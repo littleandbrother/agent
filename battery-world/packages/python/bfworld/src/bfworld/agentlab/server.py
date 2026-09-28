@@ -19,7 +19,8 @@ from .provider import Provider
 
 REPO = Path(__file__).resolve().parents[6]
 UI = REPO / 'apps/agent-studio'
-DEFAULT_ROOT = Path('/Users/depengsu/Documents/bf-agent-workbench/state')
+from .runtime_config import HOME_ROOT
+DEFAULT_ROOT = HOME_ROOT / 'state'
 STEPS = ['版本基线', '设计实验', '受控服务', 'Pi 求解', '状态与恢复', '冻结与对照', '自主补丁', '递归与迁移']
 
 
@@ -84,7 +85,7 @@ class Workbench:
             jobs.sort(key=lambda j:j['created'],reverse=True)
         jobs=[{k:j.get(k) for k in ['id','owner','agent','status','created','request']} for j in jobs]
         progress=self.store.root.parent/'progress.json'
-        statuses=json.loads(progress.read_text()) if progress.exists() else {'0':'audited','1':'verified','2':'verified','3':'running'}
+        statuses=json.loads(progress.read_text()) if progress.exists() else {}
         model=self.provider.status()
         requests=model.pop('requests')
         model['unknown_usage']=any(r['status']=='UNKNOWN' for r in requests)
@@ -347,6 +348,11 @@ def handler(workbench):
                         if record['kind']!='source':raise ValueError('REFERENCE_SOURCE_REQUIRED')
                         return self.reply(200,workbench.references.blob(record['raw_sha256']).read_bytes(),'application/octet-stream')
                     return self.reply(200,workbench.references.projection(target))
+                if path=='/api/product-context':
+                    from .product_authority import context_packet
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    return self.reply(200,context_packet(workbench,target))
                 if path=='/api/progress':
                     from .progress import project
                     query=parse_qs(urlparse(self.path).query)
@@ -539,6 +545,9 @@ def handler(workbench):
                     raise ValueError('ASSEMBLY_ACTION_INVALID')
                 if path=='/api/deliverables':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    if body.get('action')=='configure_stage':
+                        if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
+                        return self.reply(201,workbench.deliverables.configure_stage(target,body))
                     if body.get('action')=='bind':return self.reply(201,workbench.deliverables.bind(target,body))
                     if body.get('action')=='package':return self.reply(201,workbench.deliverables.package(target))
                     raise ValueError('DELIVERY_ACTION_INVALID')

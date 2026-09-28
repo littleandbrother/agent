@@ -1,5 +1,26 @@
 # Battery World system architecture
 
+## Product workbench execution path
+
+The current port-8768 UI is `apps/agent-studio` (任务 / 控制台 / 全景 / 产品).
+The older port-8766 World Studio below remains a scientific apparatus viewer.
+See [product execution authority](../agentlab/PRODUCT-EXECUTION-AUTHORITY.md)
+for reproducible commands and current engineering limitations.
+
+`chat.py → launcher.freeze → Pi chat-product.ts → bf-harness/product.ts`
+now loads an explicitly hashed product policy. The Python `/api/product-context`
+packet supplies the current revision, input identities, pending/failing jobs and
+the same stage verdict used by `/api/deliverables` and assembly projections.
+Participants cannot modify stage contracts or submit acceptance decisions.
+
+`engineering-project` snapshots participant CAD Python, self-contained SPICE,
+or target C/H projects before bounded macOS execution and trusted native
+readback. `beam-event` explicitly maps supported uniform beam geometry into
+the existing coupled transient solver. These capabilities are not general
+COMSOL authoring, board certification or calibrated physical reproduction.
+Source identity, local numerical checks, complete task acceptance and hardware
+measurements remain separate. Shared Memory remains unverified notes.
+
 ## Architectural center
 
 Battery World Studio is the observable laboratory. EpiDesign is the mechanism

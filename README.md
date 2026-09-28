@@ -47,16 +47,21 @@ BFWORLD_BOOTSTRAP_PYTHON="$(command -v python3.11)" ./bootstrap.sh
 
 `--ignore-scripts` 避免上游仓库级 hook 安装；可选原生后端可能仍需对应平台的独立构建。这里的 Pi 构建使用随源码保存的模型目录数据，不执行在线模型生成步骤。
 
-**路径迁移尚需显式配置**：当前快照保留了原机绑定，没有批量改写历史证据。换路径启动前，检查 `battery-world/packages/python/bfworld/src/bfworld/agentlab/` 中 `launcher.py` 的 `PI`、`HOME_ROOT`、`NODE` 及隔离自检路径，`provider.py` 的 `KEY_PATH`，以及 `product_build.py`、`deployment.py` 和相关 `scripts/` 的外部工具链路径。`panorama.py` 按相邻 `pi-bf-aiot` 目录定位。调整运行源码后应重新构建/冻结 Harness；旧回执不能冒充新环境结果。
-
-路径配置好后可启动工作台（不要与正在使用的服务共用 state 目录）：
+**运行路径已集中配置**：当前应用通过环境变量绑定源码、数据和工具链；不需要修改 launcher.py 或 provider.py。先配置相邻 Pi 与独立运行数据：
 
 ```bash
+export BF_PI_ROOT="$(cd ../pi-bf-aiot && pwd)"
+export BF_HOME="$HOME/Documents/bf-agent-workbench"
+# 按本机实际安装位置设置 BF_CAD_PYTHON / BF_BLENDER / BF_COMSOL /
+# BF_NGSPICE / BF_ARM_GCC / BF_CMSIS；BF_NODE 可覆盖 Node 路径。
+# BF_PROVIDER_KEY_FILE 只指定受保护的本地文件，不将密钥写入仓库。
 PYTHONPATH=packages/python/bfworld/src .venv/bin/python \
-  -m bfworld.agentlab.server --root /absolute/path/to/bf-agent-workbench/state --port 8768
+  -m bfworld.agentlab.server --port 8768
 ```
 
-使用新 state 目录生成的 `launch-url.txt` 打开带本机认证的入口。不要提交这个文件或 `operator.token`。模型调用还需要在受保护的本地文件配置凭据，并明确当前费用/时间额度；本次发布验证没有调用付费模型。
+使用新 state 目录生成的 `launch-url.txt` 打开本机认证入口，不提交它或 `operator.token`。模型调用仍需要本地凭据和有效费用/时间额度。本次验收没有外部付费模型调用。部分历史案例脚本和专有软件依赖仍需单独配置；当前作者工程沙箱仅验证 macOS，不等于全平台安装器。macOS 云盘目录中的源码及工具链应保持本地下载；云端占位依赖可能阻塞编译或沙箱导入，全景会将不可读取的历史文件明确标为暂不可用。
+
+本轮新增：统一阶段判定、可冻结的 product.ts Harness、参与者 CAD/SPICE/固件源码项目、几何到联合瞬态映射、产品节点的依据与缺口。详见 [产品执行链与验收说明](battery-world/docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md)。阶段完成、局部计算通过、完整工程验收和实物验证分别记录。
 
 立创适配器默认从 `~/.codex/tools/bf-jlceda/easyeda-pro-mcp` 和 `~/.codex/skills/{easyeda-api,easyeda-schematic-net-fanout,easyeda-pcb-routing}` 读取组件。`integrations/` 保存这些目录当前实际安装的源码；迁移时可配置适配器路径，或在确认目标目录未被其他项目使用后安装到这些位置。官方 API Skill 的本机版本没有全部上游格式指南，发布清单忠实保留已安装内容。它仍需要立创原生应用、API Gateway 插件和正确的工程绑定，不能只靠复制文件宣称电路环境可用。来源与验收边界见 [JLCEDA-INTEGRATION.md](battery-world/docs/agentlab/JLCEDA-INTEGRATION.md)。
 

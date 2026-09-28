@@ -13,9 +13,8 @@ from .store import Store,canonical,identity
 from .experiments import task,BASELINE_DESIGN,BASELINE_POLICY
 from .recovery import Recovery, INTERACTIVE_WALL_SECONDS
 
-PI=Path('/Users/depengsu/Documents/pi-bf-aiot')
-HOME_ROOT=Path('/Users/depengsu/Documents/bf-agent-workbench')
-NODE='/opt/homebrew/bin/node'
+from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
+NODE = str(NODE_PATH)
 INTERACTIVE_SHUTDOWN_GRACE_SECONDS=10
 
 def filehash(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -34,7 +33,7 @@ def world_binding():
 def delivery_binding():
     # Product delivery capability is outside the frozen scientific apparatus.
     base=Path(__file__).resolve().parent
-    paths=[base/'deliverables.py', base/'assembly.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
+    paths=[base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
     return {str(p):filehash(p) for p in paths}
 
 def freeze(source=PI/'packages/bf-harness',label='H0',home_root=HOME_ROOT,app_entry='main.js'):
@@ -53,6 +52,8 @@ def _freeze_locked(source,label,home_root,app_entry):
         build=subprocess.run([str(PI/'node_modules/.bin/tsgo'),'-p',str(PI/'packages/bf-agent/tsconfig.json')],capture_output=True,text=True,timeout=30)
         if build.returncode:raise ValueError('PRODUCT_APP_BUILD_FAILED: '+build.stdout[-1000:]+build.stderr[-1000:])
     files={str(p.relative_to(source)):p.read_text() for p in sorted((source/'src').glob('*.ts'))}
+    if app_entry=='chat-product.js' and 'src/product.ts' not in files:
+        files['src/product.ts']=(PI/'packages/bf-harness/src/product.ts').read_text()
     digest=identity(files)
     bindings={'source':digest,'app':filehash(PI/'packages/bf-agent/dist'/app_entry),'lock':filehash(PI/'package-lock.json'),'world':world_binding()}
     if app_entry=='chat-product.js':bindings['delivery']=delivery_binding()
@@ -77,7 +78,7 @@ def _freeze_locked(source,label,home_root,app_entry):
     if build.returncode:raise ValueError('CANDIDATE_BUILD_FAILED: '+build.stdout[-1000:]+build.stderr[-1000:])
     manifest={'schema_version':'bf-agent-harness-v1','label':label,'source_hash':digest,
       'source_files':{name:filehash(dest/name) for name in files},
-      'loaded_modules':{name:filehash(dest/'dist'/(name+'.js')) for name in ['solver','improver']},
+      'loaded_modules':{name:filehash(dest/'dist'/(name+'.js')) for name in (['solver','improver','product'] if 'src/product.ts' in files else ['solver','improver'])},
       'loaded_files':{p.name:filehash(p) for p in sorted((dest/'dist').glob('*.js'))},
       'pi_git_revision':'7140838fdd5ee1ff21dbe50955a8801617b065ef',
       'pi_lock_hash':filehash(PI/'package-lock.json'),'app_build_hash':filehash(PI/'packages/bf-agent/dist'/app_entry),
@@ -113,13 +114,15 @@ def seatbelt(workspace,harness,port=8768,mutable=None):
 def preflight(workspace,harness):
     source="""const fs=require('fs'),net=require('net'),cp=require('child_process');
 const checks={};
-try{fs.readFileSync('/Users/depengsu/Documents/bf-agent-workbench/secrets/deepseek.key');checks.secret=false}catch(e){checks.secret=e.code==='EPERM'||e.code==='EACCES'}
-try{fs.writeFileSync('/Users/depengsu/Documents/bf-agent-workbench/forbidden','x');checks.write=false}catch(e){checks.write=e.code==='EPERM'||e.code==='EACCES'}
-try{fs.readFileSync('/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/experiments.py');checks.evaluator=false}catch(e){checks.evaluator=e.code==='EPERM'||e.code==='EACCES'}
+try{fs.readFileSync(SECRET_PATH);checks.secret=false}catch(e){checks.secret=e.code==='EPERM'||e.code==='EACCES'}
+try{fs.writeFileSync(WRITE_PATH,'x');checks.write=false}catch(e){checks.write=e.code==='EPERM'||e.code==='EACCES'}
+try{fs.readFileSync(EVALUATOR_PATH);checks.evaluator=false}catch(e){checks.evaluator=e.code==='EPERM'||e.code==='EACCES'}
 checks.shell=cp.spawnSync('/bin/sh',['-c','echo safe']).stdout.toString().trim()==='safe';
 const socket=net.connect({host:'1.1.1.1',port:443});socket.on('error',e=>{checks.network=e.code==='EPERM'||e.code==='EACCES';console.log(JSON.stringify(checks));});
 setTimeout(()=>{socket.destroy();if(checks.network===undefined){checks.network=false;console.log(JSON.stringify(checks))}},500);
 """
+    from .runtime_config import KEY_PATH
+    source=source.replace("SECRET_PATH", json.dumps(str(KEY_PATH))).replace("WRITE_PATH", json.dumps(str(HOME_ROOT/"forbidden"))).replace("EVALUATOR_PATH", json.dumps(str(Path(__file__).with_name("experiments.py"))))
     proc=subprocess.run(['/usr/bin/sandbox-exec','-p',seatbelt(workspace,harness),NODE,'-e',source],cwd=workspace,
         env={'PATH':'/opt/homebrew/bin:/usr/bin:/bin','TMPDIR':str(workspace)},capture_output=True,text=True,timeout=5)
     if proc.returncode:raise ValueError('PI_SANDBOX_FAILED: '+proc.stderr[-1200:])
@@ -214,7 +217,7 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
             if (workspace/'public-history.json').exists():public_history=json.loads((workspace/'public-history.json').read_text())
             memory_in_prompt='public_development_memory' in json.loads((workspace/'task.json').read_text())
         cfg={'workspace':str(workspace),'service':f'http://127.0.0.1:{service_port}','token':token,'taskId':task_id,'mode':mode,'dryRun':dry_run,
-          'product':product,'sharedContext':shared_context,'solverModule':str(Path(harness)/'dist/solver.js'),'improverModule':str(Path(harness)/'dist/improver.js'),
+          'productModule':str(Path(harness)/'dist/product.js'),'product':product,'sharedContext':shared_context,'solverModule':str(Path(harness)/'dist/solver.js'),'improverModule':str(Path(harness)/'dist/improver.js'),
           'sourceManifest':manifest,'improvementContext':{'parent':manifest,'allowed_paths':['harness/'+p for p in mutable],'experience_file':'experience.json','trace_files':'experience/*.json','reading':'The index and complete public traces are local files. Page or summarize large files instead of dumping all traces into context.','continuation_feedback':feedback}}
         command=['/usr/bin/sandbox-exec','-p',seatbelt(workspace,harness,port=service_port,mutable=mutable if mode=='improve' else None),NODE,str(PI/'packages/bf-agent/dist'/app_entry),'-']
         receipt={'owner':owner,'mode':mode,'dry_run':dry_run,'task_id':task_id,'harness_path':str(harness),'harness':manifest,'sandbox':checks,'started':time.time(),'status':'RUNNING','workspace':str(workspace),

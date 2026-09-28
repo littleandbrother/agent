@@ -617,3 +617,23 @@ COMSOL 6.2 三维压电/电路静态、模态、扫频、瞬态实际完成；LT
 产物主入口从控制台画廊转到产品节点：点击打开右侧交付物，支持仿真、图片、原生工程、代码、报告与数据筛选，图片/文本/GLB 预览，原生下载，构建中间文件折叠。任务与参考来源、版本、哈希与验收状态隔离。电路拆成原理图/PCB/仿真分项，4 件原作者 Altium 文件可下载但不抵扣本版交付；本版立创原理图/PCB/制造图纸仍缺，机械 PCB 是尺寸占位。
 
 应用完整 init 377 项及 SDK/Studio 通过；最终 17 项投影测试、浏览器来源切换/源码图片三维预览/520px与900px滚动/控制台跳转通过。468 件后端参考完整性核对及4类HTTP样本SHA通过。新增模型调用0，无科学/实物新结果，未改写参考回执，根88科学Feature不变，无提交。报告：/Users/depengsu/Documents/battery-world/docs/agentlab/PRODUCT-DELIVERABLES.md；证据：/Users/depengsu/Documents/bf-agent-workbench/verification/product-deliverables-20260929/。
+
+
+## 2026-09-29 — GitHub 当前 Agent 源码发布完成
+
+已发布私有仓库 https://github.com/littleandbrother/agent ，main 提交 773730a4d0614160254aea5d26ce1caf174e0f34。独立发布工作区 /Users/depengsu/Documents/agent-github-release；包含 Battery World 四模式工作台、定制 Pi Agent/Harness、当前立创 MCP 和三个 EDA Skills。2,763 个来源文件及7个发布元数据文件，源码清单逐文件 SHA-256 绑定；保留上游版本与许可。密钥、会话数据库、参与者工作区、安装工具链和大型仿真产物未上传，本机运行服务保持原目录。
+
+独立副本首次检查暴露 init 先测试再生成数据的顺序问题：先缺 runs/coupled，再缺 .bfworld/b2-development。已将现有 coupled 与 Studio 数据生成步骤前置，未修改科学模型/密封输入。最终完整 init 377 项应用测试、SDK/Studio 检查和构建通过；Pi bf:build 通过；MCP 50 项本地模拟自检通过；空白 state 的六类 HTTP 入口通过。重新从 GitHub 克隆，远端/本地/克隆 HEAD 一致，全部源码哈希和17项产品投影测试通过。新增模型调用0。
+
+发布回执：/Users/depengsu/Documents/bf-agent-workbench/verification/github-release-20260929/receipt.json。仓库 README 说明绝对路径迁移、macOS 隔离和可选工具依赖；这不是无配置的跨平台部署或完整产品验收。BFA-024 整体仍 in-progress，本版原理图/PCB/制造及校准缺口仍按现有工程记录处理；根科学 features 数组未变，未运行根科学 init。后续发布从原运行源码审计导出到 agent-github-release，不要把本机凭据/状态直接 Git add。
+
+
+## 2026-09-29 BFA-025 — 产品执行链与阶段判定完成（平台范围）
+
+统一 Pi、装配、交付页及每轮上下文的阶段判定；需求/接口/几何/能源/展示分别绑定并传播失效。新增参与者 CadQuery、SPICE、STM32L031 多文件工程的源码快照、macOS 隔离执行与独立原生读回；均匀矩形梁几何实际驱动联合瞬态求解。产品提示、事实包和有界续跑提取到可冻结、可编辑并核验加载身份的 product.ts。任务摘要、产品节点依据/缺口、控制台能力及全景源码映射同步更新；运行路径集中为 BF_* 配置。
+
+独立发布目录完整 init 388 项 Python 测试、SDK/Studio 类型、构建与复现通过；Pi bf:build 通过。实际 CAD/SPICE/多文件目标固件、几何变化与镜头负控、输入/输出篡改、阶段权限等九项专项通过；七项全景测试包含云端占位文件不阻塞、不误判删除的负控。真实 Pi 公共工具链用六个脚本化响应完成 ngspice，120点/4通道读回，外部模型调用0，不是自主推理效果。浏览器实际检查四模式。生产模型账本保持1933笔SETTLED、1笔历史UNKNOWN。
+
+保留早前 discovery 导入失败、云端源码/依赖引起的编译阻塞和一次 CAD 超时记录；按原字节恢复和本地化依赖后重验，没有放宽超时或验收。全景对不可读取的云端历史显示缺失。详细方案与后续缺口见 docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md，发布验证见 release/VERIFICATION.md，本机回执目录 bf-agent-workbench/verification/product-authority-20260929/。
+
+BFA-025 仅完成平台功能；BFA-024 仍为 blocked。磁拨动校准、本版原生PCB/制造、专项完整验收、板上测量及真实模型/RSI效果没有被改成通过；原88项科学Feature和feat-397不变，未运行协调仓库科学init。本轮源码发布至既有 littleandbrother/agent 的 main；提交与新克隆身份见本机最终发布回执。

@@ -15,11 +15,10 @@ import time
 from .store import canonical, identity
 from .jlceda import JLCEDA, SKILL_PATHS, SCOPE as EDA_SCOPE, validate as validate_eda
 from .eda_mcp import SERVER as EDA_SERVER
-from . import product_build, deployment, tinyml, event_design, references
+from . import product_build, deployment, tinyml, event_design, references, engineering_projects, beam_event
 
 TEMPLATES = Path(__file__).with_name('engineering_templates')
-BLENDER = Path('/Applications/Blender.app/Contents/MacOS/Blender')
-COMSOL = Path('/Applications/COMSOL62/Multiphysics/bin/comsol')
+from .runtime_config import BLENDER, COMSOL
 SPECS = {
     'blender': {'template': 'enclosure-v1', 'defaults': {'length_mm':80., 'width_mm':50., 'height_mm':25., 'wall_mm':2.},
                 'ranges': {'length_mm':(30,300),'width_mm':(25,300),'height_mm':(15,150),'wall_mm':(1,6)},
@@ -29,7 +28,9 @@ SPECS = {
                'scope':'均匀悬臂梁、线弹性静力、固定根部、端面均布力；两档网格，非压电或整机验证。'}
 }
 SKILLS = {
- 'engineering-delivery': '# 完整数字产品交付\n调用 bf_product delivery_inspect 读取30项依赖清单；每项按输入依据、原生文件、真实检查和下游影响推进。先 publish_file，再 delivery_bind 绑定文件ID和实际job ID。未知需求用显式假设继续。几何、仿真、原生EDA、目标固件、接收回放必须属于同一产品；修改后检查 stale。delivery_package 打包文件与缺口，不自动通过验收。文件存在/工具成功/文献校准/实测是不同事实。制造与烧录准备可以先完成，实物结果保留未执行。',
+ 'beam-event': beam_event.SKILL,
+ 'engineering-project': engineering_projects.SKILL,
+ 'engineering-delivery': '# 完整数字产品交付\n调用 bf_product delivery_inspect 读取当前适用的依赖清单与统一阶段判定；每项按输入依据、原生文件、真实检查和下游影响推进。先 publish_file，再 delivery_bind 绑定文件ID和实际job ID。未知需求用显式假设继续。几何、仿真、原生EDA、目标固件、接收回放必须属于同一产品；修改后检查 stale。delivery_package 打包文件与缺口，不自动通过验收。文件存在/工具成功/文献校准/实测是不同事实。制造与烧录准备可以先完成，实物结果保留未执行。',
  'reference-research':references.SKILL,
  'event-transient':event_design.SKILL,
  'product-model':product_build.SKILL,
@@ -42,6 +43,8 @@ SKILLS = {
 
 
 def validate(engine, parameters):
+    if engine=='beam-event':return beam_event.validate(parameters)
+    if engine=='engineering-project':return engineering_projects.validate(parameters)
     if engine=='event-transient':
         if not isinstance(parameters,dict) or set(parameters)!={'spec_path'} or not isinstance(parameters['spec_path'],str):raise ValueError('EVENT_SPEC_PATH_REQUIRED')
         return parameters
@@ -84,11 +87,21 @@ class Engineering:
             raise PermissionError('ENGINEERING_TOOL_NOT_ENABLED')
 
     def catalog(self,owner=None):
-        return {'schema_version':'bf-engineering-catalog-v1','engines':[{'id':k,'installed':p.is_file(),'transport':'cli','executable':str(p),**SPECS[k]} for k,p in [('blender',BLENDER),('comsol',COMSOL)]]+[{'id':'event-transient','installed':event_design.SPICE.is_file(),'transport':'cli','executable':str(event_design.SPICE),'template':'coupled-event-v1','defaults':{'spec_path':'event-design.json'},'scope':event_design.SCOPE}],
+        result = {'schema_version':'bf-engineering-catalog-v1','engines':[{'id':k,'installed':p.is_file(),'transport':'cli','executable':str(p),**SPECS[k]} for k,p in [('blender',BLENDER),('comsol',COMSOL)]]+[{'id':'event-transient','installed':event_design.SPICE.is_file(),'transport':'cli','executable':str(event_design.SPICE),'template':'coupled-event-v1','defaults':{'spec_path':'event-design.json'},'scope':event_design.SCOPE},{'id':'beam-event','installed':event_design.SPICE.is_file(),'transport':'cli','template':'geometry-rom-v1','defaults':{'assembly_revision':1,'mapping_path':'beam-mapping.json','spec_path':'event-design.json'},'scope':beam_event.SCOPE}],
                 'skills':[{'id':k,'name':v.splitlines()[0][2:],'sha256':hashlib.sha256(v.encode()).hexdigest(),'status':'available'} for k,v in SKILLS.items()],
                 'deployment':{'firmware':{'installed':deployment.GCC.is_file(),'target':'STM32L031K6T6','engine':'mcu-firmware'},'tinyml':{'installed':product_build.CAD.is_file() and deployment.GCC.is_file(),'engine':'tinyml-nas','scope':tinyml.SCOPE}},
                 'cad':{'status':'available' if product_build.CAD.is_file() else 'not_installed','engine':'product-model','executable':str(product_build.CAD),'scope':product_build.SCOPE},'limits':{'timeout_seconds':180,'cpu_cores':2,'concurrent_jobs':1,'jobs_per_session':40,'model_calls':0},
                 'eda':self.eda.catalog(owner), 'mcp':{'status':'configured','note':'立创 EDA 使用真实 MCP stdio；连接状态需探测。Blender/COMSOL 使用本地 CLI。'}, 'eda_skills':[{'id':k,'name':k,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'status':'available'} for k,p in SKILL_PATHS.items() if p.is_file()]}
+
+        result['projects'] = [{'id':kind,'engine':'engineering-project','installed':exe.is_file(),
+            'runnable':exe.is_file() and __import__('platform').system()=='Darwin',
+            'inputs':'immutable project manifest and participant source',
+            'validator':'native readback, not participant verdict', 'scope':engineering_projects.SCOPE}
+            for kind,exe in engineering_projects.KINDS.items()]
+        for item in result['engines']:
+            history=[j for j in self.jobs(owner) if j['engine']==item['id']] if owner else []
+            item.update(runnable=item['installed'],probe_status='not_probed',last_execution=history[0]['status'] if history else None)
+        return result
 
     def event(self,owner,job,kind,data):
         with self.store.connect() as db:db.execute('INSERT INTO engineering_events(owner,job_id,time,kind,data) VALUES(?,?,?,?,?)',(owner,job,time.time(),kind,canonical(data)))
@@ -128,11 +141,13 @@ class Engineering:
         with self.store.connect() as db:
             message=db.execute("SELECT id FROM chat_messages WHERE conversation=? AND status IN ('SENT','ACCEPTED') ORDER BY created DESC LIMIT 1",(owner,)).fetchone()
         assembly=tinyml.request(self.app,owner,p) if engine=='tinyml-nas' else product_build.request(self.app,owner,p) if engine in ('product-model','mcu-firmware') else {}
+        if engine=='beam-event':assembly=beam_event.request(self.app,owner,p)
+        if engine=='engineering-project':assembly=engineering_projects.request(self.app,owner,p)
         if engine=='event-transient':assembly=event_design.request(self.app,owner,p)
-        template=Path(__file__).with_name('event_design.py') if engine=='event-transient' else Path(__file__).with_name('product_build.py') if engine=='product-model' else Path(__file__).with_name('jlceda.py') if engine=='jlceda' else TEMPLATES/('blender_enclosure.py' if engine=='blender' else 'Cantilever.java')
+        template=Path(__file__).with_name('beam_event.py') if engine=='beam-event' else Path(__file__).with_name('engineering_projects.py') if engine=='engineering-project' else Path(__file__).with_name('event_design.py') if engine=='event-transient' else Path(__file__).with_name('product_build.py') if engine=='product-model' else Path(__file__).with_name('jlceda.py') if engine=='jlceda' else TEMPLATES/('blender_enclosure.py' if engine=='blender' else 'Cantilever.java')
         template_hash=deployment.template_hash() if engine in ('mcu-firmware','tinyml-nas') else product_build.template_hash(TEMPLATES) if engine=='product-model' else hashlib.sha256(template.read_bytes()+(Path(__file__).with_name('freerouting.py').read_bytes() if engine=='jlceda' and p['operation']=='freeroute' else b'')).hexdigest()
-        request={'engine':engine,'template':engine+'-v1' if engine in ('mcu-firmware','tinyml-nas','event-transient') else 'product-model-v1' if engine=='product-model' else ('jlceda-'+p['operation']+'-v1') if engine=='jlceda' else SPECS[engine]['template'],'template_sha256':template_hash,'parameters':p,'design_revision':revision,
-                 'turn_id':message['id'] if message and initiator!='operator' else None, 'initiator':initiator, 'scope':event_design.SCOPE if engine=='event-transient' else tinyml.SCOPE if engine=='tinyml-nas' else deployment.SCOPE if engine=='mcu-firmware' else product_build.SCOPE if engine=='product-model' else EDA_SCOPE if engine=='jlceda' else SPECS[engine]['scope']}
+        request={'engine':engine,'template':engine+'-v1' if engine in ('mcu-firmware','tinyml-nas','event-transient','engineering-project','beam-event') else 'product-model-v1' if engine=='product-model' else ('jlceda-'+p['operation']+'-v1') if engine=='jlceda' else SPECS[engine]['template'],'template_sha256':template_hash,'parameters':p,'design_revision':revision,
+                 'turn_id':message['id'] if message and initiator!='operator' else None, 'initiator':initiator, 'scope':beam_event.SCOPE if engine=='beam-event' else engineering_projects.SCOPE if engine=='engineering-project' else event_design.SCOPE if engine=='event-transient' else tinyml.SCOPE if engine=='tinyml-nas' else deployment.SCOPE if engine=='mcu-firmware' else product_build.SCOPE if engine=='product-model' else EDA_SCOPE if engine=='jlceda' else SPECS[engine]['scope']}
         request.update(assembly)
         if engine=='jlceda':
             request['binding']=self.eda.binding(owner)
@@ -143,7 +158,7 @@ class Engineering:
             previous=db.execute('SELECT * FROM engineering_jobs WHERE owner=? AND operation=?',(owner,op)).fetchone()
             if previous:
                 original=json.loads(previous['request'])
-                if any(original.get(k)!=request.get(k) for k in ('engine','parameters','design_revision','dataset_source_sha256','event_spec_sha256')):raise ValueError('ENGINEERING_OPERATION_CONFLICT')
+                if any(original.get(k)!=request.get(k) for k in ('engine','parameters','design_revision','dataset_source_sha256','event_spec_sha256','project_sha256','mapping_sha256')):raise ValueError('ENGINEERING_OPERATION_CONFLICT')
                 return self.project(previous)
             if revision is not None:
                 current=(self.app.products.context(owner).get('proposal') or {}).get('revision')
@@ -159,7 +174,7 @@ class Engineering:
                 try:os.killpg(pid,0)
                 except ProcessLookupError:continue
                 raise ValueError('ENGINEERING_RECOVERY_REQUIRED')
-            if not (event_design.SPICE if engine=='event-transient' else deployment.GCC if engine in ('mcu-firmware','tinyml-nas') else product_build.CAD if engine=='product-model' else EDA_SERVER if engine=='jlceda' else BLENDER if engine=='blender' else COMSOL).is_file():raise ValueError('ENGINE_NOT_INSTALLED')
+            if not (engineering_projects.KINDS[assembly['project']['manifest']['kind']] if engine=='engineering-project' else event_design.SPICE if engine in ('event-transient','beam-event') else deployment.GCC if engine in ('mcu-firmware','tinyml-nas') else product_build.CAD if engine=='product-model' else EDA_SERVER if engine=='jlceda' else BLENDER if engine=='blender' else COMSOL).is_file():raise ValueError('ENGINE_NOT_INSTALLED')
             if db.execute('SELECT COUNT(*) FROM engineering_jobs WHERE owner=?',(owner,)).fetchone()[0]>=40:raise ValueError('ENGINEERING_SESSION_JOB_CAP')
             key='eng-'+secrets.token_hex(8);now=time.time()
             db.execute('INSERT INTO engineering_jobs VALUES(?,?,?,?,?,?,?,?,?,?,?)',(key,owner,op,digest,canonical(request),'QUEUED',now,None,None,None,None))
@@ -187,12 +202,16 @@ class Engineering:
                 directory=self.root/key;directory.mkdir()
                 job=self.get(owner,key);p=job['parameters'];deadline=time.monotonic()+(900 if job['engine']=='product-model' else 120 if job['engine']=='tinyml-nas' else 180)
                 with self.store.connect() as db:db.execute("UPDATE engineering_jobs SET status='RUNNING',started=? WHERE id=?",(time.time(),key))
-                (directory/'input.json').write_text(canonical({k:job[k] for k in ('engine','template','template_sha256','parameters','design_revision','scope','assembly','assembly_hashes','dataset','dataset_source_sha256','event_spec','event_spec_sha256') if k in job}))
-                template=Path(__file__).with_name('event_design.py') if job['engine']=='event-transient' else Path(__file__).with_name('jlceda.py') if job['engine']=='jlceda' else TEMPLATES/('blender_enclosure.py' if job['engine']=='blender' else 'Cantilever.java')
+                (directory/'input.json').write_text(canonical({k:job[k] for k in ('engine','template','template_sha256','parameters','design_revision','scope','assembly','assembly_hashes','dataset','dataset_source_sha256','event_spec','event_spec_sha256','project','project_sha256','input_dimensions','geometry_rom','mapping_sha256') if k in job}))
+                template=Path(__file__).with_name('beam_event.py') if job['engine']=='beam-event' else Path(__file__).with_name('engineering_projects.py') if job['engine']=='engineering-project' else Path(__file__).with_name('event_design.py') if job['engine']=='event-transient' else Path(__file__).with_name('jlceda.py') if job['engine']=='jlceda' else TEMPLATES/('blender_enclosure.py' if job['engine']=='blender' else 'Cantilever.java')
                 source_bytes=template.read_bytes()
                 if job['engine']=='jlceda' and p['operation']=='freeroute':source_bytes+=Path(__file__).with_name('freerouting.py').read_bytes()
                 if job['engine'] not in ('product-model','mcu-firmware','tinyml-nas') and hashlib.sha256(source_bytes).hexdigest()!=job['template_sha256']:raise RuntimeError('ENGINEERING_TEMPLATE_CHANGED')
-                if job['engine']=='event-transient':
+                if job['engine']=='beam-event':
+                    result=beam_event.run(self,job,directory,deadline)
+                elif job['engine']=='engineering-project':
+                    result=engineering_projects.run(self,job,directory,deadline)
+                elif job['engine']=='event-transient':
                     result=event_design.run(self,job,directory,deadline)
                 elif job['engine'] in ('mcu-firmware','tinyml-nas'):
                     result=(deployment if job['engine']=='mcu-firmware' else tinyml).run(self,job,directory,deadline)
@@ -236,7 +255,7 @@ class Engineering:
                     (directory/'result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
                 artifacts=[]
                 for f in sorted(directory.iterdir()):
-                    if f.is_file() and f.suffix in ('.json','.log','.csv','.tsv','.cir','.png','.blend','.glb','.mph','.py','.java','.epro-source','.epro2','.net','.zip','.step','.stl','.brep','.svg','.dsn','.ses','.c','.h','.ld','.elf','.bin','.map','.md'):
+                    if f.is_file() and f.suffix in ('.json','.log','.csv','.tsv','.cir','.png','.blend','.glb','.mph','.py','.java','.epro-source','.epro2','.net','.zip','.step','.stl','.brep','.svg','.dsn','.ses','.c','.h','.ld','.elf','.hex','.bin','.raw','.map','.md'):
                         artifacts.append({'name':f.name,'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()})
                 result.update(artifacts=artifacts,design_revision=job['design_revision'],input_hash=hashlib.sha256((directory/'input.json').read_bytes()).hexdigest())
                 status=result.pop('_job_status','SUCCEEDED')

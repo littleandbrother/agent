@@ -96,7 +96,7 @@ class DeveloperStudio(unittest.TestCase):
         self.assertEqual(report,self.dev.validate(key))
         self.dev.activate(key,0)
         self.assertEqual(key,self.dev.active()["revision"])
-        self.assertEqual(4,len(read_json(harness/"manifest.json")["loaded_files"]))
+        self.assertEqual({"solver.js","solver-base.js","improver.js","improver-base.js","product.js","product-base.js"},set(read_json(harness/"manifest.json")["loaded_files"]))
         with patch.object(launcher, "HOME_ROOT", self.app.store.root.parent):
             receipt=launcher.launch(harness, label="pi-editor-dry-run", store_root=self.app.store.root,
                                     dry_run=True, service_port=self.server.server_port)

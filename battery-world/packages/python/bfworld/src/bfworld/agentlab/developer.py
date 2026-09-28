@@ -15,7 +15,7 @@ from .trace_review import tool_calls
 
 EMPTY_MEMORY = {"hypotheses": [], "plan": [], "notes": ""}
 EMPTY_PROMPTS = {"solver_append": "", "improver_append": ""}
-FILES = ("solver.ts", "improver.ts")
+FILES = ("solver.ts", "improver.ts", "product.ts")
 
 
 def read_json(path, default=None):
@@ -73,7 +73,7 @@ class Developer:
             for base in [self.home / "harnesses", self.root / "harnesses"]:
                 for path in base.glob("*/manifest.json"):
                     if read_json(path).get("identity") == manifest["identity"]:
-                        return {name: safe_file(path.parent, "src/" + name).read_text() for name in FILES}
+                        return {name: safe_file(path.parent, "src/" + name).read_text() for name in FILES if safe_file(path.parent, "src/" + name).is_file()}
             return None
         return {name: (launcher.PI / "packages/bf-harness/src" / name).read_text() for name in FILES}
 
@@ -92,7 +92,7 @@ class Developer:
         sources = self.sources(manifest)
         candidate = next((c for c in self.app.study_summary()["candidates"] if c.get("identity") == key), None)
         parent = self.sources({"identity": candidate["parent"]}) if candidate else None
-        diff = {name: "".join(difflib.unified_diff(parent[name].splitlines(True), sources[name].splitlines(True),
+        diff = {name: "".join(difflib.unified_diff(parent.get(name, "").splitlines(True), sources.get(name, "").splitlines(True),
                      fromfile="parent/"+name, tofile="candidate/"+name)) for name in FILES} if parent else None
         return {"manifest": manifest, "sources": sources, "candidate": candidate, "parent_diff": diff}
 
@@ -132,6 +132,9 @@ class Developer:
             receipt = self.app.session_detail(payload["source_session"], False)["result"]["receipt"]
             if receipt["harness"]["identity"] != payload["source_identity"]:
                 raise ValueError("SOURCE_IDENTITY_MISMATCH")
+        # Add new product policy to legacy drafts without rewriting historical receipts.
+        if isinstance(payload["sources"], dict) and set(payload["sources"]) == {"solver.ts", "improver.ts"}:
+            payload["sources"] = {**payload["sources"], "product.ts": self.sources()["product.ts"]}
         memory = payload["memory"]
         if not isinstance(memory, dict) or set(memory) != set(EMPTY_MEMORY):
             raise ValueError("MEMORY_ONLY_HYPOTHESES_PLAN_NOTES")
@@ -169,7 +172,7 @@ class Developer:
             out[name] = "".join(difflib.unified_diff(json.dumps(parent[name], ensure_ascii=False, indent=2).splitlines(True),
                               json.dumps(record[name], ensure_ascii=False, indent=2).splitlines(True), fromfile="before/" + name, tofile="after/" + name))
         for name in FILES:
-            out[name] = "".join(difflib.unified_diff(parent["sources"][name].splitlines(True), record["sources"][name].splitlines(True), fromfile="before/" + name, tofile="after/" + name))
+            out[name] = "".join(difflib.unified_diff(parent["sources"].get(name, "").splitlines(True), record["sources"].get(name, "").splitlines(True), fromfile="before/" + name, tofile="after/" + name))
         return out
 
     def validate(self, key):
@@ -204,6 +207,7 @@ class Developer:
                     extra += "\nOperator memory (unverified hypotheses and notes, not experimental facts):\n" + memory
                 wrapper += f'export function {function}({signature}): string {{ const prompt = base.{function}({args}) + {json.dumps(extra, ensure_ascii=False)}; console.log(JSON.stringify({{type:"context_snapshot", revision:{json.dumps(key)}, kind:{json.dumps(kind)}, prompt, memory:{memory}}})); return prompt; }}\n'
                 (source / "src" / (kind + ".ts")).write_text(wrapper)
+            (source / "src" / "product.ts").write_text(payload["sources"].get("product.ts", self.sources()["product.ts"]))
             try:
                 harness = launcher.freeze(source, "DEV-" + key[:12], home_root=self.root)
                 smoke = source / "smoke.mjs"
@@ -211,6 +215,8 @@ class Developer:
 const root=process.argv[2];
 const s=await import(pathToFileURL(root+"/dist/solver.js"));
 const u=await import(pathToFileURL(root+"/dist/improver.js"));
+const p=await import(pathToFileURL(root+"/dist/product.js"));
+if(typeof p.productPrompt("",{})!=="string" || typeof p.contextPrompt({})!=="string" || p.continueDelivery({passed:true,auto_continue:true,max_continuations:1},0)!==false) throw Error("PRODUCT_POLICY_CONTRACT");
 const state=s.initialState();
 if(!state || !state.pending || !Array.isArray(state.facts)) throw Error("STATE_CONTRACT");
 if(typeof s.solverPrompt({},state)!=="string" || typeof u.improvementPrompt({})!=="string") throw Error("PROMPT_CONTRACT");
@@ -286,7 +292,7 @@ console.log("CONTRACT_SMOKE_PASS");
             data = event["data"]
             if data.get("type") == "harness_loaded":
                 loaded = data
-            elif data.get("type") in ("context_snapshot", "shared_context_loaded"):
+            elif data.get("type") in ("context_snapshot", "shared_context_loaded", "product_context_snapshot"):
                 contexts.append(data)
                 if data["type"] == "shared_context_loaded":
                     shared = data

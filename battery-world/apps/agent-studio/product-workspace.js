@@ -15,7 +15,7 @@
   const badge=n=>`<span class="pd-state ${n.status}"><i></i>${esc(G.labels[n.status])}</span>`;
   const currentEvent=()=>data?.events[eventIndex];
   function shell(){
-    q('#product-view').innerHTML=`<header class="pd-heading"><div><h2>产品</h2><p id="pd-title">从需求到设计、验证与交付</p></div><div class="pd-heading-actions"><label class="sr-only" for="pd-source">产品来源</label><select id="pd-source" aria-label="产品来源"><option value="session">当前任务</option><option value="reference">拨动式采能 · 参考工程</option></select><span id="pd-check-summary"></span><label class="sr-only" for="pd-version">产品装配版本</label><select id="pd-version"></select><button id="pd-model" class="quiet">三维模型 ↗</button><button id="pd-trace" class="quiet">Trace ↗</button></div></header>
+    q('#product-view').innerHTML=`<header class="pd-heading"><div><h2>产品</h2><p id="pd-title">从需求到设计、验证与交付</p><span id="pd-check-summary"></span></div><div class="pd-heading-actions"><label class="sr-only" for="pd-source">产品来源</label><select id="pd-source" aria-label="产品来源"><option value="session">当前任务</option><option value="reference">拨动式采能 · 参考工程</option></select><label class="sr-only" for="pd-version">产品装配版本</label><select id="pd-version"></select><button id="pd-model" class="quiet">三维模型 ↗</button><button id="pd-trace" class="quiet">Trace ↗</button></div></header>
       <div id="pd-empty" class="pd-empty" hidden></div><div class="pd-workspace">
       <aside class="pd-library" aria-label="产品设计目录"><div class="pd-library-title">设计目录<button id="pd-clear" class="quiet" title="显示全部节点" aria-label="显示全部节点">↺</button></div><label class="pd-search">${icon('sensing')}<input id="pd-search" type="search" placeholder="查找节点…" aria-label="查找产品节点"></label><nav>${categories.map(([id,title,desc])=>`<button data-pd-category="${id}" aria-pressed="false" title="${desc}">${icon(id)}<span><b>${title}</b><small>${desc}</small></span></button>`).join('')}</nav><div class="pd-library-foot"><span>当前会话</span><p id="pd-scope"></p><button id="pd-task" class="quiet">回到任务 ↗</button></div></aside>
       <div class="pd-center"><div class="pd-canvas-heading"><div><strong>产品设计图</strong><span>需求 → 设计 → 验证 → 交付</span></div><div class="pd-zoom-controls"><button id="pd-minus" aria-label="缩小产品图">−</button><output id="pd-zoom"></output><button id="pd-plus" aria-label="放大产品图">＋</button><button id="pd-fit">全图</button><button id="pd-inspect-toggle" aria-expanded="true" aria-controls="product-inspector" title="展开或收起节点详情">详情</button></div></div>
@@ -61,7 +61,7 @@
     else {let graph=G.build(current,revision);if(revision&&!graph.record){revision='';graph=G.build(current)}data=D.session(graph,inventory,current)}
     q('#pd-source').value=scope;
     q('#pd-title').textContent=data.title;q('#pd-title').title=data.title;
-    q('#pd-check-summary').textContent=data.checks.length?data.checks.filter(c=>c.state==='passed').length+' / '+data.checks.length+' 项检查通过':'';
+    q('#pd-check-summary').textContent=scope==='session'&&inventory?.verdict&&(!revision||data.isCurrent)?`${inventory.verdict.stages.find(s=>s.id===inventory.verdict.target_stage)?.label||inventory.verdict.target_stage} · ${inventory.verdict.passed?'已完成':'待完成'} · ${inventory.verdict.missing.length} 项缺口`:data.checks.length?data.checks.filter(c=>c.state==='passed').length+' / '+data.checks.length+' 项检查通过':'';
     q('#pd-scope').textContent=scope==='reference'?'参考辅助设计 · 独立工程快照':current?.title||'尚未选择任务';
     q('#pd-version').innerHTML='<option value="">当前装配'+(data.versions.length?' · v'+data.versions.at(-1).revision:' · 未建立')+'</option>'+data.versions.map(r=>`<option value="${r.revision}">装配 v${r.revision}${r.source_valid===false?' · 已失效':''}</option>`).join('');q('#pd-version').value=revision;
     q('#pd-version').disabled=scope==='reference';if(scope==='reference')q('#pd-version').innerHTML=`<option>${esc(data.snapshot)}</option>`;
@@ -97,7 +97,11 @@
     const n=data.nodes.find(n=>n.id===selected)||data.nodes[0];selected=n.id;
     const incoming=data.edges.filter(e=>e.target===n.id),outgoing=data.edges.filter(e=>e.source===n.id),event=currentEvent();
     let body='';
-    if(tab==='deliverables')body=V.panel(n,data,assetFilter,circuitPart);
+    if(tab==='deliverables'){
+      const card=scope==='session'&&(!revision||data.isCurrent)?inventory?.research_cards?.[n.id]:null;
+      if(card)body+=detail('当前判断',`<p><b>${esc(card.question)}</b></p><p>${esc(card.conclusion)}</p><p class="pd-muted">装配 v${esc(card.revision||'—')} · ${esc(card.claim_boundary)}</p><details><summary>假设与待验证问题 · ${card.open_questions.length}</summary>${card.assumptions.map(x=>`<p>${esc(typeof x==='string'?x:JSON.stringify(x))}</p>`).join('')}${card.open_questions.map(x=>`<p>${esc(x.label)} · ${esc(x.validation)}</p>`).join('')}${card.checks.map(c=>`<p>${esc(c.name)} · ${c.passed?'通过':'未通过或失效'} · ${esc(c.job_id)}</p>`).join('')}</details>`);
+      body+=V.panel(n,data,assetFilter,circuitPart);
+    }
     else if(tab==='overview'){
       if(event)body+=detail('回放到此记录',`<p>${esc(date(event.time)+' · '+event.title)}</p><p class="pd-muted">${esc(event.detail)}</p><p class="pd-muted">回放只定位历史记录；图中检查仍属于所选装配版本。</p>${event.revision?`<button data-pd-revision="${event.revision}">查看装配 v${event.revision}</button>`:''}${event.verification?pre({checks:event.verification.checks,integrity:event.verification.integrity,scope:event.verification.scope}):event.job?pre({job:event.job.id,status:event.job.status,scope:event.job.scope,error:event.job.error,checks:event.job.result?.checks}):''}`);
       body+=detail('设计记录',n.facts.length?n.facts.map(f=>f.startsWith('{')?`<details><summary>参数与结果</summary>${pre(f)}</details>`:`<p>${esc(f)}</p>`).join(''):'<p class="pd-muted">尚未记录该部分设计。</p>');

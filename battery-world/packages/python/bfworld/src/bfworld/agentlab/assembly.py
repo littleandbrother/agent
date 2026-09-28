@@ -251,12 +251,12 @@ class Assemblies:
                 'scope':'Bounded digital delivery observation; visual, manufacturing and hardware acceptance remain separate.',
                 'max_continuations':goal['max_continuations']}
 
-    def projection(self, owner):
+    def projection(self, owner, include_delivery=True):
         rows = self.revisions(owner)
         current = next((r for r in reversed(rows) if r['source_valid']), None)
         if not current:
             empty={'current':None,'revisions':rows,'files':[],'checks':[]}
-            return {**empty,'delivery':self.observe_delivery(owner,empty)}
+            return {**empty,'delivery':self.app.deliverables.inspect(owner)['verdict'] if include_delivery and hasattr(self.app,'deliverables') else self.observe_delivery(owner,empty)}
         with self.store.connect() as db:
             files = [dict(r) for r in db.execute('SELECT * FROM assembly_files WHERE owner=? ORDER BY created', (owner,))]
         for f in files:
@@ -269,11 +269,20 @@ class Assemblies:
             j['stale'] = h.get('definition_hash') != current['hashes']['definition_hash']
             j['geometry_current'] = h.get('geometry_hash') == current['hashes']['geometry_hash']
             j['physical_current'] = h.get('physical_hash') == current['hashes']['physical_hash']
+            j['artifact_integrity'] = False
+            if j['status'] == 'SUCCEEDED':
+                try:
+                    artifacts = (j.get('result') or {}).get('artifacts', [])
+                    for artifact in artifacts:
+                        self.app.engineering.artifact(owner, j['id'], artifact['name'])
+                    j['artifact_integrity'] = bool(artifacts)
+                except (ValueError, PermissionError, OSError):
+                    pass
         required = set(current['payload']['required_roles'])
         roles = {p['role'] for p in current['payload']['parts']}
         missing = sorted(required - roles)
         checks = [{'id': 'required-parts', 'passed': not missing, 'missing_roles': missing}]
-        model = next((j for j in jobs if not j['stale'] and j['status'] == 'SUCCEEDED' and j.get('result', {}).get('digital_checks_passed')), None)
+        model = next((j for j in jobs if not j['stale'] and j['artifact_integrity'] and j['status'] == 'SUCCEEDED' and j.get('result', {}).get('digital_checks_passed')), None)
         checks.append({'id': 'current-native-model', 'passed': bool(model), 'job_id': model['id'] if model else None})
         checks.append({'id':'energy-budget-screen','passed':bool(model and model['result'].get('energy',{}).get('calculation_passed')),
                        'scope':'Daily energy and storage screening; event availability and cold start must be read separately.'})
@@ -294,5 +303,5 @@ class Assemblies:
         result={'current': current, 'revisions': rows, 'files': files, 'jobs': jobs, 'checks': checks,
                 'digital_model_available': bool(model) and not missing, 'verifications':verifications,
                 'integrated_digital_checks_passed':bool(integrated), 'engineering_verified': False, 'hardware_verified': False}
-        result['delivery']=self.observe_delivery(owner,result)
+        result['delivery']=self.app.deliverables.inspect(owner)['verdict'] if include_delivery and hasattr(self.app,'deliverables') else self.observe_delivery(owner,result)
         return result

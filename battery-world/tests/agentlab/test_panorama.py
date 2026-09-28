@@ -3,6 +3,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
@@ -49,6 +50,27 @@ class SnapshotTests(unittest.TestCase):
         first=self.p.scan();sha=first['manifest']['files']['test:main.py']['sha256']
         (self.p.root/'blobs'/sha).write_text('wrong')
         with self.assertRaisesRegex(ValueError,'CORRUPT'):self.p.file(first['id'],'test:main.py')
+
+    def test_cloud_history_and_source_do_not_block_or_imply_deletion(self):
+        first=self.p.scan()
+        self.source.write_text('x = 2\n');second=self.p.scan()
+        cloud_snapshot=self.p.root/'snapshots'/(first['id']+'.json')
+        cloud_paths={self.source.resolve(),cloud_snapshot.resolve()}
+        original_read=Path.read_bytes
+        def guarded_read(path, *args, **kwargs):
+            if path.resolve() in cloud_paths:
+                raise AssertionError('must not read cloud placeholder bytes')
+            return original_read(path, *args, **kwargs)
+        with patch('bfworld.agentlab.panorama.is_cloud_file', side_effect=lambda p: Path(p).resolve() in cloud_paths), patch.object(Path, 'read_bytes', guarded_read):
+            view=self.p.projection()
+            self.assertEqual([first['id']],view['unavailable_snapshots'])
+            self.assertEqual(second['id'],view['baseline'])
+            with self.assertRaisesRegex(ValueError,'CLOUD_FILE_UNAVAILABLE'):
+                self.p.read_snapshot(first['id'])
+            self.p.scan()
+            view=self.p.projection()
+            self.assertEqual('unavailable',view['changes'][0]['kind'])
+            self.assertEqual('cloud_placeholder',view['skipped'][0]['reason'])
 
     def test_check_actual_output_and_stale_after_edit(self):
         check=self.p.run_check([sys.executable,'-c','print("real check")'],self.repo,'check')

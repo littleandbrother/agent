@@ -18,14 +18,14 @@ from pathlib import Path
 from .store import canonical
 
 REPO = Path(__file__).resolve().parents[6]
-PI = REPO.parent / 'pi-bf-aiot'
+from .runtime_config import PI
 PY = 'packages/python/bfworld/src/bfworld/'
 LAB = PY + 'agentlab/'
 MODULES = [
     dict(id='ui', title='任务与工作台', layer='界面', description='对话、控制台与全景的展示和交互。', console='trace', x=45, y=55,
          paths=[('world', 'apps/agent-studio/')]),
     dict(id='sessions', title='会话与产品', layer='服务', description='会话、文件夹、消息恢复和产品方案版本。', console='context', x=365, y=55,
-         paths=[('world', LAB+n) for n in ['server.py','chat.py','concurrency.py','organization.py','product.py','assembly.py','progress.py','recall.py']]),
+         paths=[('world', LAB+n) for n in ['server.py','chat.py','concurrency.py','organization.py','product.py','assembly.py','progress.py','recall.py','product_authority.py','deliverables.py','design_review.py']]),
     dict(id='pi', title='Pi Agent', layer='执行', description='模型对话循环与公开工具事件；不推测私有推理。', console='trace', x=685, y=55,
          paths=[('pi','packages/bf-agent/src/'),('pi','packages/coding-agent/src/core/agent-session.ts')]),
     dict(id='harness', title='Harness 程序', layer='策略', description='求解与改进程序，独立冻结并验证实际加载身份。', console='harness', x=1005, y=55,
@@ -33,9 +33,9 @@ MODULES = [
     dict(id='memory', title='记忆与配置', layer='配置', description='Memory、提示词和候选配置；保存不等于当前已加载。', console='memory', x=1005, y=295,
          paths=[('world',LAB+'developer.py')]),
     dict(id='tools', title='工具与工程环境', layer='能力', description='Tools、Skills、MCP、联网参考、原生 CAD / Blender / COMSOL / 立创、布线及耦合瞬态求解。', console='tools', x=685, y=295,
-         paths=[('world',LAB+n) for n in ['engineering.py','engineering_templates/','jlceda.py','eda_mcp.py','product_build.py','freerouting.py','references.py','event_design.py','event_measurement.py']]),
+         paths=[('world',LAB+n) for n in ['engineering.py','engineering_projects.py','beam_event.py','engineering_templates/','jlceda.py','eda_mcp.py','product_build.py','freerouting.py','references.py','event_design.py','event_measurement.py']]),
     dict(id='runtime', title='受控执行与存储', layer='运行时', description='任务、预算、冻结版本、实验和不可变产物。', console='experiments', x=365, y=295,
-         paths=[('world',LAB+n) for n in ['store.py','provider.py','launcher.py','context.py','experiments.py']]+[('world',PY+n) for n in ['runtime/','bundle/','application/']]),
+         paths=[('world',LAB+n) for n in ['store.py','provider.py','launcher.py','runtime_config.py','context.py','experiments.py']]+[('world',PY+n) for n in ['runtime/','bundle/','application/']]),
     dict(id='world', title='科学计算环境', layer='环境', description='耦合计算与参考环境；计算结果不代表硬件验证。', console='experiments', x=45, y=295,
          paths=[('world',PY+'coupled/'),('world',PY+'worlds/')]),
     dict(id='trace', title='Trace 与观测', layer='证据', description='原始记录、请求用量、工具与开发变化的只读投影。', console='trace', x=365, y=535,
@@ -72,6 +72,17 @@ def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def is_cloud_file(path):
+    # macOS UF_DATALESS: reading may block indefinitely on FileProvider.
+    return bool(getattr(Path(path).stat(), 'st_flags', 0) & 0x40000000)
+
+
+def local_text(path):
+    if is_cloud_file(path):
+        raise ValueError('PANORAMA_CLOUD_FILE_UNAVAILABLE: 请先下载本机云端占位文件 ' + Path(path).name)
+    return Path(path).read_text()
+
+
 class Panorama:
     def __init__(self, root, repos=None, modules=None):
         self.root = Path(root) / 'panorama'
@@ -89,6 +100,8 @@ class Panorama:
 
     def put(self, path, raw):
         if path.exists():
+            if is_cloud_file(path):
+                raise ValueError('PANORAMA_CLOUD_FILE_UNAVAILABLE: ' + path.name)
             if path.read_bytes() != raw:
                 raise ValueError('PANORAMA_IMMUTABLE_HASH_MISMATCH')
             return
@@ -102,7 +115,7 @@ class Panorama:
         path = self.root/'snapshots'/(key+'.json')
         if not path.is_file():
             raise ValueError('PANORAMA_SNAPSHOT_NOT_FOUND')
-        value = json.loads(path.read_bytes())
+        value = json.loads(local_text(path))
         if digest(canonical(value['manifest']).encode()) != key:
             raise ValueError('PANORAMA_SNAPSHOT_HASH_MISMATCH')
         return value
@@ -130,6 +143,8 @@ class Panorama:
                             continue
                         try:
                             before = p.stat()
+                            if is_cloud_file(p):
+                                skipped.append(dict(path=key, reason='cloud_placeholder')); continue
                             if before.st_size > MAX_BYTES:
                                 skipped.append(dict(path=key,reason='too_large')); continue
                             raw = p.read_bytes()
@@ -146,7 +161,7 @@ class Panorama:
             key = digest(canonical(manifest).encode())
             path = self.root/'snapshots'/(key+'.json')
             if not path.exists():
-                previous = json.loads((self.root/'latest.json').read_text())['id'] if (self.root/'latest.json').exists() else None
+                previous = json.loads(local_text(self.root/'latest.json'))['id'] if (self.root/'latest.json').exists() else None
                 self.put(path,canonical(dict(id=key,created=time.time(),parent=previous,manifest=manifest)).encode())
             (self.root/'latest.json').write_text(canonical(dict(id=key,observed_at=time.time())))
             return self.read_snapshot(key)
@@ -155,7 +170,9 @@ class Panorama:
         if not re.fullmatch('[a-f0-9]{64}',key or ''):
             raise ValueError('PANORAMA_BLOB_DENIED')
         p = self.root/'blobs'/key
-        if not p.is_file() or digest(p.read_bytes()) != key:
+        if not p.is_file() or is_cloud_file(p):
+            raise ValueError('PANORAMA_SOURCE_MISSING_OR_CLOUD_ONLY')
+        if digest(p.read_bytes()) != key:
             raise ValueError('PANORAMA_SOURCE_MISSING_OR_CORRUPT')
         return p.read_text()
 
@@ -181,24 +198,27 @@ class Panorama:
 
     def projection(self, snapshot=None, baseline=None):
         with self.locked():
-            latest = json.loads((self.root/'latest.json').read_text()) if (self.root/'latest.json').exists() else None
+            latest = json.loads(local_text(self.root/'latest.json')) if (self.root/'latest.json').exists() else None
             if latest is None:
                 return dict(empty=True,modules=self.modules,edges=EDGES,snapshots=[],checks=[])
             current = self.read_snapshot(snapshot or latest['id'])
-            history = sorted([self.read_snapshot(p.stem) for p in (self.root/'snapshots').glob('*.json')], key=lambda x:x['created'],reverse=True)
-            baseline = baseline or current['parent'] or current['id']
+            paths=list((self.root/'snapshots').glob('*.json'))
+            unavailable=[p.stem for p in paths if is_cloud_file(p)]
+            history = sorted([self.read_snapshot(p.stem) for p in paths if p.stem not in unavailable], key=lambda x:x['created'],reverse=True)
+            baseline = baseline or (current['parent'] if current['parent'] not in unavailable else None) or current['id']
             old = self.read_snapshot(baseline)
             files, before = current['manifest']['files'], old['manifest']['files']
             changes=[]
+            skipped_keys={x['path'] for x in current['manifest']['skipped'] if x['reason'] != 'missing'}
             for key in sorted(set(files)|set(before)):
                 a,b=before.get(key),files.get(key)
                 if a and b and a['sha256']==b['sha256']:continue
-                changes.append(dict(key=key,kind='added' if not a else 'deleted' if not b else 'modified',modules=(b or a)['modules']))
+                changes.append(dict(key=key,kind='unavailable' if key in skipped_keys else 'added' if not a else 'deleted' if not b else 'modified',modules=(b or a)['modules']))
             return dict(schema_version='bf-panorama-view-v1',empty=False,snapshot=current['id'],baseline=baseline,
                         created=current['created'],observed_at=latest['observed_at'],latest=latest['id'],
                         modules=current['manifest']['modules'],edges=current['manifest']['edges'],files=files,changes=changes,
                         snapshots=[dict(id=s['id'],created=s['created'],parent=s['parent'],files=len(s['manifest']['files'])) for s in history],
-                        checks=self.checks(current['id']),skipped=current['manifest']['skipped'],
+                        checks=self.checks(current['id']),skipped=current['manifest']['skipped'],unavailable_snapshots=unavailable,
                         actor=None,scope='工作台、Pi 定制入口与关联计算模块；非全仓库调用图',
                         boundary='连线为架构声明；文件来自所选快照。工作区变更不自动归因于 Agent。检查仅适用于其绑定版本及范围。')
 

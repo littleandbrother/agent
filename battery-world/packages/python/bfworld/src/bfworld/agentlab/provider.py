@@ -12,7 +12,7 @@ from .context import ContextArchive, REQUEST_BYTES, project_interactive
 
 MODEL='deepseek-flash'
 RATE={'input_usd_per_million':.30,'output_usd_per_million':1.20,'cache_hit_usd_per_million':.006}
-KEY_PATH=Path('/Users/depengsu/Documents/bf-agent-workbench/secrets/deepseek.key')
+from .runtime_config import KEY_PATH
 PRICING_SOURCE='https://api-docs.deepseek.com/quick_start/pricing/'
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

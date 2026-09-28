@@ -1,61 +1,80 @@
-# Source release verification — 2026-09-29
+# Product execution authority release verification — 2026-09-29
 
-This release is a source snapshot of the currently developed BF-AIoT Agent and
-workbench. Verification was performed in `agent-github-release`, independently
-of the live application's source directory, on the original macOS host. It is
-not a qualification on a new machine or a hardware/paid-Agent acceptance run.
+This release adds BFA-025 to the source snapshot originally published at
+`773730a4d0614160254aea5d26ce1caf174e0f34`. Checks ran on the original macOS host
+from the independent `agent-github-release` checkout. They establish local
+platform behavior, not qualification on a new machine, autonomous model design,
+physical calibration, manufacture, firmware flashing or hardware operation.
 
-## Completed checks
+## Final checks
 
-- Pi dependency installation from `package-lock.json` and `npm run bf:build`:
-  passed (Pi, BF Harness and BF Agent).
-- New Python 3.11 virtual environment, dependencies from `requirements.lock`,
-  Python package build/install, and frozen pnpm installation: passed.
-- Product graph and product deliverable projection tests: 17 passed.
-- EasyEDA community MCP self-tests: 50 passed (16 websocket, 16 bridge,
-  18 target selection). These use local mock windows, not a real PCB.
-- Workbench started on an ephemeral loopback port with new isolated state:
-  index, product scripts, Three module, health and authenticated state returned
-  HTTP 200; zero jobs and zero used model tokens.
-- Explicit file inventory audit found no provider key, GitHub token, private key,
-  credential file, local runtime database or file over 50 MB. The exact installed
-  local provider credential was also compared without printing its value.
+- `cd pi-bf-aiot && npm run bf:build`: passed. This is the scoped BF build;
+  the unrelated full upstream repository lint/check is not claimed here.
+- `cd battery-world && BF_PI_ROOT=/absolute/release/pi-bf-aiot ./init.sh`:
+  **388 Python tests passed**, with SDK type checks, World Studio type/build,
+  deterministic reproduction and source-to-view validation passed.
+- Nine product-authority checks include real CadQuery STEP generation and
+  independent dimensions/volume readback, actual ngspice raw output and tamper
+  rejection, a multiple-C-file STM32L031 target build, geometry-driven coupled
+  simulation, camera-only negative control, stage conflicts and input identity.
+- Seven Panorama checks include cloud-only source/history handling. Such files
+  must not hang the projection or be mistaken for deleted/passing evidence.
+- Seven changed frontend JavaScript modules pass `node --check`.
+- An independent real Pi process used six scripted local model responses to
+  write a project, submit the public engineering tool, run real ngspice and
+  read its independent result. It yielded 120 points / four variables and a
+  verified loaded product Harness hash. This is an integration test with zero
+  external model calls; it is not an autonomous reasoning experiment.
+- Live in-app-browser review confirmed the task stage summary, product node
+  evidence/questions, console authored-project capabilities/product Harness,
+  and source-backed Panorama (13 modules, 21 declared edges). Existing product
+  assembly v14 was observed, without changing its design or target.
+- Local production model ledger counts remained 1,933 SETTLED and one historical
+  UNKNOWN request before/after review. No new paid calls or budget reset.
 
-## Clean-source initialization issue
+## Failures retained and resolved
 
-Full application checks exposed an existing ordering bug: Studio tests loaded
-coupled and B2 manifests before the generators had recreated their ignored
-`runs/coupled` and `.bfworld/b2-development` directories. The first two attempts
-each stopped at the Studio fixture setup with one missing-artifact error (368
-tests discovered/executed; the nine Studio projection cases could not start).
-The existing development workspace masked these dependencies with cached outputs.
-`battery-world/init.sh` now invokes `scripts/build_coupled.py` and the existing
-`scripts/build_studio.py` materializer before the tests that consume them. It
-uses the same generators and leaves the scientific model and sealed fixtures
-unchanged.
+An earlier full run found an import that worked under focused unittest discovery
+but failed under root discovery. The test now supports both package entry paths.
 
-Full application recheck: **passed**, 377 Python tests (including the nine Studio
-projection cases), TypeScript SDK check, Studio type check, self-contained
-frontend build and source-to-view validation. Full command: `cd battery-world &&
-./init.sh`. No additional provider calls were made.
+Independent release verification also encountered macOS FileProvider cloud-only
+placeholders in tracked source, TypeScript dependencies and generated CAD Python
+bytecode. Compiler/process samples confirmed blocked file reads. Missing tracked
+bytes were restored from Git after inventory verification; build dependencies
+were restored only against matching lockfiles. Four generated cloud bytecode
+files were quarantined locally, and required CadQuery source dependencies were
+materialized through a local import. No timeout or acceptance threshold was
+relaxed. The interrupted compiler run and the full run with one CAD timeout are
+retained separately from the final passing run. A subsequent nine-test native
+recheck passed before the full regression rerun.
 
-## Boundaries
+Panorama now detects cloud-only snapshots and source files before reading them,
+keeps local history usable and exposes unavailable data explicitly. This handles
+the observed map failure; it is not a general-purpose cloud filesystem repair.
 
-Absolute local paths in captured application code still refer to the original
-workbench/toolchain setup. Some integration checks use installed local tools and
-the original Pi path. Passing the checks does not prove all optional tools are
-portable or that arbitrary new machines can execute the complete product task.
-See the root README before relocating the runtime.
+## Publication and evidence boundaries
 
-Builds can regenerate environment-specific validation reports. The release
-retains the original source-bound reports rather than promoting regenerated
-machine-specific copies as new scientific results. `source-manifest.json` binds
-the exported bytes, including the small initialization-order correction.
+Runtime data, credentials, private sessions, installed toolchains and large native
+artifacts are excluded. Exported bytes are inventoried in `source-manifest.json`.
+The explicit source scan found no installed provider credential, credential-token
+pattern, runtime database or file above 50 MB in the release scope. Git commit,
+remote equality and fresh-clone verification are recorded after publication in
+the local coordinator receipt, avoiding a self-referential commit identity here.
 
-The older Long-Horizon AI Agent coordination repository, its Git history, full
-private workbench state and large COMSOL/engineering binaries are not part of
-this source release. There were no new model calls and no physical operations.
+Test-generated machine-specific legacy reports are restored to the previously
+published source-bound reports; they are not promoted into new scientific results.
+The original source release's initial fixture materialization ordering correction
+remains in `init.sh`; this update does not change scientific model semantics.
 
-Git remote commit and fresh-clone readback are checked after the source commit;
-their receipt is retained by the local release coordinator to avoid a
-self-referential commit hash in this file.
+BFA-025 covers unified stage verdicts, input-scoped invalidation, authored native
+projects, geometry-to-coupled simulation, the loaded product Harness and the four
+UI projections. Detailed restrictions and next work are documented in
+`battery-world/docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md`.
+
+BFA-024 remains blocked by reference calibration and current-board integration.
+Many complete-delivery validators are still `not_run`; local native readback does
+not satisfy them. Arbitrary COMSOL project execution, a complete generic product
+contract library, current pluck PCB manufacturing data, measured MCU power and
+wireless reception, and Agent/Harness efficacy have not been established here.
+The older coordination repository's 88 scientific features and feat-397 remain
+unchanged; its separate scientific init was not run or claimed healthy.

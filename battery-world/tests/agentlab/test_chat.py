@@ -104,6 +104,29 @@ class ChatTests(unittest.TestCase):
         # Full raw history remains page-addressable for audit/export.
         first=chat.events(cid);second=chat.events(cid,first[-1]['seq'])
         self.assertEqual(len(before)+1,len(first)+len(second))
+    def test_actual_product_pi_loads_policy_and_current_context_without_paid_model(self):
+        requests=[]
+        def fake(owner,payload,on_chunk=None):
+            requests.append(payload)
+            base={'id':'fixture-product','object':'chat.completion.chunk','created':int(time.time()),'model':MODEL}
+            on_chunk({**base,'choices':[{'index':0,'delta':{'role':'assistant','content':'产品上下文已读取。'},'finish_reason':None}]})
+            on_chunk({**base,'choices':[{'index':0,'delta':{},'finish_reason':'stop'}]})
+            on_chunk({**base,'choices':[],'usage':{'prompt_tokens':20,'completion_tokens':3,'total_tokens':23}})
+            return {'model':MODEL,'usage':{'prompt_tokens':20,'completion_tokens':3,'total_tokens':23}}
+        self.app.provider.complete=fake
+        _,c=self.req('/api/conversations',{'text':'说明当前状态即可','operation_id':'product-policy'})
+        end=time.time()+20
+        while time.time()<end:
+            events=self.app.conversations.events(c['id'])
+            if any(e['data']['type']=='turn_complete' for e in events):break
+            time.sleep(.1)
+        loaded=next(e['data'] for e in events if e['data']['type']=='harness_loaded')
+        packet=next(e['data']['packet'] for e in events if e['data']['type']=='product_context_snapshot')
+        self.assertEqual(loaded['source']['loaded_modules']['product'],loaded['loaded']['product'])
+        self.assertEqual(c['id'],packet['owner']);self.assertIn(packet['sha256'],json.dumps(requests))
+        self.assertEqual(1,len(requests),'A question must not trigger automatic engineering continuation')
+        self.assertTrue(any(e['data']['type']=='turn_complete' for e in events))
+
     def test_actual_pi_stream_and_mid_turn_message_without_external_provider(self):
         requests=[];stream_started=threading.Event()
         def fake(owner,payload,on_chunk=None):

@@ -24,7 +24,9 @@
       data=next;
       if(!q('#map-stage'))build();else if(changed){selectors();draw();inspect()}
       q('#map-updated').textContent=(version?'历史快照 · ':'工作区观测 · ')+date(data.observed_at);
-      notify('');
+      const cloudSources=data.skipped?.filter(x=>x.reason==='cloud_placeholder').length||0;
+      const cloudHistory=data.unavailable_snapshots?.length||0;
+      notify(cloudSources||cloudHistory?`本机云端占位文件暂不可读：${cloudSources} 个源文件、${cloudHistory} 个历史快照。下载到本机后可恢复；未将缺失数据视为通过或删除。`:'');
     }catch(e){notify('观测暂不可用：'+e.message);if(!q('#map-stage'))q('#panorama-view').innerHTML=`<div class="map-empty"><p>${esc(e.message)}</p><button id="map-retry">重新读取</button></div>`;const retry=q('#map-retry');if(retry)retry.onclick=()=>open()}
     finally{busy=false;if(pending&&active()){pending=false;load(false)}}
   }

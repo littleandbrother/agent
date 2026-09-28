@@ -4,8 +4,7 @@ from pathlib import Path
 from .store import identity
 from . import product_build
 TEMPLATES=Path(__file__).with_name('engineering_templates')
-GCC=Path('/opt/ST/STM32CubeCLT_1.19.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc')
-CMSIS=Path('/Users/depengsu/Documents/bf-agent-workbench/toolchains/stm32l031')
+from .runtime_config import GCC, CMSIS
 SCOPE='STM32L031 目标编译与可审查烧录包；构建通过不代表已烧录、实物功能或功耗/延迟实测。'
 SKILL='''# MCU 固件与 TinyML 部署
 使用 bf_engineering run engine=mcu-firmware parameters={assembly_revision:整数}，生成现有按键/双LED功能的 STM32L031K6 C 源码、ELF/BIN/MAP、引脚说明、构建脚本与 flash_mcu.py。仅适用于记录的 PA0 按键与 PB0/PB1 LED 接线；仍需核对当前 PCB，不能假称兼容另一块板。读取 result.json 与 firmware-check.json。烧录脚本默认只输出计划，Agent 不能自动写板。

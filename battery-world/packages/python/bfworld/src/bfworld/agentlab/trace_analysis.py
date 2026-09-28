@@ -51,6 +51,8 @@ def analyze(snapshot, engineering=None, capability_events=None):
             active.update(end=at, status={'turn_complete': 'completed', 'turn_error': 'error', 'turn_stopped': 'stopped'}[kind])
             timeline.append({'id': 'event-' + str(event['seq']), 'lane': 'conversation', 'label': {'turn_complete':'本轮结束','turn_error':'本轮错误','turn_stopped':'已停止'}[kind],
                              'time': at, 'end': None, 'turn_id': active['id'], 'seq': event['seq'], 'status': active['status'], 'detail': data})
+        if kind in ('product_context_snapshot','delivery_observation','harness_loaded'):
+            timeline.append({'id':'event-'+str(event['seq']),'lane':'conversation','label':{'product_context_snapshot':'当前产品上下文快照','delivery_observation':'统一交付判定','harness_loaded':'实际加载的 Harness'}[kind], 'time':at,'end':None,'turn_id':active['id'],'seq':event['seq'],'status':'recorded','detail':data})
         message = obj(data.get('message'))
         if message.get('role') == 'assistant' and message.get('stopReason') == 'length':
             findings.append({'kind': 'output-truncated', 'level': 'error', 'title': '模型输出被截断',

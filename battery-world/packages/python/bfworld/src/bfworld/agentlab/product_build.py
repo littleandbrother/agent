@@ -5,7 +5,7 @@ from pathlib import Path
 from .store import identity
 from .product_energy import calculate
 
-CAD = Path('/Users/depengsu/Documents/bf-agent-workbench/toolchains/product-cad/bin/python')
+from .runtime_config import CAD
 SCRIPTS = ('product_cad.py', 'product_blender.py', 'product_readback.py')
 SCOPE = '参数化原生实体 CAD、STEP 读回、Blender 装配/剖视/爆炸展示、尺寸与干涉检查；未代替电气、制造或实物验收。'
 SKILL = '''# 完整产品数字样机

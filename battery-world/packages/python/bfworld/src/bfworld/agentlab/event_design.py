@@ -16,7 +16,7 @@ import shutil
 
 from .store import identity
 
-SPICE = Path('/opt/homebrew/bin/ngspice')
+from .runtime_config import SPICE
 SCOPE = '单模态机电耦合、二极管整流、行为电源管理及阶段负载的 ngspice 瞬态计算；不是已校准磁体、原厂 PMIC 模型或硬件验收。'
 SKILL = """# Event-level transient co-design
 Write an event-design JSON file in your workspace, then bf_engineering run

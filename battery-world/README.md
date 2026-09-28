@@ -1,5 +1,27 @@
 # Battery World Studio
 
+## Current BF Agent workbench (port 8768)
+
+The current product application is `apps/agent-studio`: **任务 / 控制台 / 全景 / 产品**.
+It is served by Python, not by the older World Studio command below.
+
+```bash
+# Run from battery-world; install dependencies using ./init.sh first.
+export BF_HOME="$HOME/Documents/bf-agent-workbench"
+export BF_PI_ROOT="$(cd ../pi-bf-aiot && pwd)"
+PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m bfworld.agentlab.server --port 8768
+```
+
+Open the local link written to `$BF_HOME/state/launch-url.txt`; it contains an
+operator credential and must not be committed or shared. Optional toolchain and
+provider configuration, scoped project execution, stage acceptance, verification
+commands and outstanding physical gaps are documented in
+[Product execution authority](docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md).
+The architecture entry is [docs/architecture/SYSTEM.md](docs/architecture/SYSTEM.md).
+Source installation does not install COMSOL, Blender, EDA, MCU SDKs or credentials.
+
+## Scientific apparatus and earlier World Studio
+
 Battery World Studio is an observable laboratory for executable battery-free
 intelligent systems. **EpiDesign** is the method for converting experimental
 experience into executable knowledge that is independently tested and reused on
@@ -20,7 +42,7 @@ is the observation and intervention interface. DeepSeek Harness, Codex, or
 another runner is a replaceable control plane, not the scientific runtime,
 trace authority, or qualification authority.
 
-## Quick start
+## Earlier World Studio (port 8766)
 
 ```bash
 ./init.sh

@@ -12,6 +12,8 @@ import os
 import tempfile
 
 from .store import canonical, identity
+from .design_review import native_checks, cards
+from .product_authority import binding_inputs, profile, PLUCK_ONLY, verdict
 
 ROOT = Path(__file__).resolve().parents[6]
 CONTRACT = ROOT / 'configs/reference_cases/engineering-delivery-v1.json'
@@ -62,6 +64,32 @@ class Deliverables:
             db.execute('''CREATE TABLE IF NOT EXISTS delivery_bindings(
                 owner TEXT, operation TEXT, task TEXT, revision INTEGER,
                 payload TEXT, created REAL, PRIMARY KEY(owner,operation))''')
+            db.execute('''CREATE TABLE IF NOT EXISTS product_stage_contracts(
+                owner TEXT, revision INTEGER, payload TEXT, created REAL,
+                PRIMARY KEY(owner,revision))''')
+
+    def stage_contract(self, owner):
+        with self.store.connect() as db:
+            row=db.execute('SELECT payload FROM product_stage_contracts WHERE owner=? ORDER BY revision DESC LIMIT 1',(owner,)).fetchone()
+        return json.loads(row['payload']) if row else None
+
+    def configure_stage(self, owner, body):
+        """Operator-only HTTP route. Stage changes never edit scientific checks."""
+        from .product_authority import STAGES
+        self.app.products.require(owner)
+        if set(body)-{'session_id'} != {'action','expected_revision','target_stage','max_continuations','reason'}:
+            raise ValueError('STAGE_CONTRACT_SCHEMA')
+        if body['target_stage'] not in STAGES or type(body['expected_revision']) is not int or type(body['max_continuations']) is not int or not 0<=body['max_continuations']<=12:
+            raise ValueError('STAGE_CONTRACT_INVALID')
+        if not isinstance(body['reason'],str) or not 1<=len(body['reason'])<=1000:raise ValueError('STAGE_CONTRACT_REASON_REQUIRED')
+        with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            last=db.execute('SELECT MAX(revision) FROM product_stage_contracts WHERE owner=?',(owner,)).fetchone()[0] or 0
+            if last!=body['expected_revision']:raise ValueError('STAGE_CONTRACT_CONFLICT')
+            value=dict(revision=last+1,target_stage=body['target_stage'],max_continuations=body['max_continuations'],reason=body['reason'],source='operator',owner=owner)
+            db.execute('INSERT INTO product_stage_contracts VALUES(?,?,?,?)',(owner,last+1,canonical(value),time.time()))
+        self.app.conversations.event(owner,'stage-contract-'+identity(value),{'type':'product_stage_contract','contract':value})
+        return self.inspect(owner)
 
     def bind(self, owner, body):
         required = {'action', 'operation_id', 'task_id', 'revision', 'files', 'jobs'}
@@ -97,6 +125,7 @@ class Deliverables:
             jobs.append({'id': key, 'status': job['status'], 'engine': job['engine'], 'snapshot_sha256': identity(job)})
         payload = dict(task_id=body['task_id'], revision=current['revision'],
                        physical_hash=current['hashes']['physical_hash'],
+                       input_dimensions=binding_inputs(body['task_id'], current),
                        files=files, jobs=jobs, contract_sha256=file_digest(CONTRACT))
         # Snapshot all direct dependency bindings. Future edits are discovered
         # from actual identities, without letting the participant waive them.
@@ -130,7 +159,7 @@ class Deliverables:
             current = None
         changed = set()
         for key, value in bindings.items():
-            if not current or not current['source_valid'] or value['physical_hash'] != current['hashes']['physical_hash'] or value['contract_sha256'] != file_digest(CONTRACT):
+            if not current or not current['source_valid'] or (value.get('input_dimensions') != binding_inputs(key, current) if 'input_dimensions' in value else value['physical_hash'] != current['hashes']['physical_hash']) or value['contract_sha256'] != file_digest(CONTRACT):
                 changed.add(key)
             if any(identity(bindings.get(dep)) != digest for dep, digest in value['dependencies'].items()):
                 changed.add(key)
@@ -149,6 +178,7 @@ class Deliverables:
                 except (ValueError, PermissionError, OSError):
                     changed.add(key)
         stale = set(dependent_ids(changed, spec['tasks']))
+        family, profile_reason = profile(current)
         tasks = []
         for task in spec['tasks']:
             binding = bindings.get(task['id'])
@@ -178,15 +208,19 @@ class Deliverables:
                     errors.append(str(exc))
             if errors:
                 status = 'invalid'
-            tasks.append({**task, 'binding': binding, 'delivery_status': status,
+            tasks.append({**task, 'checks': native_checks(self.app,owner,task['id'],binding,current), 'applicability': 'not_applicable' if family == 'solar' and task['id'] in PLUCK_ONLY else 'required', 'binding': binding, 'delivery_status': status,
                           'validation_status': 'stale' if status == 'stale' else 'failed' if errors else 'not_run',
                           'validation_reason': 'Requires scope-specific independent acceptance; file presence and successful tool execution do not certify this task.',
                           'missing_files': missing, 'integrity_errors': errors, 'executions': executions})
-        return {'schema_version': 'bf-engineering-delivery-snapshot-v1', 'owner': owner,
+        result = {'schema_version': 'bf-engineering-delivery-snapshot-v1', 'owner': owner,
                 'revision': current['revision'] if current else None, 'contract': spec,
-                'tasks': tasks, 'changed_tasks': sorted(changed), 'stale_tasks': sorted(stale),
+                'profile': family, 'profile_reason': profile_reason, 'tasks': tasks, 'changed_tasks': sorted(changed), 'stale_tasks': sorted(stale),
                 'complete': False, 'hardware_verified': False,
                 'scope': 'Source-bound inventory and freshness; no self-certification or reference answers.'}
+        result['research_cards'] = cards(result, current)
+        result['verdict'] = verdict(self.app, owner, result)
+        result['complete'] = result['verdict']['full_engineering_passed']
+        return result
 
     def package(self, owner):
         snapshot = self.inspect(owner)
@@ -234,4 +268,4 @@ class Deliverables:
             if target.is_symlink() or file_digest(target) != file_digest(dest):
                 raise ValueError('DELIVERY_PACKAGE_CONFLICT')
         result = self.app.assemblies.register(owner, {'revision': snapshot['revision'], 'path': relative, 'kind': 'document'})
-        return {**result, 'complete': False, 'scope': snapshot['scope'], 'tasks': len(snapshot['tasks'])}
+        return {**result, 'complete': snapshot['complete'], 'verdict': snapshot['verdict'], 'scope': snapshot['scope'], 'tasks': len(snapshot['tasks'])}

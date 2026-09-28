@@ -52,7 +52,7 @@ class DeliverablesTest(unittest.TestCase):
         self.assertIn('joint',d['stale_tasks']);self.assertEqual('invalid',d['tasks'][0]['delivery_status'])
 
     def test_geometry_edit_stales_camera_does_not(self):
-        self.bind(files=[self.publish()]);self.write(changed(definition(),camera=-35),1,'camera')
+        self.bind('cad',files=[self.publish()]);self.write(changed(definition(),camera=-35),1,'camera')
         self.assertEqual([],self.app.deliverables.inspect(self.owner)['stale_tasks'])
         self.write(changed(definition(),width=100),2,'geometry')
         self.assertIn('release',self.app.deliverables.inspect(self.owner)['stale_tasks'])
