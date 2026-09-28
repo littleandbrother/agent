@@ -1,0 +1,163 @@
+{
+  "feature": "BFA-008-conversation-layout-version",
+  "status": "complete",
+  "date": "2026-09-18T07:59:01.206188+00:00",
+  "root_cause": "The actual open tab still held BFA-006 scripts with 48 raw tool cards and no Trace nav. Sidebar Refresh only fetched data, so changing files and validating a separate tab did not update this document.",
+  "runtime_ui": "A collapsible public progress block, light gray streamed public text and a vertical rule, compact grouped tool activity, and a separate final reply. Detailed arguments/results remain in Developer Trace.",
+  "semantics": [
+    "No provider-internal thinking is read or fabricated.",
+    "Elapsed time is observed execution wall time, not model thinking time.",
+    "Explicit tool IDs preserve outcomes; ambiguous or missing returns never become success.",
+    "The original public final response and all 19 public progress messages remain unchanged; plan cards and errors remain accessible."
+  ],
+  "delivery": {
+    "ui_build": "487e6d475e44efa7",
+    "versioned_assets": true,
+    "open_tab_update_notice_verified": true,
+    "sidebar_refresh_reloads_document": true,
+    "draft_preservation_verified": true,
+    "test_draft_removed_and_empty_state_reloaded": true,
+    "automatic_message_submission": false
+  },
+  "browser": {
+    "actual_user_tab": "2",
+    "legacy_user_tab": "3",
+    "both_reloaded_to_same_build": true,
+    "current_conversation": "pi-chat-48879f0893e33a22",
+    "legacy_conversation_restored": "pi-rec-meta-ug-dev-02",
+    "raw_tool_cards_before": 48,
+    "raw_tool_cards_after": 0,
+    "progress_groups": 1,
+    "progress_texts": 19,
+    "compact_tool_calls": 24,
+    "final_replies": 1,
+    "runtime_to_trace_link_verified": true,
+    "trace_argument_result_expansion_verified": true,
+    "trace_raw_events": 1397,
+    "trace_ledger_requests": 23,
+    "draft_before": "empty",
+    "draft_after": "empty",
+    "final_copy_and_usage_retained": true,
+    "usage_label": "27,110 tokens"
+  },
+  "historical_replay": {
+    "events": 1403,
+    "groups": [
+      {
+        "kind": "user"
+      },
+      {
+        "kind": "progress",
+        "items": 46,
+        "active": false,
+        "start": 1789716439.252,
+        "end": 1789716490.72
+      },
+      {
+        "kind": "assistant"
+      },
+      {
+        "kind": "product"
+      },
+      {
+        "kind": "product"
+      }
+    ],
+    "activities": 24,
+    "publicMessages": 20,
+    "finalUnchanged": true,
+    "outcomes": {
+      "done": 21,
+      "error": 3
+    }
+  },
+  "trace_binding": {
+    "snapshot_id": "ec633d51aaf0c6f338867ad45e239e978d30bcf9a4c297474c2f0acca599a3cc",
+    "source": {
+      "bytes": 339625,
+      "committed_bytes": 339625,
+      "committed_sha256": "5f937b403e5f0215e2e7c6237f49a4648add2d40af3dcb56a6f125630248cf7e",
+      "exists": true,
+      "path": "sessions/pi-chat-48879f0893e33a22/trace.jsonl",
+      "pending_tail_bytes": 0,
+      "sha256": "5f937b403e5f0215e2e7c6237f49a4648add2d40af3dcb56a6f125630248cf7e"
+    },
+    "raw_equals_file": true
+  },
+  "verification": {
+    "full_init_exit_code": 0,
+    "full_init_tests": 248,
+    "agentlab_tests": 57,
+    "new_tests": 3,
+    "full_init_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/conversation-layout/full-init.log",
+    "full_init_log_sha256": "0f5ec8e7bc3142a144ab4440883c8dd53543a968c6610460c6949ff5882a7a45",
+    "javascript_syntax": "passed",
+    "projection_replay_after_final_visual_refinement": "passed",
+    "verified_copy_matches_live_sources": true
+  },
+  "source_sha256": {
+    "apps/agent-studio/conversation.js": "f98737bb9e94e5588d638ad3a21c3d9c119fda4e65a3c03d68be56fee633a54d",
+    "apps/agent-studio/conversation.css": "55aba5689855c5b23ad876960ca9aeddc3eed0fc2a92b8c97694fcc5a7d96c13",
+    "apps/agent-studio/version.js": "473062d1c2958c4c7edab1c8667973bb2e2f754115503e69f9a82ed6cb510925",
+    "apps/agent-studio/app.js": "18bd4437557e49f6857fb5c2c60dda7ac76800c3891d0b1f8f59afb62c9fbe40",
+    "apps/agent-studio/developer.js": "f682be32b5a55d650bf4c57a13872599d4c46524d6dd2aac73bdab97d7665468",
+    "apps/agent-studio/index.html": "f6a0b3fb46f0a1eb338bacf0e038e5009b789ef613344ec0f1e4d7a6955b78ec",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py": "c8bb39a46a77b9d31c9bde3259998c0829d8e12391bfbadc9e1fbff536b041c8",
+    "tests/agentlab/test_conversation_ui.py": "20ac52c336a6c9faa2b41b3f185dc28e67130ad0a9dcc1eb15571b8da8e6a0ef",
+    "tests/agentlab/conversation_projection.cjs": "6465fe6db3ab04fd3fddfb5373b11b9324699a4c9a0d662b0882a19c5f085ab4"
+  },
+  "preservation": {
+    "history_files_checked": 1974,
+    "changed_files": [],
+    "tables": {
+      "model_requests": {
+        "before_rows": 816,
+        "after_rows": 816,
+        "unchanged": true
+      },
+      "model_resolutions": {
+        "before_rows": 1,
+        "after_rows": 1,
+        "unchanged": true
+      },
+      "grants": {
+        "before_rows": 61,
+        "after_rows": 61,
+        "unchanged": true
+      },
+      "conversations": {
+        "before_rows": 7,
+        "after_rows": 7,
+        "unchanged": true
+      },
+      "chat_messages": {
+        "before_rows": 14,
+        "after_rows": 14,
+        "unchanged": true
+      },
+      "chat_events": {
+        "before_rows": 4845,
+        "after_rows": 4845,
+        "unchanged": true
+      },
+      "jobs": {
+        "before_rows": 120,
+        "after_rows": 120,
+        "unchanged": true
+      },
+      "model_limits": {
+        "before_rows": 1,
+        "after_rows": 1,
+        "unchanged": true
+      }
+    }
+  },
+  "new_model_calls": 0,
+  "new_cost_usd": 0,
+  "git_commit": false,
+  "limitations": [
+    "No paid-model streaming run was started; streaming projection was exercised through local event replay.",
+    "Trace is evidence for later attribution and candidate qualification; no automatic Harness RSI or scientific gain is claimed.",
+    "Missing historical source IDs/timestamps remain unknown in Trace."
+  ]
+}

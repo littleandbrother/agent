@@ -1,0 +1,92 @@
+{
+  "feature": "BFA-006-model-recovery-and-chat-polish",
+  "status": "complete",
+  "scope": "Operational transport recovery and conversation UI only",
+  "diagnosis": [
+    "Historical Python 3.11.9 SSL EOF at _ssl.c:1006 belongs to the initial TLS handshake, before HTTPS completion headers/body are written.",
+    "The old global batch expiry incorrectly disabled every new interactive conversation."
+  ],
+  "recovery": {
+    "historical_request": "llm-c5951a1fa32ae2e442f3",
+    "resolution": "verified NOT_SENT overlay",
+    "raw_ledger_preserved": true,
+    "usage_invented": false,
+    "full_reservation_retained_usd": 0.0087363,
+    "source": "https://github.com/python/cpython/blob/v3.11.9/Modules/_ssl.c#L1006",
+    "evidence": "/Users/depengsu/Documents/bf-agent-workbench/verification/model-recovery/reconciliation-receipt.json",
+    "future_transport": "Only failures directly observed inside HTTPSConnection.connect are NOT_SENT. Ambiguous post-send failures remain UNKNOWN and stop requests."
+  },
+  "interactive_leases": {
+    "seconds": 600,
+    "trigger": "New explicit operator chat message",
+    "duplicate_renews": false,
+    "background_renews": false,
+    "recall_revokes": true,
+    "batch_expiry_unchanged": true,
+    "global_usd_cap_unchanged": 3.9279102,
+    "global_tokens_unchanged": 9892099,
+    "request_cap_unchanged": 0.19,
+    "session_requests_unchanged": 24,
+    "session_experiments_unchanged": 6
+  },
+  "live_validation": {
+    "owner": "pi-chat-21ee81da9a373abf",
+    "requests": 2,
+    "status": "2 SETTLED",
+    "tokens": 6151,
+    "upper_bound_usd": 0.0018543,
+    "enforced_owner_cap_usd": 0.05,
+    "replies": [
+      "已收到，可以继续对话。",
+      "续聊正常"
+    ],
+    "evidence": "/Users/depengsu/Documents/bf-agent-workbench/verification/model-recovery/preservation-and-live.json",
+    "scope": "Connectivity, streaming, actual usage and same-session follow-up; not an autonomous engineering benchmark. User-initiated work elsewhere in the live UI is not attributed to these two test requests."
+  },
+  "preservation": {
+    "history_files_checked": 1397,
+    "history_files_changed": [],
+    "original_model_rows_checked": 775,
+    "original_model_rows_changed": [],
+    "original_limits_unchanged": true
+  },
+  "ui": {
+    "live_url": "http://127.0.0.1:8768/",
+    "initial_cases": 3,
+    "expanded_cases": 6,
+    "selection_fills_unsent_draft": true,
+    "hidden_preference_survives_reload": true,
+    "settings_removed": true,
+    "retry_button_removed": true,
+    "runtime_block_below_composer_removed": true,
+    "inline_error_observed": "上一笔模型用量待核实，暂时停止新请求。",
+    "restoration_notice_observed": true,
+    "assistant_default_opacity": "0",
+    "assistant_hover_opacity": "1",
+    "assistant_pointer_leave_opacity": "0",
+    "assistant_observed_tokens": [
+      2987,
+      3164
+    ],
+    "clipboard_exact": "续聊正常",
+    "existing_user_time_copy_recall_retained": true,
+    "note": "Checked in live in-app browser, separate hidden QA tab closed afterwards. User was also using the product; no forced replay of their old messages."
+  },
+  "verification": {
+    "new_recovery_tests": 7,
+    "chat_lifecycle_tests": 4,
+    "targeted_agentlab_before_final_lifecycle_test": 46,
+    "full_init_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/model-recovery/full-init.log",
+    "full_init_tests": 238,
+    "full_init_exit_code": 0,
+    "source_matches_verified_copy": true,
+    "final_agentlab_tests": 47,
+    "full_init_log_sha256": "5ac4481eccb546e1bb869a9a1455efcf74d18fcec613c16c1dba6b87b8d7385e"
+  },
+  "limitations": [
+    "No CAD/FEM or hardware acceptance added.",
+    "Provider interruptions after a request may have been sent still require usage reconciliation.",
+    "Monetary/token and cumulative conversation caps remain enforced."
+  ],
+  "git_commit": false
+}

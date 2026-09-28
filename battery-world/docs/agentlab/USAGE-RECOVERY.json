@@ -1,0 +1,143 @@
+{
+  "schema_version": "bf-usage-recovery-v1",
+  "diagnosis": "Current provider had no new unresolved usage. Prior UNKNOWN_STOP and budget failures remained rendered as raw current-looking 400 errors despite later successful replies. Interactive allocations were still tiny test caps.",
+  "runtime_audit": {
+    "checked": 1789926953.904358,
+    "historical_model_rows_preserved": 931,
+    "three_task_traces_preserved": [
+      "pi-chat-41e50268dcfe32c8",
+      "pi-chat-bc78abe0ca313091",
+      "pi-chat-981f6394293d0371"
+    ],
+    "new_requests": [
+      {
+        "id": "llm-56244f36eaa026c2885a",
+        "owner": "pi-chat-21ee81da9a373abf",
+        "created": 1789926824.898496,
+        "request_hash": "40b0f5cf71ccd24173c6e8af8f32f0861aea4916c61fc75173f510281ddcbd27",
+        "reserved": 0.01095,
+        "charged": 0.0012015,
+        "status": "SETTLED",
+        "usage": "{\"completion_tokens\":7,\"prompt_cache_hit_tokens\":1024,\"prompt_cache_miss_tokens\":2953,\"prompt_tokens\":3977,\"prompt_tokens_details\":{\"cached_tokens\":1024},\"total_tokens\":3984}",
+        "response_hash": "fe5c127df99ebb27ff615f7279a147e051637d72f6bbb904bd77cc8eeb31a99b",
+        "error": null
+      }
+    ],
+    "unresolved_unknown_requests": 0,
+    "limits": {
+      "id": 1,
+      "total_usd": 10.0,
+      "request_usd": 0.19,
+      "max_tokens": 50000000,
+      "expires": 1789669026.0093598
+    },
+    "interactive_default_owner_usd": 1.0,
+    "browser": {
+      "B_historical_errors_collapsed": 3,
+      "B_raw_400_visible": false,
+      "current_status": "等待消息",
+      "smoke_response": "已恢复，可以正常对话。",
+      "smoke_status": "IDLE"
+    }
+  },
+  "budget_change": {
+    "created": 1789926741.187308,
+    "authorization": "User: 怎么一直报错：400 PROVIDER_USAGE_UNKNOWN_STOP；拉高usage 让整个系统正常运行",
+    "allocation_basis": "Bounded default disclosed while optional tier preference pending; not a submitted selection. No unlimited budget.",
+    "before": {
+      "id": 1,
+      "total_usd": 3.9279101999999995,
+      "request_usd": 0.19,
+      "max_tokens": 20000000,
+      "expires": 1789669026.0093598
+    },
+    "after": {
+      "id": 1,
+      "total_usd": 10.0,
+      "request_usd": 0.19,
+      "max_tokens": 50000000,
+      "expires": 1789669026.0093598
+    },
+    "owner_caps_before": [
+      {
+        "owner": "pi-chat-21ee81da9a373abf",
+        "max_usd": 0.05
+      },
+      {
+        "owner": "pi-chat-51568ce5b0a46ee9",
+        "max_usd": 0.199
+      },
+      {
+        "owner": "pi-chat-bc78abe0ca313091",
+        "max_usd": 0.18
+      },
+      {
+        "owner": "pi-chat-41e50268dcfe32c8",
+        "max_usd": 0.15
+      },
+      {
+        "owner": "pi-chat-981f6394293d0371",
+        "max_usd": 0.12
+      }
+    ],
+    "owner_caps_after": [
+      {
+        "owner": "pi-chat-21ee81da9a373abf",
+        "max_usd": 1.0
+      },
+      {
+        "owner": "pi-chat-51568ce5b0a46ee9",
+        "max_usd": 1.0
+      },
+      {
+        "owner": "pi-chat-bc78abe0ca313091",
+        "max_usd": 1.0
+      },
+      {
+        "owner": "pi-chat-41e50268dcfe32c8",
+        "max_usd": 1.0
+      },
+      {
+        "owner": "pi-chat-981f6394293d0371",
+        "max_usd": 1.0
+      }
+    ],
+    "interactive_default_owner_usd": 1,
+    "usage_reset": false,
+    "unknown_usage_bypass": false,
+    "historical_requests_replayed": false,
+    "batch_window_changed": false
+  },
+  "folder_context_revision": 9,
+  "verification": {
+    "full_check": {
+      "actor": "local-operator-command",
+      "command": [
+        "./init.sh"
+      ],
+      "cwd": "/Users/depengsu/Documents/battery-world",
+      "end_snapshot": "d6f348729f9bf07d9db45ed3c944754903d569b7fc75647e8fc7806008821653",
+      "ended": 1789926872.893476,
+      "exit_code": 0,
+      "id": "1789926696956208000",
+      "label": "BFA-015-usage-recovery-init",
+      "log": "1789926696956208000.log",
+      "log_sha256": "9edc63d5674ce0c3c1ec1b58000501627030410274d0fcde61259a577703d66c",
+      "result": "passed",
+      "schema_version": "bf-development-check-v1",
+      "scope": "命令实际覆盖范围；不代表全部功能或产品达标",
+      "snapshot": "d6f348729f9bf07d9db45ed3c944754903d569b7fc75647e8fc7806008821653",
+      "started": 1789926696.9561942
+    },
+    "full_test_count": 282,
+    "targeted_tests": 19,
+    "conversation_projection": "passed including current/old distinction, HTTP wrapper, failed continuation, recall, source immutability",
+    "browser": "B shows 3 collapsed prior failures and no raw 400; actual UI-send returned expected Chinese reply, IDLE and SETTLED; C normal page inspected"
+  },
+  "limitations": [
+    "A genuinely unresolved request still blocks future dispatch; a larger token cap never fabricates usage.",
+    "Global and per-session totals include historical spend. Original batch window and scientific gates are unchanged.",
+    "Only one small actual dialogue smoke call was needed; no product task or historical request was automatically replayed."
+  ],
+  "evidence_directory": "/Users/depengsu/Documents/bf-agent-workbench/verification/usage-recovery"
+}

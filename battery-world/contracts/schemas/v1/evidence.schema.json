@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://battery-world.local/contracts/v1/evidence.schema.json",
+  "title": "Battery World Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "claims", "artifact_bindings", "fidelity", "hardware_result", "limitations"],
+  "properties": {
+    "schema_version": {"const": "bfworld-evidence-v1"},
+    "run_id": {"type": "string"},
+    "claims": {"type": "array", "items": {"type": "object"}},
+    "artifact_bindings": {"type": "object", "additionalProperties": {"type": "string"}},
+    "fidelity": {"type": "string"},
+    "hardware_result": {"const": false},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}
+

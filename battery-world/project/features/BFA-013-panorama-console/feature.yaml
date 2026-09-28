@@ -1,0 +1,22 @@
+schema_version: battery-world-feature-v1
+id: BFA-013-panorama-console
+status: complete
+owner: bf-agent-coordinator
+objective: Deliver Task, Console and Panorama modes with source-bound architecture, workspace changes, console scopes and version/validation inspection.
+hypothesis: One source-bound module map can locate workspace changes and validation without duplicating configuration or inventing Agent activity.
+falsifier: A stale check appears current, history opens current source, a map action dispatches a model/tool, or unobserved edits are attributed to an Agent.
+paper_claim: Engineering observability only.
+owned_paths: [apps/agent-studio/, packages/python/bfworld/src/bfworld/agentlab/, tests/agentlab/, scripts/run_panorama_check.py, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-013-panorama-console/, PROJECT.yaml, /Users/depengsu/Documents/bf-agent-workbench/verification/panorama/, /Users/depengsu/Documents/bf-agent-workbench/state/panorama/, /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json, /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md, /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md]
+schema_changes: [bf-panorama-snapshot-v1, bf-development-check-v1]
+targeted_tests: [snapshot binding, deletion and stale checks, path and role guards, mode persistence, map navigation, console scopes, browser layout and scrolling]
+negative_controls: [symlink escape, missing historical source, stale validation, unbound actor, participant access, no event redispatch]
+command: ./init.sh; targeted panorama tests; local browser acceptance
+output_artifact: docs/agentlab/PANORAMA-CONSOLE.json
+cost_cap: Zero paid model calls; existing budgets unchanged.
+claim_boundary: Source and execution observation only; no independent hardware, Agent efficacy or Harness RSI conclusion.
+stop_condition: Evidence corruption or unauthorized dispatch stops dependent work.
+handoff: Delivered three modes; future development should register actual checks with run_panorama_check.py. External Agent identity integration remains separate. Preserve existing sessions, ledgers and scientific gates.
+evidence: [docs/agentlab/PANORAMA-CONSOLE.md, docs/agentlab/PANORAMA-CONSOLE.json, /Users/depengsu/Documents/bf-agent-workbench/verification/panorama/browser-acceptance.json, /Users/depengsu/Documents/bf-agent-workbench/state/panorama/checks/1789922317699628000.json, /Users/depengsu/Documents/bf-agent-workbench/state/panorama/checks/1789922884582844000.json]
+verification: 275 full-init tests plus SDK/Studio; final 9 regressions and 2 JS syntax checks at identical snapshot; live browser desktop and narrow-screen checks.
+limitations: Declared module map and visible-page polling only; no external Coding Agent identity, background edit stream, unregistered check ingestion, or live check terminal. Full-init record spans UI changes; final targeted record binds current code. No scientific or RSI qualification.
+completed_at: '2026-09-21'

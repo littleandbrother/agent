@@ -1,0 +1,27 @@
+schema_version: battery-world-package-ownership-v1
+packages:
+  contracts:
+    owner: contracts
+    writes: []
+  kernel:
+    owner: kernel
+    depends_on: [contracts]
+  runtime:
+    owner: runtime
+    depends_on: [contracts, kernel]
+  bundle:
+    owner: bundle
+    depends_on: [contracts, kernel]
+  verification:
+    owner: qualification
+    depends_on: [contracts, bundle]
+  worlds.rotary:
+    owner: rotary-world
+    depends_on: [contracts, kernel]
+  studio:
+    owner: studio
+    depends_on: [bundle]
+  agent:
+    owner: agent-protocol
+    depends_on: [bundle]
+

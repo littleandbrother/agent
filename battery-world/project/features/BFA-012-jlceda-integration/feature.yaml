@@ -1,0 +1,27 @@
+schema_version: battery-world-feature-v1
+id: BFA-012-jlceda-integration
+status: complete
+owner: bf-agent-coordinator
+objective: Connect JLCEDA Pro through documented bridge and MCP, install reviewed routing skills, expose real capabilities and artifacts in developer Tools/Trace, and test a separate small circuit.
+hypothesis: Scoped EDA jobs can generate and inspect native design artifacts with trace-bound validation and document ownership without misreporting unavailable operations as success.
+falsifier: Wrong active document is modified, unavailable DRC appears passed, artifacts are missing or detached, or a simulated transport is reported as live EDA.
+paper_claim: Engineering integration only; no fabricated board or product qualification.
+owned_paths: [/Users/depengsu/.codex/skills/easyeda-schematic-net-fanout/, /Users/depengsu/Documents/LCEDA-Pro/projects/BF-EDA-Smoke-20260918.eprj2, apps/agent-studio/, packages/python/bfworld/src/bfworld/agentlab/, tests/agentlab/, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-012-jlceda-integration/, PROJECT.yaml, /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/, /Users/depengsu/Documents/bf-agent-workbench/, /Users/depengsu/.codex/tools/bf-jlceda/, /Users/depengsu/.codex/skills/easyeda-api/, /Users/depengsu/.codex/skills/easyeda-pcb-routing/, /Users/depengsu/.codex/skills/easyeda-workflow/, /Users/depengsu/.codex/skills/design-validation/]
+schema_changes: [versioned EDA job results and MCP observations]
+targeted_tests: [bridge health, document identity, tool discovery, native schematic and PCB smoke, artifact hashes, DRC unavailable handling, browser Tools and Trace]
+negative_controls: [wrong window, empty document, missing bridge, missing rules, malformed RPC, export traversal, repeated operation ID]
+command: ./init.sh plus isolated MCP and live JLCEDA smoke receipts.
+output_artifact: docs/agentlab/JLCEDA-INTEGRATION.json
+cost_cap: No additional paid model calls for integration; local EDA smoke jobs only. Existing monetary limits unchanged.
+claim_boundary: Native digital design and checks only, no manufacturing order or physical verification. Preserve all existing EDA projects; create isolated smoke design.
+stop_condition: Missing login or required application permission, unbound document identity, unknown mutation result, or failed artifact audit stops dependent EDA operation while independent integration work continues.
+handoff: Real native smoke and developer Tools/Trace delivered. AutoRouting unavailable in V3.2.148; schematic has 2 unresolved warnings; full solar product PCB/firmware/data remains separate. See docs/agentlab/JLCEDA-INTEGRATION.md.
+
+result: Real native schematic and 30x20 mm PCB, DRC passed, exports verified; digital integration only.
+evidence:
+  receipt: docs/agentlab/JLCEDA-INTEGRATION.json
+  report: docs/agentlab/JLCEDA-INTEGRATION.md
+  full_init_tests: 267
+  final_targeted_tests: 14
+  artifact_hashes_verified: 118
+  paid_calls: 0

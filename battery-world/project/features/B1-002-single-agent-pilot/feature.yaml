@@ -1,0 +1,22 @@
+schema_version: battery-world-feature-v1
+id: B1-002-single-agent-pilot
+status: complete
+owner: coordinator
+objective: Run a pinned, budgeted and isolated general coding Agent through the implemented control plane after real launch inputs and sealed evaluation are available.
+owned_paths: [studies/, docs/agent-pilot/, project/features/B1-002-single-agent-pilot/, PROJECT.yaml, project/ROADMAP.yaml, docs/PROGRESS.md, docs/SESSION-HANDOFF.md]
+hypothesis: A single fixed Agent can complete an end-to-end design/experiment/revision/submission workflow without reference leakage, duplicate charges or manual tool repair.
+falsifier: Reference truth leaks; model identity or usage cannot be reconciled; the Agent cannot complete the frozen mission within its authorized budget; or recovery changes committed outcomes.
+schema_changes: [agent-pilot-receipt-v1]
+tests: [tests/control/test_broker.py, tests/control/test_pilot.py]
+negative_controls: [infeasible task, wrong diagnosis, receiver loss, duplicate tool request, interrupted execution, hidden path access]
+exit_gates: [real model identity pinned, positive token/paid/wall budgets, usage receipts, participant sandbox audit, no-agent reference pass, frozen evaluation identity, actual Agent submission]
+command: .venv/bin/python scripts/check_pilot_readiness.py
+artifacts: [studies/protocols/fixed-model-pilot.yaml, docs/agent-pilot/validation.json]
+cost_cap: zero external calls until positive caller-authorized token, paid and wall-clock caps are recorded; no budget inferred from an open-ended implementation request
+claim_boundary: A controlled Agent pilot only after all launch gates; developer reference drivers and UI interventions are not substitute Agent evidence.
+stop_condition: Any launch input absent, usage unavailable, budget exhausted, hidden leak, or immutable evidence audit fails.
+handoff: B2-002-first-transfer-study
+limitations: [bounded finite-catalogue computational pilot, not a general long-horizon benchmark or DSH benefit claim, no hardware]
+evidence: [docs/campaign/preflight.json, docs/campaign/audit.json, docs/campaign/report.json]
+implemented_by: BC-001-campaign-execution
+validation: 36 real model-driven trials; 63 calls; 18 evidence-bound computational successes; OS isolation and cost-recovery checks; cached campaign replay with no added paid calls.

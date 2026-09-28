@@ -1,0 +1,81 @@
+schema_version: battery-world-feature-v1
+id: A1-001-visible-current-world-studio
+status: complete
+owner: coordinator
+objective: Build a unified Study Atlas and synchronized replay that exposes exactly the current A-001 and B0-000 evidence while marking every missing capability as unimplemented.
+entry_gates:
+  - A-001 bundle independently verifies with frozen identity
+  - B0-000 semantic suite reproduces byte-identically
+owned_paths:
+  - project/features/A2-001-minimum-closed-experiment-contracts/
+  - package.json
+  - pnpm-lock.yaml
+  - pnpm-workspace.yaml
+  - .gitignore
+  - project/ROADMAP.yaml
+  - docs/PROGRESS.md
+  - docs/ROADMAP.md
+  - scripts/validate_project_state.py
+  - tests/project/
+  - scripts/build_studio.py
+  - scripts/serve_studio.py
+  - PROJECT.yaml
+  - README.md
+  - apps/world-studio/
+  - packages/typescript/bfworld-sdk/
+  - docs/studio/
+  - project/features/A1-001-visible-current-world-studio/
+  - scripts/validate_studio.py
+  - tests/studio/
+  - init.sh
+hypothesis: A trace-first Study Atlas can make current component coverage, state transitions, thresholds, revisions, failure certainty, and evidence provenance understandable without inventing unimplemented coupled-world or Agent behavior.
+paper_claim: Observation and apparatus transparency only; no claim that visualization improves human or Agent performance.
+falsifier: Any visible numerical or verdict-bearing state lacks a source binding; Studio computes PMP/EA/VMS or causality; replay requires a scientific backend; missing components appear implemented; or A-001 identity changes.
+schema_changes: []
+consumes:
+  - runs/a-rotary-v1
+  - fixtures/golden-episodes
+tests:
+  - tests/studio/test_study_atlas.py
+  - tests/studio/test_offline_replay.py
+negative_controls:
+  - visible value without VisualBinding
+  - forged implemented status for absent component
+  - frontend-derived VMS
+  - modified sealed A artifact
+exit_gates:
+  - id: visible-values-source-bound
+    criterion: 100 percent of visible numerical and verdict-bearing properties resolve to a channel, manifest, or receipt
+  - id: studio-computes-no-scientific-verdict
+    criterion: Studio contains no implementation of PMP, EA, VMS, qualification, or causal-confirmation logic
+  - id: sealed-run-replays-offline
+    criterion: copied A RunBundle renders without Python runtime or online scientific service
+  - id: unimplemented-capability-not-simulated
+    criterion: PMIC dynamics, real inference, receiver, Agent, knowledge, hidden qualification, and hardware are grey and explicitly absent
+  - id: synchronized-views-use-one-coordinate
+    criterion: topology or 3D, timeline, event detail, code version, and provenance share task, run, time, and version identity
+  - id: a001-identity-unchanged
+    criterion: A-001 bundle hash remains sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059
+command: ./init.sh
+artifacts:
+  - apps/world-studio/dist/index.html
+  - docs/studio/A1-VALIDATION.md
+  - docs/studio/screenshots/study-atlas.png
+  - docs/studio/screenshots/run-timeline.png
+cost_cap: zero model/API calls; local CPU and browser only
+claim_boundary: A truthful visualization of current evidence, not a full coupled world, Agent result, knowledge-growth result, user study, or hardware result.
+stop_condition: Any provenance, offline replay, absent-capability, frontend-authority, identity, or full repository gate fails.
+handoff: A2-001-minimum-closed-experiment-contracts
+limitations:
+  - A-001 exposes aggregate load and simplified world state only.
+  - B0 projections are semantic expectations, not coupled continuous runs.
+  - Visual polish cannot substitute for trace and provenance gates.
+evidence:
+  command: ./init.sh
+  python_tests: 32
+  typescript: passed
+  projection_report: docs/studio/projection-validation.json
+  browser_report: docs/studio/browser-validation.json
+  browser_interactions: 12 passed
+  raw_samples_retained: 2803
+  a001_bundle_hash: sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059

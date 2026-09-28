@@ -1,0 +1,19 @@
+schema_version: battery-world-feature-v1
+id: BFA-008-conversation-layout-version
+status: complete
+owner: bf-agent-coordinator
+objective: Deliver collapsible public progress, compact Codex-style tool activity, final responses, separate developer Trace, and reliable frontend version refresh on the actual user tabs.
+hypothesis: Source-grounded display grouping and asset version detection remove stale tool cards without losing streaming, source evidence, drafts or conversation identity.
+falsifier: Final text is lost or misclassified after completion, tool failures show success, elapsed thinking time is fabricated, source logs or model execution change, or the actual open tab still loads stale UI.
+paper_claim: Interface projection and delivery reliability only.
+owned_paths: [apps/agent-studio/, packages/python/bfworld/src/bfworld/agentlab/server.py, tests/agentlab/, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-008-conversation-layout-version/, PROJECT.yaml]
+schema_changes: [bf-ui-build-v1]
+targeted_tests: [live and completed progress grouping, final text preservation, tool ID outcomes, recall and interruption, frontend build hash and cache keys, draft-preserving refresh, actual user tab verification, separate Trace]
+negative_controls: [pending tools shown complete, overwritten raw history, changed model budgets, stale assets, falsely labeled private thought or thinking duration]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/CONVERSATION-LAYOUT.json
+cost_cap: Zero new model calls. Read-only historical projection and local replay tests.
+claim_boundary: Public process text only, not private reasoning. Duration is recorded execution wall time when available. No automatic Harness improvement or scientific result.
+stop_condition: Evidence mutation, additional paid dispatch, or missing final response in replay.
+limitations: Streaming projected through local event replay; no new paid model call. Historical missing tool timings remain unknown. No automatic Harness RSI.
+handoff: Both actual user tabs updated to build 487e6d475e44efa7. 248 isolated full-init tests and browser checks pass. Preserve trace evidence and evaluate future Harness candidates independently.

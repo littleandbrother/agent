@@ -1,0 +1,31 @@
+schema_version: battery-world-feature-v1
+id: BFA-001-pi-workbench
+status: complete
+owner: bf-agent-coordinator
+objective: Minimal live UI then dependency-ordered solve and improve chains using pinned Pi and the existing computational world.
+hypothesis: A separately versioned policy execution boundary and Pi harness can produce file-bound experiments and independently loaded harness candidates without changing frozen v1/v2 scientific behavior.
+falsifier: Policy edits do not affect execution, private truth leaks, identities drift, budgets fail open, candidate source is not loaded, or matched comparisons change undeclared conditions.
+paper_claim: Engineering feasibility of auditable solve and self-modification chains; capability or recursive gains require actual matched outcomes.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, configs/agentlab/, scripts/run_agentlab.py, project/features/BFA-001-pi-workbench/, docs/agentlab/, PROJECT.yaml, project/features/B2-003-repair-and-blind-transfer/feature.yaml]
+external_owned_paths: [/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/, /Users/depengsu/Documents/pi-bf-aiot/packages/bf-harness/, /Users/depengsu/Documents/bf-agent-workbench/]
+schema_changes: [bf-agent-run-v1, bf-agent-job-v1, bf-agent-snapshot-v1, bf-agent-policy-observation-v1, bf-agent-policy-action-v1, bf-agent-harness-v1]
+targeted_tests: [policy causality, v2 parity, public projection, immutable snapshot, idempotency, owner authorization, cancellation, restart reconciliation, budget exhaustion, source activation, fresh-process comparison]
+negative_controls: [wait-only policy, malformed policy, private read, repeated operation conflict, stale submission, unavailable asset, no-op harness, unchanged candidate, unknown provider request]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/DELIVERY.json
+cost_cap: User authorized DeepSeek V4.1 Flash with each request below USD 0.20 and all work below USD 3. Enforced engineering limits USD 0.19/request and USD 2.90 initial total, prospectively adjusted to USD 2.99 inside the unchanged user cap before the final two meta trials; initial 9M, user-resumed cumulative 9.2M token ceiling; 90s/request, 600s/Pi, 6h total. Existing paid-campaign ledger is unchanged.
+claim_boundary: Synthetic computational policy tasks, archived measurement replay and physical hardware are separate. No formal B2-003 dispatch or qualification is authorized by this engineering feature.
+stop_condition: Missing model identity/budget/usage before live dispatch, unexpected private access, changed frozen source, unbounded compute, or absent required physical assets.
+handoff: UI and computational tasks 01-07 verified. Both original meta descendants resumed and sealed under the user continuation protocol, preserving cumulative counts and input identities. No statistical/meta-efficacy or physical-hardware claim. Paid window closed after completing declared trials; remote GitHub fork still needs authentication.
+
+coordination_boundary: The B2 feature status is suspended to ready solely to maintain a single active owner; frozen scientific semantics, owner approvals, budgets and gates remain unchanged.
+
+completion_evidence: docs/agentlab/DELIVERY.json
+prior_stop: Two independent meta solve attempts stopped at the 9000000-token global reservation gate; no valid meta efficacy comparison. All 747 model responses settled; peak-rate upper cost USD 2.8965297.
+external_blockers: [GitHub remote fork requires authentication, physical assets remain NOT_EVALUATED]
+
+continuation_authority: User explicitly requested continued development until completion after the prior gate stop. Preserve total cost strictly below USD 3; do not reset cost or request counts.
+continuation_hypothesis: A bounded restart can reconcile the same frozen descendants and original experiment identities while keeping cumulative requests and USD usage within the original user cap.
+continuation_falsifier: Reset usage, stale snapshot submission, source/evaluator drift, changed per-owner total experiment or request allowance, unknown usage, or total cost reaching USD 3.
+
+final_evidence: 760 settled model calls; USD 2.9379102 conservative upper cost; 9092099 cumulative tokens; no unknown usage; H0/H1 16 matched pairs and 10 recursive/control/transfer trials recorded.

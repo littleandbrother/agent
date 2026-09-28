@@ -1,0 +1,58 @@
+schema_version: battery-world-feature-v1
+id: FND-002-experiments-to-expertise-roadmap
+status: complete
+owner: coordinator
+objective: Reframe the repository around measurable cross-task growth of executable design knowledge and publish an evidence-derived six-milestone roadmap.
+owned_paths:
+  - AGENTS.md
+  - PROJECT.yaml
+  - README.md
+  - docs/VISION.md
+  - docs/ROADMAP.md
+  - docs/PROGRESS.md
+  - docs/architecture/SYSTEM.md
+  - project/ROADMAP.yaml
+  - project/features/FND-002-experiments-to-expertise-roadmap/
+  - project/features/A1-001-visible-current-world-studio/
+  - scripts/validate_project_state.py
+  - tests/project/
+  - init.sh
+hypothesis: A single central question, typed knowledge lifecycle, evidence-gated milestone graph, and machine-checked progress view can remove competing project centers without crediting unverified legacy work.
+paper_claim: Research-program governance only; no continual-learning, visualization-benefit, Agent, hardware, or RSI result.
+falsifier: The roadmap has multiple central claims; completed status lacks artifacts; current A/B0 identities drift; historical prototypes count as current completion; or the next feature lacks a falsifiable exit gate.
+schema_changes:
+  - project/ROADMAP.yaml
+tests:
+  - tests/project/test_project_state.py
+negative_controls:
+  - duplicate milestone identifier
+  - milestone marked complete with pending gates
+  - stale A or B0 evidence identity
+  - next feature missing from feature registry
+command: ./init.sh
+artifacts:
+  - docs/VISION.md
+  - docs/ROADMAP.md
+  - docs/PROGRESS.md
+  - project/ROADMAP.yaml
+  - project/features/A1-001-visible-current-world-studio/feature.yaml
+cost_cap: zero model calls; local CPU only
+claim_boundary: This feature reorganizes objectives and evidence bookkeeping; it does not improve system or Agent capability.
+stop_condition: Any project-state validation, A/B0 regression, or full repository gate fails.
+handoff: A1-001-visible-current-world-studio
+completed_at: 2026-09-05
+evidence:
+  validated_at: 2026-09-05
+  command: ./init.sh
+  project_state_validation: passed
+  python_tests: 26 passed
+  typescript_check: passed
+  research_milestones_complete: 0 of 6
+  foundation_features_complete: 4
+  next_feature: A1-001-visible-current-world-studio
+  a001_bundle_hash: sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059
+  b0_manifest_hash: sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618
+limitations:
+  - This reframing creates no new world, Studio, Agent, knowledge, or hardware capability.
+  - Milestone metrics and cost thresholds still require preregistration inside their implementing Features.
+  - The executable knowledge contract remains provisional until B2 exercises it.

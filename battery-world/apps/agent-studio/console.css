@@ -1,0 +1,13 @@
+.sidebar-bottom .mode-switch button{flex:1;padding:7px 0;font-size:12px}
+.developer-mode #conversation-title,.developer-mode #conversation-status,.developer-mode #folder-context,.panorama-mode #conversation-title,.panorama-mode #conversation-status,.panorama-mode #folder-context{display:none!important}
+.developer-mode .topbar::after{content:'控制台';font-size:13px;color:var(--muted)}
+.panorama-mode .topbar::after{content:'全景';font-size:13px;color:var(--muted)}
+.console-scope{display:flex;gap:8px 20px;flex-wrap:wrap;padding:12px 0 0;color:var(--muted);font-size:11px}
+.console-scope span+span::before{content:'·';margin-right:18px;color:#bbb}
+#dev-nav{margin:18px 0 12px;gap:14px}#dev-nav button{white-space:nowrap;padding:10px 4px}
+#dev-subnav{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}#dev-subnav button{padding:6px 12px;border:0;font-size:12px;background:transparent}#dev-subnav button[aria-pressed=true]{background:var(--surface)}#dev-subnav small{color:var(--muted);font-size:10px;margin-left:5px}
+.console-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 24px}.console-cards.three{grid-template-columns:repeat(3,minmax(0,1fr))}.console-cards article{border:1px solid var(--rule);border-radius:10px;padding:16px;min-width:0}.console-cards small{display:block;color:var(--muted);font-size:11px}.console-cards b{font-size:14px;display:block;margin:8px 0;font-weight:550;overflow-wrap:anywhere}.console-cards p{font-size:11px;color:var(--muted);margin:0}.console-notes{padding-left:20px;font-size:13px;line-height:1.9}
+.platform-versions{display:flex;gap:10px;overflow:auto;padding:8px 0 22px;margin-bottom:18px;border-bottom:1px solid var(--rule)}.platform-versions button{min-width:170px;text-align:left;padding:12px}.platform-versions b,.platform-versions span,.platform-versions small{display:block}.platform-versions b{font:12px var(--mono)}.platform-versions span{font-size:11px;margin:8px 0}.platform-versions small{font-size:10px;color:var(--muted)}
+.check-record{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--rule)}.check-record b{font-size:13px;font-weight:550}.check-record p{font-size:12px;margin:5px 0}.check-record code{font-size:10px;color:var(--muted)}.check-record button{font-size:11px;white-space:nowrap}#development-checks{padding-bottom:28px}
+@media(max-width:800px){.console-cards.three{grid-template-columns:1fr}.console-scope span+span::before{display:none}.console-scope{gap:5px 12px}}
+@media(max-width:520px){.console-cards{grid-template-columns:1fr}#dev-nav{gap:10px}#dev-nav button{font-size:12px}.dev-top h2{font-size:21px}}

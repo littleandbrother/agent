@@ -1,0 +1,34 @@
+schema_version: battery-world-feature-v1
+id: B1-001-agent-api-and-recovery
+status: complete
+evidence: [docs/control/validation.json, docs/control/B1-IMPLEMENTATION.md]
+owner: coordinator
+objective: Expose a thin design/experiment/submission control plane with durable identities, explicit costs, independent reference ownership and crash recovery; implement the Studio experiment console.
+owned_paths:
+  - PROJECT.yaml
+  - README.md
+  - project/ROADMAP.yaml
+  - docs/
+  - project/features/B1-001-agent-api-and-recovery/
+  - project/features/B2-001-executable-knowledge-capsule/
+  - packages/python/bfworld/src/bfworld/control/
+  - scripts/serve_studio.py
+  - scripts/agent_tools.py
+  - scripts/validate_control.py
+  - scripts/build_studio.py
+  - tests/control/
+  - apps/world-studio/
+  - init.sh
+hypothesis: A fixed interface can preserve exactly-once committed experiment identity and charged experiment reservations across interrupted execution while exposing no hidden reference mutation.
+falsifier: A duplicate changes design, charges twice, overwrites evidence, modifies reference truth, or submits without current run identity; a killed experiment cannot reconcile costs and recover its result.
+schema_changes: [control-request-v1, control-receipt-v1]
+tests: [tests/control/test_broker.py]
+negative_controls: [idempotency-key conflict, budget exhaustion, unknown reference, forged submission, crash after reservation, crash after artifact seal]
+exit_gates: [bounded API functional, immutable experiment identity, crash reconciliation, observer-only Studio control receipts, unauthorized reference writes rejected]
+command: ./init.sh
+artifacts: [docs/control/validation.json, docs/control/B1-IMPLEMENTATION.md]
+cost_cap: zero external model/API calls; at most 100 local experiment reservations per developer session
+claim_boundary: Functional scientific tools and reference orchestration only; no controlled LLM/DSH efficacy result or hidden task security claim from an unsandboxed local developer process.
+stop_condition: Identity, budget, recovery or immutable evidence check fails.
+handoff: B2-001-executable-knowledge-capsule
+limitations: [formal model campaign needs fixed model identity and explicit token/cost cap, local developer host is not a participant sandbox]

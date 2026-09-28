@@ -1,0 +1,22 @@
+schema_version: battery-world-feature-v1
+id: BC-001-campaign-execution
+status: complete
+owner: coordinator
+objective: Execute a budget-governed fixed DeepSeek V4 Flash pilot with isolated executable knowledge, matched history arms, independent qualification and a trace-bound campaign Studio.
+owned_paths: [PROJECT.yaml, README.md, docs/, project/ROADMAP.yaml, project/features/BC-001-campaign-execution/, project/features/B2-003-repair-and-blind-transfer/, project/features/B1-002-single-agent-pilot/, packages/python/bfworld/src/bfworld/campaign/, scripts/run_campaign.py, scripts/audit_campaign.py, scripts/build_studio.py, scripts/validate_studio.py, scripts/check_pilot_readiness.py, studies/, tests/campaign/, tests/studio/, tests/control/test_pilot.py, apps/world-studio/, init.sh]
+hypothesis: With fixed task contracts, model and history, model-authored executable knowledge can improve future-task design efficiency relative to raw history and text memory without false admission.
+falsifier: Matched future tasks show no benefit, explanation or scope checks fail, cost increases, model identity changes, usage is absent, or hidden state is exposed.
+schema_changes: [paid-call-ledger-v1, fixed-model-campaign-v1, executable-knowledge-candidate-v2]
+tests: [tests/campaign/test_budget.py, tests/campaign/test_isolation.py, tests/campaign/test_protocol.py]
+negative_controls: [network and private filesystem denial, duplicate paid request, uncertain call reservation, tampered knowledge, infeasible task, wrong diagnosis, no-revision-needed, removed knowledge]
+exit_gates: [authorized strict budget, provider identity and usage, sandbox denial tests, immutable calls and experiments, matched history, no final feedback leak, candidate dual qualification, complete bounded campaign report, source-bound UI]
+command: .venv/bin/python scripts/run_campaign.py --prepare; .venv/bin/python scripts/run_campaign.py --run; ./init.sh
+artifacts: [docs/campaign/protocol.json, docs/campaign/preflight.json, docs/campaign/report.json, docs/campaign/IMPLEMENTATION.md]
+cost_cap: User authorized DeepSeek V4 Flash, at most CNY 2 per trial and strictly below CNY 20 overall. Reserve at peak published rates; engineering cap CNY 19, 120 paid calls, 600000 total tokens, 3600 seconds; no implicit retries or parallel paid calls.
+claim_boundary: Bounded computational fixed-model pilot. Causal learning and RSI claims require positive independent future-task evidence, not merely implementation, a single patch or model-generated code. No hardware claim.
+stop_condition: CNY 19 envelope, 120 calls, 600000 tokens or 3600 seconds reached; missing usage; uncertain request; unpinned identity; sandbox leak; immutable receipt mismatch; or any attempt to tune on final feedback.
+handoff: Analyze sealed outcomes; independent campaigns and physical anchors remain separate research gates.
+evidence: [docs/campaign/report.json, docs/campaign/audit.json, docs/campaign/browser-validation.json, docs/campaign/IMPLEMENTATION.md]
+validation_receipt: 82 tests and SDK/Studio type checks passed; offline deployment, campaign and legacy browser suites passed; cached pilot replay preserved the report hash with 63 calls and CNY 1.463445 upper bound unchanged.
+scientific_outcome: Completed bounded pilot; all three knowledge candidates rejected; no transfer or RSI gain established. Guards correctly preserve rejection.
+limitations: [small pilot size, synthetic reference and labels, source models uncalibrated, no physical measurements, provider version is an observed service identity rather than immutable weights]

@@ -1,0 +1,46 @@
+easyeda-pro-mcp
+Copyright 2026 Eritque arcus
+
+This product includes software developed by Eritque arcus.
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+--------------------------------------------------------------------------------
+Relationship to upstream EasyEDA / JLCEDA projects
+--------------------------------------------------------------------------------
+
+This project is NOT affiliated with, endorsed by, or sponsored by JLCEDA /
+嘉立创. "EasyEDA" and "嘉立创EDA" are trademarks of their respective owners
+and are used here only to identify what this project interoperates with.
+
+This project talks to EasyEDA Pro (嘉立创EDA专业版) through the extension
+"Run API Gateway", published by JLCEDA at:
+
+    https://github.com/easyeda/eext-run-api-gateway   (Apache License 2.0)
+    Copyright 2024 JLCEDA <support[#]lceda.cn>
+
+The `eext/` directory of this repository, when present, contains a MODIFIED
+version of that extension. Modifications are listed in eext/CHANGES.md as
+required by Apache License 2.0 section 4(b). The upstream LICENSE is retained
+in that directory.
+
+Everything else in this repository is original work:
+
+  * The MCP server (src/eda-mcp-server.mjs) is an independent implementation.
+    It calls the EasyEDA Pro scripting API; calling an API does not make a
+    program a derivative work of that API's implementation.
+  * The WebSocket server (src/ws-server.mjs) implements RFC 6455 from the
+    specification.
+  * The bridge (src/bridge-embedded.mjs) implements the gateway's wire protocol,
+    which is defined by the extension in eext/ (Apache-2.0, above).
+  * The analysis scripts (src/sch-netlist.mjs, src/sch-netcheck.mjs,
+    src/pcb-dfm-check.mjs, src/capture-canvas.mjs) are original.
+
+The optional autorouter tool (src/freerouting-mcp-server.mjs) INVOKES Freerouting
+    (https://github.com/freerouting/freerouting, GPL-3.0)
+as a separate program via `spawn`. Freerouting itself is NOT included in, linked
+into, or distributed with this project; users supply their own freerouting jar.
+
+This project does NOT redistribute the "easyeda-api" Agent Skill or the
+generated EasyEDA Pro API reference documentation. `eda_api_lookup` reads that
+documentation from a local installation of the official skill if one is present;
+see README.md.

@@ -1,0 +1,89 @@
+schema_version: battery-world-feature-v1
+id: BFA-014-parallel-project-sessions
+status: complete
+owner: bf-agent-coordinator
+parallel_authorization: 'User clarified: three actual task conversations in the existing
+  page; not three Codex worker branches.'
+owned_paths:
+- packages/python/bfworld/src/bfworld/agentlab/concurrency.py
+- packages/python/bfworld/src/bfworld/agentlab/chat.py
+- packages/python/bfworld/src/bfworld/agentlab/launcher.py
+- packages/python/bfworld/src/bfworld/agentlab/panorama.py
+- apps/agent-studio/app.js
+- apps/agent-studio/organization.js
+- apps/agent-studio/organization.css
+- tests/agentlab/test_parallel_chat.py
+- tests/agentlab/test_recovery.py
+- docs/agentlab/
+- docs/PROGRESS.md
+- PROJECT.yaml
+- /Users/depengsu/Documents/battery-world/project/features/BFA-014-parallel-project-sessions
+- /Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/
+- /Users/depengsu/Documents/bf-agent-workbench/state/
+- /Users/depengsu/Documents/bf-agent-workbench/participants/
+- /Users/depengsu/Documents/bf-agent-workbench/sessions/
+- /Users/depengsu/Documents/bf-agent-workbench/harnesses/
+- /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+- /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+- /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+- packages/python/bfworld/src/bfworld/agentlab/provider.py
+objective: Enable and run three bounded Pi conversations within one shared project
+  folder; collect case-specific platform gaps and preserve real execution evidence.
+hypothesis: Three separate Pi conversation processes can overlap without crossing
+  workspace, message, shared-memory revision or model-budget identities.
+falsifier: Second session is blocked by unrelated session, one task affects another
+  workspace, same-owner launches overlap, shared memory loses an update, or aggregate
+  reservations exceed existing caps.
+paper_claim: Candidate mechanisms and engineering infrastructure only until matched
+  agent and physical studies exist.
+schema_changes:
+- readiness concurrency metadata
+tests:
+- actual Pi three-way local stream overlap
+- per-session exclusivity
+- shared/exclusive legacy batch exclusion
+- capacity limit
+- atomic freeze
+- memory revision conflict
+- shared provider cap
+- browser three sessions
+negative_controls:
+- fourth concurrent process
+- same-owner duplicate
+- legacy batch lock
+- stale shared memory write
+- failure in one participant
+command: targeted parallel chat tests; ./init.sh; existing operator conversation API
+  with bounded owner caps
+artifacts:
+- docs/agentlab/PARALLEL-PROJECT.json
+- verification/three-tracks/
+- three actual persisted conversation traces
+cost_cap: Existing global USD 3.9279102 / request USD 0.19 unchanged; three new owners
+  total allocation USD 0.45 (A .15 / B .18 / C .12), including already charged usage.
+  Actual USD .3758667. Existing 600-second interactive leases unchanged.
+claim_boundary: Concurrent task launch and first engineering outputs only; three research
+  studies and products remain ongoing.
+stop_condition: Stop dependent dispatch on evidence mismatch, budget ambiguity or
+  fixed apparatus changes.
+handoff: Three actual page sessions and common folder remain; next platform work is
+  PV/storage, artifact completion/assumption drift observation and candidate-to-existing-Harness
+  integration. No budget auto-renewal.
+observed_platform_issue: A real provider stream returned completion_tokens=4097 with
+  requested max_tokens=4096. Usage was present but the pre-settlement bounds error
+  left an UNKNOWN row and blocked unrelated conversations.
+completed: '2026-09-21'
+verification:
+  full_init: 280 tests + SDK/Studio checks/build/reproduction; source unchanged across
+    run
+  source_snapshot: bf1a33c0ad261c916f7f053f99408dcf6dd2eb2a28703c50d390f8d5c88cd436
+  record: /Users/depengsu/Documents/bf-agent-workbench/state/panorama/checks/1789925155298162000.json
+  targeted_tests: 17
+  javascript_syntax_checks: 2
+  audit: docs/agentlab/PARALLEL-PROJECT.json
+  new_unsettled_model_requests: 0
+limitations:
+- Research studies remain ongoing; no hardware or learned-method result.
+- Manual review and follow-up were required; no autonomous-efficacy claim.
+- Final visual recheck blocked by Mac lock; initial real three-session display and
+  backend evidence retained.

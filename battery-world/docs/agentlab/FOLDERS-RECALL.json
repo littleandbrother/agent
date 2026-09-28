@@ -1,0 +1,117 @@
+{
+  "schema_version": "bf-agent-folders-recall-verification-v1",
+  "date": "2026-09-18",
+  "status": "passed",
+  "ui": "http://127.0.0.1:8768/",
+  "features": [
+    "session rename, move, reversible deletion and restore",
+    "folder creation, rename, ordering, collapse persistence and reversible deletion",
+    "versioned shared Memory, prompts, selected tools and validated Harness",
+    "bf_memory read/write shared between actual Pi sessions",
+    "durable recall of queued, running and completed user turns with Pi context branching",
+    "message time, copy and 14px recall icon outside bubble",
+    "developer projection of actual shared prompt, memory and active tool registry"
+  ],
+  "verification": {
+    "isolated_full_init": {
+      "tests": 224,
+      "status": "passed",
+      "note": "Full init before final developer projection assertions and visual refinement; final 33 targeted tests cover subsequent backend changes."
+    },
+    "final_agentlab_tests": 33,
+    "http_authentication_tests": 3,
+    "typescript_compile": "passed",
+    "javascript_syntax": "passed",
+    "preservation": {
+      "current_history": {
+        "files": 1309,
+        "changed": []
+      },
+      "original_history": {
+        "files": 1365,
+        "changed": []
+      },
+      "scientific_sources": {
+        "files": 126,
+        "changed": []
+      }
+    },
+    "browser": [
+      "session rename and move",
+      "folder create, rename, move up, delete, restore, delete again",
+      "folder shared settings editor save",
+      "folder collapse preserved across reload",
+      "queued message recall returns original text and reaches IDLE",
+      "copy succeeds with accessible copied confirmation",
+      "14px SVG controls sit 6px below the bubble; no horizontal overflow",
+      "original folder diamond removed and thin SVG chevron used"
+    ],
+    "logs": {
+      "folders-init.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/folders-init.log",
+        "sha256": "982204f503129f970c882b42f59cc4e1927300131b29f1969e813747a91ba012"
+      },
+      "folders-final-tests.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/folders-final-tests.log",
+        "sha256": "db2ca0c8dfdbcdfa76e3a6edc46f77f4b391929b0067f1c19db94819b55c4efe"
+      },
+      "folders-http-final.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/folders-http-final.log",
+        "sha256": "20a6ad31a573bf30bb9197c0daba1dfb67f3bcd3dc02dd35708d610ba3a61f9f"
+      },
+      "folders-preservation-after.json": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/folders-preservation-after.json",
+        "sha256": "d9094a08eec2ade7b0500256959d833f7426e3b6679b32702a34c2a15a4f3249"
+      }
+    }
+  },
+  "runtime_test_boundary": "Real local Pi SDK and SessionManager with isolated fake provider responses; no new paid DeepSeek acceptance run.",
+  "model_budget": {
+    "new_external_requests": 0,
+    "new_cost_usd": 0,
+    "ledger": {
+      "SETTLED": {
+        "requests": 774,
+        "charged_upper_usd": 2.983629,
+        "reserved_usd": 13.7088027
+      },
+      "UNKNOWN": {
+        "requests": 1,
+        "charged_upper_usd": 0.0,
+        "reserved_usd": 0.008736299999999999
+      }
+    },
+    "unknown_held": true
+  },
+  "limits": [
+    "Folders are flat with ordering, not nested hierarchies.",
+    "Settings apply on next process launch; an in-flight turn keeps its bound revision.",
+    "Shared memory is an unverified note, not scientific fact; CAS protects concurrent edits.",
+    "Tool selection changes the registered tool set and does not add a security sandbox beyond the existing runtime.",
+    "Recall stops active work, returns the original text, and removes the selected and later turns from future Pi conversation context; prior raw traces remain.",
+    "Completed file effects, experiments, sealed submissions and fees are retained.",
+    "Deleting a folder moves its sessions to unclassified; restoring the folder does not retroactively reassign moved sessions.",
+    "One pre-existing provider TLS EOF request remains UNKNOWN; original budget gate is retained."
+  ],
+  "sources": {
+    "apps/agent-studio/app.js": "d87a0ca168996d0f331ebd8f0715d38bc82b2a5956dd4282d9aa40e959920049",
+    "apps/agent-studio/organization.js": "bed7c07dadef8f3990d6e9773ad53e983781cf67ba6f45bd8002ef6b679bb4e0",
+    "apps/agent-studio/organization.css": "a9006ff80c72a465b70d1b8fcad2d2b9c794e73f303f747121e26f837909cd69",
+    "apps/agent-studio/developer.js": "3897265cb87c2b6304e948f77891f6a10ec8a17be4ba5c7117175658e1ef58f1",
+    "apps/agent-studio/index.html": "af63db2f88f5df22a2251fc2f6d35fa59862f37cfebd6338737996f412f747eb",
+    "packages/python/bfworld/src/bfworld/agentlab/organization.py": "e038f8dc10b6af5c1ea0a64dd12189ab2f47da8b6251ceab4ed6eccb845a6f03",
+    "packages/python/bfworld/src/bfworld/agentlab/recall.py": "ad37cd0e234388259a5dc9eaaa2ab8d2fda4c40e5c9925e920394e343d2e5615",
+    "packages/python/bfworld/src/bfworld/agentlab/chat.py": "cf5d87c498ac04e0c78f4b40f5658330dae1c2954e0a3fe50891c48b3cf78027",
+    "packages/python/bfworld/src/bfworld/agentlab/launcher.py": "c0b353ad01aeef3f9456e12ef19cc46562db8d818f9c04b5a1058490f325381e",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py": "d81d92991cd34c0a1fb80dfb8ed44efaa510f96652e117986eb0d66b716e353b",
+    "packages/python/bfworld/src/bfworld/agentlab/developer.py": "d45b1047117da81fd6f97872feae8a5deafec953b00d04bf3360afae23486ad8",
+    "tests/agentlab/test_organization.py": "bea1469fdeba0b227d5f0cc96be0c4053c9c8eb45ab7a7cece23ecdf41d53d87",
+    "tests/agentlab/test_chat.py": "51b85733221500aa8fb23a867d18ff8b5eba9a5b41fa174b53b1a91c29baa5e5"
+  },
+  "pi_sources": {
+    "src/chat-v2.ts": "958bde0c86e7f7e887f8774412a463a7c6776184c1a4bf0b0e4f9816b045c2c6",
+    "src/chat-recall.ts": "3dc01b89bda6906d4f72d7d0539b89dd0de6ab6da3a4dbcf16d28e9e4cbcadbe",
+    "dist/chat-v2.js": "43d3bc33dc56615b7f70f000a75342cbaf57a416d383e2d5199c96d9cbb8c371",
+    "dist/chat-recall.js": "5cfb8305728478d4eccd9ed2aae945b971badaf78e5cec60d5127efdd15b6a11"
+  }
+}

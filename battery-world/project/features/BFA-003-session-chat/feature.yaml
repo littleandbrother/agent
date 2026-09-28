@@ -1,0 +1,23 @@
+schema_version: battery-world-feature-v1
+id: BFA-003-session-chat
+status: complete
+owner: bf-agent-coordinator
+objective: Conversation-first workbench with collapsible session navigation, sidebar modes, live public execution events, persistent follow-up input and section inspector.
+hypothesis: One task can retain one conversation identity across user messages, Pi events and experimental artifacts while preserving budget and historical boundaries.
+falsifier: Duplicate dispatch, lost user messages, invented streaming, mutable history, broken authorization, or bypassed budget gates.
+paper_claim: Engineering interaction and observability only.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, project/features/BFA-003-session-chat/, docs/agentlab/, PROJECT.yaml]
+external_owned_paths: [/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat.ts, /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/dist/chat.js, /Users/depengsu/Documents/bf-agent-workbench/verification/, /Users/depengsu/Documents/bf-agent-workbench/state/, /Users/depengsu/Documents/bf-agent-workbench/participants/, /Users/depengsu/Documents/bf-agent-workbench/sessions/, /Users/depengsu/Documents/bf-agent-workbench/harnesses/]
+schema_changes: [bf-agent-conversation-v1, bf-agent-chat-event-v1]
+targeted_tests: [session idempotency, durable queued messages, public streaming, SDK steering, reconnect cursor, same-origin cookie authentication, sidebar persistence, section provenance]
+negative_controls: [cross-origin mutation, participant control access, closed paid window, unknown provider usage, duplicate message, unavailable hardware section]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/SESSION-CHAT.json
+cost_cap: User authorized up to USD 1 additional for live chat validation; enforce additional USD 0.99, per request USD 0.19, extra 800000 tokens and a two-hour window; retain old ledger.
+claim_boundary: Public text and execution events only; no hidden chain of thought, new scientific efficacy or hardware evidence.
+stop_condition: Unknown provider usage, historical evidence changes, paid budget unavailable, or streaming protocol mismatch.
+limitations: Existing scientific task contracts remain fixed; mechanical, circuit and neural sections expose actual artifacts and missing evidence explicitly.
+handoff: Delivered conversation UI and persistent Pi chat with true streaming; 3 real messages including steering and resumed memory verified. See docs/agentlab/SESSION-CHAT.md.
+
+completion_evidence: docs/agentlab/SESSION-CHAT.json
+verification: 217 isolated full-gate tests and 26 targeted tests passed; browser QA complete; 1365 historical files and 126 scientific source files unchanged; 14 new settled requests cost USD 0.0457188 upper bound.

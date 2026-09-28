@@ -1,0 +1,71 @@
+{
+  "feature": "BFA-007-user-stream-developer-trace",
+  "status": "complete",
+  "runtime_ui": "Public streamed text, user messages, product interaction and necessary execution errors; technical tool cards and harness-loaded records no longer rendered.",
+  "developer_ui": "Trace tab with tool calls, raw events, errors, source identity, model ledger and experiment references. Tools and RSI link to Trace. Existing Harness editor can be opened for a future candidate.",
+  "trace_schema": "bf-agent-trace-review-v1",
+  "source_semantics": [
+    "Exact raw trace bytes exported as base64 with SHA-256; snapshot ID binds the review payload.",
+    "Only newline-committed lines parsed; malformed records and incomplete tails explicitly retained and reported.",
+    "SQLite chat, model ledger, resolution and job records are read-only; file snapshots are separately observed and not claimed atomic with SQLite.",
+    "Stable tool-call IDs take priority. Legacy ordered-name single-candidate links remain labeled approximate; ambiguous links stay unresolved.",
+    "No inferred duration from receipt or ingest timestamps. No private reasoning added or requested."
+  ],
+  "rsi_boundary": "Review data supports attribution and candidate proposals. Qualification, regression, future-task transfer and promotion remain separate; this feature adds no automatic optimizer, training labels or adoption.",
+  "ui_evidence": {
+    "live_session": "pi-chat-d1fc4654bde5b942",
+    "user_tool_cards": 0,
+    "user_assistant_messages": 10,
+    "user_assistant_copy_actions": 10,
+    "pi_startup_record_hidden": true,
+    "developer_tool_rows": 17,
+    "developer_raw_events": 1216,
+    "view_filters": [
+      "tools",
+      "events",
+      "errors"
+    ],
+    "raw_events_pagination_verified": true,
+    "input_result_expansion_verified": true,
+    "source_id_association_visible": true,
+    "missing_start_time_labeled": true,
+    "download_verified": "/Users/depengsu/Downloads/pi-chat-d1fc4654bde5b942-trace-c658c52659d8.json",
+    "tools_to_trace_link_verified": true,
+    "harness_editor_opens_bound_sources": true,
+    "no_candidate_saved_or_activated": true,
+    "qa_tab_closed": true
+  },
+  "live_export": {
+    "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-review/live-trace-export.json",
+    "snapshot_id": "c658c52659d88250bef7722b651234c80e1f0a2cc6e55968cbd2c0a34ee065ac",
+    "trace_source_sha256": "b0aee3598c14a7d817237cce2fa63d90b9a958fa3e094374429e46298a9577c9",
+    "source_bytes": 374652
+  },
+  "verification": {
+    "full_init_exit_code": 0,
+    "full_init_tests": 245,
+    "agentlab_tests": 54,
+    "new_trace_tests": 7,
+    "full_init_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-review/full-init.log",
+    "full_init_log_sha256": "59ed9229ab09c91563494cebdaf05cab630cd8dc2b12b0c6d395e1f9112372cd",
+    "verified_copy_matches_live_sources": true,
+    "javascript_syntax": "passed",
+    "live_browser": "passed"
+  },
+  "preservation": {
+    "historical_files": 2015,
+    "changed_files": [],
+    "original_model_requests": 793,
+    "changed_model_requests": [],
+    "new_model_requests": 0,
+    "budget_limits_unchanged": true
+  },
+  "new_model_calls": 0,
+  "new_cost_usd": 0,
+  "limitations": [
+    "Current export review limit 32 MiB per raw trace; larger source remains on disk.",
+    "Active logs may grow after a snapshot. Historical missing times/IDs remain unknown.",
+    "No full HTTP prompt reconstruction, automatic Harness RSI or hardware validation."
+  ],
+  "git_commit": false
+}

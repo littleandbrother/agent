@@ -1,0 +1,23 @@
+schema_version: battery-world-feature-v1
+id: BFA-005-product-discovery
+status: complete
+owner: bf-agent-coordinator
+objective: Product discovery within the existing conversation, explicit revisable assumptions, versioned proposals, and truthful capability and execution state.
+hypothesis: A nonexpert can describe a need and receive a traceable provisional product proposal without selecting a benchmark or answering mandatory technical questions.
+falsifier: Invented user approvals, assumptions presented as measurements, stale proposal evidence, unsupported hardware claims, hidden execution blocks, or altered historical receipts.
+paper_claim: Engineering workflow only; no product feasibility or Agent efficacy claim.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-005-product-discovery/, PROJECT.yaml]
+external_owned_paths: [/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/, /Users/depengsu/Documents/bf-agent-workbench/verification/, /Users/depengsu/Documents/bf-agent-workbench/state/]
+schema_changes: [bf-product-proposal-v1, bf-product-action-v1, bf-product-binding-v1, bf-product-file-v1]
+targeted_tests: [six hypothetical product scenarios, assumption continuation, actual Pi SDK with local provider, explicit approval, recall invalidation, revision invalidation, adapter authorization, immutable file previews, live UI]
+negative_controls: [forged approval, source message from another conversation, unavailable adapter, stale proposal, recalled evidence, directory traversal, cross-owner access, unknown provider usage]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/PRODUCT-DISCOVERY.json
+cost_cap: Zero external model calls while historical UNKNOWN usage or elapsed model window remains unresolved; do not reset existing limits.
+claim_boundary: Only existing rotary F1 computational adapter can run; other scenarios are design exploration. CAD, FEM, hardware and field acceptance require separate evidence.
+stop_condition: History hash mismatch, budget bypass, source-authority mismatch or scientific semantics change.
+limitations: Online model acceptance remains blocked by pre-existing UNKNOWN usage and expired wall window. CAD/FEM, physical acceptance and non-rotary solvers are not connected; attachments are text only.
+handoff: Product conversation implementation complete. Read docs/agentlab/PRODUCT-DISCOVERY.md before live-model acceptance or CAD integration. Preserve all existing usage reservations and scientific gates.
+
+completion_evidence: docs/agentlab/PRODUCT-DISCOVERY.json
+verification: 230 isolated full-init tests; 39 final agentlab tests; actual Pi with local provider and real baseline FAIL / repair PASS; browser card/file/recall QA; 1397 historical files and 126 scientific source files unchanged; zero new paid calls.

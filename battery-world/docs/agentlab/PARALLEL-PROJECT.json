@@ -1,0 +1,326 @@
+{
+  "schema": "bf-three-project-audit-v1",
+  "created": 1789925919.9377768,
+  "sessions": [
+    {
+      "track": "A",
+      "id": "pi-chat-41e50268dcfe32c8",
+      "title": "A · 产品综合｜机械故障诊断节点",
+      "created": 1789924426.749042,
+      "initial_status": "STARTING",
+      "status": "IDLE",
+      "error": null,
+      "calls": 25,
+      "tokens": 345450,
+      "charged_upper_bound_usd": 0.11076659999999999,
+      "trace": "/Users/depengsu/Documents/bf-agent-workbench/sessions/pi-chat-41e50268dcfe32c8/trace.jsonl",
+      "trace_sha256": "ccc32f5af3fcb73914cf269923e356c5353e6dae54c5fd46cee185ed6b328562",
+      "trace_events": 1795,
+      "workspace": "/Users/depengsu/Documents/bf-agent-workbench/participants/pi-chat-41e50268dcfe32c8",
+      "artifact_sha256": {
+        "design-scope.md": "0417ced9136295d1048670324f9b8e00ff45288b9925ae588b500f8516380c2f",
+        "platform-needs.json": "ab6cb671dfd5efee19c91ea2381f8c73b88e819ec8bcc88f88d0b1fe4aa9ec09",
+        "state.json": "2fda1d381db00521eb4133f9f242c520c0c4440ae4d7ddf2f79ba1d55694e5b7",
+        "task.json": "ed0f6395572666e5605247781074d922a0d99c161814c7f2921d9023b5c1cf65",
+        "policy.py": "6eeca4964c333cd5aaffe5dba3a1768c3824cd35cc31d4878fc3f5cb1a1d8b47",
+        "submission.json": "80f6e38eae9eb666ef53c66522d99460abcbf7491141efd1bbea69cd57d2871b",
+        "design.json": "0d9d43e2e96c247ce619c3079d4609906ace083ac4788e5cd7f37927d16f01f8"
+      },
+      "platform_needs": {
+        "track": "A-产品综合-机械故障诊断节点",
+        "needs": [
+          {
+            "capability": "field-acceptance 安装与现场验收",
+            "observed": "bf_product inspect 返回 capabilities 中 field-acceptance status=not_connected；本会话 hardware_verified=false，无法取得实物安装、误报率、30天可靠性证据。",
+            "impact": "使用/现场验收标准全部 NOT_EVALUATED，方案无法超出计算级结论。",
+            "next_step": "接入实物测量与现场记录接口，或明确该能力长期缺失时方案只交付计算级结论。"
+          },
+          {
+            "capability": "cad 尺寸 CAD / 制造约束",
+            "observed": "capabilities 中 cad status=not_connected；仅 blender 可用且仅尺寸占位，不代替制造 CAD/公差/防护。",
+            "impact": "外形 60x45x28 mm、安装座刚性、灌封防护均无法验证。",
+            "next_step": "连接 CAD 或明确以 Blender 占位为上限并在验收中标注未验证。"
+          },
+          {
+            "capability": "压电/机电换能真实模型",
+            "observed": "rotary-f1 为固定旋转能量源模型；contract fidelity=F1-synthetic-declared-state-load，hardware=false，task trained_model=false。",
+            "impact": "采能能力为假设，不能等同于真实压电换能效率或实物供能。",
+            "next_step": "需要真实换能与载荷剖面才可升级承诺；当前注明为假设。"
+          },
+          {
+            "capability": "批量扫参便利接口（当前已暴露接口的局限）",
+            "observed": "当前暴露接口为单次提交：单次实验消耗一次配额（remaining_experiments 由 5→4）。本轮未观察到批量扫参入口。此为对当前已暴露接口的陈述，不代表既有单次接口不能做序列扫描——只是需逐次提交、成本线性。",
+            "impact": "做'联合修改 vs 局部修改'对照时提交次数与配额消耗偏多，效率低（非不可行）。",
+            "next_step": "（待开发需求）可提供一次提交内的参数序列/批量扫描，以降低对照实验的提交与配额开销。"
+          }
+        ]
+      },
+      "verification": {
+        "submission": {
+          "owner": "pi-chat-41e50268dcfe32c8",
+          "job_id": "job-b3467e65d62094de",
+          "run_id": "run-7edd6ae5e35da2b3b020a77ea80a0008086d290fd2b6551bf4c71bc0c3d9d987",
+          "snapshot_id": "ab9fa40d3ad7d1f0cb2330690fe34a6765c27e9bfe5e093f498e2a538ae18836",
+          "created": 1789925228.957102
+        },
+        "public_result": "/Users/depengsu/Documents/bf-agent-workbench/state/runs/run-7edd6ae5e35da2b3b020a77ea80a0008086d290fd2b6551bf4c71bc0c3d9d987/public-result.json",
+        "public_result_sha256": "67582076be621638c9d0f806bbb5c17c19e1f20d6de9d0a7382e58faaf7c2bee",
+        "bundle_hash_verified": true,
+        "current_design_matches_sealed_snapshot": true,
+        "design_status": "PASS",
+        "summary": {
+          "first_brownout_s": null,
+          "first_overvoltage_s": null,
+          "maximum_storage_v": 3.5,
+          "minimum_input_v": 2.114455024
+        },
+        "fidelity": "F1-synthetic-declared-state-load",
+        "hardware_result": false
+      }
+    },
+    {
+      "track": "B",
+      "id": "pi-chat-bc78abe0ca313091",
+      "title": "B · 判断协调｜桌面陪伴产品",
+      "created": 1789924426.73062,
+      "initial_status": "STARTING",
+      "status": "IDLE",
+      "error": null,
+      "calls": 34,
+      "tokens": 468053,
+      "charged_upper_bound_usd": 0.156885,
+      "trace": "/Users/depengsu/Documents/bf-agent-workbench/sessions/pi-chat-bc78abe0ca313091/trace.jsonl",
+      "trace_sha256": "9df48d47ce20fffad5e4b0e7ebb10d44827bba719bb9d058ebc6ca755e101e55",
+      "trace_events": 2509,
+      "workspace": "/Users/depengsu/Documents/bf-agent-workbench/participants/pi-chat-bc78abe0ca313091",
+      "artifact_sha256": {
+        "platform-needs.json": "ecfd65ff3dcf60517988614e4358da0a339d2e07e01fcbb071d1eab84fa1964d",
+        "solar_sizing_v1.py": "57da651a3d505cb199dca822716ff3176843917249050c4e566c122a8d18969a",
+        "validity-plan.md": "08dcec184f5afb15922bbf87ef0894f4ea37d643f0b4ad198bb5a1a9432f426a",
+        "state.json": "2d3872a83615ea4c45f45bcf2a142efe17f2eebaa20ddc9a4b1001c77aea9321",
+        "sizing_results_v1.json": "e954b4b23e49912fbc78549ec8e19bf732258c82997b544c0601dde6180fbff7",
+        "task.json": "f7b0791b394480dbac32a535958136dbe1a5c58d2c92ecba4d70345f2b5f1667",
+        "sizing_results.json": "144c2e2adf3fae8d0dcc3ebd8a04eaf5249a5a8e748e9b4d470166d36cbe05cf",
+        "policy.py": "6eeca4964c333cd5aaffe5dba3a1768c3824cd35cc31d4878fc3f5cb1a1d8b47",
+        "solar_sizing.py": "10b8164afcd21da49bf8116eb1c62e8d6fd6f3b8cd314946f0b7aa19dc16edba",
+        "solar_sizing_v2.py": "ac583923fec514e1a414aa6d5e3b21f13f5dee6aa8973a2474c8944de134335f",
+        "sizing_results_v2.json": "11a73a3bee019c9fe8327974dcfd78108a37157a83a7d291f67660870908c797",
+        "design.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "platform_needs": {
+        "track": "B-判断协调-无电池太阳能桌面陪伴",
+        "needs": [
+          {
+            "capability": "太阳能/超级电容能量源计算模型",
+            "observed": "系统可用 capability 仅 rotary-f1（旋转能量源，dev-01..08）。本任务为太阳能+超级电容场景，rotary-f1 语义不匹配，未运行。本会话自行编写 solar_sizing.py 完成参数化能量核算。",
+            "impact": "无系统级太阳能能量源模板；能量可行性判定只能由任务内自建脚本承担，跨会话不可复用、无平台级基准。",
+            "next_step": "建议平台提供通用 PV+储能参数化能力模板（面积/辐照/效率/储能窗口为输入），或明确声明该类场景仅支持任务内自建。"
+          },
+          {
+            "capability": "尺寸 CAD / 外壳建模",
+            "observed": "cad 能力 status=not_connected；blender 可用但仅占位模型（不验证制造/公差/防护）。本任务无完整桌面产品 CAD。",
+            "impact": "外壳强度、固定方式、防护、光伏窗面积与朝向无法验证；本轮明确不验收这些项。",
+            "next_step": "接入 CAD 能力后用 Blender 出毫米尺寸占位模型，标注为展示件；实物安装需用户侧接入。"
+          },
+          {
+            "capability": "安装与现场验收",
+            "observed": "field-acceptance status=not_connected，无实物与测量记录。",
+            "impact": "真实窗边照度、日捕获能量、轻拍响应延迟、连续 7 天无充电可用性等现场指标均无法验收。",
+            "next_step": "保留为使用/现场验收项，待实物与安装条件具备后单独测量。"
+          },
+          {
+            "capability": "平台运行时",
+            "observed": "task.json 当前为 {\"assumptions\":\"explicit-revisable\",\"capability\":\"unbound\",\"mode\":\"product-discovery\",\"task_id\":null}，未绑定计算任务。",
+            "impact": "bf_experiment/bf_submit 的基准设计流水线对本产品场景未绑定；本轮不适用旋转基准。",
+            "next_step": "如平台提供产品级计算绑定，再评估是否将 solar_sizing.py 纳入；当前保持 unbound 并如实标注。"
+          }
+        ]
+      },
+      "verification": {
+        "script_sha256": "10b8164afcd21da49bf8116eb1c62e8d6fd6f3b8cd314946f0b7aa19dc16edba",
+        "command": [
+          "/opt/homebrew/opt/python@3.14/bin/python3.14",
+          "solar_sizing.py"
+        ],
+        "cwd": "isolated temporary directory",
+        "exit_code": 0,
+        "stored_result_equal": true,
+        "replay_result": "/Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/replay-B/sizing_results.json",
+        "stdout_sha256": "652c2ddf80c779993ad8d9d9306f633aae845965ed2d54b9317b3949bbd9b8a8",
+        "cases": 5,
+        "camera_physics_unchanged": true,
+        "baseline": {
+          "daily_capture_J": 16.59,
+          "daily_load_J": 6.12,
+          "net_balance_J": 10.47,
+          "margin_pct": 63.1,
+          "usable_storage_J": 21.0,
+          "event_ok": true,
+          "daily_energy_screen_pass": true
+        }
+      }
+    },
+    {
+      "track": "C",
+      "id": "pi-chat-981f6394293d0371",
+      "title": "C · 方法演化｜PV物流记录器",
+      "created": 1789924426.776177,
+      "initial_status": "STARTING",
+      "status": "IDLE",
+      "error": null,
+      "calls": 25,
+      "tokens": 315483,
+      "charged_upper_bound_usd": 0.1082151,
+      "trace": "/Users/depengsu/Documents/bf-agent-workbench/sessions/pi-chat-981f6394293d0371/trace.jsonl",
+      "trace_sha256": "5ee5b4b34cf0fe964abce2a11585cdd92228545d7634003aabfeb1e94bf5770c",
+      "trace_events": 1495,
+      "workspace": "/Users/depengsu/Documents/bf-agent-workbench/participants/pi-chat-981f6394293d0371",
+      "artifact_sha256": {
+        "platform-needs.json": "b2c07b78634401522e0cb566d4e744ebf96e3de9976c09005aa072d026629eb7",
+        "state.json": "86ea2138215cb6c6191df33578943f410b0949b98e5aa46397ea560d072f21b0",
+        "task.json": "f7b0791b394480dbac32a535958136dbe1a5c58d2c92ecba4d70345f2b5f1667",
+        "policy.py": "6eeca4964c333cd5aaffe5dba3a1768c3824cd35cc31d4878fc3f5cb1a1d8b47",
+        "lifecycle-plan.md": "ba9d1184f0ac1806d606558cb5fd4ec896ffce4dac5c9b11883e7286d885a2e8",
+        "candidate_results.json": "97b7208263e984fe6679b67e3cef040acb6a31ee792ee81f6a7dd7afe8af4cb5",
+        "design.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "candidate_rule.py": "4529c1921ab0922c1a526d2c62f5c072bc82450db5cf6805b5eee3e0a734be72"
+      },
+      "platform_needs": {
+        "track": "C-method-evolution/PV-logistics-logger",
+        "needs": [
+          {
+            "capability": "cell-energy-model-for-intermittent-pv-harvesting",
+            "observed": "仓库仅提供固定旋转能量源模型 rotary-f1 (dev-01..08)，本会话未绑定；无 PV/超级电容/光照窗口计算能力，能量数值只能作为工程假设。",
+            "impact": "无法计算黑暗运输覆盖时长上界，只能以假设兜底；不能声称工程验证。",
+            "next_step": "由平台提供一个可参数化的间歇采集+储能计算模板（光照窗口、电容、采样占空比），或明确标为不可用。"
+          },
+          {
+            "capability": "missing-data-semantics-in-evaluator",
+            "observed": "本轮自建断言 NO_DATA≠NO_EVENT 通过（EXIT=0），但属候选程序内自检，平台评估器未提供缺测语义。",
+            "impact": "缺测被误判为无异常的风险无法在平台层检出，影响冷链判责可靠性。",
+            "next_step": "平台评估器支持 NO_DATA/NO_EVENT 两态语义与外置回归断言。"
+          },
+          {
+            "capability": "plug-in-point-for-candidates-into-existing-harness",
+            "observed": "平台控制台已有 Harness 的版本冻结、测试与演化记录机制；当前缺口是【本任务的任意候选脚本尚未接到这些机制】，而非平台完全没有机制（纠正上一版表述）。",
+            "impact": "候选停在手工脚本层，无法进入平台的冻结/重放/回归流程，'能力是否变化'无从平台层比较。",
+            "next_step": "提供把本任务候选脚本登记进现有 Harness 冻结/重放/回归流程的接入点；在此之前不得称为已采纳。"
+          },
+          {
+            "capability": "field-acceptance",
+            "observed": "capabilities.field-acceptance 状态 not_connected，无实物、标定或现场测量记录。",
+            "impact": "安装、耐候、覆盖时长、漏检率均不可验收。",
+            "next_step": "接入实物测量后另行验收；在此之前不得声明现场通过。"
+          }
+        ]
+      },
+      "verification": {
+        "script_sha256": "4529c1921ab0922c1a526d2c62f5c072bc82450db5cf6805b5eee3e0a734be72",
+        "command": [
+          "/opt/homebrew/opt/python@3.14/bin/python3.14",
+          "candidate_rule.py"
+        ],
+        "cwd": "isolated temporary directory",
+        "exit_code": 0,
+        "stored_result_equal": true,
+        "replay_result": "/Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/replay-C/candidate_results.json",
+        "stdout_sha256": "770c7918143d0e097775aa68813e25514a23e9fa6a1fe9751a2dc508ec3089e3",
+        "development_cases": 5,
+        "assertions": 3,
+        "adoption": false
+      },
+      "remaining_limitations": [
+        "Authored fixtures and allowlist, not learned rules.",
+        "Missing coverage-field semantics require a further negative control; no production admission."
+      ]
+    }
+  ],
+  "claims": "Engineering first round only; no three-paper, learned-method or hardware completion.",
+  "preservation": {
+    "preserved_rows": 10824,
+    "intentional_new_project_updates": [
+      {
+        "table": "chat_folders",
+        "key": {
+          "id": "folder-b1b7de6c32e0457c"
+        },
+        "before_sha256": "d2de3e80a2267faf7910bdd4c727cfbcc02c681d4d17a662ad03db302ca95c88",
+        "after_sha256": "6d90d6943ba724ddc55e11528b878d444b997e59c9991424c3feaeb0ef8c59ee"
+      }
+    ],
+    "unexpected_changed": [],
+    "missing": []
+  },
+  "budget": {
+    "limits_unchanged": {
+      "id": 1,
+      "total_usd": 3.9279101999999995,
+      "request_usd": 0.19,
+      "max_tokens": 20000000,
+      "expires": 1789669026.0093598
+    },
+    "this_project_usd": 0.3758667,
+    "global_upper_bound_usd": 3.7229612999999997,
+    "new_unsettled_calls": 0,
+    "reconciliation": "/Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/known-usage-reconciliation.json"
+  },
+  "platform_check": {
+    "record": "/Users/depengsu/Documents/bf-agent-workbench/state/panorama/checks/1789925155298162000.json",
+    "actor": "local-operator-command",
+    "command": [
+      "./init.sh"
+    ],
+    "cwd": "/Users/depengsu/Documents/battery-world",
+    "end_snapshot": "bf1a33c0ad261c916f7f053f99408dcf6dd2eb2a28703c50d390f8d5c88cd436",
+    "ended": 1789925501.873714,
+    "exit_code": 0,
+    "id": "1789925155298162000",
+    "label": "BFA-014-final-platform-init",
+    "log": "1789925155298162000.log",
+    "log_sha256": "ab2b42cfa047e7472f419e13b4edb5c0943ac804f3424c542fbd2900a68c84d7",
+    "result": "passed",
+    "schema_version": "bf-development-check-v1",
+    "scope": "命令实际覆盖范围；不代表全部功能或产品达标",
+    "snapshot": "bf1a33c0ad261c916f7f053f99408dcf6dd2eb2a28703c50d390f8d5c88cd436",
+    "started": 1789925155.2981591,
+    "tests": [
+      "280"
+    ]
+  },
+  "ui": {
+    "initial_three_running_observation": "/Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/overlap-observation.json",
+    "peak_observed_conversations": 3,
+    "final_visual_recheck": "blocked_by_mac_lock; backend status and artifacts verified"
+  },
+  "folder": {
+    "name": "BF-AIoT 三任务共建",
+    "id": "folder-b1b7de6c32e0457c",
+    "revision": 8,
+    "receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/three-tracks/project-folder-final.json"
+  },
+  "implementation_files": [
+    "packages/python/bfworld/src/bfworld/agentlab/concurrency.py",
+    "packages/python/bfworld/src/bfworld/agentlab/chat.py",
+    "packages/python/bfworld/src/bfworld/agentlab/launcher.py",
+    "packages/python/bfworld/src/bfworld/agentlab/provider.py",
+    "packages/python/bfworld/src/bfworld/agentlab/panorama.py",
+    "apps/agent-studio/app.js",
+    "apps/agent-studio/organization.js",
+    "apps/agent-studio/organization.css",
+    "tests/agentlab/test_parallel_chat.py",
+    "tests/agentlab/test_recovery.py"
+  ],
+  "engineering_status": "delivered",
+  "research_status": "ongoing",
+  "source_snapshot": "bf1a33c0ad261c916f7f053f99408dcf6dd2eb2a28703c50d390f8d5c88cd436",
+  "next_common_work": [
+    "PV and storage parameter/temporal calculation capability with missing-data semantics",
+    "Outcome observer binding requested changes to artifacts, assumptions and replay freshness",
+    "Task candidate integration into existing Harness freeze and regression controls; no automatic promotion"
+  ],
+  "post_handoff_state_check": {
+    "command": "PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest tests.project.test_project_state -v",
+    "tests": 6,
+    "exit_code": 0
+  }
+}

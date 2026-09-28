@@ -1,0 +1,62 @@
+schema_version: battery-world-pilot-protocol-v1
+status: completed-bounded-pilot
+research_milestone: B1
+scope: one fixed general coding Agent through the scientific JSONL broker
+provider:
+  implementation: bfworld.campaign.provider
+  version: deepseek-api-chat-completions; observed fingerprint a26a7955944dc5c60445bff77fac9c8e
+  model_identity: deepseek-v4-flash
+  usage_receipts_available: true
+budget:
+  max_external_calls: 120
+  max_tokens: 600000
+  max_paid_cost: 19
+  max_wall_seconds: 3600
+  currency: CNY
+  user_limit: at most CNY 2 per trial and strictly below CNY 20 total
+  note: token and active wall-clock caps are conservative engineering limits; paid limits explicitly supplied by user
+participant_isolation:
+  separate_filesystem: true
+  reference_source_visible: false
+  sealed_evaluator_visible: false
+  hidden_mount_test_passed: true
+  evidence: docs/campaign/preflight.json
+scientific_api:
+  entrypoint: scripts/run_campaign.py
+  methods: [describe, experiment, read, status, recover, submit]
+  arbitrary_reference_mutation: false
+  self_qualification: false
+history_and_evaluation:
+  equal_history_manifest: runs/campaign/bc-pilot-20260906-v1/equal-history.json
+  public_development_manifest: docs/campaign/protocol.json
+  sealed_final_confirmation_manifest: runs/campaign/bc-pilot-20260906-v1/learning-frozen.json
+  final_feedback_to_evolver: false
+  base_model_fixed_across_conditions: true
+  cost_includes: [generation, learning, qualification, retrieval, maintenance, solve, interrupted_attempts]
+arms:
+  - general-agent-plus-raw-history
+  - general-agent-plus-text-memory
+  - general-agent-plus-executable-knowledge
+  - classical-model-plus-search
+required_negative_controls:
+  - no-revision-needed
+  - no-feasible-design-in-allowed-set
+  - transmitter-without-receiver-delivery
+  - correct-delivery-wrong-classification
+  - rejected-knowledge-must-not-be-promoted
+future_c1:
+  enabled: false
+  units: independent task-family campaigns, not individual correlated episodes
+  counterbalanced_order: true
+  factorial: [fixed-model-fixed-policy, learned-model-fixed-policy, fixed-model-learned-policy, learned-model-learned-policy]
+  admission_guard: no increased false admission or sealed-task regression
+future_c2:
+  enabled: false
+  required: new independent device/session, second-source full task, or measured physical anchor
+stop_rules:
+  - absent budget or ambiguous model identity
+  - hidden reference leak
+  - missing provider usage receipt
+  - identity or recovery audit failure
+  - changing frozen scientific semantics to pass a gate
+  - tuning failed qualification on final confirmation feedback

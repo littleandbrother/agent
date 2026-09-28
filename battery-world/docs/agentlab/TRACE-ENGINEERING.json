@@ -1,0 +1,383 @@
+{
+  "schema_version": "bf-trace-engineering-delivery-v1",
+  "date": "2026-09-18",
+  "feature": "BFA-010-trace-engineering",
+  "upstream": {
+    "url": "https://github.com/minipopstyle/agent-workbench",
+    "fork": "https://github.com/littleandbrother/agent-workbench",
+    "commit": "7968c6073a5ba36a2561226cc2bf44f33ddab335",
+    "source_code_copied": false,
+    "reason": "No project LICENSE at audited revision"
+  },
+  "verification": {
+    "full_init": "PASS",
+    "python_tests": 262,
+    "trace_subset_tests": 14,
+    "pi_typescript": "PASS",
+    "pi_changed_entry_lint": "PASS",
+    "pi_full_check": "BLOCKED_BY_EXISTING_LINT_WARNINGS",
+    "logs": {
+      "full-init.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-acceptance/full-init.log",
+        "sha256": "1693afa85be1d6238bffe4c16dbcf9086602a6adb140d6272202a3f3e9449172"
+      },
+      "trace-tests.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-acceptance/trace-tests.log",
+        "sha256": "9cfe1a3d1a8642963bf366a9fa89f5ca09ef5f867f005892f7e01d74d7b141ad"
+      },
+      "pi-root-lint.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-acceptance/pi-root-lint.log",
+        "sha256": "9160ff0f9bfec7c17345a899dc1f75bc5a47dada617445ea99efe79813707629"
+      },
+      "browser.log": {
+        "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-acceptance/browser.log",
+        "sha256": "acbe938e6d5b961f17ef15bde58f15d18513d59f4907e0fa653c5663b9e80d06"
+      }
+    }
+  },
+  "browser": {
+    "passed": true,
+    "scope": "isolated headless browser against live production localhost",
+    "native_template_buttons_tested": true,
+    "views": [
+      "overview",
+      "timeline",
+      "tool-detail",
+      "skill-filter",
+      "mcp-filter",
+      "comparison",
+      "raw-byte-export",
+      "tools",
+      "skills",
+      "mcp",
+      "runtime"
+    ],
+    "console_errors": [],
+    "model_requests_dispatched": 0
+  },
+  "desktop_foreground_acceptance": "unavailable_while_Mac_locked",
+  "preservation": {
+    "trace_files_unchanged": 59,
+    "model_ledger_rows_unchanged": 818,
+    "additional_paid_calls": 0,
+    "additional_model_cost_usd": 0
+  },
+  "production_engineering_jobs": [
+    {
+      "id": "eng-bd654624b89d968b",
+      "request": {
+        "design_revision": null,
+        "engine": "blender",
+        "parameters": {
+          "height_mm": 25,
+          "length_mm": 80,
+          "wall_mm": 2,
+          "width_mm": 50
+        },
+        "scope": "尺寸参数化外壳、元件占位、GLB 与渲染；未验证制造、公差或防护性能。",
+        "template": "enclosure-v1",
+        "template_sha256": "36a39f024215c5d972192af54b7ef0f620de9ad7f90563c6d59ab1dc7e8259c1",
+        "turn_id": null
+      },
+      "result": {
+        "artifacts": [
+          {
+            "bytes": 4784,
+            "name": "build.py",
+            "sha256": "36a39f024215c5d972192af54b7ef0f620de9ad7f90563c6d59ab1dc7e8259c1"
+          },
+          {
+            "bytes": 333,
+            "name": "input.json",
+            "sha256": "37617535102cc8daa51b999dc799ac12055c3e669906fdbe32c6b3c1d9805b71"
+          },
+          {
+            "bytes": 105452,
+            "name": "model.blend",
+            "sha256": "b9204983b456f93a2bb6c7e8f2cb215c7c787788dd4cc1fd4c500851903ffedc"
+          },
+          {
+            "bytes": 13116,
+            "name": "model.glb",
+            "sha256": "e0c1d8e2ee25b0473640de8e651efebc7ff3863262da073a9fb2968ea62d60b3"
+          },
+          {
+            "bytes": 852775,
+            "name": "preview.png",
+            "sha256": "4696592551e9200d22b5440b97a1b6e1a00793edc92d22df3dfbb1c9a49d8a78"
+          },
+          {
+            "bytes": 1757,
+            "name": "process.log",
+            "sha256": "187dc8c124fe3e731f598678de1ed62bbcc6d34e1ad9cd51a03f2e354c6db816"
+          },
+          {
+            "bytes": 1842,
+            "name": "result.json",
+            "sha256": "b1a742f709c27fb803ecae3b15ea10cb17798eaec93a7aee6c7a0f13c4cf5f6d"
+          }
+        ],
+        "design_revision": null,
+        "engine": "Blender",
+        "geometry_created": true,
+        "input_hash": "37617535102cc8daa51b999dc799ac12055c3e669906fdbe32c6b3c1d9805b71",
+        "manufacturing_verified": false,
+        "outer_dimensions_mm": [
+          80,
+          50,
+          25
+        ],
+        "parts": [
+          {
+            "dimensions_mm": [
+              80.0,
+              50.0,
+              2.0
+            ],
+            "name": "Base",
+            "position_mm": [
+              0,
+              0,
+              1.0
+            ]
+          },
+          {
+            "dimensions_mm": [
+              80.0,
+              2.0,
+              23.0
+            ],
+            "name": "Side Y -1",
+            "position_mm": [
+              0,
+              -24.0,
+              13.5
+            ]
+          },
+          {
+            "dimensions_mm": [
+              2.0,
+              46.0,
+              23.0
+            ],
+            "name": "Side X -1",
+            "position_mm": [
+              -39.0,
+              0,
+              13.5
+            ]
+          },
+          {
+            "dimensions_mm": [
+              80.0,
+              2.0,
+              23.0
+            ],
+            "name": "Side Y 1",
+            "position_mm": [
+              0,
+              24.0,
+              13.5
+            ]
+          },
+          {
+            "dimensions_mm": [
+              2.0,
+              46.0,
+              23.0
+            ],
+            "name": "Side X 1",
+            "position_mm": [
+              39.0,
+              0,
+              13.5
+            ]
+          },
+          {
+            "dimensions_mm": [
+              72.0,
+              42.0,
+              1.6
+            ],
+            "name": "PCB clearance envelope",
+            "position_mm": [
+              0,
+              0,
+              4.8
+            ]
+          },
+          {
+            "dimensions_mm": [
+              21.6,
+              18.9,
+              6.25
+            ],
+            "name": "Electronics envelope",
+            "position_mm": [
+              0,
+              0,
+              8.725
+            ]
+          },
+          {
+            "dimensions_mm": [
+              80.0,
+              50.0,
+              2.0
+            ],
+            "name": "Lid · exploded view",
+            "position_mm": [
+              0,
+              62.5,
+              17.5
+            ]
+          }
+        ],
+        "rendered": true,
+        "scope": "参数化外壳与元件占位展示；尺寸来自输入假设，未进行 CAD 公差、装配干涉或防护验证。",
+        "units": "mm",
+        "version": "5.2.1 LTS"
+      },
+      "directory": "/Users/depengsu/Documents/bf-agent-workbench/engineering/eng-bd654624b89d968b"
+    },
+    {
+      "id": "eng-d9d27cc99991017c",
+      "request": {
+        "design_revision": null,
+        "engine": "comsol",
+        "parameters": {
+          "force_n": 0.1,
+          "length_mm": 50,
+          "thickness_mm": 1,
+          "width_mm": 10,
+          "young_gpa": 200
+        },
+        "scope": "均匀悬臂梁、线弹性静力、固定根部、端面均布力；两档网格，非压电或整机验证。",
+        "template": "cantilever-static-v1",
+        "template_sha256": "47f5c4904754a07c090a0f9263dfe99c7a9b9e38df5311f761d7350de6c32e46",
+        "turn_id": null
+      },
+      "result": {
+        "artifacts": [
+          {
+            "bytes": 3584,
+            "name": "Cantilever.java",
+            "sha256": "c8e026e837196118547eaf1f6b683f6d63907cb8170c0d91873410b814cfc292"
+          },
+          {
+            "bytes": 2806187,
+            "name": "batch_Model.mph",
+            "sha256": "cf3895d38bedd6b4674b6e0ad4c34d0b7c1aff5a1cd33c3055144aa82cfec344"
+          },
+          {
+            "bytes": 374,
+            "name": "input.json",
+            "sha256": "a5b4c1aaa67a39aca3e30aecaf6e364d3253b56f2cfbc03aaba73cd22ada0e2c"
+          },
+          {
+            "bytes": 132,
+            "name": "metrics.csv",
+            "sha256": "26c031a4d696ee57ce1f27dd8d71a7fac172536a75c5d826939f20af13174c06"
+          },
+          {
+            "bytes": 2806187,
+            "name": "model.mph",
+            "sha256": "cf3895d38bedd6b4674b6e0ad4c34d0b7c1aff5a1cd33c3055144aa82cfec344"
+          },
+          {
+            "bytes": 115,
+            "name": "process.log",
+            "sha256": "db193bab57e35db29b0fe30bb744e87652b4facdbb8036f8b25f927e114eea1d"
+          },
+          {
+            "bytes": 969,
+            "name": "result.json",
+            "sha256": "5d83b3eee64990c818188f587cb3acc3c72e40a9b3b07fca02ad1f3c15f152a9"
+          },
+          {
+            "bytes": 5492,
+            "name": "solver.log",
+            "sha256": "5d24d4e02cd9001362b982b6e005baaff97ccc6eab196442857b4f5f2c82389c"
+          }
+        ],
+        "beam_reference_displacement_mm": 0.02500000000000001,
+        "beam_reference_relative_error": 0.020633057061938763,
+        "checks": {
+          "beam_reference_under_10_percent": true,
+          "mesh_displacement_under_5_percent": true,
+          "small_deflection_under_5_percent_length": true
+        },
+        "design_revision": null,
+        "displacement_mm": 0.024484173573451538,
+        "engine": "COMSOL",
+        "input_hash": "a5b4c1aaa67a39aca3e30aecaf6e364d3253b56f2cfbc03aaba73cd22ada0e2c",
+        "limitations": [
+          "固定约束角部应力存在奇异性，最大应力不能直接用于强度认证。",
+          "两档位移检查仅是本模板数值检查，不证明一般网格收敛。"
+        ],
+        "max_von_mises_mpa": 3.1605739751719244,
+        "mesh_displacement_relative_change": 0.0013255952224672182,
+        "numerical_checks_passed": true,
+        "product_verified": false,
+        "scope": "均匀悬臂梁、线弹性静力、固定根部、端面均布力；两档网格，非压电或整机验证。",
+        "template": "cantilever-static-v1",
+        "version": "COMSOL Multiphysics 6.2 (开发版本: 339) 在批处理模式下启动"
+      },
+      "directory": "/Users/depengsu/Documents/bf-agent-workbench/engineering/eng-d9d27cc99991017c"
+    }
+  ],
+  "blender_independent_readback": {
+    "native_file": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-smoke/engineering/eng-587fd8259fbbf3fd/model.blend",
+    "blender_version": "5.2.1 LTS",
+    "native_base_envelope_mm": [
+      79.99999821186066,
+      50.00000074505806,
+      25.00000037252903
+    ],
+    "unit_scale_metres": 1,
+    "geometry_readback_passed": true,
+    "scope": "Default template geometry readback only; no manufacturing qualification."
+  },
+  "comsol_independent_readback": {
+    "path": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-smoke/comsol-readback.log",
+    "sha256": "6da9816f214f08635c7a2d6e05b96c6042a1ddc10a0c59e30e2f46868cb735f3",
+    "mode": "native model load; -norun -nosave",
+    "passed": true
+  },
+  "smoke_job_receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/trace-engineering-smoke/receipt.json",
+  "folder_configuration": {
+    "folder_id": "folder-35dbaf5aa8334e93",
+    "previous_revision": 3,
+    "revision": 4,
+    "added_tool": "bf_engineering",
+    "memory_sha256_unchanged": "3970d2d1fc03e3ee67b364e69e687209d93a3296c5852c985632937f5372085a"
+  },
+  "source_sha256": {
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering.py": "4900ae326ff5969a39fa4bd3a8fcf2d960e6681362241b2070f1642e391d2a63",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/trace_analysis.py": "83965bbadcb103bb6d4c57adbb7daf3c7df04b73421b787544fde30649eaba46",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/trace_review.py": "0b4257c208563750f7075c0a078f2d606c6ba26517fff1a6deffebcd4ca6289a",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py": "ad998d0cd38ce98be49bee052b803a70cb0a58768bb0b977a7eb13d01b5082e9",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/organization.py": "137084ecc31687eb6019c8dcfa753f902cc5825270a16fad55fceee56b3a9434",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product.py": "c310f1d54ff83ba2d6b0ac873bfa870e85f782b06bd34acc77a74223f3c714b0",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/launcher.py": "ce723f9e032be0cb871503218e0c6786b756e82bd0dbfef95946b458fc10b416",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/blender_enclosure.py": "36a39f024215c5d972192af54b7ef0f620de9ad7f90563c6d59ab1dc7e8259c1",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/Cantilever.java": "47f5c4904754a07c090a0f9263dfe99c7a9b9e38df5311f761d7350de6c32e46",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/trace.js": "59214ff809038389e8e70895586d86493dcc80f0095f4ea3e5c6628922c25579",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/engineering.js": "1123c51298e02d8c9c131277196b7b999d0068b67aa3d54c090027f799752fb3",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/trace.css": "dfee83b90e8559b7059f7fa364517858c155a82f953e0d40f5db98f34f857b05",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/developer.js": "e68eb02dfd83a1e807a36b329efded8cbe646d9c3880fdff0e8cd191696939d7",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/product.js": "9206eb79d76711d21e2b3fd424ef3a1ff4b0c84c18d9803fb9619d3ab014a360",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/index.html": "6692b00fefc297cf2ea10220b10a6a0d988ae1b539c3428f51b55c5fb195f956",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts": "f8ffc1535f79412bf0328e838b8db58dfb7880c58d53c815aeebcf2f95a783e7",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-v2.ts": "1a9ab6ffab1178ee6f8f70ebc9ce0de28743e22d5a8da877b27e218a05a63fa8"
+  },
+  "limitations": [
+    "Typed local CLI templates only; no Pi engineering MCP server registered.",
+    "CAD deferred. No manufacturing, hardware or general multiphysics qualification.",
+    "Trace comparison does not establish causal Harness improvement.",
+    "Historical missing tool timestamps are not reconstructed.",
+    "No automatic restart or retry of interrupted engineering jobs."
+  ],
+  "committed": false,
+  "development_changes_pushed": false
+}

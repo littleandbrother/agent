@@ -1,0 +1,84 @@
+{
+  "schema_version": "bf-agent-session-chat-verification-v1",
+  "date": "2026-09-18",
+  "status": "passed",
+  "ui": "http://127.0.0.1:8768/",
+  "conversation": {
+    "id": "pi-chat-390c76686d6d79a5",
+    "messages": 3,
+    "message_statuses": [
+      "ACCEPTED",
+      "ACCEPTED",
+      "ACCEPTED"
+    ],
+    "status": "IDLE",
+    "pi_process_attempts": 2,
+    "stream_text_chunks": 1911,
+    "mid_run_steering": true,
+    "resumed_memory_reply": [
+      {
+        "text": "下面按三部分说明**本次实际获得的证据**与**明确不存在的证据**。证据全部来自已密封运行 job-c25a895b77669f03 的公开结果与任务声明的 `fidelity=F1-synthetic-declared-state-load`、`hardware=false`、`trained_model=false`、`required_assets=[]`。\n\n## 1. 机械（振动/轴承激励）\n\n**有的证据：仅“合成信号层面的声明状态”。**\n- 运行配置声明 `sample_count=128`，能量账目中 `sense=0.000240 J`，说明仿真执行了一次采样动作并计入能耗。\n- 但信号来源是任务内置的**合成信号**，不是物理振动台、轴承试验台或实测回放。\n\n**明确没有：NOT_EVALUATED。**\n- 无任何机械硬件：无加速度计实物、无激振/负载机构、无装配模态或疲劳数据。\n- 无“实测回放（measured replay）”（任务 claim_boundary 明确排除）。\n- 因此机械部分**没有被独立验证**，只有仿真内部一致性。\n\n## 2. 电路（能量采集/储能/电源）\n\n**有的证据：仿真内的电学安全与能量守恒。**\n- `electrical_safe=true`；`maximum_storage_v=3.45`（等于设定的 clamp_v，且 ≤3.6V 上限）；`minimum_input_v=2.114`；`first_overvoltage_s=null`、`first_brownout_s=null`。\n- 能量账目闭合并自洽：`normalized_residual≈3.9e-15`，`residual_j=0`；harvest 0.005652 J ≈ boot+idle+sense+infer+tx+esr+leakage+pmic+dump+storage_delta。\n- 基准失败的过压（3.6039V）是**仿真模型内**真实观测到的结果，因此“clamp 修复过压”这一效应是在该模型内被验证的。\n\n**明确没有：硬件电路验证。**\n- `hardware=false`，无示波器/源表/DMM 测量，无实测 ESR、电容容差、漏电、PMIC 效率数据。\n- 电学方程来自 “profiled electrical model”（任务声明的画像模型），非独立全系统物理。\n- 结论**仅在此仿真模型内成立**。\n\n## 3. 神经网络（分类器/推理）\n\n**有的证据：模型调用次数为 0，分类结果是规则化的合成分类器输出。**\n- `model_calls=0`（没有加载或运行任何神经网络）。\n- `prediction`：`predicted_label=\"bearing-fault\"`，`integer_accumulator=6372`，`score=3197`，`threshold_accumulator=3175`（即 3197 > 3175，以固定整数阈值判定），`confidence=0.99` 并明确标注为 “uncalibrated score mapping, not a probability”。\n- `quality_valid=true` 是在该合成/规则判定下的结果，`model_threshold=25` 为设计参数。\n\n**明确没有：训练/学习模型。**\n- `trained_model=false`；无 TFLite、无 ELF 部署、无权重、无训练/验证集、无精度-召回等指标。\n- confidence 0.99 **不是概率**，不能解读为模型性能。\n- 因此神经网络部分 **NOT_EVALUATED**：没有真实模型，也没有真实推理。\n\n## 综合标注\n\n| 部分 | 本次真实证据 | 缺失/未评估 |\n|---|---|---|\n| 机械 | 合成信号 + 采样能耗（仿真内） | 硬件、实测回放 → NOT_EVALUATED |\n| 电路 | 仿真内过压修复、电压边界、能量守恒 | 硬件测量、实测器件参数 → NOT_EVALUATED |\n| 神经网络 | 0 次模型调用；固定阈值整数判定 | 训练模型、TFLite/ELF、指标 → NOT_EVALUATED |\n\n**总体声明**：本次通过的是 **F1 合成声明状态负载模型下的设计可行性**（deadline、delivered、deployment_feasible、electrical_safe、quality_valid、value 全通过），**不是**硬件结果，**不是**训练模型结果，也**不是**独立全系统物理或实测回放的结论。任务 `required_assets` 为空，故无“必需但不可得资产”被冒名顶替；上述缺项均为本次范围外，统一标注为 NOT_EVALUATED。",
+        "type": "text"
+      }
+    ],
+    "experiment_jobs": [
+      {
+        "id": "job-c25a895b77669f03",
+        "status": "SUCCEEDED",
+        "design_status": "PASS"
+      },
+      {
+        "id": "job-840477479ce500fa",
+        "status": "SUCCEEDED",
+        "design_status": "FAIL"
+      }
+    ],
+    "verified_run": "run-7dd35113814670c734e5aea0356f89c0cd4a4313680610786167d8e91513d69d",
+    "design_status": "PASS",
+    "harness_identity": "2c801f470f95fe0ed06eae5a5c525d966d79362c945cdf4fde1711c400fbf544",
+    "trace_hash": "2c5048073da4bfb1321450c54f9503447dcd132325c63a947a80c358c272ca3a"
+  },
+  "budget": {
+    "authorization_file": "/Users/depengsu/Documents/bf-agent-workbench/verification/chat-budget-authorization.json",
+    "new_calls": 14,
+    "new_tokens": 142181,
+    "new_cost_upper_usd": 0.0457188,
+    "largest_request_cost_upper_usd": 0.0057897,
+    "largest_reservation_usd": 0.0249663,
+    "cumulative_cost_upper_usd": 2.983629,
+    "additional_hard_cap_usd": 0.99,
+    "all_usage_settled": true,
+    "window_expires": "2026-09-18T02:17:06.009360+08:00"
+  },
+  "verification": {
+    "agentlab_tests": 26,
+    "isolated_full_init_tests": 217,
+    "full_init": "passed",
+    "full_init_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/chat-init.log",
+    "targeted_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/chat-final-tests.log",
+    "pi_chat_typescript": "passed",
+    "frontend_syntax": "passed",
+    "browser": [
+      "centered empty composer",
+      "left sidebar mode selection",
+      "collapse persistence and keyboard expansion",
+      "actual streamed task execution",
+      "mid-run follow-up",
+      "same-conversation memory after process resume",
+      "reload reconnect",
+      "mechanical circuit neural and artifact panels",
+      "Memory prompt Harness editors",
+      "no console errors"
+    ],
+    "historical_files_preserved": 1365,
+    "scientific_source_files_preserved": 126
+  },
+  "claim_boundary": "Engineering conversation and computational task validation. No hardware, trained neural model, scientific promotion or RSI efficacy claim.",
+  "limits": [
+    "24 cumulative model calls and 6 experiments per conversation; original owner expiry is retained on resume.",
+    "New UI conversations use persistent Pi sessions; 52 historical batch sessions remain read-only.",
+    "Unknown input dispatch is preserved for inspection and is not automatically retransmitted.",
+    "Only actual public text and tool events are streamed; no hidden thinking.",
+    "Mechanical CAD/FEM, hardware and trained TFLite assets are explicitly unverified."
+  ]
+}

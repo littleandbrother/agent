@@ -1,0 +1,46 @@
+{
+  "schema_version": "bf-measurement-record-v1",
+  "status": "REQUIRED_NOT_COLLECTED",
+  "required_fields": [
+    "record_id",
+    "product_owner",
+    "product_revision",
+    "hardware_serial",
+    "firmware_sha256",
+    "model_sha256",
+    "dataset_group",
+    "session_id",
+    "condition",
+    "instrument",
+    "instrument_calibration",
+    "sample_rate_hz",
+    "timestamp",
+    "raw_file_sha256",
+    "units",
+    "measurement_uncertainty",
+    "operator",
+    "split"
+  ],
+  "allowed_splits": [
+    "calibration",
+    "held-out-measurement"
+  ],
+  "required_task_metrics": [
+    "grouped_test_quality",
+    "parameters",
+    "macs",
+    "flash_bytes",
+    "peak_ram_bytes",
+    "mcu_latency_distribution",
+    "inference_energy",
+    "whole_task_energy",
+    "cold_start_time"
+  ],
+  "prohibited_inferences": [
+    "Synthetic accuracy is not field accuracy.",
+    "Compilation is not flashing.",
+    "MACs are not measured latency.",
+    "A bound under an uncalibrated model is not a hardware guarantee."
+  ],
+  "raw_data_count": 0
+}

@@ -1,0 +1,30 @@
+schema_version: battery-world-feature-v1
+id: BFA-018-resizable-sidebars
+status: complete
+owner: bf-agent-coordinator
+objective: Mouse-resizable left navigation and right task/map inspectors with persistence and existing collapse behavior.
+hypothesis: Dragging a visible boundary adjusts the actual pane and retains useful main content space.
+falsifier: Width does not change, reload loses the choice, collapse breaks, or a viewport shrink hides the main controls.
+owned_paths:
+  - apps/agent-studio/app.js
+  - apps/agent-studio/chat.css
+  - apps/agent-studio/panorama.js
+  - apps/agent-studio/panorama.css
+  - project/features/BFA-018-resizable-sidebars/
+  - PROJECT.yaml
+  - docs/PROGRESS.md
+  - docs/agentlab/RESIZABLE-SIDEBARS.md
+  - /Users/depengsu/Documents/bf-agent-workbench/verification/resizable-sidebars-20260923/
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+schema_changes: Browser-local width preferences only.
+tests: JS syntax, live mouse dragging, keyboard, persistence, collapse and mode transitions, viewport bounds; required ./init.sh.
+negative_controls: Hidden panes expose no drag target; narrow viewport clamps widths without overwriting desktop preference.
+command: node --check and actual CUA plus ./init.sh
+artifacts: docs/agentlab/RESIZABLE-SIDEBARS.md
+cost_cap: Zero model calls.
+claim_boundary: UI layout only.
+stop_condition: Existing conversation data or scientific checks would need modification.
+limitations: Very narrow panorama uses the existing vertical stack.
+handoff: Delivered. Live CUA mouse, keyboard, reload, collapse and responsive checks passed; ./init.sh passed 322 tests plus SDK/Studio. Evidence in verification/resizable-sidebars-20260923/ui-acceptance.json.

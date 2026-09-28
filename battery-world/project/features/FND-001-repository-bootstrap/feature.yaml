@@ -1,0 +1,37 @@
+schema_version: battery-world-feature-v1
+id: FND-001-repository-bootstrap
+status: complete
+owner: coordinator
+objective: Establish a clean monorepo, authority map, locked toolchains, and legacy freeze mechanism.
+owned_paths:
+  - PROJECT.yaml
+  - AGENTS.md
+  - README.md
+  - pyproject.toml
+  - requirements.lock
+  - package.json
+  - pnpm-workspace.yaml
+  - project/
+  - docs/
+  - migration/
+hypothesis: A clean authority and package layout prevents legacy milestone code from becoming a runtime dependency.
+falsifier: New runtime code imports the predecessor lhsai package, project state has multiple authorities, or migration modifies a sealed predecessor snapshot.
+schema_changes: []
+tests:
+  - tests/dependency/test_boundaries.py
+negative_controls:
+  - forbidden legacy import fixture
+command: ./init.sh
+artifacts:
+  - migration/legacy-freeze/FREEZE.json
+cost_cap: zero model calls
+claim_boundary: Repository and migration governance only.
+stop_condition: Any predecessor sealed snapshot byte changes.
+handoff: A-001-rotary-world-kernel
+evidence:
+  validated_at: 2026-09-04
+  legacy_head: 86cd32415aa2c6fdcd758348a573be9409c3e485
+  legacy_source_manifest_hash: sha256:a23340c8dec1dfb339b4d6f14f55cf4fca2c0e8f9d69639509de7e8d04c02ed9
+  legacy_file_count: 13723
+  legacy_git_state_auditable: false
+  legacy_known_test_status: 1145 tests; 4 failures; 4 errors; 4 skipped

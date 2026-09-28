@@ -1,0 +1,58 @@
+{
+  "schema_version": "bf-pluck-study-plan-v1",
+  "status": "DRAFT_NOT_DISPATCHABLE",
+  "baseline_gate": "all simulation reference acceptance gates and source-model uncertainties resolved; hardware outcomes remain separate",
+  "public_task": {
+    "prompt": "设计一个门窗动作触发的无电池无线事件节点。一次门窗动作提供能量，附近接收器应能记录发生过动作。给出可执行的机械、电源、电路和固件设计，并用仿真检验能否从完全没电开始完成一次报告。未知参数请公开说明假设。",
+    "budget": null,
+    "reference_paths": []
+  },
+  "conditions": [
+    {
+      "id": "reference-assisted",
+      "initial_knowledge": "approved source pack visible",
+      "unit": "coordinator baseline and engineering feedback; not independent Agent efficacy"
+    },
+    {
+      "id": "autonomous-retrieval",
+      "initial_knowledge": "task only; public search/tools; fresh session and no reference answer memory",
+      "unit": "single-agent end-to-end task"
+    },
+    {
+      "id": "long-revision",
+      "initial_knowledge": "same accepted product; frozen perturbation protocol",
+      "unit": "artifact invalidation and verified repair after task changes"
+    },
+    {
+      "id": "harness-transfer",
+      "initial_knowledge": "training failure traces only; held-out missions excluded from improvements",
+      "unit": "fixed model/world/evaluator/budget, base vs candidate Harness"
+    }
+  ],
+  "measurements": [
+    "verified mission success",
+    "source provenance correctness",
+    "unsupported completion claims",
+    "stale evidence acceptance",
+    "valid design revisions",
+    "receiver-event outcome in simulation",
+    "calls/tokens/USD/wall time",
+    "human intervention ledger"
+  ],
+  "controls": [
+    "no mechanical input",
+    "low excitation",
+    "packet loss",
+    "brownout before TX completion",
+    "altered artifact hash",
+    "unavailable reference parameter"
+  ],
+  "split_rule": "same product tests continuation only; new unseen geometry and workload families needed for transfer claims",
+  "dispatch_enabled": false,
+  "paid_budget_usd": 0,
+  "prohibited_claims": [
+    "simulation means hardware success",
+    "this coordinator baseline proves autonomous Pi success",
+    "repair on the current task proves Harness transfer"
+  ]
+}

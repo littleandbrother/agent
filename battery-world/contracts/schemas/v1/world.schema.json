@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://battery-world.local/contracts/v1/world.schema.json",
+  "title": "Battery World IR v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "world_id", "mission", "provider", "requirements", "canonical_hash"],
+  "properties": {
+    "schema_version": {"const": "bfworld-ir-v1"},
+    "world_id": {"type": "string", "minLength": 1},
+    "mission": {"type": "object"},
+    "provider": {
+      "type": "object",
+      "required": ["id", "version", "fidelity", "terminal_voltage_dependent", "hardware_result"],
+      "properties": {
+        "id": {"type": "string"},
+        "version": {"type": "string"},
+        "fidelity": {"enum": ["F0", "F1-simplified", "F1", "F2"]},
+        "terminal_voltage_dependent": {"type": "boolean"},
+        "hardware_result": {"type": "boolean"},
+        "equations": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "requirements": {"type": "object"},
+    "canonical_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}
+

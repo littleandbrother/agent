@@ -1,0 +1,81 @@
+schema_version: battery-world-feature-v1
+id: BFA-016-product-delivery
+status: complete
+owner: bf-agent-coordinator
+objective: Deliver the five user-authorized product milestones for a battery-free solar desktop companion using the existing Studio and Pi.
+hypothesis: Source-bound parts, editable product geometry, native readback, versioned artifacts and delivery observation enable a coherent product to be built and revised through the existing tools.
+falsifier: A required component is missing, native geometry cannot reopen, dependent results remain current after a physical change, or agent completion is declared without the required artifacts and checks.
+paper_claim: Product engineering implementation and bounded acceptance only; no hardware or RSI efficacy claim.
+owned_paths:
+  - packages/python/bfworld/src/bfworld/agentlab/
+  - apps/agent-studio/
+  - tests/agentlab/
+  - scripts/product_delivery.py
+  - docs/agentlab/
+  - project/features/BFA-016-product-delivery/
+  - PROJECT.yaml
+  - docs/PROGRESS.md
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-harness/
+  - /Users/depengsu/Documents/bf-agent-workbench/
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+schema_changes:
+  - Additive versioned product assembly, source-bound parts, artifacts and delivery observations; old proposal sessions remain readable.
+tests:
+  - Version identity and selective physical versus presentation freshness
+  - Missing required parts, invalid dimensions, path and owner boundaries
+  - Native Blender and CAD readback, model and preview identity
+  - Energy conservation and startup/darkness/load boundary controls
+  - Native EDA and target firmware build where available
+  - Actual task page and bounded independent Pi revision
+negative_controls:
+  - Camera-only change cannot alter the physical budget
+  - Missing or modified artifact cannot count as delivery
+  - Required physical change cannot reuse stale verification
+  - Model stop and operator-assisted work cannot count as autonomous completion
+command: ./init.sh; product delivery verification commands recorded alongside each actual artifact
+artifacts:
+  - docs/agentlab/PRODUCT-DELIVERY.md
+  - docs/agentlab/PRODUCT-DELIVERY.json
+  - /Users/depengsu/Documents/bf-agent-workbench/verification/product-delivery/
+cost_cap: Existing cumulative USD 10 and default owner USD 1 caps; user-authorized independent owner pi-chat-7bbf6862d7109e25 USD 5 cumulative, per request USD .19 retained. Recheck live readiness and remaining budget before real Pi calls. No purchases.
+claim_boundary: Digital and engineering evidence are distinct from manufactured hardware. CAD, native EDA, firmware, independent Pi and human assistance are reported individually.
+stop_condition: Preserve unresolved external operations and unknown usage. Missing physical assets remain incomplete; do not fabricate substitute acceptance or change frozen scientific semantics.
+deliveries:
+  product_definition: complete-digital-reference
+  complete_editable_model: complete-digital-reference
+  session_product_view: complete-digital-reference
+  integrated_engineering_package: complete-digital-reference
+  independent_pi_and_change: complete-pi-authored-with-recorded-coordinator-review
+handoff: All five bounded digital deliveries accepted. Independent Pi v12 baseline, v13 physical width change and v14 camera-only control passed with recorded coordinator feedback, not an unassisted trial. 300-test full verification passed; Chrome headless checked the live Studio; final 259-file aggregate package hashes and HTTP download passed. No hardware, manufacturing or RSI efficacy claim. Scientific gates unchanged. See docs/agentlab/PRODUCT-DELIVERY.json.
+maintenance:
+  objective: Repair request context overflow without deleting conversation history or changing product acceptance evidence.
+  hypothesis: Content-addressed spill of oversized state and completed tool results allows long engineering sessions to continue within the existing request cap.
+  falsifier: Replay still exceeds the cap for reducible data, instructions or user requirements change, tool exchanges become invalid, or archived content cannot be read back exactly.
+  scope: Context projector, provider preflight, regression tests, context trace display and maintenance receipts within owned paths.
+  negative_controls: Oversized user instructions and incomplete tool exchanges remain protected; preflight rejection must not create a billable request.
+  command: Targeted context tests, full ./init.sh, archived-session replay and bounded live continuation.
+  cost_cap: At most USD 0.10 additional diagnostic usage inside existing USD 10 global and USD .19 per-request caps; no budget changes.
+  stop_condition: Unknown usage, inconsistent archives, or unrepresentable protected instructions stop dispatch.
+  artifact: docs/agentlab/CONTEXT-OVERFLOW-REPAIR.md
+  status: complete
+  verification: 308 full Python tests, SDK and Studio checks-build-reproduction; 15 context and 16 trace targeted tests; actual Pi reply, real-provider historical replay and live browser Trace inspection.
+  evidence: docs/agentlab/CONTEXT-OVERFLOW-REPAIR.json
+wall_limit_repair:
+  status: complete
+  objective: Let interactive engineering turns outlive the obsolete 600-second process timer and pause recoverably at their real deadline.
+  hypothesis: One explicit-user-turn lease shared by provider and process supervision prevents premature kills and honors new mid-turn messages.
+  falsifier: A live lease is killed at 600 seconds, a background retry renews time, deadline shutdown loses resumability, or a paused task is labelled completed.
+  scope: agentlab launcher, recovery, chat, Studio status text and their regression tests, with receipts inside existing owned paths.
+  schema_changes: Additive wall-policy and shutdown observations in session receipts; PAUSED conversation state.
+  tests: Advancing-clock process supervision past 600 seconds, new-message renewal, duplicate and recall negatives, graceful and forced shutdown, real Pi pause/resume with local fixture provider, full init.
+  negative_controls: Scientific batch remains 600 seconds; expired/withdrawn leases cannot dispatch; USD and token limits remain enforced.
+  command: Targeted launcher/recovery/chat tests and ./init.sh.
+  artifact: docs/agentlab/SESSION-WALL-REPAIR.md
+  cost_cap: Zero paid calls for repair verification; existing global and owner USD/token caps unchanged. New interactive user messages receive 1800 seconds; no retroactive renewal.
+  claim_boundary: Engineering runtime correction only; no product, hardware, scientific or RSI completion inferred.
+  stop_condition: Unknown billing, incorrect lease ownership, or non-reproducible shutdown state prevents dispatch or completion claims.
+  verification: 316 full Python tests, SDK/Studio checks-build-reproduction; actual Pi with local fixture provider pauses and resumes the same saved session; live API and CUA checked. Final state follows drained exit events. Zero paid calls.
+  evidence: docs/agentlab/SESSION-WALL-REPAIR.json

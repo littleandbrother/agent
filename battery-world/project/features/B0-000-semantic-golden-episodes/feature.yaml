@@ -1,0 +1,59 @@
+schema_version: battery-world-feature-v1
+id: B0-000-semantic-golden-episodes
+status: complete
+owner: coordinator
+objective: Freeze executable scientific semantics before defining B cross-language contracts.
+owned_paths:
+  - PROJECT.yaml
+  - README.md
+  - bootstrap.sh
+  - docs/semantics/
+  - fixtures/golden-episodes/
+  - packages/python/bfworld/src/bfworld/semantics/
+  - scripts/build_golden_episodes.py
+  - scripts/validate_golden_episodes.py
+  - tests/semantics/
+  - init.sh
+hypothesis: Four deterministic golden episodes can mechanically distinguish physical mission truth, evidence admissibility, public admission, and final VMS while preserving A-001 identity.
+paper_claim: Apparatus semantics only; no Agent, Harness, visualization-benefit, hardware, or RSI result.
+falsifier: Any fixture violates event ordering or energy accounting; PMP, EA, VMS, or false admission cannot be recomputed; visual values lack provenance; rebuilt fixtures drift; or A-001 identity changes.
+schema_changes: []
+tests:
+  - tests/semantics/test_golden_episodes.py
+negative_controls:
+  - modified energy ledger
+  - invalid same-time event order
+  - missing visual provenance
+  - RealityWorld marked mutable
+  - A-001 bundle identity drift
+command: ./init.sh
+artifacts:
+  - fixtures/golden-episodes/manifest.json
+  - fixtures/golden-episodes/g0-pass/episode.json
+  - fixtures/golden-episodes/g1-overvoltage/episode.json
+  - fixtures/golden-episodes/g2-brownout/episode.json
+  - fixtures/golden-episodes/g3-wrong-diagnosis/episode.json
+  - fixtures/golden-episodes/MANUAL-AUDIT.md
+  - docs/semantics/B0-GOLDEN-EPISODES.md
+cost_cap: zero model calls; local CPU only
+claim_boundary: Deterministic semantic fixtures, not a completed coupled provider or Agent experiment.
+stop_condition: Any golden episode, rebuild, tamper, provenance, or A-identity gate fails.
+handoff: B0-001-authority-and-bundle-contracts
+completed_at: 2026-09-04
+evidence:
+  manifest_hash: sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618
+  a001_bundle_hash: sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059
+  episode_hashes:
+    G0-PASS: sha256:e4494a08f5d55753d7dba345f5387a9f45310487aee20c8ca5f90a4ca6c22191
+    G1-OVERVOLTAGE: sha256:9e4afe771f07c876fc33d211ec9e59963d8ea14fe5593133dc6ec44d49aeb7b5
+    G2-BROWNOUT: sha256:94118f6e32e00372aed09c28948b70ff552889477b00f7c1c562f732ddbeec67
+    G3-WRONG-DIAGNOSIS: sha256:7f24ac0c4d8fa7da3e3ad026901b980972c2f25bc268fb2da06e5cb28bdc2f8f
+  suite_validation: passed with byte-identical rebuild
+  python_tests: 20 passed
+  typescript_check: passed
+  manual_audit: fixtures/golden-episodes/MANUAL-AUDIT.md
+limitations:
+  - F0 semantic fixtures are not a continuous coupled-world solver.
+  - Evidence receipts exercise binding semantics but are not hidden qualification receipts.
+  - Event clock precision, interpolation, and cross-engine tolerances remain for B0-002.
+  - No Agent, DSH, Study Atlas, full 3D Studio, hardware, or RSI claim is evaluated.

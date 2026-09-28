@@ -1,0 +1,142 @@
+{
+  "schema_version": "bf-panorama-delivery-v1",
+  "feature": "BFA-013-panorama-console",
+  "date": "2026-09-21",
+  "status": "delivered",
+  "url": "http://127.0.0.1:8768/",
+  "modes": [
+    "任务",
+    "控制台",
+    "全景"
+  ],
+  "baseline_snapshot": "659940062bf644c9275ae870b8e83037405667951e7a5c82c1d0affc5c097aa9",
+  "final_code_snapshot": "8536182ffe153cef0057502761f932b8d84907396b5603cd6a164ad8869fbb9c",
+  "projection": {
+    "modules": 10,
+    "files": 89,
+    "declared_edges": 12,
+    "skipped": [],
+    "coverage": "explicit source allowlist, not whole repository or inferred function call graph"
+  },
+  "verification": {
+    "full_init": {
+      "tests": 275,
+      "exit_code": 0,
+      "code_changed_during_check": true,
+      "record": {
+        "actor": "local-operator-command",
+        "command": [
+          "./init.sh"
+        ],
+        "cwd": "/Users/depengsu/Documents/battery-world",
+        "end_snapshot": "8536182ffe153cef0057502761f932b8d84907396b5603cd6a164ad8869fbb9c",
+        "ended": 1789922706.1849759,
+        "exit_code": 0,
+        "id": "1789922317699628000",
+        "label": "完整仓库验证 · init.sh",
+        "log": "1789922317699628000.log",
+        "log_sha256": "d48e7834eac58851a711ea75a2fb8889b03af02e6decbabbad30b490a8e2b99f",
+        "result": "passed",
+        "schema_version": "bf-development-check-v1",
+        "scope": "命令实际覆盖范围；不代表全部功能或产品达标",
+        "snapshot": "18280402f7458d343eb6808dda5b7943029118bd89fef6ac198bc1b837052502",
+        "started": 1789922317.699625
+      }
+    },
+    "final_regression": {
+      "tests": 9,
+      "javascript_syntax_checks": 2,
+      "same_start_end_snapshot": true,
+      "record": {
+        "actor": "local-operator-command",
+        "command": [
+          ".venv/bin/python",
+          "-c",
+          "import subprocess,sys; subprocess.run([\"node\",\"--check\",\"apps/agent-studio/developer.js\"],check=True); subprocess.run([\"node\",\"--check\",\"apps/agent-studio/panorama.js\"],check=True); subprocess.run([sys.executable,\"-m\",\"unittest\",\"tests.agentlab.test_panorama\",\"tests.agentlab.test_conversation_ui\",\"-v\"],check=True)"
+        ],
+        "cwd": "/Users/depengsu/Documents/battery-world",
+        "end_snapshot": "8536182ffe153cef0057502761f932b8d84907396b5603cd6a164ad8869fbb9c",
+        "ended": 1789922889.553671,
+        "exit_code": 0,
+        "id": "1789922884582844000",
+        "label": "最终界面与快照回归",
+        "log": "1789922884582844000.log",
+        "log_sha256": "04ebd882756a93fd1e57aea3178603b6407e267a99eb76a61525463d6739c3e8",
+        "result": "passed",
+        "schema_version": "bf-development-check-v1",
+        "scope": "命令实际覆盖范围；不代表全部功能或产品达标",
+        "snapshot": "8536182ffe153cef0057502761f932b8d84907396b5603cd6a164ad8869fbb9c",
+        "started": 1789922884.5828412
+      }
+    },
+    "earlier_agentlab_suite": {
+      "tests": 84,
+      "passed": true
+    },
+    "browser": {
+      "surface": "Codex in-app browser",
+      "tab_id": "3",
+      "url": "http://127.0.0.1:8768/",
+      "viewport_final": [
+        1280,
+        720
+      ],
+      "manual_checks_passed": [
+        "task_console_panorama_modes_and_legacy_preference_migration",
+        "existing_solar_chat_and_composer_without_dispatch",
+        "console_groups_scope_labels_memory_harness_versions",
+        "platform_history_separate_from_harness_results",
+        "console_to_map_harness_focus_persists_reload",
+        "historical_source_and_unified_diff",
+        "map_pan_zoom_fit_search_and_change_highlight",
+        "current_check_and_stale_full_init_with_real_log",
+        "700x820_console_scroll_height_2187_and_scroll_top_820",
+        "700x820_panorama_scroll_height_1044_and_stacked_layout",
+        "1280x720_final_visual_review_and_empty_browser_error_log"
+      ],
+      "error_logs": []
+    }
+  },
+  "preservation": {
+    "tables_compared": 34,
+    "changed_tables": [],
+    "model_requests": 847,
+    "before": "/Users/depengsu/Documents/bf-agent-workbench/verification/panorama/database-before.json",
+    "after": "/Users/depengsu/Documents/bf-agent-workbench/verification/panorama/database-final.json",
+    "method": "SHA256 of json.dumps(SELECT * ordered by rowid, sort_keys=True, default=str) per table",
+    "provider_calls": 0,
+    "new_cost_usd": 0,
+    "budget_changed": false
+  },
+  "source_changes": {
+    "modified_from_backup": [
+      "apps/agent-studio/developer.js",
+      "apps/agent-studio/index.html",
+      "packages/python/bfworld/src/bfworld/agentlab/server.py"
+    ],
+    "new_under_ui_backend": [
+      "apps/agent-studio/console.css",
+      "apps/agent-studio/panorama.css",
+      "apps/agent-studio/panorama.js",
+      "packages/python/bfworld/src/bfworld/agentlab/panorama.py"
+    ],
+    "additional_new": [
+      "tests/agentlab/test_panorama.py",
+      "scripts/run_panorama_check.py",
+      "docs/agentlab/PANORAMA-CONSOLE.md",
+      "docs/agentlab/PANORAMA-CONSOLE.json",
+      "project/features/BFA-013-panorama-console/feature.yaml"
+    ],
+    "source_snapshot_scope_excludes": "documentation, feature state, dependencies and other unlisted files"
+  },
+  "limitations": [
+    "Polling only while Panorama is visible; no atomic filesystem or complete edit stream claim.",
+    "External Coding Agent identity and task lifecycle are not connected; actor remains unbound.",
+    "Only checks run through the local wrapper are registered; no live command terminal.",
+    "Map edges are declared, not measured runtime calls.",
+    "No Git baseline; snapshots observe uncommitted workspace content.",
+    "No new scientific, hardware, Agent efficacy or Harness RSI claim.",
+    "Coordinator scientific init not run; feat-397 and B2 gates unchanged."
+  ],
+  "committed": false
+}

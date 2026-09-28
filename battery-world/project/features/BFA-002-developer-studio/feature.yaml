@@ -1,0 +1,23 @@
+schema_version: battery-world-feature-v1
+id: BFA-002-developer-studio
+status: complete
+owner: bf-agent-coordinator
+objective: Runtime and developer views with traceable Memory, Harness, RSI, Tools, Context and Experiments, plus versioned memory/prompt/source editors.
+hypothesis: Operator edits can be validated and bound to a future solve without altering historical evidence or the paid execution gates.
+falsifier: An edit changes a historical artifact, exposes participant-private data, bypasses paid limits, or a selected version differs from loaded source.
+paper_claim: Engineering observability and versioned configuration only.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, project/features/BFA-002-developer-studio/, docs/agentlab/, PROJECT.yaml]
+external_owned_paths: [/Users/depengsu/Documents/bf-agent-workbench/developer/, /Users/depengsu/Documents/bf-agent-workbench/verification/]
+schema_changes: [bf-agent-developer-revision-v1, bf-agent-developer-validation-v1]
+targeted_tests: [operator authorization, immutable revision, stale selection, build rejection, future activation binding, public projection, zero-provider dry run, UI editor persistence]
+negative_controls: [path traversal, forged factual memory, failed TypeScript, tampered build, participant editor access, paid window closed]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/DEVELOPER-STUDIO.json
+cost_cap: Zero paid model calls. Existing closed paid window and cumulative ledger remain unchanged.
+claim_boundary: UI and local compile/activation behavior; no new model outcome, promotion, RSI or hardware claim.
+stop_condition: Historical evidence changes, provider call, secret exposure, or compile activation mismatch.
+limitations: Historical exact assembled prompts were not recorded and must not be reconstructed as exact observations.
+handoff: Delivered both modes and all six modules. Immutable editors, compile and sandbox validation, future-run selection, actual zero-model Pi activation verified. Paid window remains closed. See docs/agentlab/DEVELOPER-STUDIO.md.
+
+completion_evidence: docs/agentlab/DEVELOPER-STUDIO.json
+verification: 212 full-gate tests passed in an isolated copy; final baseline-binding change passed all 5 developer tests; 52 historical sessions project successfully; 1365 historical files unchanged; zero new provider calls.

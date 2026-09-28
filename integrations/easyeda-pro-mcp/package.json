@@ -1,0 +1,53 @@
+{
+  "name": "easyeda-pro-mcp",
+  "version": "0.1.0",
+  "description": "Unofficial MCP server for EasyEDA Pro (嘉立创EDA专业版) — drive schematics and PCBs from an AI agent. Zero dependencies.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Eritque arcus",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nambers/easyeda-pro-mcp.git"
+  },
+  "homepage": "https://github.com/Nambers/easyeda-pro-mcp#readme",
+  "bugs": "https://github.com/Nambers/easyeda-pro-mcp/issues",
+  "bin": {
+    "easyeda-pro-mcp": "src/eda-mcp-server.mjs",
+    "freerouting-mcp": "src/freerouting-mcp-server.mjs"
+  },
+  "exports": {
+    ".": "./src/eda-mcp-server.mjs",
+    "./ws-server": "./src/ws-server.mjs",
+    "./bridge-client": "./src/bridge-client.mjs",
+    "./bridge-embedded": "./src/bridge-embedded.mjs",
+    "./freerouting": "./src/freerouting-mcp-server.mjs"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node src/ws-server.mjs --self-test && node src/bridge-embedded.mjs --self-test && node src/eda-target.mjs --self-test"
+  },
+  "keywords": [
+    "easyeda",
+    "jlceda",
+    "lceda",
+    "嘉立创eda",
+    "嘉立创eda专业版",
+    "立创eda",
+    "mcp",
+    "model-context-protocol",
+    "pcb",
+    "eda",
+    "schematic",
+    "freerouting",
+    "autorouter"
+  ],
+  "dependencies": {}
+}

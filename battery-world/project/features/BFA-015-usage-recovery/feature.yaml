@@ -1,0 +1,66 @@
+schema_version: battery-world-feature-v1
+id: BFA-015-usage-recovery
+status: complete
+owner: bf-agent-coordinator
+objective: Fix misleading historical model-stop display, increase user-authorized
+  interactive usage allocation, verify live dispatch.
+hypothesis: Settled historical failures can remain auditable without appearing as
+  current blockers; shared and per-owner usage caps remain enforced after increase.
+falsifier: Historical trace or usage is erased; current failure is hidden before a
+  later valid response; unresolved usage dispatches; per-owner or aggregate cap can
+  be bypassed.
+paper_claim: Engineering recovery only; no scientific efficacy claim.
+owned_paths:
+- packages/python/bfworld/src/bfworld/agentlab/provider.py
+- apps/agent-studio/app.js
+- apps/agent-studio/conversation.js
+- apps/agent-studio/conversation.css
+- tests/agentlab/test_provider.py
+- tests/agentlab/conversation_projection.cjs
+- PROJECT.yaml
+- docs/PROGRESS.md
+- docs/agentlab/
+- project/features/BFA-015-usage-recovery/
+- /Users/depengsu/Documents/bf-agent-workbench/verification/usage-recovery
+- /Users/depengsu/Documents/bf-agent-workbench/state
+- /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+- /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+- /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+- /Users/depengsu/Documents/bf-agent-workbench/participants/
+- /Users/depengsu/Documents/bf-agent-workbench/sessions/
+- /Users/depengsu/Documents/bf-agent-workbench/harnesses/
+schema_changes:
+- optional operator settings interactive_default_owner_usd
+- conversation projection historical error state only
+tests:
+- normalized 400 wrapper
+- history only after actual later model response
+- current and truncated output errors retained
+- default interactive owner cap and explicit override
+- unknown usage still blocks despite larger budget
+- full init
+- live browser/model smoke
+negative_controls:
+- new input alone does not resolve historical error
+- failed continuation does not imply recovery
+- noninteractive batch window unchanged
+command: ./init.sh; local conversation projection; bounded real conversation smoke
+artifacts:
+- docs/agentlab/USAGE-RECOVERY.json
+- verification/usage-recovery/
+cost_cap: Current interactive totals USD 10 / owner USD 1 / 50 million tokens, per
+  request USD .19; historical spend retained. Real smoke cap .03, actual .0012015.
+claim_boundary: Usage/accounting/UI behavior only, no historical request replay or
+  scientific gate changes.
+stop_condition: Do not dispatch with unresolved unknown billing or absent authorized
+  budget.
+handoff: Normal interactive sends verified. Never clear historical usage or bypass
+  unresolved UNKNOWN to continue; no automatic paid continuation or batch renewal.
+completed: '2026-09-21'
+verification:
+  full_tests: 282
+  targeted_tests: 19
+  check_record: /Users/depengsu/Documents/bf-agent-workbench/state/panorama/checks/1789926696956208000.json
+  source_snapshot: d6f348729f9bf07d9db45ed3c944754903d569b7fc75647e8fc7806008821653
+  live_probe_cost_usd: 0.0012015
+  evidence: docs/agentlab/USAGE-RECOVERY.json

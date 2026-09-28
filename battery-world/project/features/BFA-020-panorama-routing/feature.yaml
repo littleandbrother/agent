@@ -1,0 +1,67 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-020-panorama-routing",
+  "status": "complete",
+  "owner": "bf-agent-coordinator",
+  "objective": "Clarify panorama relationships with obstacle-avoiding orthogonal routing, separated ports and selection emphasis while retaining graph identities and user node layouts.",
+  "hypothesis": "Routing through gaps removes node crossings and reduces visual ambiguity.",
+  "falsifier": "A relation is dropped, a routed segment crosses an unrelated node, dragging breaks routing or narrow layouts become inaccessible.",
+  "owned_paths": [
+    "apps/agent-studio/panorama.js",
+    "apps/agent-studio/panorama.css",
+    "project/features/BFA-020-panorama-routing/",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/agentlab/PANORAMA-ROUTING.md",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/panorama-routing-20260924",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md"
+  ],
+  "schema_changes": "None; visual routing only.",
+  "tests": "Live-browser geometry and interaction checks; JS syntax; full ./init.sh.",
+  "negative_controls": "Long cross-row relationships, dragged nodes, narrow viewport and existing persisted positions.",
+  "command": "./init.sh; verification/panorama-routing-20260924/browser-check.cjs",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/verification/panorama-routing-20260924",
+  "cost_cap": "0 paid calls; no engineering jobs.",
+  "claim_boundary": "Presentation only; graph semantics, research outcomes and runtime unchanged.",
+  "limitations": "Overlapping manually placed cards cannot always expose a visible route.",
+  "stop_condition": "Graph identity or runtime behavior changes beyond visual scope.",
+  "handoff": "Delivered orthogonal routing with independent ports, obstacle clearance and stable selection highlighting. Browser geometry/interactions and full init pass. Existing tabs need their normal update-interface reload.",
+  "evidence": {
+    "feature": "BFA-020-panorama-routing",
+    "status": "complete",
+    "date": "2026-09-24",
+    "source": {
+      "apps/agent-studio/panorama.js": "b69bfecf36900f247f96d7419acf1b379558c09b6f8e3e5f79f924e248f409fd",
+      "apps/agent-studio/panorama.css": "dab72c4486a8c4015d105ca044096b4de64d57f5fa12abe711de4a20b0339c44"
+    },
+    "browser": {
+      "passed": true,
+      "nodes": 13,
+      "edges": 21,
+      "missing": 0,
+      "nodeCrossings": 0,
+      "selected": 5,
+      "dragging": true,
+      "persistence": true,
+      "reset": true,
+      "search": true,
+      "compare": true,
+      "viewport900": true,
+      "navigation": true,
+      "errors": []
+    },
+    "tests": {
+      "python": 352,
+      "seconds": 173.026,
+      "sdk_studio": "passed",
+      "js_syntax": "passed"
+    },
+    "new_paid_calls": 0,
+    "root_scientific_init_run": false,
+    "limit": "Presentation routing only; overlapping cards can obstruct routes; relation declarations preserved.",
+    "report": "/Users/depengsu/Documents/battery-world/docs/agentlab/PANORAMA-ROUTING.md",
+    "git_commit": false
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://battery-world.local/contracts/v1/views.schema.json",
+  "title": "Battery World View Specifications v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "event_head", "views"],
+  "properties": {
+    "schema_version": {"const": "bfworld-views-v1"},
+    "run_id": {"type": "string"},
+    "event_head": {"type": "string"},
+    "views": {"type": "array", "items": {"type": "object"}}
+  }
+}
+

@@ -1,0 +1,43 @@
+schema_version: battery-world-feature-v1
+id: BFA-017-delivery-deployment
+status: complete
+owner: bf-agent-coordinator
+objective: Complete one retained Pi product delivery and expose version-bound progress, firmware deployment and TinyML NAS evidence in task, console and panorama.
+hypothesis: Typed publication errors, delivery-stage projections and executable deployment artifacts make remaining work recoverable and observable without inventing hardware measurements.
+falsifier: A missing revision still returns an opaque error, a failed or stale artifact counts as delivery, a model metric lacks a source, a host estimate is labelled MCU measurement, or interrupted delivery loses original evidence.
+owned_paths:
+  - packages/python/bfworld/src/bfworld/agentlab/
+  - apps/agent-studio/
+  - tests/agentlab/
+  - docs/agentlab/
+  - project/features/BFA-017-delivery-deployment/
+  - PROJECT.yaml
+  - docs/PROGRESS.md
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/
+  - /Users/depengsu/Documents/bf-agent-workbench/
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+schema_changes:
+  - Additive delivery-stage projection, optional exact required_paths in operator delivery goals, and version-bound deployment artifacts, without changing frozen scientific evaluators.
+tests:
+  - Publication required fields, stale revisions, files, idempotence and actual Pi error recovery.
+  - Data split validation, reproducible bounded NAS, exported C inference parity and ARM build fit.
+  - Measurement identity and missing-metric controls; UI progress and source navigation.
+negative_controls:
+  - Synthetic data never counts as real recognition efficacy; host time and estimated power never count as MCU measurements.
+  - Stale, corrupted, missing or different-model artifacts cannot pass delivery or deployment.
+command: Targeted agentlab tests, local build and NAS, retained Pi continuation, live browser and ./init.sh.
+artifacts:
+  - docs/agentlab/DELIVERY-DEPLOYMENT.md
+  - docs/agentlab/DELIVERY-DEPLOYMENT.json
+cost_cap: Up to USD 0.15 diagnostic continuation within current global USD limits and per-request USD .19; new explicit user-turn deadline 1800 seconds; local NAS bounded to 120 seconds and no paid training. Owner pi-chat-cf37636f82c771a4 cap adjusted from default USD 1 to explicit USD 1.10 under prior user authorization to finish acceptance beyond the old cap. Global USD 10 and request USD .19 unchanged. No automatic hardware flashing.
+claim_boundary: Software delivery and digital target compilation, with hardware flashing and power/latency measurements separately evidenced. No scientific, manufacturing or RSI efficacy claim.
+stop_condition: Unknown usage, exhausted applicable budget, absent verified board identity, inconsistent artifact hashes or failed export parity prohibit the corresponding acceptance.
+limitations: No physical probe or real recognition dataset; TinyML test-vector firmware is not integrated with product input; no MCU measurements or statistical reliability claim.
+handoff: Software delivery accepted. Connect and identify the actual PCB/MCU, collect group-separated real data, integrate inputs and model, then flash and measure. Artifacts do not certify hardware or all-event service quality.
+
+verification_receipt: docs/agentlab/DELIVERY-DEPLOYMENT.json
+validation_result: 322 full Python tests plus SDK/Studio types-build-reproduction; actual ARM and C parity; real Pi publication recovery with factual review; live CUA navigation and scroll.
+new_paid_calls: 17
+new_paid_cost_upper_usd: 0.0899604

@@ -1,0 +1,42 @@
+schema_version: battery-world-feature-v1
+id: A2-001-minimum-closed-experiment-contracts
+status: complete
+evidence: [docs/coupled/validation.json, docs/coupled/A2-VALIDATION.md]
+owner: coordinator
+objective: Execute a coupled Rotary-TENG request with load-voltage feedback, PMIC hysteresis, sampled information, integer classification, receiver delivery, an energy ledger, and an independent circuit check.
+owned_paths:
+  - PROJECT.yaml
+  - README.md
+  - project/ROADMAP.yaml
+  - docs/PROGRESS.md
+  - docs/ROADMAP.md
+  - docs/coupled/
+  - project/features/A2-001-minimum-closed-experiment-contracts/
+  - project/features/B1-001-agent-api-and-recovery/
+  - packages/python/bfworld/src/bfworld/coupled/
+  - configs/coupled/
+  - scripts/build_coupled.py
+  - scripts/build_studio.py
+  - scripts/validate_studio.py
+  - apps/world-studio/
+  - tests/coupled/
+  - tests/studio/
+  - init.sh
+hypothesis: An event-driven load coupled to a voltage-dependent source produces electrical and diagnostic outcomes from actual execution, with a conserved energy ledger and independent RC circuit agreement.
+falsifier: Same-time events reorder; TX is counted as receiver delivery; diagnostic labels are hardcoded as outcomes; voltage no longer feeds load state; energy residual exceeds the declared tolerance; or a boundary circuit disagrees with ngspice beyond tolerance.
+schema_changes: [bfworld-coupled-run-v1]
+tests: [tests/coupled/test_engine.py]
+negative_controls: [unclamped overvoltage, transient brownout, wrong integer classifier, receiver loss, artifact tamper]
+exit_gates:
+  - coupled load-voltage feedback and PMIC transitions recorded
+  - real sample-to-integer-classifier-to-receiver event chain
+  - pass and three distinct failure runs reproduced
+  - energy accounting and timestep refinement checked
+  - independent ngspice RC boundary check
+command: ./init.sh
+artifacts: [docs/coupled/validation.json, docs/coupled/A2-VALIDATION.md]
+cost_cap: zero model/API calls; local CPU only; at most 60 seconds per circuit subprocess
+claim_boundary: Synthetic-data computational coupled reference and limited cross-implementation circuit check; not measured hardware or calibrated Rotary-TENG physics.
+stop_condition: Any declared exit gate fails.
+handoff: B1-001-agent-api-and-recovery
+limitations: [synthetic acquisition, fixed quantized classifier, simplified radio, independent circuit check is not full-world physical validation]

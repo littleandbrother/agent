@@ -1,0 +1,50 @@
+{
+  "schema_version": "bfworld-mission-v1",
+  "mission_id": "rotary-overvoltage-v1",
+  "seed": 7,
+  "duration_s": 2.0,
+  "coarse_dt_s": 0.005,
+  "verification_dt_s": 0.001,
+  "environment": {
+    "rpm": 120.0,
+    "pole_pairs": 4
+  },
+  "source": {
+    "provider": "rotary-teng-norton-f1-v1",
+    "peak_current_a": 0.0033,
+    "internal_resistance_ohm": 3000.0,
+    "leak_resistance_ohm": 200000.0
+  },
+  "storage": {
+    "capacitance_f": 0.001,
+    "initial_voltage_v": 2.6,
+    "min_operating_voltage_v": 1.8,
+    "max_safe_voltage_v": 3.6
+  },
+  "load": {
+    "idle_current_a": 0.00025,
+    "inference_current_a": 0.005,
+    "inference_duration_s": 0.02,
+    "inference_times_s": [0.5, 0.8, 1.1, 1.4, 1.7]
+  },
+  "baseline_design": {
+    "design_id": "rotary-baseline-unclamped-v1",
+    "clamp_voltage_v": null,
+    "shunt_resistance_ohm": null
+  },
+  "revision": {
+    "revision_id": "add-overvoltage-clamp-v1",
+    "reason": "baseline exceeds the maximum safe storage voltage",
+    "design": {
+      "design_id": "rotary-revised-clamped-v1",
+      "clamp_voltage_v": 3.45,
+      "shunt_resistance_ohm": 25.0
+    }
+  },
+  "requirements": {
+    "required_inferences": 5,
+    "allow_brownout": false,
+    "allow_overvoltage": false,
+    "max_fine_coarse_peak_delta_v": 0.02
+  }
+}

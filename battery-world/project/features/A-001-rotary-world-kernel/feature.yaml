@@ -1,0 +1,60 @@
+schema_version: battery-world-feature-v1
+id: A-001-rotary-world-kernel
+status: complete
+owner: coordinator
+objective: Complete and independently validate one deterministic Rotary-TENG World Kernel vertical slice.
+owned_paths:
+  - contracts/
+  - packages/python/bfworld/
+  - packages/typescript/bfworld-sdk/
+  - apps/bfworld-cli/
+  - configs/
+  - fixtures/
+  - suites/
+  - tests/
+  - scripts/
+  - init.sh
+  - runs/
+hypothesis: A load-dependent F1-simplified Rotary-TENG world can expose an overvoltage failure, apply a typed design revision, pass a finer-step verification, survive process death, and replay from one trace with stable semantic identity.
+paper_claim: A supplies an executable, observable, recoverable computational apparatus; it is not an Agent or hardware result.
+falsifier: Baseline does not fail overvoltage; revision or fine validation fails; consumers disagree on trace head; recovery changes scientific hash; replay changes bundle hash; tampering is accepted; or any output is nondeterministic under pinned inputs.
+schema_changes:
+  - contracts/schemas/v1/world.schema.json
+  - contracts/schemas/v1/event.schema.json
+  - contracts/schemas/v1/run-manifest.schema.json
+  - contracts/schemas/v1/evidence.schema.json
+  - contracts/schemas/v1/views.schema.json
+tests:
+  - tests/contract
+  - tests/dependency
+  - tests/integration
+  - tests/replay
+  - tests/chaos
+negative_controls:
+  - bundle byte tamper
+  - event hash-chain tamper
+  - stale checkpoint artifact
+  - forbidden import boundary
+command: ./init.sh
+artifacts:
+  - runs/a-rotary-v1/world.ir.json
+  - runs/a-rotary-v1/run-manifest.json
+  - runs/a-rotary-v1/events.jsonl
+  - runs/a-rotary-v1/channels.parquet
+  - runs/a-rotary-v1/evidence.json
+  - runs/a-rotary-v1/views.json
+  - runs/a-rotary-v1/replay.html
+  - runs/a-rotary-v1/bundle-seal.json
+cost_cap: zero model calls; local CPU only
+claim_boundary: F1-simplified numerical apparatus; no hardware, Agent, DSH-benefit, or RSI claim.
+stop_condition: Any identity, trace, recovery, independent-verification, or claim-boundary gate fails.
+handoff: Freeze A before defining B-001.
+evidence:
+  validated_at: 2026-09-04
+  command: ./init.sh
+  python_tests: 12
+  typescript_contract_check: passed
+  validation_report: runs/a-validation-report.json
+  run_id: run-9b86a46b1f0cbcd204c70ef580a019845e3c7a6d3bcda89c7df74e38dbda7cca
+  scientific_hash: sha256:5c5a9374104130aa3d8d8de38dc28dc7ed50324cdb3bf33f9b0300498b7ab986
+  bundle_hash: sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059

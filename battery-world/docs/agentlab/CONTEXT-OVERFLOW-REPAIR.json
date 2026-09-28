@@ -1,0 +1,115 @@
+{
+  "schema_version": "bf-context-overflow-repair-v1",
+  "date": "2026-09-23",
+  "accepted": true,
+  "feature": "BFA-016-product-delivery",
+  "root_cause": "Oversized product state inside protected system prompt; recent complete tool exchanges and assistant text had no bounded fallback.",
+  "implementation": "Request-only owner-local content-addressed archives; immutable original trace; protected instructions and unresolved exchanges preserved; preflight refusal is reviewable and not billable.",
+  "validation": {
+    "full_init": {
+      "passed": true,
+      "python_tests": 308,
+      "sdk_studio_checks_build_reproduction": true,
+      "log": "/Users/depengsu/Documents/bf-agent-workbench/verification/context-overflow-repair-20260923/init-final.log",
+      "sha256": "3f2e1f8f3a40f68b79b704794309c94ffe2cead6d0cd92d4e80ab65f31492d60"
+    },
+    "targeted_context_tests": 15,
+    "targeted_trace_tests": 16,
+    "trace_js_syntax": true,
+    "live_ui": {
+      "browser": "Codex in-app browser tab 1",
+      "url": "http://127.0.0.1:8768/",
+      "task_reply": "已收到，当前可以正常回复。",
+      "trace_model_requests": 2,
+      "trace_cost_display": "$0.00467",
+      "trace_projection": "365,151 → 48,992 字节",
+      "archived_data_records": 1,
+      "archive_file_path_visible": true,
+      "archive_sha256_visible": true,
+      "fits": true,
+      "original_product_restored": "pi-chat-7bbf6862d7109e25",
+      "original_product_revision": 14,
+      "parts": 26,
+      "method": "Direct CUA semantic UI inspection and actual clicks; no headless replacement"
+    },
+    "offline_replays": [
+      {
+        "owner": "pi-chat-7bbf6862d7109e25",
+        "source_bytes": 1627562,
+        "before_spill_bytes": 103407,
+        "after_bytes": 103407,
+        "fits": true
+      },
+      {
+        "owner": "pi-chat-cf37636f82c771a4",
+        "source_bytes": 364883,
+        "before_spill_bytes": 129790,
+        "after_bytes": 48724,
+        "fits": true
+      }
+    ],
+    "final_project_state": "pass; completed BFA-016 has no active feature"
+  },
+  "live": {
+    "owner": "pi-chat-d29fd027c651f4ce",
+    "pi_reply": [
+      {
+        "type": "text",
+        "text": "已收到，当前可以正常回复。"
+      }
+    ],
+    "replay_text": "长会话可以继续，历史数据已保留。",
+    "source_bytes": 365151,
+    "projected_bytes": 48992,
+    "archived_messages": [
+      {
+        "bytes": 80302,
+        "kind": "product_state",
+        "record_file": "context-records/45ea0979f22e7142a850cf111a5b4aec3a9be1e0f4b30053268a7642c4a57245.json",
+        "sha256": "45ea0979f22e7142a850cf111a5b4aec3a9be1e0f4b30053268a7642c4a57245",
+        "source_index": 0,
+        "source_message_sha256": "f56554b283c5153aba54555500afea4b452bc003eb9378e3b1da9cfabcedde52"
+      }
+    ],
+    "requests": [
+      {
+        "id": "llm-7d37d956e97081b2dadd",
+        "status": "SETTLED",
+        "charged": 0.0010313999999999998
+      },
+      {
+        "id": "llm-ee15139044697b8f6c29",
+        "status": "SETTLED",
+        "charged": 0.0036393
+      }
+    ],
+    "additional_usd": 0.004670700000000139,
+    "global_held_after_usd": 8.26329449999999,
+    "boundary": "Pi connectivity plus direct-provider historical replay; no product run or acceptance evidence changed."
+  },
+  "source_hashes": {
+    "packages/python/bfworld/src/bfworld/agentlab/context.py": "a3b7c639cbf875e46cf204a532f4ca18e1de79386d5a76744c026836ad782296",
+    "packages/python/bfworld/src/bfworld/agentlab/provider.py": "85f5280d6497838b5556df26bc9d22cb7e372fb11d9beeb61cfe45a51b66b8d5",
+    "packages/python/bfworld/src/bfworld/agentlab/trace_review.py": "fdd1db48759c3200fca53c17e9c330658c9c429ae166cd4c0bea2bece5bd6afd",
+    "packages/python/bfworld/src/bfworld/agentlab/trace_analysis.py": "0bd226abf6051bf3dc7df026a9ba80905cbffa67c6664ab7add76cc9733c0846",
+    "apps/agent-studio/trace.js": "79785e6fa8ba19a4972ab0568cc354aa4385828f512a20d5263b20d284a569e6",
+    "tests/agentlab/test_context_recovery.py": "9018f84093efb8e2e86bd1bdb924433ff17ea236239eb1509c1051c27cc26249",
+    "tests/agentlab/test_trace_review.py": "5ba35f7e5efd382e9988293dbb2093b0c780fa5384d76a55202b681a744f6416"
+  },
+  "preservation": {
+    "package_sha256": "a03d66045ae6bd15118ca1f841d7322890f0fae7f5ee1329d12e70aed8fc3106",
+    "root_features_sha256": "c0bdddfd21fc7de7b56bb4456c554349445a54a2ae018dca99e1b5a380c07e40",
+    "root_features_count": 88,
+    "model_limits": {
+      "id": 1,
+      "total_usd": 10.0,
+      "request_usd": 0.19,
+      "max_tokens": 50000000,
+      "expires": 1789669026.0093598
+    },
+    "active_paid_requests": 0,
+    "source_hashes_unchanged": true
+  },
+  "evidence_directory": "/Users/depengsu/Documents/bf-agent-workbench/verification/context-overflow-repair-20260923",
+  "limits": "Protected oversized instructions still fail closed; no unbounded conversation or autonomous product-delivery claim. Root scientific init not run; research feature values and gates unchanged."
+}

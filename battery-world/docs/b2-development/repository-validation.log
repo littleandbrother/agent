@@ -1,0 +1,230 @@
+=== Battery World environment ===
+{"dependencies":{"PyYAML":"6.0.2","jsonschema":"4.23.0","pyarrow":"22.0.0"},"expected_python":"3.11.x","problems":{},"python":"3.11.9","schema_version":"bfworld-environment-check-v1","status":"passed"}
+=== Canonical A materialization and fresh reproduction ===
+{"canonical":{"baseline_overvoltage_observed":true,"bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","event_head":"sha256:80ac2e7c35fd6479742126e842a795a9c81466e411f6c268fb6e4f4540bf6180","fine_validation_passed":true,"hardware_result":false,"model_calls":0,"revision_passed":true,"run_id":"run-9b86a46b1f0cbcd204c70ef580a019845e3c7a6d3bcda89c7df74e38dbda7cca","schema_version":"bfworld-verification-report-v1","scientific_hash":"sha256:5c5a9374104130aa3d8d8de38dc28dc7ed50324cdb3bf33f9b0300498b7ab986","status":"passed"},"fresh_reproduction":{"bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","output":"/var/folders/j4/7j4r85ls1tdf96wzf4lsqnk40000gn/T/bfworld-a-reproduce-ripb1fr3/bundle","run_id":"run-9b86a46b1f0cbcd204c70ef580a019845e3c7a6d3bcda89c7df74e38dbda7cca","scientific_hash":"sha256:5c5a9374104130aa3d8d8de38dc28dc7ed50324cdb3bf33f9b0300498b7ab986"},"gates":{"baseline_overvoltage":true,"byte_identical_reproduction":true,"fine_step_validation":true,"hardware_result":false,"independent_verification":true,"typed_revision":true,"zero_model_calls":true},"schema_version":"bfworld-a-validation-v1","status":"passed"}
+=== B0 semantic golden episodes and byte-identical reproduction ===
+{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","byte_identical_rebuild":true,"episode_count":4,"feature_receipt_bound":true,"manifest_hash":"sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618","schema_version":"bfworld-semantic-suite-audit-v0","status":"passed","validation":{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","episodes":[{"content_hash":"sha256:e4494a08f5d55753d7dba345f5387a9f45310487aee20c8ca5f90a4ca6c22191","ea":true,"energy_residual":0.004166666667,"episode_id":"G0-PASS","false_admission":false,"pmp":true,"vms":true},{"content_hash":"sha256:9e4afe771f07c876fc33d211ec9e59963d8ea14fe5593133dc6ec44d49aeb7b5","ea":true,"energy_residual":0.003571428571,"episode_id":"G1-OVERVOLTAGE","false_admission":true,"pmp":false,"vms":false},{"content_hash":"sha256:94118f6e32e00372aed09c28948b70ff552889477b00f7c1c562f732ddbeec67","ea":true,"energy_residual":0.004166666667,"episode_id":"G2-BROWNOUT","false_admission":true,"pmp":false,"vms":false},{"content_hash":"sha256:7f24ac0c4d8fa7da3e3ad026901b980972c2f25bc268fb2da06e5cb28bdc2f8f","ea":true,"energy_residual":0.004166666667,"episode_id":"G3-WRONG-DIAGNOSIS","false_admission":true,"pmp":false,"vms":false}],"gates":{"authority_separation":true,"energy_conservation":true,"pmp_ea_vms_recomputable":true,"request_level_information_ring":true,"same_energy_twin_diverges":true,"same_time_event_order":true,"unconfirmed_causality_not_promoted":true,"visual_provenance_complete":true},"schema_version":"bfworld-semantic-golden-validation-v0","status":"passed"}}
+=== Evidence-gated project roadmap and progress ===
+{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","active_feature":"B2-003-repair-and-blind-transfer","b0_manifest_hash":"sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618","foundation_features_complete":4,"method":"EpiDesign","next_feature":"B2-003-repair-and-blind-transfer","product":"Battery World Studio","research_milestones_complete":3,"research_milestones_total":6,"schema_version":"battery-world-project-state-validation-v1","status":"passed"}
+{
+  "schema_version": "pilot-readiness-v1",
+  "launchable": true,
+  "blockers": [],
+  "external_calls_made": 0,
+  "scope": "configuration preflight only; actual isolation and provider identities require independent verification"
+}
+{"status": "pass", "trials": 36, "model_calls": 63, "usage_tokens": 463487, "cost_upper_cny": 1.463445, "computational_verified_success": 18, "false_admissions": 0, "qualified_candidates": 0, "report_hash": "sha256:ada2a6fc80d4f571c50c327985d19f525daddaf1d032e0f528063aa7dc7f6a47", "scope": "hashes, derived verdicts, guarded treatment activation and usage-based budget; not an independent physical calibration"}
+=== Python contract, boundary, integration, replay, chaos, semantic, and project tests ===
+{"status": "pass", "scenes": 6, "runs": 18, "exact_recovery": true}
+{"status": "qualification-failed", "execution_status": "completed", "explanation_error_v": 0.004986737921928608, "probe_totals": {"raw-search-removal": 26, "text-energy-rule": 10, "executable-capsule": 3}, "cost": {"learning_experiments": 4, "qualification_experiments": 6, "solve_experiments": 39, "external_model_calls": 0, "predictor_steps": 48884}, "formal_agent_trial": false}
+test_cost_tamper (campaign.test_audit.AuditTests.test_cost_tamper) ... ok
+test_false_success_tamper (campaign.test_audit.AuditTests.test_false_success_tamper) ... ok
+test_report_recomputes (campaign.test_audit.AuditTests.test_report_recomputes) ... ok
+test_unqualified_program_injection (campaign.test_audit.AuditTests.test_unqualified_program_injection) ... ok
+test_fixed_conditions_and_negative_semantic_result (campaign.test_b2_artifact_projection.ArtifactProjectionTests.test_fixed_conditions_and_negative_semantic_result) ... ok
+test_measured_archive_detaches_without_source_hardware_path (campaign.test_b2_artifact_projection.ArtifactProjectionTests.test_measured_archive_detaches_without_source_hardware_path) ... ok
+test_rehashed_control_or_aggregate_tamper_rejected (campaign.test_b2_artifact_projection.ArtifactProjectionTests.test_rehashed_control_or_aggregate_tamper_rejected) ... ok
+test_ast_dangers_do_not_execute (campaign.test_b2_compiler.CompilerTests.test_ast_dangers_do_not_execute) ... ok
+test_compilation_gates_scientific_callback (campaign.test_b2_compiler.CompilerTests.test_compilation_gates_scientific_callback) ... ok
+test_duplicate_stops_and_limit_is_not_extended (campaign.test_b2_compiler.CompilerTests.test_duplicate_stops_and_limit_is_not_extended) ... ok
+test_invalid_cost_stops_without_retry (campaign.test_b2_compiler.CompilerTests.test_invalid_cost_stops_without_retry) ... ok
+test_output_domain_and_fixture_failures (campaign.test_b2_compiler.CompilerTests.test_output_domain_and_fixture_failures) ... ok
+test_real_sandbox_and_abstention (campaign.test_b2_compiler.CompilerTests.test_real_sandbox_and_abstention) ... ok
+test_repair_is_bounded_and_cached (campaign.test_b2_compiler.CompilerTests.test_repair_is_bounded_and_cached) ... ok
+test_stale_compiler_cannot_open_scientific_gate (campaign.test_b2_compiler.CompilerTests.test_stale_compiler_cannot_open_scientific_gate) ... ok
+test_three_different_invalid_candidates_stop_at_limit (campaign.test_b2_compiler.CompilerTests.test_three_different_invalid_candidates_stop_at_limit) ... ok
+test_unknown_callback_is_not_repeated (campaign.test_b2_compiler.CompilerTests.test_unknown_callback_is_not_repeated) ... ok
+test_world_and_workflow_qualifications_are_independent (campaign.test_b2_compiler.CompilerTests.test_world_and_workflow_qualifications_are_independent) ... ok
+test_g2_false_rejections_and_lost_tasks_reproduce (campaign.test_b2_diagnostics.DiagnosticsTests.test_g2_false_rejections_and_lost_tasks_reproduce) ... ok
+test_interventions_change_only_declared_fields (campaign.test_b2_diagnostics.DiagnosticsTests.test_interventions_change_only_declared_fields) ... ok
+test_old_report_not_overwritten_and_diagnostics_sealed (campaign.test_b2_diagnostics.DiagnosticsTests.test_old_report_not_overwritten_and_diagnostics_sealed) ... ok
+test_rehashed_fake_counterexample_is_rejected (campaign.test_b2_diagnostics.DiagnosticsTests.test_rehashed_fake_counterexample_is_rejected) ... ok
+test_rehashed_visual_sample_is_rejected (campaign.test_b2_diagnostics.DiagnosticsTests.test_rehashed_visual_sample_is_rejected) ... ok
+test_semantic_mismatch_is_source_bound_not_unique_causal_diagnosis (campaign.test_b2_diagnostics.DiagnosticsTests.test_semantic_mismatch_is_source_bound_not_unique_causal_diagnosis) ... ok
+test_barrier_precedes_all_confirmation (campaign.test_b2_live_trials.LiveTrialTests.test_barrier_precedes_all_confirmation) ... ok
+test_cli_draft_rejected_before_key_or_output_access (campaign.test_b2_live_trials.LiveTrialTests.test_cli_draft_rejected_before_key_or_output_access) ... ok
+test_cli_reconciliation_is_read_only_without_credentials (campaign.test_b2_live_trials.LiveTrialTests.test_cli_reconciliation_is_read_only_without_credentials) ... ok
+test_complete_provider_to_effect_to_submission_and_replay (campaign.test_b2_live_trials.LiveTrialTests.test_complete_provider_to_effect_to_submission_and_replay) ... ok
+test_draft_wrong_pins_and_empty_lesson_stop_before_transport (campaign.test_b2_live_trials.LiveTrialTests.test_draft_wrong_pins_and_empty_lesson_stop_before_transport) ... ok
+test_engineering_qualification_cannot_enable_formal_agent_arm (campaign.test_b2_live_trials.LiveTrialTests.test_engineering_qualification_cannot_enable_formal_agent_arm) ... ok
+test_expired_window_replays_settled_matrix_but_blocks_new_effects (campaign.test_b2_live_trials.LiveTrialTests.test_expired_window_replays_settled_matrix_but_blocks_new_effects) ... ok
+test_explicit_action_budget_stops_without_extra_provider_calls (campaign.test_b2_live_trials.LiveTrialTests.test_explicit_action_budget_stops_without_extra_provider_calls) ... ok
+test_model_fingerprint_drift_is_paid_but_not_admitted (campaign.test_b2_live_trials.LiveTrialTests.test_model_fingerprint_drift_is_paid_but_not_admitted) ... ok
+test_real_process_exit_after_settled_decision_resumes_once (campaign.test_b2_live_trials.LiveTrialTests.test_real_process_exit_after_settled_decision_resumes_once) ... ok
+test_rehashed_submission_effect_cannot_self_certify_evidence (campaign.test_b2_live_trials.LiveTrialTests.test_rehashed_submission_effect_cannot_self_certify_evidence) ... ok
+test_saved_provider_slot_transcript_cannot_be_changed (campaign.test_b2_live_trials.LiveTrialTests.test_saved_provider_slot_transcript_cannot_be_changed) ... ok
+test_settled_decision_recovered_with_unknown_local_interval (campaign.test_b2_live_trials.LiveTrialTests.test_settled_decision_recovered_with_unknown_local_interval) ... ok
+test_unbound_passing_design_never_admitted (campaign.test_b2_live_trials.LiveTrialTests.test_unbound_passing_design_never_admitted) ... ok
+test_unknown_local_tool_effect_stops_instead_of_repeating (campaign.test_b2_live_trials.LiveTrialTests.test_unknown_local_tool_effect_stops_instead_of_repeating) ... ok
+test_unknown_reserved_transport_never_retries (campaign.test_b2_live_trials.LiveTrialTests.test_unknown_reserved_transport_never_retries) ... ok
+test_unrelated_uncertain_call_stops_new_provider_trial (campaign.test_b2_live_trials.LiveTrialTests.test_unrelated_uncertain_call_stops_new_provider_trial) ... ok
+test_default_agrees_with_frozen_v1_without_rewriting_it (campaign.test_b2_profiled.ProfiledTests.test_default_agrees_with_frozen_v1_without_rewriting_it) ... ok
+test_explicit_context_and_private_truth (campaign.test_b2_profiled.ProfiledTests.test_explicit_context_and_private_truth) ... ok
+test_fractional_endpoint_and_domain (campaign.test_b2_profiled.ProfiledTests.test_fractional_endpoint_and_domain) ... ok
+test_independent_failure_axes (campaign.test_b2_profiled.ProfiledTests.test_independent_failure_axes) ... ok
+test_power_collapse_above_voltage_threshold_cannot_complete_actions (campaign.test_b2_profiled.ProfiledTests.test_power_collapse_above_voltage_threshold_cannot_complete_actions) ... ok
+test_sealed_projection_replay_and_tamper (campaign.test_b2_profiled.ProfiledTests.test_sealed_projection_replay_and_tamper) ... ok
+test_tx_duration_is_causal_input_not_release_alias (campaign.test_b2_profiled.ProfiledTests.test_tx_duration_is_causal_input_not_release_alias) ... ok
+test_extra_feedback_and_false_source_citations_fail (campaign.test_b2_proposal.SemanticProposalTests.test_extra_feedback_and_false_source_citations_fail) ... ok
+test_no_update_is_not_rejection_or_promotion (campaign.test_b2_proposal.SemanticProposalTests.test_no_update_is_not_rejection_or_promotion) ... ok
+test_semantic_request_uses_one_settled_effect_and_separate_component_triage (campaign.test_b2_proposal.SemanticProposalTests.test_semantic_request_uses_one_settled_effect_and_separate_component_triage) ... ok
+test_unapproved_or_drifted_pin_stops_before_dispatch (campaign.test_b2_proposal.SemanticProposalTests.test_unapproved_or_drifted_pin_stops_before_dispatch) ... ok
+test_unknown_transport_is_not_retried (campaign.test_b2_proposal.SemanticProposalTests.test_unknown_transport_is_not_retried) ... ok
+test_world_mechanical_pass_does_not_require_workflow_acceptance (campaign.test_b2_proposal.SemanticProposalTests.test_world_mechanical_pass_does_not_require_workflow_acceptance) ... ok
+test_cli_draft_gate_precedes_any_credential_or_output_access (campaign.test_b2_repair_bridge.RepairBridgeTests.test_cli_draft_gate_precedes_any_credential_or_output_access) ... ok
+test_draft_wrong_pins_expired_window_and_wrong_budget_never_dispatch (campaign.test_b2_repair_bridge.RepairBridgeTests.test_draft_wrong_pins_expired_window_and_wrong_budget_never_dispatch) ... ok
+test_identity_drift_is_paid_but_not_candidate_admission (campaign.test_b2_repair_bridge.RepairBridgeTests.test_identity_drift_is_paid_but_not_candidate_admission) ... ok
+test_known_no_reservation_can_resume_but_cost_uncertainty_remains (campaign.test_b2_repair_bridge.RepairBridgeTests.test_known_no_reservation_can_resume_but_cost_uncertainty_remains) ... ok
+test_malformed_output_gets_bounded_mechanical_repair_not_science (campaign.test_b2_repair_bridge.RepairBridgeTests.test_malformed_output_gets_bounded_mechanical_repair_not_science) ... ok
+test_real_ledger_single_effect_and_cached_parent (campaign.test_b2_repair_bridge.RepairBridgeTests.test_real_ledger_single_effect_and_cached_parent) ... ok
+test_real_process_exit_after_settlement_recovers_without_second_call (campaign.test_b2_repair_bridge.RepairBridgeTests.test_real_process_exit_after_settlement_recovers_without_second_call) ... ok
+test_reconcile_cli_uses_readonly_ledger_and_no_credentials (campaign.test_b2_repair_bridge.RepairBridgeTests.test_reconcile_cli_uses_readonly_ledger_and_no_credentials) ... ok
+test_rehashed_parent_cost_tamper_is_rejected_by_ledger_reconciliation (campaign.test_b2_repair_bridge.RepairBridgeTests.test_rehashed_parent_cost_tamper_is_rejected_by_ledger_reconciliation) ... ok
+test_reject_scientific_feedback_and_unbound_request (campaign.test_b2_repair_bridge.RepairBridgeTests.test_reject_scientific_feedback_and_unbound_request) ... ok
+test_settled_reconciliation_does_not_need_a_new_window (campaign.test_b2_repair_bridge.RepairBridgeTests.test_settled_reconciliation_does_not_need_a_new_window) ... ok
+test_unknown_reservation_keeps_budget_and_never_retries (campaign.test_b2_repair_bridge.RepairBridgeTests.test_unknown_reservation_keeps_budget_and_never_retries) ... ok
+test_complete_control_is_never_promoted_as_scientific_knowledge (campaign.test_b2_scientific.ScientificTests.test_complete_control_is_never_promoted_as_scientific_knowledge) ... ok
+test_false_feasible_and_abstain_controls_fail (campaign.test_b2_scientific.ScientificTests.test_false_feasible_and_abstain_controls_fail) ... ok
+test_feedback_excludes_regression_and_scope (campaign.test_b2_scientific.ScientificTests.test_feedback_excludes_regression_and_scope) ... ok
+test_formal_observed_and_blind_tasks_cannot_be_laundered (campaign.test_b2_scientific.ScientificTests.test_formal_observed_and_blind_tasks_cannot_be_laundered) ... ok
+test_interruption_retains_cost_uncertainty_instead_of_reexecuting (campaign.test_b2_scientific.ScientificTests.test_interruption_retains_cost_uncertainty_instead_of_reexecuting) ... ok
+test_mechanical_and_incomplete_cost_fail_before_reference (campaign.test_b2_scientific.ScientificTests.test_mechanical_and_incomplete_cost_fail_before_reference) ... ok
+test_missing_threshold_budget_and_changed_plan_stop (campaign.test_b2_scientific.ScientificTests.test_missing_threshold_budget_and_changed_plan_stop) ... ok
+test_provider_to_scientific_receipt_and_independent_activation (campaign.test_b2_scientific.ScientificTests.test_provider_to_scientific_receipt_and_independent_activation) ... ok
+test_regression_ceiling_is_independent_of_use_gain (campaign.test_b2_scientific.ScientificTests.test_regression_ceiling_is_independent_of_use_gain) ... ok
+test_abstention_falls_back_and_never_self_admits (campaign.test_b2_semantics.SemanticControls.test_abstention_falls_back_and_never_self_admits) ... ok
+test_extrema_are_original_time_bound_samples (campaign.test_b2_semantics.SemanticControls.test_extrema_are_original_time_bound_samples) ... ok
+test_measured_units_monotonicity_and_finite (campaign.test_b2_semantics.SemanticControls.test_measured_units_monotonicity_and_finite) ... ok
+test_scope_and_receipt_completeness (campaign.test_b2_semantics.SemanticControls.test_scope_and_receipt_completeness) ... ok
+test_wrong_pruning_is_not_hidden (campaign.test_b2_semantics.SemanticControls.test_wrong_pruning_is_not_hidden) ... ok
+test_blind_feedback_is_not_learning_input (campaign.test_b2_splits.SplitTests.test_blind_feedback_is_not_learning_input) ... ok
+test_explicit_new_physics_and_exposure_gate (campaign.test_b2_splits.SplitTests.test_explicit_new_physics_and_exposure_gate) ... ok
+test_incomplete_protocol_cannot_dispatch (campaign.test_b2_splits.SplitTests.test_incomplete_protocol_cannot_dispatch) ... ok
+test_invalid_physics_and_hash_tamper (campaign.test_b2_splits.SplitTests.test_invalid_physics_and_hash_tamper) ... ok
+test_regression_must_be_explicit_not_fake_transfer (campaign.test_b2_splits.SplitTests.test_regression_must_be_explicit_not_fake_transfer) ... ok
+test_renaming_order_numeric_types_and_session_do_not_create_transfer (campaign.test_b2_splits.SplitTests.test_renaming_order_numeric_types_and_session_do_not_create_transfer) ... ok
+test_abstention_is_not_a_success (campaign.test_b2_trials.MatchedTrialTests.test_abstention_is_not_a_success) ... ok
+test_complete_replay_uses_no_callback_or_reference (campaign.test_b2_trials.MatchedTrialTests.test_complete_replay_uses_no_callback_or_reference) ... ok
+test_failing_claim_and_passing_but_unbound_claim_are_not_admitted (campaign.test_b2_trials.MatchedTrialTests.test_failing_claim_and_passing_but_unbound_claim_are_not_admitted) ... ok
+test_final_execution_waits_until_all_trial_files_are_frozen (campaign.test_b2_trials.MatchedTrialTests.test_final_execution_waits_until_all_trial_files_are_frozen) ... ok
+test_five_arm_messages_treatments_tools_and_raw_python (campaign.test_b2_trials.MatchedTrialTests.test_five_arm_messages_treatments_tools_and_raw_python) ... ok
+test_formal_mode_cannot_silently_use_scripted_controls (campaign.test_b2_trials.MatchedTrialTests.test_formal_mode_cannot_silently_use_scripted_controls) ... ok
+test_inactive_or_wrong_candidate_qualified_interface_stops (campaign.test_b2_trials.MatchedTrialTests.test_inactive_or_wrong_candidate_qualified_interface_stops) ... ok
+test_interrupted_decision_does_not_get_retried (campaign.test_b2_trials.MatchedTrialTests.test_interrupted_decision_does_not_get_retried) ... ok
+test_nonempty_text_and_exact_shared_history_are_required (campaign.test_b2_trials.MatchedTrialTests.test_nonempty_text_and_exact_shared_history_are_required) ... ok
+test_proposal_history_rejects_hidden_and_observation_mismatch (campaign.test_b2_trials.MatchedTrialTests.test_proposal_history_rejects_hidden_and_observation_mismatch) ... ok
+test_rehashed_historical_truth_does_not_become_training_evidence (campaign.test_b2_trials.MatchedTrialTests.test_rehashed_historical_truth_does_not_become_training_evidence) ... ok
+test_trial_or_confirmation_tampering_is_rejected (campaign.test_b2_trials.MatchedTrialTests.test_trial_or_confirmation_tampering_is_rejected) ... ok
+test_candidate_order_invariance_infeasible_abstention_and_evidence_safety (campaign.test_b2_workflow_use.WorkflowUseTests.test_candidate_order_invariance_infeasible_abstention_and_evidence_safety) ... ok
+test_complete_evidence_and_exact_task_binding_required (campaign.test_b2_workflow_use.WorkflowUseTests.test_complete_evidence_and_exact_task_binding_required) ... ok
+test_engineering_self_promotion_and_incomplete_acquisition_denied (campaign.test_b2_workflow_use.WorkflowUseTests.test_engineering_self_promotion_and_incomplete_acquisition_denied) ... ok
+test_formal_window_expiry_and_exact_policy_pins_fail_closed (campaign.test_b2_workflow_use.WorkflowUseTests.test_formal_window_expiry_and_exact_policy_pins_fail_closed) ... ok
+test_independent_use_gain_is_not_formal_or_agent_qualification (campaign.test_b2_workflow_use.WorkflowUseTests.test_independent_use_gain_is_not_formal_or_agent_qualification) ... ok
+test_isolated_protocol_fixture_qualifies_workflow_without_world (campaign.test_b2_workflow_use.WorkflowUseTests.test_isolated_protocol_fixture_qualifies_workflow_without_world) ... ok
+test_missing_scope_and_safety_change_fail_before_evidence_access (campaign.test_b2_workflow_use.WorkflowUseTests.test_missing_scope_and_safety_change_fail_before_evidence_access) ... ok
+test_no_gain_and_regression_are_separate_failure_reasons (campaign.test_b2_workflow_use.WorkflowUseTests.test_no_gain_and_regression_are_separate_failure_reasons) ... ok
+test_path_escape_and_draft_authority_stop (campaign.test_b2_workflow_use.WorkflowUseTests.test_path_escape_and_draft_authority_stop) ... ok
+test_pins_include_workflow_scope_baseline_cost_and_evidence (campaign.test_b2_workflow_use.WorkflowUseTests.test_pins_include_workflow_scope_baseline_cost_and_evidence) ... ok
+test_regression_loss_cannot_be_hidden_by_use_gain (campaign.test_b2_workflow_use.WorkflowUseTests.test_regression_loss_cannot_be_hidden_by_use_gain) ... ok
+test_replay_rechecks_projection_without_solver_or_paid_calls (campaign.test_b2_workflow_use.WorkflowUseTests.test_replay_rechecks_projection_without_solver_or_paid_calls) ... ok
+test_scope_abstention_that_loses_solvable_tasks_is_rejected (campaign.test_b2_workflow_use.WorkflowUseTests.test_scope_abstention_that_loses_solvable_tasks_is_rejected) ... ok
+test_scope_must_not_execute_outside_domain (campaign.test_b2_workflow_use.WorkflowUseTests.test_scope_must_not_execute_outside_domain) ... ok
+test_weak_baseline_cannot_manufacture_benefit (campaign.test_b2_workflow_use.WorkflowUseTests.test_weak_baseline_cannot_manufacture_benefit) ... ok
+test_limits_before_dispatch (campaign.test_budget.BudgetTests.test_limits_before_dispatch) ... ok
+test_reserve_settle_repeat_conflict (campaign.test_budget.BudgetTests.test_reserve_settle_repeat_conflict) ... ok
+test_unknown_calls_cannot_retry_or_release_budget (campaign.test_budget.BudgetTests.test_unknown_calls_cannot_retry_or_release_budget) ... ok
+test_pure_program_detaches_from_session (campaign.test_isolation.IsolationTests.test_pure_program_detaches_from_session) ... ok
+test_real_private_network_write_and_fork_denial (campaign.test_isolation.IsolationTests.test_real_private_network_write_and_fork_denial) ... ok
+test_process_death_after_reservation_blocks_duplicate_dispatch (campaign.test_process_recovery.PaidRecoveryTests.test_process_death_after_reservation_blocks_duplicate_dispatch) ... ok
+test_process_death_after_settlement_recovers_exact_response (campaign.test_process_recovery.PaidRecoveryTests.test_process_death_after_settlement_recovers_exact_response) ... ok
+test_preregistered_budget_and_disjoint_roles (campaign.test_protocol.ProtocolTests.test_preregistered_budget_and_disjoint_roles) ... ok
+test_task_id_does_not_embed_outcome (campaign.test_protocol.ProtocolTests.test_task_id_does_not_embed_outcome) ... ok
+test_task_repeat_is_exact (campaign.test_protocol.ProtocolTests.test_task_repeat_is_exact) ... ok
+test_bundle_byte_tamper_is_rejected (chaos.test_recovery_and_tamper.RecoveryAndTamperTests.test_bundle_byte_tamper_is_rejected) ... ok
+test_checkpoint_artifact_drift_blocks_resume (chaos.test_recovery_and_tamper.RecoveryAndTamperTests.test_checkpoint_artifact_drift_blocks_resume) ... ok
+test_event_hash_chain_tamper_is_rejected (chaos.test_recovery_and_tamper.RecoveryAndTamperTests.test_event_hash_chain_tamper_is_rejected) ... ok
+test_process_death_resumes_exact_scientific_state (chaos.test_recovery_and_tamper.RecoveryAndTamperTests.test_process_death_resumes_exact_scientific_state) ... ok
+test_all_contract_schemas_are_valid (contract.test_contracts.ContractTests.test_all_contract_schemas_are_valid) ... ok
+test_compiled_world_validates_and_is_load_dependent (contract.test_contracts.ContractTests.test_compiled_world_validates_and_is_load_dependent) ... ok
+test_boundaries (control.test_broker.BrokerTests.test_boundaries) ... ok
+test_budget_is_persistent (control.test_broker.BrokerTests.test_budget_is_persistent) ... ok
+test_kill_and_recover (control.test_broker.BrokerTests.test_kill_and_recover) ... ok
+test_no_self_qualification (control.test_broker.BrokerTests.test_no_self_qualification) ... ok
+test_repeat_commit_and_conflict (control.test_broker.BrokerTests.test_repeat_commit_and_conflict) ... ok
+test_replication_is_distinct (control.test_broker.BrokerTests.test_replication_is_distinct) ... ok
+test_final_feedback_leak_is_blocker (control.test_pilot.PilotReadinessTests.test_final_feedback_leak_is_blocker) ... ok
+test_no_launch_without_real_identity_budget_and_isolation (control.test_pilot.PilotReadinessTests.test_no_launch_without_real_identity_budget_and_isolation) ... ok
+test_brownout_interrupts_delivery (coupled.test_engine.CoupledTests.test_brownout_interrupts_delivery) ... ok
+test_classifier_is_executed (coupled.test_engine.CoupledTests.test_classifier_is_executed) ... ok
+test_esr_power_equation (coupled.test_engine.CoupledTests.test_esr_power_equation) ... ok
+test_five_computed_controls (coupled.test_engine.CoupledTests.test_five_computed_controls) ... ok
+test_forged_success_rejected (coupled.test_engine.CoupledTests.test_forged_success_rejected) ... ok
+test_immutable_artifacts_and_tamper (coupled.test_engine.CoupledTests.test_immutable_artifacts_and_tamper) ... ok
+test_ledger_and_order (coupled.test_engine.CoupledTests.test_ledger_and_order) ... ok
+test_load_affects_voltage (coupled.test_engine.CoupledTests.test_load_affects_voltage) ... ok
+test_resolution (coupled.test_engine.CoupledTests.test_resolution) ... ok
+test_tx_is_not_rx (coupled.test_engine.CoupledTests.test_tx_is_not_rx) ... ok
+test_apps_contain_no_python_scientific_logic (dependency.test_boundaries.DependencyBoundaryTests.test_apps_contain_no_python_scientific_logic) ... ok
+test_constitutional_layers_do_not_import_outer_layers (dependency.test_boundaries.DependencyBoundaryTests.test_constitutional_layers_do_not_import_outer_layers) ... ok
+test_no_new_code_imports_legacy_lhsai (dependency.test_boundaries.DependencyBoundaryTests.test_no_new_code_imports_legacy_lhsai) ... ok
+test_all_families_couple_to_voltage (deployments.test_world.DeploymentTests.test_all_families_couple_to_voltage) ... ok
+test_artifacts (deployments.test_world.DeploymentTests.test_artifacts) ... ok
+test_exact_checkpoint_and_tamper (deployments.test_world.DeploymentTests.test_exact_checkpoint_and_tamper) ... ok
+test_hybrid_source_removal (deployments.test_world.DeploymentTests.test_hybrid_source_removal) ... ok
+test_receiver_independent_of_tx (deployments.test_world.DeploymentTests.test_receiver_independent_of_tx) ... ok
+test_six_deployments_have_real_requests_and_energy (deployments.test_world.DeploymentTests.test_six_deployments_have_real_requests_and_energy) ... ok
+test_small_storage_failures_remain (deployments.test_world.DeploymentTests.test_small_storage_failures_remain) ... ok
+test_zero_environment_has_no_energy (deployments.test_world.DeploymentTests.test_zero_environment_has_no_energy) ... ok
+test_agent_studio_and_verifier_bind_same_trace (integration.test_a_vertical_slice.AVerticalSliceTests.test_agent_studio_and_verifier_bind_same_trace) ... ok
+test_complete_a_world_kernel (integration.test_a_vertical_slice.AVerticalSliceTests.test_complete_a_world_kernel) ... ok
+test_capsule_identity_and_tamper (knowledge.test_capsule.KnowledgeTests.test_capsule_identity_and_tamper) ... ok
+test_dual_receipts_and_chain (knowledge.test_capsule.KnowledgeTests.test_dual_receipts_and_chain) ... ok
+test_failed_gate_not_promoted (knowledge.test_capsule.KnowledgeTests.test_failed_gate_not_promoted) ... ok
+test_missing_provenance (knowledge.test_capsule.KnowledgeTests.test_missing_provenance) ... ok
+test_out_of_scope_rejected_before_prediction (knowledge.test_capsule.KnowledgeTests.test_out_of_scope_rejected_before_prediction) ... ok
+test_self_promotion_denied (knowledge.test_capsule.KnowledgeTests.test_self_promotion_denied) ... ok
+test_wrong_candidate_receipt (knowledge.test_capsule.KnowledgeTests.test_wrong_candidate_receipt) ... ok
+test_current_repository_state_is_consistent (project.test_project_state.ProjectStateTests.test_current_repository_state_is_consistent) ... ok
+test_duplicate_milestone_is_rejected (project.test_project_state.ProjectStateTests.test_duplicate_milestone_is_rejected) ... ok
+test_false_completion_with_pending_gates_is_rejected (project.test_project_state.ProjectStateTests.test_false_completion_with_pending_gates_is_rejected) ... ok
+test_missing_next_feature_is_rejected (project.test_project_state.ProjectStateTests.test_missing_next_feature_is_rejected) ... ok
+test_stale_a_identity_is_rejected (project.test_project_state.ProjectStateTests.test_stale_a_identity_is_rejected) ... ok
+test_stale_b0_identity_is_rejected (project.test_project_state.ProjectStateTests.test_stale_b0_identity_is_rejected) ... ok
+test_two_clean_runs_are_byte_identical (replay.test_determinism.DeterminismTests.test_two_clean_runs_are_byte_identical) ... ok
+test_a_identity_drift_is_rejected_even_with_valid_manifest_hash (semantics.test_golden_episodes.GoldenEpisodeTests.test_a_identity_drift_is_rejected_even_with_valid_manifest_hash) ... ok
+test_committed_suite_and_a_identity_validate (semantics.test_golden_episodes.GoldenEpisodeTests.test_committed_suite_and_a_identity_validate) ... ok
+test_energy_tamper_is_rejected_after_resealing (semantics.test_golden_episodes.GoldenEpisodeTests.test_energy_tamper_is_rejected_after_resealing) ... ok
+test_materialization_is_byte_deterministic (semantics.test_golden_episodes.GoldenEpisodeTests.test_materialization_is_byte_deterministic) ... ok
+test_reality_mutability_tamper_is_rejected_after_resealing (semantics.test_golden_episodes.GoldenEpisodeTests.test_reality_mutability_tamper_is_rejected_after_resealing) ... ok
+test_same_time_event_order_tamper_is_rejected_after_resealing (semantics.test_golden_episodes.GoldenEpisodeTests.test_same_time_event_order_tamper_is_rejected_after_resealing) ... ok
+test_truth_table_and_same_energy_twin (semantics.test_golden_episodes.GoldenEpisodeTests.test_truth_table_and_same_energy_twin) ... ok
+test_visual_provenance_tamper_is_rejected_after_resealing (semantics.test_golden_episodes.GoldenEpisodeTests.test_visual_provenance_tamper_is_rejected_after_resealing) ... ok
+test_all_source_samples_retained (studio.test_study_atlas.StudioProjectionTests.test_all_source_samples_retained) ... ok
+test_coupled_fill_not_voltage_fraction (studio.test_study_atlas.StudioProjectionTests.test_coupled_fill_not_voltage_fraction) ... ok
+test_coupled_sample_tamper_rejected (studio.test_study_atlas.StudioProjectionTests.test_coupled_sample_tamper_rejected) ... ok
+test_missing_peak_sample_rejected (studio.test_study_atlas.StudioProjectionTests.test_missing_peak_sample_rejected) ... ok
+test_missing_visual_source_rejected (studio.test_study_atlas.StudioProjectionTests.test_missing_visual_source_rejected) ... ok
+test_rejected_knowledge_cannot_look_promoted (studio.test_study_atlas.StudioProjectionTests.test_rejected_knowledge_cannot_look_promoted) ... ok
+test_unimplemented_receiver_cannot_be_promoted (studio.test_study_atlas.StudioProjectionTests.test_unimplemented_receiver_cannot_be_promoted) ... ok
+test_verdict_cannot_be_replaced_by_view (studio.test_study_atlas.StudioProjectionTests.test_verdict_cannot_be_replaced_by_view) ... ok
+test_voltage_linear_fill_cannot_be_mislabeled_as_energy (studio.test_study_atlas.StudioProjectionTests.test_voltage_linear_fill_cannot_be_mislabeled_as_energy) ... ok
+
+----------------------------------------------------------------------
+Ran 191 tests in 85.122s
+
+OK
+{"status": "built", "profiled_hash": "sha256:3642ebf0cfa05944a133c0c26ac3dd433e82439b62693a21cd8dbdcfd3b06dca", "reference_runs": 36, "variants": [{"id": "interface-only", "false_rejects": 12, "false_feasible_predictions": 1, "physical_successes": 4}, {"id": "tx-duration-only", "false_rejects": 0, "false_feasible_predictions": 18, "physical_successes": 6}, {"id": "complete-action-energy", "false_rejects": 0, "false_feasible_predictions": 17, "physical_successes": 6}], "provider_calls": 0}
+=== TypeScript SDK contract ===
+$ tsc -p packages/typescript/bfworld-sdk/tsconfig.json --noEmit
+=== World Studio types, source projection, and portable build ===
+{"status": "pass", "cases": 5, "cross_solver_error_v": 5.4000000027087935e-09}
+{"status": "pass", "reference_submission": "recorded-unqualified", "external_model_calls": 0}
+$ tsc -p apps/world-studio/tsconfig.json --noEmit
+$ .venv/bin/python scripts/build_studio.py && node apps/world-studio/build.mjs
+{"status": "built", "dossier_hash": "sha256:ab204fd229f50f380088b73217f8df6dae7af00d37e940358d39c0f55224d573", "false_rejects": 10, "lost_solvable_tasks": 2, "provider_calls": 0, "formal_launch_ready": false}
+{"status": "built", "profiled_hash": "sha256:3642ebf0cfa05944a133c0c26ac3dd433e82439b62693a21cd8dbdcfd3b06dca", "reference_runs": 36, "variants": [{"id": "interface-only", "false_rejects": 12, "false_feasible_predictions": 1, "physical_successes": 4}, {"id": "tx-duration-only", "false_rejects": 0, "false_feasible_predictions": 18, "physical_successes": 6}, {"id": "complete-action-energy", "false_rejects": 0, "false_feasible_predictions": 17, "physical_successes": 6}], "provider_calls": 0}
+{"status": "pass", "report_hash": "sha256:306622d944f44eacaf7c1e88cd83c7c8e37c48ee7df6c296de87844a8120fc7b", "variants": [{"name": "no-change", "baseline_policy_probes": 22, "candidate_policy_probes": 22, "false_admissions": 0, "lost_solvable_tasks": [], "median_probe_reduction": 0, "controls_pass": false, "qualified": false}, {"name": "capacitance-descending", "baseline_policy_probes": 22, "candidate_policy_probes": 9, "false_admissions": 0, "lost_solvable_tasks": [], "median_probe_reduction": 1, "controls_pass": true, "qualified": false}, {"name": "esr-ascending", "baseline_policy_probes": 22, "candidate_policy_probes": 9, "false_admissions": 0, "lost_solvable_tasks": [], "median_probe_reduction": 1, "controls_pass": true, "qualified": false}], "actual_provider_calls": 0}
+{"status": "built", "samples": 2803, "bundle_hash": "sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059", "payload_hash": "sha256:9bc59511596dc91a5693dd70fca1769d9c59ed3e6881c0acf76d5d20dfc294aa"}
+Studio built: 13.39 MB, self-contained, no CDN.
+{"status": "passed", "original_samples": 2803, "projected_samples": 2803, "channel_bindings": 15, "visual_bindings": 11, "bundle_hash": "sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059", "payload_hash": "sha256:9bc59511596dc91a5693dd70fca1769d9c59ed3e6881c0acf76d5d20dfc294aa", "portable_html_hash": "sha256:759e28114d9cfc5b9288d8613ca699f56e5a1fefa16bbd20840fb7e24d8d49cd"}
+=== Battery World repository verification complete ===

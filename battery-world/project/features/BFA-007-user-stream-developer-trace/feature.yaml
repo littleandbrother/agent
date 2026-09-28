@@ -1,0 +1,19 @@
+schema_version: battery-world-feature-v1
+id: BFA-007-user-stream-developer-trace
+status: complete
+owner: bf-agent-coordinator
+objective: Keep user conversation focused on public streaming progress and replies; expose persisted tool and runtime facts in an operator-only developer Trace review and local export.
+hypothesis: Separate projections can remove tool clutter without losing the audit facts needed to propose and independently evaluate Harness changes.
+falsifier: Source events are rewritten or dropped from export, uncertain tool associations become asserted facts, runtime observer changes participant behavior, or Trace visibility is claimed as RSI improvement.
+paper_claim: Trace review and UI projection only, no autonomous Harness improvement result.
+owned_paths: [apps/agent-studio/, packages/python/bfworld/src/bfworld/agentlab/developer.py, packages/python/bfworld/src/bfworld/agentlab/trace_review.py, packages/python/bfworld/src/bfworld/agentlab/server.py, tests/agentlab/, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-007-user-stream-developer-trace/, PROJECT.yaml]
+schema_changes: [bf-agent-trace-review-v1]
+targeted_tests: [exact source prefix and export hash, interleaved same-name tools with IDs, ambiguous legacy calls, incomplete or malformed source, operator access boundary, user stream without tool cards, developer trace and export]
+negative_controls: [cross-owner participant request, path traversal, source overwrite, fabricated duration, ambiguous tool pairing, implicit RSI promotion]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/TRACE-REVIEW.json
+cost_cap: Zero new provider calls; original budget caps unchanged. Read-only historical inspection and local regression only.
+claim_boundary: Public progress text remains streaming. No private reasoning added. Trace can support attribution and candidate evaluation, but does not establish Harness RSI or hardware success.
+stop_condition: Evidence mutation, access boundary regression, or need for paid execution.
+limitations: Historical missing IDs/times remain unknown; active source may grow; 32 MiB API review limit; no automatic Harness RSI.
+handoff: Delivered on localhost 8768. 245 full-init tests and live Trace export/browser review passed. Preserve source facts; independently evaluate any future Harness candidate.

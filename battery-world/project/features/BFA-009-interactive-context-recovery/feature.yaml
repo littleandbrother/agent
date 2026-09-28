@@ -1,0 +1,55 @@
+schema_version: battery-world-feature-v1
+id: BFA-009-interactive-context-recovery
+status: complete
+owner: bf-agent-coordinator
+objective: Restore useful interactive replies after a one-token context clamp, with bounded continuation and explicit truncation
+  feedback.
+hypothesis: Correct model metadata and a source-bound projection of completed historical tool exchanges permit normal output
+  without altering raw history or cumulative budgets.
+falsifier: A reconstructed request still clamps to one token, current tool pairs or user constraints are lost, a duplicate
+  operation resets a turn quota, or original budget and ledger evidence changes.
+paper_claim: Interactive engineering recovery only.
+owned_paths:
+- apps/agent-studio/
+- packages/python/bfworld/src/bfworld/agentlab/provider.py
+- packages/python/bfworld/src/bfworld/agentlab/context.py
+- packages/python/bfworld/src/bfworld/agentlab/chat.py
+- packages/python/bfworld/src/bfworld/agentlab/trace_review.py
+- packages/python/bfworld/src/bfworld/agentlab/server.py
+- tests/agentlab/
+- docs/agentlab/
+- docs/PROGRESS.md
+- project/features/BFA-009-interactive-context-recovery/
+- PROJECT.yaml
+- /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts
+- /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-v2.ts
+- /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/dist/
+schema_changes:
+- model_request_context table with request to user-message binding and projection hashes
+targeted_tests:
+- historical context replay
+- paired tool projection and active-pair preservation
+- per-message quota and duplicate lease
+- unchanged batch limits
+- insufficient output guard
+- length error projection
+- input-output usage display
+negative_controls:
+- raw log rewrite
+- partial tool-pair deletion
+- budget reset
+- unbounded retries
+- one-token paid dispatch
+- false completed status
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/CONTEXT-RECOVERY.json
+cost_cap: Local replay first. At most USD 0.05 acceptance within existing cumulative USD and token caps; no budget increase.
+claim_boundary: Current interactive context configuration only, no change to frozen batch missions or scientific results.
+stop_condition: Unknown provider usage, exhausted global budget, evidence hash mismatch, or missing retained user/current
+  tool messages.
+limitations: Pi root check has six preexisting unused-variable warnings; active byte and cumulative budget limits remain enforced.
+handoff: Original conversation now outputs normally. Trace retains projection evidence; preserve existing caps and historical
+  records.
+evidence:
+- docs/agentlab/CONTEXT-RECOVERY.json
+- docs/agentlab/CONTEXT-RECOVERY.md

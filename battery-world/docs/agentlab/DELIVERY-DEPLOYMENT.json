@@ -1,0 +1,461 @@
+{
+  "schema_version": "bf-delivery-deployment-acceptance-v1",
+  "product_owner": "pi-chat-cf37636f82c771a4",
+  "product_revision": 4,
+  "delivery": {
+    "assembly_revision": 4,
+    "goal": {
+      "file_kinds": [
+        "document",
+        "source"
+      ],
+      "max_continuations": 3,
+      "min_parts": 10,
+      "required_paths": [
+        "delivery/PRODUCT.reviewed.md"
+      ],
+      "required_roles": [
+        "housing",
+        "solar",
+        "storage",
+        "pcb",
+        "controller",
+        "power",
+        "input",
+        "feedback",
+        "mount",
+        "connector"
+      ]
+    },
+    "max_continuations": 3,
+    "missing": [],
+    "passed": true,
+    "publication_contract": {
+      "action": "publish_file",
+      "file_kind": [
+        "document",
+        "source"
+      ],
+      "file_path": "existing workspace-relative file",
+      "revision": 4
+    },
+    "scope": "Bounded digital delivery observation; visual, manufacturing and hardware acceptance remain separate."
+  },
+  "conversation": {
+    "error": null,
+    "id": "pi-chat-cf37636f82c771a4",
+    "status": "IDLE"
+  },
+  "reviewed_document": {
+    "path": "/Users/depengsu/Documents/bf-agent-workbench/participants/pi-chat-cf37636f82c771a4/delivery/PRODUCT.reviewed.md",
+    "sha256": "c8952fd72a70522a4644438ab4af977daa31ede0a44eb77e274b82cf93b1459e"
+  },
+  "source_matches_current_assembly": true,
+  "packages": [
+    {
+      "job_id": "eng-9d69de5a692b7085",
+      "engine": "mcu-firmware",
+      "owner": "pi-chat-bc78abe0ca313091",
+      "revision": 5,
+      "zip": "/Users/depengsu/Documents/bf-agent-workbench/engineering/eng-9d69de5a692b7085/deployment.zip",
+      "sha256": "dbbe6d0ead2175467d9b6872244327d3290d55e4916382ecae3b2269130ffc13",
+      "build": {
+        "compiler": "arm-none-eabi-gcc (GNU Tools for STM32 13.3.rel1.20240926-1715) 13.3.1 20240614",
+        "flash_bytes": 1268,
+        "flash_limit_bytes": 32768,
+        "flashed": false,
+        "hardware_verified": false,
+        "host_state_machine_tests_passed": true,
+        "memory_fit": true,
+        "pulse_ms": 100,
+        "ram_limit_bytes": 8192,
+        "ram_static_bytes": 12,
+        "reserved_stack_bytes": 1024,
+        "sources": {
+          "build.py": "f05423e2fdb10c8e89704165d6e8d0668749dbbf6921599fbbecdba9575aee9f",
+          "cmsis/LICENSE_ARM.txt": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "cmsis/LICENSE_ST.md": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d",
+          "cmsis/cmsis_compiler.h": "b51963d271c1571ca3463654c76aa7ea50c4eac5d0a2710df10414ac64d9e0f8",
+          "cmsis/cmsis_gcc.h": "43bfd1fe69fbbc2ca70aaf7d43cc3e20f16e0c7f66e1bdef9b51af6dc14b2617",
+          "cmsis/cmsis_version.h": "184c19fd3ee73632edf35a0b4d49cd48be75fbf49e6ccb19d9db05fa83bea4b3",
+          "cmsis/core_cm0plus.h": "a09fa9c6b8b21d1920bce15b98aa56182b027e9278cca0b154812bac2aea3cfa",
+          "cmsis/startup_stm32l031xx.s": "eed346835866351999ae5ac34fa2732f059d38a5d64b78878db29b6039cc84cf",
+          "cmsis/stm32l031xx.h": "8a55b1db672878400403944ed2dc5a9e62d09e2795878dd9406d6575fd5118a7",
+          "cmsis/stm32l0xx.h": "38d1e35e5602b4de5f812fd70502c4073eb24920c871403e276c23dcd90a48ed",
+          "cmsis/system_stm32l0xx.c": "23875505e774343df1ec9bc5496284d9afe9b69810989d8c689624e9ce7be7a9",
+          "cmsis/system_stm32l0xx.h": "92bee36c2803ae8632e1da98b8297343f099a83c49b62539c7f66e0bc8af5fb0",
+          "cmsis/toolchain-sources.json": "5ad8bc996754119d01469067d4fd21eb367b3b0398d27bcab04c71a834206387",
+          "companion.ld": "3cad4ea39bb5d21232a5f22e9e44699fad7e61c9128d94de643483ee6a517a75",
+          "companion_build.py": "bea7c725572e65fbf3c3945b0ee630f4741fc924af5881d682e98a1b02693cfd",
+          "companion_logic.h": "9b55e7940ae710eb5b8badeca5a33e9eb5b617a48f248cc51efaf04ed6b0d40b",
+          "companion_main.c": "556e876ee474f6792b3df5dc531945fd9872870a0bcf4302c3eed4d8193e8e65",
+          "companion_test.c": "1270bc7fea3b6959155cd7333f8b3bb362a0d1c83a0c6ad5ac81f542c6df2211",
+          "firmware-config.json": "74f45cbabdb36e849bc2d2be29667e2adb97147b7e9ea1bf2471a9193678ccec",
+          "flash_mcu.py": "e7799de6a4a1d628f51597a5a28b5364d8be5053c22f110b7459ba54916d0ff2"
+        },
+        "target": "STM32L031K6T6",
+        "target_compiled": true
+      },
+      "metrics": null,
+      "manifest_files": 32,
+      "actual_http_sha_passed": true,
+      "published": {
+        "id": "050fdc62505ab946a41c70d3c48aae09",
+        "name": "mcu-firmware.zip",
+        "revision": 5,
+        "sha256": "dbbe6d0ead2175467d9b6872244327d3290d55e4916382ecae3b2269130ffc13"
+      }
+    },
+    {
+      "job_id": "eng-39fc4549a06a68f5",
+      "engine": "tinyml-nas",
+      "owner": "pi-chat-bc78abe0ca313091",
+      "revision": 5,
+      "zip": "/Users/depengsu/Documents/bf-agent-workbench/engineering/eng-39fc4549a06a68f5/deployment.zip",
+      "sha256": "84dccb86056a12fdf4b80eada6fbef50c020937f36d7c5647ab00aa7a064f96a",
+      "build": {
+        "compiler": "arm-none-eabi-gcc (GNU Tools for STM32 13.3.rel1.20240926-1715) 13.3.1 20240614",
+        "flash_bytes": 1940,
+        "flash_limit_bytes": 32768,
+        "flashed": false,
+        "hardware_verified": false,
+        "kind": "test-vector-profile-firmware",
+        "memory_fit": true,
+        "model_sha256": "b32877bbf7b8ba13f0fb859ea3895f59bd574689f69758343c9f7521a3a19867",
+        "ram_limit_bytes": 8192,
+        "ram_static_bytes": 524,
+        "reserved_stack_bytes": 1024,
+        "target": "STM32L031K6T6",
+        "target_compiled": true
+      },
+      "metrics": {
+        "claim": "Dataset evaluation and generated integer C only; synthetic fixture scores are pipeline checks, not product recognition performance.",
+        "clock_hz_measured": null,
+        "confusion_matrix": [
+          [
+            48,
+            0,
+            0
+          ],
+          [
+            0,
+            48,
+            0
+          ],
+          [
+            0,
+            0,
+            48
+          ]
+        ],
+        "dataset_sha256": "c90222e9d879723720e47e35707cb92a32318c3b5d16cc338bcf0cf6d989c38b",
+        "energy_uj_per_inference": null,
+        "firmware_sha256": "c7ebd3cfcc9eff285bbc611e14eb140a7d71f9e5fd654d8becba0b8c8bcea7ea",
+        "host_profile": {
+          "host_latency_ms": 8.7e-06,
+          "parity_passed": true,
+          "parity_vectors": 64,
+          "scope": "host CPU process time, not MCU"
+        },
+        "latency_ms_mcu": null,
+        "measured_on_mcu": false,
+        "measurement_status": "not_measured",
+        "model_sha256": "b32877bbf7b8ba13f0fb859ea3895f59bd574689f69758343c9f7521a3a19867",
+        "power_mw_mcu": null,
+        "real_world_accuracy_verified": false,
+        "schema_version": "bf-tinyml-metrics-v1",
+        "source_kind": "synthetic-fixture",
+        "split_sha256": "8c9d519115f175b8bc1454576eedabfec38124d42c94d5b810f024695a893275",
+        "target_build": {
+          "compiler": "arm-none-eabi-gcc (GNU Tools for STM32 13.3.rel1.20240926-1715) 13.3.1 20240614",
+          "flash_bytes": 1940,
+          "flash_limit_bytes": 32768,
+          "flashed": false,
+          "hardware_verified": false,
+          "kind": "test-vector-profile-firmware",
+          "memory_fit": true,
+          "ram_limit_bytes": 8192,
+          "ram_static_bytes": 524,
+          "reserved_stack_bytes": 1024,
+          "target": "STM32L031K6T6",
+          "target_compiled": true
+        },
+        "test_int8_accuracy": 1.0,
+        "winner": {
+          "activation_workspace_bytes": 64,
+          "architecture": [
+            4,
+            8,
+            3
+          ],
+          "id": "mlp-8",
+          "macs_per_inference": 56,
+          "parameters": 67,
+          "pareto": true,
+          "resource_estimate_only": true,
+          "validation_fp32_accuracy": 1.0,
+          "validation_int8_accuracy": 1.0,
+          "weight_storage_bytes": 100
+        }
+      },
+      "manifest_files": 36,
+      "actual_http_sha_passed": true,
+      "published": {
+        "id": "e85ff2a2bf468ecc17cbd28216ce0df2",
+        "name": "tinyml-nas.zip",
+        "revision": 5,
+        "sha256": "84dccb86056a12fdf4b80eada6fbef50c020937f36d7c5647ab00aa7a064f96a"
+      }
+    }
+  ],
+  "new_paid_calls": 17,
+  "new_paid_cost_upper_usd": 0.0899604,
+  "new_calls": [
+    {
+      "id": "llm-052dba1ca05ab9fe0d20",
+      "status": "SETTLED",
+      "charged": 0.0042401999999999995
+    },
+    {
+      "id": "llm-2be774490a3c6d2c0a35",
+      "status": "SETTLED",
+      "charged": 0.004679399999999999
+    },
+    {
+      "id": "llm-e0767430edcc792aac13",
+      "status": "SETTLED",
+      "charged": 0.005008799999999999
+    },
+    {
+      "id": "llm-d6f6f14d410c5715af13",
+      "status": "SETTLED",
+      "charged": 0.0053856
+    },
+    {
+      "id": "llm-204d4e63748311bd9cf0",
+      "status": "SETTLED",
+      "charged": 0.005301299999999999
+    },
+    {
+      "id": "llm-3297bf9e771994e2dc40",
+      "status": "SETTLED",
+      "charged": 0.005607600000000001
+    },
+    {
+      "id": "llm-9869a6fcc45e554c2c97",
+      "status": "SETTLED",
+      "charged": 0.0061572
+    },
+    {
+      "id": "llm-89c717053eaa54d9af9f",
+      "status": "SETTLED",
+      "charged": 0.0045633
+    },
+    {
+      "id": "llm-cef4bd39afddbaa18e83",
+      "status": "SETTLED",
+      "charged": 0.0046392
+    },
+    {
+      "id": "llm-d0c990e315aea1b48233",
+      "status": "SETTLED",
+      "charged": 0.0048108
+    },
+    {
+      "id": "llm-1279d896d8d1f42be233",
+      "status": "SETTLED",
+      "charged": 0.0048615
+    },
+    {
+      "id": "llm-4ce67615d859fe3b4ea2",
+      "status": "SETTLED",
+      "charged": 0.0067305
+    },
+    {
+      "id": "llm-40f15d97acf2683ead22",
+      "status": "SETTLED",
+      "charged": 0.005933399999999999
+    },
+    {
+      "id": "llm-cca03e184d2a4f6f70bb",
+      "status": "SETTLED",
+      "charged": 0.0059184
+    },
+    {
+      "id": "llm-232ef189954e62b6e4a9",
+      "status": "SETTLED",
+      "charged": 0.0063117
+    },
+    {
+      "id": "llm-204e15779356e2b855f1",
+      "status": "SETTLED",
+      "charged": 0.004968599999999999
+    },
+    {
+      "id": "llm-93a4cd6347e3a7db6c4f",
+      "status": "SETTLED",
+      "charged": 0.0048429
+    }
+  ],
+  "original_ledger_rows_unchanged": 1550,
+  "original_traces_unchanged": {
+    "pi-chat-7bbf6862d7109e25": "ce58a37c872e28918fac7656a9febf3fc5d153b89f49cad1324eb678401759c7",
+    "pi-chat-bc78abe0ca313091": "9df48d47ce20fffad5e4b0e7ebb10d44827bba719bb9d058ebc6ca755e101e55"
+  },
+  "global_limits_unchanged": {
+    "id": 1,
+    "total_usd": 10.0,
+    "request_usd": 0.19,
+    "max_tokens": 50000000,
+    "expires": 1789669026.0093598
+  },
+  "owner_cap_adjustment": {
+    "owner": "pi-chat-cf37636f82c771a4",
+    "previous_explicit_cap": null,
+    "previous_effective_cap_usd": 1,
+    "new_cap_usd": 1.1,
+    "time": 1790173843.203696,
+    "authority": "User previously authorized finishing Pi acceptance beyond the old USD 1 cap; current product completion request continues that scope.",
+    "global_and_request_limits_changed": false,
+    "new_diagnostic_spend_cap_usd": 0.15
+  },
+  "research_features_sha256": "c0bdddfd21fc7de7b56bb4456c554349445a54a2ae018dca99e1b5a380c07e40",
+  "source_sha256": {
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/store.py": "9e9f744a1cbb1c8261cc55f7e76923a7aed08165f2c217af41d75a80d59f86dd",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/tinyml.py": "3c1eacb95b0cc5960c3f8cdfaeb1d4851baf56cdf304ebea5ae847bd82181d63",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py": "a7eb4be99e5d4ef2d83690fbfe4294135a06c39b29bb931dcefc2164a3307602",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product_energy.py": "edc646635ca5b79971ecdda5469c3ebb077140d1fa1298c13116efedef6beae4",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product_evidence.py": "31f547fb8673e3071fa794cd4c527535b1d598ac4bcfa8a2f0b292b6cb86b4cc",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/recovery.py": "2648cab60a55b401a5f56413ab2c15c4c5ca93175bd58ced08198436e223ad64",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/trace_analysis.py": "0bd226abf6051bf3dc7df026a9ba80905cbffa67c6664ab7add76cc9733c0846",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/provider.py": "85f5280d6497838b5556df26bc9d22cb7e372fb11d9beeb61cfe45a51b66b8d5",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/deployment.py": "a0d4ce3b368430c32f7e8a0e22d40ffb3fadcbaee87f3ea167a63edeabc484d3",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/recall.py": "ad37cd0e234388259a5dc9eaaa2ab8d2fda4c40e5c9925e920394e343d2e5615",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/organization.py": "137084ecc31687eb6019c8dcfa753f902cc5825270a16fad55fceee56b3a9434",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/recursive.py": "fbcdc0605fce70cfea010acabb6aa7b5ee7e01ca41ee47a82a41591e1be19e23",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/concurrency.py": "8365356db08362609be4b5813d3b914c1a4d6d2b53ad018a59673acb5256e815",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/__init__.py": "ea51084f2ef7d2cfbb122d49c92f347762bf15a95b4f9dbd5cc8b474b931a387",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/trace_review.py": "fdd1db48759c3200fca53c17e9c330658c9c429ae166cd4c0bea2bece5bd6afd",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/chat.py": "7d486750357feea9cf7cc95b8894a82985678a38152c945e8da17062991d7fb7",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/freerouting.py": "7add2b6fd2fc58f96e4ac5414539d497d06aa1814abab7a3f6698d1f4069d82c",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/experiments.py": "02724ae1ac8ae95aca9baffa9b5f38679e944c4006f2a556dfac456725a832f2",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/context.py": "a3b7c639cbf875e46cf204a532f4ca18e1de79386d5a76744c026836ad782296",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/assembly.py": "16aed6d00c7c3432b2c1de4365122decc2e157c41adf0001a821d68923aab14e",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering.py": "08852f2cc2fa0ac0148344dba9bd45f0b7c863132be2dc8fa59de27aa31f85eb",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product.py": "7498f4ffbde139fb38b5370f8f43ba59982e1dcd7fada1e024564987956e7abe",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/launcher.py": "51cee07d1d32198d60d1ec1c15673d10a0811858f7e30987b38e5af8118b59a8",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/progress.py": "7b6487a80d59235ac4d97f05c98a4ed7f62960e3c00a6aa48b55476fecd9e2e6",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/panorama.py": "529e974fff2cb77228a3de81e85025e6fcb8de7549e3a76ac966c4a4371c0739",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product_build.py": "60bcea7529b486f3a205008e614dd464a3fb577d4bc192f210633f2a15740b3c",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/solar_companion.py": "2807fa607f1163bfab292d9dd9cffcd6a95d3f5269fd82c4eba94f585d6c28e0",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/developer.py": "0ff49b57e659fc0e341bd38fb661df900bec23c2c80bfb8bbc701c76eef87386",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/eda_mcp.py": "ee176060bb3558f2053cce004bf18bee8d11047c85b412f856bab8c344e246ed",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/programmed.py": "ff088c1811138b6258e4d253786cce6eae47c386acd10bd219bd7352fc92cf05",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/study.py": "5932d7d3abe83324bc9f82f684378cb184fc1236e29400c54678f0e8f0d31cff",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/jlceda.py": "08b69e2264b6864fb2fc860be066bd2fd043dd4f1bb449926d366d0af7b4e057",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_readback.py": "5ecabe5f15643fe590ba256acbff3e7fe1bee11d2a6f7d9c11ed3c3db90b6aa3",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/blender_enclosure.py": "36a39f024215c5d972192af54b7ef0f620de9ad7f90563c6d59ab1dc7e8259c1",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/flash_mcu.py": "e7799de6a4a1d628f51597a5a28b5364d8be5053c22f110b7459ba54916d0ff2",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/companion_build.py": "bea7c725572e65fbf3c3945b0ee630f4741fc924af5881d682e98a1b02693cfd",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_blender.py": "43fdad4e2a060ff39ff1d2f7b0dd59dd7433986a65801977441086cfe69a0513",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_glb_readback.py": "561c7e71d3b9928fab63f2c41a4da44fd2bb48ad7034a74e6e56c6f2e569ea70",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/tinyml_search.py": "d374ffb1956852154887e72036997928645a5613a966397cb3e0b27e24eb133d",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_cad.py": "f09fa990d13b3d19b80d51b23cede1d5adb1aeb0cdd80c4d036ab705b55958c3",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/organization.js": "89bec9ce2c00ae089863b9ea94272e84e44586605f926bcc01af7a903bd1689a",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/conversation.js": "91f67662afa9dd687a9f80e62692517ebd34f0431444647b00bafc65b2bf7ed1",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/index.html": "544a55a757a9fc5b956110e39123729ddbedb5f9626216c7d6f943e97f5fa1d1",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/panorama.css": "9730d5d449e7c5fd9482ec78863d60c163cf7e9266dbd5648a2ce2a0f476af85",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/cases.js": "5a2375b3dd0a5802d204e77a1160113f56e6e8e5f8f6ab326b8870790397b512",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/model-viewer.css": "9eb9e2574bbf445f1c2e16ed6ffec00dc6e992674b20e7b1e3d0d2c1ec98e333",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/model-viewer.js": "309daf6a7232a691fb7c0a87629121af544a9de9ed12393ce62b8359f6c05d85",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/trace.js": "79785e6fa8ba19a4972ab0568cc354aa4385828f512a20d5263b20d284a569e6",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/delivery.js": "4e5c0124b10c40e2b34a274f87b3cbc1e86bc4cf087c6750024583f7bd73b686",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/tokens.css": "f51e6c75275948bed60c3a5d38a05adaa681f7f90965ac2187195d2d77f9acb0",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/product.css": "671d2d3f988c6746b8a3e63ad3d281436fb2eff6608b751d0c39f2d2d266715a",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/version.js": "473062d1c2958c4c7edab1c8667973bb2e2f754115503e69f9a82ed6cb510925",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/developer.js": "4b1f03b65cc03086c174d468c40a451037c885884acb986adc23e483c6f18144",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/panorama.js": "44f3839de4b62cc5b0c70d6d30e438558f26836be634710cb5345d54d20ee06d",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/chat.css": "919dfc1bee1505cc055be2ada2563e399ee23a543bdc4daf34c24da687613dee",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/style.css": "081a89eb50beb288c5f275c08a7b763b65a95e267e08876f6e16e86e2156cdab",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/organization.css": "894a9337b273b081d837e195a066a1bf4ff69e50598a9bbb0c73ed273d22ab43",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/trace.css": "dfee83b90e8559b7059f7fa364517858c155a82f953e0d40f5db98f34f857b05",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/developer.css": "c35c39d3b35d9411594e9317118f23195de3b75322c7d54baadc5ff9628df2e4",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/eda.js": "7efc39fd7eee22f889b051bbd4ea27769ed30ccf13b1709d67553963192dd35b",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/console.css": "6110a336224b6711576d0659f697fb1c6032c4ca365c021427f4e6051de66060",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/engineering.js": "008eee36226bbe164bbe39d21b3378ff0f3c3eb1fea04142e31b1024c1ac4ba3",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/product.js": "d1c2b6537bea07bd06cd922a8700df118dd29cc60b89da1091a6877b7b21c8ad",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/model-viewer.html": "ac543d3809efc6b3f0e6397bb9d84e5a8e15fd12a31c786ca441142e67701931",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/app.js": "318d085ec82a79c281d062608a41c0c5ee029fa218b78a0673d4493d18fb80b1",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/conversation.css": "bccd439a9a2c967b7088daba996871368e45d98f8b59aea8e9857f30c50f3034",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/vendor/three/build/three.module.js": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/vendor/three/build/three.core.js": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/vendor/three/examples/jsm/utils/BufferGeometryUtils.js": "14cb6c5a9695b8af9acedf8b57fa696627189d222adad28f3edd5de9ed8d87a9",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/vendor/three/examples/jsm/controls/OrbitControls.js": "c2f2fde0685d56ed6dc6171a4d3f752fa8c6899d7b647fda251cc55ac8b757b8",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/vendor/three/examples/jsm/loaders/GLTFLoader.js": "3afe5104462ce8a4b38e63f4d9081d35709f3f65ddf85088b5b75c505d1a2c76",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_interactive_deadline.py": "9ea5a9fd0b1873f485f788a145b060ed713a19eb8d456b306014c8bd3d5d7d52",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_recovery.py": "2bdf0b1b947abde44e5ec37f04bd878ae63da8d9cee4c1bc771cc7c2c40ae0f0",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_developer.py": "f46156c86c2bae05e06c9f21950a859e75f0582aee4fbbc62e91cf3807fbf2a5",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_jlceda.py": "a672dc506ab07c3a62bb5e385b34603b28efad42f39a820399e1ee635db64af8",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_provider.py": "aff644e4df25f67fddf247d3af2c7436cb36a799a1d8da92a1a82a24fd747f3b",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_panorama.py": "2b24f4fb349e9c65f122edaebe134f649d6056c2000419b55b1ac5e9922d6574",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_context_recovery.py": "9018f84093efb8e2e86bd1bdb924433ff17ea236239eb1509c1051c27cc26249",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_product.py": "68e574389895c08619ce03c064f683d0076b7119c8bc07fa76e8c98632ad9631",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_organization.py": "bea1469fdeba0b227d5f0cc96be0c4053c9c8eb45ab7a7cece23ecdf41d53d87",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_http.py": "23bae985f5b49467c1cccfc55a9d7fdf09f6f6ba0b67ad3e77dbc871267d2b6f",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_chat.py": "7462b8c65ff5d03e759c0312928440cbc3388fae30a4e0835083ca83a8c5f02d",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_trace_review.py": "5ba35f7e5efd382e9988293dbb2093b0c780fa5384d76a55202b681a744f6416",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_assembly.py": "db1834e472e554d19bc42b14f596248faa95d98a083dc23b7b178a3b5e09e41f",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_experiments.py": "bd5848379079c465768bdd4db4b1a44bbaa4656a7b3c3201f4e2364b3a05100d",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_parallel_chat.py": "4f37e5b1f8244e09c76f33c2bc69ded91e8180fe34139f103faf39c3400ddd6c",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_deployment.py": "f8adf279b425f9c7fed0989851b959919ee6d276a80ab1117fffb421bd99e1f5",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_product_evidence.py": "f1ff35eb99c80b7a12ba5bda5b9d4962796385c8ee2922be8f4fa81d796c0804",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_trace_engineering.py": "35b19c7a22e6401ec96d74790b1252aada45da0055063e4d5046a9e2ba8d3e06",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_recursive.py": "ffd2c8b866b597750b81873af0b833bb5843579fd4690147b8cc6fe6b38d7e17",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_conversation_ui.py": "20ac52c336a6c9faa2b41b3f185dc28e67130ad0a9dcc1eb15571b8da8e6a0ef",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/main.ts": "f3e1d9e43e128c1291785c399c2e04f8dd5023274c612abd26c8001e0a85bc43",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts": "fa525aae9d91c974bd6016180956c385364d149ed5308129de1aef210dd57bc5",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-v2.ts": "1a9ab6ffab1178ee6f8f70ebc9ce0de28743e22d5a8da877b27e218a05a63fa8",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat.ts": "f491f9e556e2a7c3e2dbcf49f9f7f08bac96b48ad42ab88ed0a27b577e519b00",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-recall.ts": "02643c0826286443fc6f505c0fe6c760937f4798c6d6776ac6523c3d0076d5a4"
+  },
+  "source_snapshot": "92a97c006e3bf077c926e44f8a1dab117eded0bd458b958666cf22b810da1549",
+  "limitations": [
+    "Coordinator factual review and bounded continuation, not unassisted success or statistical stability proof.",
+    "TinyML dataset synthetic; test-vector firmware not integrated with real product sensor input.",
+    "No ST-Link detected; no flash, MCU latency, power, event energy or hardware acceptance.",
+    "Digital observer checks explicit predicates and file integrity, not all prose semantics or all-event service quality."
+  ],
+  "validation": {
+    "init_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/delivery-deployment-20260923/init-final.log",
+    "init_exit_code": 0,
+    "python_tests": 322,
+    "python_seconds": 224.045,
+    "sdk_studio": "types, build and reproduction passed",
+    "pi_typescript": "tsgo build passed",
+    "ui": {
+      "browser": "Codex in-app Browser, existing localhost tab 1",
+      "checks": [
+        "Recovered Pi task current assembly v4 and delivery passed shown",
+        "Console progress and both deployment artifacts shown for reference v5",
+        "Actual NAS five-row comparison expanded and scrollable",
+        "Panorama TinyML source paths, task evidence and return-to-delivery link verified",
+        "Task deployment tab opens real metrics after fixing section whitelist",
+        "No browser errors in final observed log"
+      ],
+      "limitations": "Browser acceptance is scoped to the exercised controls, not exhaustive UI coverage."
+    },
+    "last_js_changes": "delivery.js formatting/status and app.js deployment whitelist checked by node --check and actual CUA after full-run start"
+  },
+  "hardware_probe": {
+    "exit_code": 0,
+    "detected": false,
+    "log": "/Users/depengsu/Documents/bf-agent-workbench/verification/delivery-deployment-20260923/probe-list.txt"
+  },
+  "previous_delivery_zip_preserved": {
+    "path": "/Users/depengsu/Documents/bf-agent-workbench/participants/pi-chat-bc78abe0ca313091/product-delivery/BF-AIoT-five-deliveries-20260923.zip",
+    "sha256": "a03d66045ae6bd15118ca1f841d7322890f0fae7f5ee1329d12e70aed8fc3106"
+  },
+  "full_evidence": "/Users/depengsu/Documents/bf-agent-workbench/verification/delivery-deployment-20260923",
+  "report": "/Users/depengsu/Documents/battery-world/docs/agentlab/DELIVERY-DEPLOYMENT.md"
+}

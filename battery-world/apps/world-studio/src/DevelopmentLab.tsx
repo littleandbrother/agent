@@ -1,0 +1,51 @@
+import {useState} from 'react';
+import {ArrowRight,FlaskConical,ShieldCheck,AlertTriangle,Code2} from 'lucide-react';
+import {data,shortHash} from './types';
+import './development.css';
+import {SemanticLab,MeasuredReplay} from './SemanticLab';
+
+export function DevelopmentLab(){
+ const d=data.b2_development;
+ const [choice,setChoice]=useState('baseline'),[time,setTime]=useState(.39),[task,setTask]=useState('qualification-6'),[onlyErrors,setOnlyErrors]=useState(false);
+ if(!d)return null;
+ const run=d.episode.runs.find((r:any)=>r.id===choice),baseline=d.episode.runs[0],r=d.g2.residuals;
+ const rows=d.g2.rows.filter((x:any)=>x.task_id===task&&(!onlyErrors||x.false_reject||x.false_admit));
+ const sample=(trace:any[])=>trace.reduce((a,b)=>b.time_s<=time?b:a,trace[0]);
+ const current=sample(run.trace),baseSample=sample(baseline.trace);
+ const xmax=run.reference.duration_s, ymax=Math.max(4.2,...baseline.trace.map((p:any)=>p.predicted_voltage_v),...run.trace.map((p:any)=>p.input_voltage_v))*1.03,x=(v:number)=>54+v/xmax*810,y=(v:number)=>228-v/ymax*192;
+ const line=(trace:any[],field:string)=>trace.map((p:any,i:number)=>`${i?'L':'M'}${x(p.time_s).toFixed(2)},${y(p[field]).toFixed(2)}`).join(' ');
+ return <section className="panel development-lab" id="b2-development">
+  <div className="development-title"><div><div className="eyebrow">B2-003 / COUNTEREXAMPLE WORKBENCH</div><h2>What the program <em>erased.</em></h2><p>从错误剪枝到可修复的反例。先解释失败，再讨论知识是否真的增长。</p></div><span className="pill orange"><AlertTriangle size={14}/>DEVELOPMENT ONLY</span></div>
+  <div className="development-stats"><div><b>{r.false_reject_region.length}</b><span>可行设计被错误过滤</span></div><div><b>{r.lost_solvable_task.length}</b><span>原可解任务丢失</span></div><div><b>{r.false_admit_region.length}</b><span>错误可行预测</span></div><div><b>{d.cost.provider_calls}</b><span>本轮新增模型调用</span></div></div>
+  <div className="development-finding"><Code2 size={21}/><div><b>Release time is not TX duration.</b><p>G2 使用 <code>tx_power × release_s / efficiency</code> 估计发射能耗；释放时刻不是动作持续时间。参考模型的 TX 时长为 <b>40 ms</b>，旧任务中的释放时刻为 <b>250 ms</b>。这是真实的接口语义错配，不等于“修正后一定晋升”。</p><small>ESR 和 TX 功率已被旧程序读取，不能声称它们完全缺失。相位、完整动作负载与 typed deadline 仍需补齐。</small></div></div>
+  <div className="development-section-heading"><h3>01 / The rejected feasible region</h3><div><select aria-label="Counterexample task" value={task} onChange={e=>setTask(e.target.value)}>{['qualification-6','qualification-7','qualification-8'].map(t=><option key={t}>{t}</option>)}</select><label><input type="checkbox" checked={onlyErrors} onChange={e=>setOnlyErrors(e.target.checked)}/>只看反例</label></div></div>
+  <p className="development-boundary">这些旧资格任务现在属于已公开的开发反例，不能换一个 ID 后充当新的盲测。</p>
+  <div className="development-table-wrap"><table className="development-table"><thead><tr><th>Candidate / C / ESR</th><th>G2 prediction</th><th>Reference</th><th>Minimum input</th><th>Evidence</th></tr></thead><tbody>{rows.map((p:any)=><tr className={p.false_reject?'counterexample':''} key={p.candidate_id}><td><b>{p.candidate_id}</b><small>{(p.design.capacitance_f*1e6).toFixed(0)} µF · {p.design.esr_ohm} Ω</small></td><td>{p.predicted?'FEASIBLE':'INFEASIBLE'}</td><td><span className={p.observed?'pass':'fail'}>{p.observed?'PHYSICAL PASS':'PHYSICAL FAIL'}</span>{p.false_reject&&<small>Wrongly removed</small>}</td><td>{p.summary.minimum_input_v.toFixed(3)} V</td><td><code title={p.run_hash}>{shortHash(p.run_hash)}</code></td></tr>)}</tbody></table></div>
+  <div className="development-section-heading"><h3>02 / Intervene, without choosing a story first</h3><span>Canonical A2 brownout · average-energy-v0</span></div>
+  <p className="development-boundary">这里是独立的 A2 brownout 开发案例，不是上方选择的 G2 资格任务；预测器为 average-energy-v0，而非 G2。每项只改变一个因素。当前运行 <code>{shortHash(run.run_hash)}</code>，基线 <code>{shortHash(baseline.run_hash)}</code>。</p>
+  <div className="development-interventions" role="group" aria-label="Controlled intervention">{d.episode.runs.map((s:any)=><button key={s.id} aria-pressed={choice===s.id} className={choice===s.id?'active':''} onClick={()=>setChoice(s.id)}><small>{s.id.toUpperCase()}</small><b>{s.title}</b><span className={s.physical.value?'pass':'fail'}>{s.physical.value?'PHYSICAL PASS':'PHYSICAL FAIL'}</span></button>)}</div>
+  <div className="development-trace"><div className="development-trace-legend"><span><i style={{background:'#b5be8b'}}/>Average-energy prediction</span><span><i style={{background:'#db9e77'}}/>Baseline transient</span><span><i style={{background:'#68c7b0'}}/>Selected transient</span><span>ALL 1,601 SAMPLES · COMPUTATIONAL</span></div>
+  <svg viewBox="0 0 900 267" role="img" aria-label="Source-bound baseline prediction and controlled transient voltage"><rect x="54" y={y(run.reference.off_v)} width="810" height={228-y(run.reference.off_v)} fill="#78503a" opacity=".17"/>{[1.8,2.4,3.6].map(v=><g key={v}><line x1="54" x2="864" y1={y(v)} y2={y(v)} stroke="#50644c" strokeDasharray="4 5"/><text x="10" y={y(v)+4}>{v} V</text></g>)}<path d={line(baseline.trace,'predicted_voltage_v')} stroke="#b5be8b" strokeDasharray="5 4"/><path d={line(baseline.trace,'input_voltage_v')} stroke="#db9e77"/><path d={line(run.trace,'input_voltage_v')} stroke="#68c7b0"/><line x1={x(time)} x2={x(time)} y1="30" y2="230" stroke="#f0edcc" strokeDasharray="3 4"/>{[0,.4,.8,1.2,1.6].map(t=><text key={t} x={x(t)-7} y="255">{t.toFixed(1)} s</text>)}</svg>
+  <div className="development-cursor"><b>{time.toFixed(3)} s</b><input aria-label="Counterexample replay time" type="range" min="0" max={xmax} step=".001" value={time} onChange={e=>setTime(+e.target.value)}/><button onClick={()=>setTime(baseline.summary.first_brownout_s??.39)}>Jump to baseline brownout</button></div>
+  <div className="development-sample" data-run-hash={run.run_hash}><div><small>BASELINE INPUT</small><b>{baseSample.input_voltage_v.toFixed(3)} V</b></div><div><small>SELECTED INPUT</small><b>{current.input_voltage_v.toFixed(3)} V</b></div><div><small>PMIC / MCU</small><b>{current.pmic_state} / {current.mcu_state}</b></div><div><small>RECEIVER</small><b>{current.receiver_delivered?'DELIVERED':'NOT DELIVERED'}</b></div></div></div>
+  <div className="development-explanations">{d.episode.competing_explanations.map((h:any)=><div key={h.id}><small>CANDIDATE EXPLANATION</small><b>{h.hypothesis}</b><span>尚未唯一归因</span></div>)}</div>
+  <p className="development-boundary">本轮干预由确定性开发程序执行，不冒充 Agent 自主实验，也不是实测轨迹。一次改变带来的计算差异支持局部比较，不会自动排除其他机制。</p>
+  <div className="development-section-heading"><h3>03 / Compile before spending science budget</h3><ShieldCheck size={18}/></div>
+  <div className="development-compiler">{d.compiler_triage.map((c:any)=><details key={c.generation}><summary><span>Historical G{c.generation}</span><b>{c.receipt.passed?'MECHANICALLY READY':'BLOCKED BEFORE SCIENCE'}</b><small>{c.receipt.scientific_probes} qualification probes</small></summary><p>{c.adaptation}</p><pre>{JSON.stringify({errors:c.receipt.errors,checks:c.receipt.checks},null,2)}</pre></details>)}</div>
+  <div className="development-next"><FlaskConical size={21}/><div><b>No new blind transfer has been run.</b><p>世界模型与 workflow 采用分别绑定的资格回执；新协议尚未批准。机械修复最多 2 次，重复候选停止；完整恢复使用同一尝试身份。当前没有合格 G3/G4，没有 removal / transplant 正向结果。</p><details><summary>Inspect launch blockers and exact source identities</summary><pre>{JSON.stringify({readiness:d.protocol_readiness,cost:d.cost,pilot:d.inputs.pilot_file_hash,dossier:d.content_hash,selected_run:run.run_hash,changed_fields:run.changed_fields,comparison:run.comparison},null,2)}</pre></details></div></div>
+  {data.b2_execution_controls&&<details className="semantic-details execution-recovery" data-controls-hash={data.b2_execution_controls.content_hash}><summary>Proposal, matched trials & recovery · {data.b2_execution_controls.tests_run} engineering controls · {data.b2_execution_controls.actual_provider_calls} actual model calls</summary><p className="development-boundary">语义候选与机械修复分离；世界模型和 workflow 独立检查。五条件共享历史和工具，Raw 同样可以执行 Python；先封存全部试验再进行最终确认。真实进程退出后的结算恢复不重复调用；未知预留继续停止。这里使用隔离模拟传输与明确标注的脚本控制，不是已生成或合格的 G3/G4，也不是知识迁移结果。无法确认的崩溃成本不会记成零成本成功。</p><pre>{JSON.stringify({source_hash:data.b2_execution_controls.content_hash,controls:data.b2_execution_controls.cases,launch:data.b2_execution_controls.launch_readiness,cost:data.b2_execution_controls.cost,boundary:data.b2_execution_controls.claim_boundary},null,2)}</pre></details>}
+  <WorkflowUse/><SemanticLab/><MeasuredReplay/>
+ </section>
+}
+
+function WorkflowUse(){
+ const w=data.b2_workflow_use;
+ if(!w)return null;
+ return <div className="workflow-use" data-workflow-hash={w.content_hash}>
+  <div className="development-section-heading"><h3>03b / Useful routing ≠ learned knowledge</h3><span>PUBLIC REPLAY · {w.source_reference_observations} SEALED OBSERVATIONS</span></div>
+  <p className="development-boundary">简单排序也能改善旧基线。以下策略由工程程序预先声明，重放同一批已公开观测；不是 Agent 学习、盲测或实际节省的付费实验。世界模型的拒绝不阻止独立 workflow 检查。</p>
+  <div className="development-table-wrap"><table className="development-table"><thead><tr><th>Fixed policy</th><th>Baseline probes</th><th>Policy probes</th><th>Use median reduction</th><th>Lost solvable</th><th>Engineering / formal</th></tr></thead><tbody>{w.variants.map((v:any)=><tr key={v.name} data-policy={v.name} data-report-hash={v.report.content_hash}><td><b>{v.name}</b></td><td>{v.report.metrics.baseline_policy_probes}</td><td>{v.report.metrics.candidate_policy_probes}</td><td>{v.report.metrics.median_probe_reduction??'N/A'}</td><td>{v.report.metrics.lost_solvable_tasks.length}</td><td>{v.report.controls_pass?'USE CONTROL PASS':'USE CONTROL FAIL'}<small>{v.report.qualified?'FORMALLY QUALIFIED':'NOT FORMALLY QUALIFIED'}</small></td></tr>)}</tbody></table></div>
+  <p className="development-boundary">不可解任务仍保留其探测成本。排序收益不能自动归因于物理知识；后续正式比较需要固定经典排序控制。新增参考运行 {w.new_reference_runs}，新增真实模型调用 {w.actual_provider_calls}。历史成本不完整，不能声称学习已经回本。</p>
+  <details className="semantic-details"><summary>Inspect independent checks, per-task probes and scope</summary><pre>{JSON.stringify({source_hash:w.content_hash,source:w.source,variants:w.variants.map((v:any)=>({name:v.name,checks:v.report.checks,rows:v.report.rows,scope:v.report.scope_tests,cost:v.report.cost})),boundary:w.claim_boundary},null,2)}</pre></details>
+ </div>
+}

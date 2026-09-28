@@ -1,0 +1,52 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-023-pluck-reference-case",
+  "status": "blocked",
+  "owner": "bf-agent-coordinator",
+  "objective": "Deliver a source-bound three-paper plucking reference case with reproducible simulation, mechanical geometry, embedded software and receiver contract; qualify computational scope before autonomous retrieval and Harness studies. User currently requests simulation without connected hardware.",
+  "hypothesis": "One immutable case can connect source parameters, coupled transient response, stage-wise firmware energy, received-event simulation and independent numerical checks without silently treating assumptions as calibrated measurements.",
+  "falsifier": "Invented paper values, unaccounted energy, absent radio code labelled deployable, stale artifacts or synthetic reception accepted as physical evidence, or hidden reference answers leaked into autonomous trials.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/",
+    "apps/agent-studio/",
+    "configs/reference_cases/",
+    "scripts/",
+    "tests/agentlab/",
+    "docs/agentlab/",
+    "docs/PROGRESS.md",
+    "project/features/BFA-023-pluck-reference-case/",
+    "PROJECT.yaml",
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md"
+  ],
+  "schema_changes": [
+    "bf-pluck-reference-case-v1",
+    "bf-pluck-simulation-v1",
+    "bf-pluck-case-receipt-v1"
+  ],
+  "tests": "Source and numerical audits, independent oscillator and energy checks, timestep convergence, no-input/low-input/receiver-loss/brownout controls, case API projection and full init.",
+  "negative_controls": [
+    "zero mechanical input",
+    "insufficient cold-start energy",
+    "radio packet loss",
+    "stale artifact hash",
+    "unknown paper parameters",
+    "full-text download returns HTML"
+  ],
+  "command": "PYTHONPATH=packages/python/bfworld/src python3 scripts/pluck_reference_case.py; ./init.sh",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/pluck-v1/",
+  "cost_cap": "USD 0 model/API spend in reference engineering; local solver runs bounded by declared commands. Paid Agent evaluation remains gated.",
+  "claim_boundary": "Engineering simulation and paper-anchor verification only. Published measurements are reference observations, never local calibration data. SP-SSHI/SP-SECE behavior is not transistor-level reproduction unless circuit evidence supports it. No hardware, Agent efficacy or Harness promotion claims.",
+  "stop_condition": "Do not claim paper reproduction without full source and parameters; stop paid experiments before reference sealing or when valid budgets absent; preserve numerical failure as failed evidence.",
+  "limitations": "No physical experiment by user choice. Pure simulation numerical checks pass but SP-SECE voltage differs from paper by 129–167%; uncertain polarity/semiconductor validity prevents reference admission. This is not a hardware-connection blocker.",
+  "handoff": "Resolve source-model polarity, switching waveform and semiconductor operating-domain discrepancy. Preserve simulation-v2 and all failed attempts. Re-run newly versioned protocol after justified model corrections; no paid Agent/Harness dispatch before reference agreement.",
+  "paper_claim": "No scientific efficacy claim. Reference apparatus construction and falsifiable simulation acceptance only.",
+  "evidence": [
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/pluck-reference-20260928/receipt.json",
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/pluck-v1/presentation/published-receipt.json",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/pluck-reference-20260928/init.log"
+  ]
+}

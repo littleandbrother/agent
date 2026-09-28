@@ -1,0 +1,252 @@
+{
+  "schema_version": "bf-pluck-reference-case-v1",
+  "id": "pluck-v1",
+  "title": "单次动作供能的无线门窗事件节点",
+  "scope": "参考辅助设计 / 无实物的仿真闭环",
+  "sources": [
+    {
+      "id": "vipsn",
+      "doi": "10.1109/JIOT.2021.3098238",
+      "file": "vipsn-pluck.pdf",
+      "sha256": "fc09a9296baca763e701a3d643a026b0f450d303652bd9452da270c9d11aacf5",
+      "role": "产品行为、包数判向、nRF52832 分阶段负载；Parallel SP-SSHI，10 µF，独立原始配置"
+    },
+    {
+      "id": "unified",
+      "doi": "10.1088/1361-665X/add8d4",
+      "file": "unified.pdf",
+      "sha256": "e03fd213e481c693e88acd3ae400ca9e1f01c01f0f3ac4aa9fd06d401138435f",
+      "role": "动力学识别参数、磁力公式、SP-SECE 元件表、六组储能实验；470 µH"
+    },
+    {
+      "id": "cross-domain",
+      "doi": "10.1115/1.4071279",
+      "file": "cross-domain.pdf",
+      "sha256": "6f1e409b95c000cd63bc59dce27f65df7921731c52e2981e94d0b2b6d74bd767",
+      "role": "势能与动态过程、拓展工况；作者公开 accepted manuscript，1 mH，0.1 s 无线周期"
+    }
+  ],
+  "mechanics": {
+    "mass_kg": 0.02012,
+    "stiffness_n_m": 605.92,
+    "damping_ns_m": 0.14,
+    "coupling_n_v": 0.0006664,
+    "piezo_capacitance_f": 4.022e-08,
+    "beam_length_m": 0.0865,
+    "tip_magnet_volume_m3": 1e-06,
+    "driver_magnet_volume_m3": 6e-06,
+    "remanence_t": 1.33,
+    "magnetic_polarity": -1
+  },
+  "motion": {
+    "initial_b_m": -0.1,
+    "velocity_m_s": 0.4,
+    "gap_m": 0.026,
+    "duration_s": 2
+  },
+  "interface": {
+    "inductance_h": 0.00047,
+    "sense_capacitance_f": 3e-09,
+    "inductor_resistance_ohm": 2,
+    "diode_model": {
+      "is": 1e-08,
+      "n": 1.1,
+      "rs": 2,
+      "cjo": 8e-12
+    },
+    "pnp_model": {
+      "is": 6e-14,
+      "nf": 1,
+      "bf": 130,
+      "vaf": 360,
+      "ise": 6e-14,
+      "ne": 1.5,
+      "nr": 1,
+      "br": 6.5,
+      "var": 37,
+      "isc": 8e-12,
+      "nc": 1.35,
+      "rc": 0.08,
+      "rb": 1,
+      "re": 0.25,
+      "cjc": 1.3e-11,
+      "mjc": 0.46,
+      "vjc": 0.7,
+      "cje": 6.3e-11,
+      "mje": 0.41,
+      "vje": 0.9,
+      "tf": 6.7e-10,
+      "tr": 1.03e-06,
+      "xtb": 1.5
+    },
+    "npn_model": {
+      "is": 6.5e-15,
+      "nf": 1,
+      "bf": 110,
+      "vaf": 288,
+      "ise": 1e-14,
+      "ne": 1.5,
+      "nr": 1,
+      "br": 4.5,
+      "var": 70,
+      "isc": 3e-12,
+      "nc": 1.35,
+      "rc": 0.5,
+      "rb": 0.26,
+      "re": 0.23,
+      "cjc": 6.1e-12,
+      "mjc": 0.31,
+      "vjc": 0.4,
+      "cje": 5.7e-11,
+      "mje": 0.35,
+      "vje": 0.8,
+      "tf": 2e-10,
+      "tr": 1.5e-06,
+      "xtb": 1.4
+    },
+    "parasitic_note": "100Mohm base bleed and 1Gohm detector bleed for declared leakage; 1Gohm storage common-mode reference; trap integration after preserved Gear failure."
+  },
+  "power": {
+    "output_v": 3.3,
+    "start_v": 5.05,
+    "stop_v": 3.67,
+    "efficiency": 0.8,
+    "quiescent_a": 9.5e-07,
+    "output_capacitance_f": 4.7e-05,
+    "model_note": "Two energy reservoirs, hysteretic input buck and separate MCU 3.2/2.7V thresholds; bounded averaged buck, not vendor switching model."
+  },
+  "workload": {
+    "firmware_energy_origin": "ViPSN published Table II; NOT measured load of this build",
+    "stages": [
+      {
+        "name": "mcu_init",
+        "duration_s": 0.0538,
+        "energy_j": 7.27e-05
+      },
+      {
+        "name": "radio_init",
+        "duration_s": 0.013,
+        "energy_j": 6.847e-05
+      },
+      {
+        "name": "beacon",
+        "duration_s": 0.005,
+        "energy_j": 6.037e-05
+      }
+    ],
+    "beacon_interval_s": 0.1,
+    "idle_current_a": 2e-06
+  },
+  "paper_charging_anchors": [
+    {
+      "c_uf": 22,
+      "sece_v": 7.34,
+      "seh_v": 7.16
+    },
+    {
+      "c_uf": 33,
+      "sece_v": 6.13,
+      "seh_v": 5.68
+    },
+    {
+      "c_uf": 47,
+      "sece_v": 5.3,
+      "seh_v": 4.32
+    },
+    {
+      "c_uf": 100,
+      "sece_v": 3.33,
+      "seh_v": 2.01
+    },
+    {
+      "c_uf": 220,
+      "sece_v": 2.13,
+      "seh_v": 0.998
+    },
+    {
+      "c_uf": 330,
+      "sece_v": 1.74,
+      "seh_v": 0.73
+    }
+  ],
+  "acceptance": {
+    "numeric_relative_tolerance": 0.03,
+    "paper_voltage_relative_tolerance": 0.2,
+    "event_deadline_s": 2,
+    "max_deflection_m": 0.02,
+    "receiver": "simulated link; require complete TX energy before accepting packet",
+    "direction": "unqualified until asymmetric mounted trajectory and packet-count distributions are validated"
+  },
+  "provenance": [
+    {
+      "parameters": "mechanics",
+      "origin": "paper",
+      "source": "unified",
+      "locator": "Tables 1-2; Eq 1-5",
+      "notes": "Reported experimentally identified values reused; local apparatus not measured. Theta table unit N/m is dimensionally inconsistent with Eq1, implemented as N/V."
+    },
+    {
+      "parameters": "motion",
+      "origin": "paper",
+      "source": "unified",
+      "locator": "section3, figure3",
+      "notes": "0.4 m/s, b0=-0.1 m, d0=26mm; 2s integration is engineering choice."
+    },
+    {
+      "parameters": "interface.inductance_h/interface.sense_capacitance_f",
+      "origin": "paper",
+      "source": "unified",
+      "locator": "Figure4 Table4",
+      "notes": "2026 paper instead uses 1mH; kept separate."
+    },
+    {
+      "parameters": "interface.diode_model/interface.inductor_resistance_ohm",
+      "origin": "assumption",
+      "source": "declared engineering model",
+      "locator": "case.json",
+      "notes": "Diode model and 2-ohm inductor ESR are engineering assumptions; not vendor-qualified NSR02100. BJT model subset is documented separately. 0.1-ohm Cstore ESR and numerical gmin=1e-10 are declared solver assumptions."
+    },
+    {
+      "parameters": "power.start_v/power.stop_v/power.output_v/power.quiescent_a",
+      "origin": "datasheet",
+      "source": "ltc3588-1.pdf",
+      "locator": "page3 electrical characteristics",
+      "notes": "3.3V output typical thresholds5.05/3.67; papers sometimes use minimum threshold, not typical."
+    },
+    {
+      "parameters": "power.efficiency/power.output_capacitance_f/workload.idle_current_a",
+      "origin": "assumption",
+      "source": "engineering reduced model",
+      "locator": "case.json",
+      "notes": "Assumed constant efficiency and two-reservoir averaged buck; output capacitor retained across UVLO cycles. MCU thresholds3.2/2.7V and100mA maximum buck current are engineering assumptions."
+    },
+    {
+      "parameters": "workload.stages",
+      "origin": "paper",
+      "source": "vipsn",
+      "locator": "Table II",
+      "notes": "Publication load surrogate; does not qualify current firmware power."
+    },
+    {
+      "parameters": "mechanics.magnetic_polarity",
+      "origin": "engineering interpretation",
+      "source": "unified Eq2 and repulsive configuration; cross-domain Eq6/10/11",
+      "locator": "polarity-convention audit",
+      "notes": "Signed moment product is negative for facing like poles. Keep printed-positive interpretation as negative control. Source formulas have sign/magnet-label ambiguity; choose physical repulsion by potential curvature, not by matching charging values."
+    },
+    {
+      "parameters": "interface.pnp_model/interface.npn_model",
+      "origin": "manufacturer model parameters",
+      "source": "https://www.diodes.com/spice/download/4445/MMBT5401Q.spice.txt and https://www.diodes.com/spice/download/2541/MMBT5551.spice.txt",
+      "locator": "version2 08FEB2011 model numeric parameters",
+      "notes": "Gummel-Poon subset; QUASIMOD/RCO/VO/GAMMA omitted for ngspice compatibility and must not be called exact PSpice model. Semiconductors remain substitution candidates; actual paper model files not available."
+    }
+  ],
+  "evaluation": {
+    "reference_assisted": "Reference pack visible, coordinator-authored baseline",
+    "autonomous_retrieval": "New empty session/workspace and no shared answer memory; only task and public tools",
+    "long_revision": "Frozen task and evaluator, perturbations in separate protocol, exact version-bound artifacts",
+    "harness": "Held-out missions, equal budgets, no promotion from current-task repair",
+    "dispatch_enabled": false
+  }
+}

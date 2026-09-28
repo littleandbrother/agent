@@ -1,0 +1,48 @@
+schema_version: battery-world-feature-v1
+id: BFA-010-trace-engineering
+status: complete
+owner: bf-agent-coordinator
+objective: Add source-bound Trace overview, timelines and comparisons; connect local Blender and COMSOL engineering jobs while CAD remains deferred.
+hypothesis: Read-only trace projections and isolated typed engineering jobs expose useful execution evidence without changing prior traces, scientific semantics or model budgets.
+falsifier: Missing observations become fabricated metrics, tool completion becomes product verification, cross-owner artifacts are exposed, repeated operations dispatch twice, or original evidence is rewritten.
+paper_claim: Engineering integration only; no Agent efficacy or physical validation claim.
+owned_paths:
+  - apps/agent-studio/
+  - packages/python/bfworld/src/bfworld/agentlab/
+  - tests/agentlab/
+  - docs/agentlab/
+  - docs/PROGRESS.md
+  - project/features/BFA-010-trace-engineering/
+  - PROJECT.yaml
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-v2.ts
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat.ts
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-recall.ts
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/main.ts
+  - /Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/dist/
+schema_changes:
+  - bf-trace-analysis-v1 derived projection
+  - engineering_jobs and engineering_events operator-owned records
+targeted_tests: [trace source binding, unknown timings, partial usage, turn grouping, comparison boundaries, job idempotence, parameter validation, artifact ownership, actual Blender render, actual COMSOL solve, browser QA]
+negative_controls: [invented usage, automatic scientific PASS, cross-owner reads, traversal, conflicting operation reuse, duplicate execution, hidden paid judge]
+command: ./init.sh
+output_artifact: docs/agentlab/TRACE-ENGINEERING.json
+cost_cap: Zero model calls; local engineering smoke jobs at most 180 seconds per job, two CPU cores, one active job.
+claim_boundary: Parameterized enclosure visualization and cantilever structural FEM are template capabilities, not general CAD, full product qualification or hardware validation.
+stop_condition: Missing local executable/license, evidence hash mismatch, or unsupported model. Report unavailable without surrogate success.
+limitations: Upstream has no project license; independent implementation only. CLI templates are not general CAD/FEM or MCP servers. Missing historical timings stay unknown. Interrupted jobs require reconciliation. Pi root lint retains pre-existing warnings; changed entry lint and compilation pass. Foreground desktop QA unavailable while locked; isolated headless Chrome acceptance passed.
+handoff: Delivered at localhost 8768. Existing BF-AIoT folder v4 enables bf_engineering on next Pi launch. CAD awaits installation; extend typed templates only with actual native artifacts and explicit physical assumptions.
+evidence:
+  receipt: docs/agentlab/TRACE-ENGINEERING.json
+  guide: docs/agentlab/TRACE-ENGINEERING.md
+  remote_fork: https://github.com/littleandbrother/agent-workbench
+  full_init: passed
+  python_tests: 262
+  trace_specific_tests: 14
+  local_blender: native render and independent geometry readback passed
+  local_comsol: native solve and independent model readback passed
+  browser: live localhost headless Chrome; views, filters, native engine buttons and raw byte export passed
+  paid_calls: 0
+  preserved_trace_files: 59
+  preserved_model_ledger_rows: 818
+  incidental_changes: Required Pi root npm check formatted legacy chat entry files; solver and improver formatting was restored after exact formatted-byte comparison.

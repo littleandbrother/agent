@@ -1,0 +1,95 @@
+{
+  "schema_version": "bf-product-discovery-delivery-v1",
+  "date": "2026-09-18",
+  "feature": "BFA-005-product-discovery",
+  "implementation_status": "complete",
+  "online_model_acceptance": "blocked",
+  "full_init": {
+    "tests": 230,
+    "passed": true,
+    "command": "rtk proxy ./init.sh",
+    "cwd": "/Users/depengsu/Documents/bf-agent-workbench/verification/battery-world",
+    "log": "/Users/depengsu/Documents/bf-agent-workbench/verification/product-init-final.log"
+  },
+  "targeted_tests": {
+    "tests": 39,
+    "log": "/Users/depengsu/Documents/bf-agent-workbench/verification/product-targeted.log"
+  },
+  "typescript_build": "passed",
+  "javascript_syntax": "passed",
+  "scenarios": [
+    "rotary",
+    "door",
+    "pipe",
+    "wearable",
+    "outdoor",
+    "zero-energy-continuous-service"
+  ],
+  "integration": {
+    "actual_pi_process": true,
+    "actual_experiment": true,
+    "model_transport": "isolated scripted provider fixture",
+    "sequence": [
+      "inspect",
+      "propose-with-assumptions",
+      "bind-dev-01",
+      "baseline-FAIL",
+      "read-feedback",
+      "clamp-3.45V",
+      "repair-PASS",
+      "snapshot-bound-submit"
+    ],
+    "new_paid_model_calls": 0,
+    "new_cost_usd": 0,
+    "hardware_result": false,
+    "autonomous_model_efficacy_claim": false
+  },
+  "browser": {
+    "production_url": "http://127.0.0.1:8768/",
+    "fixture_url": "http://127.0.0.1:8779/",
+    "checks": [
+      "initial composer without implicit task binding",
+      "preserved sidebar collapse state",
+      "assumption card",
+      "unknown-user continuation",
+      "explicit approval",
+      "approval recall",
+      "real saved JSON preview",
+      "no browser console errors"
+    ],
+    "fixture_data_in_production": false
+  },
+  "preservation": {
+    "historical_file_count": 1397,
+    "changed_files": [],
+    "changed_history_tables": [],
+    "model_calls": 775,
+    "new_external_calls": 0,
+    "new_cost_usd": 0,
+    "scientific_file_count": 126,
+    "changed_scientific_files": []
+  },
+  "external_blocks": [
+    "Historical UNKNOWN usage from TLS EOF remains held",
+    "Authorized model wall window expired; no extension made"
+  ],
+  "limitations": [
+    "Only rotary F1 computational adapter is executable",
+    "No CAD/FEM integration or physical/field verification",
+    "Text attachments only; no image/PDF parser",
+    "Six scenarios are hypothetical protocol fixtures"
+  ],
+  "source_sha256": {
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/product.py": "ba1d629587276631797d0eba9f48e0630c589ffea54624c36a9c7cc6093b4ca4",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/chat.py": "a176fb6d03001917fad9a3ac78d4fb8a36d1775e1c86959e087cd1ad33e56a17",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/launcher.py": "209e082e4a96f1019bf9583d397098fdd5b6a53f47cf7566b8afe282753b3bf9",
+    "/Users/depengsu/Documents/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py": "dd5312efab11d5e8397f49ba2fa422d6848c5d0a1f53491f194936d04c7a7a36",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/index.html": "e9618d21b5c369842170c814daefd788ff9b729616629edcef08632416300f36",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/app.js": "230fcb8ae0018da8779282f2044e0a420bd234c620ca1515d04642cebb81f2be",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/product.js": "1d4a21b1adf0f3b522d56ea7d6f2b2d0e86f597fdb30b7f68f2502c98151089f",
+    "/Users/depengsu/Documents/battery-world/apps/agent-studio/product.css": "8c8adfd022a238ed4be60d08a1d9f1c8e06fad1e89e44f77da0b524db7b79b99",
+    "/Users/depengsu/Documents/battery-world/tests/agentlab/test_product.py": "6bf096b4a50cbd1e90a766da2696500f3c10e63146f910406ddded108edbdba7",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts": "4b8aa4d57cf127336dc018f7e3f1e33a20edfc9dffef5907be4c9c3b96cf6e05",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/dist/chat-product.js": "43683a495d563bd7185886c97adc6f10712393ccb7d4879a056d10453323155a"
+  }
+}

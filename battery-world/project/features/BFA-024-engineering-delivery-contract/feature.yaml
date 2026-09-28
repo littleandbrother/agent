@@ -1,0 +1,112 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-024-engineering-delivery-contract",
+  "status": "in-progress",
+  "owner": "bf-agent-coordinator",
+  "objective": "Implement the user-approved complete digital engineering delivery standard, adapt participant Agent tools and Studio, and advance the source-bound pluck product without upgrading incomplete engineering or simulated evidence.",
+  "hypothesis": "A version-bound deliverable contract exposes missing native engineering and invalidates dependent evidence after changes; executable builders and checks can advance the same product without losing provenance.",
+  "falsifier": "A missing or stale native artifact is marked delivered/validated, a participant self-certifies acceptance, physical claims derive from simulation, or a dependency edit retains downstream PASS.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/",
+    "apps/agent-studio/",
+    "configs/reference_cases/",
+    "scripts/",
+    "tests/agentlab/",
+    "docs/agentlab/",
+    "docs/PROGRESS.md",
+    "project/features/BFA-024-engineering-delivery-contract/",
+    "PROJECT.yaml",
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/Documents/pi-bf-aiot/",
+    "/Users/depengsu/Documents/bf-agent-workbench/toolchains/ltspice-26",
+    "/Users/depengsu/Documents/agent-github-release",
+    "init.sh"
+  ],
+  "schema_changes": [
+    "bf-engineering-delivery-contract-v1",
+    "bf-engineering-delivery-snapshot-v1"
+  ],
+  "tests": "Delivery schema, native file/hash/readback evidence, dependency invalidation, path and owner isolation, receiver faults and abstention, Agent route and Studio projection; full init.",
+  "negative_controls": [
+    "missing native files",
+    "tampered evidence",
+    "dependency changes",
+    "cross-owner file registration",
+    "participant fabricated PASS",
+    "direction overlap",
+    "duplicate/delayed/lost/reboot packets"
+  ],
+  "command": "./init.sh; python3 scripts/run_pluck_coupled_comsol.py --output <new-dir>; python3 scripts/run_pluck_transient_comsol.py --base <base.mph> --output <new-dir>; python3 scripts/run_pluck_ltspice.py --app <LTspice.app> --output <new-dir>",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/pluck-v1/delivery/",
+  "cost_cap": "USD 0 model/API spend in reference engineering; local solver runs bounded by declared commands. Paid Agent evaluation remains gated.",
+  "claim_boundary": "Engineering simulation and paper-anchor verification only. Published measurements are reference observations, never local calibration data. SP-SSHI/SP-SECE behavior is not transistor-level reproduction unless circuit evidence supports it. No hardware, Agent efficacy or Harness promotion claims.",
+  "stop_condition": "Do not claim paper reproduction without full source and parameters; stop paid experiments before reference sealing or when valid budgets absent; preserve numerical failure as failed evidence.",
+  "limitations": "Reference paper SECE mismatch persists; no magnetic FEM/calibrated plucking, full convergence, native complete EasyEDA schematic/PCB/Gerber, real hardware or final product acceptance. Snapshot integrity is not task acceptance. Some task-specific validators are not implemented.",
+  "handoff": "First complete magnetic/FEM-ROM and PMIC two-way coupling plus convergence; keep source assumptions and failures; then freeze native EDA/manufacturing; paid Agent evaluation remains gated.",
+  "paper_claim": "No scientific efficacy claim. Reference apparatus construction and falsifiable simulation acceptance only.",
+  "evidence": [
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/pluck-v1/delivery/engineering-v2/report.json",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/bfa024-http.json",
+    "/Users/depengsu/Documents/battery-world/docs/agentlab/PLUCK-NATIVE-SIMULATION.md",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/product-deliverables-20260929/receipt.json"
+  ],
+  "validation": {
+    "python_tests": 376,
+    "full_application_init": "passed",
+    "chat_product_types": "passed",
+    "pi_full_repository_check": "blocked-by-existing-warnings",
+    "native_comsol": "static-eigen-frequency-transient-executed",
+    "ltspice": "official-example-and-three-power-cases-executed",
+    "reference_http_integrity": true,
+    "model_calls": 0,
+    "hardware_verified": false
+  },
+  "product_deliverables_ui": {
+    "status": "complete-in-declared-ui-scope",
+    "scope": "Product node scoped deliverables with reference/current-session separation and inline image/code preview; console retains verification audit.",
+    "falsifier": "Foreign or stale files appear as current validated product output, node selection loses file scope, or absent artifacts show fabricated content.",
+    "negative_controls": [
+      "different owner",
+      "different assembly revision",
+      "reference scope switching",
+      "tampered artifact",
+      "empty subsystem",
+      "out of order fetch"
+    ],
+    "tests": "Pure projection tests, authenticated HTTP artifact checks, live browser navigation and previews, application init.",
+    "model_cost_cap_usd": 0,
+    "report": "/Users/depengsu/Documents/battery-world/docs/agentlab/PRODUCT-DELIVERABLES.md",
+    "receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/product-deliverables-20260929/receipt.json",
+    "validation": {
+      "full_application_init": true,
+      "python_tests": 377,
+      "projection_tests": 17,
+      "browser": "passed",
+      "native_schematic_pcb": "reference-only-current-design-missing",
+      "model_calls": 0
+    }
+  },
+  "github_source_release": {
+    "status": "source-verified-awaiting-remote-readback",
+    "target": "https://github.com/littleandbrother/agent",
+    "scope": "Private source snapshot of Battery World and customized Pi; exclude local credentials, session databases, participant histories, installed proprietary tools and generated engineering binaries.",
+    "hypothesis": "An explicit source inventory with locks and provenance can preserve the current engineering version without exporting private runtime state.",
+    "falsifier": "Tracked source references missing required vendored browser files, credentials enter the index, remote HEAD differs from verified local commit, or snapshot silently rewrites sealed evidence.",
+    "tests": "Source/secret manifest audit, clean snapshot build and no-provider startup, targeted product projection tests, remote HEAD and fresh clone verification.",
+    "model_cost_cap_usd": 0,
+    "bootstrap_fix": "Materialize coupled controls and Studio B2 dossier inputs before projection tests; the first two clean snapshot checks exposed missing ignored artifacts. Scientific generators and frozen semantics unchanged.",
+    "verification": {
+      "python_tests": 377,
+      "full_application_init": "passed-in-exported-checkout",
+      "pi_bf_build": "passed",
+      "product_projection_tests": 17,
+      "mcp_self_tests": 50,
+      "empty_state_http": "passed",
+      "paid_model_calls": 0
+    }
+  }
+}

@@ -1,0 +1,20 @@
+schema_version: battery-world-feature-v1
+id: D2-001-multi-harvester-deployment-worlds
+status: complete
+owner: coordinator
+objective: Add versioned voltage-coupled rotary, photovoltaic, piezoelectric and thermoelectric ports, repeated missions across six deployments, and a source-bound interactive 3D deployment studio.
+owned_paths: [PROJECT.yaml, README.md, project/ROADMAP.yaml, project/features/D2-001-multi-harvester-deployment-worlds/, project/features/BC-001-campaign-execution/, docs/, packages/python/bfworld/src/bfworld/deployments/, scripts/build_deployments.py, scripts/build_studio.py, scripts/serve_studio.py, apps/world-studio/, tests/deployments/, tests/studio/, init.sh]
+hypothesis: Typed raw/converter/bus electrical ports preserve voltage feedback and loss accounting across source families while the same sensing, classification and delivery semantics support repeated mission requests.
+falsifier: A source reports energy without a port interaction; adding a source creates unaccounted energy; UI state diverges from source channels; checkpoint recovery changes event identity; or failed missions are displayed as successful deployments.
+schema_changes: [deployment-world-v2, deployment-run-v2, deployment-checkpoint-v2]
+tests: [tests/deployments/test_world.py]
+negative_controls: [dark solar, zero temperature difference, stationary rotary, distant receiver, high load, checkpoint tamper, disabled hybrid source]
+exit_gates: [four source port families, six scene manifests, coupled repeated missions, numerical ledger, exact checkpoint resume, zero invented visual channels, offline 3D replay]
+command: ./init.sh
+artifacts: [docs/deployments/validation.json, docs/deployments/IMPLEMENTATION.md]
+validation_receipt: 68 tests passed via ./init.sh; six offline browser scenes, controls and mobile passed in docs/deployments/browser-validation.json; exact frozen A/B0 identities retained.
+cost_cap: zero model calls; local simulation only; fewer than 1000 validation runs and 10 seconds per scene
+claim_boundary: Uncalibrated computational deployment models and illustrative geometry; not FEM, measured harvester performance, radio propagation validation or hardware transfer.
+stop_condition: Frozen A/B0 or previous rejected knowledge changes, energy/identity tests fail, or launch requires unconfigured model spending.
+handoff: BC-001-campaign-execution
+limitations: [analytic source abstractions, synthetic environments and signals, simple receiver range model, source equations differ by family]

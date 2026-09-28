@@ -1,0 +1,30 @@
+import {chromium} from '@playwright/test';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {pathToFileURL} from 'node:url';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const root=path.resolve(import.meta.dirname,'../..'),out=path.join(root,'docs/campaign');await mkdir(out,{recursive:true});
+const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const page=await browser.newPage({viewport:{width:1512,height:1120}}),errors=[],network=[];
+page.on('pageerror',e=>errors.push(e.message));await page.route(/^https?:/,async r=>{network.push(r.request().url());await r.abort()});
+try{
+ await page.goto(pathToFileURL(path.join(root,'apps/world-studio/dist/index.html')).href+'?view=campaign');
+ await page.getByRole('heading',{name:'Experience, under test.'}).waitFor();
+ assert.equal(await page.locator('.campaign-generations button').count(),3);
+ assert((await page.locator('.campaign-metrics').textContent()).includes('36'));
+ await page.screenshot({path:path.join(out,'campaign-overview.png'),fullPage:false});
+ await page.locator('.campaign-generations button').nth(2).click();await page.getByRole('button',{name:'Inspect detached Python program'}).click();
+ assert((await page.locator('.campaign-code').textContent()).includes('def plan'));
+ await page.locator('.campaign-code').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'knowledge-program.png')});
+ await page.getByLabel('Campaign phase').selectOption('C2');assert.equal(await page.locator('.campaign-trial-list button').count(),12);
+ await page.locator('.campaign-trial-list button').last().click();assert((await page.locator('.campaign-trial-title').textContent()).includes('NOT VERIFIED'));
+ await page.locator('.campaign-trials').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'agent-trajectory.png')});
+ await page.locator('.campaign-replay>summary').click();await page.getByLabel('Agent run replay time').fill('0.6');
+ assert((await page.locator('.campaign-replay .time-readout').textContent()).includes('0.600'));
+ await page.locator('.campaign-replay').scrollIntoViewIfNeeded();await page.waitForTimeout(500);await page.screenshot({path:path.join(out,'submitted-system.png')});
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(out,'mobile.png'),fullPage:false});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2),false);
+ assert.deepEqual(errors,[]);assert.deepEqual(network,[]);
+ await writeFile(path.join(out,'browser-validation.json'),JSON.stringify({status:'pass',errors,network,controls:['phase','trial','generation','program','matched-replay','mobile'],captured_at:new Date().toISOString()},null,2));
+ console.log('Campaign outcomes, code lineage, exact submitted-system replay and offline mobile controls passed.');
+}finally{await browser.close()}

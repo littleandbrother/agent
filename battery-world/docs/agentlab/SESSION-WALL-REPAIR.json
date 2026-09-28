@@ -1,0 +1,95 @@
+{
+  "date": "2026-09-23",
+  "feature": "BFA-016-product-delivery",
+  "status": "complete",
+  "scope": "Interactive wall deadline repair only",
+  "failure": {
+    "owner": "pi-chat-cf37636f82c771a4",
+    "started": 1790167559.933525,
+    "ended": 1790168159.976318,
+    "exit_code": -9,
+    "error": "SESSION_WALL_LIMIT",
+    "trace_hash": "39da2c34db8e7f2372991bc09d3d6d3af9ce631c81bec378e29ad70039e82691",
+    "elapsed_seconds": 600.0427927970886
+  },
+  "root_causes": [
+    "Interactive Pi was killed after a fixed 600 seconds regardless of renewed user-turn lease",
+    "Terminal deadline pause could be overwritten by the log watcher ingesting a late abort event"
+  ],
+  "policy": {
+    "new_user_message_seconds": 1800,
+    "graceful_shutdown_seconds": 10,
+    "deadline_source": "latest valid persisted explicit user message",
+    "duplicates_background_retries_renew": false,
+    "existing_leases_retroactively_extended": false,
+    "batch_seconds": 600,
+    "terminal_status": "PAUSED",
+    "forced_kill_only_after_grace": true
+  },
+  "validation": {
+    "full_init_exit": 0,
+    "python_tests": 316,
+    "python_duration_seconds": 163.77,
+    "sdk_and_studio": "checks, build and reproduction passed",
+    "targeted_chat_tests": 10,
+    "process_supervision_tests": 7,
+    "recovery_tests": 7,
+    "javascript_projection": "passed",
+    "actual_pi": "Local fixture provider: tool wait, accelerated isolated deadline, graceful exit 0, pause, same session path and byte-identical history prefix, resumed reply",
+    "long_wait": "Accelerated clock at 25 minutes; not a real 30-minute paid run",
+    "first_full_check": "Caught pause-overwritten-by-abort race; corrected and reran full init successfully",
+    "first_failure_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/session-wall-repair-20260923/init-before-watcher-fix.log",
+    "final_log": "/Users/depengsu/Documents/bf-agent-workbench/verification/session-wall-repair-20260923/init.log"
+  },
+  "deployment": {
+    "url": "http://127.0.0.1:8768/",
+    "health": {
+      "concurrency": {
+        "active": [],
+        "limit": 3
+      },
+      "expires": 1789669026.0093598,
+      "interactive_wall_seconds": 1800,
+      "limit_usd": 10.0,
+      "local": "connected",
+      "model": "ready_for_dispatch",
+      "network": "not_probed",
+      "note": "本地连接不代表模型响应；发送后以真实事件显示进展。",
+      "reasons": [],
+      "upper_bound_usd": 8.466593999999986
+    },
+    "browser": "Actual Codex tab checked: old error translated, same user history, input editable, product v4 with 17 parts; no message sent"
+  },
+  "preservation": {
+    "model_requests_count": 1524,
+    "model_requests_sha256": "0852a61113ba0e2627a54e510e88b91ae01119349651a11ac4722ef943cf497c",
+    "model_limits": {
+      "id": 1,
+      "total_usd": 10.0,
+      "request_usd": 0.19,
+      "max_tokens": 50000000,
+      "expires": 1789669026.0093598
+    },
+    "leases_sha256": "93195e65a89b4d12bdb9cb914b7d8074e1e6edb5e02423e5565b44a7a6bbb55b",
+    "traces": {
+      "pi-chat-cf37636f82c771a4": "39da2c34db8e7f2372991bc09d3d6d3af9ce631c81bec378e29ad70039e82691",
+      "pi-chat-7bbf6862d7109e25": "ce58a37c872e28918fac7656a9febf3fc5d153b89f49cad1324eb678401759c7"
+    },
+    "preserved": true,
+    "source_hashes_verified": true,
+    "root_scientific_features_sha256": "c0bdddfd21fc7de7b56bb4456c554349445a54a2ae018dca99e1b5a380c07e40",
+    "new_paid_calls": 0
+  },
+  "source_hashes": {
+    "packages/python/bfworld/src/bfworld/agentlab/launcher.py": "51cee07d1d32198d60d1ec1c15673d10a0811858f7e30987b38e5af8118b59a8",
+    "packages/python/bfworld/src/bfworld/agentlab/recovery.py": "2648cab60a55b401a5f56413ab2c15c4c5ca93175bd58ced08198436e223ad64",
+    "packages/python/bfworld/src/bfworld/agentlab/chat.py": "7d486750357feea9cf7cc95b8894a82985678a38152c945e8da17062991d7fb7",
+    "apps/agent-studio/app.js": "8a01821582c589b4e011b0fc8e2cfa4b25420a7614e6912ff0f5e1fe576766e8",
+    "apps/agent-studio/conversation.js": "91f67662afa9dd687a9f80e62692517ebd34f0431444647b00bafc65b2bf7ed1",
+    "tests/agentlab/test_interactive_deadline.py": "9ea5a9fd0b1873f485f788a145b060ed713a19eb8d456b306014c8bd3d5d7d52",
+    "tests/agentlab/test_chat.py": "7462b8c65ff5d03e759c0312928440cbc3388fae30a4e0835083ca83a8c5f02d",
+    "tests/agentlab/conversation_projection.cjs": "73f4ab7d461f07d9701ae5c7b06f11480f92477961e6c88a1883ddf253b51cbf"
+  },
+  "evidence_directory": "/Users/depengsu/Documents/bf-agent-workbench/verification/session-wall-repair-20260923",
+  "claim_boundary": "No new product acceptance, hardware, manufacturing, scientific or RSI result. Root scientific init not run. No Git commit."
+}

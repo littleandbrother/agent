@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://battery-world.local/contracts/v1/event.schema.json",
+  "title": "Battery World Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "index", "logical_time", "type", "payload", "previous_hash", "event_hash"],
+  "properties": {
+    "schema_version": {"const": "bfworld-event-v1"},
+    "run_id": {"type": "string"},
+    "index": {"type": "integer", "minimum": 0},
+    "logical_time": {"type": "integer", "minimum": 0},
+    "type": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"},
+    "previous_hash": {"type": ["string", "null"]},
+    "event_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}
+

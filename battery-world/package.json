@@ -1,0 +1,31 @@
+{
+  "name": "battery-world-workspace",
+  "private": true,
+  "version": "0.1.0-a1",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "check:sdk": "tsc -p packages/typescript/bfworld-sdk/tsconfig.json --noEmit",
+    "check:studio": "tsc -p apps/world-studio/tsconfig.json --noEmit",
+    "build:studio": ".venv/bin/python scripts/build_studio.py && node apps/world-studio/build.mjs",
+    "studio": ".venv/bin/python scripts/serve_studio.py",
+    "test:studio": "node apps/world-studio/browser-test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@types/three": "0.185.4",
+    "esbuild": "0.28.2",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.7.0",
+    "lucide-react": "1.41.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.185.1"
+  }
+}

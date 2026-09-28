@@ -1,0 +1,20 @@
+schema_version: battery-world-feature-v1
+id: BFA-006-model-recovery-and-chat-polish
+status: complete
+owner: bf-agent-coordinator
+objective: Resolve verified pre-send TLS failures, restore explicitly requested interactive execution under existing monetary/token caps, add case suggestions and hover response usage, remove composer settings and retry clutter.
+hypothesis: A proven connection-stage failure can be reconciled without inventing provider usage, while each new user message receives a bounded interactive execution lease instead of inheriting an expired batch-test window.
+falsifier: Uncertain sent requests are released, original budget caps increase, idle/background work renews a lease, historical evidence is overwritten, usage is estimated as observed, or UI marks a failed run successful.
+paper_claim: Operational recovery and conversation UI only.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, docs/agentlab/, docs/PROGRESS.md, project/features/BFA-006-model-recovery-and-chat-polish/, PROJECT.yaml]
+external_owned_paths: [/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/, /Users/depengsu/Documents/bf-agent-workbench/verification/, /Users/depengsu/Documents/bf-agent-workbench/state/]
+schema_changes: [bf-model-resolution-v1, bf-interactive-lease-v1, bf-owner-validation-cap-v1]
+targeted_tests: [TLS connect failure with zero application bytes, unknown sent request stays blocked, source-bound historical reconciliation, user-only lease, original dollar/token/request/experiment caps, real model chat, suggestions collapse, assistant hover copy and exact usage, inline execution errors]
+negative_controls: [forged source evidence, different SSL error location, provider read failure, expired background lease, duplicate message renewal, unknown usage as zero tokens, replay of old pending requests]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/MODEL-RECOVERY.json
+cost_cap: Original USD 3.9279102 global cap, USD 0.19 per request and 9892099 token cap unchanged. Live repair validation capped at USD 0.05 incremental. User-triggered interactive leases at most 600 seconds; old batch window unchanged.
+claim_boundary: No new scientific trial or hardware claim. Historical uncertainty is resolved only with transport-stage evidence; original ledger rows and reservations are retained.
+stop_condition: Uncertain post-send usage, unverified runtime identity, total budget exhaustion, or historical evidence mismatch.
+limitations: Ambiguous post-send interruptions still block new calls. No CAD/FEM or hardware acceptance. Existing cumulative caps remain enforced.
+handoff: Delivered on localhost 8768. 238 isolated full-init tests and 47 agentlab tests passed; two real model responses cost at most USD 0.0018543. Preserve original budget caps and resolution evidence.

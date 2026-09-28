@@ -1,0 +1,31 @@
+import {chromium} from '@playwright/test';
+import {spawn} from 'node:child_process';
+import {mkdtemp,writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const root=path.resolve(import.meta.dirname,'../..'),state=await mkdtemp(path.join(tmpdir(),'bw-live-test-'));
+const server=spawn(path.join(root,'.venv/bin/python'),[path.join(root,'scripts/serve_studio.py'),'--port','0','--state',state,'--budget','5'],{cwd:root,stdio:['ignore','pipe','ignore']});
+let browser;
+try{
+ const url=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server startup timeout')),10000);server.stdout.on('data',chunk=>{const match=chunk.toString().match(/http:\/\/127\.0\.0\.1:\d+/);if(match){clearTimeout(timer);resolve(match[0])}});server.on('error',reject);server.on('exit',code=>reject(Error(`server exited ${code}`)))});
+ browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const page=await browser.newPage({viewport:{width:1512,height:1080}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(url);await page.getByRole('button',{name:'Experiments 实验与修订'}).click();
+ await page.getByRole('button',{name:'Check service',exact:true}).click();
+ await page.getByLabel('Pre-experiment prediction').fill('Developer UI test: the small storage should brown out during TX.');
+ await page.getByRole('button',{name:'Run local experiment'}).click();
+ await page.getByRole('heading',{name:'A design boundary was crossed.'}).waitFor();
+ await page.getByLabel('Experiment capacitance').focus();await page.keyboard.press('End');
+ await page.getByRole('button',{name:'Run local experiment'}).click();
+ await page.getByRole('heading',{name:'Physical mission passed',exact:true}).waitFor();
+ assert.equal(await page.locator('.console-history button').count(),2);
+ const status=await (await fetch(`${url}/api/status`)).json();assert.equal(status.reserved_experiments,2);assert.equal(status.attempts,2);
+ const forbidden=await fetch(`${url}/api/experiment`,{method:'POST',headers:{'Content-Type':'application/json','Origin':'http://evil.invalid'},body:'{}'});assert.equal(forbidden.status,403);
+ const tamper=await fetch(`${url}/api/experiment`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idempotency_key:'bad',profile:'hidden'})});assert.equal(tamper.status,400);
+ const traversal=await fetch(`${url}/PROJECT.yaml`);assert.equal(traversal.status,404);
+ await page.screenshot({path:path.join(root,'docs/studio/screenshots/live-experiments.png'),fullPage:true});
+ assert.deepEqual(errors,[]);
+ const report={status:'passed',checks:['actual-browser-to-solver','failed-design','revised-passing-design','durable-cost-ledger','cross-origin-denied','hidden-profile-denied','repository-not-served'],reserved_experiments:2,external_model_calls:0,page_errors:errors};
+ await writeFile(path.join(root,'docs/studio/live-validation.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
+}finally{if(browser)await browser.close();server.kill('SIGTERM')}

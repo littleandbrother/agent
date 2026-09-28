@@ -1,0 +1,1023 @@
+{
+  "schema_version": "bf-engineering-delivery-contract-v1",
+  "title": "可修改、可复算、可制造、可烧录的数字产品工程包",
+  "directories": [
+    "需求与验收",
+    "参考与采用说明",
+    "机械CAD与装配",
+    "动力学与COMSOL",
+    "电路原理图与SPICE",
+    "PCB与制造文件",
+    "固件与烧录",
+    "接收端与协议",
+    "联合仿真与测试",
+    "原始数据",
+    "图表与绘图程序",
+    "版本清单与验收报告"
+  ],
+  "tasks": [
+    {
+      "id": "requirements",
+      "label": "产品需求与逐项验收",
+      "directory": "需求与验收",
+      "depends_on": [],
+      "files": [
+        {
+          "role": "需求与验收表",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "说明",
+          "extensions": [
+            ".md"
+          ]
+        }
+      ],
+      "acceptance": "每个目标都有单位、工况、评价方法和阈值；未知参数标为假设",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "references",
+      "label": "全文、资料与采用关系",
+      "directory": "参考与采用说明",
+      "depends_on": [
+        "requirements"
+      ],
+      "files": [
+        {
+          "role": "全文资料",
+          "extensions": [
+            ".pdf"
+          ]
+        },
+        {
+          "role": "来源与版本",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "采用关系",
+          "extensions": [
+            ".md"
+          ]
+        }
+      ],
+      "acceptance": "源文件哈希、位置、许可、适用范围；三篇配置分开",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "interfaces",
+      "label": "系统接口与能量时序预算",
+      "directory": "需求与验收",
+      "depends_on": [
+        "requirements",
+        "references"
+      ],
+      "files": [
+        {
+          "role": "接口约定",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "系统图",
+          "extensions": [
+            ".svg"
+          ]
+        },
+        {
+          "role": "预算",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "完全放电起步；输入与输出电容分开；前后级电压电流时间一致",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "cad",
+      "label": "参数化采能机构、安装、电子装配与外壳",
+      "directory": "机械CAD与装配",
+      "depends_on": [
+        "interfaces"
+      ],
+      "files": [
+        {
+          "role": "参数化源",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "参数",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "交换几何",
+          "extensions": [
+            ".step"
+          ]
+        },
+        {
+          "role": "打印零件",
+          "extensions": [
+            ".stl"
+          ]
+        }
+      ],
+      "acceptance": "原生实体、重建读回、真实尺寸和四类结构齐全；不能用包络证明器件内部几何",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "drawings",
+      "label": "带尺寸工程图、BOM及装配工艺",
+      "directory": "机械CAD与装配",
+      "depends_on": [
+        "cad"
+      ],
+      "files": [
+        {
+          "role": "工程图",
+          "extensions": [
+            ".svg",
+            ".pdf"
+          ]
+        },
+        {
+          "role": "机械BOM",
+          "extensions": [
+            ".csv"
+          ]
+        },
+        {
+          "role": "装配说明",
+          "extensions": [
+            ".md"
+          ]
+        }
+      ],
+      "acceptance": "孔位、公差、材料、磁化方向、胶层和夹持长度明确",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "clearance",
+      "label": "运动包络、间隙与装配检查",
+      "directory": "机械CAD与装配",
+      "depends_on": [
+        "cad",
+        "drawings"
+      ],
+      "files": [
+        {
+          "role": "检查数据",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "包络图",
+          "extensions": [
+            ".svg"
+          ]
+        },
+        {
+          "role": "检查程序",
+          "extensions": [
+            ".py"
+          ]
+        }
+      ],
+      "acceptance": "静态干涉、扫掠间隙、限位、壁厚、紧固和工具可达性分别检查",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "presentation",
+      "label": "同版 CAD 展示与工作动画",
+      "directory": "机械CAD与装配",
+      "depends_on": [
+        "cad"
+      ],
+      "files": [
+        {
+          "role": "原生展示",
+          "extensions": [
+            ".blend"
+          ]
+        },
+        {
+          "role": "网页模型",
+          "extensions": [
+            ".glb"
+          ]
+        },
+        {
+          "role": "渲染",
+          "extensions": [
+            ".png"
+          ]
+        },
+        {
+          "role": "动画",
+          "extensions": [
+            ".mp4",
+            ".gif"
+          ]
+        }
+      ],
+      "acceptance": "CAD/GLB尺寸读回；示意动画与仿真驱动分开",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "magnetics",
+      "label": "磁力、势能、稳定与释放",
+      "directory": "动力学与COMSOL",
+      "depends_on": [
+        "interfaces",
+        "cad"
+      ],
+      "files": [
+        {
+          "role": "模型",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "曲线原始值",
+          "extensions": [
+            ".csv"
+          ]
+        },
+        {
+          "role": "验证",
+          "extensions": [
+            ".json"
+          ]
+        }
+      ],
+      "acceptance": "坐标、磁化符号、尺寸域、力势梯度一致；有限尺寸效应和安装误差",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "fem",
+      "label": "COMSOL 模态、应力、压电与瞬态",
+      "directory": "动力学与COMSOL",
+      "depends_on": [
+        "cad",
+        "magnetics"
+      ],
+      "files": [
+        {
+          "role": "原生模型",
+          "extensions": [
+            ".mph"
+          ]
+        },
+        {
+          "role": "重建源",
+          "extensions": [
+            ".java",
+            ".py"
+          ]
+        },
+        {
+          "role": "边界材料",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "原始值",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "梁+压电+磁体质量；极化、夹持、初值、负载与接触边界明确",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "convergence",
+      "label": "有限元网格与时间收敛",
+      "directory": "动力学与COMSOL",
+      "depends_on": [
+        "fem"
+      ],
+      "files": [
+        {
+          "role": "收敛数据",
+          "extensions": [
+            ".csv"
+          ]
+        },
+        {
+          "role": "收敛报告",
+          "extensions": [
+            ".json"
+          ]
+        }
+      ],
+      "acceptance": "不同网格/时间步及独立解析或跨实现核对；保留失败",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "mapping",
+      "label": "有限元与降阶模型对应",
+      "directory": "动力学与COMSOL",
+      "depends_on": [
+        "fem",
+        "convergence"
+      ],
+      "files": [
+        {
+          "role": "参数映射",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "模型对照",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "刚度、质量、阻尼、耦合、电容来源；不可混用不同论文几何",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "circuit-selection",
+      "label": "SEH、SP-SSHI、SP-SECE 方案比较",
+      "directory": "电路原理图与SPICE",
+      "depends_on": [
+        "interfaces",
+        "references"
+      ],
+      "files": [
+        {
+          "role": "方案比较",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "决策理由",
+          "extensions": [
+            ".md"
+          ]
+        }
+      ],
+      "acceptance": "同工况比较能量/应力/启动；无法复现的候选保留未通过",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "schematic",
+      "label": "完整原生立创原理图",
+      "directory": "电路原理图与SPICE",
+      "depends_on": [
+        "circuit-selection"
+      ],
+      "files": [
+        {
+          "role": "立创工程",
+          "extensions": [
+            ".epro2"
+          ]
+        },
+        {
+          "role": "原始文档",
+          "extensions": [
+            ".epro-source"
+          ]
+        },
+        {
+          "role": "审查图",
+          "extensions": [
+            ".pdf",
+            ".svg"
+          ]
+        },
+        {
+          "role": "真实BOM",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "压电、电源、MCU/RF和测试调试全路径；真实引脚、网络、封装",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "spice",
+      "label": "可执行 SPICE 与模型来源",
+      "directory": "电路原理图与SPICE",
+      "depends_on": [
+        "circuit-selection",
+        "mapping"
+      ],
+      "files": [
+        {
+          "role": "网表",
+          "extensions": [
+            ".cir",
+            ".net"
+          ]
+        },
+        {
+          "role": "模型清单",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "结果",
+          "extensions": [
+            ".csv",
+            ".gz"
+          ]
+        }
+      ],
+      "acceptance": "原厂/兼容/通用/行为模型分层；输入输出电容和冷启动反作用",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "electrical-checks",
+      "label": "ERC、耐压、极性及工作域",
+      "directory": "电路原理图与SPICE",
+      "depends_on": [
+        "schematic",
+        "spice"
+      ],
+      "files": [
+        {
+          "role": "原生检查",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "额定与模型映射",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "所有应力与额定核对；模型不含击穿时超域不得通过",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "pcb",
+      "label": "原生 PCB 布局布线与堆叠",
+      "directory": "PCB与制造文件",
+      "depends_on": [
+        "schematic",
+        "cad"
+      ],
+      "files": [
+        {
+          "role": "立创工程",
+          "extensions": [
+            ".epro2"
+          ]
+        },
+        {
+          "role": "板源",
+          "extensions": [
+            ".epro-source"
+          ]
+        },
+        {
+          "role": "板层与布线图",
+          "extensions": [
+            ".svg",
+            ".pdf"
+          ]
+        }
+      ],
+      "acceptance": "漏电、功率回路、天线净空、调试反供电、孔位与CAD一致",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "pcb-checks",
+      "label": "DRC、网络、封装与装配一致性",
+      "directory": "PCB与制造文件",
+      "depends_on": [
+        "pcb",
+        "electrical-checks",
+        "clearance"
+      ],
+      "files": [
+        {
+          "role": "原生检查",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "一致性表",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "DRC零未连接；逐引脚网表、元件封装和机械孔位核对",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "manufacturing",
+      "label": "制造、贴片、装配与测试点",
+      "directory": "PCB与制造文件",
+      "depends_on": [
+        "pcb-checks"
+      ],
+      "files": [
+        {
+          "role": "Gerber/钻孔",
+          "extensions": [
+            ".zip"
+          ]
+        },
+        {
+          "role": "BOM/CPL",
+          "extensions": [
+            ".csv"
+          ]
+        },
+        {
+          "role": "装配与测试点",
+          "extensions": [
+            ".svg",
+            ".pdf"
+          ]
+        },
+        {
+          "role": "制造说明",
+          "extensions": [
+            ".md"
+          ]
+        }
+      ],
+      "acceptance": "从同版检查过PCB导出，重读制造层；不是实际下单生产",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "firmware",
+      "label": "完整目标固件与构建",
+      "directory": "固件与烧录",
+      "depends_on": [
+        "interfaces",
+        "schematic"
+      ],
+      "files": [
+        {
+          "role": "C源",
+          "extensions": [
+            ".c"
+          ]
+        },
+        {
+          "role": "构建器",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "ELF",
+          "extensions": [
+            ".elf",
+            ".out"
+          ]
+        },
+        {
+          "role": "HEX",
+          "extensions": [
+            ".hex"
+          ]
+        },
+        {
+          "role": "BIN",
+          "extensions": [
+            ".bin"
+          ]
+        }
+      ],
+      "acceptance": "固定工具链SDK板时钟引脚和链接布局；真实目标编译和重复二进制",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "firmware-resources",
+      "label": "Flash、RAM、栈与行为图",
+      "directory": "固件与烧录",
+      "depends_on": [
+        "firmware"
+      ],
+      "files": [
+        {
+          "role": "资源报告",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "状态图",
+          "extensions": [
+            ".svg"
+          ]
+        },
+        {
+          "role": "负载模型",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "静态RAM含栈/堆预算；编译栈分析不冒充动态峰值；负载标来源",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "flash-guide",
+      "label": "烧录镜像、接线与调试流程",
+      "directory": "固件与烧录",
+      "depends_on": [
+        "firmware",
+        "pcb-checks"
+      ],
+      "files": [
+        {
+          "role": "说明",
+          "extensions": [
+            ".md"
+          ]
+        },
+        {
+          "role": "烧录脚本",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "协议栈",
+          "extensions": [
+            ".hex"
+          ]
+        }
+      ],
+      "acceptance": "准备与实际烧录分开；器件ID检查；不自动全片擦除",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "receiver",
+      "label": "接收扫描、协议与事件归并",
+      "directory": "接收端与协议",
+      "depends_on": [
+        "firmware"
+      ],
+      "files": [
+        {
+          "role": "接收程序",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "协议说明",
+          "extensions": [
+            ".md"
+          ]
+        },
+        {
+          "role": "原始日志",
+          "extensions": [
+            ".jsonl"
+          ]
+        }
+      ],
+      "acceptance": "TX、RX、物理事件三个对象；设备身份、重复、重启和来源可追溯",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "direction",
+      "label": "判向规则、分布与拒判",
+      "directory": "接收端与协议",
+      "depends_on": [
+        "receiver",
+        "magnetics"
+      ],
+      "files": [
+        {
+          "role": "判别程序",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "分布与混淆",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "测试数据",
+          "extensions": [
+            ".jsonl"
+          ]
+        }
+      ],
+      "acceptance": "训练/评估分开；包数不可识别时拒判；不拿合成标签作实物真值",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "receiver-tests",
+      "label": "接收丢包、延迟、重复、重启回放",
+      "directory": "接收端与协议",
+      "depends_on": [
+        "receiver",
+        "direction"
+      ],
+      "files": [
+        {
+          "role": "测试程序",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "报告",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "原始回放",
+          "extensions": [
+            ".jsonl"
+          ]
+        }
+      ],
+      "acceptance": "独立数据覆盖故障与多设备；不能由TX直接当RX成功",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "joint",
+      "label": "同一动作跨域时间线",
+      "directory": "联合仿真与测试",
+      "depends_on": [
+        "mapping",
+        "spice",
+        "firmware-resources",
+        "receiver-tests"
+      ],
+      "files": [
+        {
+          "role": "联合模型",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "时序",
+          "extensions": [
+            ".csv",
+            ".gz"
+          ]
+        },
+        {
+          "role": "接口与输入",
+          "extensions": [
+            ".json"
+          ]
+        }
+      ],
+      "acceptance": "位置速度力位移应变/压电V I/电感/储能/稳压/MCU/TX/RX事件同轴",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "matrix",
+      "label": "工况与负控矩阵",
+      "directory": "联合仿真与测试",
+      "depends_on": [
+        "requirements",
+        "joint"
+      ],
+      "files": [
+        {
+          "role": "预声明工况",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "全部结果",
+          "extensions": [
+            ".csv"
+          ]
+        },
+        {
+          "role": "运行器",
+          "extensions": [
+            ".py"
+          ]
+        }
+      ],
+      "acceptance": "冷启动、开关/部分、慢快、容差、泄漏、阶段掉电、丢包、连续、无动作",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "system-acceptance",
+      "label": "整机服务、适用域与失败分类",
+      "directory": "联合仿真与测试",
+      "depends_on": [
+        "matrix",
+        "electrical-checks",
+        "pcb-checks"
+      ],
+      "files": [
+        {
+          "role": "验收",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "指标",
+          "extensions": [
+            ".csv"
+          ]
+        }
+      ],
+      "acceptance": "事件成功率/拒判/延迟/能量/应力/阻力；求解失败与设计/链路失败分开",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "raw-data",
+      "label": "完整原始数据与来源",
+      "directory": "原始数据",
+      "depends_on": [
+        "matrix"
+      ],
+      "files": [
+        {
+          "role": "原始数据",
+          "extensions": [
+            ".gz",
+            ".csv",
+            ".jsonl"
+          ]
+        },
+        {
+          "role": "清单",
+          "extensions": [
+            ".json"
+          ]
+        }
+      ],
+      "acceptance": "含全部失败与日志；图不得替代数值；文献/模拟/本地实测分开",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "figures",
+      "label": "十组论文式图与可重绘程序",
+      "directory": "图表与绘图程序",
+      "depends_on": [
+        "raw-data",
+        "presentation",
+        "system-acceptance"
+      ],
+      "files": [
+        {
+          "role": "图",
+          "extensions": [
+            ".png",
+            ".svg",
+            ".pdf"
+          ]
+        },
+        {
+          "role": "绘图程序",
+          "extensions": [
+            ".py"
+          ]
+        },
+        {
+          "role": "图源映射",
+          "extensions": [
+            ".json"
+          ]
+        }
+      ],
+      "acceptance": "每个子图绑定模型/工况/原始列/来源；缺失组不能画伪数据",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    },
+    {
+      "id": "release",
+      "label": "版本包、验收与复现指南",
+      "directory": "版本清单与验收报告",
+      "depends_on": [
+        "drawings",
+        "manufacturing",
+        "flash-guide",
+        "figures"
+      ],
+      "files": [
+        {
+          "role": "版本清单",
+          "extensions": [
+            ".json"
+          ]
+        },
+        {
+          "role": "复现指南",
+          "extensions": [
+            ".md"
+          ]
+        },
+        {
+          "role": "独立包",
+          "extensions": [
+            ".zip"
+          ]
+        }
+      ],
+      "acceptance": "十二目录、哈希、输入工具依赖、结果、失效关系；独立解包重建",
+      "scope": "digital-engineering",
+      "hardware_required": false
+    }
+  ],
+  "status_axes": {
+    "delivery": [
+      "missing",
+      "partial",
+      "present",
+      "invalid",
+      "stale"
+    ],
+    "validation": [
+      "not_run",
+      "passed",
+      "failed",
+      "stale"
+    ]
+  },
+  "rules": [
+    "原生文件、可视化、证据三层分别交付",
+    "缺少用户输入时继续显式假设，不强制追问",
+    "工具执行成功不等于任务验收",
+    "参考辅助与自主实验隔离",
+    "无硬件时制造和烧录准备可交付，实测保持未执行",
+    "神经网络和NAS仅在规则不足时进入可选分支"
+  ],
+  "hardware_gates": [
+    "机械样机装配",
+    "目标板烧录启动",
+    "同步功耗测量",
+    "真实无线接收与方向统计"
+  ],
+  "figure_groups": [
+    "产品与场景",
+    "结构与原理",
+    "动力学",
+    "有限元",
+    "电路与PCB",
+    "采能性能",
+    "电源与固件",
+    "接收与判向",
+    "整机性能",
+    "设计演化"
+  ]
+}

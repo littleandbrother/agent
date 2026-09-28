@@ -1,0 +1,23 @@
+schema_version: battery-world-feature-v1
+id: BFA-004-folders-recall
+status: complete
+owner: bf-agent-coordinator
+objective: Organizable sessions and folders with shared memory, prompts, Harness and tool selection; truthful message recall into the composer and Pi context branch.
+hypothesis: Folder members can load one versioned shared runtime context and a recalled message can leave future model context without erasing scientific or billing history.
+falsifier: Cross-folder memory access, recalled message re-dispatch, runtime configuration mismatch, source-history mutation, duplicate execution, or budget bypass.
+paper_claim: Engineering organization and context control only.
+owned_paths: [packages/python/bfworld/src/bfworld/agentlab/, apps/agent-studio/, tests/agentlab/, docs/agentlab/, project/features/BFA-004-folders-recall/, PROJECT.yaml]
+external_owned_paths: [/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/, /Users/depengsu/Documents/bf-agent-workbench/verification/, /Users/depengsu/Documents/bf-agent-workbench/state/]
+schema_changes: [bf-agent-folder-v1, bf-agent-sidebar-entry-v1, bf-agent-shared-context-v1, bf-agent-recall-v1]
+targeted_tests: [folder order and membership, legacy metadata isolation, recycle restore, optimistic shared configuration, shared memory owner isolation, actual Pi tool registration, queued recall, running recall, Pi branch recovery, browser menus and dialogs]
+negative_controls: [cross-folder access, stale settings write, forged tool name, unknown usage dispatch, recalled input retransmission, active move, historical overwrite]
+command: PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest discover -s tests/agentlab -v
+output_artifact: docs/agentlab/FOLDERS-RECALL.json
+cost_cap: Zero external model calls; prior UNKNOWN provider request remains held and all original budget limits retained.
+claim_boundary: Shared notes are unverified memory; existing computational and scientific evidence remains immutable.
+stop_condition: Unreconciled usage, running mutation race, context branch mismatch, or historical hash change.
+limitations: Recall removes conversation context and returns text to the composer; completed experiments and file effects are not undone.
+handoff: Delivered; see docs/agentlab/FOLDERS-RECALL.md. External TLS EOF usage remains UNKNOWN; do not reset its reservation or replay paid requests.
+
+completion_evidence: docs/agentlab/FOLDERS-RECALL.json
+verification: 224 isolated full-init tests; 33 final targeted tests; TypeScript and JavaScript checks; live browser QA. 1309 current historical files, 1365 original baseline files and 126 scientific source files unchanged. Zero new provider calls.
