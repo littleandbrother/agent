@@ -33,34 +33,15 @@
     const product=current.product, p=product?.proposal?.payload;
     if(tab!=='model')delete root.dataset.modelKey;
     if(tab==='model'){
-      const assembly=product?.assembly,record=assembly?.revisions?.find(r=>r.revision===selectedVersions.get(current.id))||assembly?.current;
-      if(!record){delete root.dataset.modelKey;root.innerHTML='<p class="section-empty">完整产品生成后，在这里查看可旋转模型、零件和验证状态。</p>';return}
-      const job=assembly.jobs.find(j=>j.assembly?.revision===record.revision&&j.status==='SUCCEEDED');
-      const key=JSON.stringify([current.id,record.revision,job?.id,assembly.checks,assembly.delivery]);if(root.dataset.modelKey===key)return;root.dataset.modelKey=key;
-      root.innerHTML=`<label class="section-note">版本 <select id="product-version">${[...assembly.revisions].reverse().map(r=>`<option value="${r.revision}" ${r.revision===record.revision?'selected':''}>v${r.revision}${r.revision===assembly.current.revision?' · 当前':' · 历史'}</option>`).join('')}</select></label><div class="card-meta">产品 v${record.revision} · ${record.payload.parts.length} 个零件</div><h3>${esc(record.payload.title)}</h3>${assembly.delivery?`<p class="section-note">${assembly.delivery.passed?'✓ 当前声明阶段条件已满足':'待完成：'+esc(assembly.delivery.missing.map(x=>({'missing_published_file:document':'发布说明','missing_published_file:source':'发布源码'}[x]||x)).join('、'))}</p>`:''}${job?`<iframe class="product-model-viewer" title="可交互产品三维模型" src="/model-viewer.html?job=${encodeURIComponent(job.id)}"></iframe><button class="quiet" id="expand-model">放大查看 ↗</button>`:'<p class="section-note">当前版本尚未生成模型；历史产物不会当作当前结果。</p>'}<details><summary>本版检查与待办</summary>${(record.revision===assembly.current.revision?assembly.checks:[{id:'历史版本检查请查看对应 result.json',passed:false}]).map(c=>`<p class="section-note">${c.passed?'✓':'○'} ${esc(checkNames[c.id]||c.id)}${c.status==='NOT_EVALUATED'?' · 待验证':''}</p>`).join('')}<p class="section-note">数字模型检查与实物验证分开记录。</p></details><details><summary>零件与尺寸来源</summary>${record.payload.parts.map(p=>`<p class="section-note"><b>${esc(p.name)}</b><br>${p.geometry.size_mm.map(x=>Number(x).toFixed(2)).join(' × ')} mm<br>${esc(p.source.note)}${p.source.url?` · <a href="${esc(p.source.url)}" target="_blank" rel="noreferrer">来源</a>`:''}</p>`).join('')}</details><details><summary>产品版本</summary>${assembly.revisions.map(r=>`<p class="section-note">v${r.revision} · ${esc(r.payload.title)} · ${r.hashes.physical_hash.slice(0,10)}${r.source_valid?'':' · 来源已撤回'}</p>`).join('')}</details>`;
-      root.querySelector('#product-version').onchange=e=>{selectedVersions.set(current.id,Number(e.target.value));delete root.dataset.modelKey;panel(root,'model',current,execution)};
-      root.querySelector('#expand-model')?.addEventListener('click',()=>{const d=document.createElement('dialog');d.className='model-dialog';d.innerHTML=`<form method="dialog"><button aria-label="关闭模型">×</button></form><iframe title="完整产品模型" src="/model-viewer.html?job=${encodeURIComponent(job.id)}"></iframe>`;document.body.append(d);d.addEventListener('close',()=>d.remove(),{once:true});d.showModal()});
+      const record=product?.assembly?.current;
+      delete root.dataset.modelKey;
+      root.innerHTML=`<h3>${esc(record?.payload.title||'产品成果')}</h3><p class="section-note">${record?'装配 v'+record.revision+' · '+record.payload.parts.length+' 个零件。':'尚未建立产品装配。'}在产品页统一查看可旋转模型、仿真曲线、版本变化与验收依据。</p><button id="open-product-results">打开产品成果 →</button>`;
+      root.querySelector('#open-product-results').onclick=()=>window.ProductWorkspace.showSession({view:'results'});
       return;
     }
     if(tab==='files'){
-      const files=product?.files||[],engineering=product?.engineering||[],published=product?.assembly?.files||[];
-      if(!files.length&&!engineering.length&&!published.length){root.innerHTML='<p class="section-empty">这里会出现真实生成的方案、设计参数、模型、渲染和实验记录。</p>';return}
-      const artifact=(id,name)=>'/api/engineering/jobs/'+encodeURIComponent(id)+'/artifact?name='+encodeURIComponent(name);
-      const publishedRow=f=>`<p class="section-note"><a href="/api/assembly/file?session=${encodeURIComponent(current.id)}&id=${encodeURIComponent(f.id)}" download="${esc(f.name)}" title="SHA-256 ${esc(f.digest)}">${esc(f.name)}</a> · v${f.revision}${f.integrity===false?' · 文件损坏':''}</p>`;
-      const currentFiles=new Map();for(const f of [...published].sort((a,b)=>a.created-b.created))if(!f.stale)currentFiles.set(f.kind+'|'+f.source,f);
-      const latest=[...currentFiles.values()],currentIds=new Set(latest.map(f=>f.id)),history=published.filter(f=>!currentIds.has(f.id));
-      root.innerHTML=(latest.length?'<h3>当前产品文件</h3>'+latest.map(publishedRow).join(''):'')+(history.length?`<details><summary>历史产品文件 · ${history.length}</summary>${history.map(publishedRow).join('')}</details>`:'')+`<details><summary>工程运行产物 · ${engineering.length}</summary>`+engineering.map(j=>`<h3>${esc(({'blender':'三维展示','comsol':'结构仿真','jlceda':'原理图与 PCB','product-model':'完整产品模型','event-transient':'机电与电路瞬态'}[j.engine]||j.engine))}</h3><p class="section-note">${esc(j.status)} · ${j.assembly?.revision?'产品 v'+j.assembly.revision:j.design_revision?'方案 v'+j.design_revision:j.engine==='jlceda'?'绑定的原生工程':'独立模板示例'}${j.stale?' · 旧方案产物':''}</p>${j.result?.artifacts?.some(a=>a.name==='preview.png')?`<img class="engineering-preview" src="${artifact(j.id,'preview.png')}" alt="尺寸参数化展示模型">`:''}<div class="engineering-artifacts">${(j.result?.artifacts||[]).filter(a=>['channels.csv','event-design.json','coarse.cir','fine.cir','model.blend','model.glb','preview.png','model.mph','metrics.csv','result.json','input.json','assembly.step','cad-readback.json','blender-readback.json','front.png','back.png','inside.png','exploded.png','front.svg','side.svg','top.svg','product_cad.py','energy.json','project.epro2','bom.csv','gerber.zip','schematic-netlist.net','pcb-netlist.net','schematic.epro-source','pcb.epro-source'].includes(a.name)).map(a=>`<a href="${artifact(j.id,a.name)}" download="${esc(a.name)}" title="SHA-256 ${esc(a.sha256)}">${esc(a.name)}</a>`).join('')}</div><p class="section-note">${esc(j.scope)}</p>`).join('')+'</details>'+[...new Set(files.map(f=>f.group))].map(group=>`<h3>${esc(group)}</h3>${files.filter(f=>f.group===group).map(f=>`<button class="product-file" data-product-file="${esc(f.id)}"><span>${esc(f.name)}</span><small>${esc(f.status|| (f.revision?'v'+f.revision:'用户资料'))}${f.stale?' · 来源已撤回':''}</small></button>`).join('')}`).join('');
-      root.querySelectorAll('[data-product-file]').forEach(b=>b.onclick=async()=>{
-        const cid=current.id;
-        try{
-          const file=await api('/api/conversations/'+cid+'/file?id='+encodeURIComponent(b.dataset.productFile));
-          if(window.BF.getSelection()!==cid||!$('[data-section="files"]').matches('[aria-pressed="true"]'))return;
-          let preview=file.content;if(file.name.endsWith('.json')){try{preview=JSON.stringify(JSON.parse(preview),null,2)}catch{}}
-          root.innerHTML=`<button id="back-product-files" class="quiet">← 文件</button><h3>${esc(file.name)}</h3><p class="section-note">SHA-256 ${esc(file.sha256.slice(0,16))}…${file.run_id?'<br>计算运行 '+esc(file.run_id):''}</p><button id="download-product-file" class="quiet">下载</button><pre class="product-preview">${esc(preview)}</pre>`;
-          $('#back-product-files').onclick=()=>panel(root,'files',current,execution);
-          $('#download-product-file').onclick=()=>{const url=URL.createObjectURL(new Blob([file.content],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-        }catch(e){window.BF.error(e.message)}
-      });
+      root.innerHTML='<h3>产品工程与交付物</h3><p class="section-note">模型、仿真曲线、固件源码和完整下载包统一保存在产品页。每份文件保留生成版本与适用范围。</p><button id="open-result-files">查看原始工程 →</button>';
+      root.querySelector('#open-result-files').onclick=()=>window.ProductWorkspace.showSession({view:'source'});
       return;
     }
     if(!p){
@@ -72,15 +53,23 @@
     root.innerHTML=`<div class="card-meta">方案 v${v} · ${product.approved?'已确认继续':'按假设探索中'}</div><h3>${esc(p.title)}</h3>${Object.entries(labels).map(([k,label])=>`<section class="proposal-field"><h4>${label}</h4><p>${esc(p[k])}</p></section>`).join('')}<details open><summary>场景假设 · 可修改</summary>${list(p.assumptions)}</details><details><summary>验收方式与边界</summary>${list(p.acceptance)}${list(p.limits)}</details><details><summary>当前证据与能力</summary><p class="section-note">${product.binding?'已绑定 '+esc(product.binding.task_id)+'：'+esc(product.binding.rationale):'尚未绑定工程实验；当前为方案探索。'}</p>${evidence.map(e=>`<p class="section-note">${esc(e.job_id)} · ${esc(e.design_status||e.status)} · 方案 v${e.revision}</p>`).join('')}<p class="section-note">${evidence.some(e=>e.design_status==='PASS')?'已有计算通过记录；现场使用仍待验收。':'尚无本版本计算通过记录。'}</p>${product.capabilities.map(c=>'<p class="section-note">'+esc(c.name)+' · '+(c.status==='available'?'已接入':'未接入')+'<br>'+esc(c.scope)+'</p>').join('')}</details><details><summary>来源与历史</summary><p class="section-note">Agent 根据会话消息提出方案；场景假设不是用户确认的现场事实。来源 ${esc(product.proposal.source_message)}</p>${product.records.filter(r=>r.kind==='proposal').map(r=>'<p class="section-note">v'+r.revision+' · '+esc(r.payload.title)+(r.stale?' · 来源已撤回':'')+'</p>').join('')}</details><div class="card-actions"><button data-product-adjust="${v}">补充或修改</button></div>`;
     bindCards(root);window.ReferencePanel.summary(root,current.id);
   }
+  const resultCache=new Map(),resultLoading=new Set();
   function handoff(current){
     let row=document.querySelector('#task-handoff');
     if(!row){row=document.createElement('details');row.id='task-handoff';row.className='section-note';document.querySelector('#conversation').before(row)}
-    const d=current?.product?.assembly?.delivery;row.hidden=!d;
-    if(!d)return;
-    const key=d.verdict_sha256;if(row.dataset.verdict===key)return;row.dataset.verdict=key;
-    const labels={'concept':'需求与方案','digital-model':'数字模型','engineering-package':'工程文件','computational-verification':'工程验收','hardware':'实物验收'};
-    row.innerHTML=`<summary>${esc(labels[d.target_stage]||d.target_stage)} · ${d.passed?'当前阶段已完成':d.missing.length+' 项待完成'}</summary><p>${esc(d.scope)}</p><p>${d.stages.map(s=>`${esc(s.label)}：${s.passed?'通过':s.status==='not_measured'?'未实测':'待完成'}`).join(' · ')}</p><button class="quiet" data-handoff-product>查看产品证据 →</button>`;
-    row.querySelector('button').onclick=()=>window.ProductWorkspace.showSession();
+    const id=current?.owner||current?.id;
+    if(row.dataset.owner!==id){row.hidden=true;row.dataset.owner=id||'';row.innerHTML='';row.open=false}
+    if(!id)return;
+    const cached=resultCache.get(id);
+    if(cached){
+      const s=cached.data,key=s.snapshot_sha256;
+      if(row.dataset.snapshot!==key){row.dataset.snapshot=key;row.hidden=!s.files.length&&!s.results.length;
+        row.innerHTML=`<summary>任务成果 · ${s.files.length} 件文件 · ${s.results.length} 条方案与执行记录</summary><p>${s.coverage.map(d=>esc(d.label)+' '+d.files+' 件').join(' · ')}</p><p>${s.revision?'装配 v'+s.revision+' · '+(s.verdict?.passed?'当前阶段条件满足':'验收仍有缺项'):'会话记录已归档，尚未建立产品装配。'}</p><button class="quiet" data-handoff-product>查看结果与过程 →</button>`;
+        row.querySelector('button').onclick=()=>window.ProductWorkspace.showSession({view:'results'});
+      }
+    }
+    if(resultLoading.has(id)||(cached&&Date.now()-cached.time<10000))return;
+    resultLoading.add(id);api('/api/results?session='+encodeURIComponent(id)).then(data=>{resultCache.set(id,{data,time:Date.now()});if((window.BF.getCurrent()?.owner||window.BF.getCurrent()?.id)===id)handoff(window.BF.getCurrent())}).catch(()=>{}).finally(()=>resultLoading.delete(id));
   }
   function activity(events){
     const last=[...events].reverse().find(e=>['tool_execution_start','tool_execution_end','text_delta','input_accepted'].includes(e.data.type))?.data;

@@ -1,0 +1,227 @@
+\documentclass[UTF8,fontset=fandol,11pt]{ctexart}
+\usepackage[a4paper,margin=21mm]{geometry}
+\usepackage{graphicx,booktabs,tabularx,longtable,float,amsmath,xcolor,hyperref,fancyhdr,pdfpages}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\pagestyle{fancy}\fancyhf{}\lhead{BF-AIoT 门磁耦合工程案例}\rhead{D2 · 仿真版}\cfoot{\thepage}
+\setlength{\headheight}{15pt}
+\setlength{\parskip}{5pt}
+\newcommand{\fig}[3][.97]{\begin{figure}[H]\centering\includegraphics[width=#1\linewidth]{figures/#2}\caption{#3}\end{figure}}
+\newcommand{\boundary}{\noindent\textcolor{red!65!black}{结论边界：本案例尚未通过一次开门冷启动要求；未制造、未烧录、未进行实物测量。}}
+\title{门动作磁耦合压电采能节点\\详细数字工程与验证报告}
+\author{BF-AIoT 工程工作台 · 操作者辅助设计}
+\date{2026年9月30日 · 设计版本 D2}
+\begin{document}
+\maketitle
+\boundary
+
+本报告关联同一个 D2 设计版本的参数化 CAD、门体动画、COMSOL 原生模型与场图、机电降阶计算、厂商电源模型、PCB 铜线、目标固件和验收记录。文中展示实际计算结果，并保留未通过的项目；模型和图像不是实物性能的替代证明。
+
+\fig[.90]{installation.png}{900×2100×40 mm 门的安装场景。产品在门框上，驱动磁体随门运动。}
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 设计任务 & 从静止、储能电容零电压开始，一次开门产生可接收无线事件。\\
+当前结果 & 数字工程已建立；当前 D2 供能不足，未达到该任务要求。\\
+通过范围 & CAD 实体、采样运动间距、降阶时间步、负对照、独立 PCB 检查、目标固件重复编译。\\
+未闭合范围 & 冷启动、磁场网格、原生 EDA 验收、真实硬件及双向电源耦合。\\
+\bottomrule
+\end{tabularx}
+\newpage\tableofcontents\newpage
+\section{需求、参考来源与版本选择}
+该产品是安装在门框上的压电采能无线动作节点。驱动磁体安装在门上，随开门运动改变梁端磁体所受磁力；压电梁将机械响应转为电能，经 LTC3588-1 整流、储能和稳压后，供 nRF52832 模块发送 BLE 事件。
+
+本轮以三篇 ViPSN/拨动压电跨域仿真论文作为参考材料，以厂商资料确定电源和无线模块的接口。论文中的性能没有直接复制为本产品性能，缺少实测的阻尼、粘接、磁材离散性均作为假设记录。没有训练神经网络：当前功能是二值动作事件，没有支持方向分类或 NAS 的数据基础。
+
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 参数 & 本轮固定值或验收标准\\\midrule
+正常输入 & 门角 0--65°，2 s 开门，继续观察 2 s\\
+弱输入 & 同样角度，8 s 慢开门\\
+初始条件 & 电源电容零电压；机械闭门磁预载单独计入初始能量\\
+任务验收 & 一次开门达到冷启动并支持至少一次无线事件；未通过\\
+数值验收 & 磁力网格差异不高于 5\%；时间步能量差异不高于 5\%\\
+降阶范围 & 梁端位移绝对值不超过 8 mm；仍需后续几何非线性校核\\
+电路验收 & 独立几何检查和原生 EDA ERC/DRC 分别记录，不相互替代\\
+\bottomrule
+\end{tabularx}
+
+D1 驱动磁体距离过近，受力约 4 N，超出当前梁模型允许范围。D2 将磁体中心横向间距增至 48 mm，以使运动计算处于声明的范围内。这个改动降低了采能能力；不能把“避免模型越界”写成“产品任务通过”。冷启动标准没有降低。
+
+\section{机械尺寸、坐标与装配}
+门沿世界坐标 $z$ 轴绕铰链旋转，铰链位于 $x=0$。产品局部坐标以 mm 为单位，安装转换为
+\[
+(x_w,y_w,z_w)=(1004-x,\ 70+z,\ 2140+y).
+\]
+固定产品与运动驱动磁体采用同一个变换，Blender 没有另造不同尺寸的展示物。
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 零部件 & D2 几何定义\\\midrule
+门 & 900×2100×40 mm\\
+主壳体 & PETG，主体 136×62×66 mm，名义壁厚 2 mm\\
+含安装耳壳体包络 & STEP 回读约 136.003×73.002×66.003 mm\\
+全机构包络 & 含驱动件约 188.002×82.000×75.001 mm\\
+盖板 & PC，厚 2 mm\\
+铜基梁 & 100×10×0.53 mm；夹持 4 mm，自由长 96 mm\\
+压电片 & PZT-5A 名义材料，50×8×0.30 mm，梁上 $x=10$--60 mm\\
+端部磁体 & 10×10×10 mm，中心 $(100,0,5.265)$ mm\\
+驱动磁体 & 20×20×20 mm，中心 $(148,0,-25)$ mm\\
+PCB & 80×30×1.6 mm，中心 $(45,-12,-22)$ mm\\
+PCB 安装孔 & 直径 2.4 mm，板坐标 (4,4)、(76,4)、(4,26)、(76,26) mm\\
+\bottomrule
+\end{tabularx}
+\fig{mechanism.png}{由实际 CAD 零件导入的机构局部视图；PCB 在壳体内，门上驱动件与固定梁组件分开。}
+\newpage
+\section{CAD 图纸与安装检查}
+本轮输出 22 个产品实体的 STEP、BREP、STL、零件明细、装配 STEP 和安装 STEP。实体回读有效，静态无未授权实体干涉。附录包含 22 张由原生几何投影生成的 A3 零件图，每张包括三视图、等轴测视图与包络尺寸。
+
+这些图纸达到数字样机复核范围；尚未完成生产工程图的全部孔位基准、公差配合、粗糙度、螺纹、粘接厚度与材料采购等级标注。螺钉使用名义螺纹包络，不能据此声称完成量产制图。CAD 源参数和生成程序一起交付，可继续编辑。
+
+运动检查使用真实 BREP，在 0--65° 每隔 1° 比较 4 个运动部件与 18 个固定部件，发现碰撞数为 0，最小间距为 20.6564 mm，限制对为 1° 时的驱动竖支架与壳体。该结果覆盖离散刚体样本，不覆盖连续扫掠、柔性梁、导线、整个建筑门框和装配公差。
+
+\fig{open.png}{打开后的局部机构视图。动画反映刚体安装和门输入；梁振动没有伪造为仿真动画。}
+\section{COMSOL 压电梁模型}
+原生 COMSOL 6.2 模型耦合 Solid Mechanics、Electrostatics 与 Electrical Circuit。铜基梁使用 $E=110$ GPa、$\rho=8960$ kg/m$^3$；压电层使用模型库 PZT-5A，极化沿 $+z$。当前采用理想粘接与线性材料，未测量胶层、压电常数离散与疲劳寿命。
+
+静力载荷为 0.3 N，用来提取刚度及进行场分布检查，不能当成完整开门过程峰值应力。
+\begin{center}\begin{tabular}{rrrr}
+\toprule 网格级别 & 最大位移/mm & 梁端位移/mm & 最大应力/MPa\\\midrule
+6 & 3.72932 & 3.40423 & 62.0536\\
+4 & 3.76237 & 3.43469 & 65.5216\\
+3 & 3.76838 & 3.44031 & 67.5038\\\bottomrule
+\end{tabular}\end{center}
+最后两级梁端位移差约 0.164\%，应力差约 2.94\%。这说明该静载下两级结果接近，不能保证夹持奇异点的点应力已达到材料强度评估要求。第一弯曲频率为 15.91524 Hz，后续模态包括 137.1092、142.1622、375.9652 Hz。
+\fig[.88]{stress.png}{原生 COMSOL 静载应力场，颜色由求解变量生成，并保留单位与色标。}
+\newpage
+\fig[.90]{displacement.png}{同一静载模型的位移场。形变显示和颜色值的含义以原生模型设置为准。}
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 降阶参数 & 由原生模型提取的数值\\\midrule
+等效刚度 $k$ & 87.201538 N/m\\
+等效模态质量 $m$ & 0.008720430 kg\\
+机电耦合 $\theta$ & 0.000216801 N/V\\
+阻挡电容 $C_p$ & 17.23455 nF\\
+阻尼比 $\zeta$ & 0.02，工程假设；另计算 0.05 对照\\
+\bottomrule
+\end{tabularx}
+
+\section{磁场模型与网格限制}
+COMSOL Magnetic Fields, No Currents 用于求解驱动磁体场。驱动磁体按 N42 名义 $B_r=1.25$ T、$\mu_r=1.05$，空气域半径 150 mm。梁端磁体通过体积分 $M_x\partial B_x/\partial x$ 等梯度项估算受力。该模型没有自洽求解端部磁体对源场的反作用，也没有完整磁滞与退磁模型。
+
+\begin{center}\begin{tabular}{rrrrr}
+\toprule 级别 & $z$ 偏移/mm & $F_x$/N & $F_z$/N\\\midrule
+3 & 0 & 0.77928 & 0.03091\\
+2 & 0 & 0.83613 & 0.00144\\
+3 & 20 & 0.36158 & 0.39821\\
+2 & 20 & 0.36559 & 0.39103\\
+3 & 45 & -0.02862 & 0.13680\\
+2 & 45 & -0.03273 & 0.13866\\\bottomrule
+\end{tabular}\end{center}
+最大向量差异约 7.65\%，超过 5\% 门槛，因此磁力仍是未收敛工程估计。更细网格的未完成尝试保留在执行记录中，不能选取局部看起来较好的分量宣称通过。
+\fig[.88]{field.png}{原生三维磁场及切面场图。云图用于解释场分布，验收仍以数值和网格检查为准。}
+\section{机电降阶与时间域结果}
+\[
+m\ddot q+c\dot q+kq+\theta V=F_{\rm mag}(\alpha(t),q),\qquad
+C_p\dot V+V/R=\theta\dot q.
+\]
+有限体积磁荷积分构造力表，按门角和梁端位移插值；该计算采用均匀磁化近似，与 COMSOL 的 $\mu_r=1.05$ 模型不是完全相同的方程。闭门初始预载约 $-4.17178$ mm，其弹性势能约 758.82 $\mu$J 被显式记入能量账本，不能把这部分能量漏掉后虚增采能效率。
+\fig[.95]{coupled.png}{实际输出 CSV 绘制的门角、梁端位移、电压及电阻能量。慢动作的电能更少。}
+\begin{center}\begin{tabular}{lrrr}
+\toprule 工况 & 峰值位移/mm & 峰值电压/V & 电阻能量/$\mu$J\\\midrule
+正常，100 k$\Omega$ & 4.49242 & 4.61972 & 11.06091\\
+正常，1 M$\Omega$ & 4.48946 & 31.83670 & 50.55926\\
+慢开，100 k$\Omega$ & 4.62830 & 0.93182 & 1.21786\\
+高阻尼，100 k$\Omega$ & 4.47914 & 4.42765 & 7.40968\\
+无动作 / 无磁体 & -- & 0 & 0\\\bottomrule
+\end{tabular}\end{center}
+正常工况 1 ms 与 0.5 ms 的电阻能量相差约 $2.17\times10^{-6}$ $\mu$J。0.5 ms 的最大能量残差为 $5.60\times10^{-8}$ J，相对参考能量约 $7.38\times10^{-5}$。这些属于当前降阶模型的内部数值检查，不是实物校准。
+\section{电路原理与器件选择}
+\fig{schematic.png}{与 PCB 同一器件引脚网表生成的电源和无线模块原理图；原生 EDA 读取尚未验收。}
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 标号 & 选型及作用\\\midrule
+U1 & LTC3588EMSE-1，压电整流、欠压锁定与降压稳压；输出设置 3.3 V\\
+U2 & MDBT42Q-512KV2，nRF52832 模块，LDO 方式\\
+C1 & 47 $\mu$F / 25 V / 1210，整流后输入储能\\
+C2 & 1 $\mu$F / 50 V / 0603，CAP 与 VIN 之间\\
+C3 & 4.7 $\mu$F / 16 V / 0603，VIN2 旁路\\
+C4 & 100 $\mu$F / 6.3 V / 1206，输出储能\\
+C5 & 100 nF / 50 V / 0603，模块供电旁路\\
+L1 & 10 $\mu$H，SRN4018-100M\\
+J1/J2/J3 & 压电输入 / SWD 与电压参考 / 时序调试\\
+\bottomrule
+\end{tabularx}
+器件、封装和焊盘来自缓存的立创器件库导出，原始导出和引脚映射一并保留。MDBT42Q 的 DEC4 电容按模块手册内部配置处理，不另造不存在的外部连接。PGOOD 接模块 25 脚（P0.11），时序信号接 26 脚（P0.12）；不能将模块焊盘编号直接当作 MCU 端口编号。
+\newpage
+\section{厂商 SPICE 电源验证}
+使用 ADI LTC3588-1 宏模型及真实 LTspice 执行。降阶结果的 $\theta\dot q$ 作为 PWL 电流源，与 $C_p$ 并联后驱动 PZ1/PZ2。所有储能电容初始为 0 V，PGOOD 超过 2.5 V 才启用 2 mA 负载。
+
+这是单向耦合：运动来自电阻负载下的降阶计算，尚未把非线性 PMIC 的电压反作用送回机械方程。因此不能用该模型证明产品性能；当前负结果仍清楚显示所选运动输入无法给电源启动。
+\fig{power.png}{从 LTspice 原始二进制 RAW 直接转换的曲线。VOUT 图以微伏为单位，避免把极小残值画成正常供电。}
+\begin{center}\begin{tabular}{lrrl}
+\toprule 工况 & VIN 峰值/V & VOUT 峰值 & 冷启动\\\midrule
+正常 & 0.135532 & 约 0.9923 $\mu$V & 未发生\\
+慢开 & 0.048421 & 近零 & 未发生\\
+无动作 & 0 & 0 & 未发生\\\bottomrule
+\end{tabular}\end{center}
+正常工况负载能量为 0。仅把 47 $\mu$F 输入电容从 0 充到 5.05 V 就需约 599 $\mu$J，且还未计入损耗与输出储能。这个数量级比较不能代替厂商模型，但能解释为何当前连续缓慢磁加载难以形成有效冷启动。
+\section{PCB 布局、布线与制造边界}
+板外形为 80×30 mm，两个铜层，4 个安装孔。无线模块位于板端，天线和内凹禁布区域同时施加于两层；供电转换部分在另一端，SWD 连接器与调试接口可达。
+\fig{pcb.png}{实际布线和铜区预览。68 段铜线、12 个过孔、72 个焊盘；图像由同一布线结果生成。}
+Freerouter 路由后，独立连通性及几何检查均报告 0 断网、0 间距违规和 0 天线禁布冲突。最小铜间距约 0.1669 mm；最窄颈缩线宽约 0.1142 mm，而一般线宽目标为 0.1524 mm。是否接受颈缩线宽，需要选定板厂规则并再次检查。地铜区以真实边界、避让及连接检查生成，不是绘制一个装饰性矩形。
+
+已经输出专业版 EDA 草案文件、路由交换文件以及铜层、板框、钻孔 Gerber 草案。原生 EDA 导入调用返回空结果，尚未完成原生 ERC/DRC 和可编辑性回读；不把独立几何检查写成原生 DRC。阻焊、钢网、板层叠构、制造公差与订单前审查尚未闭合，因此本包标记为工程样机草案，未释放制造。
+\section{MCU 固件与时序}
+目标为 nRF52832 xxAA，S132 3.0.0，固定 SDK 源提交。固件使用内部低频 RC 时钟，不依赖外置 32.768 kHz 晶体。PGOOD 低时进入 SYSTEMOFF，配置上升唤醒；可用供电时发送非连接 BLE 广播；检测到 PGOOD 低后停止发送并休眠。欠压期间 MCU 行为仍需实物棕断测试。
+\fig{firmware-sequence.png}{由控制分支整理的时序关系，横向位置不代表实测耗时。}
+
+\noindent\begin{tabularx}{\linewidth}{lX}
+\toprule 项目 & 已验证数据\\\midrule
+应用 Flash & 4896 bytes，不含 SoftDevice\\
+静态 RAM & 180 bytes，不含动态峰值与协议栈占用\\
+栈 / 堆保留 & 各 8192 bytes，合计预留 RAM 16564 bytes\\
+应用区域 & Flash 397312 bytes，RAM 52496 bytes\\
+广播 & 100 ms 配置间隔，叠加协议随机延迟；0 dBm\\
+载荷 & 厂商号 0xffff，BFD2 + 8 字节 FICR 器件 ID\\
+重复构建 & clean 后 HEX/BIN 哈希一致\\
+烧录 & 已生成烧录脚本和 dry-run；未连接目标板、未实际执行\\
+接收 & 解码器与合成协议样例检查；没有真实无线接收数据\\
+\bottomrule
+\end{tabularx}
+事件按照接收端静默间隔分组，不能从 BFD2 载荷可靠推断开门/关门方向，也没有跨重启持久事件编号。不同包数不能自动解释为方向差异。论文给出的 72.70、68.47、60.37 $\mu$J 阶段能量只是对照资料，绝不是这个二进制的功耗测量。
+\section{验收矩阵与下一次修订}
+\begin{longtable}{p{.28\linewidth}p{.13\linewidth}p{.50\linewidth}}
+\toprule 检查 & 状态 & 证据与限制\\\midrule
+CAD 实体回读 & 通过 & 22 个有效实体，原生 STEP/BREP\\
+刚体安装运动 & 通过 & 66 个角度样本，非连续扫掠\\
+梁静载网格 & 部分通过 & 两级位移、应力差异小；未覆盖疲劳和非线性\\
+磁力网格 & 未通过 & 最大向量变化 7.65\% > 5\%\\
+降阶时间步 & 通过 & 1 ms / 0.5 ms 能量差异远小于 5\%\\
+负对照 & 通过 & 无动作、无磁体输出为零\\
+单次开门冷启动 & 未通过 & PGOOD 未拉高，负载无供能\\
+PCB 独立检查 & 通过 & 连通、间距、天线禁布几何检查\\
+原生 EDA ERC/DRC & 未执行 & 导入返回空结果，未取得原生报告\\
+固件目标编译 & 通过 & ELF/BIN/HEX，重复构建一致\\
+实物功耗/时延/射频 & 未执行 & 未连接硬件\\
+完整产品任务 & 未通过 & 冷启动及硬件证据尚缺\\\bottomrule
+\end{longtable}
+
+下一版应首先改变机械激励形成方式，使储存的机械能更快释放，或选用经验证的阻抗匹配和储能方案。单纯把磁体继续靠近会重新进入大挠度区，必须先建立几何非线性或接触/脱离模型，再修改间距。电源与机械应双向耦合，不能用预先计算的电流波形绕过反作用。随后完成磁网格收敛、原生 PCB 回读与制造规则、最终硬件电压/电流/接收同步测量。
+
+更好的渲染不改变上述判定。D2 的用途是提供可打开、可修改、可复算和可定位失败的数字工程基线。
+\section{文件、复算与来源}
+工程包包含 requirements、mechanical-D2、animation-D2、simulation、circuit、pcb、firmware-D2-release、report 与 reproduction。文件清单记录 SHA-256；产品页按机械、仿真、电路、PCB、固件和报告展示同一版本。
+
+报告源为 \texttt{report/door-case.tex}，使用 XeLaTeX 连续编译两次生成本 PDF，图像来自同一目录的 \texttt{figures}。替换设计参数后必须重新计算，不能仅替换报告中的数字。完整复算依赖 CadQuery、Blender、COMSOL 6.2、LTspice、立创专业版、ARM 工具链及各自许可证；原生文件保留，未把商业求解器打包分发。
+
+参考资料：
+\begin{enumerate}
+\item ViPSN-Pluck: A Transient-Motion-Powered Motion Detector；作者公开 PDF。
+\item A unified system-level simulation framework for energy harvesting, management, and application in plucking piezoelectric energy harvesters；DOI 10.1088/1361-665X/add8d4。
+\item Cross-Domain Simulation of a Plucking Piezoelectric Energy Harvester: Coupling Dynamics, Power Management, and Application；DOI 10.1115/1.4071279。
+\item ADI LTC3588-1 数据手册及 LTspice 宏模型；官方 35881fc 数据手册。
+\item Raytac MDBT42Q 模块资料 Version O；器件供应链公开 PDF，天线布局与 LDO 说明按文档校对。
+\end{enumerate}
+第三方资料和 Nordic SDK / SoftDevice 保留原许可，仅作为工程参考与复算依赖，不重新授权。实际来源、下载记录及哈希保存在 sources 与各求解回执中。
+\appendix\section{22 张原生 CAD 投影图}
+以下图纸来自同一 D2 几何，当前含包络尺寸。加工所需的功能尺寸、孔位公差、配合和表面要求仍需生产制图补齐。
+%%DRAWING_APPENDIX%%
+\end{document}

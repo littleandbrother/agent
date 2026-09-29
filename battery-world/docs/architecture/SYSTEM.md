@@ -129,3 +129,11 @@ Studio, an Agent observation adapter, and the verifier consume sealed artifacts
 through readers. None imports the Rotary provider. The architecture above is a
 target contract; only capabilities listed as verified in `docs/PROGRESS.md`
 exist today.
+
+## Product result read model (BFA-026)
+
+`ProductResults` projects existing jobs, immutable artifacts and assembly bindings into
+`/api/results`, with a rebuildable `product_result_index` in the existing SQLite database.
+The product page, graph and export consume this owner-scoped inventory; acceptance remains
+with `product_authority`. See [result workspace](../agentlab/PRODUCT-RESULTS-WORKSPACE.md)
+for APIs, scoped freshness, derivations, export integrity and verified limitations.

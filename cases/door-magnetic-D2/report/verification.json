@@ -1,0 +1,45 @@
+{
+  "design": "D2",
+  "hardware_verified": false,
+  "autonomous_agent_verified": false,
+  "overall": "NOT_ACCEPTED_SINGLE_OPENING_COLD_START_FAILED",
+  "passed": [
+    "CAD solids/readback",
+    "rigid sampled motion clearance",
+    "ROM timestep energy convergence",
+    "no-motion/no-magnet negative controls",
+    "independent PCB connectivity and clearance",
+    "repeat target firmware binary"
+  ],
+  "failed": [
+    "single-opening PMIC cold start",
+    "magnetic force mesh convergence at 5 percent"
+  ],
+  "not_performed": [
+    "native EasyEDA ERC/DRC",
+    "hardware calibration",
+    "actual flash and radio reception",
+    "fatigue and manufacturing qualification",
+    "bidirectional PMIC-mechanical co-simulation"
+  ],
+  "power": {
+    "nominal": {
+      "VIN_peak_V": 0.13553178310394287,
+      "VOUT_peak_V": 9.922990784616559e-07,
+      "PGOOD_peak_V": 1.0022220039822023e-14,
+      "startup": false
+    },
+    "weak-slow": {
+      "VIN_peak_V": 0.04842054471373558,
+      "VOUT_peak_V": 9.304451396019431e-07,
+      "PGOOD_peak_V": 9.397495971772297e-15,
+      "startup": false
+    },
+    "no-motion": {
+      "VIN_peak_V": 0.0,
+      "VOUT_peak_V": 0.0,
+      "PGOOD_peak_V": 0.0,
+      "startup": false
+    }
+  }
+}

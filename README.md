@@ -1,6 +1,6 @@
 # BF-AIoT Agent
 
-当前 BF-AIoT Agent 与设计工作台的源码快照（2026-09-29）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+当前 BF-AIoT Agent 与设计工作台的源码快照（2026-09-30）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
 
 ## 目录
 
@@ -19,13 +19,21 @@
 
 产品页可按节点查看图片、仿真、原生工程、代码、报告和数据；交付状态与文件数量分开。原作者参考电路不会被计为当前设计的原理图或 PCB。
 
+## 当前可查看的工程案例
+
+[门磁耦合 D2 报告（36页）](cases/door-magnetic-D2/report/door-case.pdf) · [报告源码与编译说明](cases/door-magnetic-D2/README.md) · [原生工程附件](https://github.com/littleandbrother/agent/releases/tag/door-magnetic-d2-20260930)
+
+D2 包含门动画、22件 CAD/图纸、COMSOL 场图、LTspice 电源仿真、PCB 布线和目标固件。**单次开门冷启动和磁网格验收未通过；原生 EDA ERC/DRC、实物与制造未验收。** 本次文档修订仅改善字体可移植性。源码包含 BFA-026/027 的全会话成果目录与 BFA-028 的不可变工程案例发布，不包含用户会话数据库。
+
+本次发布副本 19 项后端、22 项界面专项通过；上次完整应用回归 407 项中有 12 项失败、9 项错误，尚未全量修复，不能将旧版 388 项通过记录当成本版本全量通过。[当前验证说明](release/DOOR-VERIFICATION.md)。
+
 ## 本次上传范围
 
-这是**源码发布，不是本机工作区或实物产品交付备份**。包含当前源码、锁文件、文档、测试、必要浏览器依赖和小型基准数据。不包含密钥、认证令牌、会话数据库、参与者工作区、完整私有运行轨迹、模型账单状态、已安装工具链或大型仿真二进制产物。COMSOL、Blender、立创 EDA、编译器与各自许可需要单独安装；工具接入代码不等于这些软件或硬件已可用。
+这是**源码与指定数字工程案例发布，不是本机工作区或实物产品交付备份**。包含当前源码、锁文件、文档、测试、必要浏览器依赖和小型基准数据。不包含密钥、认证令牌、会话数据库、参与者工作区、完整私有运行轨迹、模型账单状态、已安装工具链；指定 D2 原生工程二进制仅作为版本绑定的 Release 附件提供。COMSOL、Blender、立创 EDA、编译器与各自许可需要单独安装；工具接入代码不等于这些软件或硬件已可用。
 
-原机参考案例的 COMSOL/STEP/GLB/固件产物仍保存在本地 `bf-agent-workbench`。新克隆没有这些本地资料时，产品页应显示缺失，不能把源代码存在解释为该交付项已验收。
+其余原机参考案例的 COMSOL/STEP/GLB/固件产物仍保存在本地 `bf-agent-workbench`。新克隆没有这些本地资料时，产品页应显示缺失，不能把源代码存在解释为该交付项已验收。
 
-本版立创原理图、PCB 与制造图纸仍未完成；仿真结果不代表实测、制造或烧录验收；源码上传也不构成自主 Agent 或 Harness RSI 有效性的科学结论。工程状态见 [产品交付物说明](battery-world/docs/agentlab/PRODUCT-DELIVERABLES.md) 与 [原生仿真说明](battery-world/docs/agentlab/PLUCK-NATIVE-SIMULATION.md)。
+D2 已提供原理图及实际布线，但原生立创验收及可制造图纸仍未完成；仿真结果不代表实测、制造或烧录验收；源码上传也不构成自主 Agent 或 Harness RSI 有效性的科学结论。工程状态见 [产品交付物说明](battery-world/docs/agentlab/PRODUCT-DELIVERABLES.md) 与 [原生仿真说明](battery-world/docs/agentlab/PLUCK-NATIVE-SIMULATION.md)。
 
 ## 构建与本机启动
 

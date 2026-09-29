@@ -637,3 +637,36 @@ COMSOL 6.2 三维压电/电路静态、模态、扫频、瞬态实际完成；LT
 保留早前 discovery 导入失败、云端源码/依赖引起的编译阻塞和一次 CAD 超时记录；按原字节恢复和本地化依赖后重验，没有放宽超时或验收。全景对不可读取的云端历史显示缺失。详细方案与后续缺口见 docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md，发布验证见 release/VERIFICATION.md，本机回执目录 bf-agent-workbench/verification/product-authority-20260929/。
 
 BFA-025 仅完成平台功能；BFA-024 仍为 blocked。磁拨动校准、本版原生PCB/制造、专项完整验收、板上测量及真实模型/RSI效果没有被改成通过；原88项科学Feature和feat-397不变，未运行协调仓库科学init。本轮源码发布至既有 littleandbrother/agent 的 main；提交与新克隆身份见本机最终发布回执。
+
+
+## 2026-09-29 BFA-026 — 产品成果工作区完成（平台与体验范围）
+
+产品默认改为当前成果，提供过程与比较、原始工程及设计图；任务页模型/文件入口统一指向产品。现有 Python + SQLite 增加可重建的结果索引，按 owner、专业、创建版本、当前适用关系、哈希及验收范围组织原生文件。CAD 独立 STEP 派生预览、ngspice RAW 曲线、固件源码/资源、报告表格和页内 PDF 通路接入；参考图表与当前任务隔离。支持实际输入/指标对比、具体 Job Trace 往返、后台更新提示保留阅读位置；缺文件、失效、失败及验收能力缺失区分显示。
+
+完整 Battery World init 398 项 Python、SDK/Studio 通过；最终 20 项 JS 投影/报告安全测试与脚本语法通过。真实 CAD 40×24×3 mm / 520面、ngspice 520点4变量、目标固件 ELF 资源读取；浏览器复核模型/曲线/源码/报告、镜头复用、历史隔离、实际版本差异、Trace 返回及更新不打断。生产任务网页下载 694 件完整文件，逐件哈希与清单一致（137件适用当前版）；生产1934条模型账本及预算等7表摘要不变，新增外部调用0。
+
+首轮 Pi 启动回归遇到 iCloud 依赖占位，按相同锁文件的既有本地副本恢复764个忽略依赖，随后11项chat及全量通过，未放宽门控。新成果索引可重建，原始数据不搬迁；历史失败日志保留。服务8768已加载，测试8781已停止。未修改88项科学Feature、feat-397或B2；未运行协调仓库科学init。无Git提交或推送。
+
+文档：/Users/depengsu/Documents/battery-world/docs/agentlab/PRODUCT-RESULTS-WORKSPACE.md。证据：/Users/depengsu/Documents/bf-agent-workbench/verification/results-workspace-20260929/receipt.json。BFA-024真实产品与校准缺口仍blocked；这次没有把测试用例、已生成文件或工具成功改成完整产品、硬件或Agent效果通过。
+
+
+## 2026-09-29 BFA-027 — 全会话成果适配完成（平台范围）
+
+成果入口扩展至基准计算、方案、输入、独立工程和装配，任务/控制台/产品/设计图共用 owner 范围目录；无装配旧任务可查看真实波形、前后差异并导出。类型驱动的 GLB/网格、图像、CSV 分类表、PDF 预览，任意合法文件名和按包络取景；跨任务重置与刷新保留阅读。磁耦合工程121件文件、60件适用当前装配、25项缺口；同名旧基准会话10件文件，不合并或冒认工程。
+
+应用完整 init405项Python、SDK/Studio通过；最终17项目标Python与22项JS通过。全量61条会话审核通过；三包10/121/12文件HTTP下载逐件哈希通过；18份云端占位文件取回后匹配旧哈希。浏览器三维/表格/比较/控制台与切换通过。42张源表逐行摘要不变，唯一变化为可重建product_result_index从10至70条；1934条模型账本未变，新增调用0。88项科学feature不变，未运行根科学init；无Git提交/推送。现有磁耦合/PCB/物理验收缺口继续保留。
+
+报告：/Users/depengsu/Documents/battery-world/docs/agentlab/SYSTEM-WIDE-RESULTS.md。证据：/Users/depengsu/Documents/bf-agent-workbench/verification/system-wide-results-20260929/receipt.json。服务8768；新静态界面刷新生效。
+
+
+## 2026-09-30 BFA-028 D2 数字工程交付（未全项通过）
+
+状态：数字工程交付已归档，完整验收未通过。没有硬件、没有外部模型调用、没有提交或推送。
+
+
+报告见 docs/agentlab/DOOR-ENGINEERING-D2.md；36页PDF、399项包、8组130文件发布与下载校验通过。19项目标测试通过；完整407测试12失败9错误，Pi依赖已定位一项。冷启动、磁网格、原生EDA未闭合，feature保持in-progress。
+
+
+## 2026-09-30 BFA-028 — 报告字体修复与 GitHub 发布准备
+
+当前打开的 door-case.tex 改为 Fandol，原位置 XeLaTeX 两轮编译成功，36页/22附图/无警告。内置 Tectonic 资源下载已恢复，但编辑器不暂存外部图片与附录，内置预览仍受限。原 D2 ZIP 和后端不可变发布不覆盖；报告修订 D2-report-r1 单独绑定。发布副本19项Python及22项JS通过；此前全量407项的12失败9错误没有被改写为通过。用户已授权上传现有私有GitHub仓库，远端回读证据另记本机发布回执。

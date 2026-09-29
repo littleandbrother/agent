@@ -32,3 +32,16 @@ test('withdrawn source cannot show a current hardware qualification',()=>{
  const c=fixture();c.product.assembly.current.source_valid=false;c.product.assembly.hardware_verified=true;
  assert.equal(G.build(c).physicalVerified,false);
 });
+test('legacy and unbound sources populate graph without manufacturing a verdict',()=>{
+ const graph=G.build({id:'legacy',title:'renamed'}),f={id:'record/job/channels.csv',result_id:'job',domain:'circuit',name:'channels.csv',integrity:true,applicability:{state:'unbound',reason:'F1 only'},status:'SUCCEEDED'};
+ const r={id:'job',kind:'benchmark',domain:'circuit',created:100,status:'SUCCEEDED',design_status:'FAIL',files:[f],applicability:f.applicability};
+ const next=G.withResults(graph,{title:'renamed',files:[f],results:[r]});
+ assert.equal(next.empty,false);assert.equal(next.nodes.find(n=>n.id==='circuit').assets.length,1);assert.equal(next.events[0].state,'failed');
+ assert.equal(next.physicalVerified,false);assert.ok(!next.nodes.some(n=>n.status==='passed'));assert.equal(graph.empty,true);
+ assert.equal(G.withResults(next,{title:'renamed',files:[f],results:[r]}).events.length,1);
+});
+test('featured results keep each engine including unbound results and prioritize engineering over proposals',()=>{
+ const row=(id,kind,state,created)=>({id,kind,created,status:'SUCCEEDED',files:[{integrity:true,applicability:{state}}]});
+ const rows=[row('p','proposal','proposal',9),row('old','spice','unbound',1),row('new','spice','unbound',2),row('cad','cadquery','current',3)];
+ assert.deepEqual(G.featuredResults(rows).map(r=>r.id),['cad','new','p']);
+});

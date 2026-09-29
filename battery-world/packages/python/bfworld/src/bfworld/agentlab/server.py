@@ -61,6 +61,8 @@ class Workbench:
         self.deliverables=Deliverables(self)
         from .engineering import Engineering
         self.engineering=Engineering(self)
+        from .product_results import ProductResults
+        self.results=ProductResults(self)
         from .references import References
         self.references=References(self)
         from .panorama import Panorama
@@ -256,7 +258,7 @@ def handler(workbench):
             self.send_header('Content-Length', str(len(content)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors " + ("'self'" if urlparse(self.path).path=='/model-viewer.html' else "'none'"))
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors " + ("'self'" if (urlparse(self.path).path=='/model-viewer.html' or kind=='application/pdf') else "'none'"))
             if getattr(self,'bootstrap_cookie',False):
                 token=(workbench.store.root/'operator.token').read_text().strip()
                 self.send_header('Set-Cookie','bf_operator='+token+'; Path=/; HttpOnly; SameSite=Strict')
@@ -322,7 +324,7 @@ def handler(workbench):
                     rel=path.removeprefix('/vendor/three/')
                     if rel not in allowed:return self.reply(404,{'error':'NOT_FOUND'})
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
-                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/reference-case.js'):
+                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 if path in ('/api/reference-case','/api/reference-case/artifact'):
@@ -382,6 +384,26 @@ def handler(workbench):
                         import mimetypes
                         return self.reply(200,file.read_bytes(),mimetypes.guess_type(meta['name'])[0] or 'application/octet-stream')
                     return self.reply(200,workbench.assemblies.projection(target))
+                if path.startswith('/api/results'):
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    if path=='/api/results':
+                        revision=query.get('revision',[''])[0]
+                        return self.reply(200,workbench.results.inspect(target,int(revision) if revision else None))
+                    if path=='/api/results/archive':
+                        file=workbench.results.archive(target,query.get('snapshot',[''])[0])
+                        return self.reply(200,file.read_bytes(),'application/zip')
+                    if path=='/api/results/file':
+                        import mimetypes
+                        file,name=workbench.results.file(target,query.get('id',[''])[0])
+                        kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
+                        if kind in ('text/html','application/javascript'):kind='text/plain'
+                        return self.reply(200,file.read_bytes(),kind)
+                    if path=='/api/results/source':
+                        return self.reply(200,workbench.results.source(target,query.get('result',[''])[0],query.get('name',[None])[0]))
+                    if path=='/api/results/series':
+                        return self.reply(200,workbench.results.series(target,query.get('id',[''])[0]))
+                    return self.reply(404,{'error':'NOT_FOUND'})
                 if path=='/api/deliverables':
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
@@ -505,6 +527,9 @@ def handler(workbench):
                 if not 0 < length <= incoming_limit:
                     raise ValueError('REQUEST_SIZE')
                 body = json.loads(self.rfile.read(length))
+                if path=='/api/results/package':
+                    target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    return self.reply(200,workbench.results.package(target,body.get('snapshot_sha256'),body.get('revision')))
                 if path=='/api/measurements/import':
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     target=body.get('session_id')
@@ -549,7 +574,7 @@ def handler(workbench):
                         if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                         return self.reply(201,workbench.deliverables.configure_stage(target,body))
                     if body.get('action')=='bind':return self.reply(201,workbench.deliverables.bind(target,body))
-                    if body.get('action')=='package':return self.reply(201,workbench.deliverables.package(target))
+                    if body.get('action')=='package':return self.reply(201,workbench.deliverables.package(target,body.get('snapshot_sha256'),body.get('revision')))
                     raise ValueError('DELIVERY_ACTION_INVALID')
                 if path=='/api/product':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner

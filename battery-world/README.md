@@ -17,6 +17,8 @@ operator credential and must not be committed or shared. Optional toolchain and
 provider configuration, scoped project execution, stage acceptance, verification
 commands and outstanding physical gaps are documented in
 [Product execution authority](docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md).
+Results, revision comparison, source browsing and complete downloads are described in
+[Product results workspace](docs/agentlab/PRODUCT-RESULTS-WORKSPACE.md).
 The architecture entry is [docs/architecture/SYSTEM.md](docs/architecture/SYSTEM.md).
 Source installation does not install COMSOL, Blender, EDA, MCU SDKs or credentials.
 

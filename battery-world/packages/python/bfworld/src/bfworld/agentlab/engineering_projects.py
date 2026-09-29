@@ -164,6 +164,10 @@ def run(engineering, job, root, deadline):
         step=relative_file(out,'assembly.step')
         reader=root/'trusted_readback.py'
         reader.write_text('import cadquery as cq,json,math\nfrom pathlib import Path\np=Path("assembly.step")\ns=cq.importers.importStep(str(p)).val()\nb=s.BoundingBox()\nv=[b.xlen,b.ylen,b.zlen,s.Volume()]\nassert len(s.Solids())>0 and s.isValid() and all(math.isfinite(x) and x>0 for x in v)\nPath("readback.json").write_text(json.dumps({"solid_count":len(s.Solids()),"bounds_mm":v[:3],"volume_mm3":v[3],"native_valid":True}))\n')
+        # Preview is derived by the trusted reader from the exact native STEP,
+        # never from participant-authored success labels or a separate mesh.
+        with reader.open('a') as stream:
+            stream.write('import hashlib\nv,t=s.tessellate(0.15)\nassert len(t)<=200000\nPath("preview-mesh.json").write_text(json.dumps({"vertices":[[p.x,p.y,p.z] for p in v],"triangles":t,"units":"mm","source_sha256":hashlib.sha256(p.read_bytes()).hexdigest()}))\n')
         command([exe,reader]);report=json.loads(relative_file(out,'readback.json').read_text())
     elif kind=='spice':
         command([exe,'-b','-r',out/'trace.raw',entry]);report=raw_readback(relative_file(out,'trace.raw'))

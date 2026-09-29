@@ -1,0 +1,132 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-028-door-engineering-case",
+  "owner": "bf-agent-coordinator",
+  "status": "in-progress",
+  "objective": "Deliver one dimensionally consistent door-motion magnetic plucking piezoelectric digital engineering case: native CAD/drawings, Blender animation, COMSOL fields, circuit simulation, native EasyEDA PCB, firmware timing, reproducible TeX/PDF and product UI.",
+  "hypothesis": "Shared versioned geometry, components and excitation bind all native engineering outputs into one reproducible case.",
+  "paper_claim": "Digital engineering demonstration only; no real hardware, autonomous Pi efficacy, calibration or RSI claim.",
+  "falsifier": "Any claimed source is absent or cannot reopen; CAD/FEM/circuit/PCB dimensions or component identities disagree; prescribed demonstration animation is presented as simulated dynamics; simulated reception or estimated power is presented as physical measurement.",
+  "owned_paths": [
+    "scripts/door_case/",
+    "configs/reference_cases/door-magnetic-v1/",
+    "packages/python/bfworld/src/bfworld/agentlab/",
+    "apps/agent-studio/",
+    "tests/agentlab/",
+    "docs/agentlab/",
+    "docs/PROGRESS.md",
+    "PROJECT.yaml",
+    "project/features/BFA-028-door-engineering-case/",
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/door-magnetic-v1",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/door-engineering-20260929",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md"
+  ],
+  "schema_changes": [
+    "versioned door design contract, dependent native artifact manifest and verification results"
+  ],
+  "tests": [
+    "geometry readback/dimension consistency",
+    "mechanical-electrical source identity",
+    "COMSOL mesh/time-step comparison",
+    "SPICE zero-input and cold-start cases",
+    "EDA native netlist/PCB DRC/manufacturing readback",
+    "target firmware build and timing provenance",
+    "report source/data/figure binding",
+    "product HTTP artifact integrity"
+  ],
+  "negative_controls": [
+    "no door motion",
+    "large magnetic gap",
+    "weak/slow motion",
+    "source mismatch",
+    "missing native file",
+    "unrouted PCB net",
+    "stale version"
+  ],
+  "command": "python scripts/door_case/run.py --root /Users/depengsu/Documents/bf-agent-workbench/reference-cases/door-magnetic-v1",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/door-magnetic-v1",
+  "cost_cap": "USD 0 external model calls; existing licensed local native tools only. Execution budget 6 hours local tool time, checkpoint all stages.",
+  "claim_boundary": "Simulated digital prototype; unverified material, adhesive, fatigue, radio and physical behavior remain explicit. Existing frozen reference and research semantics unchanged.",
+  "stop_condition": "Do not relax gates to pass or replace native EDA/FEM results with invented records. Retain failures; continue independent deliverables when external execution is blocked.",
+  "limitations": "Digital D2 archived. Cold-start, magnetic mesh and native EDA gates not passed; full init failed. No hardware or autonomous Agent evidence.",
+  "handoff": "See docs/agentlab/DOOR-ENGINEERING-D2.md; continue from failed gates in a new immutable D3 version. D2 archived publication must not be overwritten.",
+  "evidence": {
+    "feature": "BFA-028-door-engineering-case",
+    "status": "partial-engineering-delivery",
+    "case_version": "D2",
+    "case_owner": "pi-chat-c1152c3ff3c7a5d8",
+    "native_parts": 22,
+    "dimensioned_projection_sheets": 22,
+    "report_pages": 36,
+    "package": {
+      "file": "door-magnetic-D2-engineering.zip",
+      "sha256": "4a11f12af0338c66da90f922aba0d080ca5dd03a2ecd10035a9530a30d10be8a",
+      "bytes": 132177014,
+      "files": 399,
+      "crc_and_all_hashes_pass": true,
+      "hardware_verified": false,
+      "product_accepted": false
+    },
+    "published_groups": 8,
+    "published_files": 130,
+    "http_all_hashes_pass": true,
+    "targeted_tests": {
+      "tests": 19,
+      "failures": 0
+    },
+    "full_init": {
+      "tests": 407,
+      "failures": 12,
+      "errors": 9,
+      "status": "FAILED",
+      "isolated_reproduction": "pi-regression.log",
+      "observed_error": "TypeError: iteratorMixin is not a function; pi-bf-aiot/node_modules/undici; Node 22.22.0",
+      "scope": "Not all full-suite failures independently attributed"
+    },
+    "cad_clearance": {
+      "sample_interval_deg": 1,
+      "angle_range_deg": [
+        0,
+        65
+      ],
+      "minimum_mm": 20.656382016745283,
+      "collisions": 0
+    },
+    "pcb": {
+      "pads": 72,
+      "tracks": 68,
+      "vias": 12,
+      "independent_unconnected": 0,
+      "independent_clearance_violations": 0,
+      "native_erc_drc": null
+    },
+    "native_failures": [
+      "PMIC cold start; VIN peak 0.1355317831 V",
+      "Magnetic force mesh 7.65 percent exceeds 5 percent",
+      "EDA import returned null, native ERC/DRC not available"
+    ],
+    "model_calls": 0,
+    "hardware_verified": false,
+    "autonomous_agent_verified": false,
+    "manufacturing_released": false,
+    "git_commit_or_push": false,
+    "ui_regressions": "node --test test_product_graph.cjs test_product_deliverables.cjs test_product_reader.cjs: PASS",
+    "browser": "Live localhost product page shows eight D2 sections; native door video visible, no console errors; all 130 file HTTP hashes verified"
+  },
+  "report_revision": {
+    "revision": "D2-report-r1",
+    "compiler": "XeLaTeX TeX Live 2026",
+    "two_pass_exit_codes": [
+      0,
+      0
+    ],
+    "pages": 36,
+    "native_editor_preview": "blocked: single-file compiler does not stage external figures/drawings",
+    "source_change": "mac CJK fontset -> portable Fandol",
+    "design_results_changed": false,
+    "pdf_sha256": "696f1661cde5d76eff19a37f2271e43238fe849a2e3fc9d5a91d22b9cc745a2c",
+    "tex_sha256": "e72838ae21a382ffe82e147389e315f3e5aa6eb5bae230239ddca17d234003fc"
+  }
+}

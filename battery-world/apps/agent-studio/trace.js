@@ -2,6 +2,7 @@
 (() => {
   const {api,esc}=window.BF;
   let generation=0,selected=null,snapshot=null,view='overview',turn='all',kind='all',query='',timer=null;
+  let focusedJob='';
   const tabs={overview:'概览',timeline:'时间线',compare:'对比',raw:'原始记录'};
   const lanes={conversation:'对话',model:'模型',tools:'工具 / Skill / MCP',experiments:'科学实验',engineering:'工程任务',capabilities:'适配器与 Skill'};
   const pre=v=>'<pre>'+esc(JSON.stringify(v,null,2))+'</pre>';
@@ -36,8 +37,9 @@
   async function compare(root){const id=selected;const sessions=await api('/api/conversations');if(view!=='compare'||selected!==id||root.dataset.module!=='trace')return;root.querySelector('#trace-body').innerHTML=`<p class="dev-hint">当前会话作为候选。选择基准查看差异。</p><div class="trace-filters"><label>基准 <select id="trace-baseline">${sessions.sessions.filter(s=>s.id!==id).map(s=>`<option value="${esc(s.id)}">${esc(s.title)}</option>`).join('')}</select></label><button id="trace-run-compare">查看差异</button></div><div id="trace-comparison"></div>`;root.querySelector('#trace-run-compare').onclick=async()=>{try{const base=root.querySelector('#trace-baseline').value;if(!base)return;const r=await api('/api/developer/trace-compare?session='+encodeURIComponent(id)+'&baseline='+encodeURIComponent(base));if(view!=='compare'||selected!==id)return;root.querySelector('#trace-comparison').innerHTML=`<p class="dev-hint">${esc(r.boundary)}</p><table class="trace-table"><thead><tr><th>指标</th><th>基准</th><th>当前</th><th>变化</th></tr></thead><tbody>${r.metrics.map(m=>`<tr><td>${esc({input_tokens:'输入 Token',output_tokens:'输出 Token',total_tokens:'总 Token',charged_usd:'费用 USD',tools:'工具调用',duration_ms:'最近进程时长 ms'}[m.key])}</td>${['baseline','candidate','delta'].map(k=>`<td>${m.key==='charged_usd'?money(m[k]):num(m[k])}</td>`).join('')}</tr>`).join('')}</tbody></table><details class="dev-record"><summary>比较来源与版本</summary>${pre(r.sources)}</details>`}catch(e){root.querySelector('#trace-comparison').textContent=e.message}}}
   async function raw(root){const id=selected,s=await api('/api/developer/trace?session='+encodeURIComponent(id));if(selected!==id||view!=='raw'||root.dataset.module!=='trace')return;root.querySelector('#trace-body').innerHTML=`<p class="dev-hint">${s.events.length} 条原始事件 · ${s.source.bytes} 字节 · 尾行 ${s.source.pending_tail_bytes} 字节</p><button id="trace-export-raw">导出完整原始证据 JSON</button><details class="dev-record"><summary>文件来源与快照</summary>${pre({source:s.source,snapshot_id:s.snapshot_id,boundary:s.boundary})}</details>${s.events.slice(-100).reverse().map(r=>`<details class="dev-record"><summary>#${r.seq} · ${esc(r.data.type||'event')}</summary>${pre(r)}</details>`).join('')}<p class="dev-hint">显示最近 100 条。导出保留全部记录及原始字节，可能含会话内容。</p>`;root.querySelector('#trace-export-raw').onclick=()=>download(id+'-trace.json',JSON.stringify(s,null,2))}
   function paint(root){
-    root.innerHTML=`<div class="dev-heading"><div><h3>Trace</h3><p class="dev-hint">执行过程、用量与证据</p></div><div class="trace-actions"><button id="refresh-trace" class="quiet">刷新</button><button id="trace-report">导出报告</button></div></div><div class="trace-tabs" role="group" aria-label="Trace 视图">${Object.entries(tabs).map(([key,label])=>`<button data-trace-tab="${key}" aria-pressed="${view===key}">${label}</button>`).join('')}</div><div id="trace-body">${view==='overview'?overview():view==='timeline'?timeline():'<p class="dev-hint">正在读取…</p>'}</div><details class="dev-record"><summary>来源与观测边界</summary>${pre(snapshot.source)}<p class="dev-hint">${esc(snapshot.boundary)}</p></details>`;
+    root.innerHTML=`<div class="dev-heading"><div><h3>Trace</h3><p class="dev-hint">执行过程、用量与证据</p></div><div class="trace-actions">${focusedJob?'<button id="trace-back-result">返回产品成果</button>':''}<button id="refresh-trace" class="quiet">刷新</button><button id="trace-report">导出报告</button></div></div><div class="trace-tabs" role="group" aria-label="Trace 视图">${Object.entries(tabs).map(([key,label])=>`<button data-trace-tab="${key}" aria-pressed="${view===key}">${label}</button>`).join('')}</div><div id="trace-body">${view==='overview'?overview():view==='timeline'?timeline():'<p class="dev-hint">正在读取…</p>'}</div><details class="dev-record"><summary>来源与观测边界</summary>${pre(snapshot.source)}<p class="dev-hint">${esc(snapshot.boundary)}</p></details>`;
     root.querySelectorAll('[data-trace-tab]').forEach(b=>b.onclick=()=>{view=b.dataset.traceTab;paint(root)});
+    root.querySelector('#trace-back-result')?.addEventListener('click',()=>window.ProductWorkspace.showSession({restore:true,result:focusedJob}));
     root.querySelector('#refresh-trace').onclick=()=>open(root,selected);root.querySelector('#trace-report').onclick=exportReport;
     const t=root.querySelector('#trace-turn'),k=root.querySelector('#trace-kind'),q=root.querySelector('#trace-search');
     if(t)t.onchange=()=>{turn=t.value;paint(root)};if(k)k.onchange=()=>{kind=k.value;paint(root)};if(q)q.onchange=()=>{query=q.value;paint(root)};
@@ -47,11 +49,11 @@
     if(view==='raw')raw(root).catch(e=>{if(root.querySelector('#trace-body'))root.querySelector('#trace-body').textContent=e.message});
   }
   async function open(root,id){clearInterval(timer);const gen=++generation;let busy=false;
-    if(selected!==id){turn='all';snapshot=null;query='';kind='all'}selected=id;
+    if(selected!==id){turn='all';snapshot=null;query='';kind='all'}selected=id;if(focusedJob){view='timeline';query=focusedJob;kind='all';turn='all'};
     if(!id?.startsWith('pi-')){root.innerHTML='<h3>Trace</h3><p class="dev-hint">选择左侧会话查看执行时间线。工程适配器在 Tools 中管理。</p>';return}
     root.innerHTML='<p class="dev-hint">正在读取执行记录…</p>';snapshot=null;
     const refresh=async()=>{if(busy||gen!==generation||root.dataset.module!=='trace'||document.querySelector('#developer-view').hidden||document.hidden)return;busy=true;try{const result=await api('/api/developer/trace-analysis?session='+encodeURIComponent(id));if(gen!==generation||window.BF.getSelection()!==id||root.dataset.module!=='trace')return;if(snapshot?.analysis_id!==result.analysis_id){snapshot=result;paint(root)}}catch(e){if(gen===generation)root.textContent=e.message}finally{busy=false}};
     await refresh();timer=setInterval(refresh,5000);
   }
-  window.TracePanel={open};
+  window.TracePanel={open,focusJob:id=>{focusedJob=id}};
 })();

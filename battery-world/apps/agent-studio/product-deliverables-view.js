@@ -19,6 +19,28 @@
     ${!data.reference&&data.inventoryPending?'<p class="pd-muted">正在读取交付绑定…</p>':''}
     ${!data.reference&&n.id==='integrated'&&data.unboundFiles?.length?'<p class="pd-muted">未绑定分项的已发布文件保留在「集成设计」，不会猜测其所属模块。</p>':''}`;
   }
+  function renderMarkdown(content){
+    // Escape source first. This reader deliberately does not execute raw HTML or load remote images.
+    const inline=text=>esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    const lines=content.split('\n'),out=[];let code=null,list=false;
+    const endList=()=>{if(list){out.push('</ul>');list=false}};
+    const cells=line=>line.trim().replace(/^\||\|$/g,'').split('|').map(x=>x.trim());
+    for(let i=0;i<lines.length;i++){
+      const line=lines[i];
+      if(line.startsWith('```')){endList();if(code!==null){out.push('<pre><code>'+esc(code.join('\n'))+'</code></pre>');code=null}else code=[];continue}
+      if(code!==null){code.push(line);continue}
+      if(line.includes('|')&&i+1<lines.length&&cells(lines[i+1]).every(x=>/^:?-{3,}:?$/.test(x))){
+        endList();const header=cells(line);out.push('<div class="pd-markdown-table"><table><thead><tr>'+header.map(x=>'<th>'+inline(x)+'</th>').join('')+'</tr></thead><tbody>');i++;
+        while(i+1<lines.length&&lines[i+1].includes('|')&&lines[i+1].trim()){const row=cells(lines[++i]);out.push('<tr>'+header.map((_,j)=>'<td>'+inline(row[j]||'')+'</td>').join('')+'</tr>')}
+        out.push('</tbody></table></div>');continue;
+      }
+      const bullet=line.match(/^\s*[-*+] (.*)$/);if(bullet){if(!list){out.push('<ul>');list=true}out.push('<li>'+inline(bullet[1])+'</li>');continue}
+      endList();const heading=line.match(/^(#{1,6}) (.*)$/);
+      if(heading)out.push('<h'+heading[1].length+'>'+inline(heading[2])+'</h'+heading[1].length+'>');
+      else if(line.trim())out.push('<p>'+inline(line)+'</p>');
+    }
+    endList();if(code!==null)out.push('<pre><code>'+esc(code.join('\n'))+'</code></pre>');return out.join('');
+  }
   let dialog=null;
   function close(){dialog?.close()}
   async function preview(file,context){
@@ -29,8 +51,12 @@
     d.addEventListener('close',()=>{controller.abort();d.remove();if(dialog===d)dialog=null},{once:true});
     d.showModal();const body=d.querySelector('.pd-preview-body');
     if(file.integrity===false){body.textContent='该文件完整性核对失败，请到控制台查看原因。';return}
-    if(D.ext(file)==='glb'&&(file.path||file.job_id)){
-      const frame=document.createElement('iframe');frame.title='三维模型：'+file.name;frame.src=file.path?'/model-viewer.html?case=pluck-v1&artifact='+encodeURIComponent(file.path):'/model-viewer.html?job='+encodeURIComponent(file.job_id);frame.className='pd-model-preview';body.classList.add('pd-preview-3d');body.append(frame);return;
+    if(D.ext(file)==='glb'&&(file.path||file.job_id||(file.session&&file.id))){
+      const frame=document.createElement('iframe');frame.title='三维模型：'+file.name;frame.src=file.session&&file.id?'/model-viewer.html?'+new URLSearchParams({session:file.session,result_file:file.id}):file.path?'/model-viewer.html?case=pluck-v1&artifact='+encodeURIComponent(file.path):'/model-viewer.html?job='+encodeURIComponent(file.job_id);frame.className='pd-model-preview';body.classList.add('pd-preview-3d');body.append(frame);return;
+    }
+    if(D.ext(file)==='mp4'){const video=document.createElement('video');video.src=file.url;video.controls=true;video.playsInline=true;video.style.width='100%';body.append(video);return;}
+    if(D.ext(file)==='pdf'){
+      const frame=document.createElement('iframe');frame.title='PDF：'+file.name;frame.src=file.url;frame.className='pd-model-preview';frame.setAttribute('sandbox','allow-same-origin');body.classList.add('pd-preview-3d');body.append(frame);return;
     }
     if(D.kind(file)==='image'){
       const img=document.createElement('img');img.alt=file.name;img.src=file.url;img.onerror=()=>{body.textContent='图片暂时无法读取，文件可能已变更；请刷新后核对。'};body.append(img);return;
@@ -45,9 +71,12 @@
       while(true){const {done,value}=await reader.read();if(done)break;const room=524288-length;chunks.push(value.slice(0,room));length+=Math.min(room,value.length);if(value.length>room||length>=524288){truncated=true;await reader.cancel();break}}
       if(!d.isConnected)return;
       const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length}
-      const pre=document.createElement('pre');pre.textContent=new TextDecoder().decode(bytes);body.replaceChildren(pre);
+      const content=new TextDecoder().decode(bytes);
+      if(D.ext(file)==='md'){
+        const article=document.createElement('article');article.className='pd-markdown-reader';article.innerHTML=renderMarkdown(content);body.replaceChildren(article);
+      }else{const pre=document.createElement('pre');pre.textContent=content;body.replaceChildren(pre)}
       if(truncated){const p=document.createElement('p');p.textContent='预览已截取前 512 KB，下载可查看完整文件。';body.prepend(p)}
     }catch(e){if(d.isConnected)body.textContent='预览未能加载：'+e.message}
   }
-  window.ProductDeliveryView={panel,preview,close,bytes};
+  window.ProductDeliveryView={panel,preview,close,bytes,renderMarkdown};
 })();

@@ -26,8 +26,12 @@
   }
   async function open(root,owner,compact=false){
     const gen=(generations.get(root)||0)+1;generations.set(root,gen);root.innerHTML='<p class="dev-hint">读取版本和交付证据…</p>';
-    if(!owner?.startsWith('pi-chat-')){root.innerHTML='<p class="dev-hint">选择一个产品会话查看交付与部署。</p>';return}
+    if(!owner){root.innerHTML='<p class="dev-hint">选择一个会话查看交付与部署。</p>';return}
     try{
+      const results=await api('/api/results?session='+encodeURIComponent(owner));
+      if(gen!==generations.get(root)||window.BF.getSelection()!==owner)return;
+      const catalog=`<section class="deployment-record"><h4>统一成果目录 · ${results.files.length} 件文件</h4><p class="dev-hint">${results.coverage.map(d=>esc(d.label)+' '+d.files+' 件').join(' · ')}。方案、基准计算、独立工程和装配交付共用后台目录。</p><button data-result-open>查看成果与过程 →</button><details><summary>数据来源与绑定范围</summary>${results.results.map(r=>`<p>${esc(r.kind)} · ${esc(r.id)} · ${esc(r.status)} · ${esc(r.applicability.reason)}</p>`).join('')||'<p>暂无方案或执行记录。</p>'}</details></section>`;
+      if(!results.revision){root.innerHTML='<h3>交付与部署</h3>'+catalog+'<p class="dev-hint">尚无产品装配与阶段验收记录。已有计算或独立仿真可查看，不能据此宣称整机交付。</p>';root.querySelector('[data-result-open]').onclick=()=>window.ProductWorkspace.showSession({view:'results'});return}
       const [d,contract]=await Promise.all([api('/api/progress?session='+encodeURIComponent(owner)),api('/api/deliverables?session='+encodeURIComponent(owner))]);if(gen!==generations.get(root)||window.BF.getSelection()!==owner)return;
       root.innerHTML=`<div class="dev-heading"><div><h3>交付与部署</h3><p class="dev-hint">装配 ${d.revision?'v'+d.revision:'尚未建立'} · ${d.delivery?.passed?'当前声明阶段条件已满足':d.delivery?'逐项查看缺少的产物与验证':'按当前版本展示工程证据；未设置自动交付条件'}</p></div><button data-delivery-refresh class="quiet">刷新</button></div>
         <div class="delivery-stages">${d.stages.map(s=>`<article data-stage="${s.id}"><span class="delivery-dot ${s.state}"></span><div><b>${esc(s.title)}</b><p>${esc(s.detail)}</p></div><small>${names[s.state]||esc(s.state)}</small>${!compact?`<button class="quiet" data-stage-map="${s.module}" aria-label="在全景中定位${esc(s.title)}">↗</button>`:''}</article>`).join('')}</div>
@@ -40,6 +44,7 @@
         <p class="dev-hint">${esc(d.scope)}</p>`;
       root.querySelector('[data-stage-save]').onclick=async()=>{const notice=root.querySelector('[data-stage-notice]');try{await api('/api/deliverables',{session_id:owner,action:'configure_stage',expected_revision:d.delivery?.stage_contract?.revision||0,target_stage:root.querySelector('[data-stage-target]').value,max_continuations:2,reason:root.querySelector('[data-stage-reason]').value});await open(root,owner,compact)}catch(e){notice.textContent=e.message}};
       root.querySelector('[data-delivery-product]').onclick=()=>window.ProductWorkspace.showSession();
+      root.insertAdjacentHTML('afterbegin',catalog);root.querySelector('[data-result-open]').onclick=()=>window.ProductWorkspace.showSession({view:'results'});
       root.querySelector('[data-delivery-refresh]').onclick=()=>open(root,owner,compact);
       root.querySelector('[data-engineering-package]')?.addEventListener('click',async e=>{
         e.target.disabled=true;const notice=root.querySelector('[data-package-notice]');notice.textContent='正在核对并打包…';

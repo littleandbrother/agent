@@ -222,11 +222,16 @@ class Deliverables:
         result['complete'] = result['verdict']['full_engineering_passed']
         return result
 
-    def package(self, owner):
+    def package(self, owner, expected_snapshot=None, revision=None):
         snapshot = self.inspect(owner)
         if snapshot['revision'] is None:
             raise ValueError('DELIVERY_ASSEMBLY_REQUIRED')
-        key = identity(snapshot)[:24]
+        catalog = self.app.results.inspect(owner, revision)
+        if expected_snapshot and expected_snapshot != catalog['snapshot_sha256']:
+            raise ValueError('RESULTS_CHANGED_REFRESH_BEFORE_EXPORT')
+        if any(not f['integrity'] for f in catalog['files']):
+            raise ValueError('RESULTS_CONTAIN_INVALID_FILES')
+        key = identity({'delivery':snapshot,'results':catalog})[:24]
         root = self.store.root / 'product-assemblies' / owner / 'delivery-packages'
         root.mkdir(parents=True, exist_ok=True)
         dest = root / (key + '.zip')
@@ -239,18 +244,28 @@ class Deliverables:
                     z.writestr('版本清单与验收报告/交付标准.json', canonical(snapshot['contract']))
                     for folder in snapshot['contract']['directories']:
                         z.writestr(folder + '/', '')
-                    for task in snapshot['tasks']:
-                        for ref in (task['binding'] or {}).get('files', []):
-                            path, meta = self.app.assemblies.file(owner, ref['id'])
-                            z.write(path, task['directory'] + '/' + task['id'] + '/' + meta['id'][:12] + '-' + meta['name'])
+                    z.writestr('成果清单.json', canonical(catalog))
+                    for ref in catalog['files']:
+                        path, name = self.app.results.file(owner,ref['id'])
+                        z.write(path, ref['archive_path'])
+                    if self.app.results.inspect(owner,revision)['snapshot_sha256'] != catalog['snapshot_sha256']:
+                        raise ValueError('RESULTS_CHANGED_DURING_PACKAGE')
                 if canonical(self.inspect(owner)) != canonical(snapshot):
                     raise ValueError('DELIVERY_CHANGED_DURING_PACKAGE')
                 os.replace(temporary, dest)
             finally:
                 Path(temporary).unlink(missing_ok=True)
         with zipfile.ZipFile(dest) as z:
-            if z.testzip() or z.read('版本清单与验收报告/验收.json').decode() != canonical(snapshot):
+            if z.testzip() or z.read('版本清单与验收报告/验收.json').decode() != canonical(snapshot) or z.read('成果清单.json').decode() != canonical(catalog):
                 raise ValueError('DELIVERY_ZIP_CORRUPT')
+            expected={f['archive_path'] for f in catalog['files']}
+            if {n for n in z.namelist() if n.startswith('成果/')} != expected:
+                raise ValueError('DELIVERY_ZIP_INVENTORY_MISMATCH')
+            for f in catalog['files']:
+                h=hashlib.sha256()
+                with z.open(f['archive_path']) as stream:
+                    for chunk in iter(lambda:stream.read(1024*1024),b''):h.update(chunk)
+                if h.hexdigest()!=f['sha256']:raise ValueError('DELIVERY_ZIP_HASH_MISMATCH')
         # Use the existing publication/download/Trace path for the archive.
         import shutil
         relative = 'delivery-packages/' + dest.name

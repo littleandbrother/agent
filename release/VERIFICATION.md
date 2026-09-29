@@ -1,3 +1,5 @@
+> Historical BFA-025 verification. Current publication and known failures: [DOOR-VERIFICATION.md](DOOR-VERIFICATION.md).
+
 # Product execution authority release verification — 2026-09-29
 
 This release adds BFA-025 to the source snapshot originally published at

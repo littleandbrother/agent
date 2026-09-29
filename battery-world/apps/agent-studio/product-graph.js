@@ -1,7 +1,7 @@
 /* Read-only projection of recorded product facts. No scientific verdicts here. */
 (function (root) {
   const labels = {pending:'待验证',recorded:'已记录',passed:'检查通过',failed:'未通过',stale:'已失效',active:'执行中'};
-  const engines = {'product-model':'产品模型',blender:'三维展示',comsol:'结构仿真',jlceda:'原理图与 PCB','event-transient':'机电瞬态','mcu-firmware':'固件构建','tinyml-nas':'TinyML / NAS'};
+  const engines = {'product-model':'产品模型',blender:'三维展示',comsol:'结构仿真',jlceda:'原理图与 PCB','event-transient':'机电瞬态','mcu-firmware':'固件构建','tinyml-nas':'TinyML / NAS','engineering-project':'源码工程','cadquery':'原生 CAD','spice':'电路仿真','firmware-stm32l031':'MCU 固件','beam-event':'几何耦合仿真'};
   const definitions = [
     ['mission','需求约定','requirements',24,256],
     ['energy','能源架构','energy',244,20], ['sensing','感知与服务','sensing',244,116],
@@ -15,8 +15,8 @@
   ];
   const checkNames = {'required-parts':'必需部件','current-native-model':'原生模型与尺寸读回','energy-budget-screen':'日能量与储能初筛','normal-service-screen':'条件轨迹至少一次回应','native-electrical-rules':'原生电路规则','cross-domain-interfaces':'跨域接口一致性','product-electrical-verification':'真实电路功能','target-firmware-verification':'目标固件验证','hardware-measurements':'硬件测量'};
   const checkGroups = {'energy-check':['energy-budget-screen'], 'mechanical-check':['required-parts','current-native-model'], 'circuit-check':['native-electrical-rules','cross-domain-interfaces','product-electrical-verification'], 'firmware-check':['target-firmware-verification'], 'service-check':['normal-service-screen','hardware-measurements']};
-  const engineNode = {'product-model':'mechanical-check',blender:'mechanical',comsol:'mechanical-check',jlceda:'circuit-check','event-transient':'energy-check','mcu-firmware':'firmware-check','tinyml-nas':'ml'};
-  const nodeEngines = {energy:['event-transient'],mechanical:['product-model','blender','comsol'],circuit:['jlceda'],firmware:['mcu-firmware'],ml:['tinyml-nas'],'energy-check':['event-transient'],'mechanical-check':['product-model','comsol'],'circuit-check':['jlceda'],'firmware-check':['mcu-firmware'],'service-check':['event-transient']};
+  const engineNode = {'product-model':'mechanical-check',blender:'mechanical',comsol:'mechanical-check',jlceda:'circuit-check','event-transient':'energy-check','mcu-firmware':'firmware-check','tinyml-nas':'ml','cadquery':'mechanical','spice':'circuit','firmware-stm32l031':'firmware','beam-event':'energy-check'};
+  const nodeEngines = {energy:['event-transient'],mechanical:['product-model','blender','comsol','cadquery'],circuit:['jlceda','spice'],firmware:['mcu-firmware','firmware-stm32l031'],ml:['tinyml-nas'],'energy-check':['event-transient'],'mechanical-check':['product-model','comsol'],'circuit-check':['jlceda'],'firmware-check':['mcu-firmware'],'service-check':['event-transient']};
   const text = v => typeof v==='string'?v:JSON.stringify(v);
   const time = v => Number.isFinite(Number(v))?Number(v):0;
   function checkState(c) {
@@ -58,7 +58,7 @@
     put('mechanical',(a.parts||[]).map(part=>part.name+' · '+(part.geometry?.size_mm||[]).join(' × ')+' mm'),a.parts?.length+' 个部件 · 尺寸以 mm 记录');
     put('integrated',[a.title,...(a.assumptions||[])],a.title);
     for(const n of nodes){
-      n.jobs=bound.filter(j=>(nodeEngines[n.id]||[]).includes(j.engine));
+      n.jobs=bound.filter(j=>(nodeEngines[n.id]||[]).includes(j.project?.manifest?.kind||j.engine));
       if(n.jobs.length&&!n.facts.length){n.status='recorded';n.summary=n.jobs.length+' 项绑定工程记录'}
       n.checks=checks.filter(c=>(checkGroups[n.id]||[]).includes(c.id));
       if(n.checks.length){
@@ -82,13 +82,36 @@
     const decisions=['energy','sensing','ml','circuit','mechanical','firmware'], validators=Object.keys(checkGroups);
     const edges=[...decisions.flatMap(id=>[{source:'mission',target:id},{source:id,target:'integrated'}]),...validators.flatMap(id=>[{source:'integrated',target:id},{source:id,target:'evidence'}]),{source:'evidence',target:'release'}];
     // Fixed lanes are explanatory workflow relationships, never inferred causal evidence.
-    const events=[...(product.records||[]).filter(r=>r.kind==='proposal').map(r=>({id:'proposal-'+r.revision,time:time(r.created),title:'方案 v'+r.revision,node:'mission',state:r.stale?'stale':'recorded',detail:r.payload.title,record:r})),...versions.map(r=>({id:'assembly-'+r.revision,time:time(r.created),title:'装配 v'+r.revision,node:'integrated',state:r.source_valid===false?'stale':'recorded',revision:r.revision,detail:r.payload.title,record:r})),...jobs.map(j=>({id:j.id,time:time(j.ended||j.created),title:engines[j.engine]||j.engine,node:engineNode[j.engine]||'evidence',state:jobState(j),detail:j.status+' · '+j.id,job:j})),...(assembly.verifications||[]).map(v=>({id:'verification-'+v.id,time:time(v.created),title:'装配验证 v'+v.revision,node:'evidence',state:v.stale?'stale':v.integrity===false?'failed':'recorded',revision:v.revision,detail:v.scope||'独立验证记录',verification:v}))].filter(e=>e.time>0).sort((x,y)=>x.time-y.time||x.id.localeCompare(y.id));
+    const events=[...(product.records||[]).filter(r=>r.kind==='proposal').map(r=>({id:'proposal-'+r.revision,time:time(r.created),title:'方案 v'+r.revision,node:'mission',state:r.stale?'stale':'recorded',detail:r.payload.title,record:r})),...versions.map(r=>({id:'assembly-'+r.revision,time:time(r.created),title:'装配 v'+r.revision,node:'integrated',state:r.source_valid===false?'stale':'recorded',revision:r.revision,detail:r.payload.title,record:r})),...jobs.map(j=>({id:j.id,time:time(j.ended||j.created),title:engines[j.project?.manifest?.kind||j.engine]||j.engine,node:engineNode[j.project?.manifest?.kind||j.engine]||'evidence',state:jobState(j),detail:j.status+' · '+j.id,job:j})),...(assembly.verifications||[]).map(v=>({id:'verification-'+v.id,time:time(v.created),title:'装配验证 v'+v.revision,node:'evidence',state:v.stale?'stale':v.integrity===false?'failed':'recorded',revision:v.revision,detail:v.scope||'独立验证记录',verification:v}))].filter(e=>e.time>0).sort((x,y)=>x.time-y.time||x.id.localeCompare(y.id));
     const files=(assembly.files||[]).filter(f=>f.revision===record?.revision).map(f=>({...f,url:'/api/assembly/file?session='+encodeURIComponent(current.id)+'&id='+encodeURIComponent(f.id)}));
     const artifacts=bound.flatMap(j=>(j.result?.artifacts||[]).map(f=>({...f,job_id:j.id,engine:j.engine,url:'/api/engineering/jobs/'+encodeURIComponent(j.id)+'/artifact?name='+encodeURIComponent(f.name)})));
     const previous=versions.filter(r=>r.revision<record?.revision).at(-1);
     const changes=previous?Object.keys(record.hashes||{}).filter(k=>record.hashes[k]!==previous.hashes?.[k]):[];
     return {nodes,edges,events,files,artifacts,bound,record,proposal,versions,previous,changes,isCurrent,checks,empty:!proposal&&!record,title:a.title||p.title||current?.title||'产品设计',physicalVerified:isCurrent&&valid&&assembly.hardware_verified===true};
   }
-  const api={build,matches,checkState,jobState,labels,engines,checkNames,width:1116,height:606};
+  // Shared by the result list and graph. An independent run remains visible but
+  // never inherits the selected assembly's acceptance.
+  function featuredResults(rows){
+    const score=r=>(r.source_type==='engineering-case'?20:0)+(r.kind==='proposal'?-10:0)+(r.presentations?.some(v=>['model','mesh'].includes(v.kind))?3:0)+(r.files.some(f=>f.integrity&&['current','reused'].includes(f.applicability?.state))?5:0)+(r.status==='SUCCEEDED'?2:0);
+    const ranked=[...rows].sort((a,b)=>score(b)-score(a)||b.created-a.created),seen=new Set();
+    return ranked.filter(r=>{if(seen.has(r.kind))return false;seen.add(r.kind);return true});
+  }
+  function withResults(graph,snapshot){
+    const files=snapshot.files.map(f=>({...f,session:snapshot.owner,stale:f.integrity===false||['stale','future'].includes(f.applicability.state),source:f.created_revision?'生成于装配 v'+f.created_revision:f.applicability.reason}));
+    const domainNodes={mechanical:['mechanical'],circuit:['circuit','energy'],firmware:['firmware'],system:['mission']};
+    const all=['integrated','evidence','release'];
+    const nodes=graph.nodes.map(n=>{
+      const assets=files.filter(f=>all.includes(n.id)||(domainNodes[f.domain]||[]).includes(n.id)||(n.id==='ml'&&snapshot.results.find(r=>r.id===f.result_id)?.kind==='tinyml-nas'));
+      const jobs=snapshot.results.filter(r=>assets.some(f=>f.result_id===r.id));
+      if(!assets.length)return n;
+      return {...n,assets,sections:[],jobs:jobs.map(r=>({...r,engine:r.kind,result:{scope:r.scope}})),
+        title:n.id==='firmware'&&jobs.every(r=>r.kind==='benchmark')?'计算策略（非固件）':n.title,
+        status:n.id==='release'?n.status:n.status==='pending'?'recorded':n.status,summary:n.id==='release'?n.summary:assets.length+' 件记录 · '+assets.filter(f=>f.stale).length+' 件需核对'};
+    });
+    const events=new Map(graph.events.map(e=>[e.id,e]));
+    for(const r of snapshot.results)if(!events.has(r.id))events.set(r.id,{id:r.id,time:r.created,title:engines[r.kind]||({benchmark:'基准计算',proposal:'产品方案'})[r.kind]||r.kind,node:r.kind==='benchmark'?'energy-check':r.kind==='proposal'?'mission':engineNode[r.kind]||'evidence',state:r.status==='FAILED'||r.design_status==='FAIL'?'failed':'recorded',detail:r.status+' · '+r.applicability.reason,job:{...r,engine:r.kind,result:{checks:r.checks,scope:r.scope}}});
+    return {...graph,nodes,events:[...events.values()].sort((a,b)=>a.time-b.time),files:files.filter(f=>!f.job_id),artifacts:files.filter(f=>f.job_id),empty:!files.length&&!snapshot.results.length,title:snapshot.title};
+  }
+  const api={build,featuredResults,withResults,matches,checkState,jobState,labels,engines,checkNames,width:1116,height:606};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProductGraph=api;
 })(typeof window==='undefined'?globalThis:window);

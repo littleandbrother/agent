@@ -154,6 +154,6 @@
     if(b.dataset.diff){const r=await api('/api/developer/revision?id='+b.dataset.diff);q('#dev-detail-body').innerHTML=Object.entries(r.diff).map(([k,v])=>fold(k,v||'无变化',true)).join('');peek.showModal();return}
     if(b.dataset.jobDetail){const j=await api('/api/jobs/'+encodeURIComponent(b.dataset.jobDetail));q('#dev-detail-body').innerHTML=`<h3>${esc(j.request.task_id)} · ${esc(j.result?.design_status||j.status)}</h3>`+fold('身份与结果',{id:j.id,request:j.request,status:j.status,run_id:j.result?.run_id,checks:j.result?.checks,summary:j.result?.summary},true)+fold('设计与策略',{design:j.result?.design,policy:j.result?.policy})+`<button id="view-job-runtime">在任务模式查看产物</button>`;q('#view-job-runtime').onclick=async()=>{peek.close();await window.BF.select(j.id);setMode('runtime')};peek.showModal()}
   }catch(err){notice(err.message,true)}});
-  window.BFDeveloper={setMode,openModule:key=>{module=modules[key]?key:'trace';localStorage.setItem('bf-dev-module',module);setMode('console')},openTrace:()=>{module='trace';localStorage.setItem('bf-dev-module',module);setMode('console')}};
+  window.BFDeveloper={setMode,openModule:key=>{module=modules[key]?key:'trace';localStorage.setItem('bf-dev-module',module);setMode('console')},openTrace:(options={})=>{window.TracePanel.focusJob(options.job||'');module='trace';localStorage.setItem('bf-dev-module',module);setMode('console')}};
   setMode(mode);
 })();

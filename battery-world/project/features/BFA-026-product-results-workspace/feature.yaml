@@ -1,0 +1,61 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "owner": "bf-agent-coordinator",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/",
+    "apps/agent-studio/",
+    "configs/reference_cases/",
+    "scripts/",
+    "tests/agentlab/",
+    "docs/agentlab/",
+    "docs/PROGRESS.md",
+    "PROJECT.yaml",
+    "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "init.sh",
+    "README.md",
+    "docs/architecture/SYSTEM.md",
+    "project/features/BFA-026-product-results-workspace/",
+    "/Users/depengsu/Documents/pi-bf-aiot/**/node_modules/ (same-lock cloud placeholder materialization only)"
+  ],
+  "claim_boundary": "Engineering simulation and paper-anchor verification only. Published measurements are reference observations, never local calibration data. SP-SSHI/SP-SECE behavior is not transistor-level reproduction unless circuit evidence supports it. No hardware, Agent efficacy or Harness promotion claims.",
+  "id": "BFA-026-product-results-workspace",
+  "status": "complete",
+  "objective": "Results-first product workspace backed by a rebuildable SQLite result index and identical downloadable inventory.",
+  "hypothesis": "A single owner-scoped result catalog makes outcomes, limitations, revisions and native sources discoverable without guessing filenames.",
+  "paper_claim": "Engineering infrastructure only; no autonomy efficacy, physical calibration, hardware or RSI claim.",
+  "falsifier": "UI and archive inventories disagree, a foreign or tampered artifact is served, camera-only changes hide reusable results, or an execution success is presented as product acceptance.",
+  "schema_changes": [
+    "bf-product-results-v1",
+    "product_result_index"
+  ],
+  "tests": "Result catalog isolation/tamper/reuse/export controls, native readbacks, UI navigation and full init.",
+  "negative_controls": [
+    "foreign owner",
+    "tampered artifact",
+    "unbound legacy input",
+    "geometry change",
+    "camera-only change",
+    "missing validator",
+    "malformed numeric preview"
+  ],
+  "command": "./init.sh",
+  "artifacts": "docs/agentlab/PRODUCT-RESULTS-WORKSPACE.md",
+  "cost_cap": "USD 0; local native tools and recorded data only.",
+  "stop_condition": "Keep missing calibration, validators and hardware explicitly open; no scientific gate changes.",
+  "limitations": "Existing SECE calibration and current pluck EDA/board integration gaps remain research/engineering tasks, not silently certified by platform changes.",
+  "handoff": "Results UX delivered. Continue physical/product gaps only as a separately declared feature; no scientific or hardware completion.",
+  "evidence": {
+    "report": "docs/agentlab/PRODUCT-RESULTS-WORKSPACE.md",
+    "receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/results-workspace-20260929/receipt.json",
+    "full_init_python_tests": 398,
+    "javascript_tests": 20,
+    "native_tools": "CAD/SPICE/MCU actual execution",
+    "live_browser": "passed",
+    "production_export_files": 694,
+    "new_model_calls": 0
+  }
+}

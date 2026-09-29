@@ -70,6 +70,7 @@
     if(scope==='reference'&&!referenceData){q('#pd-empty').hidden=false;q('#pd-empty').textContent='正在读取参考工程交付物…'}
     if(inventoryError&&scope==='session'){q('#pd-empty').hidden=false;q('#pd-empty').textContent='交付绑定暂时无法读取：'+inventoryError}
     draw();inspect();history();window.BFPanelSizing?.refresh();
+    window.ProductResults?.update({owner,scope,referenceData,revision});
   }
   function draw(){
     if(!data)return;
@@ -143,24 +144,34 @@
     renderData();if(scope==='reference')loadReference();else refresh();requestAnimationFrame(fit);
   }
   async function refresh(){
-    if(!active()||document.hidden||refreshBusy||scope==='reference'||!owner?.startsWith('pi-chat-'))return;
+    if(!active()||document.hidden||refreshBusy||scope==='reference'||!owner)return;
+    if(!owner.startsWith('pi-chat-')){window.ProductResults?.update({owner,scope,referenceData,revision});return}
     refreshBusy=true;const id=owner,gen=generation;
     try{
       const [next,snapshot]=await Promise.all([api('/api/conversations/'+encodeURIComponent(id)),api('/api/deliverables?session='+encodeURIComponent(id)).catch(e=>{if(e.message==='PRODUCT_SESSION_REQUIRED')return {owner:id,revision:null,tasks:[]};throw e})]);
       if(gen===generation&&id===owner&&active()&&scope==='session'){
         const changed=JSON.stringify(current?.product)!==JSON.stringify(next.product)||JSON.stringify(inventory)!==JSON.stringify(snapshot)||inventoryError;
-        current=next;inventory=snapshot;inventoryError='';if(changed){stop();eventIndex=-1;renderData()}
+        current=next;inventory=snapshot;inventoryError='';if(changed&&!revision&&!play&&eventIndex<0)renderData();else window.ProductResults?.update({owner,scope,referenceData,revision});
       }
     }catch(e){if(gen===generation){inventoryError=e.message;renderData()}}
     finally{refreshBusy=false}
   }
   function open(){
-    const id=window.BF.getSelection();if(id!==owner){generation++;stop();V.close();if(owner!==null){scope='session';sessionStorage.setItem('bf-product-source',scope)}owner=id;inventory=null;inventoryError='';revision='';selected='integrated';tab='deliverables';assetFilter='all';circuitPart='';eventIndex=-1;search='';category=''}
+    const id=window.BF.getCurrent()?.owner||window.BF.getSelection();if(id!==owner){generation++;stop();V.close();if(owner!==null){scope='session';sessionStorage.setItem('bf-product-source',scope)}owner=id;inventory=null;inventoryError='';revision='';selected='integrated';tab='deliverables';assetFilter='all';circuitPart='';eventIndex=-1;search='';category=''}
     current=window.BF.getCurrent();if(!q('#pd-stage'))shell();q('#pd-search').value=search;renderData();requestAnimationFrame(fit);if(scope==='reference'){if(!referenceData)loadReference()}else refresh();
   }
+  function applyResults(snapshot){
+    if(scope!=='session'||snapshot.owner!==owner||snapshot.revision!==(data?.record?.revision??null))return;
+    data=G.withResults(data,snapshot);
+    q('#pd-title').textContent=snapshot.title;q('#pd-title').title=snapshot.title;
+    q('#pd-empty').hidden=!data.empty;
+    q('#pd-version').disabled=!snapshot.versions.length;
+    if(!snapshot.versions.length)q('#pd-version').innerHTML='<option>会话成果 · 尚无装配版本</option>';
+    draw();inspect();history();
+  }
   function showReference(){window.BFDeveloper.setMode('product');setSource('reference')}
-  function showSession(){window.BFDeveloper.setMode('product');setSource('session')}
-  window.ProductWorkspace={open,showReference,showSession};
+  function showSession(options={}){window.BFDeveloper.setMode('product');if(scope!=='session')setSource('session');window.ProductResults?.focus(options)}
+  window.ProductWorkspace={open,showReference,showSession,applyResults};
   window.addEventListener('bf-selection',()=>{if(active())open()});
   window.addEventListener('bf-mode',e=>{if(e.detail.mode!=='product'){stop();V.close()}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else refresh()});
