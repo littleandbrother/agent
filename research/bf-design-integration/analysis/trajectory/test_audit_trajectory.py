@@ -119,6 +119,72 @@ class AuditTests(unittest.TestCase):
             self.assertEqual(subprocess.run(cmd,capture_output=True).returncode,2)
             self.assertEqual(src.read_bytes(),before)
 
+    def test_pre_feedback_candidate_retry_cannot_gain_revision_credit(self):
+        t=fixture();early=copy.deepcopy(t['sources'][7]);early['id']='early-op2'
+        early['record']['data'].update(revision_id=None,request_id='request1')
+        t['sources'].insert(3,early)  # before delayed op1 result and feedback
+        with self.assertRaisesRegex(a.AuditError,'RETRY_PROVENANCE_CHANGED'):
+            a.audit(seal(t))
+
+    def test_retry_same_revision_has_no_additional_linkage(self):
+        t=fixture();retry=copy.deepcopy(t['sources'][7]);retry['id']='retry-op2';t['sources'].append(retry)
+        report=a.audit(seal(t))
+        self.assertEqual(len(report['levels']['feedback_linked_numeric_revision']['records']),1)
+        self.assertEqual(report['actions'][-1]['first_source'],'action2')
+        self.assertTrue(report['actions'][-1]['retry'])
+
+    def test_changed_revision_label_or_removed_label_is_blocked(self):
+        for relabel in (None,'revision3'):
+            t=fixture();revision=copy.deepcopy(t['sources'][6]);revision['id']='revision3';t['sources'].append(revision)
+            retry=copy.deepcopy(t['sources'][7]);retry['id']='retry-op2';retry['record']['data']['revision_id']=relabel;t['sources'].append(retry)
+            with self.subTest(relabel=relabel),self.assertRaisesRegex(a.AuditError,'RETRY_PROVENANCE_CHANGED'):
+                a.audit(seal(t))
+
+    def test_delayed_terminal_cannot_be_backdated_into_revision(self):
+        t=fixture();terminal=t['sources'].pop(3);t['sources'].append(terminal)
+        with self.assertRaisesRegex(a.AuditError,'MISSING_OR_FUTURE_REFERENCE'):
+            a.audit(seal(t))
+
+    def run_private_input(self, raw, marker):
+        with tempfile.TemporaryDirectory() as d:
+            src=Path(d)/'input.json';out=Path(d)/'out.json';src.write_bytes(raw)
+            result=subprocess.run([sys.executable,'-B',a.__file__,'--input',str(src),'--out',str(out)],capture_output=True,text=True)
+            combined=result.stdout+result.stderr+(out.read_text() if out.exists() else '')
+            self.assertNotIn(marker,combined)
+            self.assertEqual(result.returncode,1)
+            report=json.loads(out.read_text());self.assertEqual(report['status'],'BLOCKED')
+            self.assertRegex(report['error_code'],r'^[A-Z_]+$')
+
+    def test_all_reference_fields_never_echo_private_marker(self):
+        fields=[(1,'config_id'),(7,'revision_id'),(3,'action_id'),(4,'terminal_id'),
+                (6,'previous_action_id'),(6,'feedback_id')]
+        for seq,key in fields:
+            for marker in ('SYNTHETIC PRIVATE TRANSCRIPT MARKER','PRIVATE_TRANSCRIPT_MARKER'):
+                t=fixture();t['sources'][seq]['record']['data'][key]=marker
+                with self.subTest(field=key,marker_type='spaces' if ' ' in marker else 'identifier'):
+                    self.run_private_input(json.dumps(seal(t)).encode(),marker)
+
+    def test_malformed_and_wrong_shape_inputs_do_not_echo_values(self):
+        marker='SYNTHETIC PRIVATE MALFORMED MARKER'
+        malformed=[('not-json '+marker).encode(),json.dumps({marker:'x'}).encode(),
+                   json.dumps([marker]).encode(), ('"'+marker+'" trailing').encode(),b'\xff'+marker.encode()]
+        t=fixture();t['sources'][1]['record']['data']['config_id']={marker:'x'}
+        malformed.append(json.dumps(seal(t)).encode())
+        t=fixture();t['sources'][0]['record']['kind']={marker:'x'}
+        malformed.append(json.dumps(seal(t)).encode())
+        for raw in malformed:
+            with self.subTest(case=len(raw)):self.run_private_input(raw,marker)
+
+    def test_cli_argument_and_path_errors_do_not_echo_private_values(self):
+        marker='SYNTHETIC_PRIVATE_PATH_MARKER'
+        r=subprocess.run([sys.executable,'-B',a.__file__,'--'+marker],capture_output=True,text=True)
+        self.assertEqual(r.returncode,2);self.assertNotIn(marker,r.stdout+r.stderr)
+        with tempfile.TemporaryDirectory() as d:
+            out=Path(d)/'out.json'
+            r=subprocess.run([sys.executable,'-B',a.__file__,'--input',str(Path(d)/marker),'--out',str(out)],capture_output=True,text=True)
+            self.assertEqual(r.returncode,1)
+            self.assertNotIn(marker,r.stdout+r.stderr+out.read_text())
+
     def test_committed_synthetic_fixture(self):
         self.assertEqual(fixture(),json.loads((HERE/'SYNTHETIC-INPUT.json').read_text()))
         self.assertEqual(a.audit(fixture()),json.loads((HERE/'SYNTHETIC-AUDIT.json').read_text()))

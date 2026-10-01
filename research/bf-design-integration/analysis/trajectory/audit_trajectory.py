@@ -21,9 +21,16 @@ FIELDS = {
     'manual_intervention': {'status', 'coverage'},
 }
 
-def require(ok, message):
+class AuditError(ValueError):
+    """Internal constant code only; never include input values."""
+    def __init__(self, code):
+        self.code = code
+        super().__init__(code)
+
+
+def require(ok, code):
     if not ok:
-        raise ValueError(message)
+        raise AuditError(code)
 
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
@@ -58,7 +65,7 @@ def normalize(candidate, facts):
                 require(rule['range'][0]<=value<=rule['range'][1], 'DESIGN_RANGE')
     return candidate
 
-def audit(trace):
+def _audit(trace):
     protocol = json.loads((ROOT/'contracts/PROTOCOL.json').read_text())
     require(digest({k:v for k,v in protocol.items() if k!='protocol_hash'})==protocol['protocol_hash'], 'PROTOCOL_HASH')
     require(set(trace)=={'schema','owner','protocol_hash','task_hash','evidence_kind','sources'}, 'TRACE_FIELDS')
@@ -77,7 +84,8 @@ def audit(trace):
         kind, d = record['kind'], record['data']
         require(kind in FIELDS and isinstance(d,dict) and set(d)==FIELDS[kind], 'RECORD_FIELDS')
         def reference(id, expected_kind):
-            require(id in prior and prior[id]['kind']==expected_kind, 'MISSING_OR_FUTURE_REFERENCE:'+str(id))
+            require(identifier(id), 'REFERENCE_ID_INVALID')
+            require(id in prior and prior[id]['kind']==expected_kind, 'MISSING_OR_FUTURE_REFERENCE')
             return prior[id]['data']
         if kind=='configuration':
             require(d['profile'] in {p['id'] for p in protocol['profiles']} and sha_value(d['instruction_sha256']) and type(d['loaded']) is bool, 'CONFIGURATION')
@@ -98,15 +106,17 @@ def audit(trace):
             require(d['job_id'] is None or all(o['job_id']!=d['job_id'] or key==d['operation_id'] for key,o in operations.items()), 'JOB_OPERATION_CONFLICT')
             op = operations.get(d['operation_id'])
             if op:
+                require(op['revision_id']==d['revision_id'], 'RETRY_PROVENANCE_CHANGED')
                 require(op['candidate']==candidate and op['job_id'] in (None,d['job_id']), 'IDEMPOTENCY_CONFLICT')
                 if d['job_id'] is not None: op['job_id'] = d['job_id']
             else:
                 require(len(operations)<protocol['max_new_candidates_per_owner'], 'CANDIDATE_QUOTA')
-                operations[d['operation_id']]={'candidate':candidate,'job_id':d['job_id'],'first_source':sid}
+                operations[d['operation_id']]={'candidate':candidate,'job_id':d['job_id'],'first_source':sid,'first_seq':seq,'revision_id':d['revision_id']}
             levels['candidate_action_recorded'].append(sid)
             actions.append({'source':sid,'operation_id':d['operation_id'],'dispatch':d['dispatch'],
                 'changes_from_baseline':changes(protocol['common_facts_and_freedoms']['baseline'],candidate),
-                'change_class':'numeric only; not architecture','retry':op is not None})
+                'change_class':'numeric only; not architecture','retry':op is not None,
+                'first_source':operations[d['operation_id']]['first_source']})
             if d['request_id'] not in deliveries:
                 notes.append({'source':sid,'issue':'instruction delivery for this request unknown'})
             if d['revision_id'] is not None:
@@ -118,7 +128,13 @@ def audit(trace):
                 require(rev['next_operation_id']==d['operation_id'] and rev['candidate_hash']==d['candidate_hash']
                         and rev['request_id']==d['request_id']==fb['request_id'], 'REVISION_ACTION_BINDING')
                 require(term['action_id']==rev['previous_action_id'] and d['operation_id']!=old['operation_id'], 'REVISION_PREDECESSOR')
-                if fb['available'] and d['request_id'] in deliveries and delta:
+                first = operations[d['operation_id']]
+                first_occurrence = first['first_source']==sid and first['first_seq']==seq
+                require(prior[d['revision_id']]['seq'] < first['first_seq']
+                        and prior[rev['feedback_id']]['seq'] < first['first_seq'], 'REVISION_AFTER_FIRST_ACTION')
+                if not first_occurrence:
+                    notes.append({'source':sid,'issue':'retry retains original provenance; no new revision linkage'})
+                elif fb['available'] and d['request_id'] in deliveries and delta:
                     levels['feedback_linked_numeric_revision'].append({'source':sid,'revision_source':d['revision_id'],'changes':delta,
                         'interpretation':'recorded feedback/action linkage; model reading and causality unproven'})
                 else:
@@ -171,24 +187,58 @@ def audit(trace):
         'scientific_qualification':'not assessed or promoted','method_benefit':'not established','causality':'not established',
         'limits':'Hashes bind supplied sanitized records, not authentic authorship or omitted history. No external artifact bytes, raw transcript, runtime execution or scientific score.'}
 
+def audit(trace):
+    try:
+        return _audit(trace)
+    except AuditError:
+        raise
+    except Exception:
+        # Type/shape/encoding failures may contain arbitrary input in repr.
+        raise AuditError('INVALID_INPUT') from None
+
+
+class SafeParser(argparse.ArgumentParser):
+    def error(self, message):
+        # argparse normally repeats unknown arguments and conversion values.
+        self.exit(2, 'CLI_ARGUMENT_ERROR\n')
+
+
 def main():
-    parser=argparse.ArgumentParser(description=__doc__)
+    parser=SafeParser(description=__doc__)
     parser.add_argument('--input',type=Path,required=True)
     parser.add_argument('--out',type=Path,required=True)
     args=parser.parse_args()
-    if os.path.lexists(args.out) or args.out.resolve()==args.input.resolve():
-        parser.error('Output must be a new path; existing files and links are protected')
-    raw=args.input.read_bytes()
     try:
-        result=audit(json.loads(raw));code=0
-    except Exception as exc:
-        result={'status':'BLOCKED','error_type':type(exc).__name__,'error':str(exc)};code=1
-    require(args.input.read_bytes()==raw,'INPUT_CHANGED_DURING_AUDIT')
-    result['input_sha256']=hashlib.sha256(raw).hexdigest()
-    args.out.parent.mkdir(parents=True,exist_ok=True)
-    with args.out.open('x') as stream:
-        json.dump(result,stream,ensure_ascii=False,indent=2,allow_nan=False);stream.write('\n')
-    print(json.dumps({'status':result['status'],'out':str(args.out)}))
+        if os.path.lexists(args.out) or args.out.resolve()==args.input.resolve():
+            parser.error('OUTPUT_EXISTS')
+    except (OSError, ValueError):
+        parser.error('OUTPUT_PATH_INVALID')
+    raw=None
+    try:
+        raw=args.input.read_bytes()
+    except Exception:
+        result={'status':'BLOCKED','error_code':'INPUT_READ_FAILED'};code=1
+    else:
+        try:
+            try:
+                value=json.loads(raw)
+            except Exception:
+                raise AuditError('MALFORMED_JSON') from None
+            result=audit(value);code=0
+            require(args.input.read_bytes()==raw,'INPUT_CHANGED_DURING_AUDIT')
+        except AuditError as exc:
+            result={'status':'BLOCKED','error_code':exc.code};code=1
+        except Exception:
+            result={'status':'BLOCKED','error_code':'INPUT_RECHECK_FAILED'};code=1
+        result['input_sha256']=hashlib.sha256(raw).hexdigest()
+    try:
+        args.out.parent.mkdir(parents=True,exist_ok=True)
+        with args.out.open('x') as stream:
+            json.dump(result,stream,ensure_ascii=False,indent=2,allow_nan=False);stream.write('\n')
+    except Exception:
+        print(json.dumps({'status':'BLOCKED','error_code':'OUTPUT_WRITE_FAILED'}))
+        return 1
+    print(json.dumps({'status':result['status']}))
     return code
 
 if __name__=='__main__': raise SystemExit(main())

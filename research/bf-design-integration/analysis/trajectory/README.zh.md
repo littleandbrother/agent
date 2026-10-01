@@ -29,7 +29,7 @@ python3 -B -m unittest discover -s research/bf-design-integration/analysis/traje
 
 配置 → 对应请求实际交付 → 动作；旧动作 → 终态 → 反馈可用 → 修订声明 → 新动作，引用都必须指向之前的记录。同请求的指令交付和反馈交付均要在关联动作之前。只有完整链路且候选实际变化才列为 feedback_linked_numeric_revision；仍只证明记录关联，不能证明模型阅读、理解或因果。没有修订声明的候选变化仍报告相对基线差异，不补造反馈关联。
 
-同 operation_id 重试必须保留候选和 job 绑定；不新增配额。未知副作用仍保守计一个不同操作。超过3个不同操作拒绝。只能改 gap_mm、cin_uF、cout_uF、interval_ms；保护字段、非法值和 architecture 标签拒绝，数值变化不叫架构变更。审计不会轮询、重试或启动任务。
+同 operation_id 重试必须保留候选、job 绑定和首次 revision_id（包括null）；不新增配额，也不新增反馈关联。每个操作固定 first_source/first_seq，只有首次动作发生在反馈交付和修订记录之后才可记录关联。先发出的候选不能在收到延迟结果/反馈后通过重试、更换或移除修订标签获得追溯性证据。未知副作用仍保守计一个不同操作。超过3个不同操作拒绝。只能改 gap_mm、cin_uF、cout_uF、interval_ms；保护字段、非法值和 architecture 标签拒绝，数值变化不叫架构变更。审计不会轮询、重试或启动任务。
 
 ## 解读边界
 
@@ -38,3 +38,9 @@ terminal_result_bound 仅核对所提供脱敏结果的哈希、owner/task/candi
 H 记录分开标记开发者补丁和参与者生成声明。只有 generation/execution 的ID不足以证明参与者生成了可执行H1；本审计始终保持 executable_H1_verified=false，且不执行H实验。单条轨迹不建立方法收益、因果、架构能力、RSI 或科学资格。费用和人工干预记录即使存在也只是所声明范围，缺失仍未知。
 
 已有 report_design_pilot.py 负责原有 pilot 报告；src/analyze_ledger.py 负责适配器本地调用账本。本模块只补上述交付/行为证据层，不重跑或替代前两者。生产接入、真实模型和本地四轨迹由 BFA-035 拥有。
+
+## 修复复核记录
+
+`review/F113EC2-REPRODUCTION.json` 保留旧提交上两项合成反例：早于反馈的操作在后续重试中错误获得关联，以及非法引用值进入错误报告。旧14项测试日志、合成输出和旧交付索引以 F113EC2 前缀保留，仅指向该历史提交，不作为当前通过证据。当前 tests.log 与 DELIVERY.json 对应21项测试。
+
+失败输出只包含固定 error_code（如 REFERENCE_ID_INVALID、MISSING_OR_FUTURE_REFERENCE、RETRY_PROVENANCE_CHANGED、MALFORMED_JSON、INVALID_INPUT），不写入输入值、异常文本或 repr。命令行参数/文件错误同样不回显参数或路径；成功stdout也不重复输出路径。输入哈希仅用于字节身份。合法的脱敏源ID仍出现在正常报告中，因此导出方仍须确保这些ID不含私密内容。
