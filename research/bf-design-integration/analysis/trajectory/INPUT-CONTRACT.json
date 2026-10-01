@@ -1,0 +1,78 @@
+{
+  "schema": "bf-method-behavior-input-contract-v1",
+  "input_schema": "bf-method-behavior-input-v1",
+  "protocol_reference": "../../contracts/PROTOCOL.json",
+  "source_envelope": [
+    "id",
+    "sha256",
+    "record"
+  ],
+  "record_fields": [
+    "seq",
+    "owner",
+    "kind",
+    "data"
+  ],
+  "data_exact_fields": {
+    "configuration": [
+      "instruction_sha256",
+      "loaded",
+      "profile"
+    ],
+    "instruction_delivery": [
+      "config_id",
+      "delivered",
+      "instruction_sha256",
+      "receipt_id",
+      "request_id"
+    ],
+    "candidate_action": [
+      "candidate",
+      "candidate_hash",
+      "dispatch",
+      "job_id",
+      "operation_id",
+      "request_id",
+      "revision_id"
+    ],
+    "terminal_result": [
+      "action_id",
+      "job_id",
+      "result",
+      "result_sha256"
+    ],
+    "feedback_available": [
+      "available",
+      "delivery_receipt_id",
+      "request_id",
+      "terminal_id"
+    ],
+    "revision": [
+      "candidate_hash",
+      "feedback_id",
+      "kind",
+      "next_operation_id",
+      "previous_action_id",
+      "request_id"
+    ],
+    "h_change": [
+      "artifact_sha256",
+      "authorship",
+      "execution_receipt_id",
+      "generation_request_id"
+    ],
+    "cost": [
+      "coverage",
+      "usd"
+    ],
+    "manual_intervention": [
+      "coverage",
+      "status"
+    ]
+  },
+  "source_hash": "SHA256 of canonical sanitized record; not raw transcript hash",
+  "unknown_policy": "missing evidence remains unknown; invalid explicit claims block",
+  "terminal_scope": "sanitized receipt consistency only; external artifact bytes absent",
+  "real_receipts": "pending local BFA-035",
+  "dispatch_authorized": false
+}

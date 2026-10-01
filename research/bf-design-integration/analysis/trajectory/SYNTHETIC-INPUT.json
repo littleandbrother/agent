@@ -1,0 +1,241 @@
+{
+  "schema": "bf-method-behavior-input-v1",
+  "owner": "synthetic-owner",
+  "protocol_hash": "8b06c8f5234426210350b5fff9aa3470350145e43a7131b426dec506b32e40f2",
+  "task_hash": "667696fd9f33b4efe7abb7e6bd254904e42b2738addfe2c3110e6e2a702abfac",
+  "evidence_kind": "synthetic",
+  "sources": [
+    {
+      "id": "config",
+      "sha256": "a7648a41ece650ff473629bd14376ad98fd4bf3eeefd3fcf0841b7c19127bdff",
+      "record": {
+        "seq": 0,
+        "owner": "synthetic-owner",
+        "kind": "configuration",
+        "data": {
+          "profile": "bf_design",
+          "instruction_sha256": "b46f68a57c82ee909a41b8210e094aea95853d60854e600f7f7a0f549e001f82",
+          "loaded": true
+        }
+      }
+    },
+    {
+      "id": "delivery1",
+      "sha256": "9a345b41af68b4dfadb867be8822f35e41237a6a28feb5a17870d66972aa3cba",
+      "record": {
+        "seq": 1,
+        "owner": "synthetic-owner",
+        "kind": "instruction_delivery",
+        "data": {
+          "config_id": "config",
+          "request_id": "request1",
+          "instruction_sha256": "b46f68a57c82ee909a41b8210e094aea95853d60854e600f7f7a0f549e001f82",
+          "delivered": true,
+          "receipt_id": "synthetic-delivery1"
+        }
+      }
+    },
+    {
+      "id": "action1",
+      "sha256": "ab53d891040a839416938ec01a224be47fca2dceb0bd404b02f228f108877d8a",
+      "record": {
+        "seq": 2,
+        "owner": "synthetic-owner",
+        "kind": "candidate_action",
+        "data": {
+          "operation_id": "op1",
+          "request_id": "request1",
+          "candidate": {
+            "schema_version": "closed-simulation-spec-v1",
+            "mechanical": {
+              "gap_mm": 48.0,
+              "opening_s": 2.0,
+              "angle_deg": 65.0,
+              "remanence_T": 1.25,
+              "damping_ratio": 0.02
+            },
+            "circuit": {
+              "cin_uF": 47.0,
+              "cout_uF": 100.0,
+              "initial_vin_V": 0.0,
+              "diagnostic_input_A": 0.0
+            },
+            "firmware": {
+              "interval_ms": 100.0,
+              "boot_ms": 53.8,
+              "init_ms": 13.0,
+              "tx_ms": 5.0,
+              "boot_mA": 0.41,
+              "init_mA": 1.596,
+              "tx_mA": 3.659,
+              "sleep_uA": 2.0,
+              "reset_uA": 0.3
+            },
+            "link": {
+              "loss_probability": 0.0,
+              "seed": 17,
+              "scan_duty": 1.0
+            },
+            "solver": {
+              "max_step_s": 5e-05,
+              "firmware_step_s": 0.0001,
+              "reltol": 0.0001,
+              "max_coupling_iterations": 8
+            },
+            "presentation": {
+              "camera_deg": 35.0
+            }
+          },
+          "candidate_hash": "c3b0c885995e99d63726739c1f36f65fb28069ab18ac2a2f64b38761625c2539",
+          "job_id": "eng-a",
+          "dispatch": "acknowledged",
+          "revision_id": null
+        }
+      }
+    },
+    {
+      "id": "terminal1",
+      "sha256": "3d23c2e1ee1bc1710421710d757c60aee73841261aae1216bbb8bfe0502cab7a",
+      "record": {
+        "seq": 3,
+        "owner": "synthetic-owner",
+        "kind": "terminal_result",
+        "data": {
+          "action_id": "action1",
+          "job_id": "eng-a",
+          "result": {
+            "job_id": "eng-a",
+            "operation_id": "op1",
+            "owner": "synthetic-owner",
+            "task_hash": "667696fd9f33b4efe7abb7e6bd254904e42b2738addfe2c3110e6e2a702abfac",
+            "candidate_hash": "c3b0c885995e99d63726739c1f36f65fb28069ab18ac2a2f64b38761625c2539",
+            "status": "FAILED",
+            "artifact_sha256": "4973fbd6764d11ecd32e969ba51ccd2a7b6dbe302593d03f39d8043ce28eada6"
+          },
+          "result_sha256": "fd1c34cd0710786cc7bfd52224dd64806eb8a41fb9c402d7336c5d1dcfc21891"
+        }
+      }
+    },
+    {
+      "id": "feedback1",
+      "sha256": "9ba88675a94a037a62ecc74fb7bb951484a627e8ab0bc6443daa4e64701477a5",
+      "record": {
+        "seq": 4,
+        "owner": "synthetic-owner",
+        "kind": "feedback_available",
+        "data": {
+          "terminal_id": "terminal1",
+          "request_id": "request2",
+          "delivery_receipt_id": "synthetic-feedback1",
+          "available": true
+        }
+      }
+    },
+    {
+      "id": "delivery2",
+      "sha256": "a95a23c7928ee62724ee681b78a1984168447c05c645c9c9d15ac7514bba567b",
+      "record": {
+        "seq": 5,
+        "owner": "synthetic-owner",
+        "kind": "instruction_delivery",
+        "data": {
+          "config_id": "config",
+          "request_id": "request2",
+          "instruction_sha256": "b46f68a57c82ee909a41b8210e094aea95853d60854e600f7f7a0f549e001f82",
+          "delivered": true,
+          "receipt_id": "synthetic-delivery2"
+        }
+      }
+    },
+    {
+      "id": "revision2",
+      "sha256": "cd7b21ea5d4cddf45f0b1c6d5ed236bea2806e66632bc25a776dfa18efa07fcb",
+      "record": {
+        "seq": 6,
+        "owner": "synthetic-owner",
+        "kind": "revision",
+        "data": {
+          "previous_action_id": "action1",
+          "feedback_id": "feedback1",
+          "request_id": "request2",
+          "next_operation_id": "op2",
+          "candidate_hash": "e4a12c87a6f36009bd1553795d07917ac9a65ee5708e1c193ed44e3bd19d784b",
+          "kind": "numeric"
+        }
+      }
+    },
+    {
+      "id": "action2",
+      "sha256": "9616d6f7d4f382e4c7744cb5b7e7e048a4a5aa3fd3b028cd822e382e5eb85d53",
+      "record": {
+        "seq": 7,
+        "owner": "synthetic-owner",
+        "kind": "candidate_action",
+        "data": {
+          "operation_id": "op2",
+          "request_id": "request2",
+          "candidate": {
+            "schema_version": "closed-simulation-spec-v1",
+            "mechanical": {
+              "gap_mm": 48.0,
+              "opening_s": 2.0,
+              "angle_deg": 65.0,
+              "remanence_T": 1.25,
+              "damping_ratio": 0.02
+            },
+            "circuit": {
+              "cin_uF": 22,
+              "cout_uF": 100.0,
+              "initial_vin_V": 0.0,
+              "diagnostic_input_A": 0.0
+            },
+            "firmware": {
+              "interval_ms": 100.0,
+              "boot_ms": 53.8,
+              "init_ms": 13.0,
+              "tx_ms": 5.0,
+              "boot_mA": 0.41,
+              "init_mA": 1.596,
+              "tx_mA": 3.659,
+              "sleep_uA": 2.0,
+              "reset_uA": 0.3
+            },
+            "link": {
+              "loss_probability": 0.0,
+              "seed": 17,
+              "scan_duty": 1.0
+            },
+            "solver": {
+              "max_step_s": 5e-05,
+              "firmware_step_s": 0.0001,
+              "reltol": 0.0001,
+              "max_coupling_iterations": 8
+            },
+            "presentation": {
+              "camera_deg": 35.0
+            }
+          },
+          "candidate_hash": "e4a12c87a6f36009bd1553795d07917ac9a65ee5708e1c193ed44e3bd19d784b",
+          "job_id": "eng-b",
+          "dispatch": "unknown",
+          "revision_id": "revision2"
+        }
+      }
+    },
+    {
+      "id": "developer-patch",
+      "sha256": "37bef432bbb1233d558eb04f4a4f6af3cbe32ad36e71faa4f13ff8a6cb90e731",
+      "record": {
+        "seq": 8,
+        "owner": "synthetic-owner",
+        "kind": "h_change",
+        "data": {
+          "authorship": "developer",
+          "artifact_sha256": "e89f3a7bd657dd4ffdfebd5637d9a5bfba6256a53b9601e242ccfa9fc4f5f374",
+          "generation_request_id": null,
+          "execution_receipt_id": null
+        }
+      }
+    }
+  ]
+}
