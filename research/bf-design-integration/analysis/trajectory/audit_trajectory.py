@@ -203,12 +203,32 @@ class SafeParser(argparse.ArgumentParser):
         self.exit(2, 'CLI_ARGUMENT_ERROR\n')
 
 
+def validate_existing_ancestors(path):
+    """Strictly inspect paths without requiring a new output leaf to exist.
+
+    Python 3.13+ non-strict resolve suppresses symlink-loop errors. Strict
+    resolution rejects loops on both old and new Python; only missing paths
+    may walk upward to an existing ancestor. Never suppress ELOOP/OSError.
+    """
+    current = path
+    while True:
+        try:
+            current.resolve(strict=True)
+            return
+        except FileNotFoundError:
+            if current.parent == current:
+                raise
+            current = current.parent
+
+
 def main():
     parser=SafeParser(description=__doc__)
     parser.add_argument('--input',type=Path,required=True)
     parser.add_argument('--out',type=Path,required=True)
     args=parser.parse_args()
     try:
+        validate_existing_ancestors(args.input)
+        validate_existing_ancestors(args.out)
         if os.path.lexists(args.out) or args.out.resolve()==args.input.resolve():
             parser.error('OUTPUT_EXISTS')
     except (OSError, ValueError, RuntimeError):

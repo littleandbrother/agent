@@ -41,8 +41,11 @@ H 记录分开标记开发者补丁和参与者生成声明。只有 generation/
 
 ## 修复复核记录
 
-`review/F113EC2-REPRODUCTION.json` 保留旧提交上两项合成反例：早于反馈的操作在后续重试中错误获得关联，以及非法引用值进入错误报告。旧14项测试日志、合成输出和旧交付索引以 F113EC2 前缀保留，仅指向该历史提交，不作为当前通过证据。当前 tests.log 与 DELIVERY.json 对应22项测试。
+`review/F113EC2-REPRODUCTION.json` 保留旧提交上两项合成反例：早于反馈的操作在后续重试中错误获得关联，以及非法引用值进入错误报告。旧14项测试日志、合成输出和旧交付索引以 F113EC2 前缀保留，仅指向该历史提交，不作为当前通过证据。当前 tests.log 与 DELIVERY.json 对应23项测试。
 
 失败输出只包含固定 error_code（如 REFERENCE_ID_INVALID、MISSING_OR_FUTURE_REFERENCE、RETRY_PROVENANCE_CHANGED、MALFORMED_JSON、INVALID_INPUT），不写入输入值、异常文本或 repr。命令行参数/文件错误同样不回显参数或路径；成功stdout也不重复输出路径。输入哈希仅用于字节身份。合法的脱敏源ID仍出现在正常报告中，因此导出方仍须确保这些ID不含私密内容。
 
 路径预检也捕获 Python 3.12 的符号链接循环 RuntimeError；输入循环和输出父目录循环均返回固定 CLI_ARGUMENT_ERROR，不产生含路径的 traceback。前版21项测试及交付索引另以82D9F84前缀保留。
+
+
+Python版本兼容性：256403f在Python3.13.5上已复现与本地3.14报告一致的3个断言失败，旧失败日志保留。自3.13起[非严格Path.resolve不再抛出循环链接错误](https://docs.python.org/3.14/library/pathlib.html#pathlib.Path.resolve)。当前实现先严格检查路径或最近已存在父目录，仅对不存在路径向上检查，不吞掉循环错误；仍允许新建输出目录。固定CLI_ARGUMENT_ERROR、不泄露路径、退出码2及不生成错误输出文件的断言均保留。Python3.12.14与3.13.5实际各运行23项通过；当前环境无3.14，未声称3.14实测通过，也未替代本地3.14复核。

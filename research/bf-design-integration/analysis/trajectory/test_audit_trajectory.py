@@ -199,6 +199,14 @@ class AuditTests(unittest.TestCase):
                     self.assertNotIn('Traceback',r.stdout+r.stderr)
             self.assertFalse((root/'new.json').exists())
 
+    def test_missing_output_ancestors_still_allow_exclusive_creation(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);source=root/'input.json';source.write_text(json.dumps(fixture()))
+            out=root/'new'/'nested'/'report.json'
+            r=subprocess.run([sys.executable,'-B',a.__file__,'--input',str(source),'--out',str(out)],capture_output=True,text=True)
+            self.assertEqual(r.returncode,0)
+            self.assertEqual(json.loads(out.read_text())['status'],'RECORDED_EVIDENCE_ONLY')
+
     def test_committed_synthetic_fixture(self):
         self.assertEqual(fixture(),json.loads((HERE/'SYNTHETIC-INPUT.json').read_text()))
         self.assertEqual(a.audit(fixture()),json.loads((HERE/'SYNTHETIC-AUDIT.json').read_text()))
