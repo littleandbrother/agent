@@ -185,6 +185,20 @@ class AuditTests(unittest.TestCase):
             self.assertEqual(r.returncode,1)
             self.assertNotIn(marker,r.stdout+r.stderr+out.read_text())
 
+    def test_input_and_output_symlink_loops_do_not_echo_paths(self):
+        marker='SYNTHETIC_PRIVATE_LOOP_MARKER'
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);loop=root/marker;loop.symlink_to(loop)
+            source=root/'input.json';source.write_text(json.dumps(fixture()))
+            for input_path,output_path in [(loop,root/'new.json'),(source,loop/'new.json')]:
+                with self.subTest(direction='input' if input_path==loop else 'output'):
+                    r=subprocess.run([sys.executable,'-B',a.__file__,'--input',str(input_path),'--out',str(output_path)],capture_output=True,text=True)
+                    self.assertEqual(r.returncode,2)
+                    self.assertEqual(r.stderr,'CLI_ARGUMENT_ERROR\n')
+                    self.assertNotIn(marker,r.stdout+r.stderr)
+                    self.assertNotIn('Traceback',r.stdout+r.stderr)
+            self.assertFalse((root/'new.json').exists())
+
     def test_committed_synthetic_fixture(self):
         self.assertEqual(fixture(),json.loads((HERE/'SYNTHETIC-INPUT.json').read_text()))
         self.assertEqual(a.audit(fixture()),json.loads((HERE/'SYNTHETIC-AUDIT.json').read_text()))

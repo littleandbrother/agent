@@ -41,6 +41,8 @@ H 记录分开标记开发者补丁和参与者生成声明。只有 generation/
 
 ## 修复复核记录
 
-`review/F113EC2-REPRODUCTION.json` 保留旧提交上两项合成反例：早于反馈的操作在后续重试中错误获得关联，以及非法引用值进入错误报告。旧14项测试日志、合成输出和旧交付索引以 F113EC2 前缀保留，仅指向该历史提交，不作为当前通过证据。当前 tests.log 与 DELIVERY.json 对应21项测试。
+`review/F113EC2-REPRODUCTION.json` 保留旧提交上两项合成反例：早于反馈的操作在后续重试中错误获得关联，以及非法引用值进入错误报告。旧14项测试日志、合成输出和旧交付索引以 F113EC2 前缀保留，仅指向该历史提交，不作为当前通过证据。当前 tests.log 与 DELIVERY.json 对应22项测试。
 
 失败输出只包含固定 error_code（如 REFERENCE_ID_INVALID、MISSING_OR_FUTURE_REFERENCE、RETRY_PROVENANCE_CHANGED、MALFORMED_JSON、INVALID_INPUT），不写入输入值、异常文本或 repr。命令行参数/文件错误同样不回显参数或路径；成功stdout也不重复输出路径。输入哈希仅用于字节身份。合法的脱敏源ID仍出现在正常报告中，因此导出方仍须确保这些ID不含私密内容。
+
+路径预检也捕获 Python 3.12 的符号链接循环 RuntimeError；输入循环和输出父目录循环均返回固定 CLI_ARGUMENT_ERROR，不产生含路径的 traceback。前版21项测试及交付索引另以82D9F84前缀保留。

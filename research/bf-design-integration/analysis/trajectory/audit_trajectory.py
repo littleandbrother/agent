@@ -211,7 +211,7 @@ def main():
     try:
         if os.path.lexists(args.out) or args.out.resolve()==args.input.resolve():
             parser.error('OUTPUT_EXISTS')
-    except (OSError, ValueError):
+    except (OSError, ValueError, RuntimeError):
         parser.error('OUTPUT_PATH_INVALID')
     raw=None
     try:
