@@ -1,0 +1,1098 @@
+{
+  "schema": "bf-retained-passive-reanalysis-v1",
+  "status": "SCOPED_RETAINED_DATA_CHECKS_PASS",
+  "analysis_kind": "Independent arithmetic reconstruction of previously retained data; no new trajectory or physical validation",
+  "execution": {
+    "new_trajectories": 0,
+    "new_equilibrium_solves": 0,
+    "new_force_or_provider_evaluations": 0,
+    "network_calls": 0,
+    "source_files_modified": 0,
+    "script_sha256": "d4168fa03c54c8f806c872edc682827f9fee49d43e28259d00d5e5af3f98e7d9",
+    "python": "3.12.14",
+    "numpy": "2.3.5"
+  },
+  "input_integrity": {
+    "archives": [
+      {
+        "filename": "BF_Conditional_Passive_20261001_core.zip",
+        "sha256": "e43d54c5289d7100c50a700429c2f08dfdc4a0531c5cbd0bb99097d3d1e497ec",
+        "bytes": 2672325
+      },
+      {
+        "filename": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+        "sha256": "83ff27440bf80cfa19b568a690bbfa8dfacf7d773ee30d66862146bdbfa6d19d",
+        "bytes": 6838224
+      },
+      {
+        "filename": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+        "sha256": "35b93a24df43518538492a35857f70f8ede441524533aed43bd4bc6fdd9ca089",
+        "bytes": 6329668
+      }
+    ],
+    "package_manifest_sha256": "b487357a066919aad8e32d96214553d2fa7f69d26e35a012f69414eafc1ccf6c",
+    "all_manifest_entries_verified": 268,
+    "frozen_plan_sha256": "0f8ae3b0b8d6d5d0d1accfa46fe4dc8f479f874be58cc30bc135567112ca3684",
+    "plan_seal_sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+    "recovery_index": {
+      "filename": "RECOVERY-INDEX.json",
+      "sha256": "2701484bfc214a53f8d89b52eef36da1ce1d2348348fa2c1842d24efdabcb2c7",
+      "passive_member_bindings_checked": 28
+    },
+    "old_to_new_changed_top_level_fields": [
+      "authorization_status",
+      "implementation_revision",
+      "jacobian",
+      "model_version"
+    ]
+  },
+  "provenance": {
+    "original_version": "bf-conditional-qonly-passive-bridge-storage-v1",
+    "repaired_version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+    "original": {
+      "attempted": 1,
+      "completed": 0,
+      "stopped": 1,
+      "unrun": [
+        "cin47-fine",
+        "cin10-coarse",
+        "cin10-fine"
+      ],
+      "last_accepted_t_s": 1.0670022596384308,
+      "exact_rejected_voltage": "not retained; unknown",
+      "comparison_admitted": false
+    },
+    "repaired": {
+      "attempted": 4,
+      "completed": 4,
+      "stopped": 0,
+      "unrun": 0
+    },
+    "totals": {
+      "attempted": 5,
+      "completed": 4,
+      "stopped": 1
+    },
+    "note": "The four repaired executions never replace the stopped original or populate its three unrun slots."
+  },
+  "frozen_scientific_thresholds": {
+    "q_limit_m": 0.008,
+    "storage_negative_tolerance_V": 1e-09,
+    "voltage_computational_guard_V": 500.0,
+    "quadrature": {
+      "force_N": [
+        1e-09,
+        0.0001
+      ],
+      "potential_J": [
+        1e-11,
+        0.0001
+      ],
+      "driver_derivative_J_per_rad": [
+        1e-09,
+        0.0001
+      ]
+    },
+    "energy_abs_J": 1e-09,
+    "energy_relative": 0.001,
+    "independent_ledger_abs_J": 1e-09,
+    "independent_ledger_relative": 0.005,
+    "time_refinement": {
+      "q_m": [
+        1e-06,
+        0.005
+      ],
+      "Vs_V": [
+        0.0001,
+        0.005
+      ],
+      "Vp_V": [
+        0.001,
+        0.01
+      ],
+      "energy_J": [
+        1e-09,
+        0.005
+      ]
+    },
+    "continuous_numerical_path": "Radau cubic q extrema exactly evaluated. Magnet clearance at interval start minus h*(maximum tip translation/rotation speed + driver translation/rotation speed) must remain >1e-12m. This bounds separation along numerical cubic, not exact ODE path or surrounding assembly."
+  },
+  "frozen_effect_rule": "Report signed cin10-minus-cin47 differences in final storage energy and peak storage voltage, plus coupled q/piezo/energy partition. Compare each effect against five times sum of observed within-case coarse/fine deltas; below this report numerically unresolved. This is not a confidence/error bound or guarantee against common-mode quadrature/model errors.",
+  "data_readback_tolerance": {
+    "rtol": 1e-11,
+    "atol": 1e-13,
+    "scope": "Only floating arithmetic cross-checks; never a substituted scientific threshold"
+  },
+  "cells": {
+    "cin47-coarse": {
+      "case": {
+        "id": "cin47",
+        "cin_F": 4.7e-05
+      },
+      "resolution": "coarse",
+      "role": "47 uF control",
+      "scoped_checks_pass": true,
+      "end_time_s": 4.0,
+      "final_Vs_V": 0.14236431113845646,
+      "final_storage_J": 4.762885315192901e-07,
+      "dense_extrema": {
+        "q_min_m": -0.005975637729467595,
+        "q_max_m": 0.004650083403466231,
+        "Vp_min_V": -2.988550988673236,
+        "Vp_max_V": 5.783375381039385,
+        "Vs_min_V": 0.0,
+        "Vs_peak_V": 0.14236431116376005
+      },
+      "initial_components_J": {
+        "kinetic_J": 0.0,
+        "elastic_J": 0.0014855861520281061,
+        "piezo_J": 0.0,
+        "storage_J": 0.0,
+        "mutual_magnetic_J": -0.007711207266181439
+      },
+      "final_components_J": {
+        "kinetic_J": 4.405581611051074e-13,
+        "elastic_J": 2.4903265553234107e-13,
+        "piezo_J": 5.136651001187618e-15,
+        "storage_J": 4.7628853151929007e-07,
+        "mutual_magnetic_J": 1.2457690561946486e-06
+      },
+      "ode_work_and_losses_J": {
+        "Dmechanical_J": 7.499381438790716e-05,
+        "Dresistor_J": 1.379585067484469e-05,
+        "Wdriver_translation_J": 0.006090728797145577,
+        "Wdriver_rotation_J": 0.00022540404751383996
+      },
+      "energy_closure": {
+        "formula": "E(t)-E(0)+Dmechanical+Dresistor-Wtranslation-Wrotation",
+        "maximum_abs_residual_J": 3.67870676886632e-11,
+        "final_residual_J": -7.160890451570964e-12,
+        "max_residual_over_frozen_threshold": 2.474600455444555e-05,
+        "frozen_gate_pass": true,
+        "initial_runtime_n6_minus_static_n10_U_J": 4.668106179384068e-13
+      },
+      "independent_saved_primitive_simpson": {
+        "work_and_losses_J": {
+          "Dmechanical_J": 7.499381127828176e-05,
+          "Dresistor_J": 1.3795851674793365e-05,
+          "Wdriver_translation_J": 0.0060907287676902205,
+          "Wdriver_rotation_J": 0.00022540404733314618
+        },
+        "minus_ode_J": {
+          "Dmechanical_J": -3.109625404396077e-12,
+          "Dresistor_J": 9.99948674277923e-13,
+          "Wdriver_translation_J": -2.945535655662912e-11,
+          "Wdriver_rotation_J": -1.8069378458773766e-13
+        },
+        "frozen_threshold_J": {
+          "Dmechanical_J": 3.759690563914088e-07,
+          "Dresistor_J": 6.997925837396682e-08,
+          "Wdriver_translation_J": 3.0454643838451103e-05,
+          "Wdriver_rotation_J": 1.128020236665731e-06
+        },
+        "frozen_gate_pass": true,
+        "final_balance_residual_J": 2.036548374059234e-11,
+        "max_endpoint_balance_residual_J_descriptive_only": 2.2287736624803864e-11
+      },
+      "power_identity_max_abs_error_W": 5.421010862427522e-20,
+      "driver_power_min_W": [
+        -0.1857984094185484,
+        -0.003435279890284686
+      ],
+      "quadrature_refinement": {
+        "force_N": {
+          "max_abs_delta": 4.589567337287548e-10,
+          "max_delta_over_threshold": 0.0006763230288144937,
+          "pass": true
+        },
+        "potential_J": {
+          "max_abs_delta": 2.0166819603151254e-12,
+          "max_delta_over_threshold": 1.593819724508865e-06,
+          "pass": true
+        },
+        "driver_derivative_J_per_rad": {
+          "max_abs_delta": 3.5481576010631954e-10,
+          "max_delta_over_threshold": 0.0005365357772450848,
+          "pass": true
+        }
+      },
+      "dense_voltage_and_q_guards_pass": true,
+      "jacobian_readback": {
+        "records": 300,
+        "max_delta_over_frozen_threshold": 8.438371687075657e-06,
+        "pass": true
+      },
+      "event_2s": {
+        "t_s": 2.0,
+        "state_continuity_max_abs_delta": 2.117582368135751e-22,
+        "left_driver_power_W": [
+          -1.8878524246466709e-06,
+          4.474025406694499e-07
+        ],
+        "right_driver_power_W": [
+          -0.0,
+          0.0
+        ],
+        "opening_0_to_2s_simpson_J": {
+          "Dmechanical_J": 7.499238257135284e-05,
+          "Dresistor_J": 1.3795851674793365e-05,
+          "Wdriver_translation_J": 0.0060907287676902205,
+          "Wdriver_rotation_J": 0.00022540404733314618
+        },
+        "hold_2_to_4s_simpson_J": {
+          "Dmechanical_J": 1.4287069288673214e-09,
+          "Dresistor_J": 0.0,
+          "Wdriver_translation_J": 0.0,
+          "Wdriver_rotation_J": 0.0
+        },
+        "storage_energy_at_2s_J": 4.7628853151929007e-07,
+        "storage_gain_2_to_4s_J": 0.0,
+        "integration_rule": "Per accepted interval Simpson on its retained start/mid/end; distinct left/right powers retained at 2 s. No integration across the jump."
+      },
+      "historical_execution_cost": {
+        "accepted_steps": 3171,
+        "rhs_evaluations": 29369,
+        "force_evaluations": 41628,
+        "jacobian_evaluations": 300,
+        "wall_s": 70.25206588899891
+      },
+      "historical_budget_pass": true,
+      "recorded_minimum_clearance_lower_bound_m_not_recomputed": 0.032735128088902735,
+      "readback_max_abs_deltas": {
+        "sample": 6.938893903907228e-18,
+        "kinematic_electrical_primitives": 1.1546319456101628e-14,
+        "powers": 5.551115123125783e-17,
+        "stored_energy": 6.505213034913027e-19
+      },
+      "data_counts": {
+        "accepted_intervals": 3171,
+        "common_grid_points": 4001,
+        "primitive_rows": 9513
+      }
+    },
+    "cin47-fine": {
+      "case": {
+        "id": "cin47",
+        "cin_F": 4.7e-05
+      },
+      "resolution": "fine",
+      "role": "47 uF control",
+      "scoped_checks_pass": true,
+      "end_time_s": 4.0,
+      "final_Vs_V": 0.14236431619444423,
+      "final_storage_J": 4.762885653495248e-07,
+      "dense_extrema": {
+        "q_min_m": -0.005975637730631125,
+        "q_max_m": 0.004650083449699978,
+        "Vp_min_V": -2.9885502148165277,
+        "Vp_max_V": 5.783374597482481,
+        "Vs_min_V": 0.0,
+        "Vs_peak_V": 0.1423643161960037
+      },
+      "initial_components_J": {
+        "kinetic_J": 0.0,
+        "elastic_J": 0.0014855861520281061,
+        "piezo_J": 0.0,
+        "storage_J": 0.0,
+        "mutual_magnetic_J": -0.007711207266181439
+      },
+      "final_components_J": {
+        "kinetic_J": 4.4056946518055835e-13,
+        "elastic_J": 2.490260347780235e-13,
+        "piezo_J": 5.1424643785027266e-15,
+        "storage_J": 4.7628856534952483e-07,
+        "mutual_magnetic_J": 1.2457690561990328e-06
+      },
+      "ode_work_and_losses_J": {
+        "Dmechanical_J": 7.499381954885664e-05,
+        "Dresistor_J": 1.3795851737815891e-05,
+        "Wdriver_translation_J": 0.006090728797338097,
+        "Wdriver_rotation_J": 0.0002254040475117839
+      },
+      "energy_closure": {
+        "formula": "E(t)-E(0)+Dmechanical+Dresistor-Wtranslation-Wrotation",
+        "maximum_abs_residual_J": 8.824230164931543e-12,
+        "final_residual_J": -1.0935880022724942e-12,
+        "max_residual_over_frozen_threshold": 5.935902304009023e-06,
+        "frozen_gate_pass": true,
+        "initial_runtime_n6_minus_static_n10_U_J": 4.668106179384068e-13
+      },
+      "independent_saved_primitive_simpson": {
+        "work_and_losses_J": {
+          "Dmechanical_J": 7.499381891027972e-05,
+          "Dresistor_J": 1.3795852001819577e-05,
+          "Wdriver_translation_J": 0.006090728792893178,
+          "Wdriver_rotation_J": 0.00022540404748321423
+        },
+        "minus_ode_J": {
+          "Dmechanical_J": -6.38576919207573e-13,
+          "Dresistor_J": 2.6400368639801185e-13,
+          "Wdriver_translation_J": -4.444918391688368e-12,
+          "Wdriver_rotation_J": -2.8569675921893967e-14
+        },
+        "frozen_threshold_J": {
+          "Dmechanical_J": 3.7596909455139864e-07,
+          "Dresistor_J": 6.997926000909789e-08,
+          "Wdriver_translation_J": 3.0454643964465892e-05,
+          "Wdriver_rotation_J": 1.1280202374160713e-06
+        },
+        "frozen_gate_pass": true,
+        "final_balance_residual_J": 3.005326429340524e-12,
+        "max_endpoint_balance_residual_J_descriptive_only": 4.130029651605582e-12
+      },
+      "power_identity_max_abs_error_W": 5.421010862427522e-20,
+      "driver_power_min_W": [
+        -0.18580113028536077,
+        -0.003435279890284686
+      ],
+      "quadrature_refinement": {
+        "force_N": {
+          "max_abs_delta": 4.589696955825673e-10,
+          "max_delta_over_threshold": 0.0677042122633367,
+          "pass": true
+        },
+        "potential_J": {
+          "max_abs_delta": 2.0166854297620773e-12,
+          "max_delta_over_threshold": 1.5938675598998504e-06,
+          "pass": true
+        },
+        "driver_derivative_J_per_rad": {
+          "max_abs_delta": 3.547881294307942e-10,
+          "max_delta_over_threshold": 0.0008146387615496921,
+          "pass": true
+        }
+      },
+      "dense_voltage_and_q_guards_pass": true,
+      "jacobian_readback": {
+        "records": 290,
+        "max_delta_over_frozen_threshold": 1.327879449962509e-05,
+        "pass": true
+      },
+      "event_2s": {
+        "t_s": 2.0,
+        "state_continuity_max_abs_delta": 2.117582368135751e-22,
+        "left_driver_power_W": [
+          -1.8878524247799771e-06,
+          4.474025407797361e-07
+        ],
+        "right_driver_power_W": [
+          -0.0,
+          0.0
+        ],
+        "opening_0_to_2s_simpson_J": {
+          "Dmechanical_J": 7.499239019017619e-05,
+          "Dresistor_J": 1.3795852001819577e-05,
+          "Wdriver_translation_J": 0.006090728792893178,
+          "Wdriver_rotation_J": 0.00022540404748321423
+        },
+        "hold_2_to_4s_simpson_J": {
+          "Dmechanical_J": 1.4287201038498303e-09,
+          "Dresistor_J": 0.0,
+          "Wdriver_translation_J": 0.0,
+          "Wdriver_rotation_J": 0.0
+        },
+        "storage_energy_at_2s_J": 4.7628856534952483e-07,
+        "storage_gain_2_to_4s_J": 0.0,
+        "integration_rule": "Per accepted interval Simpson on its retained start/mid/end; distinct left/right powers retained at 2 s. No integration across the jump."
+      },
+      "historical_execution_cost": {
+        "accepted_steps": 5027,
+        "rhs_evaluations": 43341,
+        "force_evaluations": 61045,
+        "jacobian_evaluations": 290,
+        "wall_s": 106.4039079570066
+      },
+      "historical_budget_pass": true,
+      "recorded_minimum_clearance_lower_bound_m_not_recomputed": 0.03292347277272159,
+      "readback_max_abs_deltas": {
+        "sample": 2.7755575615628914e-17,
+        "kinematic_electrical_primitives": 2.3092638912203256e-14,
+        "powers": 5.551115123125783e-17,
+        "stored_energy": 4.336808689942018e-19
+      },
+      "data_counts": {
+        "accepted_intervals": 5027,
+        "common_grid_points": 4001,
+        "primitive_rows": 15081
+      }
+    },
+    "cin10-coarse": {
+      "case": {
+        "id": "cin10",
+        "cin_F": 1e-05
+      },
+      "resolution": "coarse",
+      "role": "10 uF conditional comparison candidate",
+      "scoped_checks_pass": true,
+      "end_time_s": 4.0,
+      "final_Vs_V": 0.5918389993178806,
+      "final_storage_J": 1.7513670055679518e-06,
+      "dense_extrema": {
+        "q_min_m": -0.005975636508588533,
+        "q_max_m": 0.004649543361132411,
+        "Vp_min_V": -3.2234283987827386,
+        "Vp_max_V": 5.84373760675108,
+        "Vs_min_V": 0.0,
+        "Vs_peak_V": 0.5918390001727503
+      },
+      "initial_components_J": {
+        "kinetic_J": 0.0,
+        "elastic_J": 0.0014855861520281061,
+        "piezo_J": 0.0,
+        "storage_J": 0.0,
+        "mutual_magnetic_J": -0.007711207266181439
+      },
+      "final_components_J": {
+        "kinetic_J": 3.813830733015878e-13,
+        "elastic_J": 7.493048563696116e-15,
+        "piezo_J": 1.4206678497882402e-12,
+        "storage_J": 1.7513670055679516e-06,
+        "mutual_magnetic_J": 1.245769436639307e-06
+      },
+      "ode_work_and_losses_J": {
+        "Dmechanical_J": 7.441602986293178e-05,
+        "Dresistor_J": 1.3480293592883728e-05,
+        "Wdriver_translation_J": 0.0060911043847369775,
+        "Wdriver_rotation_J": 0.0002254101969530756
+      },
+      "energy_closure": {
+        "formula": "E(t)-E(0)+Dmechanical+Dresistor-Wtranslation-Wrotation",
+        "maximum_abs_residual_J": 3.636961315201274e-11,
+        "final_residual_J": -5.829152807147742e-12,
+        "max_residual_over_frozen_threshold": 2.4465190330472764e-05,
+        "frozen_gate_pass": true,
+        "initial_runtime_n6_minus_static_n10_U_J": 4.668106179384068e-13
+      },
+      "independent_saved_primitive_simpson": {
+        "work_and_losses_J": {
+          "Dmechanical_J": 7.441602670818464e-05,
+          "Dresistor_J": 1.3480295276514658e-05,
+          "Wdriver_translation_J": 0.006091104362991764,
+          "Wdriver_rotation_J": 0.00022541019682263994
+        },
+        "minus_ode_J": {
+          "Dmechanical_J": -3.1547471340993838e-12,
+          "Dresistor_J": 1.6836309297131417e-12,
+          "Wdriver_translation_J": -2.1745213268919983e-11,
+          "Wdriver_rotation_J": -1.3043564709228073e-13
+        },
+        "frozen_threshold_J": {
+          "Dmechanical_J": 3.7308013354092324e-07,
+          "Dresistor_J": 6.840147638257328e-08,
+          "Wdriver_translation_J": 3.045652181495882e-05,
+          "Wdriver_rotation_J": 1.1280509841131997e-06
+        },
+        "frozen_gate_pass": true,
+        "final_balance_residual_J": 1.4575380344935412e-11,
+        "max_endpoint_balance_residual_J_descriptive_only": 1.6856257356720125e-11
+      },
+      "power_identity_max_abs_error_W": 5.421010862427522e-20,
+      "driver_power_min_W": [
+        -0.18579992576801385,
+        -0.003435279890284686
+      ],
+      "quadrature_refinement": {
+        "force_N": {
+          "max_abs_delta": 4.5896852984839143e-10,
+          "max_delta_over_threshold": 0.000668511258778188,
+          "pass": true
+        },
+        "potential_J": {
+          "max_abs_delta": 2.016720124231597e-12,
+          "max_delta_over_threshold": 1.5937737037415635e-06,
+          "pass": true
+        },
+        "driver_derivative_J_per_rad": {
+          "max_abs_delta": 3.5481563520622927e-10,
+          "max_delta_over_threshold": 0.0005732800343942071,
+          "pass": true
+        }
+      },
+      "dense_voltage_and_q_guards_pass": true,
+      "jacobian_readback": {
+        "records": 187,
+        "max_delta_over_frozen_threshold": 5.442884724020509e-05,
+        "pass": true
+      },
+      "event_2s": {
+        "t_s": 2.0,
+        "state_continuity_max_abs_delta": 8.470329472543003e-22,
+        "left_driver_power_W": [
+          -1.8877075064230875e-06,
+          4.472827942056352e-07
+        ],
+        "right_driver_power_W": [
+          -0.0,
+          0.0
+        ],
+        "opening_0_to_2s_simpson_J": {
+          "Dmechanical_J": 7.44136559187629e-05,
+          "Dresistor_J": 1.3480295276514658e-05,
+          "Wdriver_translation_J": 0.006091104362991764,
+          "Wdriver_rotation_J": 0.00022541019682263994
+        },
+        "hold_2_to_4s_simpson_J": {
+          "Dmechanical_J": 2.370789421600506e-09,
+          "Dresistor_J": 0.0,
+          "Wdriver_translation_J": 0.0,
+          "Wdriver_rotation_J": 0.0
+        },
+        "storage_energy_at_2s_J": 1.7513670055679516e-06,
+        "storage_gain_2_to_4s_J": 0.0,
+        "integration_rule": "Per accepted interval Simpson on its retained start/mid/end; distinct left/right powers retained at 2 s. No integration across the jump."
+      },
+      "historical_execution_cost": {
+        "accepted_steps": 2992,
+        "rhs_evaluations": 25744,
+        "force_evaluations": 37572,
+        "jacobian_evaluations": 187,
+        "wall_s": 68.17102340499696
+      },
+      "historical_budget_pass": true,
+      "recorded_minimum_clearance_lower_bound_m_not_recomputed": 0.03273080445945242,
+      "readback_max_abs_deltas": {
+        "sample": 2.7755575615628914e-17,
+        "kinematic_electrical_primitives": 1.3100631690576847e-14,
+        "powers": 5.551115123125783e-17,
+        "stored_energy": 6.505213034913027e-19
+      },
+      "data_counts": {
+        "accepted_intervals": 2992,
+        "common_grid_points": 4001,
+        "primitive_rows": 8976
+      }
+    },
+    "cin10-fine": {
+      "case": {
+        "id": "cin10",
+        "cin_F": 1e-05
+      },
+      "resolution": "fine",
+      "role": "10 uF conditional comparison candidate",
+      "scoped_checks_pass": true,
+      "end_time_s": 4.0,
+      "final_Vs_V": 0.5918392029724753,
+      "final_storage_J": 1.751368210875474e-06,
+      "dense_extrema": {
+        "q_min_m": -0.005975636501998362,
+        "q_max_m": 0.004649543368933078,
+        "Vp_min_V": -3.2234291065295864,
+        "Vp_max_V": 5.843736967206478,
+        "Vs_min_V": 0.0,
+        "Vs_peak_V": 0.5918392033591211
+      },
+      "initial_components_J": {
+        "kinetic_J": 0.0,
+        "elastic_J": 0.0014855861520281061,
+        "piezo_J": 0.0,
+        "storage_J": 0.0,
+        "mutual_magnetic_J": -0.007711207266181439
+      },
+      "final_components_J": {
+        "kinetic_J": 3.813913568003215e-13,
+        "elastic_J": 7.494506208296577e-15,
+        "piezo_J": 1.4206881255285638e-12,
+        "storage_J": 1.7513682108754742e-06,
+        "mutual_magnetic_J": 1.2457694366447078e-06
+      },
+      "ode_work_and_losses_J": {
+        "Dmechanical_J": 7.44160336412171e-05,
+        "Dresistor_J": 1.3480296141337245e-05,
+        "Wdriver_translation_J": 0.006091104387427048,
+        "Wdriver_rotation_J": 0.00022541019692641457
+      },
+      "energy_closure": {
+        "formula": "E(t)-E(0)+Dmechanical+Dresistor-Wtranslation-Wrotation",
+        "maximum_abs_residual_J": 8.906644342952623e-12,
+        "final_residual_J": -9.604804473463402e-13,
+        "max_residual_over_frozen_threshold": 5.991340852194504e-06,
+        "frozen_gate_pass": true,
+        "initial_runtime_n6_minus_static_n10_U_J": 4.668106179384068e-13
+      },
+      "independent_saved_primitive_simpson": {
+        "work_and_losses_J": {
+          "Dmechanical_J": 7.4416032706482e-05,
+          "Dresistor_J": 1.3480296594163634e-05,
+          "Wdriver_translation_J": 0.0060911043834147,
+          "Wdriver_rotation_J": 0.00022541019690179524
+        },
+        "minus_ode_J": {
+          "Dmechanical_J": -9.347351045312438e-13,
+          "Dresistor_J": 4.528263885823086e-13,
+          "Wdriver_translation_J": -4.012347745718792e-12,
+          "Wdriver_rotation_J": -2.4619331096334407e-14
+        },
+        "frozen_threshold_J": {
+          "Dmechanical_J": 3.7308016353241004e-07,
+          "Dresistor_J": 6.840148297081816e-08,
+          "Wdriver_translation_J": 3.04565219170735e-05,
+          "Wdriver_rotation_J": 1.1280509845089763e-06
+        },
+        "frozen_gate_pass": true,
+        "final_balance_residual_J": 2.594578713118953e-12,
+        "max_endpoint_balance_residual_J_descriptive_only": 3.0974051448695583e-12
+      },
+      "power_identity_max_abs_error_W": 5.421010862427522e-20,
+      "driver_power_min_W": [
+        -0.18580101632971036,
+        -0.003435279890284686
+      ],
+      "quadrature_refinement": {
+        "force_N": {
+          "max_abs_delta": 4.5897036171638206e-10,
+          "max_delta_over_threshold": 0.001298653846166064,
+          "pass": true
+        },
+        "potential_J": {
+          "max_abs_delta": 2.0166888992090293e-12,
+          "max_delta_over_threshold": 1.5938902099973595e-06,
+          "pass": true
+        },
+        "driver_derivative_J_per_rad": {
+          "max_abs_delta": 3.5482339288961384e-10,
+          "max_delta_over_threshold": 0.0015670755981610997,
+          "pass": true
+        }
+      },
+      "dense_voltage_and_q_guards_pass": true,
+      "jacobian_readback": {
+        "records": 169,
+        "max_delta_over_frozen_threshold": 1.2178581358196854e-05,
+        "pass": true
+      },
+      "event_2s": {
+        "t_s": 2.0,
+        "state_continuity_max_abs_delta": 8.470329472543003e-22,
+        "left_driver_power_W": [
+          -1.8877075059100894e-06,
+          4.4728279378171383e-07
+        ],
+        "right_driver_power_W": [
+          -0.0,
+          0.0
+        ],
+        "opening_0_to_2s_simpson_J": {
+          "Dmechanical_J": 7.441366189075222e-05,
+          "Dresistor_J": 1.3480296594163634e-05,
+          "Wdriver_translation_J": 0.0060911043834147,
+          "Wdriver_rotation_J": 0.00022541019690179524
+        },
+        "hold_2_to_4s_simpson_J": {
+          "Dmechanical_J": 2.3708157296994717e-09,
+          "Dresistor_J": 0.0,
+          "Wdriver_translation_J": 0.0,
+          "Wdriver_rotation_J": 0.0
+        },
+        "storage_energy_at_2s_J": 1.7513682108754742e-06,
+        "storage_gain_2_to_4s_J": 0.0,
+        "integration_rule": "Per accepted interval Simpson on its retained start/mid/end; distinct left/right powers retained at 2 s. No integration across the jump."
+      },
+      "historical_execution_cost": {
+        "accepted_steps": 4924,
+        "rhs_evaluations": 39726,
+        "force_evaluations": 57335,
+        "jacobian_evaluations": 169,
+        "wall_s": 99.8476697080041
+      },
+      "historical_budget_pass": true,
+      "recorded_minimum_clearance_lower_bound_m_not_recomputed": 0.03299424800395204,
+      "readback_max_abs_deltas": {
+        "sample": 1.3877787807814457e-17,
+        "kinematic_electrical_primitives": 1.3100631690576847e-14,
+        "powers": 5.551115123125783e-17,
+        "stored_energy": 4.336808689942018e-19
+      },
+      "data_counts": {
+        "accepted_intervals": 4924,
+        "common_grid_points": 4001,
+        "primitive_rows": 14772
+      }
+    }
+  },
+  "time_refinement": {
+    "cin47": {
+      "q_m": {
+        "sup_abs_delta": 4.704440474331828e-10,
+        "threshold": 3.08781723211027e-05,
+        "pass": true
+      },
+      "Vs_V": {
+        "sup_abs_delta": 2.008940389042202e-08,
+        "threshold": 0.0008118215809722212,
+        "pass": true
+      },
+      "Vp_V": {
+        "sup_abs_delta": 3.322840223438095e-05,
+        "threshold": 0.05882276553344043,
+        "pass": true
+      },
+      "final_storage_J": {
+        "abs_delta": 3.3830234656612087e-14,
+        "threshold": 3.381442826747624e-09,
+        "pass": true
+      },
+      "maxima.Vs_peak_V": {
+        "abs_delta": 5.032243649560897e-09,
+        "threshold": 0.0008118215809800185,
+        "pass": true
+      },
+      "Dmechanical_J": {
+        "abs_delta": 5.1609494808183345e-12,
+        "threshold": 3.7596909774428325e-07,
+        "pass": true
+      },
+      "Dresistor_J": {
+        "abs_delta": 1.062971200183017e-12,
+        "threshold": 6.997925868907945e-08,
+        "pass": true
+      },
+      "Wdriver_translation_J": {
+        "abs_delta": 1.9251961136390605e-13,
+        "threshold": 3.045464398669048e-05,
+        "pass": true
+      },
+      "Wdriver_rotation_J": {
+        "abs_delta": 2.0560538948471985e-15,
+        "threshold": 1.1280202375589196e-06,
+        "pass": true
+      }
+    },
+    "cin10": {
+      "q_m": {
+        "sup_abs_delta": 3.544207527288179e-10,
+        "threshold": 3.087816623352984e-05,
+        "pass": true
+      },
+      "Vs_V": {
+        "sup_abs_delta": 3.27409818645652e-07,
+        "threshold": 0.0030591960148623762,
+        "pass": true
+      },
+      "Vp_V": {
+        "sup_abs_delta": 7.697581234133999e-05,
+        "threshold": 0.05943476138775994,
+        "pass": true
+      },
+      "final_storage_J": {
+        "abs_delta": 1.2053075221178503e-12,
+        "threshold": 9.756841054377371e-09,
+        "pass": true
+      },
+      "maxima.Vs_peak_V": {
+        "abs_delta": 2.0318637083960311e-07,
+        "threshold": 0.0030591960167956054,
+        "pass": true
+      },
+      "Dmechanical_J": {
+        "abs_delta": 3.778285328917899e-12,
+        "threshold": 3.7308016820608553e-07,
+        "pass": true
+      },
+      "Dresistor_J": {
+        "abs_delta": 2.548453517035561e-12,
+        "threshold": 6.840148070668622e-08,
+        "pass": true
+      },
+      "Wdriver_translation_J": {
+        "abs_delta": 2.6900703886667543e-12,
+        "threshold": 3.045652193713524e-05,
+        "pass": true
+      },
+      "Wdriver_rotation_J": {
+        "abs_delta": 2.6661019312396173e-14,
+        "threshold": 1.128050984632073e-06,
+        "pass": true
+      }
+    }
+  },
+  "time_refinement_gate_count": 18,
+  "time_refinement_all_pass": true,
+  "effects": {
+    "final_storage_J": {
+      "cin10_minus_cin47": 1.275079645525949e-06,
+      "coarse_fine_delta_sum": 1.2391377567744624e-12,
+      "five_times_observed_delta": 6.195688783872312e-12,
+      "effect_exceeds_five_times_observed_resolution_delta": true,
+      "resolved_difference_admitted": true,
+      "empirical_only_not_error_bound": true
+    },
+    "maxima.Vs_peak_V": {
+      "cin10_minus_cin47": 0.4494748871631174,
+      "coarse_fine_delta_sum": 2.08218614489164e-07,
+      "five_times_observed_delta": 1.04109307244582e-06,
+      "effect_exceeds_five_times_observed_resolution_delta": true,
+      "resolved_difference_admitted": true,
+      "empirical_only_not_error_bound": true
+    }
+  },
+  "fine_comparison": {
+    "final_Vs_ratio_10_over_47": 4.157215928773391,
+    "storage_ratio_10_over_47": 3.6771158039249396,
+    "common_grid_q_sup_abs_difference_m": 2.7476649489426555e-05,
+    "cin10_minus_cin47_work_and_loss_J": {
+      "Dmechanical_J": -5.777859076395357e-07,
+      "Dresistor_J": -3.155555964786459e-07,
+      "Wdriver_translation_J": 3.755900889511679e-07,
+      "Wdriver_rotation_J": 6.14941463066487e-09
+    },
+    "cin10_minus_cin47_final_energy_components_J": {
+      "kinetic_J": -5.917810838023683e-14,
+      "elastic_J": -2.415315285697269e-13,
+      "piezo_J": 1.4155456611500611e-12,
+      "storage_J": 1.2750796455259493e-06,
+      "mutual_magnetic_J": 3.804456749634255e-13
+    },
+    "driver_total_work_difference_J": 3.817395035818328e-07,
+    "interpretation": "Same prescribed angle/time profile and initial state, but coupled dynamics change magnetic driver work and losses. The storage gain is an energy-partition result, not equal-input-work efficiency or energy creation."
+  },
+  "historical_repaired_execution_cost_totals": {
+    "accepted_steps": 16114,
+    "rhs_evaluations": 138180,
+    "force_evaluations": 197580,
+    "jacobian_evaluations": 946,
+    "wall_s": 344.6746669590066
+  },
+  "scope_limits": [
+    "No magnetic source implementation imported or re-evaluated; n6/n10 evidence is same-source numerical refinement.",
+    "Magnet clearance column is integrity-verified and reported, not geometrically recomputed by this bounded script.",
+    "No new proof of material/tensor/ROM applicability, calibrated damping, omitted axial or modal physics, initialization/reset cost, PMIC startup, hardware feasibility or Agent benefit.",
+    "Simpson cumulative endpoint residual is descriptive; the frozen independent-ledger gate applies to final individual work/loss integrals.",
+    "47 uF remains control; 10 uF is one conditional comparison candidate. No optimum, scan or threshold retuning."
+  ],
+  "conclusions_zh": [
+    "原归档和清单校验通过；四条修订轨迹的冻结能量、步长收敛和两项效果规则可由保存数据重算。",
+    "细步 10−47 µF 储能差为 +1.275079646 µJ；这是固定条件模型的储能电容敏感性，不是统计显著性或物理可行性。",
+    "2 s 驱动停止点保留左右单侧功率，逐接受区间积分；相同角度轨迹不等于相同外部磁驱动功。",
+    "原版 1 条中断和 3 个未运行槽位保持原身份，修订版 4 条完成，总实际尝试数仍为 5。"
+  ],
+  "input_mapping": {
+    "PACKAGE-MANIFEST.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/PACKAGE-MANIFEST.json",
+      "sha256": "b487357a066919aad8e32d96214553d2fa7f69d26e35a012f69414eafc1ccf6c",
+      "bytes": 39945
+    },
+    "passive-source-storage-20261001/PLAN.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-20261001/PLAN.json",
+      "sha256": "306a5b3bc617dec411590c9ad5d03215496d098de9c153f5ade88421ab3f8dd4",
+      "bytes": 9565
+    },
+    "passive-source-storage-20261001/STOPPED-STUDY-RECEIPT.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-20261001/STOPPED-STUDY-RECEIPT.json",
+      "sha256": "61209bacc91afe11c9661849064de3f1b8cb77b1d6ffbd674b0e0f8e869a0645",
+      "bytes": 1201
+    },
+    "passive-source-storage-20261001/outputs/cin47-coarse/RUN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-20261001/outputs/cin47-coarse/RUN-SEAL.json",
+      "sha256": "339e8c8c80f114fb541390807f639f6298495e498af47857b195e8efac58d149",
+      "bytes": 1104
+    },
+    "passive-source-storage-20261001/outputs/cin47-coarse/SUMMARY.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-20261001/outputs/cin47-coarse/SUMMARY.json",
+      "sha256": "f9f135da495ecb18eb520d5cd85f53b8acd1cf5d8959e4a352bedb018617ce21",
+      "bytes": 3380
+    },
+    "passive-source-storage-20261001/outputs/cin47-coarse/raw.npz": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-20261001/outputs/cin47-coarse/raw.npz",
+      "sha256": "fac954a30158e608bfd0656fdf314f7c3322d7735cfbe4ef259920059597c421",
+      "bytes": 913439
+    },
+    "passive-source-storage-jacobian-20261001/FINAL-RECEIPT.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/FINAL-RECEIPT.json",
+      "sha256": "dd155ece1ebd85e03f127b7c4e9e5f64b0fd52747e60b56a0cbe61dc6c15fc62",
+      "bytes": 2909
+    },
+    "passive-source-storage-jacobian-20261001/PLAN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/PLAN-SEAL.json",
+      "sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+      "bytes": 5604
+    },
+    "passive-source-storage-jacobian-20261001/PLAN.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/PLAN.json",
+      "sha256": "0f8ae3b0b8d6d5d0d1accfa46fe4dc8f479f874be58cc30bc135567112ca3684",
+      "bytes": 10277
+    },
+    "passive-source-storage-jacobian-20261001/outputs/COMPARISON.json": {
+      "archive": "BF_Conditional_Passive_20261001_core.zip",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/COMPARISON.json",
+      "sha256": "282d75a70b5cc19359ae49b30fc736d357fc047e60de1003dad85ff06b4ff8b5",
+      "bytes": 22604
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/DENSE-SEGMENTS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/DENSE-SEGMENTS.json",
+      "sha256": "607c1d725555fc62804d52cb8964a66cb38aaa7287d5de2a0b07705e6a28e903",
+      "bytes": 3313241
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/JACOBIAN-CHECKS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/JACOBIAN-CHECKS.json",
+      "sha256": "6dd286345113a1130cd96b2ca93eb081acd40c38e65198f24cd0f249802cee66",
+      "bytes": 263084
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/REJECTED-EVALUATION.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/REJECTED-EVALUATION.json",
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "bytes": 5
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/RUN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/RUN-SEAL.json",
+      "sha256": "25b3909b220cedbc3abbba21599ef79f9e601aab8c3ff1c47ad478acbd1a113a",
+      "bytes": 1220
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/STARTED.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/STARTED.json",
+      "sha256": "12a213ab833de9e23e12eb2e185aea9e46f7f7cae12eb9c91027bebdf687d26d",
+      "bytes": 623
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/SUMMARY.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/SUMMARY.json",
+      "sha256": "baaaca48c16529331850691fb7fac568683b9bf68f432dd83c06c4b61f988f7c",
+      "bytes": 3723
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-coarse/raw.npz": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-coarse/raw.npz",
+      "sha256": "99294874c52f6694bfe8f45fefac8600d31dcc5c2b653022dd50f5621d9f5980",
+      "bytes": 1888871
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/DENSE-SEGMENTS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/DENSE-SEGMENTS.json",
+      "sha256": "d6930a2d2beef340d32a846bda375cd9e88e815604045cb12386dd6968b8578b",
+      "bytes": 5348293
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/JACOBIAN-CHECKS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/JACOBIAN-CHECKS.json",
+      "sha256": "2ed18e4c2bb153e4624874732c14256437541da5185275a7115f2ff9a0e690af",
+      "bytes": 237937
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/REJECTED-EVALUATION.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/REJECTED-EVALUATION.json",
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "bytes": 5
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/RUN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/RUN-SEAL.json",
+      "sha256": "6186e2ebb97cefcd71cd051abdecc7524edda22fa3b768f36a4283be813a319d",
+      "bytes": 1236
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/STARTED.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/STARTED.json",
+      "sha256": "271314727d6095fa5d0c560b24ca3dc37e19194369f563155f094fab20a57626",
+      "bytes": 639
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/SUMMARY.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/SUMMARY.json",
+      "sha256": "331b548d4cc3d525d2138bbdd25577cd978ae041989d5f71016c72089c56122a",
+      "bytes": 3732
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin10-fine/raw.npz": {
+      "archive": "BF_Conditional_Passive_20261001_raw10.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin10-fine/raw.npz",
+      "sha256": "7ec61063376b75f53448eae7d270ece18ef980b1779dc6d47d524502e3aadf45",
+      "bytes": 2898003
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/DENSE-SEGMENTS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/DENSE-SEGMENTS.json",
+      "sha256": "fd28fe81d5e641dbffa89b98a4a779654575f0b921380361d360efd30be0dc0d",
+      "bytes": 3582313
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/JACOBIAN-CHECKS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/JACOBIAN-CHECKS.json",
+      "sha256": "aeba5a5b104ba360df9f5426f3f3aa88123e661a0cb2044d184ea066d19add0e",
+      "bytes": 423606
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/REJECTED-EVALUATION.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/REJECTED-EVALUATION.json",
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "bytes": 5
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/RUN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/RUN-SEAL.json",
+      "sha256": "99ace5bb2e311bb50ebc4928ceb3aee69055125be778c6c7f1ddf9abd8aad6ea",
+      "bytes": 1222
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/STARTED.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/STARTED.json",
+      "sha256": "bb4cf94dd9391437d97dc3b77e3b617298b3b1afdebcb443f0397d3ed06e9e1f",
+      "bytes": 625
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/SUMMARY.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/SUMMARY.json",
+      "sha256": "ad3ab6b5b1de21fcf0ef6b03fffb764bf51c9c819fb65ed31ea2f4f6b7fdd142",
+      "bytes": 3729
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-coarse/raw.npz": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-coarse/raw.npz",
+      "sha256": "a30775683f5800190847148d5f6341c4e80ebe4a9e82ee9179cc50cdc7d49b07",
+      "bytes": 2039966
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/DENSE-SEGMENTS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/DENSE-SEGMENTS.json",
+      "sha256": "0a36215790469ab709b02a71aba63ef4effa21793ef67cd944acbb1423190b42",
+      "bytes": 5567080
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/JACOBIAN-CHECKS.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/JACOBIAN-CHECKS.json",
+      "sha256": "0081ffa8e9aded4ca280be6d2f5c0831e0214dde30702b81856ce6b00728cd20",
+      "bytes": 409717
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/REJECTED-EVALUATION.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/REJECTED-EVALUATION.json",
+      "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+      "bytes": 5
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/RUN-SEAL.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/RUN-SEAL.json",
+      "sha256": "13d95ef8cce94d6a71c4cfc05c7451706922d32d3bf288498f505ed6aab7a92e",
+      "bytes": 1238
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/STARTED.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/STARTED.json",
+      "sha256": "12f31340b775db5bee2dfe8f7de1ffc428fb2433a77a11347c7872f4d040493c",
+      "bytes": 640
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/SUMMARY.json": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/SUMMARY.json",
+      "sha256": "6af2539099d1cf2ecddd39423da018b83fa44290e4ab2dd6c33b70e211e31587",
+      "bytes": 3742
+    },
+    "passive-source-storage-jacobian-20261001/outputs/cin47-fine/raw.npz": {
+      "archive": "BF_Conditional_Passive_20261001_raw47.tar.xz",
+      "member": "BF_Conditional_Passive_20261001/passive-source-storage-jacobian-20261001/outputs/cin47-fine/raw.npz",
+      "sha256": "7a38de26c0b95399aeda37434a69a0e05ea0f77aa6f84203fa99f67a604e8800",
+      "bytes": 3021698
+    }
+  }
+}
