@@ -207,6 +207,7 @@ if (config.mode === "solve") {
 	save();
 }
 const productContext = await api("/api/product");
+const simulationTask = (await api("/api/engineering/task")).binding;
 if (productContext.binding) config.taskId = productContext.binding.task_id;
 const tools: any[] = [
 	defineTool({
@@ -487,7 +488,7 @@ tools.push(
 		name: "bf_engineering",
 		label: "Engineering tools",
 		description:
-			"Inspect capabilities, read a skill, run native product CAD/Blender, EDA, mcu-firmware, tinyml-nas or closed-simulation, poll a job, or download a verified artifact. closed-simulation accepts parameters.candidate and confirmation; read its skill and distinguish run_status, predicted_design_status and design_status. For product-model use parameters.assembly_revision and OMIT design_revision (the prose proposal version). Native files are outside bash: use action=artifact, job_id, artifact_name before reading the local path. Digital checks do not imply hardware qualification.",
+			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Native files require action=artifact before local reading. Digital checks do not imply hardware qualification.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -496,7 +497,9 @@ tools.push(
 				Type.Literal("run"),
 				Type.Literal("job"),
 				Type.Literal("artifact"),
+				Type.Literal("artifact_view"),
 				Type.Literal("eda_probe"),
+				Type.Literal("submit"),
 			]),
 			engine: Type.Optional(
 				Type.Union([
@@ -515,7 +518,13 @@ tools.push(
 			skill_id: Type.Optional(Type.String()),
 			job_id: Type.Optional(Type.String()),
 			artifact_name: Type.Optional(Type.String()),
+			offset: Type.Optional(Type.Integer({ minimum: 0 })),
+			limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 16000 })),
+			channels: Type.Optional(Type.Array(Type.String())),
+			time_from: Type.Optional(Type.Number()),
+			time_to: Type.Optional(Type.Number()),
 			operation_id: Type.Optional(Type.String()),
+			rationale: Type.Optional(Type.String()),
 			design_revision: Type.Optional(Type.Number()),
 			parameters: Type.Optional(Type.Record(Type.String(), Type.Unknown())), // Validated by the typed backend adapter.
 		}),
@@ -638,7 +647,9 @@ const executionInstructions = productContext.binding
 用户要求执行时，简短说明动作后立即调用工具；不要把“准备修改”“接下来检查”作为最终交付。复用自己已有文件，对实际失败结果做修改、重新运行和读回，直到要求完成或明确的外部阻塞。
 每次原生工程任务等待终态后核对检查，不把进程成功当成设计通过。交付说明和源码须发布到当前产品版本。禁止修改检查器或放宽既定要求来制造通过。
 模型费用、请求数、token 和时间以上游服务账本与实际返回为准；不得绕过或重置。当前状态摘要：${JSON.stringify(promptState)}`;
-const basePrompt = productHarness.productPrompt(executionInstructions, startupProduct(productContext));
+const basePrompt = simulationTask
+	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n先读取原生失败依据，自主提出实际设计修改并执行。只使用 bf_engineering 的 inspect/skill/run/job/artifact_view/submit。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
+	: productHarness.productPrompt(executionInstructions, startupProduct(productContext));
 
 const shared = config.sharedContext;
 const prompt =
@@ -647,7 +658,7 @@ const prompt =
 		? `\nFolder shared context (unverified notes, not experiment facts): ${JSON.stringify({ folder: shared.folder_name, revision: shared.revision, memory: shared.memory })}\nFolder instructions: ${shared.prompt}\nUse bf_memory to read or update shared notes when available. Shared notes are not scientific verification. Enabled tools: ${shared.tools.join(", ")}.`
 		: "");
 const selectedTools = shared?.tools ?? ["read", "edit", "write", "bash", ...tools.map((tool) => tool.name)];
-const availableTools = [...new Set([...selectedTools, "bf_product"])];
+const availableTools = simulationTask ? ["bf_engineering"] : [...new Set([...selectedTools, "bf_product"])];
 if (shared?.folder_id)
 	tools.push(
 		defineTool({

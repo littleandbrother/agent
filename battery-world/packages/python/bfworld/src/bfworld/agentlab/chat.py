@@ -77,7 +77,7 @@ class Conversations:
         with self.store.connect() as db:db.execute('UPDATE conversations SET status=?,error=?,updated=? WHERE id=?',(status,error,time.time(),cid))
         self.event(cid,'status-'+secrets.token_hex(8),{'type':'conversation_status','status':status,'error':error})
 
-    def create(self,text,task_id,operation,folder_id=None,attachments=None,model_cap_usd=None):
+    def create(self,text,task_id,operation,folder_id=None,attachments=None,model_cap_usd=None,preflight=None):
         self.validate_text(text,operation)
         self.app.products.validate_attachments(attachments or [])
         if model_cap_usd is not None and (type(model_cap_usd) not in (int,float) or not 0<model_cap_usd<=.05):raise ValueError('MODEL_CAP_INVALID')
@@ -100,6 +100,7 @@ class Conversations:
                 if model_cap_usd is not None:db.execute('INSERT INTO owner_model_caps VALUES(?,?)',(cid,model_cap_usd))
             if not task_id:self.app.products.create(cid,attachments)
             if folder_id:self.app.organization.change_entry(cid,{'action':'move','folder_id':folder_id})
+            if preflight:preflight(cid)
             self.send(cid,text,operation)
             return self.get(cid)
 

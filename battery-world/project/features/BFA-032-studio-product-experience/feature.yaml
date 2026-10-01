@@ -1,0 +1,58 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-032-studio-product-experience",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "objective": "Unify project conversation, scoped product results and persistent delivery with an accessible Apple-HIG-inspired web interface.",
+  "hypothesis": "Stable project and version context plus truthful purpose-specific delivery lets users find, understand and export results without mixing engineering scopes.",
+  "falsifier": "Any view/export leaks another scope, hides failed checks, loses user drafts or cannot be used with keyboard and narrow content widths.",
+  "paper_claim": "No scientific or autonomous-design claim. Product UX only.",
+  "owned_paths": [
+    "apps/agent-studio/",
+    "packages/python/bfworld/src/bfworld/agentlab/studio_delivery.py",
+    "tests/agentlab/test_studio_delivery.py",
+    "tests/agentlab/test_studio_model.cjs",
+    "docs/agentlab/STUDIO-PRODUCT-EXPERIENCE.md",
+    "docs/PROGRESS.md",
+    "PROJECT.yaml",
+    "project/features/BFA-032-studio-product-experience/",
+    "project/features/BFA-031-agent-design-pilot/feature.yaml",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/.local/share/bf-agent-runtime/battery-world/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-hig-20261001"
+  ],
+  "schema_changes": [
+    "Add delivery purpose inventory and health projection; retain immutable snapshot contract."
+  ],
+  "tests": [
+    "Scope isolation, report dependency closure, snapshot/hash checks, responsive UI and keyboard navigation, init.sh"
+  ],
+  "negative_controls": [
+    "Unreadable report dependency",
+    "Cross-owner export",
+    "Stale export snapshot",
+    "Assembly excludes historical files",
+    "No artifacts"
+  ],
+  "command": "./init.sh",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-hig-20261001",
+  "cost_cap": "0 paid model calls; local development and read-only project inspection only.",
+  "claim_boundary": "Presentation and export projections do not adopt versions or change acceptance, simulator, trial or research semantics.",
+  "stop_condition": "Preserve active computations, project/source hashes and existing histories. No fabricated artifacts or verdicts.",
+  "validation": {
+    "application_init": "passed: 436 Python tests, SDK/Studio types and build, 2803-sample reproduction",
+    "model_tests": "7 passed",
+    "final_targeted": "3 conversation UI + 9 delivery tests passed",
+    "browser": "browser-validation.json",
+    "archive": "archive-readback.json; v2 partial report and legacy v1 readback",
+    "paid_model_calls": 0
+  },
+  "limitations": [
+    "Historical cloud-placeholder files remain unavailable; missing-file inventory and explicit partial export retained.",
+    "Dark/transparency fallbacks implemented but not manually OS-emulated.",
+    "No physical simulation rerun, product acceptance or Agent efficacy claim."
+  ],
+  "handoff": "Live at 8768. Authoritative Documents source and local runtime synchronized. BFA-031 paid pilot remains waiting for explicit allocation; no commit or push requested for this UI turn."
+}

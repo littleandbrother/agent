@@ -29,7 +29,7 @@ class StudioDeliveryTest(unittest.TestCase):
         self.assertEqual(1, len(a['files']))
         self.assertIsNone(a['verdict'])
         self.assertEqual('FAIL', a['results'][0]['design_status'])
-        self.assertEqual('case:fixture:D2', a['options'][0]['id'])
+        self.assertIn('case:fixture:D2', [o['id'] for o in a['options']])
         self.assertFalse(a['results'][0]['hardware_verified'])
 
     def test_export_scope_hashes_index_and_immutable_readback(self):
@@ -74,8 +74,8 @@ class StudioDeliveryTest(unittest.TestCase):
 
     def test_report_relative_dependencies_are_preserved(self):
         m=self.manifest();m['groups'][0]['files']=[]
-        for name in ['report/main.tex','report/main.pdf','figures/view.png']:
-            p=self.base/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('fixture '+name)
+        for name in ['report/main.tex','report/main.pdf','figures/view.png','mechanical/large.blend']:
+            p=self.base/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(r'\includegraphics{../figures/view.png}' if name.endswith('.tex') else 'fixture '+name)
             m['groups'][0]['files'].append(dict(path=name,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
         self.app.results.cases.publish(self.owner,self.base,m)
         self.delivery=StudioDelivery(self.app.results);a=self.delivery.inspect(self.owner,'case:fixture:D2')
@@ -83,6 +83,10 @@ class StudioDeliveryTest(unittest.TestCase):
         with zipfile.ZipFile(self.delivery.archive(self.owner,record['id'])) as z:
             self.assertIn('工程/fixture/D2/report/main.tex',z.namelist())
             self.assertIn('工程/fixture/D2/figures/view.png',z.namelist())
+            self.assertNotIn('工程/fixture/D2/mechanical/large.blend',z.namelist())
+        self.assertEqual(3, a['purposes']['report']['files'])
+        self.assertEqual(4, a['purposes']['engineering']['files'])
+        self.assertEqual(0, a['purposes']['summary']['files'])
 
     def test_cross_owner_scope_cannot_be_requested(self):
         self.seed();other=self.app.conversations.create('other',None,'scope-other')['id']
@@ -119,3 +123,32 @@ class StudioDeliveryTest(unittest.TestCase):
                 self.assertEqual('application/zip',response.headers['Content-Type'])
                 self.assertEqual(self.delivery.archive(self.owner,record['id']).read_bytes(),response.read())
         finally:server.shutdown();server.server_close();thread.join(2)
+
+    def test_missing_dependency_is_explicit_without_including_unrelated_files(self):
+        m=self.manifest();m['groups'][0]['files']=[]
+        for name, text in [('report/main.pdf','fixture pdf'),('report/main.tex',r'\input{missing}'),('unrelated.json','{}')]:
+            p=self.base/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
+            m['groups'][0]['files'].append(dict(path=name,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+        self.app.results.cases.publish(self.owner,self.base,m)
+        delivery=StudioDelivery(self.app.results);snap=delivery.inspect(self.owner,'case:fixture:D2')
+        self.assertEqual(2,snap['purposes']['report']['files'])
+        self.assertTrue(any('missing' in w for w in snap['purposes']['report']['warnings']))
+        result=delivery.package(self.owner,self.request(snap,purpose='report'))
+        with zipfile.ZipFile(delivery.archive(self.owner,result['id'])) as z:
+            self.assertTrue(json.loads(z.read('交付清单.json'))['snapshot']['purposes']['report']['warnings'])
+
+    def test_report_export_not_blocked_by_unrelated_missing_engineering_file(self):
+        m=self.manifest();m['groups'][0]['files']=[]
+        for name in ['report/main.pdf','geometry.step']:
+            p=self.base/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('fixture')
+            m['groups'][0]['files'].append(dict(path=name,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+        self.app.results.cases.publish(self.owner,self.base,m)
+        delivery=StudioDelivery(self.app.results);snap=delivery.inspect(self.owner,'case:fixture:D2')
+        geometry=next(f for f in snap['files'] if f['name']=='geometry.step')
+        path,_=self.app.results.file(self.owner,geometry['id']);path.write_bytes(b'corrupt')
+        snap=delivery.inspect(self.owner,'case:fixture:D2')
+        self.assertEqual(0,len(snap['purposes']['report']['missing']))
+        result=delivery.package(self.owner,self.request(snap,purpose='report'))
+        self.assertEqual(1,result['files']);self.assertEqual(0,result['omitted'])
+        with self.assertRaisesRegex(ValueError,'FILES_MISSING'):
+            delivery.package(self.owner,self.request(snap,purpose='engineering'))

@@ -1,0 +1,22 @@
+{
+  "schema_version": "closed-simulation-task-v1",
+  "id": "door-event-nominal-v1",
+  "title": "固定门动作下的一次自供能事件交付",
+  "baseline": {},
+  "allowed_design_variables": {
+    "mechanical.gap_mm": {"range": [28, 70], "artifact": "assembly.step + source-design.json + force-table"},
+    "circuit.cin_uF": {"values": [10, 22, 47, 100, 220], "artifact": "system.cir Cstorage; ideal nominal capacitance, not a qualified part number"},
+    "circuit.cout_uF": {"values": [10, 22, 47, 100, 220, 470], "artifact": "system.cir Cout; fixed declared ESR model"},
+    "firmware.interval_ms": {"values": [50, 100, 200, 500], "artifact": "policy.h + shared C builds"}
+  },
+  "protected_categories": {
+    "environment": ["mechanical.opening_s", "mechanical.angle_deg", "circuit.initial_vin_V", "link"],
+    "model_assumptions": ["mechanical.remanence_T", "mechanical.damping_ratio", "firmware timings and currents except interval_ms"],
+    "diagnostic": ["circuit.diagnostic_input_A"],
+    "numerical": ["solver", "confirmation=true"],
+    "presentation": ["presentation"]
+  },
+  "service": {"event": "motion occurrence, not open/close direction", "deadline_s": 4.0, "minimum_correct_packets": 1, "expected_payload_hex": "424644320102030405060708"},
+  "evaluation": {"nominal_requires": ["legal inputs", "zero precharge and external current", "completed", "energy_balance", "force_interpolation", "beam_mesh", "program_power_fixed_point", "time_step"], "ranking_additionally_requires": ["magnetic_mesh", "magnetic_anchor_agreement"], "hardware_acceptance": false},
+  "claim_boundary": "Fixed nominal door/piezo/PMIC family, assumed shared-C SIL and virtual receiver. At-least-once packet by deadline only; no direction, exactly-once, physical safety, hardware or architecture-synthesis qualification. Missing physical gates prohibit design ranking."
+}

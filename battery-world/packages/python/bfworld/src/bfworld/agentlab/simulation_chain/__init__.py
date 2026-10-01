@@ -31,8 +31,9 @@ def template_hash():
     return digest({p.name:file_hash(p) for p in sorted(Path(__file__).parent.iterdir()) if p.suffix in ('.py','.c')})
 
 def run(engine,job,directory,deadline):
+    cache_root=(engine.store.root.parent/'studies/door-design-pilot-v1/agent-cache'/job['owner']) if job.get('task_binding') else HOME_ROOT/'simulation-chain/cache'
     args=[str(CAD),'-m','bfworld.agentlab.simulation_chain.cli','--input',str(directory/'input.json'),
-          '--output',str(directory),'--cache',str(HOME_ROOT/'simulation-chain/cache')]
+          '--output',str(directory),'--cache',str(cache_root)]
     engine.event(job['owner'],job['id'],'process_start',{'transport':'cli','argv':args,'cwd':str(directory)})
     env={**os.environ,'PYTHONPATH':str(REPO/'packages/python/bfworld/src')}
     offset=0

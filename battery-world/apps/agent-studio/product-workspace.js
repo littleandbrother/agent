@@ -169,7 +169,7 @@
     if(!snapshot.versions.length)q('#pd-version').innerHTML='<option>会话成果 · 尚无装配版本</option>';
     draw();inspect();history();
   }
-  function showReference(){window.BFDeveloper.setMode('product');setSource('reference')}
+  function showReference(){window.BFDeveloper.setMode('product');setSource('reference');window.ProductResults?.focus({view:'overview'})}
   function showSession(options={}){window.BFDeveloper.setMode('product');if(scope!=='session')setSource('session');window.ProductResults?.focus(options)}
   window.ProductWorkspace={open,showReference,showSession,applyResults};
   window.addEventListener('bf-selection',()=>{if(active())open()});

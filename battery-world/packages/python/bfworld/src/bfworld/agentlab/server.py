@@ -370,6 +370,7 @@ def handler(workbench):
                     operator=actor['role']=='operator'
                     target=query.get('session',[owner])[0] if operator else owner
                     if not operator:workbench.engineering.authorize(owner)
+                    if path=='/api/engineering/task':return self.reply(200,{'binding':workbench.engineering.tasks.binding(target)})
                     if path=='/api/engineering':return self.reply(200,{**workbench.engineering.catalog(target),'jobs':workbench.engineering.jobs(target if target!='operator' else None)})
                     parts=path.strip('/').split('/')
                     if len(parts)==4 and parts[2]=='jobs':return self.reply(200,workbench.engineering.get(owner,parts[3],operator))
@@ -565,6 +566,16 @@ def handler(workbench):
                     target=body.get('session_id',owner) if operator else owner
                     if operator and target!='operator':workbench.conversations.get(target)
                     action=body.get('action','run')
+                    if action=='pilot_trial':
+                        if not operator:raise PermissionError('OPERATOR_REQUIRED')
+                        return self.reply(201,workbench.engineering.tasks.create_trial(workbench,body.get('trial_id'),body.get('text')))
+                    if action=='artifact_view':
+                        return self.reply(200,workbench.engineering.tasks.artifact_view(workbench.engineering,target,body))
+                    if action=='task_bind':
+                        if not operator:raise PermissionError('OPERATOR_REQUIRED')
+                        return self.reply(200,workbench.engineering.tasks.bind(target,body.get('task_id'),body.get('max_candidates',3)))
+                    if action=='submit':
+                        return self.reply(200,workbench.engineering.tasks.submit(workbench.engineering,target,body.get('job_id'),body.get('rationale')))
                     if action=='eda_probe':return self.reply(200,workbench.engineering.eda.probe(target))
                     if action in ('eda_context','eda_bind'):
                         if not operator:raise PermissionError('OPERATOR_REQUIRED')

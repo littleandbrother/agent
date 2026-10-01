@@ -79,6 +79,8 @@ class Engineering:
             db.execute("UPDATE engineering_jobs SET status='UNKNOWN',error='服务重启，未自动重试；检查保留的进程日志和产物。' WHERE status IN ('RUNNING','QUEUED')")
 
         self.eda=JLCEDA(self)
+        from .simulation_tasks import SimulationTasks
+        self.tasks=SimulationTasks(self.store)
 
     def authorize(self,owner,operator=False):
         if operator:return
@@ -110,6 +112,7 @@ class Engineering:
         for item in result['engines']:
             history=[j for j in self.jobs(owner) if j['engine']==item['id']] if owner else []
             item.update(runnable=item['installed'],probe_status='not_probed',last_execution=history[0]['status'] if history else None)
+        result['task_binding']=self.tasks.binding(owner) if owner else None
         return result
 
     def event(self,owner,job,kind,data):
@@ -118,6 +121,9 @@ class Engineering:
     def skill(self,owner,key,initiator='unrecorded'):
         if key not in SKILLS and key not in SKILL_PATHS:raise ValueError('SKILL_NOT_FOUND')
         content=SKILL_PATHS[key].read_text() if key in SKILL_PATHS else SKILLS[key]
+        binding=self.tasks.binding(owner)
+        if binding and key=='closed-simulation':
+            content+='\n## 本会话冻结任务（优先于通用参数列表）\n'+json.dumps(binding,ensure_ascii=False)+'\n只允许任务列明的设计变量；confirmation必须为true。完成比较后调用bf_engineering action=submit，指定已有job_id与rationale。提交失败候选是合法结论，不等于产品通过。'
         value={'id':key,'content':content,'sha256':hashlib.sha256(content.encode()).hexdigest(),'status':'read_not_execution','initiator':initiator}
         self.event(owner,None,'skill_read',value)
         return value
@@ -144,6 +150,7 @@ class Engineering:
 
     def submit(self,owner,body,initiator='unrecorded'):
         engine=body.get('engine');p=validate_eda(body.get('parameters',{})) if engine=='jlceda' else validate(engine,body.get('parameters',{}));op=body.get('operation_id')
+        task_binding=self.tasks.guard(owner,engine,p)
         if not isinstance(op,str) or not re.fullmatch(r'[A-Za-z0-9_.-]{1,100}',op):raise ValueError('OPERATION_ID_REQUIRED')
         revision=body.get('design_revision')
         if revision is not None and (type(revision) is not int or revision<1):raise ValueError('DESIGN_REVISION_INVALID')
@@ -158,6 +165,7 @@ class Engineering:
         request={'engine':engine,'template':engine+'-v1' if engine in ('mcu-firmware','tinyml-nas','event-transient','engineering-project','beam-event','closed-simulation') else 'product-model-v1' if engine=='product-model' else ('jlceda-'+p['operation']+'-v1') if engine=='jlceda' else SPECS[engine]['template'],'template_sha256':template_hash,'parameters':p,'design_revision':revision,
                  'turn_id':message['id'] if message and initiator!='operator' else None, 'initiator':initiator, 'scope':simulation_chain.SCOPE if engine=='closed-simulation' else beam_event.SCOPE if engine=='beam-event' else engineering_projects.SCOPE if engine=='engineering-project' else event_design.SCOPE if engine=='event-transient' else tinyml.SCOPE if engine=='tinyml-nas' else deployment.SCOPE if engine=='mcu-firmware' else product_build.SCOPE if engine=='product-model' else EDA_SCOPE if engine=='jlceda' else SPECS[engine]['scope']}
         request.update(assembly)
+        if task_binding:request['task_binding']=task_binding
         if engine=='jlceda':
             request['binding']=self.eda.binding(owner)
             if not request['binding']:raise ValueError('EDA_BINDING_REQUIRED')
@@ -169,6 +177,7 @@ class Engineering:
                 original=json.loads(previous['request'])
                 if any(original.get(k)!=request.get(k) for k in ('engine','parameters','design_revision','dataset_source_sha256','event_spec_sha256','project_sha256','mapping_sha256')):raise ValueError('ENGINEERING_OPERATION_CONFLICT')
                 return self.project(previous)
+            self.tasks.reserve_check(db,owner,task_binding)
             if revision is not None:
                 current=(self.app.products.context(owner).get('proposal') or {}).get('revision')
                 if current!=revision:raise ValueError('DESIGN_REVISION_STALE')
@@ -211,7 +220,7 @@ class Engineering:
                 directory=self.root/key;directory.mkdir()
                 job=self.get(owner,key);p=job['parameters'];deadline=time.monotonic()+(3600 if job['engine']=='closed-simulation' else 900 if job['engine']=='product-model' else 120 if job['engine']=='tinyml-nas' else 180)
                 with self.store.connect() as db:db.execute("UPDATE engineering_jobs SET status='RUNNING',started=? WHERE id=?",(time.time(),key))
-                (directory/'input.json').write_text(canonical({k:job[k] for k in ('engine','template','template_sha256','parameters','design_revision','scope','assembly','assembly_hashes','dataset','dataset_source_sha256','event_spec','event_spec_sha256','project','project_sha256','input_dimensions','geometry_rom','mapping_sha256') if k in job}))
+                (directory/'input.json').write_text(canonical({k:job[k] for k in ('engine','template','template_sha256','parameters','design_revision','scope','assembly','assembly_hashes','dataset','dataset_source_sha256','event_spec','event_spec_sha256','project','project_sha256','input_dimensions','geometry_rom','mapping_sha256','task_binding') if k in job}))
                 template=Path(simulation_chain.__file__) if job['engine']=='closed-simulation' else Path(__file__).with_name('beam_event.py') if job['engine']=='beam-event' else Path(__file__).with_name('engineering_projects.py') if job['engine']=='engineering-project' else Path(__file__).with_name('event_design.py') if job['engine']=='event-transient' else Path(__file__).with_name('jlceda.py') if job['engine']=='jlceda' else TEMPLATES/('blender_enclosure.py' if job['engine']=='blender' else 'Cantilever.java')
                 source_bytes=template.read_bytes()
                 if job['engine']=='jlceda' and p['operation']=='freeroute':source_bytes+=Path(__file__).with_name('freerouting.py').read_bytes()
@@ -219,6 +228,10 @@ class Engineering:
                 if job['engine'] not in ('product-model','mcu-firmware','tinyml-nas','closed-simulation') and hashlib.sha256(source_bytes).hexdigest()!=job['template_sha256']:raise RuntimeError('ENGINEERING_TEMPLATE_CHANGED')
                 if job['engine']=='closed-simulation':
                     result=simulation_chain.run(self,job,directory,deadline)
+                    if task_binding:=job.get('task_binding'):
+                        from .simulation_tasks import attach_evaluation
+                        evaluation=attach_evaluation(task_binding,directory,result)
+                        self.event(owner,key,'task_evaluated',evaluation)
                 elif job['engine']=='beam-event':
                     result=beam_event.run(self,job,directory,deadline)
                 elif job['engine']=='engineering-project':

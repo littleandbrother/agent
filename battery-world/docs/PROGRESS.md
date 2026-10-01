@@ -694,3 +694,38 @@ BFA-025 仅完成平台功能；BFA-024 仍为 blocked。磁拨动校准、本�
 完成共享后端上的Studio设计/成果/交付与Lab控制台/架构地图分离；版本与owner隔离、产品真实视觉/结论/分项成果、版本固定导出及离线索引；原有编辑能力保留。加入导航/浮层/输入框玻璃风格、模式滑动与按压动效及减少动态/透明度兼容。浏览器验证草稿/滚动往返、390/1440布局、实际130文件D2下载和399项嵌套密封包。26项Python、25项JS通过，44张生产表和科学features摘要不变，付费调用0。
 
 全量init415项仍13失败1错误，集中Pi启动/会话集成；后续SDK阶段未执行，不能声称全系统健康。D2冷启动/磁网格/原生EDA未通过，BFA-028改记blocked；BFA-029仅平台范围complete。未提交或推送。文档：battery-world/docs/agentlab/STUDIO-LAB-EXPERIENCE.md；证据：bf-agent-workbench/verification/studio-lab-20260930/receipt.json。
+
+
+## 2026-10-01 — BFA-031 bounded design pilot
+
+P0 now binds immutable tasks, allowed physical design variables, candidate quotas, per-owner tools and independently checked final submissions. Large waveforms can be read by channel/time window. Paid trial authority is bound before first dispatch.
+
+Native mapping completed 12 distinct designs plus 2 true cold-cache baseline controls. Three cloud/runtime failures are preserved and explicitly repeated with unchanged candidate/model: 17 attempts total; effective results are 8 nominally evaluated but unsatisfied and 4 out-of-domain designs. No self-powered positive case or physically qualified ranking. Empty-cache waveform maximum normalized differences are about 1.6e-5; program state/current and receiver records match.
+
+CloudDocs evicted dependencies and checkpoint status files. The same-version runtime and hash-verified study files now live under ~/.local/share/bf-agent-runtime; the old study path is a symlink and the original pre-migration directory is retained. Live port 8768 uses run-workbench.sh with original workbench state. Authoritative edit repos remain Documents/battery-world and Documents/pi-bf-aiot.
+
+Application ./init.sh passed: 434 Python tests, SDK/Studio types/build and 2803-sample projection. Targeted task/native suite: 20 passed; real Pi fixture-provider integration is not scientific Agent evidence. External paid model calls this pilot: 0. USD2/12h request still pending; old ledger intact. P1 real trajectories and P2 physical confirmation remain open, so the feature is not marked complete.
+
+Evidence: /Users/depengsu/Documents/bf-agent-workbench/studies/door-design-pilot-v1/report/REPORT.md and lightweight-evidence.zip. No commits/push this turn. B2/feat-397, D2 acceptance and fixed scientific features unchanged.
+
+
+## 2026-10-01 — BFA-032 Studio product experience complete
+
+Implemented the HIG-inspired project conversation/product/delivery flow using the existing product backend. Stable navigation, project search, scoped product results, real previews and honest failed conclusions; persistent delivery offers summary, report with registered relative dependencies, and engineering packages. Snapshot/owner/hash checks and legacy archive verification retained. Responsive layout follows actual content width; keyboard focus, reduced motion and solid material fallbacks implemented. No extra product database or scientific verdict layer.
+
+Application ./init.sh: 436 Python tests, SDK/Studio types/build and 2803-sample reproduction passed in the verified local runtime. Final targeted checks: 3 conversation UI + 9 delivery tests; 7 JS projection tests. Live browser verified scope/project isolation, preserved drafts, empty projects, report preview, generation and download, no horizontal overflow at 390/825/1280 widths. Downloaded report package: 8 original files hash-verified, 22 unreadable cloud-placeholder files disclosed in manifest. Old v1 archive readback also verified. UI console has no observed errors. Dark/transparency CSS not manually OS-emulated.
+
+Evidence and screenshots: /Users/depengsu/Documents/bf-agent-workbench/verification/studio-hig-20261001/. Full design/implementation notes: battery-world/docs/agentlab/STUDIO-PRODUCT-EXPERIENCE.md. Running port 8768 uses the existing local runtime with synchronized changed files. No paid model calls, no simulation rerun, no change to D2 acceptance. 88 coordinator scientific features unchanged; coordinator init was not run or claimed. BFA-031 paid Pi pilot remains waiting for explicit allocation. No commit/push requested or performed this turn.
+
+
+## 2026-10-02 — BFA-033 Studio craft refinement started
+User requested final eight-axis visual/interaction refinement. Scope: Studio frontend and quality review. Existing delivery backend, scientific claims, paid limits and frozen feature array preserved. No commit requested.
+
+
+## 2026-10-02 — BFA-033 Studio craft refinement complete
+
+Completed shared Studio usage/product/delivery visual refinement: original opening composition, one toolbar for project views, real product media with conclusions, numbered engineering sections, purpose-based delivery presentation, restrained materials and motion. Responsive sidebar, keyboard search/escape, focus handling and small-screen typography corrected during live review. All eight requested design dimensions are assessed in docs/agentlab/STUDIO-CRAFT-REVIEW.md.
+
+Application init passed: 436 Python tests, SDK/Studio types/build, 2803-sample reproduction. Focused checks: 3 conversation + 9 delivery tests, 7 JS projection tests. Actual browser checks at 320/375/414/768/1280 and default 825 widths showed no horizontal overflow for recorded views; 1440 delivery columns also inspected. Actual 34 KB summary generation/link verified. Studio/Lab context preserved; final browser error log empty. Viewport override reset. No OS-level dark/transparency/reduced-motion emulation; CSS fallback review is not full accessibility certification.
+
+Evidence: /Users/depengsu/Documents/bf-agent-workbench/verification/studio-craft-20261002/receipt.json. Live 8768 frontend synchronized. 88 scientific features unchanged. No paid model calls, no native simulation reruns, no scientific verdict changes, no commit/push. BFA-031 remains waiting. PROJECT active_feature cleared after completion to keep the feature-state validator consistent. Coordinator scientific init not run or claimed.

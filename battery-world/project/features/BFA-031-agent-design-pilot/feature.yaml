@@ -1,0 +1,91 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-031-agent-design-pilot",
+  "owner": "bf-agent-coordinator",
+  "status": "waiting-for-authorization",
+  "objective": "Freeze a task-level intervention boundary, map twelve bounded native candidates, and collect four short real Pi feedback-driven design trajectories.",
+  "hypothesis": "A fixed Pi agent can use structured native feedback to propose, execute, compare and submit legal revisions without changing task conditions or model assumptions.",
+  "paper_claim": "Development pilot of bounded design and feedback use; no superiority, architecture synthesis, physical qualification or RSI claim.",
+  "falsifier": "Agent changes a protected assumption, cannot complete a feedback revision, submits unevaluated/stale output, or treats a diagnostic/out-of-domain/numerical failure as self-powered success.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_tasks.py",
+    "packages/python/bfworld/src/bfworld/agentlab/engineering.py",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py",
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/__init__.py",
+    "scripts/run_design_pilot.py",
+    "scripts/report_design_pilot.py",
+    "configs/reference_cases/design-pilot/",
+    "tests/agentlab/test_simulation_tasks.py",
+    "docs/agentlab/AGENT-DESIGN-PILOT.md",
+    "docs/PROGRESS.md",
+    "PROJECT.yaml",
+    "project/features/BFA-031-agent-design-pilot/",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/src/chat-product.ts",
+    "/Users/depengsu/Documents/pi-bf-aiot/packages/bf-agent/dist/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/Documents/bf-agent-workbench/studies/door-design-pilot-v1/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/design-pilot-20261001/",
+    "/Users/depengsu/Documents/bf-agent-workbench/state/",
+    "packages/python/bfworld/src/bfworld/agentlab/chat.py",
+    "/Users/depengsu/.local/share/bf-agent-runtime/",
+    "/Users/depengsu/Documents/bf-agent-workbench/toolchains/product-cad/"
+  ],
+  "schema_changes": [
+    "closed-simulation-task-v1",
+    "simulation-task-bindings",
+    "task-evaluation-v1",
+    "door-design-pilot-v1"
+  ],
+  "tests": [
+    "protected fields and alternate engine rejected",
+    "task binding immutable and owner isolated",
+    "candidate cap/idempotency",
+    "diagnostic/stale/failed checks unrankable",
+    "deadline and correct payload",
+    "export hash audit",
+    "cold and warm cost separation"
+  ],
+  "negative_controls": [
+    "external current",
+    "precharge",
+    "edited damping/current/loss/solver",
+    "confirmation disabled",
+    "over quota",
+    "cross-owner job",
+    "out of domain",
+    "late/wrong event",
+    "tampered artifact"
+  ],
+  "command": "PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest tests.agentlab.test_simulation_tasks; scripts/run_design_pilot.py --help",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/studies/door-design-pilot-v1/",
+  "cost_cap": "Native mapping: 12 planned candidates plus 2 cold repeat controls, <=6h total, <=3600s/candidate, serial. Real Pi: 4 trajectories, <=3 new candidates each, <=45min/trial. New paid allocation USD2 requested, pending explicit reply; no paid dispatch without available authorized cap. Runtime repair addendum: at most three exact-design repeats of preserved gap28/gap36 CAD timeouts and gap40 cloud-checkpoint interruption, under the same six-hour native total; no new search variables.",
+  "claim_boundary": "Nominal fixed device family and assumed shared-C SIL. D2 and B2/feat-397 stay sealed; magnetic qualification failure remains a failure. This pilot is not a formal method comparison.",
+  "stop_condition": "Stop paid dispatch on missing budget/window/provider usage; stop experiments on source/hash drift or frozen semantic changes. Do not tune task/model thresholds to pass.",
+  "limitations": "Original magnetic mesh gate fails; no self-powered positive candidate established; additional architecture/method comparison is conditional on pilot evidence. Local dependency files were evicted to cloud placeholders during native mapping; preserve failed attempts and stage a verified local runtime without changing scientific sources.",
+  "handoff": "P0 and bounded native mapping are implemented and verified. Preserve seal and all failures. Await explicit USD2/12h reply before authorize/trials; use verified local runtime. Then collect four real Pi trajectories; no operator-selected next parameters. No positive self-powered candidate found, and physical mesh/rotated-field qualification remains open. Active implementation switched to BFA-032 per user UI request; paid pilot remains unlaunched.",
+  "stage_status": {
+    "P0": "implemented-and-tested",
+    "P1": "ready-awaiting-explicit-paid-allocation",
+    "P2_mapping": "12 designs + 2 cold controls + 3 runtime recovery attempts complete",
+    "P2_physical_confirmation": "not qualified; magnetic mesh and rotated FEM coverage remain open",
+    "P3_P4": "conditional; not launched"
+  },
+  "validation": {
+    "application_init": "passed",
+    "python_tests": 434,
+    "targeted_task_and_chain_tests": 20,
+    "sdk_studio": "types/build and 2803-sample projection passed",
+    "paid_provider_calls": 0
+  },
+  "results": {
+    "native_attempts": 17,
+    "unique_designs": 12,
+    "unique_completed": 8,
+    "unique_out_of_domain": 4,
+    "self_powered_successes": 0,
+    "physical_qualification": false,
+    "evidence": "/Users/depengsu/Documents/bf-agent-workbench/studies/door-design-pilot-v1/report/REPORT.md"
+  }
+}

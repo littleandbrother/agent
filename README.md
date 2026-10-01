@@ -1,12 +1,12 @@
 # BF-AIoT Agent
 
-当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-01）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-02）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
 
 ## 目录
 
 | 目录 | 内容 |
 | --- | --- |
-| `battery-world/apps/agent-studio/` | Studio（设计对话、产品成果）与 Lab（控制台、全景）；流式对话、Trace、工具/Memory/Harness、架构地图、产品节点交付物 |
+| `battery-world/apps/agent-studio/` | Studio（设计对话、产品成果、交付）与 Lab（控制台、全景）；流式对话、Trace、工具/Memory/Harness、架构地图、产品节点交付物 |
 | `battery-world/packages/python/bfworld/src/bfworld/agentlab/` | 本地服务、会话与预算、Agent 调度、工程适配器、交付物绑定、参考案例与验证 |
 | `battery-world/scripts/` | 可执行设计、构建、仿真、固件、校验和案例发布脚本 |
 | `battery-world/configs/`、`contracts/`、`fixtures/` | 配置、契约和确定性测试输入（后两个目录也在 battery-world 内） |
@@ -23,9 +23,13 @@
 
 [门磁耦合 D2 报告（36页）](cases/door-magnetic-D2/report/door-case.pdf) · [报告源码与编译说明](cases/door-magnetic-D2/README.md) · [原生工程附件](https://github.com/littleandbrother/agent/releases/tag/door-magnetic-d2-20260930)
 
-D2 包含门动画、22件 CAD/图纸、COMSOL 场图、LTspice 电源仿真、PCB 布线和目标固件。**单次开门冷启动和磁网格验收未通过；原生 EDA ERC/DRC、实物与制造未验收。** 源码包含 BFA-026/027 的全会话成果目录、BFA-028 的不可变工程案例发布、BFA-029 Studio/Lab 交互与 BFA-030 受限全仿真链路，不包含用户会话数据库。
+D2 包含门动画、22件 CAD/图纸、COMSOL 场图、LTspice 电源仿真、PCB 布线和目标固件。**单次开门冷启动和磁网格验收未通过；原生 EDA ERC/DRC、实物与制造未验收。** 源码包含 BFA-026/027 的全会话成果目录、BFA-028 的不可变工程案例发布、BFA-029/032/033 Studio/Lab 与交付体验、BFA-030 受限全仿真链路和 BFA-031 任务级实验约束，不包含用户会话数据库。
 
-原工作区本轮完整 `./init.sh` 通过：425项 Python 测试（4项隔离数值检查跳过，已在专用数值环境另行通过11项）、SDK/Studio 类型和构建、2803样本复现；Pi 定向构建通过，全仓库 lint 仍有既有警告。六项工程链路和四项对照已计算通过，但基线**储能峰值约0.146 V、0次完整发送**；磁场两档网格差11.3%，仍高于5%验收门槛。[本版验证与边界](release/CLOSED-SIMULATION-VERIFICATION.md)。
+当前应用完整 `./init.sh` 通过：436 项 Python 测试、SDK/Studio 类型和构建、2803 样本复现。本次独立发布副本另通过 21 项会话/交付/任务约束检查、7 项成果投影检查和 BF Agent 类型检查；Pi 全仓库 lint 仍有既有问题。新增功能与证据见 [2026-10-02 发布说明](release/STUDIO-PILOT-VERIFICATION.md)。
+
+BFA-031 已固定可修改设计变量、任务条件、候选配额和提交复核。17 次原生尝试覆盖 12 个设计与 2 个冷缓存对照；8 个设计在名义模型内未满足任务，4 个越界，尚无自供能正例。真实 Pi 付费设计轨迹仍等待新额度，没有把夹具模型测试计为自主设计证据。约 14 MB [轻量研究记录](release/evidence/door-design-pilot-v1.zip) 包含逐运行结果、关键波形、检查脚本、来源摘要与大文件哈希；未包含完整原生档案。
+
+前版机械—电路—程序闭环的基线仍为**储能峰值约0.146 V、0次完整发送**；磁场两档网格差11.3%，仍高于5%门槛。[原闭环验证与边界](release/CLOSED-SIMULATION-VERIFICATION.md)。
 
 ## 本次上传范围
 
@@ -69,7 +73,11 @@ PYTHONPATH=packages/python/bfworld/src .venv/bin/python \
 
 使用新 state 目录生成的 `launch-url.txt` 打开本机认证入口，不提交它或 `operator.token`。模型调用仍需要本地凭据和有效费用/时间额度。本次验收没有外部付费模型调用。部分历史案例脚本和专有软件依赖仍需单独配置；当前作者工程沙箱仅验证 macOS，不等于全平台安装器。macOS 云盘目录中的源码及工具链应保持本地下载；云端占位依赖可能阻塞编译或沙箱导入，全景会将不可读取的历史文件明确标为暂不可用。
 
-本轮新增：Studio/Lab 分区与版本化成果导出；有界门磁全仿真入口将参数化 CAD、COMSOL 梁参数、有限磁力表、LTspice 原厂 PMIC、共享 C 程序和虚拟接收器连成可复算计算链。Lab 保留详细 Trace，Studio 呈现模型结果与缺口。详见 [交互与交付](battery-world/docs/agentlab/STUDIO-LAB-EXPERIENCE.md)、[全仿真链路](battery-world/docs/agentlab/CLOSED-SIMULATION.md) 和 [产品执行链](battery-world/docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md)。阶段完成、局部计算通过、完整工程验收和实物验证分别记录。
+本轮新增：稳定的项目导航与搜索、按版本/来源组织的产品成果、结果概要/技术报告/工程资料包三类交付、报告依赖与缺失文件检查。界面统一排版、留白、材质、短动效和键盘/手机交互；产品结论与文件数量保持分别记录。详见 [Studio 使用与交付](battery-world/docs/agentlab/STUDIO-PRODUCT-EXPERIENCE.md)、[八项设计自检](battery-world/docs/agentlab/STUDIO-CRAFT-REVIEW.md)、[受限设计先导](battery-world/docs/agentlab/AGENT-DESIGN-PILOT.md)。
+
+![Studio 产品成果与当前结论](release/screenshots/studio-product.png)
+
+既有全仿真入口继续把参数化 CAD、COMSOL 梁参数、有限磁力表、LTspice 原厂 PMIC、共享 C 程序和虚拟接收器连接起来。详见 [全仿真链路](battery-world/docs/agentlab/CLOSED-SIMULATION.md) 和 [产品执行链](battery-world/docs/agentlab/PRODUCT-EXECUTION-AUTHORITY.md)。阶段完成、局部计算通过、完整工程验收和实物验证分别记录。
 
 立创适配器默认从 `~/.codex/tools/bf-jlceda/easyeda-pro-mcp` 和 `~/.codex/skills/{easyeda-api,easyeda-schematic-net-fanout,easyeda-pcb-routing}` 读取组件。`integrations/` 保存这些目录当前实际安装的源码；迁移时可配置适配器路径，或在确认目标目录未被其他项目使用后安装到这些位置。官方 API Skill 的本机版本没有全部上游格式指南，发布清单忠实保留已安装内容。它仍需要立创原生应用、API Gateway 插件和正确的工程绑定，不能只靠复制文件宣称电路环境可用。来源与验收边界见 [JLCEDA-INTEGRATION.md](battery-world/docs/agentlab/JLCEDA-INTEGRATION.md)。
 
@@ -81,4 +89,4 @@ PYTHONPATH=packages/python/bfworld/src .venv/bin/python \
 
 Pi 来源：<https://github.com/earendil-works/pi>，基线 `7140838fdd5ee1ff21dbe50955a8801617b065ef`，包含本项目的 `bf-agent`/`bf-harness` 定制。保留 [Pi MIT LICENSE](pi-bf-aiot/LICENSE)、[Three.js LICENSE](battery-world/apps/agent-studio/vendor/three/LICENSE) 及各上游文件原有声明。本仓库是源码快照，不继承或声称拥有上游完整 Git 历史。
 
-本次验证范围见 [release/CLOSED-SIMULATION-VERIFICATION.md](release/CLOSED-SIMULATION-VERIFICATION.md)；较早版本的记录仍见 [release/VERIFICATION.md](release/VERIFICATION.md)。
+本次验证范围见 [release/STUDIO-PILOT-VERIFICATION.md](release/STUDIO-PILOT-VERIFICATION.md)。前版闭环验证见 [release/CLOSED-SIMULATION-VERIFICATION.md](release/CLOSED-SIMULATION-VERIFICATION.md)，较早记录仍见 [release/VERIFICATION.md](release/VERIFICATION.md)。

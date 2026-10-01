@@ -20,3 +20,19 @@ test('hero uses only readable real artifacts and prioritizes product views',()=>
  assert.equal(M.hero({results:[row('invalid','blender',false),row('cad','cadquery',true),row('scene','blender',true)]}).f.id,'scene');
  assert.equal(M.hero({results:[]}),null);
 });
+
+test('assembly projects only applicable files and previews without changing verdicts',()=>{
+ const a={id:'a',name:'current.png',integrity:true,applicability:{state:'current'}}, b={id:'b',name:'old.png',integrity:true,applicability:{state:'stale'}};
+ const snapshot={revision:2,results:[{id:'r',kind:'comsol',design_status:'FAIL',files:[a,b],presentations:[{kind:'image',file_id:'a'},{kind:'image',file_id:'b'}]}],files:[a,b],verdict:{passed:false},blockers:[{state:'failed'}]};
+ assert.equal(M.choices(snapshot)[0].id,'assembly');
+ const scoped=M.scoped(snapshot,'assembly');assert.deepEqual(scoped.files,[a]);assert.deepEqual(scoped.results[0].files,[a]);assert.equal(scoped.results[0].presentations.length,1);
+ assert.equal(scoped.results[0].design_status,'FAIL');assert.equal(scoped.verdict.passed,false);assert.equal(snapshot.results[0].files.length,2);
+});
+test('empty unassembled projects do not default to an independent reference',()=>{
+ assert.equal(M.choices({results:[],files:[],revision:null})[0].id,'session');
+ assert.equal(M.scoped({results:[],files:[],revision:null},'session').selectedScope,'session');
+});
+test('same-label previews remain distinguishable',()=>{
+ const labels=M.previewLabels([{id:'a',name:'schematic.svg'},{id:'b',name:'schematic.pdf'}]);
+ assert.notEqual(labels[0].label,labels[1].label);assert.ok(labels[0].label.includes('.svg'));
+});
