@@ -6,6 +6,7 @@ import copy
 import json
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 
@@ -27,6 +28,7 @@ class ToolFixture:
         self.fail_run_once = False
         self.fail_submit_once = False
         self.wrap = False
+        self.production_summary = False
         self.mutate = lambda action, value: value
 
     def artifact(self, owner, job_id, name):
@@ -101,6 +103,12 @@ class ToolFixture:
         else:
             raise AssertionError('Unexpected action')
         value = self.mutate(action, copy.deepcopy(value))
+        text = json.dumps(value, ensure_ascii=False, separators=(',', ':'))
+        if self.production_summary and len(text.encode()) > 24000:
+            sha = m.file_bytes_hash(text.encode())
+            summary = {'record_file': 'tool-records/' + sha + '.json', 'sha256': sha,
+                       'bytes': len(text.encode()), 'id': value.get('id'), 'status': value.get('status')}
+            return {'content': [{'type': 'text', 'text': json.dumps(summary)}], 'details': {}}
         return {'content': [{'type': 'text', 'text': json.dumps(value)}], 'details': {}} if self.wrap else value
 
 
@@ -289,6 +297,90 @@ class AdapterTests(unittest.TestCase):
         self.assertIsNone(report['costs'])
         self.assertFalse(report['scientific_success'])
         self.assertEqual(before, self.adapter.ledger.path.read_bytes())
+
+    def test_production_large_job_summary_blocks_without_record_file_read(self):
+        self.run_one()
+        self.tool.complete('a', padding='x' * 25000)
+        self.tool.production_summary = True
+        with self.assertRaisesRegex(m.Rejected, 'LOCAL_TRANSPORT_BRIDGE'):
+            self.adapter.poll('a')
+        with self.assertRaisesRegex(m.Rejected, 'PENDING'):
+            self.run_one('b')
+        summary = next(r['data'] for r in self.adapter.ledger.events if r['kind'] == 'transport_summary')
+        self.assertFalse(summary['record_file_read'])
+        self.assertFalse((self.path / summary['summary']['record_file']).exists())
+
+    def test_large_inspect_summary_has_explicit_boundary_error(self):
+        tool = ToolFixture('owner-A', self.path)
+        tool.production_summary = True
+        tool.mutate = lambda action, value: {**value, 'padding': 'x' * 25000}
+        with self.assertRaisesRegex(m.Rejected, 'LOCAL_TRANSPORT_BRIDGE'):
+            m.Adapter('owner-A', 'bf_design', tool, self.path / 'summary-ledger')
+
+    def test_error_envelope_and_malformed_json_are_not_success(self):
+        for value in [{'error': 'synthetic'}, {'isError': True, 'content': [{'type': 'text', 'text': '{}'}]},
+                      {'content': [{'type': 'text', 'text': '{bad-json'}]}]:
+            self.adapter.tool = lambda args, v=value: v
+            with self.subTest(value=value), self.assertRaises((m.Rejected, json.JSONDecodeError)):
+                self.adapter.read_skill()
+
+    def node_reply(self, value):
+        source = (REPO / 'pi-bf-aiot/packages/bf-agent/src/chat-product.ts').read_text()
+        reply = source[source.index('const reply ='):source.index('const files =')]
+        reply = reply.replace(': any', '').replace(' as const', '')
+        script = ("const fs=require('fs'),path=require('path'),crypto=require('crypto');"
+                  "const cwd=process.argv[1]; const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');"
+                  + reply + "process.stdout.write(JSON.stringify(reply(JSON.parse(fs.readFileSync(0,'utf8')))));" )
+        return json.loads(subprocess.run(['node', '-e', script, str(self.path)],
+            input=json.dumps(value), text=True, capture_output=True, check=True).stdout)
+
+    def test_real_node_reply_full_lifecycle_and_numeric_identity(self):
+        self.adapter.close()
+        self.adapter = m.Adapter('owner-A', 'bf_design', lambda args: self.node_reply(self.tool(args)), self.path / 'node-ledger')
+        self.assertEqual(m.digest(self.adapter.task), self.tool.binding['task_hash'])
+        self.run_one()
+        self.finish()
+        proof = self.adapter.submit('a', 'fixture selection')
+        self.assertFalse(proof['scientific_success'])
+
+    def test_real_node_reply_summary_is_explicitly_unsupported(self):
+        self.adapter.tool = lambda args: self.node_reply(self.tool(args))
+        self.run_one()
+        self.tool.complete('a', padding='x' * 25000)
+        with self.assertRaisesRegex(m.Rejected, 'LOCAL_TRANSPORT_BRIDGE'):
+            self.adapter.poll('a')
+        self.assertTrue(list((self.path / 'tool-records').glob('*.json')))
+        self.assertFalse(next(e for e in self.adapter.ledger.events if e['kind'] == 'transport_summary')['data']['record_file_read'])
+
+    def test_wire_numeric_equivalence_does_not_admit_boolean_or_changed_task(self):
+        for replacement in [True, 49, '48']:
+            binding = copy.deepcopy(self.tool.binding)
+            binding['task']['baseline']['mechanical']['gap_mm'] = replacement
+            with self.assertRaisesRegex(m.Rejected, 'TASK_IDENTITY'):
+                self.adapter._binding(binding)
+
+    def test_returned_prompt_task_and_job_cannot_mutate_state_or_budget(self):
+        self.adapter.activate()['shared']['task']['baseline']['mechanical']['opening_s'] = 999
+        self.adapter.task['baseline']['mechanical']['opening_s'] = 888
+        job = self.run_one()
+        job['parameters']['candidate']['mechanical']['opening_s'] = 777
+        self.assertEqual(self.adapter.task['baseline']['mechanical']['opening_s'], 2)
+        self.assertEqual(self.adapter.operations['a']['candidate']['mechanical']['opening_s'], 2)
+        self.assertEqual(len(self.adapter.operations), 1)
+        self.finish()
+
+    def test_returned_submission_cannot_rewrite_disk_or_idempotent_selection(self):
+        self.run_one()
+        self.finish()
+        proof = self.adapter.submit('a', 'original')
+        original = (self.path / 'ledger/events.jsonl').read_bytes()
+        proof['receipt']['rationale'] = 'changed'
+        proof['scientific_success'] = True
+        with self.assertRaisesRegex(m.Rejected, 'SUBMISSION_IMMUTABLE'):
+            self.adapter.submit('a', 'changed')
+        self.assertFalse(self.adapter.submit('a', 'original')['scientific_success'])
+        self.assertEqual(self.tool.submission['rationale'], 'original')
+        self.assertEqual((self.path / 'ledger/events.jsonl').read_bytes(), original)
 
 
 if __name__ == '__main__':

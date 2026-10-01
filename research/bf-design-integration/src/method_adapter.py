@@ -81,7 +81,7 @@ def method_prompt(protocol, profile_id, task, observations):
     profiles = {p['id']: p for p in protocol['profiles']}
     require(profile_id in profiles, 'METHOD_PROFILE')
     profile = profiles[profile_id]
-    shared = {'task': task, 'observations': observations, 'max_new_candidates': 3,
+    shared = {'task': copy.deepcopy(task), 'observations': copy.deepcopy(observations), 'max_new_candidates': 3,
               'architecture_changes': False, 'artifact_source_changes': False,
               'actions': ['inspect', 'skill', 'run', 'job', 'artifact_view', 'submit']}
     policy = ['Use the same frozen nominal task, public evidence and numeric freedoms. '
@@ -93,7 +93,7 @@ def method_prompt(protocol, profile_id, task, observations):
     if profile['Q']:
         policy.append('Attribute the observed conflict before revising numeric parameters; state the predicted change and falsifier. '
                       'Architecture recomposition is unsupported here: record the limitation, never silently substitute numeric tuning.')
-    return {'profile': profile, 'shared': shared, 'shared_hash': digest(shared), 'policy': policy,
+    return {'profile': copy.deepcopy(profile), 'shared': shared, 'shared_hash': digest(shared), 'policy': policy,
             'text': canonical(shared) + '\n' + '\n'.join(policy)}
 
 
@@ -159,7 +159,7 @@ class Adapter:
             self._reduce(row)
         try:
             catalog = self._call({'action': 'inspect'})
-            self.task = self._binding(catalog.get('task_binding'))['task']
+            self._task = self._binding(catalog.get('task_binding'))['task']
             jobs = catalog.get('jobs')
             require(isinstance(jobs, list), 'INSPECT_JOBS')
             for job in jobs:
@@ -172,16 +172,34 @@ class Adapter:
     def close(self):
         self.ledger.close()
 
+    @property
+    def task(self):
+        return copy.deepcopy(self._task)
+
     def _binding(self, value):
         require(isinstance(value, dict) and value.get('owner') == self.owner, 'TASK_OWNER')
         require(type(value.get('max_candidates')) is int and value['max_candidates'] == 3, 'TASK_QUOTA')
-        require(value.get('task_hash') == self.protocol['normalized_task_hash'] and
-                digest(value.get('task')) == value['task_hash'], 'TASK_IDENTITY')
-        require(value['task']['id'] == self.protocol['task_id'], 'TASK_ID')
-        return value
+        trusted = json.loads((ROOT / 'contracts/MIGRATION.json').read_text())['normalized_main_task']
+        require(digest(trusted) == self.protocol['normalized_task_hash']
+                and value.get('task_hash') == self.protocol['normalized_task_hash'], 'TASK_IDENTITY')
+        # The server hashes Python-normalized JSON; JavaScript loses integral
+        # float spelling. Compare every field against the hash-bound template,
+        # allowing only equal finite numeric values (never booleans), then use
+        # the trusted server representation. Do not rehash lossy wire spelling.
+        def matches(wire, expected):
+            if type(expected) in (int, float):
+                return type(wire) in (int, float) and math.isfinite(wire) and wire == expected
+            if isinstance(expected, dict):
+                return isinstance(wire, dict) and wire.keys() == expected.keys() and all(matches(wire[k], v) for k, v in expected.items())
+            if isinstance(expected, list):
+                return isinstance(wire, list) and len(wire) == len(expected) and all(matches(a, b) for a, b in zip(wire, expected))
+            return type(wire) is type(expected) and wire == expected
+        require(matches(value.get('task'), trusted), 'TASK_IDENTITY')
+        require(trusted['id'] == self.protocol['task_id'], 'TASK_ID')
+        return {**copy.deepcopy(value), 'task': trusted}
 
     def _reduce(self, row):
-        d = row['data']
+        d = copy.deepcopy(row['data'])
         if row['kind'] == 'reserved':
             self.operations[d['operation_id']] = {**d, 'status': 'RESERVED', 'job_id': None}
         elif row['kind'] == 'job':
@@ -196,7 +214,7 @@ class Adapter:
     def _record(self, kind, data):
         row = self.ledger.append(kind, data)
         self._reduce(row)
-        return row
+        return copy.deepcopy(row)
 
     def _call(self, args):
         require(args['action'] in {'inspect', 'skill', 'run', 'job', 'artifact_view', 'submit'}, 'ACTION_NOT_ALLOWED')
@@ -204,11 +222,16 @@ class Adapter:
         try:
             result = self.tool(copy.deepcopy(args))
             require(isinstance(result, dict), 'TOOL_RESULT_OBJECT')
+            require(result.get('isError') is not True, 'TRANSPORT_REPORTED_ERROR')
             if isinstance(result.get('content'), list):
                 blocks = result['content']
                 require(len(blocks) == 1 and blocks[0].get('type') == 'text', 'TOOL_REPLY_FORMAT')
                 result = json.loads(blocks[0]['text'])
             require(isinstance(result, dict) and 'error' not in result, 'TOOL_ERROR')
+            if 'record_file' in result:
+                self._record('transport_summary', {'intent_hash': intent['hash'],
+                    'summary': result, 'summary_hash': digest(result), 'record_file_read': False})
+                raise Rejected('TOOL_SUMMARY_ENVELOPE_REQUIRES_LOCAL_TRANSPORT_BRIDGE')
             self._record('action_result', {'intent_hash': intent['hash'], 'response': result, 'response_hash': digest(result)})
             return result
         except Exception as exc:
@@ -305,6 +328,8 @@ class Adapter:
         with self.mutex:
             require(isinstance(rationale, str) and 1 <= len(rationale) <= 4000, 'SUBMISSION_REASON')
             if self.submission:
+                require(self.submission['receipt_hash'] == digest(self.submission['receipt'])
+                        and self.submission['scientific_success'] is False, 'SUBMISSION_STATE')
                 require(self.submission['operation_id'] == operation_id and self.submission['receipt']['rationale'] == rationale, 'SUBMISSION_IMMUTABLE')
                 return copy.deepcopy(self.submission)
             if self.pending_submission:

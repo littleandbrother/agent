@@ -1,4 +1,4 @@
-"""One standard-library offline entrypoint; requires git for scratch patch tests."""
+"""One standard-library offline entrypoint; requires Git and Node for scratch patch and actual reply-wrapper tests."""
 import argparse
 import hashlib
 import json
@@ -35,6 +35,7 @@ def main():
         'production_files_modified': False,
         'files': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(files)},
         'remaining_gates': ['local coordinator wiring to real bf_engineering and authorization',
+            'Pi replies above 24000 bytes require a local authorized full-response bridge; record_file is never read',
             'local-owned native-model-interface sidecar', 'independent runtime/source identity alignment',
             'model budget ledger and live method delivery qualification; no inherited paid authority']}
     (output / 'VALIDATION.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
