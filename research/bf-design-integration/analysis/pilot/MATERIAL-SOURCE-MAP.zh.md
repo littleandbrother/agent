@@ -9,7 +9,7 @@
 | [官方支持页](https://support.piezo.com/article/62-material-properties) | 将 PSI-5A4E 对应至3195HD | 型号映射不消除不同表格的数值差异 |
 | [旧材料 PDF，第1页](https://info.piezo.com/hubfs/Data-Sheets/piezo-PZT-5A_PZT-5H-material-properties.pdf)，3195HD 列 | 相对介电常数1900；Y₁₁ᴱ=67 GPa | 与当前 HTML 的1800、66 GPa不同，不代入替换现有输入 |
 
-父线程提供的新来源身份为 `PSI-5A4E.current-official-HTML.20261001T191952Z`，110488 bytes，SHA-256 `857eb898d824bec3eee1a35bee214047c1eeeeab8039b1ec6a261d6602810136`。该字节身份来自父线程的采集记录；本审计仅在线核对内容，没有取得或重新验证该特定快照字节，不能把动态页面当作同一文件哈希证明。
+所提供的新采集记录对应[官方材料页面](https://piezo.com/pages/piezo-material)，采集时间为 `2026-10-01T19:19:52Z`，来源身份为 `PSI-5A4E.current-official-HTML.20261001T191952Z`，110488 bytes，SHA-256 `857eb898d824bec3eee1a35bee214047c1eeeeab8039b1ec6a261d6602810136`。该字节身份来自所提供的采集记录；本审计仅在线核对内容，没有取得或重新验证该特定快照字节，不能把动态页面当作同一文件哈希证明。
 
 原 `840af517…` HTML 和 catalog 历史快照仍未取得；历史来源封存保持 blocked。新来源身份不能补写为旧来源，也不授权重新运行或改写历史实验。
 
