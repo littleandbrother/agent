@@ -1,0 +1,32 @@
+真实 Pi pilot 封存证据：独立审计结论
+
+结论：可按“带人工恢复干预的负结果集成 pilot”收口；不能升级为方法收益、因果、架构设计、H1/RSI 或实物资格证据。本轮未发现新的 PR2 轨迹契约失败，不需要为此另建模块。
+
+实际做过的核验
+已在本轮云端读取 bf-pilot-closure-20261001.zip 的真实字节：82,978 bytes，SHA-256 e5662772a2b27d6b8a3426315d3b18333bec9bb07cdca81d51430ebe173cb2c4。安全检查后得到 35 个文件；包清单的 34 个条目全部匹配，原失败导出清单中的 27 个文件全部匹配。没有拿另一个历史 ZIP 作独立字节比较，故“原样保留”的外部历史来源仍以所交付清单为边界。
+
+使用 littleandbrother/agent 精确提交 3d68b3bf8dec10405b11f611dfa02c1a18c95f7b 的 research/bf-design-integration/analysis/trajectory；下载文件的 Git blob SHA-1 均核对一致。audit_trajectory.py 的 SHA-256 为 2c61b101a3a4d33e586be9eb321806edf3531e0920a2f1cbc9beb725a0727530。在 Python 3.12.14 上，23/23 测试通过，9 份真实 input 均返回 RECORDED_EVIDENCE_ONLY，与原 audit 逐项语义一致，输入字节不变。五份最终证据是独立元数据，并非 PR2 输入轨迹；本轮交叉核对，没有补造事件或硬转成新轨迹。
+
+证据分层
+九份失败导出是累计历史快照，不能相加费用或候选数。它们全部记录 strong_generic 配置，包括 domain 名称的轨迹；domain 标签本身不证明 BF 方法已实际交付。指令交付、反馈进入请求、反馈关联数值修订都仍为 unknown，不能由时间先后、配置载入或公开解释补出来。seq 是导出分组的一致性顺序，明确不是原始反馈时序。模型是否阅读、理解反馈和因果关系仍未证实。
+
+最终材料报告 4 次提交均 nominal_task_status=unsatisfied、timely_correct_packets=0。材料的候选汇总为 12 个，原生执行状态为 7 FAILED / 5 SUCCEEDED；原生执行完成不等于任务满足。实际可在所交付文件中辨认 8 个唯一 job ID，另 4 个候选只有汇总计数，尚无完整身份链。最终四个 job ID 各不相同，任务哈希、声明的结果哈希及提交时间内部一致；baseline-r1 的最终 job/candidate/result 哈希还能与此前终态对应。其余最终提交没有对应完整 action/terminal 轨迹，final owner 标识与原数据库行也未交付。
+
+必须区分本轮验过的字节与本地协调者的核验声明：原生 result.json、原数据库、原提示词/响应及多数原始收据不在 ZIP 内。因此其中 hash_verified=true、owner-scoped persisted submission、Pi 作者身份和原生计算结果，均不能写成本轮独立复验。保留结果/收据哈希能够定位来源，不能代替缺失的原始字节。
+
+费用与授权边界
+本轮按最终账本 244 个唯一请求重算：236 SETTLED，8 UNKNOWN；已结算 $1.3571244，UNKNOWN 预留 $0.2002035，总计保守上界 $1.5573279，低于总额 $2，算术余量 $0.4426721。UNKNOWN 的 charged=0 不是零费用；这只是本地账本，未对供应商账单或扣款核销。最终本地对账时点为 2026-10-01 21:41:32 UTC，记录 active_provider=0、active_native=0；本轮没有检查当前本地进程。
+
+各真实轨迹已结算 / 含 UNKNOWN 上界：baseline-r1 $0.1215345 / $0.2351523；baseline-r2 $0.2723115 / $0.3003159；domain-r1 $0.4525929 / $0.5111742；domain-r2 $0.5106774 / $0.5106774。两个非 Pi transport diagnostic 合计 $0.0000081，已含在总账。
+
+domain-r2 已结算费用及 domain-r1 的保守上界超过原每 trial $0.50。21:33:55 UTC 的修订把 owner ceiling 记录为 $2，同时保持研究总额 $2；其依据是协调者对“继续付费实验”的解释，文件明确没有用户的数字提额声明。因此不能宣称原 $0.50 边界仍满足、数字提额已获明确批准或方法比较等成本。总额未超不消除逐 trial 授权来源缺口；本审计不追认修订，算术余量也不构成新的支出许可。六次 continuation 限制只证明 supervisor policy 的声明，未独立覆盖所有手工 follow-up。
+
+人工干预与程序身份
+21:04:48 UTC 的人工恢复列出 baseline-r1 三个既存 job 的事实；操作名、状态、owner 和此前收据/作业哈希引用一致。零人工参数选择仍是协调者声明，不能据此宣称全程无人干预。消息被 ACCEPTED 不证明已交付或已读；其后的提交不能证明由该消息造成。
+
+起始收据时间均早于对应提交，提交及请求时间位于研究窗口内且早于最终对账；这些只说明所提供时间戳自洽。最终 harness/build/source 元数据不是全部早期请求的执行身份。当前 checkout 有 65 项 dirty entries，common_integration_commit=null，完整响应桥接完成也未独立建立；当前源文件快照不能反推每次实验实际运行的程序。
+
+收口建议
+保留失败快照、八项 UNKNOWN、授权修订和人工干预来源。下一步只需在既有契约上补齐四 owner 的最终 action/terminal 身份和请求级交付/程序绑定证据，并先明确数值预算边界；缺什么就标 unknown，不新建平台或包装新方法收益。四个结果均无物理门槛、硬件校准或产品资格证据，也未覆盖方向、exactly-once、安全和架构综合。本轮没有 provider/native 调用、科学计算重跑或仓库修改。
+
+完整输入文件、审计程序和每份重跑输出的精确哈希见配套 pilot-closure-independent-audit.json。
