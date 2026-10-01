@@ -1,0 +1,417 @@
+{
+  "schema": "bf-design-main-migration-v1",
+  "baseline": "87e7d75b4c5cd13c96560b8aaa4168a292ddc3c9",
+  "preserve_pr1": "4be17f5ff3d8fb073029be6a7cef165284f07bd9",
+  "inspected_source_sha256": {
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_tasks.py": "25907cfe8d677e1b707f481f2d85ca8ede0966f57149e98a2d380d80527dbe27",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/engineering.py": "e82ee04a0ac4e0ecc97f92a8975fd572107770f02b2926a8378b3364443c6ca6",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py": "56946e38292ba1022d84770e6b48136d3789d1d197f27e23486b78925dfe2375",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/__init__.py": "8d1de851022ef58458d077a31614dd3392beda5f991450a3eecc00d2708f8db4",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py": "82eb4b01dbe1e47fa737059bdde62116108fe0562f9cf9618a72423e3c594ea5",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/contracts.py": "00d7ffea6447f22515cc95a5a816a67ea3823bec533f87a2146a682370f638d5",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/native.py": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/program.c": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf",
+    "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782",
+    "pi-bf-aiot/packages/bf-agent/src/chat-product.ts": "fa9dc74bb60510c4df439ec79586e778cd54cdcb251cb1cfdf431b59886d3ad8",
+    "battery-world/configs/reference_cases/design-pilot/protocol.json": "56d617345069c75229b28bfad0162080f313e14ea445df36aefe73bf876de554",
+    "battery-world/configs/reference_cases/design-pilot/door-event-nominal-v1.json": "16721336f08361701659aac1474d75926729499a4ad41051816f8d3743c56511",
+    "battery-world/configs/reference_cases/door-magnetic-v1/design.json": "75530fcb2726bcd8ab0138e9a197fe555a72ea5e5391eb86442db95f1dc1f667",
+    "battery-world/configs/reference_cases/door-magnetic-v1/DoorBeam.java": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6",
+    "battery-world/scripts/run_closed_simulation.py": "af223c3f1929f808f5792d5254b7f66797af5f8807393be9af475606d1452912"
+  },
+  "normalized_main_task": {
+    "schema_version": "closed-simulation-task-v1",
+    "id": "door-event-nominal-v1",
+    "title": "固定门动作下的一次自供能事件交付",
+    "baseline": {
+      "schema_version": "closed-simulation-spec-v1",
+      "mechanical": {
+        "gap_mm": 48.0,
+        "opening_s": 2.0,
+        "angle_deg": 65.0,
+        "remanence_T": 1.25,
+        "damping_ratio": 0.02
+      },
+      "circuit": {
+        "cin_uF": 47.0,
+        "cout_uF": 100.0,
+        "initial_vin_V": 0.0,
+        "diagnostic_input_A": 0.0
+      },
+      "firmware": {
+        "interval_ms": 100.0,
+        "boot_ms": 53.8,
+        "init_ms": 13.0,
+        "tx_ms": 5.0,
+        "boot_mA": 0.41,
+        "init_mA": 1.596,
+        "tx_mA": 3.659,
+        "sleep_uA": 2.0,
+        "reset_uA": 0.3
+      },
+      "link": {
+        "loss_probability": 0.0,
+        "seed": 17,
+        "scan_duty": 1.0
+      },
+      "solver": {
+        "max_step_s": 5e-05,
+        "firmware_step_s": 0.0001,
+        "reltol": 0.0001,
+        "max_coupling_iterations": 8
+      },
+      "presentation": {
+        "camera_deg": 35.0
+      }
+    },
+    "allowed_design_variables": {
+      "mechanical.gap_mm": {
+        "range": [
+          28,
+          70
+        ],
+        "artifact": "assembly.step + source-design.json + force-table"
+      },
+      "circuit.cin_uF": {
+        "values": [
+          10,
+          22,
+          47,
+          100,
+          220
+        ],
+        "artifact": "system.cir Cstorage; ideal nominal capacitance, not a qualified part number"
+      },
+      "circuit.cout_uF": {
+        "values": [
+          10,
+          22,
+          47,
+          100,
+          220,
+          470
+        ],
+        "artifact": "system.cir Cout; fixed declared ESR model"
+      },
+      "firmware.interval_ms": {
+        "values": [
+          50,
+          100,
+          200,
+          500
+        ],
+        "artifact": "policy.h + shared C builds"
+      }
+    },
+    "protected_categories": {
+      "environment": [
+        "mechanical.opening_s",
+        "mechanical.angle_deg",
+        "circuit.initial_vin_V",
+        "link"
+      ],
+      "model_assumptions": [
+        "mechanical.remanence_T",
+        "mechanical.damping_ratio",
+        "firmware timings and currents except interval_ms"
+      ],
+      "diagnostic": [
+        "circuit.diagnostic_input_A"
+      ],
+      "numerical": [
+        "solver",
+        "confirmation=true"
+      ],
+      "presentation": [
+        "presentation"
+      ]
+    },
+    "service": {
+      "event": "motion occurrence, not open/close direction",
+      "deadline_s": 4.0,
+      "minimum_correct_packets": 1,
+      "expected_payload_hex": "424644320102030405060708"
+    },
+    "evaluation": {
+      "nominal_requires": [
+        "legal inputs",
+        "zero precharge and external current",
+        "completed",
+        "energy_balance",
+        "force_interpolation",
+        "beam_mesh",
+        "program_power_fixed_point",
+        "time_step"
+      ],
+      "ranking_additionally_requires": [
+        "magnetic_mesh",
+        "magnetic_anchor_agreement"
+      ],
+      "hardware_acceptance": false
+    },
+    "claim_boundary": "Fixed nominal door/piezo/PMIC family, assumed shared-C SIL and virtual receiver. At-least-once packet by deadline only; no direction, exactly-once, physical safety, hardware or architecture-synthesis qualification. Missing physical gates prohibit design ranking."
+  },
+  "geometry": {
+    "case_id": "door-magnetic-v1",
+    "revision": "D2",
+    "units": "mm",
+    "title": "门运动磁拨动压电无线事件节点 · 数字工程样机",
+    "scope": "Reference-assisted digital design; no hardware calibration or radio reception claim.",
+    "door": {
+      "width": 900,
+      "height": 2100,
+      "thickness": 40,
+      "open_angle_deg": 65,
+      "opening_s": 2,
+      "frame_clearance": 5,
+      "installation": "lintel front; door-top driver bracket",
+      "product_origin_world_mm": [
+        1004,
+        70,
+        2140
+      ],
+      "driver_closed_world_mm": [
+        856,
+        45,
+        2140
+      ]
+    },
+    "beam": {
+      "length": 100,
+      "free_length": 96,
+      "width": 10,
+      "thickness": 0.53,
+      "clamp_end_x": 4,
+      "young_Pa": 110000000000,
+      "density_kg_m3": 8960,
+      "material": "copper, nominal linear elastic"
+    },
+    "pzt": {
+      "length": 50,
+      "width": 8,
+      "thickness": 0.3,
+      "start_x": 10,
+      "material": "COMSOL PZT-5A library, assumed grade; perfect bond; +z polarization"
+    },
+    "magnets": {
+      "tip_mm": [
+        10,
+        10,
+        10
+      ],
+      "driver_mm": [
+        20,
+        20,
+        20
+      ],
+      "tip_center_mm": [
+        100,
+        0,
+        5.265
+      ],
+      "remanence_T": 1.25,
+      "relative_permeability": 1.05,
+      "polarization": "both +x, attractive axial alignment",
+      "source": "custom NdFeB N42 nominal; Br, coercivity and tolerances require supplier qualification",
+      "nominal_center_separation_x_mm": 48
+    },
+    "enclosure": {
+      "outer_mm": [
+        136,
+        62,
+        66
+      ],
+      "wall": 2,
+      "material": "PETG prototype",
+      "tolerance_mm": 0.25,
+      "lid": "2 mm polycarbonate"
+    },
+    "board": {
+      "size_mm": [
+        80,
+        30,
+        1.6
+      ],
+      "holes_mm": [
+        [
+          4,
+          4
+        ],
+        [
+          76,
+          4
+        ],
+        [
+          4,
+          26
+        ],
+        [
+          76,
+          26
+        ]
+      ],
+      "hole_diameter_mm": 2.4,
+      "layers": 2,
+      "pmic": "LTC3588EMSE-1#TRPBF / LCSC C685115",
+      "radio": "Raytac MDBT42Q-512KV2 / LCSC C2828282",
+      "vout_V": 3.3,
+      "cin_uF": 47,
+      "cout_uF": 100,
+      "inductor_uH": 10
+    },
+    "acceptance": {
+      "step_valid": true,
+      "unrouted_nets": 0,
+      "native_drc_errors": 0,
+      "single_open_cold_start_required": true,
+      "cold_start_initial_V": 0,
+      "minimum_radio_events": 1,
+      "nominal_gap_and_weak_motion_required": true,
+      "mesh_delta_target_pct": 5,
+      "time_step_energy_delta_target_pct": 5,
+      "no_motion_energy_max_J": 1e-09,
+      "stress_limit_status": "not qualified: report stress; no fatigue certification",
+      "max_rom_deflection_mm": 8
+    },
+    "assumptions": [
+      "Door dimensions and installation are explicit design assumptions, not measured premises.",
+      "PZT grade, bonding, damping and magnet remanence are nominal; uncertainty must remain visible.",
+      "No neural network is needed for a binary motion-event transmitter; no artificial NAS claim.",
+      "Animation door rotation is prescribed; beam animation must be labelled by its actual solved or imposed origin."
+    ],
+    "revision_reason": "D1 dx=26 mm produces approx 4 N transverse magnetic force; beyond 8 mm linear-ROM validity. D2 increases magnetic center x separation to 48 mm; acceptance limits retained."
+  },
+  "physical_mismatches_preserved": [
+    "design.json magnet relative_permeability=1.05; native cuboid force recoil permeability=1",
+    "native force uses transverse Fz on fixed tip, not the parallel generalized-force module",
+    "static ROM/passive modules are separate unpromoted research artifacts"
+  ],
+  "program_semantics": {
+    "program_sha256": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf",
+    "states": [
+      "RESET",
+      "BOOT",
+      "WAIT",
+      "INIT",
+      "TX",
+      "SLEEP"
+    ],
+    "brownout_supply_V": 1.8,
+    "pgood_threshold_V": 2.5,
+    "pgood_is_status_not_power_switch": true,
+    "partial_tx_cleared_on_brownout": true,
+    "payload_hex": "424644320102030405060708",
+    "shared_C_SIL_not_SoC_RF_emulation": true
+  },
+  "semantic_migration": [
+    {
+      "old": "isolated magnetic service /api/tasks,/api/snapshots,/api/jobs",
+      "new": "existing bf_engineering actions only",
+      "replace_production": false
+    },
+    {
+      "old": "DEV-FEASIBLE-01 architecture/artifact-source required; blocked",
+      "new": "door-event-nominal-v1",
+      "equivalent": false
+    },
+    {
+      "old": "two candidate opportunities",
+      "new": "three new engineering jobs per owner; backend reservation authority",
+      "new_protocol_required": true
+    },
+    {
+      "old": "fixture service budget zero native/model",
+      "new": "planning adapter zero-dispatch; actual budgets remain production-owned",
+      "paid_authorization_inherited": false
+    },
+    {
+      "old": "cache-v2 portable consistency",
+      "new": "minimal cache.py/resolver patch only; preserve main owner-root selection",
+      "apply_pending_local_owner": true
+    }
+  ],
+  "cache_patch_design": {
+    "payload_paths": [
+      "battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py",
+      "battery-world/scripts/run_closed_simulation.py"
+    ],
+    "preserve_json_normalization": "fresh producer values serialized then read back before return; tuples/NumPy JSON scalars stay equivalent to hits",
+    "preserve_owner_cache": "engine.store.root.parent/'studies/door-design-pilot-v1/agent-cache'/job['owner']",
+    "new_namespace_nested_under_existing_owner_root": "simulation-cache-v2",
+    "do_not_copy_pr1_simulation_chain_init": true,
+    "negative_controls": [
+      "manifest-only value tamper",
+      "canonical artifact tamper",
+      "old namespace unchanged",
+      "fresh/hit JSON type equality",
+      "separate owner roots cannot share stage artifacts"
+    ]
+  },
+  "adapter_design": {
+    "pure_no_network_no_subprocess": true,
+    "functions": [
+      "validate_bound_task",
+      "render_profile_instructions",
+      "prepare_engineering_action",
+      "record_observation_binding",
+      "record_revision_intent",
+      "analyze_receipts"
+    ],
+    "actions": {
+      "inspect": {
+        "method": "GET",
+        "path": "/api/engineering"
+      },
+      "skill": {
+        "method": "POST",
+        "path": "/api/engineering",
+        "body": {
+          "action": "skill",
+          "skill_id": "closed-simulation"
+        }
+      },
+      "run": {
+        "method": "POST",
+        "path": "/api/engineering",
+        "engine": "closed-simulation",
+        "confirmation": true,
+        "operation_id": "stable unique candidate operation, reused for retry only"
+      },
+      "job": {
+        "method": "GET",
+        "path": "/api/engineering/jobs/{job_id}",
+        "effect": "poll same job; never dispatch on waiting"
+      },
+      "artifact_view": {
+        "method": "POST",
+        "path": "/api/engineering",
+        "limit_max": 16000,
+        "effect": "retain artifact hash and pagination; no resampling"
+      },
+      "submit": {
+        "method": "POST",
+        "path": "/api/engineering",
+        "required": [
+          "job_id",
+          "rationale"
+        ],
+        "effect": "select existing terminal evaluated job; failure selection valid"
+      }
+    },
+    "tests": [
+      "task/budget/profile/source drift fail closed",
+      "all profiles identical public facts and numeric freedoms",
+      "4th candidate refused by prepared contract without claiming backend reservation",
+      "retry keeps operation identity",
+      "unsupported architecture never silently becomes parameter tuning",
+      "missing physical gates never rank",
+      "synthetic receipt stays synthetic",
+      "no endpoint/auth/native imports"
+    ]
+  },
+  "staged_commits": [
+    "migration/protocol/ownership contracts",
+    "pure numeric R/Q adapter and tests",
+    "receipt analyzer and local handoff plus review-only cache patch"
+  ]
+}

@@ -1,0 +1,137 @@
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py
+index bdeadc5..e659128 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py
+@@ -1,47 +1,75 @@
+-"""Content-addressed checkpoints. Incomplete or altered artifacts never count as hits."""
++"""Versioned trusted-operator cache with artifact-bound canonical result values.
++
++This detects local inconsistency/corruption, not an adversary able to rewrite a
++manifest and all its hashes. Old namespaces are preserved and never migrated.
++"""
+ import os
+ import json
+ import time
+ import secrets
+ from pathlib import Path
+-from .contracts import digest,file_hash,write_json,ChainError
++from .contracts import digest, file_hash, write_json, ChainError
++
++CACHE_SCHEMA = 'simulation-checkpoint-v2'
++CACHE_NAMESPACE = 'simulation-cache-v2'
++VALUE_FILE = 'producer-value.json'
+ 
+ class Cache:
+-    def __init__(self,root,event=lambda *args:None):
+-        self.root=Path(root);self.root.mkdir(parents=True,exist_ok=True);self.event=event
++    def __init__(self, root, event=lambda *args: None):
++        self.root = Path(root) / CACHE_NAMESPACE
++        self.root.mkdir(parents=True, exist_ok=True)
++        self.event = event
+ 
+-    def stage(self,name,inputs,producer):
+-        key=digest({'stage':name,'inputs':inputs});dest=self.root/name/key
+-        manifest=dest/'checkpoint.json'
++    def stage(self, name, inputs, producer):
++        key = digest({'cache_schema': CACHE_SCHEMA, 'stage': name, 'inputs': inputs})
++        dest = self.root / name / key
++        manifest = dest / 'checkpoint.json'
+         if manifest.is_file():
+-            m=json.loads(manifest.read_text())
+-            if m.get('key')!=key or not m.get('files'):
+-                raise ChainError('tool_fail','Invalid checkpoint '+name)
+-            for f in m['files']:
+-                path=dest/f['path']
+-                if path.is_symlink() or not path.is_file() or file_hash(path)!=f['sha256']:
+-                    raise ChainError('tool_fail','Checkpoint hash mismatch: '+name+'/'+f['path'])
+-            self.event('stage_cached',{'stage':name,'key':key})
+-            return dest,m['value'],key,True
+-        dest.parent.mkdir(parents=True,exist_ok=True)
+-        temp=dest.parent/(key+'.partial-'+secrets.token_hex(4));temp.mkdir()
+-        self.event('stage_started',{'stage':name,'key':key})
+-        started=time.time()
++            m = json.loads(manifest.read_text())
++            if (m.get('schema_version') != CACHE_SCHEMA or m.get('key') != key
++                    or m.get('stage') != name or digest(m.get('inputs')) != digest(inputs)
++                    or not isinstance(m.get('files'), list) or not m['files']):
++                raise ChainError('tool_fail', 'Invalid checkpoint schema/identity ' + name)
++            entries = m['files']
++            if sum(f.get('path') == VALUE_FILE for f in entries) != 1:
++                raise ChainError('tool_fail', 'Missing/duplicate canonical value artifact ' + name)
++            for f in entries:
++                relative = Path(f['path'])
++                if relative.is_absolute() or '..' in relative.parts:
++                    raise ChainError('tool_fail', 'Invalid checkpoint artifact path ' + name)
++                path = dest / relative
++                if path.is_symlink() or not path.is_file() or file_hash(path) != f['sha256']:
++                    raise ChainError('tool_fail', 'Checkpoint hash mismatch: ' + name + '/' + f['path'])
++            # The verified artifact is the sole returned authority. The duplicate
++            # manifest value is retained for readability but must agree exactly.
++            value = json.loads((dest / VALUE_FILE).read_text())
++            if 'value' not in m or digest(m['value']) != digest(value):
++                raise ChainError('tool_fail', 'Checkpoint metadata/value mismatch: ' + name)
++            self.event('stage_cached', {'stage': name, 'key': key})
++            return dest, value, key, True
++        dest.parent.mkdir(parents=True, exist_ok=True)
++        temp = dest.parent / (key + '.partial-' + secrets.token_hex(4))
++        temp.mkdir()
++        self.event('stage_started', {'stage': name, 'key': key})
++        started = time.time()
+         try:
+-            value=producer(temp)
+-            files=[{'path':str(p.relative_to(temp)),'bytes':p.stat().st_size,'sha256':file_hash(p)}
+-                   for p in sorted(temp.rglob('*')) if p.is_file() and not p.is_symlink()]
+-            m={'schema_version':'simulation-checkpoint-v1','key':key,'stage':name,
+-               'inputs':inputs,'value':value,'files':files,'elapsed_s':time.time()-started}
+-            write_json(temp/'checkpoint.json',m)
+-            # Match a resumed checkpoint exactly, including JSON scalar/container
+-            # types (native producers can return NumPy float scalars or tuples).
+-            value=json.loads((temp/'checkpoint.json').read_text())['value']
+-            # Callers hold a cache lock; rename is the commit point.
+-            os.rename(temp,dest)
+-            self.event('stage_completed',{'stage':name,'key':key,'files':len(files)})
+-            return dest,value,key,False
++            value = producer(temp)
++            if (temp / VALUE_FILE).exists() or (temp / 'checkpoint.json').exists():
++                raise ChainError('tool_fail', 'Producer used reserved cache artifact name')
++            write_json(temp / VALUE_FILE, value)
++            value = json.loads((temp / VALUE_FILE).read_text())
++            files = [{'path': str(p.relative_to(temp)), 'bytes': p.stat().st_size,
++                      'sha256': file_hash(p)} for p in sorted(temp.rglob('*'))
++                     if p.is_file() and not p.is_symlink()]
++            m = {'schema_version': CACHE_SCHEMA, 'key': key, 'stage': name,
++                 'inputs': inputs, 'value': value, 'files': files,
++                 'elapsed_s': time.time() - started}
++            write_json(temp / 'checkpoint.json', m)
++            # Callers retain the existing cache lock; rename is the commit point.
++            os.rename(temp, dest)
++            self.event('stage_completed', {'stage': name, 'key': key, 'files': len(files)})
++            return dest, value, key, False
+         except Exception as exc:
+-            write_json(temp/'failure.json',{'error':str(exc),'elapsed_s':time.time()-started})
+-            self.event('stage_failed',{'stage':name,'key':key,'error':str(exc)})
++            write_json(temp / 'failure.json', {'error': str(exc), 'elapsed_s': time.time() - started})
++            self.event('stage_failed', {'stage': name, 'key': key, 'error': str(exc)})
+             raise
+diff --git a/battery-world/scripts/run_closed_simulation.py b/battery-world/scripts/run_closed_simulation.py
+index b1f9b6b..33f1f62 100644
+--- a/battery-world/scripts/run_closed_simulation.py
++++ b/battery-world/scripts/run_closed_simulation.py
+@@ -9,6 +9,7 @@ import numpy as np
+ from bfworld.agentlab.simulation_chain.pipeline import submit_candidate,implementation
+ from bfworld.agentlab.simulation_chain.contracts import DEFAULT,digest,file_hash,write_json
+ from bfworld.agentlab.simulation_chain import solver
++from bfworld.agentlab.simulation_chain.cache import Cache
+ from bfworld.agentlab.runtime_config import HOME_ROOT
+ 
+ def acceptance(root):
+@@ -52,7 +53,8 @@ def acceptance(root):
+     }
+     # Native passive-load comparison against independently integrated ODE; this
+     # catches sign errors, duplicate Cp and a disconnected electrical back-action.
+-    beam=cache/'beam'/key(baseline,'beam');force=cache/'force'/key(baseline,'force');fw=cache/'firmware'/key(baseline,'firmware')
++    checkpoint_root=Cache(cache).root
++    beam=checkpoint_root/'beam'/key(baseline,'beam');force=checkpoint_root/'force'/key(baseline,'force');fw=checkpoint_root/'firmware'/key(baseline,'firmware')
+     rom=json.loads((beam/'rom.json').read_text());passive={};max_errors={}
+     from scipy.integrate import solve_ivp
+     from scipy.interpolate import RegularGridInterpolator
