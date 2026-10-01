@@ -55,6 +55,7 @@
   }
   const resultCache=new Map(),resultLoading=new Set();
   function handoff(current){
+    if(window.StudioExperience){document.querySelector('#task-handoff')?.remove();window.StudioExperience.chatCard(document.querySelector('#conversation'));return}
     let row=document.querySelector('#task-handoff');
     if(!row){row=document.createElement('details');row.id='task-handoff';row.className='section-note';document.querySelector('#conversation').before(row)}
     const id=current?.owner||current?.id;

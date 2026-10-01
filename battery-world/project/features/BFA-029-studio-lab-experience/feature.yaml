@@ -1,0 +1,61 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-029-studio-lab-experience",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "objective": "Separate Studio design/results/delivery from Lab inspection while retaining all existing capabilities and owner-bound immutable evidence.",
+  "hypothesis": "An object-centred Studio with version-bound exports and progressive disclosure makes real outcomes and limitations readable without a developer console.",
+  "paper_claim": "Product UI and delivery infrastructure only.",
+  "falsifier": "Any owner/version mix, evidence promotion, lost navigation/draft/scroll state, unbound export, inaccessible control or inaccessible reduced-motion flow.",
+  "owned_paths": [
+    "apps/agent-studio/",
+    "packages/python/bfworld/src/bfworld/agentlab/studio_delivery.py",
+    "packages/python/bfworld/src/bfworld/agentlab/engineering_cases.py",
+    "packages/python/bfworld/src/bfworld/agentlab/product_results.py",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py",
+    "tests/agentlab/",
+    "docs/agentlab/",
+    "docs/architecture/SYSTEM.md",
+    "docs/PROGRESS.md",
+    "PROJECT.yaml",
+    "project/features/BFA-029-studio-lab-experience/",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-lab-20260930",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "project/features/BFA-028-door-engineering-case/feature.yaml"
+  ],
+  "schema_changes": [
+    "Additive Studio delivery read model and immutable selected-scope package manifest; existing authority unchanged"
+  ],
+  "tests": [
+    "Studio projection and version/owner isolation",
+    "selected-scope export integrity and stale snapshot negative controls",
+    "existing product/chat regression",
+    "live desktop and narrow viewport interactions"
+  ],
+  "negative_controls": [
+    "failed cold-start stays failed",
+    "unreadable files not marked ready",
+    "no report when PDF absent",
+    "stale snapshot rejection",
+    "cross-owner access"
+  ],
+  "command": "PYTHONPATH=packages/python/bfworld/src .venv/bin/python -m unittest tests.agentlab.test_studio_delivery tests.agentlab.test_product_results tests.agentlab.test_engineering_cases tests.agentlab.test_system_results",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-lab-20260930",
+  "cost_cap": "USD 0 paid model calls; local implementation and bounded tests only",
+  "claim_boundary": "Navigation, projection, export and UI checks, not hardware, autonomous design, RSI or scientific validation.",
+  "stop_condition": "Retain frozen scientific semantics; do not fabricate product acceptance or alter sealed D2 bytes.",
+  "limitations": "Stable/experimental deployment separation and formal research remain separate work.",
+  "handoff": "UI and version delivery complete; full Pi integration remains failed. Resolve Pi startup separately; D2 product remains unaccepted; no Git commit.",
+  "evidence": {
+    "report": "docs/agentlab/STUDIO-LAB-EXPERIENCE.md",
+    "receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-lab-20260930/receipt.json",
+    "python_targeted": 26,
+    "javascript": 25,
+    "full_init_passed": false,
+    "full_init_failures": 13,
+    "full_init_errors": 1,
+    "new_paid_calls": 0
+  }
+}

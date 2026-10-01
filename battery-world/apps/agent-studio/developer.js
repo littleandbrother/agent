@@ -14,11 +14,13 @@
   const session = () => data?.session;
   const money = n => '$'+Number(n||0).toFixed(4);
   function notice(text,bad=false){q('#dev-notice').textContent=text;q('#dev-notice').classList.toggle('bad-text',bad)}
-  const groups={trace:{name:'Trace',members:['trace','context']},config:{name:'配置与能力',members:['memory','harness','tools']},evolution:{name:'版本与演化',members:['rsi']},validation:{name:'验证',members:['delivery','referenceCase','experiments','research']}};
+  const groups={trace:{name:'运行',members:['trace','context','delivery']},validation:{name:'实验',members:['experiments','research','referenceCase']},config:{name:'系统',members:['memory','harness','tools','rsi']}};
   const group=()=>Object.keys(groups).find(k=>groups[k].members.includes(module))||'trace';
   function setMode(value){
     mode=({runtime:'task',developer:'console'})[value]||value;
     if(!['task','console','panorama','product'].includes(mode))mode='task';
+    const next=mode;window.StudioExperience?.beforeMode(next);
+    document.body.dataset.workspace=['console','panorama'].includes(mode)?'lab':'studio';
     localStorage.setItem('bf-studio-mode',mode);document.body.dataset.studioMode=mode;
     document.body.classList.toggle('developer-mode',mode==='console');document.body.classList.toggle('panorama-mode',mode==='panorama');
     document.body.classList.toggle('product-mode',mode==='product');q('#product-view').hidden=mode!=='product';
@@ -39,7 +41,7 @@
   q('#console-map').onclick=()=>window.Panorama.focus(({memory:'memory',harness:'harness',tools:'tools',trace:'trace',context:'sessions',experiments:'runtime',rsi:'validation',delivery:'sessions',research:'research',referenceCase:'runtime'})[module]);
   q('#dev-content').before(Object.assign(document.createElement('p'),{id:'dev-notice',className:'dev-hint'}));
   q('#dev-notice').setAttribute('role','status');
-  async function load(){const turn=++request;try{const selected=['trace','tools','delivery','research','referenceCase'].includes(module)?null:window.BF.getSelection();const value=await api('/api/developer'+(selected?'?session='+encodeURIComponent(selected):''));if(turn!==request)return;data=value;notice('');render();renderRevisions()}catch(e){if(turn===request)notice(e.message==='SESSION_NOT_FOUND'?'当前会话尚未启动 Pi。保存配置后可用于下一次运行。':e.message,true)}}
+  async function load(){const turn=++request;navigation();q('#dev-content').setAttribute('aria-busy','true');notice('正在读取…');try{const selected=['trace','tools','delivery','research','referenceCase'].includes(module)?null:window.BF.getSelection();const value=await api('/api/developer'+(selected?'?session='+encodeURIComponent(selected):''));if(turn!==request)return;data=value;notice('');render();renderRevisions()}catch(e){if(turn===request)notice(e.message==='SESSION_NOT_FOUND'?'当前会话尚未启动 Pi。保存配置后可用于下一次运行。':e.message,true)}finally{if(turn===request)q('#dev-content').setAttribute('aria-busy','false')}}
   window.addEventListener('bf-selection',()=>{if(mode==='console')load()});
   q('#refresh').addEventListener('click',()=>{if(mode==='console')load()});
   const jobButton = id => `<button class="quiet" data-job-detail="${esc(id)}">查看实验 ↗</button>`;

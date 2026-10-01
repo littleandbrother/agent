@@ -137,3 +137,8 @@ exist today.
 The product page, graph and export consume this owner-scoped inventory; acceptance remains
 with `product_authority`. See [result workspace](../agentlab/PRODUCT-RESULTS-WORKSPACE.md)
 for APIs, scoped freshness, derivations, export integrity and verified limitations.
+
+
+## Studio / Lab experience boundary (BFA-029)
+
+Studio projects the shared owner-bound results catalog into conversation, product overview/design/verification, and immutable selected-scope delivery. Lab exposes the existing trace, context, research, Memory, Harness, Tools, RSI and architecture map. Neither surface is an acceptance authority. `StudioDelivery` adds read/pack/download routes; manifest identity, original file hashes, preserved relative paths and owner checks bind export. No source database migration or scientific semantic change. Material/motion are presentation only. See `docs/agentlab/STUDIO-LAB-EXPERIENCE.md` for implementation, validation and outstanding Pi integration failures.

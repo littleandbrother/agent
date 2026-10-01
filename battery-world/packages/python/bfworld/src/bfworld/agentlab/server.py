@@ -252,18 +252,23 @@ def handler(workbench):
             pass
 
         def reply(self, status, value, kind='application/json; charset=utf-8'):
-            content = canonical(value).encode() if not isinstance(value, bytes) else value
+            file = value if isinstance(value,Path) else None
+            content = b'' if file is not None else canonical(value).encode() if not isinstance(value, bytes) else value
             self.send_response(status)
             self.send_header('Content-Type', kind)
-            self.send_header('Content-Length', str(len(content)))
+            self.send_header('Content-Length', str(file.stat().st_size if file is not None else len(content)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors " + ("'self'" if (urlparse(self.path).path=='/model-viewer.html' or kind=='application/pdf') else "'none'"))
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; frame-ancestors " + ("'self'" if (urlparse(self.path).path=='/model-viewer.html' or kind=='application/pdf') else "'none'"))
             if getattr(self,'bootstrap_cookie',False):
                 token=(workbench.store.root/'operator.token').read_text().strip()
                 self.send_header('Set-Cookie','bf_operator='+token+'; Path=/; HttpOnly; SameSite=Strict')
             self.end_headers()
-            try:self.wfile.write(content)
+            try:
+                if file is not None:
+                    with file.open('rb') as source:
+                        for chunk in iter(lambda:source.read(1024*1024),b''):self.wfile.write(chunk)
+                else:self.wfile.write(content)
             except (BrokenPipeError,ConnectionResetError):pass
 
         def principal(self):
@@ -324,7 +329,7 @@ def handler(workbench):
                     rel=path.removeprefix('/vendor/three/')
                     if rel not in allowed:return self.reply(404,{'error':'NOT_FOUND'})
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
-                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js'):
+                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 if path in ('/api/reference-case','/api/reference-case/artifact'):
@@ -339,7 +344,7 @@ def handler(workbench):
                         root=(home/'reference-cases'/'pluck-v1').resolve();file=(root/name).resolve()
                         if not file.is_relative_to(root) or digest(file)!=record['sha256']:raise ValueError('CASE_ARTIFACT_INTEGRITY')
                         kind={'.pdf':'application/pdf','.png':'image/png','.json':'application/json','.csv':'text/csv','.md':'text/plain','.svg':'image/svg+xml'}.get(file.suffix,'application/octet-stream')
-                        return self.reply(200,file.read_bytes(),kind)
+                        return self.reply(200,file,kind)
                     return self.reply(200,data)
                 if path in ('/api/references','/api/references/source'):
                     query=parse_qs(urlparse(self.path).query)
@@ -371,7 +376,7 @@ def handler(workbench):
                     if len(parts)==5 and parts[2]=='jobs' and parts[4]=='artifact':
                         file=workbench.engineering.artifact(owner,parts[3],query.get('name',[''])[0],operator)
                         kind={'.png':'image/png','.json':'application/json','.glb':'model/gltf-binary','.csv':'text/csv','.log':'text/plain'}.get(file.suffix,'application/octet-stream')
-                        return self.reply(200,file.read_bytes(),kind)
+                        return self.reply(200,file,kind)
                     return self.reply(404,{'error':'NOT_FOUND'})
                 if path=='/api/ui-version':
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
@@ -382,8 +387,17 @@ def handler(workbench):
                     if path.endswith('/file'):
                         file,meta=workbench.assemblies.file(target,query.get('id',[''])[0])
                         import mimetypes
-                        return self.reply(200,file.read_bytes(),mimetypes.guess_type(meta['name'])[0] or 'application/octet-stream')
+                        return self.reply(200,file,mimetypes.guess_type(meta['name'])[0] or 'application/octet-stream')
                     return self.reply(200,workbench.assemblies.projection(target))
+                if path in ('/api/studio/delivery','/api/studio/archive'):
+                    from .studio_delivery import StudioDelivery
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    delivery=StudioDelivery(workbench.results)
+                    if path.endswith('/archive'):
+                        return self.reply(200,delivery.archive(target,query.get('id',[''])[0]),'application/zip')
+                    revision=query.get('revision',[''])[0]
+                    return self.reply(200,delivery.inspect(target,query.get('selection',['session'])[0],int(revision) if revision else None))
                 if path.startswith('/api/results'):
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
@@ -392,13 +406,13 @@ def handler(workbench):
                         return self.reply(200,workbench.results.inspect(target,int(revision) if revision else None))
                     if path=='/api/results/archive':
                         file=workbench.results.archive(target,query.get('snapshot',[''])[0])
-                        return self.reply(200,file.read_bytes(),'application/zip')
+                        return self.reply(200,file,'application/zip')
                     if path=='/api/results/file':
                         import mimetypes
                         file,name=workbench.results.file(target,query.get('id',[''])[0])
                         kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
                         if kind in ('text/html','application/javascript'):kind='text/plain'
-                        return self.reply(200,file.read_bytes(),kind)
+                        return self.reply(200,file,kind)
                     if path=='/api/results/source':
                         return self.reply(200,workbench.results.source(target,query.get('result',[''])[0],query.get('name',[None])[0]))
                     if path=='/api/results/series':
@@ -527,6 +541,10 @@ def handler(workbench):
                 if not 0 < length <= incoming_limit:
                     raise ValueError('REQUEST_SIZE')
                 body = json.loads(self.rfile.read(length))
+                if path=='/api/studio/package':
+                    from .studio_delivery import StudioDelivery
+                    target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    return self.reply(200,StudioDelivery(workbench.results).package(target,body))
                 if path=='/api/results/package':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner
                     return self.reply(200,workbench.results.package(target,body.get('snapshot_sha256'),body.get('revision')))

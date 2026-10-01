@@ -144,12 +144,16 @@ class ProductResults:
                        applicability=apply,integrity=valid,error=error,role=role(name),status=j['status'],job_id=j['id'],
                        url='/api/results/file?'+urlencode({'session':owner,'id':j['id']+'/'+name}))
                 outputs.append(f);files.append(f)
-            results.append(dict(id=j['id'],kind=k,domain=d,label=DOMAINS[d],created=j['created'],status=j['status'],error=j['error'],
+            label=('受控供电 · 程序接收诊断' if raw.get('metrics',{}).get('diagnostic_only') else '门磁设计 · 全链路仿真') if k=='closed-simulation' else DOMAINS[d]
+            results.append(dict(id=j['id'],kind=k,domain=d,label=label,created=j['created'],status=j['status'],error=j['error'],
                 created_revision=(old or {}).get('revision'),applicability=applicability(old,selected,input_keys(k,'')),
                 design_inputs=(old or {}).get('payload',{}),
                 inputs=j.get('parameters') or {},interfaces=(j.get('project') or {}).get('manifest',{}).get('interfaces',{}),
-                conditions=j.get('event_spec') or {},metrics=flatten_metrics(raw),checks=raw.get('checks') or {},
-                scope=raw.get('scope') or '工程执行记录；尚无独立产品验收',files=outputs,
+                conditions=j.get('event_spec') or {},metrics=([{'name':n,'value':raw['metrics'][n]} for n in ['peak_tip_mm','peak_piezo_V','peak_storage_V','peak_supply_V','tx_completed','received_events'] if n in raw.get('metrics',{})] if k=='closed-simulation' else flatten_metrics(raw)),checks=raw.get('checks') or {},
+                scope=(raw.get('summary_zh') or raw.get('scope') or '工程执行记录；尚无独立产品验收'),files=outputs,
+                run_status=raw.get('run_status'),design_status=raw.get('design_status'),predicted_design_status=raw.get('predicted_design_status'),
+                simulation_stages=raw.get('stages') if k=='closed-simulation' else None,
+                simulation=({n:raw.get(n) for n in ('physics_hash','presentation_hash','applicability','energy_ledger','limitations','failed_stage','unreached_stages','module_diagnostic_passed')} if k=='closed-simulation' else None),
                 source_files=list(((j.get('project') or {}).get('sources') or {}).keys()),
                 source_sha256=identity(j),readback_passed=raw.get('readback_passed',raw.get('numerical_checks_passed',False)),
                 hardware_verified=False))

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Closed simulation bounded design input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "closed-simulation-spec-v1"
+    },
+    "mechanical": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gap_mm": {
+          "type": "number",
+          "minimum": 28,
+          "maximum": 70
+        },
+        "opening_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "angle_deg": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 65
+        },
+        "remanence_T": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1.4
+        },
+        "damping_ratio": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 0.08
+        }
+      }
+    },
+    "circuit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cin_uF": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 220
+        },
+        "cout_uF": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 470
+        },
+        "initial_vin_V": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 6
+        },
+        "diagnostic_input_A": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.003
+        }
+      }
+    },
+    "firmware": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interval_ms": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 1000
+        },
+        "boot_ms": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "init_ms": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "tx_ms": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 20
+        },
+        "boot_mA": {
+          "type": "number",
+          "minimum": 0.05,
+          "maximum": 5
+        },
+        "init_mA": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 10
+        },
+        "tx_mA": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 15
+        },
+        "sleep_uA": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 20
+        },
+        "reset_uA": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 5
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "loss_probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "scan_duty": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "solver": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_step_s": {
+          "type": "number",
+          "minimum": 5e-06,
+          "maximum": 0.0001
+        },
+        "firmware_step_s": {
+          "type": "number",
+          "minimum": 1e-05,
+          "maximum": 0.0002
+        },
+        "reltol": {
+          "type": "number",
+          "minimum": 1e-06,
+          "maximum": 0.001
+        },
+        "max_coupling_iterations": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 12
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "camera_deg": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    }
+  }
+}

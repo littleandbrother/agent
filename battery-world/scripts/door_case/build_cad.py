@@ -6,9 +6,9 @@ from pathlib import Path
 import cadquery as cq
 
 APP=Path(__file__).resolve().parents[2]
-def build(out):
+def build(out,design_path=None):
  out=Path(out);out.mkdir(parents=True,exist_ok=True)
- design=json.loads((APP/'configs/reference_cases/door-magnetic-v1/design.json').read_text())
+ design=json.loads(Path(design_path or APP/'configs/reference_cases/door-magnetic-v1/design.json').read_text())
  modspec=importlib.util.spec_from_file_location('reference',APP/'scripts/build_pluck_product.py');mod=importlib.util.module_from_spec(modspec);modspec.loader.exec_module(mod)
  spec=mod.definition();spec['title']=design['title'];spec['design_revision']='D2';spec['requirements']=design['assumptions'];spec['interfaces']=['All coordinates in local mm; x along beam, z transverse bending.','World XYZ = (1004-x,70+z,2140+y) mm. Driver rotates with door around world z.'];spec['assumptions']=design['assumptions']
  # D1 changes: actual 80x30 carrier PCB mounting interface; remove unbound chips.
@@ -36,13 +36,13 @@ def build(out):
  for i,(x,y) in enumerate([(9,-23),(81,-23),(9,-1),(81,-1)]):
   add('pcb_screw_'+str(i),[2,2,5],[x,y,-23.3],'M2 nylon screw envelope','connector',kind='cylinder')
  for part in spec['parts']:
-  if part['id'].startswith('driver_'):part['geometry']['center_mm'][0]+=22
+  if part['id'].startswith('driver_'):part['geometry']['center_mm'][0]+=design['magnets']['nominal_center_separation_x_mm']-26
  # No fake chip blocks: board assembly awaits native footprint/STEP import.
  spec['allowed_contacts']=[['main_pcb','pcb_screw_'+str(i)] for i in range(4)]
  spec['allowed_contacts'] += [['housing','pcb_screw_'+str(i)] for i in range(4)]
  spec['allowed_contacts'] += [['driver_bracket_vertical','driver_bracket_shelf'],['driver_magnet','driver_bracket_shelf']]
  (out/'input.json').write_text(json.dumps({'assembly':{'payload':spec}},ensure_ascii=False,indent=2))
- shutil.copy2(APP/'configs/reference_cases/door-magnetic-v1/design.json',out/'design.json')
+ (out/'design.json').write_text(json.dumps(design,ensure_ascii=False,indent=2))
  shutil.copy2(__file__,out/'D1_parametric_source.py');shutil.copy2(APP/'scripts/build_pluck_product.py',out/'reference_definition.py')
  source=(APP/'packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_cad.py').read_text().replace('    return shape\n','    for addition in g.get("additions", []):\n        shape = shape.fuse(transform(primitive(addition), addition))\n    return shape\n',1)
  (out/'native_builder.py').write_text(source)
@@ -92,4 +92,4 @@ def build(out):
  (out/'drawing-index.json').write_text(json.dumps({'revision':'D2','drawings':[str(p.relative_to(out)) for p in draw.glob('*.svg')],'readback':'cad-readback.json','dimensions':'input.json','no_hardware_claim':True},indent=2))
  print(json.dumps({'case':'D2','parts':len(solids),'drawings':len(list(draw.glob('*.svg'))),'collisions':read['collisions']}))
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('output');a=p.parse_args();build(a.output)
+ p=argparse.ArgumentParser();p.add_argument('output');p.add_argument('--design');a=p.parse_args();build(a.output,a.design)

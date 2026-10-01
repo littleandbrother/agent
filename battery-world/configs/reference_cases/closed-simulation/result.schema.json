@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_status",
+    "design_status",
+    "failed_stage",
+    "unreached_stages",
+    "model_versions",
+    "applicability",
+    "energy_ledger",
+    "events",
+    "artifacts",
+    "product_verified"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "closed-simulation-result-v1"
+    },
+    "run_status": {
+      "enum": [
+        "completed",
+        "numerical_fail",
+        "input_error",
+        "out_of_domain",
+        "tool_fail"
+      ]
+    },
+    "design_status": {
+      "enum": [
+        "satisfied",
+        "unsatisfied",
+        "insufficient_evidence"
+      ]
+    },
+    "product_verified": {
+      "const": false
+    },
+    "failed_stage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unreached_stages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_versions": {
+      "type": "object"
+    },
+    "applicability": {
+      "type": "object"
+    },
+    "energy_ledger": {
+      "type": "object"
+    },
+    "events": {
+      "type": "array"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "bytes",
+          "sha256"
+        ]
+      }
+    }
+  }
+}

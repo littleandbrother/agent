@@ -46,7 +46,11 @@ const activation = {
 	pid: process.pid,
 	mode: config.mode,
 	source: config.sourceManifest,
-	loaded: { solver: sha(config.solverModule), improver: sha(config.improverModule), product: sha(config.productModule) },
+	loaded: {
+		solver: sha(config.solverModule),
+		improver: sha(config.improverModule),
+		product: sha(config.productModule),
+	},
 	model: "deepseek-flash",
 };
 console.log(JSON.stringify(activation));
@@ -70,7 +74,7 @@ const api = async (route: string, body?: unknown) => {
 };
 const briefJob = (j: any) => ({
 	...j,
-    project: j.project ? {manifest:j.project.manifest, sha256:j.project_sha256} : undefined,
+	project: j.project ? { manifest: j.project.manifest, sha256: j.project_sha256 } : undefined,
 	events: undefined,
 	assembly: j.assembly ? { revision: j.assembly.revision, hashes: j.assembly.hashes } : undefined,
 	result: j.result
@@ -483,7 +487,7 @@ tools.push(
 		name: "bf_engineering",
 		label: "Engineering tools",
 		description:
-			"Inspect capabilities, read a skill, run native product CAD/Blender or a bound EDA operation, build mcu-firmware, train/search tinyml-nas, poll a job, or download a verified artifact into your workspace. For product-model use parameters.assembly_revision and OMIT design_revision (that field is the prose proposal version). Native job files are outside bash: download with action=artifact, job_id, artifact_name before reading the returned local path. Read the skill first. Digital checks do not imply manufacturing or hardware qualification.",
+			"Inspect capabilities, read a skill, run native product CAD/Blender, EDA, mcu-firmware, tinyml-nas or closed-simulation, poll a job, or download a verified artifact. closed-simulation accepts parameters.candidate and confirmation; read its skill and distinguish run_status, predicted_design_status and design_status. For product-model use parameters.assembly_revision and OMIT design_revision (the prose proposal version). Native files are outside bash: use action=artifact, job_id, artifact_name before reading the local path. Digital checks do not imply hardware qualification.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -503,8 +507,9 @@ tools.push(
 					Type.Literal("mcu-firmware"),
 					Type.Literal("tinyml-nas"),
 					Type.Literal("event-transient"),
-                    Type.Literal("engineering-project"),
-                    Type.Literal("beam-event"),
+					Type.Literal("engineering-project"),
+					Type.Literal("beam-event"),
+					Type.Literal("closed-simulation"),
 				]),
 			),
 			skill_id: Type.Optional(Type.String()),
@@ -799,8 +804,10 @@ const execute = async () => {
 				responseError = false;
 				userStopped = false;
 				const packet = await api("/api/product-context");
-                emit({ type: "product_context_snapshot", message_id: cmd.id, packet });
-                await session.prompt(productHarness.contextPrompt(packet) + "\n用户消息：" + cmd.text, { expandPromptTemplates: false });
+				emit({ type: "product_context_snapshot", message_id: cmd.id, packet });
+				await session.prompt(productHarness.contextPrompt(packet) + "\n用户消息：" + cmd.text, {
+					expandPromptTemplates: false,
+				});
 				// Explicit operator delivery goals only. Same message/lease/cost
 				// accounting: this cannot reset a paid or wall-clock budget.
 				for (let n = 0; n < 12 && !closing && !userStopped && !responseError && !responseTruncated; n++) {

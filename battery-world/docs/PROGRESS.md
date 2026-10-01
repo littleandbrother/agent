@@ -1,3 +1,15 @@
+## 2026-10-01 BFA-030 — 全仿真链路完成（受限参考模型范围）
+
+最终完整 ./init.sh 已通过：425项Python（4项隔离数值检查另在CAD Python中通过）、SDK类型检查、Studio类型/构建与2803样本复现均通过。Pi本地依赖曾出现空导出与锁接口错误；177份依赖读回校验后真实Pi工具/Skill测试与全量回归通过，未升级依赖、未绕过鉴权/锁/预算，原失败日志保留。云端按需文件读取的长期稳定性不由这次通过保证。
+
+已接通候选规格→22实体CAD→COMSOL梁ROM/有限磁力表→原厂LTC3588-1联合求解→共享C程序→虚拟接收。支持两向机电反馈、供电/负载迭代、阶段缓存/恢复、独立时间步和能量检查。六项主验收与四项额外对照通过，15份Result结构校验通过；磁场网格与全模型充分性仍未通过，未放宽门槛。
+
+基线48mm间距/47µF储能峰值0.145752V、0完整TX，未冷启动；1mA外部受控诊断36 TX/1去重事件，仅证明模块链路。基线与诊断两个正式工程job、36文件逐件HTTP SHA通过；大ZIP改为分块发送。Studio展示波形、六指标、七阶段和失败范围；Tools可运行，Trace双向跳转已实际浏览器验证。记录是操作者发起，独立于旧装配，无自主Pi/实物/整机合格/RSI声明。
+
+证据：/Users/depengsu/Documents/bf-agent-workbench/verification/closed-simulation-20260930/；说明：/Users/depengsu/Documents/battery-world/docs/agentlab/CLOSED-SIMULATION.md。专项11项数值/接口与4项JS通过；全量测试及本机依赖读回恢复的最终结果见final-receipt.json，早期失败日志不删除。生产模型账本1934条摘要保持，调用0；88项科学features摘要保持c0bdddfd21fc7de7b56bb4456c554349445a54a2ae018dca99e1b5a380c07e40。根科学init未运行，无Git提交/推送。
+
+下一阶段须使用新模型版本：改善磁场局部网格与旋转全轨迹覆盖，机械动态/非线性互核，再校准芯片时序/功耗。当前11.3%磁网格差大于5%，默认设计不具备完整产品验收资格；四端点检查不是可靠性概率。保留D2、旧失败、原生RAW与来源摘要。
+
 ## BFA-018 — 左右侧栏可拖动，2026-09-23
 
 会话左栏、任务右栏和全景右栏均支持鼠标拖动、键盘微调、双击恢复默认。浏览器本地记忆宽度，收起展开保留；窗口收窄只限制显示宽度，恢复后还原。保留原有窄窗口覆盖/上下排列布局，不增加常驻按钮。
@@ -670,3 +682,15 @@ BFA-025 仅完成平台功能；BFA-024 仍为 blocked。磁拨动校准、本�
 ## 2026-09-30 BFA-028 — 报告字体修复与 GitHub 发布准备
 
 当前打开的 door-case.tex 改为 Fandol，原位置 XeLaTeX 两轮编译成功，36页/22附图/无警告。内置 Tectonic 资源下载已恢复，但编辑器不暂存外部图片与附录，内置预览仍受限。原 D2 ZIP 和后端不可变发布不覆盖；报告修订 D2-report-r1 单独绑定。发布副本19项Python及22项JS通过；此前全量407项的12失败9错误没有被改写为通过。用户已授权上传现有私有GitHub仓库，远端回读证据另记本机发布回执。
+
+
+## 2026-09-30 报告编译与 GitHub 推送完成
+
+已推送 private littleandbrother/agent main 2406224bc5f59bcab3c833bef496774f484ea4a2；从远端新克隆核对2852文件全部哈希通过。原始D2工程ZIP、当前36页PDF及编译回执已发布 prerelease door-magnetic-d2-20260930，GitHub资产摘要与本地全部一致。Fandol字体修复后，在原报告位置XeLaTeX两轮编译成功；内置Tectonic基础资源已恢复，但单文件编辑器仍无法暂存外部图片/图纸，因此内置预览未通过。未创建替代文档、未覆盖D2密封包或不可变后端发布。报告修订另记D2-report-r1；原case-files.json仍对应密封D2包而非编辑后的报告工作副本。科学/硬件/整机/全量回归没有提升为通过；无付费调用。回执：bf-agent-workbench/verification/door-engineering-20260929/latex-github/receipt.json。
+
+
+## 2026-09-30 BFA-029 — Studio / Lab、版本交付与液态玻璃
+
+完成共享后端上的Studio设计/成果/交付与Lab控制台/架构地图分离；版本与owner隔离、产品真实视觉/结论/分项成果、版本固定导出及离线索引；原有编辑能力保留。加入导航/浮层/输入框玻璃风格、模式滑动与按压动效及减少动态/透明度兼容。浏览器验证草稿/滚动往返、390/1440布局、实际130文件D2下载和399项嵌套密封包。26项Python、25项JS通过，44张生产表和科学features摘要不变，付费调用0。
+
+全量init415项仍13失败1错误，集中Pi启动/会话集成；后续SDK阶段未执行，不能声称全系统健康。D2冷启动/磁网格/原生EDA未通过，BFA-028改记blocked；BFA-029仅平台范围complete。未提交或推送。文档：battery-world/docs/agentlab/STUDIO-LAB-EXPERIENCE.md；证据：bf-agent-workbench/verification/studio-lab-20260930/receipt.json。
