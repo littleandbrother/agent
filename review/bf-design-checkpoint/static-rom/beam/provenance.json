@@ -1,0 +1,89 @@
+{
+  "schema": "bf-conditional-beam-provenance-v1",
+  "status": "conditional_static_derivation_no_native_equivalence",
+  "sources": [
+    {
+      "id": "DoorBeam.geometry",
+      "kind": "upstream_source_assumption",
+      "path": "sources/DoorBeam.java",
+      "sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6",
+      "origin_path": "/workspace/shared/current-cache-integration-20261001/working/battery-world/configs/reference_cases/door-magnetic-v1/DoorBeam.java",
+      "used": "Dimensions, clamp, electrode coverage, loaded magnet face; not executed native selection proof"
+    },
+    {
+      "id": "DoorBeam.assumed_material",
+      "kind": "upstream_source_assumption",
+      "path": "sources/DoorBeam.java",
+      "sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6",
+      "used": "Copper E110GPa rho8960 and magnet rho7500; magnet E160GPa and Poisson ratios recorded but not used"
+    },
+    {
+      "id": "PSI-5A4E.manufacturer_typical",
+      "kind": "new_conditional_material_choice",
+      "url": "https://piezo.com/pages/piezo-material",
+      "path": "sources/piezo-material-20261001.html",
+      "sha256": "840af5174fdb7674c3d73065a741a98992e43f5a3b3ee9746300b07be81a98ba",
+      "accessed_utc": "2026-10-01",
+      "values": {
+        "Y1E_Pa": 66000000000.0,
+        "d31_C_per_N": -1.9e-10,
+        "epsilon33T_relative_at_1kHz": 1800,
+        "rho_kg_per_m3": 7800
+      },
+      "grade": "PSI-5A4E",
+      "actual_device_grade_verified": false,
+      "full_native_tensor_recovered": false,
+      "source_qualification": "Manufacturer guidelines; frequency, field, temperature dependence and tolerances unqualified. Published k31=.35 not imposed as independent extra constraint."
+    },
+    {
+      "id": "PSI-5A4E.manufacturer_catalog_primary",
+      "kind": "manufacturer_authored_primary_PDF_archived_on_third_party_host",
+      "url": "https://cdn.thomasnet.com/ccp/00979620/121657.pdf",
+      "title": "Piezo Systems Catalog #7C (2008)",
+      "page": 24,
+      "path": "sources/piezo-systems-catalog-7C-2008.pdf",
+      "sha256": "1bc1da3f31df3817119b2d38d6e36fa752118859843ab4946b7480d4bb897e20",
+      "visual_checked_page_path": "sources/catalog-page24.png",
+      "visual_checked_page_sha256": "be64a5be54ed6586e2c412ca05b909ee72d0203475444c7e87fc9ee2883f0065",
+      "text_path": "sources/catalog-page24.txt",
+      "text_sha256": "bf777e8d225a43166b148d6d06942d59b24f0b48a17e3eab745bfabb4969fe88",
+      "accessed_utc": "2026-10-01",
+      "role": "Corroborates exact same PSI-5A4E primitives and their directions, not a current product selection"
+    },
+    {
+      "id": "NIST.CODATA2022",
+      "kind": "primary_physical_constant",
+      "url": "https://www.physics.nist.gov/cgi-bin/cuu/Value?eqep0=",
+      "value": 8.8541878188e-12,
+      "unit": "F/m",
+      "standard_uncertainty_F_per_m": 1.4e-21,
+      "accessed_utc": "2026-10-01"
+    },
+    {
+      "id": "new_conditional_polarity",
+      "kind": "declared_model_assumption",
+      "value": "+z poling, Vtop−Vbottom, E3=−V/t; other physical polarity unknown"
+    },
+    {
+      "id": "new_rigid_overlap_idealization",
+      "kind": "declared_model_boundary",
+      "value": "Rigid magnet and distal overlap copper x=91..96mm; a=.091m, xCOM=.096m; free-overlap alternative separately identified"
+    }
+  ],
+  "forbidden_mixing": {
+    "url": "https://info.piezo.com/hubfs/Data-Sheets/piezo-PZT-5A_PZT-5H-material-properties.pdf",
+    "reason": "This manufacturer-hosted PDF identifies CTS3195STD/3195HD, not the selected PSI-5A4E branch. No constants taken from it."
+  },
+  "distribution": {
+    "full_vendor_PDF_HTML_page_images": "Local provenance only; exclude from any user-facing/source-distribution bundle. Share verified URLs, hashes and factual parameter extracts instead."
+  },
+  "unknowns": {
+    "native_COMSOL_tensor": null,
+    "actual_supplier_grade_polarity": null,
+    "adhesive_and_electrode_dimensions_and_mass": null,
+    "measured_assembly_damping": null,
+    "material_joint_tolerances_and_frequency_dependence": null,
+    "magnet_force_pose_frame_registration": null,
+    "qualified_nonlinear_domain": null
+  }
+}

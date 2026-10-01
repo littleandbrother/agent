@@ -30,7 +30,7 @@ class ContractsAndRecovery(unittest.TestCase):
             def good(p):called.append(1);(p/'model').write_text('complete');return {'solved':True}
             p,_,key,hit=c.stage('native',{'input':1},good);self.assertFalse(hit)
             self.assertTrue(c.stage('native',{'input':1},good)[3]);self.assertEqual([1],called)
-            self.assertTrue(list(Path(tmp).glob('native/*.partial-*/failure.json')))
+            self.assertTrue(list(c.root.glob('native/*.partial-*/failure.json')))
             self.assertNotEqual(key,c.stage('native',{'input':2},good)[2])
 
     def test_cached_native_bytes_cannot_be_silently_changed(self):
@@ -131,5 +131,159 @@ class SoftwareInLoop(unittest.TestCase):
         a=force(.048,.02,n=8);b=force(.048,-.02,n=8)
         self.assertAlmostEqual(a[0],b[0],places=10);self.assertAlmostEqual(a[2],-b[2],places=10)
         self.assertLess(self.np.linalg.norm(a-force(.048,.02,n=12))/self.np.linalg.norm(a),.005)
+
+
+
+# Cache v2 integration regressions: portable consistency, not native acceptance.
+import hashlib
+from bfworld.agentlab.simulation_chain.contracts import write_json
+from bfworld.agentlab.simulation_chain import cache as module
+
+class CacheConsistencyTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self.cache = Cache(self.root)
+        self.calls = 0
+        self.rom = {'k': 100., 'mass': .01, 'theta': .002, 'cp': 1e-8}
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def producer(self, p):
+        self.calls += 1
+        write_json(p / 'rom.json', self.rom)
+        return self.rom
+
+    def make(self):
+        return self.cache.stage('beam', {'source': 'fixed'}, self.producer)
+
+    def edit_manifest(self, p, fn):
+        m = json.loads((p / 'checkpoint.json').read_text())
+        fn(m)
+        write_json(p / 'checkpoint.json', m)
+
+    def test_unchanged_hit_uses_hash_listed_canonical_value(self):
+        p, a, k, hit = self.make()
+        self.assertFalse(hit)
+        _, b, kb, hit = self.make()
+        self.assertTrue(hit)
+        self.assertEqual(self.calls, 1)
+        self.assertEqual((a, k), (b, kb))
+        m = json.loads((p / 'checkpoint.json').read_text())
+        self.assertEqual(m['schema_version'], module.CACHE_SCHEMA)
+        self.assertIn(module.VALUE_FILE, [x['path'] for x in m['files']])
+        self.assertEqual(b, json.loads((p / module.VALUE_FILE).read_text()))
+
+    def test_metadata_only_corruption_is_rejected(self):
+        p, *_ = self.make()
+        self.edit_manifest(p, lambda m: m['value'].update(k=200.))
+        with self.assertRaisesRegex(ChainError, 'metadata/value mismatch'):
+            self.make()
+
+    def test_value_artifact_corruption_is_rejected(self):
+        p, *_ = self.make()
+        write_json(p / module.VALUE_FILE, {**self.rom, 'k': 200.})
+        with self.assertRaisesRegex(ChainError, 'hash mismatch'):
+            self.make()
+
+    def test_missing_value_artifact_is_rejected(self):
+        p, *_ = self.make()
+        (p / module.VALUE_FILE).unlink()
+        with self.assertRaisesRegex(ChainError, 'hash mismatch'):
+            self.make()
+
+    def test_unlisted_value_is_rejected(self):
+        p, *_ = self.make()
+        self.edit_manifest(p, lambda m: m.update(files=[f for f in m['files'] if f['path'] != module.VALUE_FILE]))
+        with self.assertRaisesRegex(ChainError, 'canonical value artifact'):
+            self.make()
+
+    def test_legacy_schema_in_new_namespace_is_rejected(self):
+        p, *_ = self.make()
+        self.edit_manifest(p, lambda m: m.update(schema_version='simulation-checkpoint-v1'))
+        with self.assertRaisesRegex(ChainError, 'schema/identity'):
+            self.make()
+
+    def test_legacy_namespace_is_preserved_not_reused(self):
+        oldkey = digest({'stage': 'beam', 'inputs': {'source': 'fixed'}})
+        p = self.root / 'beam' / oldkey
+        p.mkdir(parents=True)
+        self.producer(p)
+        write_json(p / 'checkpoint.json', {'schema_version': 'simulation-checkpoint-v1', 'value': self.rom})
+        (p / 'retained-failure.txt').write_text('Old evidence must remain unchanged')
+        before = {str(f.relative_to(p)): hashlib.sha256(f.read_bytes()).hexdigest()
+                  for f in p.rglob('*') if f.is_file()}
+        newp, _, newkey, hit = self.make()
+        self.assertFalse(hit)
+        self.assertNotEqual(oldkey, newkey)
+        self.assertNotEqual(p, newp)
+        self.assertEqual(before, {str(f.relative_to(p)): hashlib.sha256(f.read_bytes()).hexdigest()
+                                  for f in p.rglob('*') if f.is_file()})
+
+    @unittest.skipUnless(importlib.util.find_spec('numpy') and importlib.util.find_spec('scipy'), 'numerical deck construction dependencies')
+    def test_real_cache_to_deck_consistency_and_rejection(self):
+        import numpy as np
+        from bfworld.agentlab.simulation_chain import solver
+        p, first, _, _ = self.make()
+        _, cached, _, hit = self.make()
+        self.assertTrue(hit)
+        table = self.root / 'table.npz'
+        np.savez(table, angles=[0., 1.2], qs=[-.008, .008], values=np.zeros((2, 2)))
+        placeholder = self.root / 'placeholder.sub'
+        placeholder.write_text('* inert placeholder; no native solver call\n')
+        old = solver.PMIC
+        solver.PMIC = placeholder
+        try:
+            texts = []
+            for name, rom in [('fresh', first), ('cached', cached)]:
+                out = self.root / name
+                out.mkdir()
+                solver.deck(out, validate({}), rom, table, np.array([0., 4.]), np.zeros(2), resistor=100000)
+                texts.append((out / 'system.cir').read_text())
+            self.assertEqual(*texts)
+            self.assertIn('-100.0*V(q)', texts[0])
+            self.edit_manifest(p, lambda m: m['value'].update(k=200.))
+            with self.assertRaisesRegex(ChainError, 'metadata/value mismatch'):
+                self.make()
+        finally:
+            solver.PMIC = old
+
+    def test_json_types_and_partial_failure_remain_supported(self):
+        def tuple_producer(p):
+            (p / 'data').write_text('value')
+            return {'coordinate': (1., 2.)}
+        a = self.cache.stage('tuple', {}, tuple_producer)[1]
+        b = self.cache.stage('tuple', {}, tuple_producer)[1]
+        self.assertEqual(a, b)
+        self.assertIsInstance(a['coordinate'], list)
+        def bad(p):
+            (p / 'data').write_text('incomplete')
+            raise RuntimeError('interrupted')
+        with self.assertRaises(RuntimeError):
+            self.cache.stage('partial', {}, bad)
+        self.assertTrue(list((self.root / module.CACHE_NAMESPACE / 'partial').glob('*.partial-*/failure.json')))
+
+    def test_acceptance_resolver_uses_versioned_cache_root(self):
+        import ast
+        p, _, key_value, _ = self.make()
+        tree = ast.parse((Path(__file__).resolve().parents[2] / 'scripts/run_closed_simulation.py').read_text())
+        function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'acceptance')
+        names = {'checkpoint_root', 'beam', 'force', 'fw'}
+        nodes = [n for n in function.body if isinstance(n, ast.Assign)
+                 and any(isinstance(t, ast.Name) and t.id in names for t in n.targets)]
+        self.assertEqual(len(nodes), 4)
+        scope = {'Cache': Cache, 'cache': self.root, 'baseline': {}, 'key': lambda r, stage: key_value}
+        exec(compile(ast.Module(body=nodes, type_ignores=[]), 'patched-acceptance-resolver', 'exec'), scope)
+        self.assertEqual(scope['beam'], p)
+        self.assertEqual(scope['checkpoint_root'], self.root / module.CACHE_NAMESPACE)
+
+    def test_reserved_producer_value_filename_is_rejected(self):
+        def bad(p):
+            (p / module.VALUE_FILE).write_text('{}')
+            return {}
+        with self.assertRaisesRegex(ChainError, 'reserved'):
+            self.cache.stage('reserved', {}, bad)
+
 
 if __name__=='__main__':unittest.main()

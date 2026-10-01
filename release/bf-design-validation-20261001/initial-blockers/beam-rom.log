@@ -1,0 +1,24 @@
+setUpClass (test_rom.StaticROM) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_rom.StaticROM)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/bf-validation-01/sources/static-rom/beam/tests/test_rom.py", line 16, in setUpClass
+    cls.p=b.load_inputs(); cls.r=b.build()
+                                 ^^^^^^^^^
+  File "/workspace/bf-validation-01/sources/static-rom/beam/beam_rom.py", line 221, in build
+    if 'path' in item and hashlib.sha256((ROOT/item['path']).read_bytes()).hexdigest()!=item['sha256']:
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/bf-validation-01/sources/static-rom/beam/sources/piezo-material-20261001.html'
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.001s
+
+FAILED (errors=1)

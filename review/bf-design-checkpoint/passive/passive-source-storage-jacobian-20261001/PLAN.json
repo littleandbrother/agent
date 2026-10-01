@@ -1,0 +1,229 @@
+{
+  "schema": "bf-conditional-passive-study-plan-v1",
+  "model_version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+  "purpose": "Matched 47-versus-10 microfarad input-storage sensitivity on one explicitly assumed q-only conditional source model",
+  "claim_boundary": "No native equivalence, PMIC, firmware, receiver, task/mission, robustness, physical safety, hardware feasibility or Agent efficacy claim",
+  "dynamic_trajectories_max": 4,
+  "cases": [
+    {
+      "id": "cin47",
+      "cin_F": 4.7e-05
+    },
+    {
+      "id": "cin10",
+      "cin_F": 1e-05
+    }
+  ],
+  "execution_order": [
+    "cin47-coarse",
+    "cin47-fine",
+    "cin10-coarse",
+    "cin10-fine"
+  ],
+  "mechanics": {
+    "k_N_m": 87.16295936341257,
+    "mass_kg": 0.008693494536827093,
+    "theta_C_m": -0.00025557326500094804,
+    "Cp_ritz_F": 1.875197361378469e-08,
+    "magnet_pitch_slope_per_m": 16.400263573374637,
+    "magnet_axial_shape": -0.08565521492786202
+  },
+  "damping_ratio": 0.02,
+  "damping_provenance": "Inherited uncalibrated development assumption from source world; c=2*zeta*sqrt(m*k), not inferred from ceramic Qm",
+  "rectifier": {
+    "type": "ideal full-wave bridge plus fixed series resistor and otherwise ideal storage capacitor",
+    "series_resistance_ohm": 100000.0,
+    "choice": "Explicit round-number passive benchmark assumption selected before trajectories, not measured ESR and not a fitted/optimized/native diode or PMIC model",
+    "law": "I=max(abs(Vp)-Vs,0)/R; terminal outward i=sign(Vp)*I; Qdot=-i; Cin*Vsdot=I",
+    "reverse_leakage_A": 0.0,
+    "forward_voltage_drop_V": 0.0,
+    "load_current_A": 0.0,
+    "external_electrical_work_J": 0.0,
+    "power_identity": "Vp*i = Vs*I + R*I^2 >=0 for Vs>=0; ideal diode loss=0",
+    "upper_bound_on_real_harvester": false
+  },
+  "signed_port": {
+    "q": "positive world +y, beam +z",
+    "Vpiezo": "top electrode minus bottom electrode",
+    "Q": "top-electrode supplied charge",
+    "equations": "Vp=(Q-theta*q)/Cp_Ritz; m*qdd=Fmag-c*qdot-k*q+theta*Vp",
+    "Cp_count": 1
+  },
+  "initial_state": {
+    "q0_m": -0.005838454977432304,
+    "qdot0_m_s": 0.0,
+    "Q0_C": 1.4921530011434105e-06,
+    "Vpiezo0_V": 0.0,
+    "Vstorage0_V": 0.0,
+    "initial_elastic_J": 0.0014855861520281061,
+    "initial_mutual_magnetic_J": -0.00771120726664825,
+    "initial_piezo_J": 0.0,
+    "initial_storage_J": 0.0,
+    "initial_kinetic_J": 0.0
+  },
+  "initial_recipe": "Same retained stable closed-door root for all four trajectories, selected by STATIC-PREFLIGHT-PLAN; Q0=theta*q0 makes physical Vpiezo=0; signed electrode charge is not an electrical precharge",
+  "initial_preparation": "Computational initial equilibrium only; initial elastic and signed mutual potential are accounted; preparation/reset work remains unknown and no first-operation/reset qualification is claimed",
+  "magnetic_potential_gauge": "Mutual potential tends to zero at infinite separation; initial Umag is signed, and adding a constant does not change equations or ledger gates",
+  "driver_input": {
+    "angle_profile": "linear from 0 to 65deg over 0..2s; hold 2..4s",
+    "opening_angle_rad": 1.1344640137963142,
+    "opening_s": 2.0,
+    "observation_s": 4.0,
+    "gap_m": 0.048,
+    "break_handling": "two continuous-state integration segments meet exactly at 2s; one-sided driver powers retained"
+  },
+  "ledger": {
+    "stored": "0.5*m*qdot^2+0.5*k*q^2+(Q-theta*q)^2/(2*Cp)+0.5*Cin*Vs^2+Umag",
+    "driver_translation": "Ptrans=Ftip dot (d rdriver/d angle)*angle_dot",
+    "driver_rotation": "Prot=-tau_driver_COM_y*angle_dot",
+    "driver_derivative": "d rdriver/d angle=e_y cross (rdriver-pivot_beam); omega_driver=e_y*angle_dot",
+    "balance": "E(t)-E(0)+Dmechanical+Dresistor-Wdriver_translation-Wdriver_rotation=0",
+    "dissipation": "Dmechanical_dot=c*qdot^2; Dresistor_dot=R*I^2",
+    "work_scope": "Work by externally prescribed driver against magnetic forces and torque only; driver-mechanism inertia, actuation friction and reset are outside boundary",
+    "normalization": "max(initial nonmagnetic positive storage,abs(Wdriver),abs(Umag(t)-Umag(0)),1e-9 J); invariant to magnetic additive constant"
+  },
+  "mechanical_assumptions": [
+    "One retained Ritz bending coordinate with fixed mass/stiffness/reciprocal piezo port",
+    "Magnetic COM path and pitch are q-only short-circuit kinematics; nonzero-voltage axial shift beta*V and force-induced additional axial shift are omitted",
+    "Discarded bending shapes and torque-driven modal content, axial inertia, geometric/material nonlinearity, actual tensor, damping, losses, assembly and installation physics are unqualified",
+    "Voltage/domain guards are computational only. No negligibility or physical-accuracy bound on omitted coordinates is claimed"
+  ],
+  "dynamic_quadrature_order": 6,
+  "path_quadrature_check": "Direct unchanged finite-cuboid evaluations at n=6 and n=10 at every accepted interval start, midpoint and end, separately from timestep refinement; raw Ftip, tip torque, driver COM torque, driver pose derivative and powers retained. Differences are empirical numerical refinement evidence, not rigorous error bounds or physical validation.",
+  "resolutions": {
+    "coarse": {
+      "method": "SciPy Radau",
+      "max_step_s": 0.002,
+      "first_step_s": 1e-05,
+      "rtol": 1e-06,
+      "atol": [
+        1e-10,
+        1e-08,
+        1e-14,
+        1e-08,
+        1e-12,
+        1e-12,
+        1e-12,
+        1e-12
+      ]
+    },
+    "fine": {
+      "method": "SciPy Radau",
+      "max_step_s": 0.001,
+      "first_step_s": 5e-06,
+      "rtol": 2.5e-07,
+      "atol": [
+        2.5e-11,
+        2.5e-09,
+        2.5e-15,
+        2.5e-09,
+        2.5e-13,
+        2.5e-13,
+        2.5e-13,
+        2.5e-13
+      ]
+    }
+  },
+  "resolution_rationale": "Mechanical period about 62.75ms; R*Cp about 1.875ms. Implicit Radau resolves passive-RC stiffness, adaptive tolerances treat diode corners; exact input break and fixed refinements declared before output. No PMIC source timestep imported.",
+  "gates": {
+    "q_limit_m": 0.008,
+    "storage_negative_tolerance_V": 1e-09,
+    "voltage_computational_guard_V": 500.0,
+    "quadrature": {
+      "force_N": [
+        1e-09,
+        0.0001
+      ],
+      "potential_J": [
+        1e-11,
+        0.0001
+      ],
+      "driver_derivative_J_per_rad": [
+        1e-09,
+        0.0001
+      ]
+    },
+    "energy_abs_J": 1e-09,
+    "energy_relative": 0.001,
+    "independent_ledger_abs_J": 1e-09,
+    "independent_ledger_relative": 0.005,
+    "time_refinement": {
+      "q_m": [
+        1e-06,
+        0.005
+      ],
+      "Vs_V": [
+        0.0001,
+        0.005
+      ],
+      "Vp_V": [
+        0.001,
+        0.01
+      ],
+      "energy_J": [
+        1e-09,
+        0.005
+      ]
+    },
+    "continuous_numerical_path": "Radau cubic q extrema exactly evaluated. Magnet clearance at interval start minus h*(maximum tip translation/rotation speed + driver translation/rotation speed) must remain >1e-12m. This bounds separation along numerical cubic, not exact ODE path or surrounding assembly."
+  },
+  "budgets": {
+    "wall_per_trajectory_s": 420,
+    "rhs_per_trajectory": 100000,
+    "force_evaluations_per_trajectory": 150000,
+    "accepted_steps_per_trajectory": 20000,
+    "total_wall_cap_s": 1800,
+    "dynamic_trajectories": 4,
+    "software_test_wall_s": 30,
+    "software_test_additional_static_states_max": 20,
+    "paid_calls": 0
+  },
+  "stop_conditions": [
+    "source or code hash mismatch",
+    "missing exact frozen approval",
+    "failed static/software preflight",
+    "nonfinite/negative passive store/domain/contact or continuous clearance guard",
+    "wall/RHS/force/step budget",
+    "solver failure",
+    "unresolved force quadrature or energy accounting",
+    "after one trajectory failure stop branch; no replacement, retry, threshold tuning or new design",
+    "after time-refinement failure retain four results but no admitted sensitivity conclusion"
+  ],
+  "outputs": [
+    "raw state samples on common 1ms grid",
+    "all accepted states and every Radau cubic coefficient",
+    "raw n6/n10 potentials and primitive force/torque/driver-pose derivatives at all accepted endpoints/midpoints",
+    "sample powers and ODE-integrated signed translational/rotational driver work",
+    "independent Simpson integration of all four work/loss rates",
+    "full stored-energy ledger and residuals",
+    "domain checks with cubic extrema and magnet-clearance bounds",
+    "peak/final q, piezo and storage voltages/energy, budgets, failures, source and code hashes"
+  ],
+  "interpretation_rule": "Report signed cin10-minus-cin47 differences in final storage energy and peak storage voltage, plus coupled q/piezo/energy partition. Compare each effect against five times sum of observed within-case coarse/fine deltas; below this report numerically unresolved. This is not a confidence/error bound or guarantee against common-mode quadrature/model errors.",
+  "source_manifest_sha256": "fd2b6e5016399e4f7cfc00fdd7a6c2bdab2b51c2ae3853c9f6321951e4d9a1bb",
+  "equilibrium_receipt_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e",
+  "toolchain": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "scipy_radau_source_sha256": "d0aa4593431ef39ee07825db6ef0324e4a9bacef0e23fda42d377318ba6a6256"
+  },
+  "authorization_status": "No trajectories; pending independently reviewed repair seal and exact new root authorization",
+  "implementation_revision": "structured-jacobian-v3",
+  "jacobian": {
+    "method": "analytic branch-aware circuit and exact zero-ledger columns; bounded magnetic q-only differences",
+    "q_step_nominal_m": 1e-07,
+    "q_margin_fraction": 0.25,
+    "q_step_minimum_m": 1e-12,
+    "step_half_check": true,
+    "force_derivative_abs_N_m": 1e-05,
+    "driver_power_derivative_abs_W_m": 1e-05,
+    "relative_derivative_tolerance": 0.001,
+    "return_half_step_derivative": true,
+    "maximum_jacobian_evaluations": 10000,
+    "kink_convention": "inactive branch at abs(Vp)==Vs; current law unchanged",
+    "all_force_calls_count_in_original_force_budget": true,
+    "structured_rejected_state_telemetry": true
+  }
+}

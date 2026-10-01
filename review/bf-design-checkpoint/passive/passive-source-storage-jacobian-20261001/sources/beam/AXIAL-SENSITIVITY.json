@@ -1,0 +1,88 @@
+{
+  "schema": "bf-static-axial-sensitivity-addendum-v1",
+  "base_manifest_sha256": "8632e9ec0fac8fbb12dca2eb3cef1ca4f6dff8a9a5b514a3f1b1ff0a1b51e530",
+  "scope": "Fixed retained bending q and voltage; constant axial force carried by the flexible composite beam, rigid distal body; no dynamics or magnetic-force evaluations",
+  "alpha_m_per_N": 1.3776587893378667e-07,
+  "beta_m_per_V_equivalently_C_per_N": 6.765578635014836e-09,
+  "fixed_eta_capacitance_F": 1.8419721138637568e-08,
+  "one_axial_coordinate_enthalpy": "H(q,eta,V)=H_Ritz(q,V)+(eta-beta*V)^2/(2*alpha)",
+  "eta_definition": "Additional axial COM displacement relative to q-only short-circuit path; eta=alpha*N+beta*V. Pitch and retained q are held fixed.",
+  "axial_force_relation": "N=(eta-beta*V)/alpha",
+  "charge_relation": "Q=theta*q+Cp_Ritz*V+beta*N",
+  "zero_N_voltage_pose_term": "q-only pose omits eta=beta*V even at N=0",
+  "fixed_qV_elastic_energy_increment": "DeltaU_elastic = 0.5*alpha*N^2 + beta*N*V, relative to N=0 at the same q,V. It can be signed and is storage, not a loss.",
+  "zero_V_energy": "At V=0, extra elastic energy is exactly 0.5*alpha*N^2 within this model.",
+  "retained_bending_energy": "0.5*k*q^2; a relative error bound divides the absolute load-induced energy bound by this value only for q!=0. No finite relative bound exists at q=0.",
+  "bound_formulas": {
+    "shift": "|delta_x| <= alpha*Fmax+|beta|*Vmax",
+    "load_induced_charge": "|DeltaQ| <= |beta|*Fmax",
+    "energy_increment_abs": "|DeltaU_elastic| <= 0.5*alpha*Fmax^2+|beta|*Fmax*Vmax",
+    "magnetic_energy_pose_change": "|DeltaU_mag| <= Fmax_path*|delta_x| if Fmax_path truly bounds axial force on the displaced segment at fixed q/pitch/driver state"
+  },
+  "magnetic_feedback": {
+    "condition": "alpha*Lx<1, with Lx a verified sup|dFx/dx| on an invariant displacement interval; x-force orientation and COM torque held according to the selected kinematic model",
+    "bound": "|delta_x| <= (alpha*|Fx(q-only)|+|beta|*Vmax)/(1-alpha*Lx)",
+    "no_bound_if_condition_missing": true,
+    "gradient_contraction_threshold_N_m": 7258691.395426164,
+    "qualification": "A local derivative at a few points is not a global Lipschitz supremum; interval invariance also must be checked."
+  },
+  "actual_force_voltage_gradient_bounds": {
+    "Fmax_N": null,
+    "Vmax_V": null,
+    "Lx_N_m": null
+  },
+  "negligible_claim": false,
+  "second_axial_DOF_needed": "undecided until actual force/voltage/gradient bounds and required accuracy are supplied; static condensation itself does not validate dynamics",
+  "remaining_truncations": [
+    "discarded bending shapes",
+    "nonlinear beam and axial geometry",
+    "axial inertia",
+    "voltage-dependent magnetic potential if pose depends on V",
+    "full tensor and material dispersion"
+  ],
+  "checks": {
+    "primitive_volume_energy_cases": [
+      {
+        "synthetic_q_m": 0.0,
+        "synthetic_V": 0.0,
+        "synthetic_N": 1.0,
+        "enthalpy_residual_J": 1.3234889800848443e-23,
+        "elastic_energy_increment_residual_J": 1.3234889800848443e-23
+      },
+      {
+        "synthetic_q_m": 0.0008,
+        "synthetic_V": 10.0,
+        "synthetic_N": 1.0,
+        "enthalpy_residual_J": 2.0328790734103208e-20,
+        "elastic_energy_increment_residual_J": -1.3129010682441655e-20
+      },
+      {
+        "synthetic_q_m": 0.0008,
+        "synthetic_V": 10.0,
+        "synthetic_N": -1.0,
+        "enthalpy_residual_J": 2.0328790734103208e-20,
+        "elastic_energy_increment_residual_J": -2.234049398383217e-20
+      },
+      {
+        "synthetic_q_m": -0.0008,
+        "synthetic_V": -10.0,
+        "synthetic_N": 1.0,
+        "enthalpy_residual_J": 2.0328790734103208e-20,
+        "elastic_energy_increment_residual_J": -2.234049398383217e-20
+      },
+      {
+        "synthetic_q_m": 0.0008,
+        "synthetic_V": 0.0,
+        "synthetic_N": -1.0,
+        "enthalpy_residual_J": 1.6940658945086007e-20,
+        "elastic_energy_increment_residual_J": -2.2816950016662715e-20
+      }
+    ],
+    "charge_voltage_derivative_abs_error_C": 1.890791281741882e-17,
+    "invalid_bound_cases_rejected": 3,
+    "noncontractive_gradient_cases_rejected": 3
+  },
+  "new_dynamic_runs": 0,
+  "new_magnetic_evaluations": 0,
+  "dynamic_admitted": false
+}

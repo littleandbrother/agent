@@ -1,0 +1,104 @@
+{
+  "schema": "bf-static-magnetic-interface-plan-v1",
+  "provider_version": "bf-conditional-psi5a4e-cuboid-generalized-force-v1",
+  "approved_scope": "Root approved exactly this five-state static plan at 2026-10-01 11:41 UTC; no table, extra physical state, equilibrium or time integration.",
+  "gap_m": 0.048,
+  "states": [
+    {
+      "id": "closed_zero",
+      "angle_deg": 0,
+      "q_m": 0
+    },
+    {
+      "id": "early_negative",
+      "angle_deg": 2,
+      "q_m": -0.004
+    },
+    {
+      "id": "early_positive",
+      "angle_deg": 2,
+      "q_m": 0.004
+    },
+    {
+      "id": "rotated_positive",
+      "angle_deg": 15,
+      "q_m": 0.004
+    },
+    {
+      "id": "open_zero",
+      "angle_deg": 65,
+      "q_m": 0
+    }
+  ],
+  "quadrature_orders": [
+    4,
+    6,
+    10
+  ],
+  "q_central_difference_steps_m": [
+    2e-06,
+    1e-06,
+    5e-07
+  ],
+  "predeclared_numeric_checks": {
+    "virtual_work_abs_plus_relative_N": [
+      1e-09,
+      1e-06
+    ],
+    "quadrature_6_to_10_abs_plus_relative_Q_N": [
+      1e-09,
+      0.0001
+    ],
+    "interpretation": "Engineering implementation tolerances only; not physical uncertainty or whole-domain qualification. Order4-to6 retained, no pass claim from two levels alone."
+  },
+  "negative_controls": [
+    "nonfinite and out-of-support inputs rejected before evaluation",
+    "rotation orthogonality/determinant and frame-polarity controls",
+    "synthetic overlapping/touching OBBs rejected without force evaluation"
+  ],
+  "source_bindings": {
+    "world-v1.json": {
+      "original_path": "/workspace/shared/authoritative-world-20261001/contracts/world-v1.json",
+      "snapshot_path": "sources/world-v1.json",
+      "sha256": "725567ef1901ee17bc7355180516e39b0c2d906b24f3035fdbd0f6889da5f3f2"
+    },
+    "upstream_build_cad.py": {
+      "original_path": "/workspace/shared/authoritative-world-20261001/sources/upstream_build_cad.py",
+      "snapshot_path": "sources/upstream_build_cad.py",
+      "sha256": "798046ca942c41a2891656ad25abd4d8392bd9067682bb2669e7ad86e47be882"
+    },
+    "upstream_native.py": {
+      "original_path": "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/native.py",
+      "snapshot_path": "sources/upstream_native.py",
+      "sha256": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07"
+    },
+    "source-design.json": {
+      "original_path": "/workspace/shared/current-cache-integration-20261001/working/battery-world/configs/reference_cases/door-magnetic-v1/design.json",
+      "snapshot_path": "sources/source-design.json",
+      "sha256": "75530fcb2726bcd8ab0138e9a197fe555a72ea5e5391eb86442db95f1dc1f667"
+    },
+    "beam_rom.py": {
+      "original_path": "/workspace/shared/canonical-beam-rom-20261001/beam_rom.py",
+      "snapshot_path": "sources/beam_rom.py",
+      "sha256": "c920948956d9ee9e0ed84ddd44f4fd36179e828a5e42a038da4273ab27c9e5ec"
+    },
+    "beam-parameters.json": {
+      "original_path": "/workspace/shared/canonical-beam-rom-20261001/parameters.json",
+      "snapshot_path": "sources/beam-parameters.json",
+      "sha256": "708be72ca53a698b8c364383cd29b00611516c32a517a7f092eef5ac87c55d2c"
+    },
+    "beam-static-rom.json": {
+      "original_path": "/workspace/shared/canonical-beam-rom-20261001/outputs/canonical-static-rom.json",
+      "snapshot_path": "sources/beam-static-rom.json",
+      "sha256": "0aee8039b509c0c327e469d12bee69c8c5f92b8b2d9a3cc6b5c9d858b05af327"
+    },
+    "DoorBeam.java": {
+      "original_path": "/workspace/shared/canonical-beam-rom-20261001/sources/DoorBeam.java",
+      "snapshot_path": "sources/DoorBeam.java",
+      "sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6"
+    }
+  },
+  "mu0": "Inherited computational constant 4*pi*1e-7 H/m from upstream_native; not claimed exact post-2019 SI",
+  "material_identity": "Uniform hard-magnet M=Br/mu0 fixed in material frame, mu_rec=1, ambient mu0, no field-induced magnetization, hysteresis, steel, eddy currents or demagnetization qualification",
+  "sealed_utc": "2026-10-01T11:42:13.721595+00:00"
+}

@@ -9,6 +9,7 @@ import numpy as np
 from bfworld.agentlab.simulation_chain.pipeline import submit_candidate,implementation
 from bfworld.agentlab.simulation_chain.contracts import DEFAULT,digest,file_hash,write_json
 from bfworld.agentlab.simulation_chain import solver
+from bfworld.agentlab.simulation_chain.cache import Cache
 from bfworld.agentlab.runtime_config import HOME_ROOT
 
 def acceptance(root):
@@ -52,7 +53,8 @@ def acceptance(root):
     }
     # Native passive-load comparison against independently integrated ODE; this
     # catches sign errors, duplicate Cp and a disconnected electrical back-action.
-    beam=cache/'beam'/key(baseline,'beam');force=cache/'force'/key(baseline,'force');fw=cache/'firmware'/key(baseline,'firmware')
+    checkpoint_root=Cache(cache).root
+    beam=checkpoint_root/'beam'/key(baseline,'beam');force=checkpoint_root/'force'/key(baseline,'force');fw=checkpoint_root/'firmware'/key(baseline,'firmware')
     rom=json.loads((beam/'rom.json').read_text());passive={};max_errors={}
     from scipy.integrate import solve_ivp
     from scipy.interpolate import RegularGridInterpolator

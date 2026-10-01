@@ -1,0 +1,108 @@
+{
+  "source_commit": "338d60384d5805abf1e02252a4513860066a2c39",
+  "root": "/Users/depengsu/Documents/bf-agent-workbench/verification/closed-simulation-20260930",
+  "purpose": "Small read-only evidence packet first; no licensed tool, credential, installation or1.4GB archive required for initial reconciliation",
+  "priority_1_small_existing_files": [
+    "final-receipt.json",
+    "acceptance-v2/receipt.json",
+    "acceptance-v2/cases.json",
+    "acceptance-v2/uncertainty.json",
+    "acceptance-v2/schema-validation.json"
+  ],
+  "cases": [
+    "baseline",
+    "positive-module"
+  ],
+  "case_files": [
+    "result.json",
+    "design-spec.json",
+    "convergence.json",
+    "coupling-iterations.json",
+    "energy.json",
+    "receiver.json",
+    "program.csv",
+    "waveform.csv",
+    "system.cir",
+    "trace.jsonl",
+    "policy.h",
+    "program.c",
+    "magnetic-confirmation.json"
+  ],
+  "cache_resolution": "Read each case result.json stages.<stage>.key; request only referenced directories under acceptance-v2/cache/<stage>/<key>",
+  "small_stage_files": {
+    "beam": [
+      "checkpoint.json",
+      "rom.json",
+      "DoorBeam.java",
+      "solve.log",
+      "solver.log"
+    ],
+    "force": [
+      "checkpoint.json",
+      "force-table.npz",
+      "force-domain.json"
+    ],
+    "firmware": [
+      "checkpoint.json",
+      "build-receipt.json",
+      "program.c",
+      "policy.h",
+      "receiver.py",
+      "host-build.log",
+      "arm-build.log",
+      "compiler.log"
+    ],
+    "magnetic-confirmation": [
+      "checkpoint.json",
+      "magnetic-confirmation.json",
+      "DoorMagnetic.java",
+      "solve.log",
+      "solver.log"
+    ],
+    "joint": [
+      "checkpoint.json",
+      "solve.json",
+      "coupling-iterations.json",
+      "energy.json",
+      "program.csv",
+      "receiver.json",
+      "system.cir",
+      "system.log",
+      "load.pwl"
+    ],
+    "numerical": [
+      "checkpoint.json",
+      "solve.json",
+      "coupling-iterations.json",
+      "energy.json",
+      "program.csv",
+      "receiver.json",
+      "system.cir",
+      "system.log",
+      "load.pwl"
+    ]
+  },
+  "raw_evidence_followup": "To independently recompute native transient extrema, mechanical/piezo ledger and sub-gridbrownout handling, obtain system.raw ONLY for the referenced joint and numerical stages of baseline and positive-module. The root copies are final iterations, so full iteration archives are unnecessary for this first audit. If these4RAWfiles are large, start withbaselinecoarse/fine2RAWfiles; positive-module RAW can follow. Do not report full raw-nativevalidation from CSVonly.",
+  "not_initially_needed": [
+    "engineering-evidence.zip wholes",
+    "COMSOLmodel.mph bulk files",
+    "commercialtool binaries or licensefiles",
+    "encryptedPMICmodel redistribution",
+    "runtimeSQLite databases",
+    "provider credentials",
+    "oldartifactsets"
+  ],
+  "optional_backreaction_evidence": [
+    "acceptance-v2/passive-100000/solve.json",
+    "acceptance-v2/passive-100000/waveform.csv",
+    "acceptance-v2/passive-100000/system.raw",
+    "acceptance-v2/passive-100000/system.cir",
+    "acceptance-v2/passive-100000/system.log",
+    "acceptance-v2/passive-1000000/solve.json",
+    "acceptance-v2/passive-1000000/waveform.csv",
+    "acceptance-v2/passive-1000000/system.raw",
+    "acceptance-v2/passive-1000000/system.cir",
+    "acceptance-v2/passive-1000000/system.log"
+  ],
+  "verification_limit": "Small JSON/CSV/log packet can check provenance,reportednumbers,policy andstageconsistency. NativeRAW is needed to independently recompute transient/energyclaims. COMSOLfieldconvergence andnative rerun still require correspondingnative files andlegallyavailabletools; no such rerun is claimed here."
+}

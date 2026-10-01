@@ -1,0 +1,807 @@
+{
+  "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+  "cases": {
+    "cin47": [
+      {
+        "status": "TRAJECTORY_CHECKS_PASS",
+        "exception": null,
+        "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+        "case": {
+          "id": "cin47",
+          "cin_F": 4.7e-05
+        },
+        "resolution": "coarse",
+        "settings": {
+          "method": "SciPy Radau",
+          "max_step_s": 0.002,
+          "first_step_s": 1e-05,
+          "rtol": 1e-06,
+          "atol": [
+            1e-10,
+            1e-08,
+            1e-14,
+            1e-08,
+            1e-12,
+            1e-12,
+            1e-12,
+            1e-12
+          ]
+        },
+        "initial_components_J": [
+          0.0,
+          0.0014855861520281061,
+          0.0,
+          0.0,
+          -0.007711207266181439
+        ],
+        "initial_total_J": -0.006225621114153333,
+        "final_state": [
+          -7.559223117711865e-08,
+          1.0067448819271626e-05,
+          5.4397031882586165e-12,
+          0.14236431113845646,
+          7.499381438790716e-05,
+          1.379585067484469e-05,
+          0.006090728797145577,
+          0.00022540404751383996
+        ],
+        "last_accepted_t_s": 4.0,
+        "maxima": {
+          "q_min_m": -0.005975637729467595,
+          "q_max_m": 0.004650083403466231,
+          "Vp_min_V": -2.988550988673236,
+          "Vp_max_V": 5.783375381039385,
+          "Vs_peak_V": 0.14236431116376005
+        },
+        "max_energy_residual_J": 3.6787067641229354e-11,
+        "max_energy_scale_J": 0.00786465088243728,
+        "rhs_evaluations": 29369,
+        "force_evaluations": 41628,
+        "accepted_steps": 3171,
+        "wall_s": 70.25206588899891,
+        "last_rhs": {
+          "t_s": 4.0,
+          "state": [
+            -7.559223117711865e-08,
+            1.0067448819271626e-05,
+            5.4397031882586165e-12,
+            0.14236431113845646,
+            7.499381438790716e-05,
+            1.379585067484469e-05,
+            0.006090728797145577,
+            0.00022540404751383996
+          ],
+          "rhs": [
+            1.0067448819271626e-05,
+            0.0002459943479107061,
+            0.0,
+            0.0,
+            3.529084266611509e-12,
+            0.0,
+            -0.0,
+            0.0
+          ]
+        },
+        "state_names": [
+          "q_m",
+          "qdot_m_s",
+          "Q_C",
+          "Vs_V",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J"
+        ],
+        "quadrature_columns": [
+          "t_s",
+          "q_m",
+          "Fq6_N",
+          "Fq10_N",
+          "U6_J",
+          "U10_J",
+          "dU_da6_J_rad",
+          "dU_da10_J_rad",
+          "Ftip6_N_x",
+          "Ftip6_N_y",
+          "Ftip6_N_z",
+          "tauTip6_Nm_x",
+          "tauTip6_Nm_y",
+          "tauTip6_Nm_z",
+          "tauDriver6_Nm_x",
+          "tauDriver6_Nm_y",
+          "tauDriver6_Nm_z",
+          "Ftip10_N_x",
+          "Ftip10_N_y",
+          "Ftip10_N_z",
+          "tauTip10_Nm_x",
+          "tauTip10_Nm_y",
+          "tauTip10_Nm_z",
+          "tauDriver10_Nm_x",
+          "tauDriver10_Nm_y",
+          "tauDriver10_Nm_z",
+          "dDriverCenter_da_m_rad_x",
+          "dDriverCenter_da_m_rad_y",
+          "dDriverCenter_da_m_rad_z",
+          "adot_rad_s",
+          "qdot_m_s",
+          "Vp_V",
+          "Vs_V",
+          "bridge_current_A",
+          "Pdriver_translation_W",
+          "Pdriver_rotation_W",
+          "Pmechanical_loss_W",
+          "Presistor_loss_W"
+        ],
+        "ledger_columns": [
+          "t_s",
+          "kinetic_J",
+          "elastic_J",
+          "piezo_J",
+          "storage_J",
+          "mutual_magnetic_J",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J",
+          "residual_J",
+          "scale_J"
+        ],
+        "independent_simpson_ledger_J": [
+          7.499381127828178e-05,
+          1.3795851674793357e-05,
+          0.0060907287676902205,
+          0.00022540404733314618
+        ],
+        "new_dynamic_trajectories": 1,
+        "native_equivalent": false,
+        "physical_qualified": false,
+        "assumed_q_only_path": true,
+        "final_storage_J": 4.762885315192901e-07,
+        "final_components_J": [
+          4.405581611051074e-13,
+          2.4903265553234097e-13,
+          5.136651001187615e-15,
+          4.7628853151929007e-07,
+          1.2457690561946486e-06
+        ],
+        "minimum_continuous_path_clearance_lower_bound_m": 0.032735128088902735,
+        "independent_simpson_minus_ode_ledger_J": [
+          -3.1096253772910226e-12,
+          9.999486658075936e-13,
+          -2.945535655662912e-11,
+          -1.8069378458773766e-13
+        ],
+        "jacobian_evaluations": 300
+      },
+      {
+        "status": "TRAJECTORY_CHECKS_PASS",
+        "exception": null,
+        "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+        "case": {
+          "id": "cin47",
+          "cin_F": 4.7e-05
+        },
+        "resolution": "fine",
+        "settings": {
+          "method": "SciPy Radau",
+          "max_step_s": 0.001,
+          "first_step_s": 5e-06,
+          "rtol": 2.5e-07,
+          "atol": [
+            2.5e-11,
+            2.5e-09,
+            2.5e-15,
+            2.5e-09,
+            2.5e-13,
+            2.5e-13,
+            2.5e-13,
+            2.5e-13
+          ]
+        },
+        "initial_components_J": [
+          0.0,
+          0.0014855861520281061,
+          0.0,
+          0.0,
+          -0.007711207266181439
+        ],
+        "initial_total_J": -0.006225621114153333,
+        "final_state": [
+          -7.559122632713959e-08,
+          1.0067577976419424e-05,
+          5.431594486492924e-12,
+          0.14236431619444423,
+          7.499381954885664e-05,
+          1.3795851737815891e-05,
+          0.006090728797338097,
+          0.0002254040475117839
+        ],
+        "last_accepted_t_s": 4.0,
+        "maxima": {
+          "q_min_m": -0.005975637730631125,
+          "q_max_m": 0.004650083449699978,
+          "Vp_min_V": -2.9885502148165277,
+          "Vp_max_V": 5.783374597482481,
+          "Vs_peak_V": 0.1423643161960037
+        },
+        "max_energy_residual_J": 8.824229107834425e-12,
+        "max_energy_scale_J": 0.00786465074337333,
+        "rhs_evaluations": 43341,
+        "force_evaluations": 61045,
+        "accepted_steps": 5027,
+        "wall_s": 106.4039079570066,
+        "last_rhs": {
+          "t_s": 4.0,
+          "state": [
+            -7.559122632713959e-08,
+            1.0067577976419424e-05,
+            5.431594486492924e-12,
+            0.14236431619444423,
+            7.499381954885664e-05,
+            1.3795851737815891e-05,
+            0.006090728797338097,
+            0.0002254040475117839
+          ],
+          "rhs": [
+            1.0067577976419424e-05,
+            0.0002459960655166647,
+            0.0,
+            0.0,
+            3.5291748177313034e-12,
+            0.0,
+            -0.0,
+            0.0
+          ]
+        },
+        "state_names": [
+          "q_m",
+          "qdot_m_s",
+          "Q_C",
+          "Vs_V",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J"
+        ],
+        "quadrature_columns": [
+          "t_s",
+          "q_m",
+          "Fq6_N",
+          "Fq10_N",
+          "U6_J",
+          "U10_J",
+          "dU_da6_J_rad",
+          "dU_da10_J_rad",
+          "Ftip6_N_x",
+          "Ftip6_N_y",
+          "Ftip6_N_z",
+          "tauTip6_Nm_x",
+          "tauTip6_Nm_y",
+          "tauTip6_Nm_z",
+          "tauDriver6_Nm_x",
+          "tauDriver6_Nm_y",
+          "tauDriver6_Nm_z",
+          "Ftip10_N_x",
+          "Ftip10_N_y",
+          "Ftip10_N_z",
+          "tauTip10_Nm_x",
+          "tauTip10_Nm_y",
+          "tauTip10_Nm_z",
+          "tauDriver10_Nm_x",
+          "tauDriver10_Nm_y",
+          "tauDriver10_Nm_z",
+          "dDriverCenter_da_m_rad_x",
+          "dDriverCenter_da_m_rad_y",
+          "dDriverCenter_da_m_rad_z",
+          "adot_rad_s",
+          "qdot_m_s",
+          "Vp_V",
+          "Vs_V",
+          "bridge_current_A",
+          "Pdriver_translation_W",
+          "Pdriver_rotation_W",
+          "Pmechanical_loss_W",
+          "Presistor_loss_W"
+        ],
+        "ledger_columns": [
+          "t_s",
+          "kinetic_J",
+          "elastic_J",
+          "piezo_J",
+          "storage_J",
+          "mutual_magnetic_J",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J",
+          "residual_J",
+          "scale_J"
+        ],
+        "independent_simpson_ledger_J": [
+          7.499381891027971e-05,
+          1.3795852001819577e-05,
+          0.0060907287928931774,
+          0.00022540404748321423
+        ],
+        "new_dynamic_trajectories": 1,
+        "native_equivalent": false,
+        "physical_qualified": false,
+        "assumed_q_only_path": true,
+        "final_storage_J": 4.762885653495248e-07,
+        "final_components_J": [
+          4.4056946518055835e-13,
+          2.490260347780234e-13,
+          5.142464378502725e-15,
+          4.7628856534952483e-07,
+          1.2457690561990328e-06
+        ],
+        "minimum_continuous_path_clearance_lower_bound_m": 0.03292347277272159,
+        "independent_simpson_minus_ode_ledger_J": [
+          -6.385769327601001e-13,
+          2.6400368639801185e-13,
+          -4.444919259050106e-12,
+          -2.8569675921893967e-14
+        ],
+        "jacobian_evaluations": 290
+      }
+    ],
+    "cin10": [
+      {
+        "status": "TRAJECTORY_CHECKS_PASS",
+        "exception": null,
+        "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+        "case": {
+          "id": "cin10",
+          "cin_F": 1e-05
+        },
+        "resolution": "coarse",
+        "settings": {
+          "method": "SciPy Radau",
+          "max_step_s": 0.002,
+          "first_step_s": 1e-05,
+          "rtol": 1e-06,
+          "atol": [
+            1e-10,
+            1e-08,
+            1e-14,
+            1e-08,
+            1e-12,
+            1e-12,
+            1e-12,
+            1e-12
+          ]
+        },
+        "initial_components_J": [
+          0.0,
+          0.0014855861520281061,
+          0.0,
+          0.0,
+          -0.007711207266181439
+        ],
+        "initial_total_J": -0.006225621114153333,
+        "final_state": [
+          1.3112282215891724e-08,
+          9.366956688431732e-06,
+          2.274748724297051e-10,
+          0.5918389993178806,
+          7.441602986293178e-05,
+          1.3480293592883728e-05,
+          0.0060911043847369775,
+          0.0002254101969530756
+        ],
+        "last_accepted_t_s": 4.0,
+        "maxima": {
+          "q_min_m": -0.005975636508588533,
+          "q_max_m": 0.004649543361132411,
+          "Vp_min_V": -3.2234283987827386,
+          "Vp_max_V": 5.84373760675108,
+          "Vs_peak_V": 0.5918390001727503
+        },
+        "max_energy_residual_J": 3.636961413457096e-11,
+        "max_energy_scale_J": 0.007864586778194039,
+        "rhs_evaluations": 25744,
+        "force_evaluations": 37572,
+        "accepted_steps": 2992,
+        "wall_s": 68.17102340499696,
+        "last_rhs": {
+          "t_s": 4.0,
+          "state": [
+            1.3112282215891724e-08,
+            9.366956688431732e-06,
+            2.274748724297051e-10,
+            0.5918389993178806,
+            7.441602986293178e-05,
+            1.3480293592883728e-05,
+            0.0060911043847369775,
+            0.0002254101969530756
+          ],
+          "rhs": [
+            9.366956688431732e-06,
+            -0.001024202522265098,
+            -0.0,
+            0.0,
+            3.0550631502646646e-12,
+            0.0,
+            -0.0,
+            0.0
+          ]
+        },
+        "state_names": [
+          "q_m",
+          "qdot_m_s",
+          "Q_C",
+          "Vs_V",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J"
+        ],
+        "quadrature_columns": [
+          "t_s",
+          "q_m",
+          "Fq6_N",
+          "Fq10_N",
+          "U6_J",
+          "U10_J",
+          "dU_da6_J_rad",
+          "dU_da10_J_rad",
+          "Ftip6_N_x",
+          "Ftip6_N_y",
+          "Ftip6_N_z",
+          "tauTip6_Nm_x",
+          "tauTip6_Nm_y",
+          "tauTip6_Nm_z",
+          "tauDriver6_Nm_x",
+          "tauDriver6_Nm_y",
+          "tauDriver6_Nm_z",
+          "Ftip10_N_x",
+          "Ftip10_N_y",
+          "Ftip10_N_z",
+          "tauTip10_Nm_x",
+          "tauTip10_Nm_y",
+          "tauTip10_Nm_z",
+          "tauDriver10_Nm_x",
+          "tauDriver10_Nm_y",
+          "tauDriver10_Nm_z",
+          "dDriverCenter_da_m_rad_x",
+          "dDriverCenter_da_m_rad_y",
+          "dDriverCenter_da_m_rad_z",
+          "adot_rad_s",
+          "qdot_m_s",
+          "Vp_V",
+          "Vs_V",
+          "bridge_current_A",
+          "Pdriver_translation_W",
+          "Pdriver_rotation_W",
+          "Pmechanical_loss_W",
+          "Presistor_loss_W"
+        ],
+        "ledger_columns": [
+          "t_s",
+          "kinetic_J",
+          "elastic_J",
+          "piezo_J",
+          "storage_J",
+          "mutual_magnetic_J",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J",
+          "residual_J",
+          "scale_J"
+        ],
+        "independent_simpson_ledger_J": [
+          7.441602670818466e-05,
+          1.348029527651465e-05,
+          0.006091104362991764,
+          0.00022541019682263994
+        ],
+        "new_dynamic_trajectories": 1,
+        "native_equivalent": false,
+        "physical_qualified": false,
+        "assumed_q_only_path": true,
+        "final_storage_J": 1.7513670055679518e-06,
+        "final_components_J": [
+          3.8138307330158767e-13,
+          7.493048563696124e-15,
+          1.4206678497882402e-12,
+          1.7513670055679516e-06,
+          1.245769436639307e-06
+        ],
+        "minimum_continuous_path_clearance_lower_bound_m": 0.03273080445945242,
+        "independent_simpson_minus_ode_ledger_J": [
+          -3.1547471205468566e-12,
+          1.6836309212428123e-12,
+          -2.1745213268919983e-11,
+          -1.3043564709228073e-13
+        ],
+        "jacobian_evaluations": 187
+      },
+      {
+        "status": "TRAJECTORY_CHECKS_PASS",
+        "exception": null,
+        "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+        "case": {
+          "id": "cin10",
+          "cin_F": 1e-05
+        },
+        "resolution": "fine",
+        "settings": {
+          "method": "SciPy Radau",
+          "max_step_s": 0.001,
+          "first_step_s": 5e-06,
+          "rtol": 2.5e-07,
+          "atol": [
+            2.5e-11,
+            2.5e-09,
+            2.5e-15,
+            2.5e-09,
+            2.5e-13,
+            2.5e-13,
+            2.5e-13,
+            2.5e-13
+          ]
+        },
+        "initial_components_J": [
+          0.0,
+          0.0014855861520281061,
+          0.0,
+          0.0,
+          -0.007711207266181439
+        ],
+        "initial_total_J": -0.006225621114153333,
+        "final_state": [
+          1.3113557539131015e-08,
+          9.367058411289918e-06,
+          2.274761936572542e-10,
+          0.5918392029724753,
+          7.44160336412171e-05,
+          1.3480296141337245e-05,
+          0.006091104387427048,
+          0.00022541019692641457
+        ],
+        "last_accepted_t_s": 4.0,
+        "maxima": {
+          "q_min_m": -0.005975636501998362,
+          "q_max_m": 0.004649543368933078,
+          "Vp_min_V": -3.2234291065295864,
+          "Vp_max_V": 5.843736967206478,
+          "Vs_peak_V": 0.5918392033591211
+        },
+        "max_energy_residual_J": 8.906644302295041e-12,
+        "max_energy_scale_J": 0.00786458678126094,
+        "rhs_evaluations": 39726,
+        "force_evaluations": 57335,
+        "accepted_steps": 4924,
+        "wall_s": 99.8476697080041,
+        "last_rhs": {
+          "t_s": 4.0,
+          "state": [
+            1.3113557539131015e-08,
+            9.367058411289918e-06,
+            2.274761936572542e-10,
+            0.5918392029724753,
+            7.44160336412171e-05,
+            1.3480296141337245e-05,
+            0.006091104387427048,
+            0.00022541019692641457
+          ],
+          "rhs": [
+            9.367058411289918e-06,
+            -0.0010242182986413746,
+            -0.0,
+            0.0,
+            3.0551295051018576e-12,
+            0.0,
+            -0.0,
+            0.0
+          ]
+        },
+        "state_names": [
+          "q_m",
+          "qdot_m_s",
+          "Q_C",
+          "Vs_V",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J"
+        ],
+        "quadrature_columns": [
+          "t_s",
+          "q_m",
+          "Fq6_N",
+          "Fq10_N",
+          "U6_J",
+          "U10_J",
+          "dU_da6_J_rad",
+          "dU_da10_J_rad",
+          "Ftip6_N_x",
+          "Ftip6_N_y",
+          "Ftip6_N_z",
+          "tauTip6_Nm_x",
+          "tauTip6_Nm_y",
+          "tauTip6_Nm_z",
+          "tauDriver6_Nm_x",
+          "tauDriver6_Nm_y",
+          "tauDriver6_Nm_z",
+          "Ftip10_N_x",
+          "Ftip10_N_y",
+          "Ftip10_N_z",
+          "tauTip10_Nm_x",
+          "tauTip10_Nm_y",
+          "tauTip10_Nm_z",
+          "tauDriver10_Nm_x",
+          "tauDriver10_Nm_y",
+          "tauDriver10_Nm_z",
+          "dDriverCenter_da_m_rad_x",
+          "dDriverCenter_da_m_rad_y",
+          "dDriverCenter_da_m_rad_z",
+          "adot_rad_s",
+          "qdot_m_s",
+          "Vp_V",
+          "Vs_V",
+          "bridge_current_A",
+          "Pdriver_translation_W",
+          "Pdriver_rotation_W",
+          "Pmechanical_loss_W",
+          "Presistor_loss_W"
+        ],
+        "ledger_columns": [
+          "t_s",
+          "kinetic_J",
+          "elastic_J",
+          "piezo_J",
+          "storage_J",
+          "mutual_magnetic_J",
+          "Dmechanical_J",
+          "Dresistor_J",
+          "Wdriver_translation_J",
+          "Wdriver_rotation_J",
+          "residual_J",
+          "scale_J"
+        ],
+        "independent_simpson_ledger_J": [
+          7.441603270648203e-05,
+          1.3480296594163634e-05,
+          0.0060911043834147,
+          0.00022541019690179524
+        ],
+        "new_dynamic_trajectories": 1,
+        "native_equivalent": false,
+        "physical_qualified": false,
+        "assumed_q_only_path": true,
+        "final_storage_J": 1.751368210875474e-06,
+        "final_components_J": [
+          3.813913568003215e-13,
+          7.494506208296582e-15,
+          1.4206881255285638e-12,
+          1.7513682108754742e-06,
+          1.2457694366447078e-06
+        ],
+        "minimum_continuous_path_clearance_lower_bound_m": 0.03299424800395204,
+        "independent_simpson_minus_ode_ledger_J": [
+          -9.347350774261895e-13,
+          4.528263885823086e-13,
+          -4.012347745718792e-12,
+          -2.4619331096334407e-14
+        ],
+        "jacobian_evaluations": 169
+      }
+    ]
+  },
+  "gates": {
+    "cin47": {
+      "q_m": {
+        "sup_abs_delta": 4.704440474331828e-10,
+        "threshold": 3.08781723211027e-05,
+        "pass": true
+      },
+      "Vs_V": {
+        "sup_abs_delta": 2.008940389042202e-08,
+        "threshold": 0.0008118215809722212,
+        "pass": true
+      },
+      "Vp_V": {
+        "sup_abs_delta": 3.322840223438095e-05,
+        "threshold": 0.05882276553344043,
+        "pass": true
+      },
+      "final_storage_J": {
+        "abs_delta": 3.3830234656612087e-14,
+        "threshold": 3.381442826747624e-09,
+        "pass": true
+      },
+      "maxima.Vs_peak_V": {
+        "abs_delta": 5.032243649560897e-09,
+        "threshold": 0.0008118215809800185,
+        "pass": true
+      },
+      "Dmechanical_J": {
+        "abs_delta": 5.1609494808183345e-12,
+        "threshold": 3.7596909774428325e-07,
+        "pass": true
+      },
+      "Dresistor_J": {
+        "abs_delta": 1.062971200183017e-12,
+        "threshold": 6.997925868907945e-08,
+        "pass": true
+      },
+      "Wdriver_translation_J": {
+        "abs_delta": 1.9251961136390605e-13,
+        "threshold": 3.045464398669048e-05,
+        "pass": true
+      },
+      "Wdriver_rotation_J": {
+        "abs_delta": 2.0560538948471985e-15,
+        "threshold": 1.1280202375589196e-06,
+        "pass": true
+      }
+    },
+    "cin10": {
+      "q_m": {
+        "sup_abs_delta": 3.544207527288179e-10,
+        "threshold": 3.087816623352984e-05,
+        "pass": true
+      },
+      "Vs_V": {
+        "sup_abs_delta": 3.27409818645652e-07,
+        "threshold": 0.0030591960148623762,
+        "pass": true
+      },
+      "Vp_V": {
+        "sup_abs_delta": 7.697581234133999e-05,
+        "threshold": 0.05943476138775994,
+        "pass": true
+      },
+      "final_storage_J": {
+        "abs_delta": 1.2053075221178503e-12,
+        "threshold": 9.756841054377371e-09,
+        "pass": true
+      },
+      "maxima.Vs_peak_V": {
+        "abs_delta": 2.0318637083960311e-07,
+        "threshold": 0.0030591960167956054,
+        "pass": true
+      },
+      "Dmechanical_J": {
+        "abs_delta": 3.778285328917899e-12,
+        "threshold": 3.7308016820608553e-07,
+        "pass": true
+      },
+      "Dresistor_J": {
+        "abs_delta": 2.548453517035561e-12,
+        "threshold": 6.840148070668622e-08,
+        "pass": true
+      },
+      "Wdriver_translation_J": {
+        "abs_delta": 2.6900703886667543e-12,
+        "threshold": 3.045652193713524e-05,
+        "pass": true
+      },
+      "Wdriver_rotation_J": {
+        "abs_delta": 2.6661019312396173e-14,
+        "threshold": 1.128050984632073e-06,
+        "pass": true
+      }
+    }
+  },
+  "all_pass": true,
+  "effects": {
+    "final_storage_J": {
+      "cin10_minus_cin47": 1.275079645525949e-06,
+      "coarse_fine_delta_sum": 1.2391377567744624e-12,
+      "effect_exceeds_five_times_observed_resolution_delta": true,
+      "empirical_only_not_error_bound": true,
+      "resolved_difference_admitted": true
+    },
+    "maxima.Vs_peak_V": {
+      "cin10_minus_cin47": 0.4494748871631174,
+      "coarse_fine_delta_sum": 2.08218614489164e-07,
+      "effect_exceeds_five_times_observed_resolution_delta": true,
+      "empirical_only_not_error_bound": true,
+      "resolved_difference_admitted": true
+    }
+  },
+  "claim": "Numerically checked conditional passive comparison on assumed q-only path; only effects individually marked resolved_difference_admitted have a resolved direction"
+}

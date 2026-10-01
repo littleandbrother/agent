@@ -1,0 +1,36 @@
+--- pinned-upstream
++++ isolated-protocol-overlay
+@@ -9,7 +9,7 @@
+ 	remainingExperiments: number;
+ }
+ 
+-export function initialState(): SolverState {
++export function initialState(budget: {solver_calls: number}): SolverState {
+ 	return {
+ 		current: null,
+ 		bestVerified: null,
+@@ -17,7 +17,7 @@
+ 		facts: [],
+ 		hypotheses: [],
+ 		plan: [],
+-		remainingExperiments: 6,
++		remainingExperiments: budget.solver_calls,
+ 	};
+ }
+ 
+@@ -37,12 +37,13 @@
+ 
+ export function solverPrompt(task: any, state: SolverState): string {
+ 	return `You solve one declared computational battery-free AIoT design task independently.
+-Read task.json, design.json and policy.py. Edit actual design parameters and/or the Python plan(obs).
++Read task.json and candidate.json. Use the registered magnetic candidate contract. Unsupported architecture or model regions are insufficient evidence, never silently restricted or scored as design failure.
+ First execute the provided baseline unchanged and inspect it. If it fails, choose and execute a source revision using the observed result. If it passes, unnecessary changes are not required.
+ Use bf_experiment to execute current files, bf_job to reconcile, bf_inspect_run to read verified facts, and bf_submit to seal current files against their exact completed run.
+ Execution success and design success differ. Do not claim hardware or a trained-model result.
+ Use observations to decide your next revision. Keep hypotheses separate from facts in notes.md.
+-The experiment limit is 6. Finish within 24 model requests and 10 minutes. No internet access.
++Use only the explicit execution packet limits. No internet access. A blocked native request is not a completed experiment.
++Execution contract: ${JSON.stringify(task.execution_contract)}
+ If no design passes, submit the best actually evaluated design and state the failure. Required but unavailable assets must be reported as NOT_EVALUATED; never replace them with synthetic defaults.
+ When work is interrupted, use persisted operation IDs and pending jobs; never invent or redispatch unknown work.
+ Task: ${JSON.stringify(task)}

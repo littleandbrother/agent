@@ -1,0 +1,562 @@
+--- a/pi-overlay/packages/bf-agent/src/main.ts
++++ b/pi-overlay/packages/bf-agent/src/main.ts
+@@ -12,6 +12,7 @@
+ 	SettingsManager,
+ } from "@earendil-works/pi-coding-agent";
+ import { Type } from "typebox";
++import { verifyMethodBinding, methodEvent, activationDigest } from "./method-activation.js";
+ 
+ const config = JSON.parse(fs.readFileSync(process.argv[2] === "-" ? 0 : process.argv[2], "utf8"));
+ const cwd = path.resolve(config.workspace);
+@@ -34,6 +35,9 @@
+ 
+ const sha = (file: string) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+ 
++if (config.sourceManifest.app_auxiliary_files?.["method-activation.js"] !==
++    sha(path.join(path.dirname(process.argv[1]), "method-activation.js")))
++    throw new Error("METHOD_ACTIVATION_IMPLEMENTATION_DRIFT");
+ // Controlled activation evidence is emitted only after actual import/call.
+ // A trusted supervisor binds the fresh process, nonce, exit status and trace.
+ const binding = config.controlledActivation;
+@@ -72,9 +76,26 @@
+ evidence("post_import", "solver");
+ const improver = await import(pathToFileURL(config.improverModule).href);
+ evidence("post_import", "improver");
+-let state = fs.existsSync(path.join(cwd, "state.json"))
+-	? JSON.parse(fs.readFileSync(path.join(cwd, "state.json"), "utf8"))
+-	: invoke("solver.initialState", () => solver.initialState(profile.budget));
++const harnessRoot = path.resolve(path.dirname(config.solverModule), "..");
++const methodProfile = solver.validateProfile(verifyMethodBinding(packet.method_binding, {
++    method_source_sha256: sha(path.join(harnessRoot, "src/method.ts")),
++    method_build_sha256: sha(path.join(harnessRoot, "dist/method.js")),
++    solver_source_sha256: sha(path.join(harnessRoot, "src/solver.ts")),
++    solver_build_sha256: sha(config.solverModule),
++}, config.sourceManifest));
++const methodMeta = { pid: process.pid, nonce: binding.nonce, packet_id: packet.packet_id };
++console.log(JSON.stringify(methodEvent("post_import", "solver.method", packet.method_binding, methodMeta)));
++const capability = solver.capabilityAdmission(packet.capability_admission?.required);
++if (activationDigest(capability) !== activationDigest(packet.capability_admission))
++    throw new Error("PROVIDER_CAPABILITY_RECEIPT_DRIFT");
++// Participant-writable state.json cannot authenticate past observations or branch use.
++// This new method version supports fresh episodes only until a controller-owned
++// checkpoint binds restored state, artifacts, observations and cumulative budgets.
++if (fs.existsSync(path.join(cwd, "state.json")))
++    throw new Error("METHOD_RESUME_REQUIRES_TRUSTED_CHECKPOINT");
++let state = invoke("solver.initialState", () => solver.initialState(profile.budget, methodProfile));
++if (activationDigest(solver.validateProfile(state.methodProfile)) !== activationDigest(methodProfile))
++    throw new Error("RESUMED_METHOD_PROFILE_DRIFT");
+ const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify(state, null, 2));
+ const api = async (route: string, body?: unknown) => {
+ 	const response = await fetch(config.service + route, {
+@@ -92,6 +113,10 @@
+ 	Object.fromEntries(
+ 		["candidate.json"].map((name) => [name, fs.readFileSync(path.join(cwd, name), "utf8")]),
+ 	);
++const artifactHashes = () => Object.fromEntries(Object.entries(files()).map(([name, contents]) =>
++    [name, crypto.createHash("sha256").update(contents).digest("hex")]));
++state.methodCheckpoint ??= artifactHashes();
++state.methodOpportunities ??= [];
+ const compact = (job: any) => ({
+ 	...job,
+ 	result: job.result ? { ...job.result, channels: undefined, policy: undefined, decisions: undefined } : null,
+@@ -151,7 +176,27 @@
+ 		async execute(_id, { operation_id }) { return experiment(operation_id);
+ 		},
+ 	});
+-const tools = [experimentTool,
++const tools = [
++    defineTool({
++        name: "bf_record_revision", label: "Record method revision",
++        description: "Record a public-observation-grounded revision with actual before/after artifact hashes. Does not execute, validate or accept a design; unsupported architecture remains a proposal.",
++        executionMode: "sequential",
++        parameters: Type.Object({ record: Type.Any() }),
++        async execute(_id, { record }) {
++            if (Buffer.byteLength(JSON.stringify(record)) > 100000) throw new Error("REVISION_RECORD_TOO_LARGE");
++            const result = solver.revisionRecord(record, { profile: methodProfile,
++                previous_artifacts: state.methodCheckpoint, current_artifacts: artifactHashes(),
++                observation_ids: state.facts.map((f: any) => f.run_id), round: 1,
++                used_opportunities: state.methodOpportunities });
++            state.methodOpportunities.push(record.opportunity);
++            state.methodCheckpoint = result.after_artifacts;
++            fs.appendFileSync(path.join(cwd, "method-revisions.jsonl"), JSON.stringify(result) + "\n");
++            console.log(JSON.stringify({ type: "method_revision", packet_id: packet.packet_id,
++                method_binding_id: packet.method_binding.binding_id, record: result }));
++            save();
++            return reply(result);
++        },
++    }),experimentTool,
+ 	defineTool({
+ 		name: "bf_job",
+ 		label: "Job",
+@@ -248,6 +293,8 @@
+ const prompt =
+ 	config.mode === "solve" ? invoke("solver.solverPrompt", () => solver.solverPrompt(task, state))
+     : invoke("improver.improvementPrompt", () => improver.improvementPrompt(config.improvementContext));
++if (config.mode === "solve")
++    console.log(JSON.stringify(methodEvent("invoked", "solver.solverPrompt", packet.method_binding, methodMeta, prompt)));
+ const resources: ResourceLoader = {
+ 	getExtensions: () => ({ extensions: [], errors: [], runtime: createExtensionRuntime() }),
+ 	getSkills: () => ({ skills: [], diagnostics: [] }),
+--- /dev/null
++++ b/pi-overlay/packages/bf-agent/src/method-activation.ts
+@@ -0,0 +1,40 @@
++/** Pure post-import method evidence; no SDK/session/provider creation. */
++import crypto from "node:crypto";
++const ordered = (value: any): any => Array.isArray(value) ? value.map(ordered)
++    : value && typeof value === "object" ? Object.fromEntries(Object.keys(value).sort().map(k => [k, ordered(value[k])])) : value;
++export const activationDigest = (value: unknown): string => crypto.createHash("sha256").update(JSON.stringify(ordered(value))).digest("hex");
++const isHash = (v: unknown): v is string => typeof v === "string" && /^[a-f0-9]{64}$/.test(v);
++export function verifyMethodBinding(binding: any, actual: Record<string, string>, manifest: any) {
++    if (!binding || binding.schema !== "bf-method-binding-v1") throw new Error("METHOD_BINDING_REQUIRED");
++    const body = { ...binding }; delete body.binding_id;
++    if (activationDigest(body) !== binding.binding_id) throw new Error("METHOD_BINDING_TAMPER");
++    for (const k of ["method_source_sha256", "method_build_sha256", "solver_source_sha256", "solver_build_sha256"])
++        if (!isHash(binding[k]) || actual[k] !== binding[k]) throw new Error("METHOD_SOURCE_OR_BUILD_DRIFT:" + k);
++    if (manifest.source_files?.["src/method.ts"] !== actual.method_source_sha256
++        || manifest.source_files?.["src/solver.ts"] !== actual.solver_source_sha256
++        || manifest.loaded_files?.["method.js"] !== actual.method_build_sha256
++        || manifest.loaded_modules?.solver !== actual.solver_build_sha256) throw new Error("METHOD_MANIFEST_DRIFT");
++    return JSON.parse(JSON.stringify(binding.profile));
++}
++export function methodEvent(phase: "post_import" | "invoked", entrypoint: string, binding: any, meta: any, output?: unknown) {
++    if (!isHash(binding?.binding_id) || !Number.isInteger(meta?.pid) || meta.pid <= 0 || !meta.nonce || !isHash(meta.packet_id)) throw new Error("METHOD_ACTIVATION_CONTEXT");
++    if (phase === "invoked" && output === undefined) throw new Error("METHOD_INVOCATION_OUTPUT_REQUIRED");
++    return JSON.parse(JSON.stringify({ type: "method_activation", phase, entrypoint, method_binding_id: binding.binding_id,
++        profile: binding.profile, pid: meta.pid, nonce: meta.nonce, packet_id: meta.packet_id,
++        output: phase === "invoked" ? output : null,
++        output_hash: phase === "invoked" ? activationDigest(output) : null }));
++}
++export function verifyMethodActivation(events: any[], binding: any, expected: any) {
++    if (!expected || !Number.isInteger(expected.pid) || expected.pid <= 0 || !Number.isInteger(expected.author_pid) || expected.author_pid <= 0 || typeof expected.nonce !== "string" || !expected.nonce.trim() || !isHash(expected.packet_id) || expected.exit_code !== 0 || expected.pid === expected.author_pid || expected.fresh_process !== true || expected.clean_context !== true) throw new Error("METHOD_PROCESS_NOT_QUALIFIED");
++    const rows = events.filter(e => e.type === "method_activation");
++    if (rows.length !== 2 || rows[0].phase !== "post_import" || rows[0].entrypoint !== "solver.method"
++        || rows[1].phase !== "invoked" || rows[1].entrypoint !== "solver.solverPrompt") throw new Error("METHOD_POST_IMPORT_INVOCATION_REQUIRED");
++    for (const row of rows) {
++        if (row.pid !== expected.pid || row.nonce !== expected.nonce || row.packet_id !== expected.packet_id
++            || row.method_binding_id !== binding.binding_id || activationDigest(row.profile) !== activationDigest(binding.profile)) throw new Error("METHOD_ACTIVATION_BINDING_MISMATCH");
++    }
++    if (typeof rows[1].output !== "string" || !rows[1].output || rows[1].output_hash !== activationDigest(rows[1].output)) throw new Error("METHOD_ACTIVATION_OUTPUT_TAMPER");
++    return { method_binding_id: binding.binding_id, prompt_hash: rows[1].output_hash,
++        profile: JSON.parse(JSON.stringify(binding.profile)), post_import: true, invoked: true,
++        execution_authorized: false, scientific_success: false };
++}
+--- /dev/null
++++ b/pi-overlay/packages/bf-harness/src/method.ts
+@@ -0,0 +1,108 @@
++/** Frozen prompt-first method manipulation. No model, solver or dispatch code. */
++import crypto from "node:crypto";
++
++export const METHOD_VERSION = "bf-method-policy-v1";
++export const PROFILES = Object.freeze({
++    strong_generic: Object.freeze({ R: false, Q: false }),
++    bf_design: Object.freeze({ R: true, Q: true }),
++    representation_only: Object.freeze({ R: true, Q: false }),
++    revision_only: Object.freeze({ R: false, Q: true }),
++});
++export type MethodId = keyof typeof PROFILES;
++export interface MethodProfile {
++    schema: typeof METHOD_VERSION;
++    method_id: MethodId;
++    R: boolean;
++    Q: boolean;
++    candidate_opportunities: 2;
++}
++export const ordered = (value: any): any => Array.isArray(value) ? value.map(ordered)
++    : value && typeof value === "object"
++        ? Object.fromEntries(Object.keys(value).sort().map(key => [key, ordered(value[key])])) : value;
++export const digest = (value: unknown): string => crypto.createHash("sha256").update(JSON.stringify(ordered(value))).digest("hex");
++const hash = (value: unknown): value is string => typeof value === "string" && /^[0-9a-f]{64}$/.test(value);
++const fail = (code: string): never => { throw new Error(code); };
++
++export function profile(id: string): MethodProfile {
++    if (!Object.prototype.hasOwnProperty.call(PROFILES, id)) fail("UNKNOWN_METHOD_PROFILE");
++    return { schema: METHOD_VERSION, method_id: id as MethodId, ...PROFILES[id as MethodId], candidate_opportunities: 2 };
++}
++export function validateProfile(value: MethodProfile): MethodProfile {
++    if (!value || digest(value) !== digest(profile(value.method_id))) fail("METHOD_PROFILE_DRIFT");
++    return profile(value.method_id);
++}
++export function methodInstructions(value: MethodProfile): string {
++    const p = validateProfile(value);
++    const common = `All conditions receive the same public requirements, facts, history, tools, baseline, feedback and validity checks. You may propose architecture and cross-domain changes. Never treat unsupported execution as a failed design, or a proposed change as implemented. Preserve requirements; do not lower modeled currents or change physical assumptions without artifact-bound evidence. This bounded method version has one revision round and exactly two candidate opportunities in the entire episode within the same total budget; unused opportunities are reported, not synthetically spent. Publicly select the final design using only available feedback. Record revisions with bf_record_revision, citing observed run IDs and actual changed artifacts. No representation format is part of scientific acceptance.`;
++    const representation = p.R
++        ? `R=1: Maintain method-state.json with functions, their implementing artifact IDs, resource supplies/demands, and conditional relations. Each relation names its condition, dependent artifact IDs and observed run IDs. Distinguish supported, stale, contradicted and unknown support. When artifacts change, recheck the affected relations; keep old evidence immutable. Use these relations to identify which requirements/resources conflict before choosing the next action. Relations do not add physical facts or confer validity.`
++        : `R=0: Use ordinary notes or tables for exactly the same facts and history. No special functional/resource representation procedure is imposed; the common validity checks still apply.`;
++    const revision = p.Q
++        ? `Q=1: Attribute the observed conflict to explicit requirement/condition and implementation choices. Consider one parameter-refinement opportunity and one architecture-recomposition opportunity. Refinement keeps roles/connections/implementation topology; recomposition changes functional allocation, connections or implementation. State why the chosen change addresses the conflict and what observation would falsify it. If recomposition lacks provider support, retain that proposal as insufficient_evidence/model_extension_required, never substitute a parameter edit while claiming architecture success. A second opportunity is not an extra budget.`
++        : `Q=0: Use normal feedback-driven search across two candidate opportunities. No special conflict-attribution or refinement/recomposition procedure is imposed. Architecture and cross-domain proposals remain allowed; choose them spontaneously when useful.`;
++    return [common, representation, revision].join("\n");
++}
++
++export const CURRENT_PROVIDER = Object.freeze({
++    id: "upstream-338d603-numeric-candidate-only",
++    numeric_parameters: true,
++    architecture: false,
++    candidate_artifact_sources: false,
++});
++export function capabilityAdmission(required: { architecture: boolean; candidate_artifact_sources: boolean }) {
++    if (!required || Object.keys(required).sort().join() !== "architecture,candidate_artifact_sources" || typeof required.architecture !== "boolean" || typeof required.candidate_artifact_sources !== "boolean") fail("CAPABILITY_REQUIREMENTS_REQUIRED");
++    const blockers: string[] = [];
++    if (required.architecture) blockers.push("PROVIDER_ARCHITECTURE_NOT_IMPLEMENTED");
++    if (required.candidate_artifact_sources) blockers.push("PROVIDER_CANDIDATE_SOURCES_NOT_IMPLEMENTED");
++    return { provider: CURRENT_PROVIDER, required: { ...required }, capability_compatible: blockers.length === 0,
++        blockers, execution_authorized: false, scientific_qualified: false };
++}
++
++export interface RevisionContext {
++    profile: MethodProfile;
++    previous_artifacts: Record<string, string>;
++    current_artifacts: Record<string, string>;
++    observation_ids: string[];
++    round: number;
++    used_opportunities: number[];
++}
++/** Input is untrusted participant metadata; all identities/effects come from context. */
++export function revisionRecord(input: any, context: RevisionContext) {
++    const p = validateProfile(context.profile);
++    const keys = ["opportunity", "requested_kind", "observation_ids", "rationale", "falsifier", "relations"];
++    if (!input || typeof input !== "object" || Array.isArray(input) || Object.keys(input).some(k => !keys.includes(k))) fail("REVISION_FIELDS");
++    if (![1, 2].includes(input.opportunity) || context.used_opportunities.includes(input.opportunity)) fail("REVISION_OPPORTUNITY_USED_OR_OUTSIDE_BUDGET");
++    if (!Number.isInteger(context.round) || context.round < 1) fail("REVISION_ROUND");
++    if (!["parameter_refinement", "architecture_recomposition"].includes(input.requested_kind)) fail("REVISION_KIND");
++    if (!Array.isArray(input.observation_ids) || !input.observation_ids.length || new Set(input.observation_ids).size !== input.observation_ids.length
++        || input.observation_ids.some((id: unknown) => typeof id !== "string" || !context.observation_ids.includes(id))) fail("REVISION_UNKNOWN_OBSERVATION");
++    if (typeof input.rationale !== "string" || !input.rationale.trim() || typeof input.falsifier !== "string" || !input.falsifier.trim()) fail("REVISION_REASON_REQUIRED");
++    for (const manifest of [context.previous_artifacts, context.current_artifacts]) {
++        if (!manifest || !Object.keys(manifest).length || Object.values(manifest).some(value => !hash(value))) fail("ARTIFACT_HASH_REQUIRED");
++    }
++    const artifacts = [...new Set([...Object.keys(context.previous_artifacts), ...Object.keys(context.current_artifacts)])].sort();
++    const changed = artifacts.filter(name => context.previous_artifacts[name] !== context.current_artifacts[name]);
++    const relations = input.relations ?? [];
++    if (!Array.isArray(relations) || (p.R && !relations.length)) fail("METHOD_RELATIONS_REQUIRED");
++    const relationIds = new Set<string>();
++    for (const relation of relations) {
++        if (!relation || Object.keys(relation).sort().join() !== ["id", "function", "implementation", "resource", "condition", "artifact_ids", "observation_ids"].sort().join()
++            || ["id", "function", "implementation", "resource", "condition"].some(k => typeof relation[k] !== "string" || !relation[k].trim())) fail("METHOD_RELATION_FIELDS");
++        if (relationIds.has(relation.id)) fail("METHOD_RELATION_DUPLICATE");
++        relationIds.add(relation.id);
++        if (!Array.isArray(relation.artifact_ids) || !relation.artifact_ids.length || relation.artifact_ids.some((name: string) => !artifacts.includes(name))) fail("METHOD_RELATION_UNKNOWN_ARTIFACT");
++        if (!Array.isArray(relation.observation_ids) || !relation.observation_ids.length || relation.observation_ids.some((id: string) => !input.observation_ids.includes(id))) fail("METHOD_RELATION_UNKNOWN_OBSERVATION");
++    }
++    // A requested architecture change is never certified by changing numeric JSON.
++    const unsupported = input.requested_kind === "architecture_recomposition";
++    const record = { schema: "bf-method-revision-v1", method_profile: p, round: context.round,
++        opportunity: input.opportunity, requested_kind: input.requested_kind,
++        observation_ids: input.observation_ids, rationale: input.rationale, falsifier: input.falsifier,
++        before_artifacts: context.previous_artifacts, after_artifacts: context.current_artifacts, changed_artifacts: changed,
++        relations: relations.map((r: any) => ({ ...r, support_status: r.artifact_ids.some((a: string) => changed.includes(a)) ? "stale_after_revision" : "unknown_not_independently_validated" })),
++        implementation_status: unsupported ? "proposed_unsupported" : changed.length ? "artifact_change_unverified" : "no_op",
++        evaluation_status: "not_evaluated", acceptance_status: "not_accepted",
++        blocker: unsupported ? "PROVIDER_ARCHITECTURE_NOT_IMPLEMENTED" : null,
++        execution_authorized: false, scientific_success: false };
++    return JSON.parse(JSON.stringify({ ...record, record_id: digest(record) }));
++}
+--- a/pi-overlay/packages/bf-harness/src/solver.ts
++++ b/pi-overlay/packages/bf-harness/src/solver.ts
+@@ -1,3 +1,5 @@
++import { methodInstructions, validateProfile, type MethodProfile } from "./method.js";
++export * from "./method.js";
+ /** H0 policy for presenting verified experiment state to a Pi solver. */
+ export interface SolverState {
+ 	current: unknown;
+@@ -7,10 +9,12 @@
+ 	hypotheses: string[];
+ 	plan: string[];
+ 	remainingExperiments: number;
++	methodProfile: MethodProfile;
+ }
+ 
+-export function initialState(budget: {solver_calls: number}): SolverState {
++export function initialState(budget: {solver_calls: number}, methodProfile: MethodProfile): SolverState {
+ 	return {
++		methodProfile: validateProfile(methodProfile),
+ 		current: null,
+ 		bestVerified: null,
+ 		pending: {},
+@@ -36,7 +40,8 @@
+ }
+ 
+ export function solverPrompt(task: any, state: SolverState): string {
+-	return `You solve one declared computational battery-free AIoT design task independently.
++	return `${methodInstructions(state.methodProfile)}
++You solve one declared computational battery-free AIoT design task independently.
+ Read task.json and candidate.json. Use the registered magnetic candidate contract. Unsupported architecture or model regions are insufficient evidence, never silently restricted or scored as design failure.
+ First execute the provided baseline unchanged and inspect it. If it fails, choose and execute a source revision using the observed result. If it passes, unnecessary changes are not required.
+ Use bf_experiment to execute current files, bf_job to reconcile, bf_inspect_run to read verified facts, and bf_submit to seal current files against their exact completed run.
+--- a/run_probe.py
++++ b/run_probe.py
+@@ -17,16 +17,17 @@
+ from paths import ROOT, PI, read, sha, digest, write_once, module, verify_inputs
+ from service_adapter import RegistryService, fixture_settings, FIXTURE_BEARER, FIXTURE_OWNER
+ from trace_readback import validate_trace
++from method_contract import verify_activation
+ 
+ launcher = module('bfworld.agentlab.explicit_launcher_overlay', ROOT / 'src/launcher_overlay.py')
+ 
+-def run(output):
++def run(output, method_id):
+     output = Path(output).resolve()
+     if output.exists() or not output.is_relative_to(ROOT):
+         raise ValueError('NEW_OWNED_OUTPUT_REQUIRED')
+     output.mkdir(parents=True)
+     write_once(output / 'offline-runtime-profile.json', fixture_settings())
+-    service = RegistryService(output / 'service', output / 'offline-runtime-profile.json')
++    service = RegistryService(output / 'service', output / 'offline-runtime-profile.json', method_id=method_id)
+     packet = service.packet('DEV-FEASIBLE-01')
+     write_once(output / 'EXECUTION-PACKET.json', packet)
+     harness = launcher.freeze(source=PI / 'packages/bf-harness', label='EXPLICIT-PACKET-H0-v2', home_root=ROOT / 'fixture-runtime')
+@@ -86,12 +87,15 @@
+             'stdout_sha256': sha(workspace / 'stdout.jsonl'), 'stderr_sha256': sha(workspace / 'stderr.log')})
+         raise ValueError('TRUSTED_PROTOCOL_PROCESS_FAILED:' + (workspace / 'stderr.log').read_text()[-1600:])
+     result = validate_trace(events, packet, manifest, proc.pid, nonce, proc.returncode)
++    method_receipt = verify_activation(events, packet['method_binding'], pid=proc.pid,
++        author_pid=os.getpid(), nonce=nonce, packet_id=packet['packet_id'], exit_code=proc.returncode)
+     if result['status'] != 'BLOCKED' or result['request']['task_id'] != 'DEV-FEASIBLE-01' or result['execution_packet_id'] != packet['packet_id']:
+         raise ValueError('NATIVE_BLOCK_OR_TASK_BINDING_MISMATCH')
+     if result['native_tool_identities'] != {} or not result['native_prepare_error'].startswith('TOOL_IDENTITY_MISSING_OR_INVALID:'):
+         raise ValueError('MISSING_NATIVE_TOOLS_WERE_SUBSTITUTED')
+     service_rows = service.journal.read()
+-    receipt = {'schema': 'magnetic-service-trusted-probe-v1', 'status': 'transport_and_identity_pass_native_blocked',
++    receipt = {'schema': 'magnetic-service-trusted-probe-v1', 'method_receipt': method_receipt,
++        'capability_admission': packet['capability_admission'], 'status': 'transport_and_identity_pass_native_blocked',
+         'task_id': packet['task_id'], 'task_contract_hash': packet['task_contract_hash'], 'world_id': packet['world_id'],
+         'evaluator_sha256': packet['evaluator_sha256'], 'execution_packet_id': packet['packet_id'],
+         'pid': proc.pid, 'supervisor_pid': os.getpid(), 'exit_code': proc.returncode,
+@@ -118,5 +122,6 @@
+ if __name__ == '__main__':
+     parser = argparse.ArgumentParser()
+     parser.add_argument('--output', type=Path, required=True)
++    parser.add_argument('--method', choices=['strong_generic', 'bf_design', 'representation_only', 'revision_only'], required=True)
+     args = parser.parse_args()
+-    print(json.dumps(run(args.output), indent=2))
++    print(json.dumps(run(args.output, args.method), indent=2))
+--- a/src/launcher_overlay.py
++++ b/src/launcher_overlay.py
+@@ -56,6 +56,9 @@
+         files['src/product.ts']=(PI/'packages/bf-harness/src/product.ts').read_text()
+     digest=identity(files)
+     bindings={'source':digest,'app':filehash(PI/'packages/bf-agent/dist'/app_entry),'lock':filehash(PI/'package-lock.json'),'world':world_binding()}
++    if app_entry=='main.js':
++        bindings['app_auxiliary_sources']={'method-activation.ts':filehash(PI/'packages/bf-agent/src/method-activation.ts')}
++        bindings['app_auxiliary_files']={'method-activation.js':filehash(PI/'packages/bf-agent/dist/method-activation.js')}
+     if app_entry=='chat-product.js':bindings['delivery']=delivery_binding()
+     binding=identity(bindings)
+     dest=Path(home_root)/'harnesses'/(label+'-'+binding[:12])
+@@ -85,8 +88,11 @@
+       'app_entry':app_entry,'app_source_hash':filehash(PI/'packages/bf-agent/src'/app_entry.replace('.js','.ts')),'world_binding':world_binding(),
+       'thinking':'off','session_caps':None,'session_cap_authority':'explicit-execution-packet',
+       'resource_hashes':{str(p.relative_to(PI)):filehash(p) for p in sorted((PI/'packages/ai/src/providers/data').rglob('*.json'))},
+-      'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
++      'tools':['read','edit','write','bash','bf_experiment','bf_record_revision','bf_job','bf_inspect_run','bf_submit']+(['bf_product'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
+       'model':None,'model_authority':'explicit-execution-packet','resources':'explicit-empty-no-ancestry','world':None,'world_authority':'explicit-execution-packet','world_binding_scope':'legacy-controller-source-dependencies-only','legacy_source_world':'coupled-programmed-reference-v3'}
++    if app_entry=='main.js':
++        manifest['app_auxiliary_sources']=bindings['app_auxiliary_sources']
++        manifest['app_auxiliary_files']=bindings['app_auxiliary_files']
+     if app_entry=='chat-product.js':manifest['delivery_binding']=delivery_binding()
+     manifest['identity']=identity(manifest)
+     (dest/'manifest.json').write_text(canonical(manifest))
+@@ -180,6 +186,9 @@
+         for name,digest in manifest.get('loaded_files',{}).items():
+             if filehash(Path(harness)/'dist'/name)!=digest:raise ValueError('HARNESS_ACTIVATION_HASH_MISMATCH')
+         if filehash(PI/'packages/bf-agent/dist'/app_entry)!=manifest['app_build_hash']:raise ValueError('APP_BUILD_CHANGED_SINCE_FREEZE')
++        for folder,field in [('src','app_auxiliary_sources'),('dist','app_auxiliary_files')]:
++            for name,digest in manifest.get(field,{}).items():
++                if filehash(PI/'packages/bf-agent'/folder/name)!=digest:raise ValueError('APP_AUXILIARY_CHANGED_SINCE_FREEZE')
+         if filehash(PI/'package-lock.json')!=manifest['pi_lock_hash']:raise ValueError('LOCK_CHANGED_SINCE_FREEZE')
+         if manifest.get('world_binding',world_binding())!=world_binding():raise ValueError('WORLD_CHANGED_SINCE_FREEZE')
+         if 'delivery_binding' in manifest and manifest['delivery_binding']!=delivery_binding():raise ValueError('DELIVERY_CHANGED_SINCE_FREEZE')
+--- /dev/null
++++ b/src/method_contract.py
+@@ -0,0 +1,80 @@
++"""Read-only method source binding and actual-provider capability checks.
++
++Compatibility never supplies execution permission or scientific qualification.
++"""
++import hashlib
++import json
++import re
++from pathlib import Path
++
++PROFILES = {'strong_generic': (False, False), 'bf_design': (True, True),
++            'representation_only': (True, False), 'revision_only': (False, True)}
++PROVIDER = {'id': 'upstream-338d603-numeric-candidate-only', 'numeric_parameters': True,
++            'architecture': False, 'candidate_artifact_sources': False}
++
++def digest(value):
++    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
++
++def profile(method_id):
++    if method_id not in PROFILES:
++        raise ValueError('UNKNOWN_METHOD_PROFILE')
++    r, q = PROFILES[method_id]
++    return {'schema': 'bf-method-policy-v1', 'method_id': method_id, 'R': r, 'Q': q, 'candidate_opportunities': 2}
++
++def bind_method(pi_root, method_id):
++    root = Path(pi_root) / 'packages/bf-harness'
++    files = {'method_source_sha256': root/'src/method.ts', 'method_build_sha256': root/'dist/method.js',
++             'solver_source_sha256': root/'src/solver.ts', 'solver_build_sha256': root/'dist/solver.js'}
++    value = {'schema': 'bf-method-binding-v1', 'profile': profile(method_id),
++             **{key: hashlib.sha256(path.read_bytes()).hexdigest() for key, path in files.items()}}
++    return {**value, 'binding_id': digest(value)}
++
++def capability_admission(task):
++    allowed = task.get('allowed_design')
++    if not isinstance(allowed, dict) or not isinstance(allowed.get('permissions_per_arm'), dict) or not allowed['permissions_per_arm']:
++        raise ValueError('TASK_CAPABILITY_REQUIREMENTS_MISSING')
++    arms = allowed.get('all_main_arms')
++    if not isinstance(arms, list) or not arms or len(set(arms)) != len(arms) or set(arms) != set(allowed['permissions_per_arm']):
++        raise ValueError('TASK_ARM_COVERAGE_MISMATCH')
++    components = allowed.get('candidate_components')
++    source_components = {'beam_and_piezo_geometry', 'magnet_geometry_and_mount', 'passive_mechanical_release',
++                         'rectifier_and_power_topology', 'real_storage_components', 'firmware_policy_and_payload'}
++    numeric_components = {'bounded_numeric_parameters'}
++    if not isinstance(components, list) or not components or any(not isinstance(x, str) or x not in source_components | numeric_components for x in components):
++        raise ValueError('TASK_COMPONENT_CAPABILITY_UNKNOWN')
++    permissions = list(allowed['permissions_per_arm'].values())
++    fields = ('architecture_changes', 'mechanical_changes', 'circuit_changes', 'firmware_changes', 'cross_domain_changes')
++    if any(not isinstance(p, dict) or any(type(p.get(key)) is not bool for key in fields) for p in permissions):
++        raise ValueError('TASK_CAPABILITY_REQUIREMENTS_MALFORMED')
++    # Never infer support from an arm label or permit a restricted strong baseline.
++    if any(p != permissions[0] for p in permissions[1:]):
++        raise ValueError('TASK_ARM_FREEDOM_MISMATCH')
++    architecture = permissions[0]['architecture_changes']
++    source_required = architecture or bool(set(components) & source_components)
++    required = {'architecture': architecture, 'candidate_artifact_sources': source_required}
++    blockers = []
++    if architecture: blockers.append('PROVIDER_ARCHITECTURE_NOT_IMPLEMENTED')
++    if source_required: blockers.append('PROVIDER_CANDIDATE_SOURCES_NOT_IMPLEMENTED')
++    return {'provider': dict(PROVIDER), 'required': required, 'capability_compatible': not blockers,
++            'blockers': blockers, 'execution_authorized': False, 'scientific_qualified': False}
++
++def verify_activation(events, binding, *, pid, author_pid, nonce, packet_id, exit_code):
++    """Trusted supervisor readback of this run, never participant-supplied IDs."""
++    if (type(pid) is not int or pid <= 0 or type(author_pid) is not int or author_pid <= 0
++        or pid == author_pid or type(exit_code) is not int or exit_code != 0
++        or not isinstance(nonce, str) or not nonce.strip()
++        or not isinstance(packet_id, str) or not re.fullmatch('[a-f0-9]{64}', packet_id)):
++        raise ValueError('METHOD_PROCESS_NOT_QUALIFIED')
++    rows = [e for e in events if e.get('type') == 'method_activation']
++    if [(e.get('phase'), e.get('entrypoint')) for e in rows] != [('post_import', 'solver.method'), ('invoked', 'solver.solverPrompt')]:
++        raise ValueError('METHOD_POST_IMPORT_INVOCATION_REQUIRED')
++    for row in rows:
++        if (row.get('pid') != pid or row.get('nonce') != nonce or row.get('packet_id') != packet_id
++            or row.get('method_binding_id') != binding['binding_id'] or row.get('profile') != binding['profile']):
++            raise ValueError('METHOD_ACTIVATION_BINDING_MISMATCH')
++    prompt = rows[1].get('output')
++    if not isinstance(prompt, str) or not prompt or rows[1].get('output_hash') != digest(prompt):
++        raise ValueError('METHOD_ACTIVATION_OUTPUT_TAMPER')
++    return {'method_binding_id': binding['binding_id'], 'profile': binding['profile'],
++            'prompt_hash': rows[1]['output_hash'], 'post_import': True, 'invoked': True,
++            'execution_authorized': False, 'scientific_success': False}
+--- a/src/service_adapter.py
++++ b/src/service_adapter.py
+@@ -13,8 +13,9 @@
+ from http.server import ThreadingHTTPServer
+ from types import SimpleNamespace
+ 
+-from paths import ROOT, WORLD, PROTOCOL, EVALUATOR, sha, read, canonical, digest, write_once, module, verify_inputs
++from paths import ROOT, PI, WORLD, PROTOCOL, EVALUATOR, sha, read, canonical, digest, write_once, module, verify_inputs
+ from bfworld.runtime.journal import HashJournal
++from method_contract import bind_method, capability_admission
+ 
+ handoff = module('magnetic_existing_handoff', WORLD / 'pipeline-handoff-v2/prepare_request.py')
+ contract = module('magnetic_prospective_contract', PROTOCOL / 'preflight.py')
+@@ -45,18 +46,22 @@
+         return {'owner': FIXTURE_OWNER, 'role': 'participant'}
+ 
+ class RegistryService:
+-    def __init__(self, root, settings_path):
++    def __init__(self, root, settings_path, *, method_id):
+         verify_inputs()
+         self.root = Path(root).resolve()
+         if not self.root.is_relative_to(ROOT):
+             raise ValueError('OWNED_OUTPUT_ROOT_REQUIRED')
+         self.root.mkdir(parents=True, exist_ok=True)
+         self.settings_path = Path(settings_path).resolve()
++        self.method_binding = bind_method(PI, method_id)
+         self.inputs = {str(WORLD / 'contracts/tasks-v2.json'): sha(WORLD / 'contracts/tasks-v2.json'),
+             str(PROTOCOL / 'protocol-world-bound-draft.json'): sha(PROTOCOL / 'protocol-world-bound-draft.json'),
+             str(EVALUATOR): sha(EVALUATOR), str(self.settings_path): sha(self.settings_path),
+             str(Path(__file__).resolve()): sha(__file__),
+             str(ROOT / 'src/paths.py'): sha(ROOT / 'src/paths.py'),
++            str(ROOT / 'src/method_contract.py'): sha(ROOT / 'src/method_contract.py'),
++            **{str(PI / 'packages/bf-harness' / p): sha(PI / 'packages/bf-harness' / p) for p in
++                ('src/method.ts', 'dist/method.js', 'src/solver.ts', 'dist/solver.js')},
+             str(ROOT / 'src/server_overlay.py'): sha(ROOT / 'src/server_overlay.py')}
+         self.registry = read(WORLD / 'contracts/tasks-v2.json')
+         self.plan = read(PROTOCOL / 'protocol-world-bound-draft.json')
+@@ -104,7 +109,8 @@
+             'runtime_profile': copy.deepcopy(self.profile), 'approved_model': self.plan['model'],
+             'approved_budget': self.plan['per_episode_budget'], 'approval': self.plan['approval'],
+             'execution_authorized': False, 'model_dispatch_allowed': False, 'native_dispatch_allowed': False,
+-            'service_identity': self.identity}
++            'service_identity': self.identity, 'method_binding': self.method_binding,
++            'capability_admission': capability_admission(task)}
+         result['packet_id'] = digest(result)
+         return result
+ 
+@@ -133,7 +139,8 @@
+             result = {'task_id': task_id, 'binding': {k: packet[k] for k in
+                 ('world_id', 'world_input_id', 'task_contract_hash', 'task_registry_sha256', 'evaluator_sha256')},
+                 'task': copy.deepcopy(self.tasks[task_id]), 'execution_packet_id': packet['packet_id'],
+-                'execution_contract': {'runtime_profile': packet['runtime_profile'], 'approved_model': None,
++                'execution_contract': {'runtime_profile': packet['runtime_profile'], 'method_binding': packet['method_binding'],
++                    'capability_admission': packet['capability_admission'], 'approved_model': None,
+                     'approved_budget': None, 'execution_authorized': False}}
+             self.journal.append('task_read', {'task_id': task_id, 'packet_id': packet['packet_id'], 'binding': result['binding']})
+             return result
+@@ -233,6 +240,7 @@
+                 raise ValueError('DUPLICATE_OPERATION_IDENTITY_CONFLICT')
+             self.checkpoint('job_after_intent')
+             blockers = contract.check_plan(self.plan)['blockers']
++            blockers += packet['capability_admission']['blockers']
+             task = self.tasks[body['task_id']]
+             if not all(task['qualification'].values()):
+                 blockers += ['TASK_QUALIFICATION_NOT_PASSED']
+--- a/tests/test_service.py
++++ b/tests/test_service.py
+@@ -24,7 +24,7 @@
+         self.root = Path(self.tmp.name)
+         self.settings = self.root / 'profile.json'
+         write_once(self.settings, s.fixture_settings())
+-        self.service = s.RegistryService(self.root / 'service', self.settings)
++        self.service = s.RegistryService(self.root / 'service', self.settings, method_id='strong_generic')
+         self.packet = self.service.packet('DEV-FEASIBLE-01')
+ 
+     def tearDown(self):
+@@ -130,7 +130,7 @@
+         with mock.patch.object(self.service, 'checkpoint', side_effect=fault):
+             with self.assertRaises(RuntimeError):
+                 self.upload()
+-        restored = s.RegistryService(self.root / 'service', self.settings)
++        restored = s.RegistryService(self.root / 'service', self.settings, method_id='strong_generic')
+         final = restored.snapshot(s.FIXTURE_OWNER, self.upload_body())
+         self.assertTrue(final['snapshot_id'])
+         self.assertEqual(len(self.kinds('snapshot_intent')), 1)
+@@ -190,7 +190,7 @@
+             with self.assertRaisesRegex(ValueError, 'STALE_REGISTRY_MODEL_BUDGET_OR_EVALUATOR'):
+                 self.upload()
+             with self.assertRaisesRegex(ValueError, 'UNREVIEWED_RUNTIME_PROFILE'):
+-                s.RegistryService(self.root / ('changed-' + key), self.settings)
++                s.RegistryService(self.root / ('changed-' + key), self.settings, method_id='strong_generic')
+             self.settings.write_text(original)
+         body = self.upload_body()
+         body['execution_packet_id'] = 'f' * 64
+@@ -207,7 +207,7 @@
+         source.write_text('{"changed":true}')
+         with mock.patch.object(paths, 'FIRST', fake):
+             with self.assertRaisesRegex(ValueError, 'SEALED_INPUT_CHANGED'):
+-                s.RegistryService(self.root / 'should-not-exist', self.settings)
++                s.RegistryService(self.root / 'should-not-exist', self.settings, method_id='strong_generic')
+         self.assertFalse((self.root / 'should-not-exist').exists())
+ 
+     def test_local_caps_count_all_job_intents_and_snapshot_intents(self):
+@@ -289,7 +289,7 @@
+             self.assertNotIn('controlled_runtime_configuration', process.stdout)
+ 
+     def test_real_pi_registered_tool_to_real_handler_and_native_handoff_block(self):
+-        result = run_probe.run(self.root / 'end-to-end')
++        result = run_probe.run(self.root / 'end-to-end', 'strong_generic')
+         self.assertEqual(result['status'], 'transport_and_identity_pass_native_blocked')
+         self.assertEqual(result['task_id'], 'DEV-FEASIBLE-01')
+         self.assertEqual(result['invoked'], ['solver.initialState', 'solver.solverPrompt'])

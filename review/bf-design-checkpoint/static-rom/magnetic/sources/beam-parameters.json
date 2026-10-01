@@ -1,0 +1,124 @@
+{
+  "schema": "bf-conditional-beam-input-v1",
+  "provider_version": "bf-conditional-psi5a4e-beam-ritz-v1",
+  "material_branch": "new conditional PSI-5A4E; does not identify actual COMSOL library PZT",
+  "source_sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6",
+  "parameters": {
+    "copper_length": {
+      "value": 0.096,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "copper_width": {
+      "value": 0.01,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "copper_thickness": {
+      "value": 0.00053,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "pzt_start": {
+      "value": 0.006,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "pzt_end": {
+      "value": 0.056,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "pzt_width": {
+      "value": 0.008,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "pzt_thickness": {
+      "value": 0.0003,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "magnet_start": {
+      "value": 0.091,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "magnet_end": {
+      "value": 0.101,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "magnet_width": {
+      "value": 0.01,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "magnet_height": {
+      "value": 0.01,
+      "unit": "m",
+      "provenance_id": "DoorBeam.geometry"
+    },
+    "copper_young": {
+      "value": 110000000000.0,
+      "unit": "Pa",
+      "provenance_id": "DoorBeam.assumed_material"
+    },
+    "copper_density": {
+      "value": 8960,
+      "unit": "kg/m^3",
+      "provenance_id": "DoorBeam.assumed_material"
+    },
+    "pzt_young_E1": {
+      "value": 66000000000.0,
+      "unit": "Pa",
+      "provenance_id": "PSI-5A4E.manufacturer_typical"
+    },
+    "pzt_density": {
+      "value": 7800,
+      "unit": "kg/m^3",
+      "provenance_id": "PSI-5A4E.manufacturer_typical"
+    },
+    "pzt_d31": {
+      "value": -1.9e-10,
+      "unit": "C/N",
+      "provenance_id": "PSI-5A4E.manufacturer_typical"
+    },
+    "pzt_epsilon_T33_relative": {
+      "value": 1800,
+      "unit": "1",
+      "provenance_id": "PSI-5A4E.manufacturer_typical"
+    },
+    "epsilon0": {
+      "value": 8.8541878188e-12,
+      "unit": "F/m",
+      "provenance_id": "NIST.CODATA2022"
+    },
+    "magnet_density": {
+      "value": 7500,
+      "unit": "kg/m^3",
+      "provenance_id": "DoorBeam.assumed_material"
+    },
+    "poling_sign": {
+      "value": 1,
+      "unit": "1",
+      "provenance_id": "new_conditional_polarity"
+    },
+    "rigid_attachment_start": {
+      "value": 0.091,
+      "unit": "m",
+      "provenance_id": "new_rigid_overlap_idealization"
+    }
+  },
+  "excluded_unknowns": [
+    "native COMSOL full material tensor",
+    "actual PZT supplier/grade",
+    "actual poling polarity",
+    "adhesive dimensions/material",
+    "electrode thickness/mass",
+    "measured damping",
+    "real-device manufacturing tolerances",
+    "nonlinear validity domain",
+    "force-frame registration"
+  ]
+}

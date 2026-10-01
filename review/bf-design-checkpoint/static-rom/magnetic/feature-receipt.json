@@ -1,0 +1,39 @@
+{
+  "schema": "bf-owned-feature-receipt-v1",
+  "id": "static-magnetic-generalized-force-20261001",
+  "owned_paths": [
+    "/workspace/shared/magnetic-generalized-force-20261001"
+  ],
+  "hypothesis": "One mutual hard-magnet potential differentiated along the canonical V0 q-only pose equals analytic force-and-COM-torque virtual work.",
+  "falsifier": "Source/frame mismatch, magnet contact, or predeclared derivative/quadrature gate failure.",
+  "schema_change": "New conditional provider identity; legacy source identity preserved unchanged.",
+  "command": "./init.sh",
+  "tests": 26,
+  "negative_controls": [
+    "transverse force only",
+    "omit torque",
+    "reflection",
+    "nonfinite inputs",
+    "out-of-support inputs",
+    "touching/overlapping magnet OBBs"
+  ],
+  "numerical_result": "All exact five-state planned checks pass.",
+  "qualification": "Conditional mathematical static verification only; no native or physical qualification.",
+  "new_time_integrations": 0,
+  "new_equilibrium_solves": 0,
+  "table_sweeps": 0,
+  "paid_model_calls": 0,
+  "commercial_solver_calls": 0,
+  "source_commits": 0,
+  "limitation": "V0 q-only Ritz path; axial/torque/voltage-induced discarded response unresolved. No full-domain or physical validation.",
+  "handoff": "Review DERIVATION.md and independent receipt before considering separately scoped next experiment.",
+  "plan_sha256": "a5ee5c5dc230b50b62f30266d0c84d3f13c00c48fd8e0b227b38f2e0305eab8e",
+  "evidence_completion_replay": {
+    "authorized": true,
+    "new_physical_states": 0,
+    "independent_samples": false,
+    "reproduction_checks": 105,
+    "maximum_reproduction_discrepancy": 0,
+    "raw_plus_minus_energies_retained": true
+  }
+}

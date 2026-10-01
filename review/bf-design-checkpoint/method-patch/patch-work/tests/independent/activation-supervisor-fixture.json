@@ -1,0 +1,133 @@
+{
+  "binding": {
+    "schema": "bf-method-binding-v1",
+    "profile": {
+      "schema": "bf-method-policy-v1",
+      "method_id": "bf_design",
+      "R": true,
+      "Q": true,
+      "candidate_opportunities": 2
+    },
+    "method_source_sha256": "7a20a13ee576075774adae2d589d112d8e94ff9a64750d48daf87d52faabd290",
+    "method_build_sha256": "a540537988f65d210a2e7db8a52db553192a58878cb7b7e0b6833b3d7749f89b",
+    "solver_source_sha256": "bf8c6606d6731e3146a46ef4db25452490edb820251abb2af6121d77e993f445",
+    "solver_build_sha256": "64e3fb4d45aa987ef34e1e1dffbd5f9af844d174aa03c87034600759ceabb6de",
+    "binding_id": "1770887197d817ccc45c06a939029560e9e9ce4c290959c25a5e7a1844414bad"
+  },
+  "actual": {
+    "method_source_sha256": "7a20a13ee576075774adae2d589d112d8e94ff9a64750d48daf87d52faabd290",
+    "method_build_sha256": "a540537988f65d210a2e7db8a52db553192a58878cb7b7e0b6833b3d7749f89b",
+    "solver_source_sha256": "bf8c6606d6731e3146a46ef4db25452490edb820251abb2af6121d77e993f445",
+    "solver_build_sha256": "64e3fb4d45aa987ef34e1e1dffbd5f9af844d174aa03c87034600759ceabb6de"
+  },
+  "manifest": {
+    "source_files": {
+      "src/method.ts": "7a20a13ee576075774adae2d589d112d8e94ff9a64750d48daf87d52faabd290",
+      "src/solver.ts": "bf8c6606d6731e3146a46ef4db25452490edb820251abb2af6121d77e993f445"
+    },
+    "loaded_files": {
+      "method.js": "a540537988f65d210a2e7db8a52db553192a58878cb7b7e0b6833b3d7749f89b"
+    },
+    "loaded_modules": {
+      "solver": "64e3fb4d45aa987ef34e1e1dffbd5f9af844d174aa03c87034600759ceabb6de"
+    }
+  },
+  "events": [
+    {
+      "type": "method_activation",
+      "phase": "post_import",
+      "entrypoint": "solver.method",
+      "method_binding_id": "1770887197d817ccc45c06a939029560e9e9ce4c290959c25a5e7a1844414bad",
+      "profile": {
+        "schema": "bf-method-policy-v1",
+        "method_id": "bf_design",
+        "R": true,
+        "Q": true,
+        "candidate_opportunities": 2
+      },
+      "pid": 79,
+      "nonce": "ca1075b4-e9dc-4303-801b-007c49e2389d",
+      "packet_id": "f4a5dd67d412cc9add877bb5306505d651887213cc2d66f742f267ab63c10b7b",
+      "output": null,
+      "output_hash": null
+    },
+    {
+      "type": "method_activation",
+      "phase": "invoked",
+      "entrypoint": "solver.solverPrompt",
+      "method_binding_id": "1770887197d817ccc45c06a939029560e9e9ce4c290959c25a5e7a1844414bad",
+      "profile": {
+        "schema": "bf-method-policy-v1",
+        "method_id": "bf_design",
+        "R": true,
+        "Q": true,
+        "candidate_opportunities": 2
+      },
+      "pid": 79,
+      "nonce": "ca1075b4-e9dc-4303-801b-007c49e2389d",
+      "packet_id": "f4a5dd67d412cc9add877bb5306505d651887213cc2d66f742f267ab63c10b7b",
+      "output": "All conditions receive the same public requirements, facts, history, tools, baseline, feedback and validity checks. You may propose architecture and cross-domain changes. Never treat unsupported execution as a failed design, or a proposed change as implemented. Preserve requirements; do not lower modeled currents or change physical assumptions without artifact-bound evidence. This bounded method version has one revision round and exactly two candidate opportunities in the entire episode within the same total budget; unused opportunities are reported, not synthetically spent. Publicly select the final design using only available feedback. Record revisions with bf_record_revision, citing observed run IDs and actual changed artifacts. No representation format is part of scientific acceptance.\nR=1: Maintain method-state.json with functions, their implementing artifact IDs, resource supplies/demands, and conditional relations. Each relation names its condition, dependent artifact IDs and observed run IDs. Distinguish supported, stale, contradicted and unknown support. When artifacts change, recheck the affected relations; keep old evidence immutable. Use these relations to identify which requirements/resources conflict before choosing the next action. Relations do not add physical facts or confer validity.\nQ=1: Attribute the observed conflict to explicit requirement/condition and implementation choices. Consider one parameter-refinement opportunity and one architecture-recomposition opportunity. Refinement keeps roles/connections/implementation topology; recomposition changes functional allocation, connections or implementation. State why the chosen change addresses the conflict and what observation would falsify it. If recomposition lacks provider support, retain that proposal as insufficient_evidence/model_extension_required, never substitute a parameter edit while claiming architecture success. A second opportunity is not an extra budget.\nYou solve one declared computational battery-free AIoT design task independently.\nRead task.json and candidate.json. Use the registered magnetic candidate contract. Unsupported architecture or model regions are insufficient evidence, never silently restricted or scored as design failure.\nFirst execute the provided baseline unchanged and inspect it. If it fails, choose and execute a source revision using the observed result. If it passes, unnecessary changes are not required.\nUse bf_experiment to execute current files, bf_job to reconcile, bf_inspect_run to read verified facts, and bf_submit to seal current files against their exact completed run.\nExecution success and design success differ. Do not claim hardware or a trained-model result.\nUse observations to decide your next revision. Keep hypotheses separate from facts in notes.md.\nUse only the explicit execution packet limits. No internet access. A blocked native request is not a completed experiment.\nExecution contract: {\"model_calls\":0,\"solver_calls\":0,\"execution_authorized\":false}\nIf no design passes, submit the best actually evaluated design and state the failure. Required but unavailable assets must be reported as NOT_EVALUATED; never replace them with synthetic defaults.\nWhen work is interrupted, use persisted operation IDs and pending jobs; never invent or redispatch unknown work.\nTask: {\"task_id\":\"INERT-INDEPENDENT-TEST\",\"requirements\":[\"all facts retained\",\"do not weaken requirement\"],\"execution_contract\":{\"model_calls\":0,\"solver_calls\":0,\"execution_authorized\":false}}\nCurrent structured state: {\"methodProfile\":{\"schema\":\"bf-method-policy-v1\",\"method_id\":\"bf_design\",\"R\":true,\"Q\":true,\"candidate_opportunities\":2},\"current\":{\"run_id\":\"synthetic-independent-observation\",\"snapshot_id\":\"synthetic-independent-snapshot\",\"checks\":{\"storage\":false},\"summary\":\"INERT TEST DATA, not scientific evidence\"},\"bestVerified\":{\"run_id\":\"synthetic-independent-observation\",\"snapshot_id\":\"synthetic-independent-snapshot\",\"checks\":{\"storage\":false},\"summary\":\"INERT TEST DATA, not scientific evidence\"},\"pending\":{},\"facts\":[{\"run_id\":\"synthetic-independent-observation\",\"snapshot_id\":\"synthetic-independent-snapshot\",\"checks\":{\"storage\":false},\"summary\":\"INERT TEST DATA, not scientific evidence\"}],\"hypotheses\":[],\"plan\":[],\"remainingExperiments\":0}",
+      "output_hash": "8a5554dfdddc0b50a05345c012a31bc3cd0a7c66af0caebb2f41412dca31fffb"
+    }
+  ],
+  "expected": {
+    "pid": 79,
+    "nonce": "ca1075b4-e9dc-4303-801b-007c49e2389d",
+    "packet_id": "f4a5dd67d412cc9add877bb5306505d651887213cc2d66f742f267ab63c10b7b",
+    "author_pid": 78,
+    "fresh_process": true,
+    "clean_context": true,
+    "exit_code": 0
+  },
+  "observed": {
+    "methodProfile": {
+      "schema": "bf-method-policy-v1",
+      "method_id": "bf_design",
+      "R": true,
+      "Q": true,
+      "candidate_opportunities": 2
+    },
+    "current": {
+      "run_id": "synthetic-independent-observation",
+      "snapshot_id": "synthetic-independent-snapshot",
+      "checks": {
+        "storage": false
+      },
+      "summary": "INERT TEST DATA, not scientific evidence"
+    },
+    "bestVerified": {
+      "run_id": "synthetic-independent-observation",
+      "snapshot_id": "synthetic-independent-snapshot",
+      "checks": {
+        "storage": false
+      },
+      "summary": "INERT TEST DATA, not scientific evidence"
+    },
+    "pending": {},
+    "facts": [
+      {
+        "run_id": "synthetic-independent-observation",
+        "snapshot_id": "synthetic-independent-snapshot",
+        "checks": {
+          "storage": false
+        },
+        "summary": "INERT TEST DATA, not scientific evidence"
+      }
+    ],
+    "hypotheses": [],
+    "plan": [],
+    "remainingExperiments": 0
+  },
+  "task": {
+    "task_id": "INERT-INDEPENDENT-TEST",
+    "requirements": [
+      "all facts retained",
+      "do not weaken requirement"
+    ],
+    "execution_contract": {
+      "model_calls": 0,
+      "solver_calls": 0,
+      "execution_authorized": false
+    }
+  }
+}

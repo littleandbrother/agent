@@ -1,0 +1,76 @@
+{
+  "schema": "bf-task-qualification-plan-v1",
+  "status": "proposed_not_executed",
+  "new_solver_runs_this_package": 0,
+  "required_before_any_dynamic_plan": [
+    "Choose/pin one model stack; do not pool vendor and behavioral chains.",
+    "Freeze actual installation, weak-motion, receiver semantics and initial/reset boundary; retain unresolved requirements rather than weaken them.",
+    "Import the already requested native baseline and positive-diagnostic evidence packet; it can qualify components but is not a feasible reference.",
+    "Compare actual internal CAP/VIN2 startup and decay to behavioral model with source-matched data."
+  ],
+  "minimal_model_extension": {
+    "startup": [
+      "A versioned actual-rail model or imported native trace with VIN, VIN2, CAP-to-VIN, Vout, PGOOD, all rail initial conditions and port currents; bind real capacitor values, DC bias/ESR/leakage, component topology and PMIC macro-model hash.",
+      "If considering the datasheet low-input topology, model and qualify <6 V input protection, clamp loss/leakage, regulation target and firmware voltage compatibility. Do not merely set startup energy to zero."
+    ],
+    "mechanical_release": [
+      "Retain actual door trajectory and energy-accounted closed-door initial equilibrium.",
+      "A passive release/latch hypothesis needs geometry-derived engagement/disengagement/contact and force continuity or impulse/work accounting, and an independent dynamic comparison over the resulting deflection/rotation domain.",
+      "Prove how the initial state is prepared/reset within the declared battery-free operation boundary; do not add a free initial displacement or release waveform."
+    ],
+    "architecture_api": [
+      "Artifact-bound support for at least one independently feasible architecture in the allowed space; all methods must be able to invoke the same providers.",
+      "If only fixed inherited beam and fixed topology remain executable, label the work restricted engineering development and keep architecture-open task admission false."
+    ]
+  },
+  "finite_follow_on_proposal": {
+    "status": "requires_parent_approval_and_exact_versioned_inputs_before_execution",
+    "phase_1_read_only_import": {
+      "new_scientific_solves": 0,
+      "purpose": "Review existing native baseline, positive diagnostic and supplier documentation, then decide actual-rail adequacy."
+    },
+    "phase_2_candidate_qualification": {
+      "max_new_joint_solves": 8,
+      "design_cells": [
+        "D",
+        "D+a",
+        "D+b",
+        "D+a+b"
+      ],
+      "steps_per_cell": 2,
+      "retries": 0,
+      "scope": "Only after one exact qualified mechanical patch a and one exact qualified circuit/firmware patch b are independently justified and frozen, keep W fixed; coarse/fine each cell. Do not force both patches to be necessary.",
+      "stop": "At the finite cohort, an unsupported/out-of-domain result, or qualification failure; no adaptive grid expansion or threshold change."
+    },
+    "required_plan_before_phase_2": [
+      "exact design/model/provider hashes",
+      "source-bound component choices",
+      "exact coarse/fine solver settings and numerical acceptance",
+      "per-solve wall/RHS budgets supported by chosen provider",
+      "initial/reset ledger",
+      "candidate-selection rule",
+      "independent evaluator and evidence destination"
+    ],
+    "ordinary_reference_rule": "Freeze a successful independently developed reference before any task participant; if none passes, keep DEV-FEASIBLE-01 blocked.",
+    "no_solver_run_is_authorized_by_this_plan": true
+  },
+  "external_primary_reference": {
+    "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/35881fc.pdf",
+    "read_utc_date": "2026-10-01",
+    "locations": [
+      "p7 pin functions",
+      "p8 internal rail generation",
+      "p13 VIN2 and CAP capacitors"
+    ],
+    "claim": "Distinct rail dynamics and a conditional low-input alternative motivate qualification, not a new feasibility claim."
+  },
+  "what_cannot_substitute": [
+    "externally powered diagnostic",
+    "hypothetical synthetic positive fixture",
+    "lowered auxiliary threshold",
+    "extra precharge",
+    "faster or repeated opening",
+    "bare mission flag without source and replay",
+    "physics source tests without qualified reference"
+  ]
+}

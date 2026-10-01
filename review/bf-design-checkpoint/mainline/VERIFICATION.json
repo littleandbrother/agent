@@ -1,0 +1,60 @@
+{
+  "schema": "mainline-transition-packaging-verification-v1",
+  "created_date_utc": "2026-10-01",
+  "source_snapshot_verification": "All selected source/member digests rechecked against unchanged source bytes",
+  "integration_final_records": {
+    "common_status_changes": 0,
+    "added_tests": 11,
+    "all_added_passed": true,
+    "removed_tests": 0
+  },
+  "replay": {
+    "alignment_tests": 30,
+    "alignment_passed": 30,
+    "canonical_coordinates": 72,
+    "synthetic_settling_tests": 4,
+    "gate_tests": 38,
+    "gate_tests_passed": 38,
+    "admission_program_exit_code": 2,
+    "admitted_tasks": 0,
+    "mode": "NEW external output directories; scientific source bytes unchanged; alignment source-lock location fields remapped only in disposable working copy"
+  },
+  "packaging_dependency_fix": {
+    "first_attempt": "27/30; three missing-file errors because cloud pluck_receiver_bfp1.py was absent from initial minimal source selection",
+    "repair": "Included exact original cloud decoder bytes and source hash in SNAPSHOT-SOURCES.json; no original source or old source-lock modified",
+    "verified_after": "30/30 plus canonical and settling checks"
+  },
+  "replay_dependencies": "Alignment minimal code inputs included. Full gate source binding additionally requires authorized original datasheet and historical raw inputs, verified present in this workspace but intentionally excluded from delivery.",
+  "code_syntax": "All included Python sources compile as syntax; no pyc written",
+  "credential_scan": {
+    "scope": "Private-key, long OpenAI/GitHub token, AWS access-key patterns; curated member/path inventory",
+    "matches": 0,
+    "guarantee": "Not a proof against all unknown or encoded secrets; no real credential inputs were supplied"
+  },
+  "optional_syscall_trace": "Not performed: runtime ptrace is unavailable; no restriction was changed or bypassed",
+  "binary_and_external_content_exclusions": [
+    "venv",
+    "node_modules",
+    "tool binaries",
+    "compiled host libraries",
+    "third-party PDFs",
+    "third-party screenshots",
+    "third-party extracted full text",
+    "real credentials",
+    "full historical scientific raw bundles"
+  ],
+  "zip_verification_plan": "Final archive CRC plus every member size/hash must match FILE-MANIFEST; final archive SHA and Library identity recorded in external delivery receipt.",
+  "subsequent_bounded_ngspice_diagnostic": {
+    "solves": 4,
+    "frozen_source_archive_sha256": "4e88d7ac64f7bb0ba2aa69cb2801d2c875c495cb9c02ab74b57eca31e643047c",
+    "all_28_archive_members_plus_external_receipt_included": true,
+    "no_additional_solves_by_packager": true,
+    "original_integration_unchanged": true
+  },
+  "retained_channel_postprocess_replay": {
+    "exit_code": 0,
+    "channel_analysis_sha256": "21958da04b4d29245c6f08c790dab66ed32e529011b21728891eacba8dd38423",
+    "byte_identical_to_frozen_analysis": true,
+    "extra_solver_runs": 0
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "circuit": {
+    "cin_F": 4.7e-05,
+    "cout_F": 0.0001,
+    "cp_rule": "blocked capacitance counted exactly once; reciprocal theta signs",
+    "energy_boundary": "full declared behavioral stores and assumed losses; not encrypted PMIC internals",
+    "load_taper_voltage_V": 0.1,
+    "model": "reciprocal-behavioral-power-v1.2-solver-provider-provenance"
+  },
+  "contract_id": "cloud-behavioral-default-v1",
+  "firmware": {
+    "brownout_V": 1.7,
+    "parameters": {
+      "advertising_interval_s": 0.1,
+      "brownout_v": 1.7,
+      "currents_a": {
+        "boot": 0.003,
+        "clock": 0.003,
+        "init": 0.003,
+        "off": 1e-06,
+        "payload": 0.003,
+        "read": 0.003,
+        "reset": 0.003,
+        "sleep": 5e-06,
+        "tx": 0.0053
+      },
+      "device_id": [
+        305419896,
+        2427178479
+      ],
+      "durations_s": {
+        "boot": 0.003,
+        "clock": 0.001,
+        "init": 0.002,
+        "payload": 0.0002,
+        "read": 0.001,
+        "reset": 0.001,
+        "tx": 0.0012
+      },
+      "random_delay_s": 0.005,
+      "silence_s": 0.35,
+      "startup_v": 1.8
+    },
+    "pgood_low_inflight": "finish current TX; gate at boot exit or sleep",
+    "policy": "Python-off-reset-clock-boot-init-read-payload-tx-sleep + common C gate/encoding",
+    "startup_V": 1.8
+  },
+  "force": {
+    "model": "finite-uniform-cuboid-surface-charge-mur1",
+    "quadrature_order": 6,
+    "recoil_permeability": 1.0,
+    "remanence_T": 1.25
+  },
+  "geometry": {
+    "beam_source": "inherited COMSOL-derived constants; not newly recomputed",
+    "driver_magnet_m": [
+      0.02,
+      0.02,
+      0.02
+    ],
+    "gap_actuation": "move stationary product; rotating driver x=.856m fixed",
+    "gap_m": 0.048,
+    "rom_limit_m": 0.008,
+    "tip_magnet_m": [
+      0.01,
+      0.01,
+      0.01
+    ]
+  },
+  "initial_energy": {
+    "auxiliary_J": 0.0,
+    "mechanical_J": null,
+    "mechanical_state_rule": "k*q0 = interpolated F(angle=0,q0); qdot=0; equilibrium preload energy counted",
+    "piezo_V": 0.0,
+    "vin_V": 0.0,
+    "vout_V": 0.0
+  },
+  "mission": {
+    "cold_start_gate": "receiver stage counts completed timely packets grouped by silence; separate source cold-start mission contract",
+    "deadline_s": 4.0,
+    "diagnostic_excluded": true,
+    "duration_s": 4.0,
+    "minimum_groups": 1
+  },
+  "packet": {
+    "byte_order": "raw bytes in C; cloud can match with two little-endian uint32 IDs",
+    "bytes": 12,
+    "device_id_hex": "78563412efcdab90",
+    "protocol": "BFD2",
+    "sequence": false
+  },
+  "receiver": {
+    "capture_dedup": true,
+    "direction": "unknown",
+    "loss_probability": 0.0,
+    "scan_duty": 1.0,
+    "scan_period_s": null,
+    "seed": null,
+    "silence_s": 0.35
+  },
+  "schema_version": "simulation-semantic-contract-v1",
+  "scope": "source-defaults",
+  "source_trajectory": {
+    "angle_rad": 1.1344640137963142,
+    "coordinate_rule": "stationary tip x=.856+gap; driver x=.856*cos(a)-.045*sin(a), z=.856*sin(a)+.045*cos(a)-.075265",
+    "duration_s": 4.0,
+    "electrical_input": "none at baseline; controlled input replaces door with F=0, Vin source 6V/20ohm for .3s",
+    "opening_s": 2.0
+  },
+  "units": {
+    "angle": "rad",
+    "capacitance": "F",
+    "current": "A",
+    "energy": "J",
+    "firmware_input_conversion": "upstream dt milliseconds, current milliamps; adapters convert explicitly",
+    "force": "N",
+    "length": "m",
+    "time": "s",
+    "voltage": "V"
+  },
+  "version": {
+    "model": "reciprocal-behavioral-power-v1.2-solver-provider-provenance",
+    "native_evidence_available": false,
+    "numerical_semantics": "Radau2e-8/1e-13; accepted macro/event ticks; PMIC latches at macro boundaries",
+    "physics_hash": "d2580d31aa05d0c13f91a928c5e35142bc7f012d7e152d33587ae9809b1706d8",
+    "source_bound": true
+  }
+}
