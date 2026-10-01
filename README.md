@@ -1,5 +1,7 @@
 # BF-AIoT Agent
 
+BF-Design 待本地验证分支：[统一验证入口与进度矩阵](release/BF-DESIGN-LOCAL-VALIDATION.zh.md)。该分支保留原始检查点，新增缓存修订与方法源码整合；离线测试不代表原生或 Agent 实验通过。
+
 当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-01）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
 
 ## 目录

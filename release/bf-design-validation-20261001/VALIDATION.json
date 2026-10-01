@@ -1,0 +1,156 @@
+{
+  "schema": "bf-design-local-validation-v1",
+  "scope": "offline software contracts only",
+  "entrypoint_sha256": "e7fca6f011b943c67ad651832d233050438225bb6b0292002840fb72845b4eff",
+  "python_version": "3.12.14",
+  "all_checks_passed": false,
+  "executed_checks_passed": true,
+  "scientific_success": false,
+  "native_execution": false,
+  "model_calls": 0,
+  "checks": [
+    {
+      "name": "cache-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "test_simulation_chain.ContractsAndRecovery",
+        "test_simulation_chain.CacheConsistencyTests",
+        "-v"
+      ],
+      "cwd": "/workspace/agent/battery-world/tests/agentlab",
+      "log": "logs/cache-contracts.log"
+    },
+    {
+      "name": "method-node",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/bf-validation-final/sources/method-patch/patch-work/tests/independent/activation.adversarial.test.mjs",
+        "/workspace/bf-validation-final/sources/method-patch/patch-work/tests/independent/method.adversarial.test.mjs",
+        "/workspace/bf-validation-final/sources/method-patch/patch-work/tests/independent/source-wiring.test.mjs"
+      ],
+      "cwd": "/workspace/bf-validation-final/sources/method-patch/patch-work",
+      "log": "logs/method-node.log"
+    },
+    {
+      "name": "method-python",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-validation-final/sources/method-patch/patch-work",
+      "log": "logs/method-python.log"
+    },
+    {
+      "name": "method-syntax",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "node",
+        "tests/build_offline.mjs"
+      ],
+      "cwd": "/workspace/bf-validation-final/sources/method-patch/patch-work",
+      "log": "logs/method-syntax.log"
+    },
+    {
+      "name": "causal-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_causal_evaluator.py",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-validation-final/sources/development/evidence/causal-evaluator-repair-20261001",
+      "log": "logs/causal-contracts.log"
+    },
+    {
+      "name": "beam-rom",
+      "status": "blocked",
+      "missing_prerequisites": [
+        "static-rom/beam/sources/piezo-material-20261001.html"
+      ],
+      "reason": "Excluded from the source checkpoint; do not fabricate provenance or retained results."
+    },
+    {
+      "name": "magnetic-interface",
+      "status": "blocked",
+      "missing_prerequisites": [
+        "static-rom/magnetic/outputs/STATIC-RESULTS.json",
+        "static-rom/magnetic/evidence-completion-replay/RAW-REPLAY-RESULTS.json"
+      ],
+      "reason": "Excluded from the source checkpoint; do not fabricate provenance or retained results."
+    },
+    {
+      "name": "native-kit-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-validation-final/sources/native-observation",
+      "log": "logs/native-kit-contracts.log"
+    },
+    {
+      "name": "generator-preserves-method",
+      "status": "passed"
+    },
+    {
+      "name": "passive-and-authoritative-world-full-replay",
+      "status": "unrun",
+      "reason": "Separate modules retained; original source provenance, transitive paths and new execution receipts still required."
+    },
+    {
+      "name": "full-pi-build-and-service-probe",
+      "status": "unrun",
+      "reason": "Requires a new pinned build/input lock and fixture runtime; historical absolute-path locks are retained, not rewritten."
+    },
+    {
+      "name": "historical-raw-replay",
+      "status": "blocked",
+      "reason": "Checkpoint excludes raw traces, vendor payloads, auth fixtures and runtime files; original sealed archives required."
+    },
+    {
+      "name": "native-agent-method-experiments",
+      "status": "unrun",
+      "reason": "No vendor/model execution authorized; task qualification, model/budget authorization and participant isolation remain open."
+    },
+    {
+      "name": "repository-init",
+      "status": "unrun",
+      "reason": "This entrypoint is a bounded offline suite, not full repository health verification."
+    }
+  ]
+}
