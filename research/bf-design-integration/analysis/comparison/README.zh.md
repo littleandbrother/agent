@@ -26,3 +26,5 @@ budgets精确字段为model_tokens、model_requests、model_cost_microusd、nati
 输出状态：MATCHED_DECLARATIONS_ONLY仅表示所提供声明完整且相等；UNKNOWN表示缺证；INCOMPARABLE表示已知差异或双方都为同一profile；BLOCKED表示哈希/任务/方法/配额/结构无效。00与11同时改变R和Q，不能据此分别归因。即使声明一致，也没有认证作者、实际交付、执行预算、封存时点、人工干预或真实轨迹完整性。科学收益、因果、架构和可执行H1均不由此模块判定。
 
 本地BFA-035仍需从真实运行配置导出上述描述哈希与上限，保留来源证明，再提供现有轨迹契约记录。生产桥接尚未完成时，配置预检不能替代桥接验收。只读模块不改任何现有协议或生产文件。
+
+规则读取异常也在固定错误边界内：缺失、权限拒绝或循环链接返回BLOCKED/INVALID_OR_UNBOUND_DECLARATION，rules_sha256保留null，不抛出包含路径的异常。规则读取成功后从同一份字节计算哈希并解析，避免二次读取不一致。14项测试包含实际缺文件/循环链接及注入PermissionError；权限测试不冒称本环境实际权限隔离。旧11项日志和交付索引保留于review/。

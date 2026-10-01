@@ -4,6 +4,10 @@ import hashlib
 import json
 from pathlib import Path
 import unittest
+import tempfile
+import contextlib
+import io
+from unittest.mock import patch
 import check_configuration as c
 
 
@@ -83,5 +87,34 @@ class ConfigurationTests(unittest.TestCase):
         paths=[c.RULE_PATH,c.ROOT/'contracts/PROTOCOL.json',c.ROOT/'contracts/OWNERSHIP.json',c.ROOT/'analysis/trajectory/INPUT-CONTRACT.json']
         raw=[x.read_bytes() for x in paths];c.check(p)
         self.assertEqual(p,before);self.assertEqual(raw,[x.read_bytes() for x in paths])
+
+    def assert_rules_failure_private(self, path, error=None):
+        marker='SYNTHETIC_PRIVATE_RULES_MARKER'
+        stdout,stderr=io.StringIO(),io.StringIO()
+        with patch.object(c,'RULE_PATH',path), contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            if error is None:
+                result=c.check([])
+            else:
+                with patch.object(Path,'read_bytes',side_effect=error):
+                    result=c.check([])
+        self.assertEqual(result['status'],'BLOCKED')
+        self.assertEqual(result['issues'],['INVALID_OR_UNBOUND_DECLARATION'])
+        self.assertIsNone(result['rules_sha256'])
+        self.assertNotIn(marker,json.dumps(result)+stdout.getvalue()+stderr.getvalue())
+        self.assertEqual(stdout.getvalue()+stderr.getvalue(),'')
+
+    def test_missing_rules_fail_closed_without_path(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assert_rules_failure_private(Path(d)/'SYNTHETIC_PRIVATE_RULES_MARKER.json')
+
+    def test_unreadable_rules_fail_closed_without_path(self):
+        # Inject PermissionError: chmod alone is unreliable under privileged CI.
+        path=Path('/SYNTHETIC_PRIVATE_RULES_MARKER.json')
+        self.assert_rules_failure_private(path,PermissionError(13,'permission denied',str(path)))
+
+    def test_symlink_loop_rules_fail_closed_without_path(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/'SYNTHETIC_PRIVATE_RULES_MARKER.json';path.symlink_to(path)
+            self.assert_rules_failure_private(path)
 
 if __name__=='__main__':unittest.main()

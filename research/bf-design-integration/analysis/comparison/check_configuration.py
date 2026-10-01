@@ -28,12 +28,14 @@ def expected_method_hash(protocol,profile):
 def check(pair):
     """Stable codes only. Equality is not proof of delivery, authorship or timing."""
     result={'schema':'bf-rq-comparison-preflight-v1','status':'BLOCKED','issues':[],
-            'rules_sha256':hashlib.sha256(RULE_PATH.read_bytes()).hexdigest(),
+            'rules_sha256':None,
             'actual_delivery_verified':False,'actual_budget_enforcement_verified':False,
             'pre_run_seal_timing_verified':False,'method_benefit':'not assessed',
             'execution_authorized':False,'formal_method_comparison':False}
     try:
-        rules=json.loads(RULE_PATH.read_text())
+        rules_raw=RULE_PATH.read_bytes()
+        result['rules_sha256']=hashlib.sha256(rules_raw).hexdigest()
+        rules=json.loads(rules_raw)
         protocol=json.loads((ROOT/'contracts/PROTOCOL.json').read_text())
         if digest({k:v for k,v in protocol.items() if k!='protocol_hash'})!=rules['protocol_hash'] or protocol['protocol_hash']!=rules['protocol_hash']:
             raise ValueError('PROTOCOL_BINDING')
