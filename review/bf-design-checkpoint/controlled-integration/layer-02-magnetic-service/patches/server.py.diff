@@ -1,0 +1,60 @@
+--- pinned-upstream
++++ isolated-protocol-overlay
+@@ -17,7 +17,7 @@
+ from . import experiments
+ from .provider import Provider
+ 
+-REPO = Path(__file__).resolve().parents[6]
++from .runtime_config import REPO
+ UI = REPO / 'apps/agent-studio'
+ from .runtime_config import HOME_ROOT
+ DEFAULT_ROOT = HOME_ROOT / 'state'
+@@ -314,6 +314,8 @@
+             try:
+                 self.local_host()
+                 path = urlparse(self.path).path
++                if getattr(workbench,'controlled',None) and path!='/api/budget' and not path.startswith('/api/tasks/'):
++                    return self.reply(403,{'error':'CONTROLLED_ROUTE_NOT_ALLOWED'})
+                 static = {'/': ('index.html', 'text/html'), '/app.js': ('app.js', 'text/javascript'),
+                           '/conversation.js': ('conversation.js', 'text/javascript'), '/conversation.css': ('conversation.css', 'text/css'), '/version.js': ('version.js', 'text/javascript'),
+                           '/style.css': ('style.css', 'text/css'), '/tokens.css': ('tokens.css', 'text/css'),
+@@ -332,6 +334,8 @@
+                 if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js'):
+                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
+                 actor = self.principal(); owner = actor['owner']
++                if getattr(workbench,'controlled',None) and path!='/api/budget' and not path.startswith('/api/tasks/'):
++                    return self.reply(403,{'error':'CONTROLLED_ROUTE_NOT_ALLOWED'})
+                 if path in ('/api/reference-case','/api/reference-case/artifact'):
+                     if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_REFERENCE_CASE')
+                     from .pluck_case import projection, digest
+@@ -482,6 +486,8 @@
+                     return self.reply(404,{'error':'NOT_FOUND'})
+                 if path == '/api/state':
+                     return self.reply(200, workbench.state(owner))
++                if path=='/api/budget' and getattr(workbench,'controlled',None):
++                    return self.reply(200,workbench.controlled.budget(owner))
+                 if path=='/api/budget':
+                     with workbench.store.connect() as db:
+                         grant=dict(db.execute('SELECT * FROM grants WHERE owner=?',(owner,)).fetchone())
+@@ -495,6 +501,8 @@
+                     with workbench.store.connect() as db:
+                         row=db.execute('SELECT * FROM jobs WHERE owner=? AND operation=?',(owner,operation)).fetchone()
+                     return self.reply(200,workbench.store.project(row) if row else {'status':'NOT_SUBMITTED','operation':operation})
++                if path.startswith('/api/tasks/') and getattr(workbench,'controlled',None):
++                    return self.reply(200,workbench.controlled.public_task(owner,path.removeprefix('/api/tasks/')))
+                 if path.startswith('/api/tasks/'):
+                     task_id=path.removeprefix('/api/tasks/')
+                     workbench.store.authorize(owner,{'task_id':task_id})
+@@ -541,6 +549,12 @@
+                 if not 0 < length <= incoming_limit:
+                     raise ValueError('REQUEST_SIZE')
+                 body = json.loads(self.rfile.read(length))
++                if getattr(workbench,'controlled',None):
++                    if path=='/api/snapshots':return self.reply(201,workbench.controlled.snapshot(owner,body))
++                    if path=='/api/jobs':return self.reply(200,workbench.controlled.job(owner,body))
++                    if path in ('/api/solve','/v1/chat/completions','/api/submit'):
++                        return self.reply(403,workbench.controlled.denied(owner,path,body))
++                    return self.reply(403,{'error':'CONTROLLED_ROUTE_NOT_ALLOWED'})
+                 if path=='/api/studio/package':
+                     from .studio_delivery import StudioDelivery
+                     target=body.get('session_id',owner) if actor['role']=='operator' else owner

@@ -1,0 +1,303 @@
+{
+  "schema": "bf-startup-model-sufficiency-v1",
+  "scientific_solves": 0,
+  "sources": {
+    "old_firmware": {
+      "path": "/workspace/shared/bf-simulation-chain/battery-world/scripts/door_case/simchain/firmware_receiver.py",
+      "sha256": "956156384dbc242abe1552e8db8c7bf519880277547ef035b6dcc53d7ffcf7c0"
+    },
+    "new_firmware_parameters": {
+      "path": "/workspace/shared/current-source-reconciliation-20261001/checkout/battery-world/configs/reference_cases/closed-simulation/d2-nominal.json",
+      "sha256": "1520130e2782518e1114710b569ee82d1bd50dbdc7cd2e1b33f51411c399fd3b"
+    },
+    "ADI": {
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/35881fc.pdf",
+      "revision": "C",
+      "sha256": "f1e52b155e35b2b5fe70ee05f5cdf130a577488df648703054bf2f57395c7c1d",
+      "research_copy_only": "/workspace/shared/primary-source-research-20261001/35881fc.pdf",
+      "redistributed": false,
+      "printed_pages": [
+        7,
+        8,
+        13
+      ],
+      "figures": [
+        1,
+        6
+      ]
+    }
+  },
+  "frozen_firmware_assumptions": {
+    "historical_behavioral": {
+      "states": [
+        {
+          "state": "reset",
+          "duration_ms": 1.0,
+          "current_mA": 3.0,
+          "charge_uC": 3.0,
+          "energy_at_constant_3p3V_uJ": 9.899999999999999
+        },
+        {
+          "state": "clock",
+          "duration_ms": 1.0,
+          "current_mA": 3.0,
+          "charge_uC": 3.0,
+          "energy_at_constant_3p3V_uJ": 9.899999999999999
+        },
+        {
+          "state": "boot",
+          "duration_ms": 3.0,
+          "current_mA": 3.0,
+          "charge_uC": 9.0,
+          "energy_at_constant_3p3V_uJ": 29.7
+        },
+        {
+          "state": "init",
+          "duration_ms": 2.0,
+          "current_mA": 3.0,
+          "charge_uC": 6.0,
+          "energy_at_constant_3p3V_uJ": 19.799999999999997
+        },
+        {
+          "state": "read",
+          "duration_ms": 1.0,
+          "current_mA": 3.0,
+          "charge_uC": 3.0,
+          "energy_at_constant_3p3V_uJ": 9.899999999999999
+        },
+        {
+          "state": "payload",
+          "duration_ms": 0.2,
+          "current_mA": 3.0,
+          "charge_uC": 0.6000000000000001,
+          "energy_at_constant_3p3V_uJ": 1.9800000000000002
+        },
+        {
+          "state": "tx",
+          "duration_ms": 1.2,
+          "current_mA": 5.3,
+          "charge_uC": 6.359999999999999,
+          "energy_at_constant_3p3V_uJ": 20.987999999999996
+        }
+      ],
+      "duration_ms": 9.4,
+      "charge_uC": 30.96,
+      "energy_at_constant_3p3V_uJ": 102.16799999999999
+    },
+    "pinned_native": {
+      "states": [
+        {
+          "state": "boot",
+          "duration_ms": 53.8,
+          "current_mA": 0.41,
+          "charge_uC": 22.057999999999996,
+          "energy_at_constant_3p3V_uJ": 72.79139999999998
+        },
+        {
+          "state": "init",
+          "duration_ms": 13.0,
+          "current_mA": 1.596,
+          "charge_uC": 20.748,
+          "energy_at_constant_3p3V_uJ": 68.4684
+        },
+        {
+          "state": "tx",
+          "duration_ms": 5.0,
+          "current_mA": 3.659,
+          "charge_uC": 18.294999999999998,
+          "energy_at_constant_3p3V_uJ": 60.37349999999999
+        }
+      ],
+      "duration_ms": 71.8,
+      "charge_uC": 61.101,
+      "energy_at_constant_3p3V_uJ": 201.63329999999996
+    },
+    "evidence_class": "Arithmetic from executable frozen parameter values, all timings/currents unmeasured assumptions.",
+    "exclusions": [
+      "WAIT and first RESET sampling tick in native C",
+      "off and sleep draw",
+      "PGOOD/brownout aborts and repeated boots",
+      "sample quantization",
+      "output capacitor charge",
+      "PMIC/bridge/converter/clamp losses"
+    ],
+    "not_claimed": [
+      "measured binary consumption",
+      "exact transient mission energy",
+      "proof of feasibility",
+      "one firmware better than the other"
+    ]
+  },
+  "existing_topology_rail_analysis": {
+    "datasheet_relationship": "Ideal quasi-static relation: VIN2=min(VIN,4.8 V), CAP=max(VIN-4.8 V,0); CAP capacitor is between VIN and CAP.",
+    "capacitance_uF": {
+      "VIN_to_CAP": 1.0,
+      "VIN2_to_GND": 4.7
+    },
+    "ideal_bypass_stored_energy_uJ_at_Vin": {
+      "1.8": 9.234000000000002,
+      "3.67": 38.386365,
+      "4.8": 65.664,
+      "5.05": 65.664
+    },
+    "ideal_input_plus_bypass_stored_energy_at_UVLO_5p05V_uJ": {
+      "0.1": 66.939125,
+      "0.22": 68.469275,
+      "0.47": 71.6570875,
+      "1": 78.41525,
+      "10": 193.17649999999998,
+      "47": 664.9727499999999
+    },
+    "interpretation": "65.664 uJ is real ideal stored energy in the two recommended bypass capacitors at their 4.8 V differential voltages. It is not established as an independent all-at-once post-UVLO gate. Before 4.8 V the ideal tracking relationship loads the input like an additional 5.7 uF. Internal rail charging dynamics and dissipation require their own qualification; these static estimates are not a universal start/no-start criterion.",
+    "sub_UVLO_invariant_counterexample": {
+      "scope": "Exact old-model invariant plus datasheet ideal quasistatic comparison; not a timed native experiment.",
+      "initial_aux_J": 0,
+      "UVLO_rise_V": 5.05,
+      "old_off_equation": "dEaux/dt=-Eaux/0.1 with startup=0",
+      "old_result_for_arbitrarily_long_sub_UVLO_input": "Eaux(t)=0",
+      "test_points": [
+        {
+          "Vin_V": 2.5,
+          "old_aux_uJ": 0,
+          "datasheet_ideal_settled_bypass_uJ": 17.8125
+        },
+        {
+          "Vin_V": 4.5,
+          "old_aux_uJ": 0,
+          "datasheet_ideal_settled_bypass_uJ": 57.712500000000006
+        }
+      ],
+      "settling_time_s": null,
+      "settling_explanation": "No documented rail charging time constant is available. Claim is the incompatible settled relationships, not a finite-time convergence claim."
+    },
+    "old_model_difference": "Input can first reach5.05V while separate Eaux remains zero; then a1mA startup draw fills Eaux toward65.664uJ, blocking any output current until ready, and Eaux decays exponentially with0.1s tau whenever UVLO is off. Neither this staged timing nor the decay constant is qualified by source or measurements.",
+    "consequence": "Changing the rail model changes input loading, UVLO timing and electrical back-action on mechanics. Existing trajectory values cannot be carried into the alternative model as fixed harvested-energy supply.",
+    "evidence_blockers": [
+      "The pinned vendor deck omits CAP/VIN2 voltages and currents from .save, so old RAW alone cannot establish these missing rail dynamics. A separately versioned observable extension and bounded new diagnostic is needed.",
+      "The licensed macro-model .SUBCKT port declaration/order has not been independently verified; obtain declaration metadata and identity before assuming package pin numbering equals model order. No full licensed model needs to be distributed."
+    ],
+    "do_not": "Do not delete stored energy, substitute a zero threshold, or claim lower startup energy without a changed physical topology and complete energy accounting."
+  },
+  "alternative_circuit_contract": {
+    "id": "HYP-LOWVIN-3V3-v1",
+    "status": "proposed_blocked_component_and_model_qualification",
+    "claim": "Testable design hypothesis only, no successful reference.",
+    "source_boundary": "ADI p13/Fig6 permits VIN2 tied to VIN and CAP to GND for input limited below6V; its figure is1.8V output. This hypothesis retains3.3V and must independently qualify that configuration.",
+    "fixed_world": {
+      "opening_s": 2,
+      "angle_deg": 65,
+      "observation_s": 4,
+      "electrical_initial_V": 0,
+      "external_electrical_work_J": 0,
+      "no_extra_operations": true
+    },
+    "wiring": {
+      "CAP": "GND",
+      "VIN2": "VIN",
+      "D1": "VIN2",
+      "D0": "GND",
+      "VOUT_target_V": 3.3,
+      "separate_Ccap_uF": 0,
+      "separate_Cvin2_uF": 0,
+      "Cin_uF": 47,
+      "Cout_uF": 100,
+      "L_uH": 10
+    },
+    "parts_rule": "Use the pinned native baseline values for common components; removing bypass capacitors is an explicit topology change. Select an actual protection BOM and bind models before any run.",
+    "voltage_guards": {
+      "datasheet_condition_Vin_strictly_below_V": 6.0,
+      "proposed_engineering_worst_case_Vin_ceiling_V": 5.8,
+      "includes": [
+        "clamp_tolerance",
+        "dynamic_overshoot",
+        "temperature",
+        "all_door_conditions",
+        "component_variation"
+      ],
+      "maximum_allowed_raw_transient_above_guard": 0,
+      "output_target_must_not_be_silently_lowered": true
+    },
+    "clamp_and_leakage": {
+      "clamp_part": null,
+      "nominal_5p6V_label_not_sufficient": true,
+      "reverse_leakage_I_of_V_T_required": true,
+      "junction_capacitance_required": true,
+      "dynamic_resistance_and_pulse_energy_required": true,
+      "all_clamp_and_leakage_current_in_source_and_energy_ledger": true,
+      "leakage_budget_A": null,
+      "budget_rule": "Freeze after BOM/source review. No zero-leak ideal clamp permitted. Missing budget prevents run admission."
+    },
+    "firmware": "Pinned native program and its declared assumptions unchanged for topology contrast. No current/duration reduction. Any later firmware optimization needs changed source, build hash and independent timing/current bounds.",
+    "required_raw_observables": [
+      "q",
+      "qdot",
+      "magnetic_force",
+      "piezo_voltage",
+      "piezo_current",
+      "VIN",
+      "VIN2",
+      "VIN-CAP",
+      "VOUT",
+      "PGOOD",
+      "rail_currents",
+      "clamp_current",
+      "load_current",
+      "complete_TX",
+      "receiver_event"
+    ],
+    "additional_checks": [
+      "pin_absolute_limits_across_waveform",
+      "output_and_PGOOD_policy_compatibility",
+      "zero_initial_rail_and_cap_energies",
+      "no_ideal_hidden_supply",
+      "full_port_energy_ledger",
+      "numerical_halfstep",
+      "actual_part_models_and_tolerances"
+    ],
+    "run_admission": false
+  },
+  "bounded_matched_physics_proposal": {
+    "status": "not_executed_needs_exact_inputs_and_parent_approval",
+    "maximum_new_joint_solves": 4,
+    "cells": [
+      "native_default_rails_coarse",
+      "native_default_rails_fine",
+      "native_low_input_topology_coarse",
+      "native_low_input_topology_fine"
+    ],
+    "retries": 0,
+    "common_conditions": [
+      "same independently bound native ROM and force table",
+      "same gap48,2s65deg,zero-electrical-initial-state world",
+      "same initial equilibrium/reset boundary",
+      "same Cin47,Cout100,L10 and load firmware",
+      "same vendor model hash and complete receiver criteria"
+    ],
+    "proposal_solver_parameters": {
+      "coarse": {
+        "max_step_s": 5e-05,
+        "firmware_step_s": 0.0001,
+        "reltol": 0.0001
+      },
+      "fine": {
+        "max_step_s": 2.5e-05,
+        "firmware_step_s": 5e-05,
+        "reltol": 5e-05
+      },
+      "max_coupling_iterations": 8
+    },
+    "not_yet_frozen": [
+      "protection_BOM_and_leakage_budget",
+      "verified_macro_model_port_order",
+      "versioned_rail_observable_extension",
+      "source/provider_ids",
+      "per_solve_wall_and_native_process_caps",
+      "imported_native_Raw_evidence",
+      "numerical_acceptance_provider_contract",
+      "independent_reviewer"
+    ],
+    "stopping_condition": "Exactly four planned cells, or any applicability/voltage/qualification failure. Zero adaptive capacitance/geometry/threshold search. If unchanged baseline evidence exactly matches, reuse it rather than rerun.",
+    "purpose": "Establish topology/startup model sufficiency on matched physics before searching for feasibility. Four successful solves do not themselves admit either task.",
+    "separate_mechanical_patch_plan": "At most8 D,D+a,D+b,D+a+b coarse/fine solves only after a qualified passive-release patch and circuit patch are frozen; not an authorization or automatic next stage."
+  }
+}

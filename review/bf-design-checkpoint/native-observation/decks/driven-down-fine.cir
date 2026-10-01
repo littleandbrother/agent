@@ -1,0 +1,53 @@
+* Native PMIC observation kit v1; PROSPECTIVE AND UNEXECUTED
+* Case: driven-down-fine
+* RC smoke, exact prospective review, runtime identity and authorization remain required.
+* PZ1 and PZ2 are explicitly clamped to ground; not open-piezo or door-world.
+* All VPM currents are positive from named external node INTO the macro pin.
+* Vendor body deliberately absent from this kit; never replace it with a placeholder.
+.lib "../vendor/LTC3588-1.sub"
+Vdrive drv 0 PWL(0 0 0.005 0 0.05 4 0.20 4 0.25 5.5 0.50 5.5 0.60 3.0 2.0 3.0)
+Rsource drv src_after_r 100
+Vsupply src_after_r pre_switch 0
+Vcontrol sw_ctl 0 PWL(0 1 2.0 1)
+Sdrive pre_switch vin sw_ctl 0 SOURCE_SWITCH
+.model SOURCE_SWITCH SW(Ron=0.01 Roff=1e12 Vt=0.5 Vh=0 Lser=0 Vser=0)
+VPM_PZ1 0 m_pz1 0
+VPM_PZ2 0 m_pz2 0
+VPM_CAP cap m_cap 0
+VPM_VIN vin m_vin 0
+VPM_SW sw m_sw 0
+VPM_VOUT out m_out 0
+VPM_VIN2 vin2 m_vin2 0
+VPM_D1 vin2 m_d1 0
+VPM_D0 0 m_d0 0
+VPM_PGOOD pgood m_pgood 0
+VPM_GND 0 m_gnd 0
+XU1 m_pz1 m_pz2 m_cap m_vin m_sw m_out m_vin2 m_d1 m_d0 m_pgood m_gnd LTC3588-1
+Cstorage vin 0 47u IC=0 Rser=0
+Ccap vin cap 1u IC=0 Rser=0
+Cvin2 vin2 0 4.7u IC=0 Rser=0
+R_L_ESR sw l_after_r 0.4
+V_L_TERMINAL l_after_r l_inner 0
+* Explicit 1T parallel shunt suppresses unspecified auto damping; loss is in ledger.
+* Ideal L current is I(V_L_TERMINAL)-V(l_inner,out)/1e12; do not assume I(L1) semantics.
+L1 l_inner out 10u IC=0 Rser=0 Rpar=1e12 Cpar=0
+R_COUT_ESR out cout_after_r 0.02
+V_COUT_BRANCH cout_after_r cout_inner 0
+Cout cout_inner 0 100u IC=0 Rser=0
+Rload out 0 10000
+* PGOOD has no external load/pullup; preserve unresolved output behavior if native model requires one.
+.temp 25
+.tran 0 2.0 0 2.5e-06 uic
+.options plotwinsize=0 numdgt=15 reltol=5e-05 abstol=1e-12 vntol=1e-9
+.options chgtol=1e-14 method=trap solver=norm gmin=1e-12 gshunt=0 cshunt=0 cshuntintern=0 tnom=27
+.save V(drv) V(src_after_r) V(pre_switch) V(vin) V(cap) V(vin2) V(sw) V(l_after_r)
+.save V(l_inner) V(out) V(cout_after_r) V(cout_inner) V(pgood) V(sw_ctl) V(m_pz1) V(m_pz2)
+.save V(m_cap) V(m_vin) V(m_sw) V(m_out) V(m_vin2) V(m_d1) V(m_d0) V(m_pgood)
+.save V(m_gnd) I(Vdrive) I(Vcontrol) I(Vsupply) I(V_L_TERMINAL) I(V_COUT_BRANCH) I(Cstorage) I(Ccap)
+.save I(Cvin2) I(Cout) I(L1) I(Rsource) I(R_L_ESR) I(R_COUT_ESR) I(Rload) I(Sdrive)
+.save I(VPM_PZ1) I(VPM_PZ2) I(VPM_CAP) I(VPM_VIN) I(VPM_SW) I(VPM_VOUT) I(VPM_VIN2) I(VPM_D1)
+.save I(VPM_D0) I(VPM_PGOOD) I(VPM_GND)
+.meas TRAN vin_peak MAX V(vin)
+.meas TRAN vout_peak MAX V(out)
+.meas TRAN vin2_peak MAX V(vin2)
+.end

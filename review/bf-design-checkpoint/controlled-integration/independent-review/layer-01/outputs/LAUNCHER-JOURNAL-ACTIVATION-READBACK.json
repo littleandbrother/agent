@@ -1,0 +1,332 @@
+{
+  "schema": "bf-independent-pi-evidence-readback-v1",
+  "input_files_rehashed": 2161,
+  "input_lock_sha256": "c4c0c1d8100f380b6a86eb56dc9102a1f00f232947c6abe2e3285e56d66751cf",
+  "runs": [
+    {
+      "version": "v1",
+      "status": "historical_rejected_run",
+      "journal_rows": 23,
+      "journal_head": "sha256:b84cf83e170dc75e6b914f4c67016744efcf9f5e9a4dceb24f78cb6a157d139c",
+      "assigned_episodes": 11,
+      "attempt_count": 11,
+      "statuses": {
+        "h0-solve-a1": "invocation_failed",
+        "h0-improve-a1": "activation_pass",
+        "manual-h1-a1": "activation_pass",
+        "rollback-h0-a1": "activation_pass",
+        "failed-import-a1": "import_failed",
+        "failed-invoke-a1": "invocation_failed",
+        "failed-improver-a1": "invocation_failed",
+        "failed-build-a1": "build_failed",
+        "timeout-a1": "timed_out",
+        "recover-receipt-a1": "activation_pass",
+        "failed-import-a2": "budget_exhausted"
+      },
+      "actual_processes": [
+        {
+          "attempt_id": "h0-solve-a1",
+          "pid": 191,
+          "status": "invocation_failed",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": [
+            {
+              "method": "GET",
+              "path": "/api/budget"
+            }
+          ]
+        },
+        {
+          "attempt_id": "h0-improve-a1",
+          "pid": 201,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "manual-h1-a1",
+          "pid": 214,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "rollback-h0-a1",
+          "pid": 227,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-import-a1",
+          "pid": 240,
+          "status": "import_failed",
+          "imports": [],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-invoke-a1",
+          "pid": 249,
+          "status": "invocation_failed",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-improver-a1",
+          "pid": 258,
+          "status": "invocation_failed",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "timeout-a1",
+          "pid": 291,
+          "status": "timed_out",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": -9,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "recover-receipt-a1",
+          "pid": 300,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        }
+      ],
+      "not_started_assignments_retained": true
+    },
+    {
+      "version": "v2",
+      "status": "accepted_trusted_offline_control_run",
+      "journal_rows": 23,
+      "journal_head": "sha256:6f6dbce6b5c6830b11649e4813bd7a5fa12ebf447dbe8374e17686cee8ba4ef1",
+      "assigned_episodes": 11,
+      "attempt_count": 11,
+      "statuses": {
+        "h0-solve-a1": "activation_pass",
+        "h0-improve-a1": "activation_pass",
+        "manual-h1-a1": "activation_pass",
+        "rollback-h0-a1": "activation_pass",
+        "failed-import-a1": "import_failed",
+        "failed-invoke-a1": "invocation_failed",
+        "failed-improver-a1": "invocation_failed",
+        "failed-build-a1": "build_failed",
+        "timeout-a1": "timed_out",
+        "recover-receipt-a1": "activation_pass",
+        "failed-import-a2": "budget_exhausted"
+      },
+      "actual_processes": [
+        {
+          "attempt_id": "h0-solve-a1",
+          "pid": 206,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "solver.solverPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": [
+            {
+              "method": "GET",
+              "path": "/api/budget"
+            }
+          ]
+        },
+        {
+          "attempt_id": "h0-improve-a1",
+          "pid": 220,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "manual-h1-a1",
+          "pid": 233,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "rollback-h0-a1",
+          "pid": 246,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-import-a1",
+          "pid": 259,
+          "status": "import_failed",
+          "imports": [],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-invoke-a1",
+          "pid": 268,
+          "status": "invocation_failed",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "failed-improver-a1",
+          "pid": 277,
+          "status": "invocation_failed",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 1,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "timeout-a1",
+          "pid": 309,
+          "status": "timed_out",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [],
+          "output_hashes_verified": true,
+          "exit_code": -9,
+          "service_requests": []
+        },
+        {
+          "attempt_id": "recover-receipt-a1",
+          "pid": 318,
+          "status": "activation_pass",
+          "imports": [
+            "solver",
+            "improver"
+          ],
+          "calls": [
+            "solver.initialState",
+            "improver.improvementPrompt"
+          ],
+          "output_hashes_verified": true,
+          "exit_code": 0,
+          "service_requests": []
+        }
+      ],
+      "not_started_assignments_retained": true
+    }
+  ],
+  "legacy_relative_path_resolution": "Historical v1 receipt paths resolved relative to original producer package, matching its recorded CLI context; no producer receipt changed",
+  "reviewer_started_processes": 0,
+  "provider_calls": 0,
+  "participant_calls": 0,
+  "scientific_success": false,
+  "scope": "Readback of fixed trusted dry-run Pi processes only; no participant isolation/authorship or hidden evaluator qualification"
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "New optional operator-declared native model interface",
+  "description": "New proposed sidecar, not an existing 338d603 artifact. Declaration consistency is not model authentication. Cross-field token/order checks are additionally enforced by model_interface.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_name",
+    "model_sha256",
+    "subckt_declaration",
+    "ordered_ports",
+    "provenance",
+    "verification_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "native-model-interface-v1"
+    },
+    "model_name": {
+      "const": "LTC3588-1"
+    },
+    "model_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "subckt_declaration": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "ordered_ports": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_+.-]{1,64}$"
+      }
+    },
+    "verification_status": {
+      "const": "operator-supplied-unverified"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "model_version",
+        "tool_version",
+        "captured_utc",
+        "note"
+      ],
+      "properties": {
+        "method": {
+          "const": "operator-copied-original-declaration"
+        },
+        "model_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\r\\n]+$"
+        },
+        "tool_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\r\\n]+$"
+        },
+        "captured_utc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 1000,
+          "pattern": "^[^\\r\\n]*$"
+        }
+      }
+    },
+    "xu1_instance": {
+      "type": "string",
+      "maxLength": 4096,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "xu1_nodes_in_order": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "maxLength": 64
+      }
+    },
+    "port_mapping": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 64
+      }
+    }
+  },
+  "dependentRequired": {
+    "xu1_instance": [
+      "xu1_nodes_in_order",
+      "port_mapping"
+    ],
+    "xu1_nodes_in_order": [
+      "xu1_instance",
+      "port_mapping"
+    ],
+    "port_mapping": [
+      "xu1_instance",
+      "xu1_nodes_in_order"
+    ]
+  }
+}

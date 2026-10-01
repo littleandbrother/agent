@@ -1,0 +1,82 @@
+{
+  "state_count": 5,
+  "nominal_new_evaluations": 15,
+  "q_perturbation_evaluations": 90,
+  "legacy_comparison_evaluations": 15,
+  "all_virtual_work_checks_passed": true,
+  "all_6_to10_quadrature_checks_passed": true,
+  "all_sampled_and_perturbed_magnets_separated": true,
+  "maximum_virtual_work_absolute_error_N": 1.6638323774298414e-09,
+  "maximum_6_to10_Q_change_N": 3.3499639173761864e-10,
+  "states_order10": [
+    {
+      "id": "closed_zero",
+      "Q_N": -0.42122165337918316,
+      "U_J": -0.004975991804830535,
+      "terms_N": {
+        "transverse_Fz_N": -0.31543059854689964,
+        "axial_virtual_work_N": -0.009662170567374178,
+        "rotational_virtual_work_N": -0.09612888426490936
+      },
+      "legacy_Fz_N": -0.3154305985468958,
+      "clearance_lower_bound_m": 0.033000000000000015
+    },
+    {
+      "id": "early_negative",
+      "Q_N": 0.1188285652464299,
+      "U_J": -0.012408316142143772,
+      "terms_N": {
+        "transverse_Fz_N": 0.14261875902255658,
+        "axial_virtual_work_N": -0.06277746334372958,
+        "rotational_virtual_work_N": 0.0389872695676029
+      },
+      "legacy_Fz_N": 0.11514948738456555,
+      "clearance_lower_bound_m": 0.03444291505621458
+    },
+    {
+      "id": "early_positive",
+      "Q_N": -0.2274376423471382,
+      "U_J": -0.011929380706601808,
+      "terms_N": {
+        "transverse_Fz_N": -0.13285153498927632,
+        "axial_virtual_work_N": -0.05936740826375977,
+        "rotational_virtual_work_N": -0.03521869909410211
+      },
+      "legacy_Fz_N": -0.11430860242481629,
+      "clearance_lower_bound_m": 0.03508156905213283
+    },
+    {
+      "id": "rotated_positive",
+      "Q_N": 0.0008568919234995759,
+      "U_J": 6.108328003162958e-05,
+      "terms_N": {
+        "transverse_Fz_N": -0.0004350324700228913,
+        "axial_virtual_work_N": 9.841853122334051e-05,
+        "rotational_virtual_work_N": 0.0011935058622991267
+      },
+      "legacy_Fz_N": -0.0005330728899812113,
+      "clearance_lower_bound_m": 0.18615466216021861
+    },
+    {
+      "id": "open_zero",
+      "Q_N": -4.2888856436380846e-06,
+      "U_J": 1.2457693804023164e-06,
+      "terms_N": {
+        "transverse_Fz_N": -2.6771470103402076e-06,
+        "axial_virtual_work_N": 2.660587001509029e-07,
+        "rotational_virtual_work_N": -1.87779733344878e-06
+      },
+      "legacy_Fz_N": -2.6771470103736193e-06,
+      "clearance_lower_bound_m": 0.8158492457673312
+    }
+  ],
+  "status": "conditional_static_interface_only",
+  "limitations": [
+    "V=0 retained q-only pose; no voltage-dependent axial shift",
+    "Fx axial resultant and torque-driven discarded modes are not statically recondensed",
+    "quadrature/chain-rule checks are not independent physical or FEM validation",
+    "inherited angle/gap/q support is computational, not a proven accuracy/safety range",
+    "collision coverage only these magnet OBB samples and perturbations, not full assembly or continuous path",
+    "no native material recovery, dynamic coupling, force table, equilibrium, damping or mission result"
+  ]
+}

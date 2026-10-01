@@ -1,0 +1,55 @@
+{
+  "defaults_never_rewritten": true,
+  "fixture_parameters": {
+    "analytic_Cin_F": 1e-07,
+    "analytic_dt_s": 0.0005,
+    "analytic_duration_s": 0.004,
+    "analytic_source_R_ohm": 10000.0,
+    "analytic_source_V": 6.0,
+    "analytic_startup_current_A": 0.001,
+    "angles_deg": [
+      0,
+      5,
+      30,
+      65
+    ],
+    "displacements_m": [
+      -0.004,
+      0,
+      0.004
+    ],
+    "force_direct_gaps_mm": [
+      48
+    ],
+    "inflight_perturbation_delay_s": 0.0004,
+    "trajectory_gaps_mm": [
+      40,
+      48,
+      60
+    ],
+    "waveform_duration_s": 0.4,
+    "waveform_step_s": 0.0001
+  },
+  "forbidden_claims": [
+    "native vendor execution",
+    "hardware calibration",
+    "matched closed-loop mission",
+    "formal Agent superiority",
+    "event-v2 promotion"
+  ],
+  "gates": {
+    "analytic_event_time_abs_s": 2e-09,
+    "analytic_final_v_abs_V": 2e-07,
+    "force_direct_abs_N": 1e-12,
+    "geometry_nominal_abs_m": 1e-14,
+    "passive_energy_relative": 1e-07
+  },
+  "schema_version": "alignment-test-plan-v1",
+  "scope": "portable source semantics, common host-C and matched synthetic analytic tests only",
+  "source_lock_sha256": "e98250b21a63501162dd7208eb8adac6b5dce96b149debbe7c876c5659422244",
+  "supplement_source_receipt": "source-supplement/fetch-receipt.json",
+  "supplemental_checks": [
+    "Pinned CAD declaration/force coordinate consistency at gaps40,48,60",
+    "Native rail .save omission and non-overwriting save-only derivative"
+  ]
+}

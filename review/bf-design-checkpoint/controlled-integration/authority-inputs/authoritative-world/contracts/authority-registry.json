@@ -1,0 +1,59 @@
+{
+  "candidate_design": {
+    "never_controls": [
+      "world_id",
+      "task_contract_id",
+      "qualification",
+      "source_registry",
+      "reference_model"
+    ],
+    "owner": "participant",
+    "participant_mutable": true
+  },
+  "candidate_world_model": {
+    "owner": "participant",
+    "participant_mutable": true,
+    "qualification_authority": false
+  },
+  "computational_semantics": {
+    "owner": "world_maintainer",
+    "participant_mutable": false,
+    "sources": [
+      "upstream_contracts",
+      "upstream_native",
+      "upstream_solver",
+      "upstream_program",
+      "upstream_receiver"
+    ]
+  },
+  "conflict_policy": "new semantics require a new version and identity; source authority does not convert assumptions to user requirements",
+  "evidence": {
+    "immutable_after_seal": true,
+    "owner": "runtime",
+    "participant_mutable": false
+  },
+  "presentation": {
+    "owner": "viewer",
+    "scientific_identity_effect": "none"
+  },
+  "qualification": {
+    "owner": "independent_reviewer",
+    "world_freeze_is_sufficient": false
+  },
+  "ranking_policy": "never pool legacy world, canonical world, independent runs and same-state continuations",
+  "reference_model": {
+    "owner": "independent_evaluator",
+    "participant_mutable": false,
+    "physical_qualified": false
+  },
+  "schema": "bf-authority-registry-v1",
+  "task_requirements": {
+    "owner": "requirement_owner",
+    "participant_mutable": false,
+    "sources": [
+      "legacy_tasks"
+    ],
+    "state": "not_owner_frozen"
+  },
+  "version": 1
+}

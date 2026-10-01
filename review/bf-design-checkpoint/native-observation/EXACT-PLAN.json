@@ -1,0 +1,377 @@
+{
+  "schema_version": "native-pmic-exact-observation-plan-v1",
+  "kit_version": "1.0-prospective",
+  "status": "UNEXECUTED_REQUIRES_EXACT_REVIEW_AND_AUTHORIZATION",
+  "original_proposal_sha256": "fa24c6ba138f7f29c88595c8361b45f533f35526a7185ce64f32549a8e8951d6",
+  "source_handoff_library_file_id": "libfile_00b4edfd00648191953b59fb5edb29ec",
+  "cases": {
+    "source-open-coarse": {
+      "mode": "source-open",
+      "resolution": "coarse",
+      "maxstep_s": 5e-06,
+      "reltol": 0.0001,
+      "deck": "decks/source-open-coarse.cir",
+      "deck_sha256": "5f246fee25fa66d94f11bacc67b9b09a5fed200ca6cea7ea3db32165a2591a78"
+    },
+    "source-open-fine": {
+      "mode": "source-open",
+      "resolution": "fine",
+      "maxstep_s": 2.5e-06,
+      "reltol": 5e-05,
+      "deck": "decks/source-open-fine.cir",
+      "deck_sha256": "306e237c2519d80f8a99dc216af35b87c383a8a7c2356641a3fca803fc5bc6cc"
+    },
+    "driven-down-coarse": {
+      "mode": "driven-down",
+      "resolution": "coarse",
+      "maxstep_s": 5e-06,
+      "reltol": 0.0001,
+      "deck": "decks/driven-down-coarse.cir",
+      "deck_sha256": "82d7dc7e6cee5daa70a967d7b6ddda7dd9db7a1c489a81f7ecb10f4591aa4dbc"
+    },
+    "driven-down-fine": {
+      "mode": "driven-down",
+      "resolution": "fine",
+      "maxstep_s": 2.5e-06,
+      "reltol": 5e-05,
+      "deck": "decks/driven-down-fine.cir",
+      "deck_sha256": "7c62cfd0b62c57d4d11f534fc160a096d38ba2085351b32050f181c2e0f749fb"
+    }
+  },
+  "physical_values": {
+    "cin_F": 4.7e-05,
+    "ccap_F": 1e-06,
+    "cvin2_F": 4.7e-06,
+    "cout_F": 0.0001,
+    "l_H": 1e-05,
+    "source_R_ohm": 100.0,
+    "l_esr_ohm": 0.4,
+    "cout_esr_ohm": 0.02,
+    "l_rpar_ohm": 1000000000000.0,
+    "load_R_ohm": 10000.0,
+    "temperature_C": 25.0,
+    "tnom_C": 27.0,
+    "tnom_scope": "device-model nominal parameter; does not identify hidden macro calibration"
+  },
+  "explicit_fixture_changes": [
+    "Both PZ inputs clamped to external ground via separate zero-volt sensors; not open piezo",
+    "All eleven declared macro pins sensed external-to-macro; all original internal nodes remain unprobed",
+    "Cout ESR=.02 ohm is an explicit resistor with ideal capacitor node cout_inner",
+    "L ESR=.4 ohm is explicit; builtin Rser=0; fixed1T ohm builtin Rpar and Cpar=0 suppress unspecified damping; its leakage/loss accounted",
+    "No external PGOOD pullup/load, consistent with unloaded official example but not proof of all applications",
+    "No mechanics, force-table, firmware or receiver; fixed10k ohm load",
+    "Explicit25C ambient and27C nominal-model parameter"
+  ],
+  "source_prefix_pwl_s_V": [
+    [
+      0,
+      0
+    ],
+    [
+      0.005,
+      0
+    ],
+    [
+      0.05,
+      4
+    ],
+    [
+      0.2,
+      4
+    ],
+    [
+      0.25,
+      5.5
+    ],
+    [
+      0.5,
+      5.5
+    ]
+  ],
+  "source_suffix": {
+    "source-open": [
+      [
+        2,
+        5.5
+      ]
+    ],
+    "driven-down": [
+      [
+        0.6,
+        3.0
+      ],
+      [
+        2,
+        3.0
+      ]
+    ]
+  },
+  "switch": {
+    "model": "SW",
+    "Ron_ohm": 0.01,
+    "Roff_ohm": 1000000000000.0,
+    "Vt_V": 0.5,
+    "Vh_V": 0,
+    "Lser_H": 0,
+    "Vser_V": 0,
+    "source_open_control_pwl_s_V": [
+      [
+        0,
+        1
+      ],
+      [
+        0.499999,
+        1
+      ],
+      [
+        0.500001,
+        0
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "driven_down_control_pwl_s_V": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "nominal_open_crossing_s": 0.5,
+    "equality": "No claim about a sample exactly at threshold; retain actual Vcontrol crossing bracket",
+    "off_leakage": "finite1T-ohm source connection; measure source/switch work, never call infinite isolation",
+    "switch_ohm_gate_control_exclusion_V": 1e-09
+  },
+  "initial_states": {
+    "Cstorage_V": 0,
+    "Ccap_Vin_minus_CAP_V": 0,
+    "Cvin2_V": 0,
+    "Cout_inner_V": 0,
+    "L1_ideal_A": 0,
+    "uic": true,
+    "t0_row": "retain unchanged; no abs(time), display-row correction or reconstructed auxiliary state",
+    "hidden_macro_states": "unknown"
+  },
+  "settings_common": {
+    "stop_s": 2.0,
+    "plotwinsize": 0,
+    "numdgt": 15,
+    "abstol_A": 1e-12,
+    "vntol_V": 1e-09,
+    "chgtol_C": 1e-14,
+    "method": "trap",
+    "solver": "norm",
+    "gmin_S": 1e-12,
+    "gshunt_S": 0,
+    "cshunt_F": 0,
+    "cshuntintern_F": 0
+  },
+  "saves": [
+    "V(drv)",
+    "V(src_after_r)",
+    "V(pre_switch)",
+    "V(vin)",
+    "V(cap)",
+    "V(vin2)",
+    "V(sw)",
+    "V(l_after_r)",
+    "V(l_inner)",
+    "V(out)",
+    "V(cout_after_r)",
+    "V(cout_inner)",
+    "V(pgood)",
+    "V(sw_ctl)",
+    "V(m_pz1)",
+    "V(m_pz2)",
+    "V(m_cap)",
+    "V(m_vin)",
+    "V(m_sw)",
+    "V(m_out)",
+    "V(m_vin2)",
+    "V(m_d1)",
+    "V(m_d0)",
+    "V(m_pgood)",
+    "V(m_gnd)",
+    "I(Vdrive)",
+    "I(Vcontrol)",
+    "I(Vsupply)",
+    "I(V_L_TERMINAL)",
+    "I(V_COUT_BRANCH)",
+    "I(Cstorage)",
+    "I(Ccap)",
+    "I(Cvin2)",
+    "I(Cout)",
+    "I(L1)",
+    "I(Rsource)",
+    "I(R_L_ESR)",
+    "I(R_COUT_ESR)",
+    "I(Rload)",
+    "I(Sdrive)",
+    "I(VPM_PZ1)",
+    "I(VPM_PZ2)",
+    "I(VPM_CAP)",
+    "I(VPM_VIN)",
+    "I(VPM_SW)",
+    "I(VPM_VOUT)",
+    "I(VPM_VIN2)",
+    "I(VPM_D1)",
+    "I(VPM_D0)",
+    "I(VPM_PGOOD)",
+    "I(VPM_GND)"
+  ],
+  "budget": {
+    "max_native_attempts": 4,
+    "max_elapsed_s_per_attempt": 300,
+    "max_total_elapsed_s": 1200,
+    "max_raw_bytes_per_attempt": 1073741824,
+    "max_raw_bytes_total": 3221225472,
+    "analysis_one_case_at_a_time": true,
+    "analysis_memory_budget_bytes": 8589934592,
+    "on_timeout": "Preserve partial native RAW/log/deck, classify incomplete and stop; no automatic retry or extension"
+  },
+  "analysis": {
+    "initial_zero_screen": {
+      "window_start_s_exclusive": 0,
+      "window_end_s": 0.004,
+      "max_abs_external_store_voltage_V": 0.001,
+      "max_abs_ideal_L_current_A": 1e-06
+    },
+    "pre_uvlo_charge_window_s": [
+      0.005,
+      0.2
+    ],
+    "pre_uvlo_plateau_window_s": [
+      0.1,
+      0.2
+    ],
+    "pgood_low_reference_s": [
+      0.001,
+      0.004
+    ],
+    "pgood_high_reference_s": [
+      0.45,
+      0.49
+    ],
+    "pgood_stable_peak_to_peak_V": 0.01,
+    "pgood_min_swing_V": 1.0,
+    "pgood_min_reference_samples": 8,
+    "pgood_crossing": "50% of observed stable low/high medians; full native sample brackets only, no interpolation",
+    "uvlo_reference_crossings_V": [
+      5.05,
+      3.67
+    ],
+    "uvlo_hidden_latch": "not observed; voltage reference crossing is not native latch measurement",
+    "macro_sleep_event": "unobserved unless separately documented native signal is exposed; no guessed internal node",
+    "charge_detectability_factor": 5,
+    "charge_gate_abs_C": 1e-11,
+    "charge_gate_relative_to_total_abs_charge": 0.001,
+    "capacitor_energy_gate_abs_J": 1e-09,
+    "capacitor_energy_gate_relative_to_total_abs_work": 0.001,
+    "kcl_gate_abs_A": 1e-09,
+    "kcl_gate_relative_to_largest_branch": 0.0001,
+    "zero_sensor_drop_gate_V": 1e-08,
+    "inductor_flux_gate_abs_Wb": 1e-12,
+    "inductor_flux_gate_relative_to_abs_volt_seconds": 0.001,
+    "external_ledger_gate_abs_J": 1e-09,
+    "external_ledger_gate_relative_to_abs_source_work": 0.001,
+    "coarse_fine_energy_abs_J": 1e-09,
+    "coarse_fine_energy_relative": 0.005,
+    "coarse_fine_event_voltage_V": 0.01,
+    "coarse_fine_event_time_s": 0.0001,
+    "coarse_fine_transition_order_count": "must match; stable plateau failure is unresolved, not no-events agreement",
+    "settling": {
+      "window_s": 0.25,
+      "window_multiples": [
+        1,
+        2
+      ],
+      "end_s": 2,
+      "peak_to_peak_V": 0.001,
+      "slope_times_span_V": 0.001,
+      "energy_drift_J": 1e-09,
+      "charge_consistency_C": 1e-11,
+      "minimum_samples": 8,
+      "max_sample_spacing": "case maxstep plus1e-10s roundoff allowance",
+      "source_last_command_change_s": {
+        "source-open": 0.500001,
+        "driven-down": 0.6
+      },
+      "claim": "observed windows only; no asymptotic or hardware qualification"
+    },
+    "pgood_censoring": "If a rising or falling transition is not observed by2s, label that event right-censored; unresolved low/high references remain unresolved rather than zero events",
+    "switch_off_current_abs_A": 1e-11,
+    "switch_off_gate": "Only samples with measured control below0.5V by more than1nV; compare measured source-branch current to observed switch voltage /1e12ohm with10pA absolute tolerance"
+  },
+  "run_receipt_required": [
+    "case_id",
+    "plan_sha256",
+    "deck_sha256",
+    "model_sha256",
+    "symbol_sha256",
+    "executable_sha256",
+    "rc_smoke_review_reference",
+    "process_returncode",
+    "native_started_at_utc",
+    "native_finished_at_utc",
+    "elapsed_s",
+    "raw_path",
+    "raw_sha256",
+    "log_path",
+    "log_sha256",
+    "exact_plan_authorization_reference"
+  ],
+  "rc_smoke": "must run and be independently reviewed in supported runtime before PMIC execution",
+  "no_autolaunch": true,
+  "no_model_placeholder_allowed": true,
+  "publication": "Private user-project evidence only. Do not publicly publish or disclose vendor benchmark/comparison results to third parties without ADI written consent under the approved EULA.",
+  "raw_reader_contract": {
+    "max_bytes": 1073741824,
+    "supported_encodings": [
+      "UTF-16LE header",
+      "UTF-8/ASCII header"
+    ],
+    "supported_formats": [
+      "real point-major binary mixed-time-f64/dependent-f32",
+      "real point-major binary all-double",
+      "real ASCII Values"
+    ],
+    "allowed_flags": [
+      "real",
+      "forward",
+      "double"
+    ],
+    "dependent_types": {
+      "v(...)": "voltage",
+      "i(...)": [
+        "device_current",
+        "current"
+      ]
+    },
+    "reject": [
+      "FastAccess",
+      "complex",
+      "stepped",
+      "duplicate header fields",
+      "duplicate variables",
+      "wrong channel types",
+      "nonfinite data",
+      "negative or duplicate/nonmonotonic time",
+      "truncated/extra payload",
+      "missing required saved nodes/currents"
+    ],
+    "no_repair": [
+      "no abs(time)",
+      "no duplicate-row dropping",
+      "no UIC initial-row correction",
+      "no missing-rail reconstruction"
+    ],
+    "actual_native_layout_qualification": "RC smoke in supported runtime still required",
+    "max_ascii_payload_bytes": 67108864,
+    "ascii_limit_rationale": "Fail closed before splitting huge text into Python objects; binary double is the frozen default output"
+  }
+}

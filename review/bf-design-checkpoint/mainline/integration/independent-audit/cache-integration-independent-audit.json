@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "checks": [
+    {
+      "check": "real_force_producer_cache_real_deck_byte_identity",
+      "passed": true,
+      "force_sha256": "38136df9a8d6d90e1e7e1ced465eba23c6d02f81bb7f8ceeaec351a50b4e3d84",
+      "deck_sha256": "1c396915d40e6ba0cdbc24b4d0d896d992bb558ef7d896cc8b305c46b8303d40",
+      "beam_scope": "real parser of synthetic log",
+      "vendor_solver_calls": 0
+    },
+    {
+      "check": "manifest_value_only_tamper_rejected",
+      "passed": true
+    },
+    {
+      "check": "canonical_value_and_force_bytes_tamper_rejected",
+      "passed": true
+    },
+    {
+      "check": "old_namespace_full_directory_preserved",
+      "passed": true,
+      "files": {
+        "beam/legacy-v1/rom.json": "c87b238811b47e35d023104fec5cd8c18f0134597c77309756fb335df9da8ba9",
+        "beam/legacy-v1/checkpoint.json": "709b14a20a0a179de25caa4c12e5680f6f37443f702a327743d0766d12648286"
+      }
+    },
+    {
+      "check": "returned_rom_reaches_generated_deck_no_dormant_read",
+      "passed": true
+    },
+    {
+      "check": "acceptance_runtime_uses_cache_root",
+      "passed": true,
+      "force_path": "/workspace/shared/transition-independent-audit-20261001/cache-execution-v2/acceptance-fixture/cache/simulation-cache-v2/force/d77cd2abafcaf719639098b4641d031c3bfc9fd124604e0b177d41cebb8d6463/force-table.npz",
+      "scope": "mock candidate records to exercise path plumbing only; stopped before native solve"
+    }
+  ],
+  "vendor_solver_calls": 0,
+  "ARM_compiler_calls": 0,
+  "model_API_calls": 0,
+  "source_files": {
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py": "47700dc880a5c713b269f9c7895443fb5ce38acc5f971a5e08f1826dbd3dc147",
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/native.py": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07",
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782",
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/contracts.py": "00d7ffea6447f22515cc95a5a816a67ea3823bec533f87a2146a682370f638d5"
+  },
+  "scope": "Trusted-operator corruption/dataflow/path audit; not adversarial isolation or native-physics validation",
+  "python": "3.11.16 (main, Sep 24 2026, 17:56:40) [Clang 22.1.3 ]",
+  "numpy": "2.4.6",
+  "wall_s": 0.7645421839988558
+}

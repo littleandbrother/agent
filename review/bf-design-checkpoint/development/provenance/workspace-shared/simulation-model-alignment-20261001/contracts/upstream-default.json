@@ -1,0 +1,108 @@
+{
+  "circuit": {
+    "cin_F": 4.7e-05,
+    "cout_F": 0.0001,
+    "cp_rule": "blocked capacitance counted exactly once; reciprocal theta signs",
+    "energy_boundary": "mechanical+piezo+PMIC input port; encrypted internal losses unqualified",
+    "load_taper_voltage_V": 1.8,
+    "model": "native-LTC3588-1-encrypted-macro"
+  },
+  "contract_id": "upstream-338d603-default-v1",
+  "firmware": {
+    "brownout_V": 1.8,
+    "parameters": {
+      "boot_mA": 0.41,
+      "boot_ms": 53.8,
+      "init_mA": 1.596,
+      "init_ms": 13.0,
+      "interval_ms": 100.0,
+      "reset_uA": 0.3,
+      "sleep_uA": 2.0,
+      "tx_mA": 3.659,
+      "tx_ms": 5.0
+    },
+    "pgood_low_inflight": "abort INIT/TX/SLEEP to WAIT if PGOOD<2.5V",
+    "policy": "shared-C-RESET-BOOT-WAIT-INIT-TX-SLEEP",
+    "startup_V": 1.8
+  },
+  "force": {
+    "model": "finite-uniform-cuboid-surface-charge-mur1",
+    "quadrature_order": 6,
+    "recoil_permeability": 1.0,
+    "remanence_T": 1.25
+  },
+  "geometry": {
+    "beam_source": "fresh native extraction; rom.json absent",
+    "driver_magnet_m": [
+      0.02,
+      0.02,
+      0.02
+    ],
+    "gap_actuation": "move rotating driver at fixed stationary tip",
+    "gap_m": 0.048,
+    "rom_limit_m": 0.008,
+    "tip_magnet_m": [
+      0.01,
+      0.01,
+      0.01
+    ]
+  },
+  "initial_energy": {
+    "auxiliary_J": null,
+    "mechanical_J": null,
+    "mechanical_state_rule": "k*q0 = interpolated F(angle=0,q0); qdot=0; equilibrium preload energy counted",
+    "piezo_V": 0.0,
+    "vin_V": 0.0,
+    "vout_V": 0.0
+  },
+  "mission": {
+    "cold_start_gate": "max(Vout)>=3.2V and >=1 receiver group; result still insufficient_evidence",
+    "deadline_s": 4.0,
+    "diagnostic_excluded": true,
+    "duration_s": 4.0,
+    "minimum_groups": 1
+  },
+  "packet": {
+    "byte_order": "raw bytes in C; cloud can match with two little-endian uint32 IDs",
+    "bytes": 12,
+    "device_id_hex": "0102030405060708",
+    "protocol": "BFD2",
+    "sequence": false
+  },
+  "receiver": {
+    "capture_dedup": true,
+    "direction": "unknown",
+    "loss_probability": 0.0,
+    "scan_duty": 1.0,
+    "scan_period_s": 0.1,
+    "seed": 17,
+    "silence_s": 0.35
+  },
+  "schema_version": "simulation-semantic-contract-v1",
+  "scope": "source-defaults",
+  "source_trajectory": {
+    "angle_rad": 1.1344640137963142,
+    "coordinate_rule": "fixed tip at x=.904; driver x=(.904-gap)*cos(a)-.045*sin(a), z=(.904-gap)*sin(a)+.045*cos(a)-.075265",
+    "duration_s": 4.0,
+    "electrical_input": "none at baseline; configurable continuous diagnostic current into Vin",
+    "opening_s": 2.0
+  },
+  "units": {
+    "angle": "rad",
+    "capacitance": "F",
+    "current": "A",
+    "energy": "J",
+    "firmware_input_conversion": "upstream dt milliseconds, current milliamps; adapters convert explicitly",
+    "force": "N",
+    "length": "m",
+    "time": "s",
+    "voltage": "V"
+  },
+  "version": {
+    "model": "door-closed-simulation-v1",
+    "native_evidence_available": false,
+    "numerical_semantics": "LTspice waveform fixed point; maxstep 50us; firmware bin minimum 100us; reltol1e-4",
+    "physics_hash": "1e7b3d7b8144c59a1172690b96c47f415f21835ca180d3e01acc6867fd077a88",
+    "source_bound": true
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "conditional-passive-source-storage-jacobian-20261001",
+  "status": "software_static_derivative_preflight_pass_pending_review",
+  "hypothesis": "Within one declared conditional q-only passive model, changing Cin alone can create numerically resolved changes in source/storage trajectory and energy partition",
+  "falsifier": "A source/identity/domain/energy/refinement failure makes the comparison insufficient; effects smaller than the fixed resolution rule are unresolved",
+  "owned_paths": [
+    "/workspace/shared/passive-source-storage-jacobian-20261001"
+  ],
+  "schema_changes": [
+    "bf-conditional-passive-study-plan-v1",
+    "bf-conditional-qonly-passive-bridge-storage-v1",
+    "bf-conditional-qonly-passive-bridge-storage-jacobian-v2"
+  ],
+  "tests": [
+    "30 no-trajectory controls pass in outputs/TESTS-JACOBIAN-PREFREEZE.log, including exactly 12 new static derivative force evaluations",
+    "all four planned numerical/energy/path checks only after approval"
+  ],
+  "negative_controls": [
+    "out-of-support q",
+    "negative storage",
+    "nonfinite state",
+    "unauthorized dynamics",
+    "missing reciprocal sign diagnostic"
+  ],
+  "command": "bash init.sh; authorized exact four-case order in PLAN.json; python passive_runner.py --compare",
+  "artifacts": [
+    "PLAN.json",
+    "PLAN-SEAL.json",
+    "SOURCE-MANIFEST.json",
+    "outputs"
+  ],
+  "cost_boundary": "No paid calls or commercial solvers; four trajectories maximum, 420 seconds each and 1800 seconds overall with finite RHS/force/step limits",
+  "claim_boundary": "Conditional numerical passive source/storage comparison only",
+  "limitations": [
+    "assumed one-coordinate path",
+    "actual native material, damping, loss, axial and omitted modes unqualified",
+    "physical equilibrium preparation and reset unknown",
+    "no PMIC/firmware/receiver/mission or hardware feasibility",
+    "Stopped original study retained separately; exact rejected original voltage unknown"
+  ],
+  "handoff": "Independent review and root approval must bind the exact plan seal before any dynamic solve; retain all failures and stop without tuning",
+  "implementation_revision": "structured-jacobian-v3"
+}

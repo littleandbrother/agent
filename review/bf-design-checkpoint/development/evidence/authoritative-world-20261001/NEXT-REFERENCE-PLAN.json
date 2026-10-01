@@ -1,0 +1,143 @@
+{
+  "schema": "bf-canonical-necessary-condition-screening-plan-v1",
+  "status": "prospective_requires_parent_review_not_executed",
+  "new_dynamic_runs_this_package": 0,
+  "world_id": "c4971ad2c17a47765f486466dd73b02fc0c233e20a08bfa513ac177b60874111",
+  "question": "Under one explicitly new development ROM and screening circuit, does reducing input storage alone improve reachable source-to-startup conditions without changed door motion, precharge or hidden energy? This prioritizes what should receive native replay; it cannot decide physical feasibility.",
+  "scope": "Four bounded reciprocal screening trajectories in a separately versioned surrogate, after all model inputs and numerical budgets are pinned. Necessary energy/domain conditions are conditional on that model, not a global impossibility bound on the real device.",
+  "fixed_world": {
+    "gap_mm": 48,
+    "door_angle_deg": 65,
+    "opening_s": 2,
+    "duration_s": 4,
+    "operations": 1,
+    "initial_primary_electrical_V": 0,
+    "external_electrical_input_A": 0,
+    "no_added_preload": true,
+    "mechanical_q0": "design-bound equilibrium from same force table, with initial mechanical energy explicitly counted"
+  },
+  "baseline": {
+    "cin_uF": 47,
+    "cout_uF": 100,
+    "firmware": "unchanged source-bound shared C; prototype phase-average loads remain assumptions"
+  },
+  "single_intervention": {
+    "field": "cin_uF",
+    "from": 47,
+    "to": 10,
+    "justification": "Existing source-supported storage change, same nominal geometry and topology; no semantic recasting of supply or force."
+  },
+  "cells": [
+    {
+      "id": "D-h",
+      "cin_uF": 47,
+      "max_step_s": 1e-05
+    },
+    {
+      "id": "D-h2",
+      "cin_uF": 47,
+      "max_step_s": 5e-06
+    },
+    {
+      "id": "D-Cin10-h",
+      "cin_uF": 10,
+      "max_step_s": 1e-05
+    },
+    {
+      "id": "D-Cin10-h2",
+      "cin_uF": 10,
+      "max_step_s": 5e-06
+    }
+  ],
+  "gate_before_any_execution": [
+    "Independent reviewer accepts this plan and the fully specified screening provider; parent authorizes execution.",
+    "Pin exact derived-ROM parameter file, derivation/source hashes, topology, rail/current laws and applicability. This plan does not fill undocumented PMIC dynamics.",
+    "If provider cannot make a defensible conditional necessary-condition inference, report source/storage sensitivity only; do not call it necessary-condition screening.",
+    "Freeze wall/RHS budgets, solver version/tools and output list; no retries or adaptive extra designs.",
+    "Reuse only source/geometry/angle/q-domain matching force samples. Existing quadrature consistency is not full magnetic qualification; sparse unrotated COMSOL mesh failed and must remain failed."
+  ],
+  "rom_options": {
+    "native": {
+      "status": "not_available_as_verified_evidence_here",
+      "required": "Exact upstream DoorBeam output rows/model/tool/source plus complete ROM extraction, not just four numerical constants."
+    },
+    "independent_development_derivation": {
+      "status": "not_yet_derived",
+      "geometry_source": {
+        "path": "/workspace/shared/current-cache-integration-20261001/working/battery-world/configs/reference_cases/door-magnetic-v1/DoorBeam.java",
+        "sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6"
+      },
+      "method": "New Euler-Bernoulli composite-section stiffness and Rayleigh-Ritz first-mode mass/coupling derivation, independently checked by a second algebra/quadrature implementation. Explicit magnet mass, laminate neutral axis, electrodes and modal normalization.",
+      "assumptions": [
+        "Perfect bond and clamp",
+        "Small-deflection linear beam",
+        "Declared copper dimensions/E/density and magnet geometry/density from source",
+        "PZT elastic/piezo/dielectric coefficients must be sourced and pinned from an actual material reference; absent coefficients are unknown",
+        "Damping remains an explicit sensitivity/assumption, not calibration"
+      ],
+      "limit": "New reduced-order development provider only; not prior COMSOL reproduction, nonlinear calibration, or native/physical qualification."
+    },
+    "forbidden": [
+      "Old cloud ROM silently renamed native",
+      "cache-downstream-demonstration fixture rom.json (fixture checkpoint, inconsistent cached metadata)",
+      "Filling missing PZT constants or CAP/VIN2 dynamics from convenient arbitrary values"
+    ]
+  },
+  "static_rail_knowledge": {
+    "path": "/workspace/shared/causal-evaluator-repair-20261001/contracts/ltc3588-rail-state-v2.json",
+    "sha256": "1c19cab77974ebc2dd81d0642fe085ffe375d6cfb1075a15fa5ac4e17349fd63",
+    "role": "Pin/settled-energy and nominal state semantics only. PGOOD initial assertion needs converter sleep; 92% is falling threshold. No dynamic startup predictor.",
+    "cannot_supply": [
+      "CAP/VIN2 charge currents and time constants",
+      "Vendor port binding evidence",
+      "Transient source energy or mission witness"
+    ]
+  },
+  "possible_pre_execution_work_without_new_dynamic_solves": [
+    "Hash/pin canonical force functions and source-bound coordinates",
+    "Derive and independently check a transparent development ROM from actual sourced constants",
+    "Compute separate required stored-energy arithmetic, keeping simultaneous states and load work separate so no double-counting",
+    "Build native evidence import checklist and zero-state ledger schema"
+  ],
+  "outputs": [
+    "four raw state/energy traces",
+    "source/load work and all modeled stores",
+    "initial equilibrium/preparation ledger with physical preparation unknown",
+    "domain exits and source hash manifest",
+    "same-step intervention contrast",
+    "within-design h versus h/2 convergence",
+    "no feasible-reference or physical mission pass flag"
+  ],
+  "predeclared_checks": {
+    "reciprocal_energy_relative_residual_strictly_below": 0.01,
+    "halfstep_energy_voltage_aux_relative_max": 0.01,
+    "halfstep_displacement_relative_max": 0.005,
+    "rom_abs_q_m_max": 0.008,
+    "no_external_input_or_precharge": true,
+    "unsupported_state_or_domain": "stop_and_report_insufficient_evidence"
+  },
+  "decision": {
+    "fails_energy_or_domain": "Do not broaden sweep; select the smallest evidenced model/mechanical extension for review. Failure is conditional, not physical impossibility.",
+    "passes_screening": "Prioritize exactly this baseline/intervention pair for independently qualified native PMIC replay; still no feasible reference.",
+    "model_missing_or_undocumented": "Stop dynamic screening at the preflight boundary; continue independent parameter/source derivation only."
+  },
+  "facts_user_may_eventually_need_to_supply": [
+    "Actual installation envelope/placement and allowable actuation force for product requirements",
+    "Actual intended weak-motion duty and event/action definition when claiming that behavior",
+    "Actual preparation/reset usage when making battery-free first-operation physical claims"
+  ],
+  "autonomous_explicit_development_assumptions": [
+    "Retain published 48mm / 65deg / 2s / 4s single-operation world",
+    "Use inherited component nominal values only as tagged source assumptions",
+    "Use a transparent independently derived ROM under declared small-deflection limits",
+    "Freeze exploratory provider and numerical checks without promoting them to user requirements"
+  ],
+  "native_reference_blockers": [
+    "Verified native ROM and full-domain force/nonlinear applicability",
+    "Exact licensed macro port declaration/wiring, rail currents/potentials and initial states",
+    "Dynamic CAP/VIN2 losses/startup/decay evidence",
+    "Independent complete firmware and attributed receiver evidence"
+  ],
+  "weak_motion_unknown_blocks_this_exploration": false,
+  "independent_feasible_reference_admitted": false
+}

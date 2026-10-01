@@ -1,0 +1,121 @@
+{
+  "schema_version": "bf-controlled-agent-protocol-v1",
+  "status": "prospective-draft",
+  "scope": "offline preparation; no participant or provider dispatch",
+  "model": null,
+  "per_episode_budget": null,
+  "global_budget_ledger_id": null,
+  "global_money_cap": null,
+  "unsettled_costs": null,
+  "assigned_episodes": null,
+  "denominator": "all_assigned_episodes_including_failures_and_retries",
+  "task_manifest_hash": null,
+  "world_id": null,
+  "facts_hash": null,
+  "evaluator_hash": null,
+  "holdout_manifest_hash": null,
+  "analysis_plan_hash": null,
+  "reuse_source_manifest_hash": "8b8ac826935e5f0242cf66baa99dde3bc52c5088bca36117e9eac32943a51cde",
+  "world_freeze_receipt": null,
+  "no_agent_reference": null,
+  "runtime": null,
+  "independence": null,
+  "d_loop": {
+    "arms": [
+      {
+        "model": null,
+        "facts_hash": null,
+        "history_hash": null,
+        "tools_hash": null,
+        "retrieval_hash": null,
+        "clarifications_hash": null,
+        "edit_freedoms": [
+          "architecture",
+          "candidate_models",
+          "circuit",
+          "cross_domain",
+          "firmware",
+          "in_task_tools",
+          "mechanics"
+        ],
+        "budget": null,
+        "selection_rule": "last_public_submission",
+        "task_order_hash": null,
+        "harness_hash": null,
+        "intervention_hash": null,
+        "harness_frozen_during_episode": true,
+        "id": "strong_generic"
+      },
+      {
+        "model": null,
+        "facts_hash": null,
+        "history_hash": null,
+        "tools_hash": null,
+        "retrieval_hash": null,
+        "clarifications_hash": null,
+        "edit_freedoms": [
+          "architecture",
+          "candidate_models",
+          "circuit",
+          "cross_domain",
+          "firmware",
+          "in_task_tools",
+          "mechanics"
+        ],
+        "budget": null,
+        "selection_rule": "last_public_submission",
+        "task_order_hash": null,
+        "harness_hash": null,
+        "intervention_hash": null,
+        "harness_frozen_during_episode": true,
+        "id": "bf_design"
+      }
+    ],
+    "primary_outcome": "independent_joint_acceptance_of_publicly_selected_final_design"
+  },
+  "h_loop": {
+    "enabled": true,
+    "h0_hash": null,
+    "mutation_scope_hash": null,
+    "generation_plan_hash": null,
+    "rollback_policy_hash": null,
+    "cost_allocation_hash": null,
+    "arms": [
+      "frozen_h0_total_budget_matched",
+      "participant_evolved_h"
+    ],
+    "author_kind": "participant",
+    "external_manual_fixes_are_separate": true,
+    "later_generation_requires_actual_parent_load": true,
+    "cost_phases": [
+      "acquisition",
+      "generation",
+      "build_repair",
+      "qualification",
+      "regression",
+      "transfer",
+      "rollback",
+      "solve"
+    ],
+    "total_budget_by_arm": null,
+    "unused_budget_policy": "report_actual_cost_and_equal_opportunity_envelope_no_synthetic_spend",
+    "required_negative_controls": [
+      "budget_overspend",
+      "build_failure",
+      "clean_session_transplant",
+      "evaluator_tamper",
+      "external_manual_fix",
+      "generation_lineage_break",
+      "hidden_feedback",
+      "missing_attempt",
+      "no_op",
+      "out_of_scope",
+      "pre_import_only",
+      "removal",
+      "rollback",
+      "stale_build"
+    ],
+    "promotion_authority": "independent_evaluator_after_frozen_confirmation"
+  },
+  "approval": null
+}

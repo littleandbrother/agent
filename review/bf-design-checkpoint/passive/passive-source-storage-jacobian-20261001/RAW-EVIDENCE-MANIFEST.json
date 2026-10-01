@@ -1,0 +1,214 @@
+{
+  "schema": "passive-raw-evidence-manifest-v1",
+  "scope": "all scientific attempted-run primary evidence; unrun slots have no invented outputs",
+  "cohort_accounting": {
+    "attempted_across_versions": 5,
+    "completed": 4,
+    "stopped": 1,
+    "old_unrun": 3,
+    "new_unrun": 0
+  },
+  "cohorts": {
+    "stopped_original": {
+      "package_directory_name": "passive-source-storage-20261001",
+      "original_location": "/workspace/shared/passive-source-storage-20261001",
+      "runs": {
+        "cin47-coarse": {
+          "status": "INSUFFICIENT_NUMERICAL_EVIDENCE",
+          "run_identity": {
+            "version": "bf-conditional-qonly-passive-bridge-storage-v1",
+            "case": {
+              "id": "cin47",
+              "cin_F": 4.7e-05
+            },
+            "resolution_id": "coarse",
+            "settings": {
+              "method": "SciPy Radau",
+              "max_step_s": 0.002,
+              "first_step_s": 1e-05,
+              "rtol": 1e-06,
+              "atol": [
+                1e-10,
+                1e-08,
+                1e-14,
+                1e-08,
+                1e-12,
+                1e-12,
+                1e-12,
+                1e-12
+              ]
+            },
+            "plan_seal_sha256": "b8bf3b76eba19c991f739289c73c93c9ea627034677f030110469d3f0d1e68d8",
+            "equilibrium_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e"
+          },
+          "run_seal_sha256": "339e8c8c80f114fb541390807f639f6298495e498af47857b195e8efac58d149",
+          "files": {
+            "FAILURE.txt": "732bb20929150984a52fa4cb3163f846b0f367fdcdb6d9d58dd379e9c1c87b8f",
+            "STARTED.json": "84c1a201c1b3aa9c45df83486136f797b97140cfa25d0c78013fb12e90e1b339",
+            "raw.npz": "fac954a30158e608bfd0656fdf314f7c3322d7735cfbe4ef259920059597c421",
+            "DENSE-SEGMENTS.json": "e979c5081ba80eccb5668f38aa9a97ace9717235207e09701623f884980e83a0",
+            "SUMMARY.json": "f9f135da495ecb18eb520d5cd85f53b8acd1cf5d8959e4a352bedb018617ce21"
+          }
+        }
+      }
+    },
+    "structured_jacobian": {
+      "package_directory_name": "passive-source-storage-jacobian-20261001",
+      "original_location": "/workspace/shared/passive-source-storage-jacobian-20261001",
+      "runs": {
+        "cin47-coarse": {
+          "status": "TRAJECTORY_CHECKS_PASS",
+          "run_identity": {
+            "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+            "case": {
+              "id": "cin47",
+              "cin_F": 4.7e-05
+            },
+            "resolution_id": "coarse",
+            "settings": {
+              "method": "SciPy Radau",
+              "max_step_s": 0.002,
+              "first_step_s": 1e-05,
+              "rtol": 1e-06,
+              "atol": [
+                1e-10,
+                1e-08,
+                1e-14,
+                1e-08,
+                1e-12,
+                1e-12,
+                1e-12,
+                1e-12
+              ]
+            },
+            "plan_seal_sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+            "equilibrium_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e"
+          },
+          "run_seal_sha256": "99ace5bb2e311bb50ebc4928ceb3aee69055125be778c6c7f1ddf9abd8aad6ea",
+          "files": {
+            "STARTED.json": "bb4cf94dd9391437d97dc3b77e3b617298b3b1afdebcb443f0397d3ed06e9e1f",
+            "raw.npz": "a30775683f5800190847148d5f6341c4e80ebe4a9e82ee9179cc50cdc7d49b07",
+            "DENSE-SEGMENTS.json": "fd28fe81d5e641dbffa89b98a4a779654575f0b921380361d360efd30be0dc0d",
+            "REJECTED-EVALUATION.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+            "SUMMARY.json": "ad3ab6b5b1de21fcf0ef6b03fffb764bf51c9c819fb65ed31ea2f4f6b7fdd142",
+            "JACOBIAN-CHECKS.json": "aeba5a5b104ba360df9f5426f3f3aa88123e661a0cb2044d184ea066d19add0e"
+          }
+        },
+        "cin47-fine": {
+          "status": "TRAJECTORY_CHECKS_PASS",
+          "run_identity": {
+            "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+            "case": {
+              "id": "cin47",
+              "cin_F": 4.7e-05
+            },
+            "resolution_id": "fine",
+            "settings": {
+              "method": "SciPy Radau",
+              "max_step_s": 0.001,
+              "first_step_s": 5e-06,
+              "rtol": 2.5e-07,
+              "atol": [
+                2.5e-11,
+                2.5e-09,
+                2.5e-15,
+                2.5e-09,
+                2.5e-13,
+                2.5e-13,
+                2.5e-13,
+                2.5e-13
+              ]
+            },
+            "plan_seal_sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+            "equilibrium_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e"
+          },
+          "run_seal_sha256": "13d95ef8cce94d6a71c4cfc05c7451706922d32d3bf288498f505ed6aab7a92e",
+          "files": {
+            "STARTED.json": "12f31340b775db5bee2dfe8f7de1ffc428fb2433a77a11347c7872f4d040493c",
+            "raw.npz": "7a38de26c0b95399aeda37434a69a0e05ea0f77aa6f84203fa99f67a604e8800",
+            "DENSE-SEGMENTS.json": "0a36215790469ab709b02a71aba63ef4effa21793ef67cd944acbb1423190b42",
+            "REJECTED-EVALUATION.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+            "SUMMARY.json": "6af2539099d1cf2ecddd39423da018b83fa44290e4ab2dd6c33b70e211e31587",
+            "JACOBIAN-CHECKS.json": "0081ffa8e9aded4ca280be6d2f5c0831e0214dde30702b81856ce6b00728cd20"
+          }
+        },
+        "cin10-coarse": {
+          "status": "TRAJECTORY_CHECKS_PASS",
+          "run_identity": {
+            "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+            "case": {
+              "id": "cin10",
+              "cin_F": 1e-05
+            },
+            "resolution_id": "coarse",
+            "settings": {
+              "method": "SciPy Radau",
+              "max_step_s": 0.002,
+              "first_step_s": 1e-05,
+              "rtol": 1e-06,
+              "atol": [
+                1e-10,
+                1e-08,
+                1e-14,
+                1e-08,
+                1e-12,
+                1e-12,
+                1e-12,
+                1e-12
+              ]
+            },
+            "plan_seal_sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+            "equilibrium_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e"
+          },
+          "run_seal_sha256": "25b3909b220cedbc3abbba21599ef79f9e601aab8c3ff1c47ad478acbd1a113a",
+          "files": {
+            "STARTED.json": "12a213ab833de9e23e12eb2e185aea9e46f7f7cae12eb9c91027bebdf687d26d",
+            "raw.npz": "99294874c52f6694bfe8f45fefac8600d31dcc5c2b653022dd50f5621d9f5980",
+            "DENSE-SEGMENTS.json": "607c1d725555fc62804d52cb8964a66cb38aaa7287d5de2a0b07705e6a28e903",
+            "REJECTED-EVALUATION.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+            "SUMMARY.json": "baaaca48c16529331850691fb7fac568683b9bf68f432dd83c06c4b61f988f7c",
+            "JACOBIAN-CHECKS.json": "6dd286345113a1130cd96b2ca93eb081acd40c38e65198f24cd0f249802cee66"
+          }
+        },
+        "cin10-fine": {
+          "status": "TRAJECTORY_CHECKS_PASS",
+          "run_identity": {
+            "version": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2",
+            "case": {
+              "id": "cin10",
+              "cin_F": 1e-05
+            },
+            "resolution_id": "fine",
+            "settings": {
+              "method": "SciPy Radau",
+              "max_step_s": 0.001,
+              "first_step_s": 5e-06,
+              "rtol": 2.5e-07,
+              "atol": [
+                2.5e-11,
+                2.5e-09,
+                2.5e-15,
+                2.5e-09,
+                2.5e-13,
+                2.5e-13,
+                2.5e-13,
+                2.5e-13
+              ]
+            },
+            "plan_seal_sha256": "adc8647db2251a93142dfc1ec928ae0bf471f810b2e03c879c3a11fd484eca8e",
+            "equilibrium_sha256": "78a158f4697d888ba85ed2fa2b21115ba7436a4d4063bd78b993f9b9a6a7ac2e"
+          },
+          "run_seal_sha256": "6186e2ebb97cefcd71cd051abdecc7524edda22fa3b768f36a4283be813a319d",
+          "files": {
+            "STARTED.json": "271314727d6095fa5d0c560b24ca3dc37e19194369f563155f094fab20a57626",
+            "raw.npz": "7ec61063376b75f53448eae7d270ece18ef980b1779dc6d47d524502e3aadf45",
+            "DENSE-SEGMENTS.json": "d6930a2d2beef340d32a846bda375cd9e88e815604045cb12386dd6968b8578b",
+            "REJECTED-EVALUATION.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+            "SUMMARY.json": "331b548d4cc3d525d2138bbdd25577cd978ae041989d5f71016c72089c56122a",
+            "JACOBIAN-CHECKS.json": "2ed18e4c2bb153e4624874732c14256437541da5185275a7115f2ff9a0e690af"
+          }
+        }
+      }
+    }
+  }
+}

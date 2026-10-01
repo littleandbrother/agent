@@ -1,0 +1,226 @@
+{
+  "status": "PHYSICAL_PARAMETERS_AND_GATES_UNCHANGED",
+  "old_plan_sha256": "306a5b3bc617dec411590c9ad5d03215496d098de9c153f5ade88421ab3f8dd4",
+  "new_plan_sha256": "0f8ae3b0b8d6d5d0d1accfa46fe4dc8f479f874be58cc30bc135567112ca3684",
+  "changed_top_level_fields": {
+    "authorization_status": {
+      "old": "Pending independent code/plan review and root approval; creation of this file authorizes no trajectory",
+      "new": "No trajectories; pending independently reviewed repair seal and exact new root authorization"
+    },
+    "implementation_revision": {
+      "old": null,
+      "new": "structured-jacobian-v3"
+    },
+    "jacobian": {
+      "old": null,
+      "new": {
+        "method": "analytic branch-aware circuit and exact zero-ledger columns; bounded magnetic q-only differences",
+        "q_step_nominal_m": 1e-07,
+        "q_margin_fraction": 0.25,
+        "q_step_minimum_m": 1e-12,
+        "step_half_check": true,
+        "force_derivative_abs_N_m": 1e-05,
+        "driver_power_derivative_abs_W_m": 1e-05,
+        "relative_derivative_tolerance": 0.001,
+        "return_half_step_derivative": true,
+        "maximum_jacobian_evaluations": 10000,
+        "kink_convention": "inactive branch at abs(Vp)==Vs; current law unchanged",
+        "all_force_calls_count_in_original_force_budget": true,
+        "structured_rejected_state_telemetry": true
+      }
+    },
+    "model_version": {
+      "old": "bf-conditional-qonly-passive-bridge-storage-v1",
+      "new": "bf-conditional-qonly-passive-bridge-storage-jacobian-v2"
+    }
+  },
+  "unchanged_top_level_fields": [
+    "budgets",
+    "cases",
+    "claim_boundary",
+    "damping_provenance",
+    "damping_ratio",
+    "driver_input",
+    "dynamic_quadrature_order",
+    "dynamic_trajectories_max",
+    "equilibrium_receipt_sha256",
+    "execution_order",
+    "gates",
+    "initial_preparation",
+    "initial_recipe",
+    "initial_state",
+    "interpretation_rule",
+    "ledger",
+    "magnetic_potential_gauge",
+    "mechanical_assumptions",
+    "mechanics",
+    "outputs",
+    "path_quadrature_check",
+    "purpose",
+    "rectifier",
+    "resolution_rationale",
+    "resolutions",
+    "schema",
+    "signed_port",
+    "source_manifest_sha256",
+    "stop_conditions",
+    "toolchain"
+  ],
+  "explicit_unchanged": {
+    "mechanics": {
+      "k_N_m": 87.16295936341257,
+      "mass_kg": 0.008693494536827093,
+      "theta_C_m": -0.00025557326500094804,
+      "Cp_ritz_F": 1.875197361378469e-08,
+      "magnet_pitch_slope_per_m": 16.400263573374637,
+      "magnet_axial_shape": -0.08565521492786202
+    },
+    "damping_ratio": 0.02,
+    "damping_provenance": "Inherited uncalibrated development assumption from source world; c=2*zeta*sqrt(m*k), not inferred from ceramic Qm",
+    "rectifier": {
+      "type": "ideal full-wave bridge plus fixed series resistor and otherwise ideal storage capacitor",
+      "series_resistance_ohm": 100000.0,
+      "choice": "Explicit round-number passive benchmark assumption selected before trajectories, not measured ESR and not a fitted/optimized/native diode or PMIC model",
+      "law": "I=max(abs(Vp)-Vs,0)/R; terminal outward i=sign(Vp)*I; Qdot=-i; Cin*Vsdot=I",
+      "reverse_leakage_A": 0.0,
+      "forward_voltage_drop_V": 0.0,
+      "load_current_A": 0.0,
+      "external_electrical_work_J": 0.0,
+      "power_identity": "Vp*i = Vs*I + R*I^2 >=0 for Vs>=0; ideal diode loss=0",
+      "upper_bound_on_real_harvester": false
+    },
+    "signed_port": {
+      "q": "positive world +y, beam +z",
+      "Vpiezo": "top electrode minus bottom electrode",
+      "Q": "top-electrode supplied charge",
+      "equations": "Vp=(Q-theta*q)/Cp_Ritz; m*qdd=Fmag-c*qdot-k*q+theta*Vp",
+      "Cp_count": 1
+    },
+    "initial_state": {
+      "q0_m": -0.005838454977432304,
+      "qdot0_m_s": 0.0,
+      "Q0_C": 1.4921530011434105e-06,
+      "Vpiezo0_V": 0.0,
+      "Vstorage0_V": 0.0,
+      "initial_elastic_J": 0.0014855861520281061,
+      "initial_mutual_magnetic_J": -0.00771120726664825,
+      "initial_piezo_J": 0.0,
+      "initial_storage_J": 0.0,
+      "initial_kinetic_J": 0.0
+    },
+    "initial_recipe": "Same retained stable closed-door root for all four trajectories, selected by STATIC-PREFLIGHT-PLAN; Q0=theta*q0 makes physical Vpiezo=0; signed electrode charge is not an electrical precharge",
+    "initial_preparation": "Computational initial equilibrium only; initial elastic and signed mutual potential are accounted; preparation/reset work remains unknown and no first-operation/reset qualification is claimed",
+    "driver_input": {
+      "angle_profile": "linear from 0 to 65deg over 0..2s; hold 2..4s",
+      "opening_angle_rad": 1.1344640137963142,
+      "opening_s": 2.0,
+      "observation_s": 4.0,
+      "gap_m": 0.048,
+      "break_handling": "two continuous-state integration segments meet exactly at 2s; one-sided driver powers retained"
+    },
+    "ledger": {
+      "stored": "0.5*m*qdot^2+0.5*k*q^2+(Q-theta*q)^2/(2*Cp)+0.5*Cin*Vs^2+Umag",
+      "driver_translation": "Ptrans=Ftip dot (d rdriver/d angle)*angle_dot",
+      "driver_rotation": "Prot=-tau_driver_COM_y*angle_dot",
+      "driver_derivative": "d rdriver/d angle=e_y cross (rdriver-pivot_beam); omega_driver=e_y*angle_dot",
+      "balance": "E(t)-E(0)+Dmechanical+Dresistor-Wdriver_translation-Wdriver_rotation=0",
+      "dissipation": "Dmechanical_dot=c*qdot^2; Dresistor_dot=R*I^2",
+      "work_scope": "Work by externally prescribed driver against magnetic forces and torque only; driver-mechanism inertia, actuation friction and reset are outside boundary",
+      "normalization": "max(initial nonmagnetic positive storage,abs(Wdriver),abs(Umag(t)-Umag(0)),1e-9 J); invariant to magnetic additive constant"
+    },
+    "mechanical_assumptions": [
+      "One retained Ritz bending coordinate with fixed mass/stiffness/reciprocal piezo port",
+      "Magnetic COM path and pitch are q-only short-circuit kinematics; nonzero-voltage axial shift beta*V and force-induced additional axial shift are omitted",
+      "Discarded bending shapes and torque-driven modal content, axial inertia, geometric/material nonlinearity, actual tensor, damping, losses, assembly and installation physics are unqualified",
+      "Voltage/domain guards are computational only. No negligibility or physical-accuracy bound on omitted coordinates is claimed"
+    ],
+    "dynamic_quadrature_order": 6,
+    "resolutions": {
+      "coarse": {
+        "method": "SciPy Radau",
+        "max_step_s": 0.002,
+        "first_step_s": 1e-05,
+        "rtol": 1e-06,
+        "atol": [
+          1e-10,
+          1e-08,
+          1e-14,
+          1e-08,
+          1e-12,
+          1e-12,
+          1e-12,
+          1e-12
+        ]
+      },
+      "fine": {
+        "method": "SciPy Radau",
+        "max_step_s": 0.001,
+        "first_step_s": 5e-06,
+        "rtol": 2.5e-07,
+        "atol": [
+          2.5e-11,
+          2.5e-09,
+          2.5e-15,
+          2.5e-09,
+          2.5e-13,
+          2.5e-13,
+          2.5e-13,
+          2.5e-13
+        ]
+      }
+    },
+    "gates": {
+      "q_limit_m": 0.008,
+      "storage_negative_tolerance_V": 1e-09,
+      "voltage_computational_guard_V": 500.0,
+      "quadrature": {
+        "force_N": [
+          1e-09,
+          0.0001
+        ],
+        "potential_J": [
+          1e-11,
+          0.0001
+        ],
+        "driver_derivative_J_per_rad": [
+          1e-09,
+          0.0001
+        ]
+      },
+      "energy_abs_J": 1e-09,
+      "energy_relative": 0.001,
+      "independent_ledger_abs_J": 1e-09,
+      "independent_ledger_relative": 0.005,
+      "time_refinement": {
+        "q_m": [
+          1e-06,
+          0.005
+        ],
+        "Vs_V": [
+          0.0001,
+          0.005
+        ],
+        "Vp_V": [
+          0.001,
+          0.01
+        ],
+        "energy_J": [
+          1e-09,
+          0.005
+        ]
+      },
+      "continuous_numerical_path": "Radau cubic q extrema exactly evaluated. Magnet clearance at interval start minus h*(maximum tip translation/rotation speed + driver translation/rotation speed) must remain >1e-12m. This bounds separation along numerical cubic, not exact ODE path or surrounding assembly."
+    },
+    "budgets": {
+      "wall_per_trajectory_s": 420,
+      "rhs_per_trajectory": 100000,
+      "force_evaluations_per_trajectory": 150000,
+      "accepted_steps_per_trajectory": 20000,
+      "total_wall_cap_s": 1800,
+      "dynamic_trajectories": 4,
+      "software_test_wall_s": 30,
+      "software_test_additional_static_states_max": 20,
+      "paid_calls": 0
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "provider_version": "bf-conditional-psi5a4e-beam-ritz-v1",
+  "status": "conditional_static_candidate_not_dynamic_admitted",
+  "native_equivalent": false,
+  "physical_qualified": false,
+  "new_dynamic_runs": 0,
+  "rigid_attachment_start_m": 0.091,
+  "magnet_center_x_m": 0.096,
+  "neutral_axis_patch_z_m": 8.866468842729971e-05,
+  "patch_axial_rigidity_N": 741400.0,
+  "EI_bare_N_m2": 0.013647058333333332,
+  "EI_patch_N_m2": 0.03628703637487636,
+  "pzt_e31_scalar_C_m2": -12.54,
+  "pzt_epsilon_T33_F_m": 1.593753807384e-08,
+  "pzt_epsilon_S1_Tother0_F_m": 1.355493807384e-08,
+  "cN_F_m": 3.7503947227569376e-07,
+  "bending_voltage_coefficient_C": -3.273795845697329e-05,
+  "k_N_m": 87.16295936341257,
+  "mass_kg": 0.008693494536827093,
+  "theta_C_m": -0.00025557326500094804,
+  "Cp_ritz_F": 1.875197361378469e-08,
+  "Cfree_ritz_F": 1.950134805288459e-08,
+  "Cfree_continuum_static_F": 2.0228773637983637e-08,
+  "Cp_static_q_condensed_F": 1.9479399198883736e-08,
+  "Cp_scalar_S1_fixed_Tother0_F": 1.807325076512e-08,
+  "Cp_free_material_T_fixed_F": 2.1250050765120002e-08,
+  "f_SC_ritz_Hz": 15.936352314134517,
+  "f_OC_ritz_Hz": 16.25166073405908,
+  "voltage_actuation_q_m_per_V": -2.932131571340695e-06,
+  "short_circuit_charge_C_per_N": -2.932131571340695e-06,
+  "magnet_mass_kg": 0.0075000000000000075,
+  "magnet_centroid_Jyy_kg_m2": 1.2500000000000026e-07,
+  "mass_terms_kg": {
+    "beam_transverse": 0.0011048473373350281,
+    "magnet_vertical": 0.0075000000000000075,
+    "magnet_axial_eccentric": 5.5026118832536826e-05,
+    "magnet_centroid_pitch": 3.3621080659519945e-05
+  },
+  "omitted_beam_axial_rotary_mass_diagnostic_kg": 2.3965042966138594e-08,
+  "magnet_pitch_slope_per_m": 16.400263573374637,
+  "magnet_axial_shape": -0.08565521492786202,
+  "phi_magnet_center": 1.0,
+  "k_from_strain_energy_N_m": 87.16295936341258,
+  "material_k31_from_selected_primitives": 0.3866472726529568,
+  "material_k31_published_but_not_used": 0.35,
+  "inherited_support_diagnostic_only": {
+    "abs_q_m": 0.008,
+    "magnet_pitch_abs_rad": 0.1312021085869971,
+    "magnet_axial_displacement_abs_m": 0.0006852417194228961,
+    "max_linear_fiber_strain_magnitude_at_V0": 0.0012998702765351798,
+    "physical_validity": "unknown"
+  },
+  "shapes": [
+    {
+      "x_start_m": 0.0,
+      "x_end_m": 0.006,
+      "phi_coefficients_in_local_x": [
+        0.0,
+        0.0,
+        306.5731784281084,
+        -1064.4902028753763
+      ],
+      "u0q_coefficients_in_local_x": [
+        0.0
+      ],
+      "EI_N_m2": 0.013647058333333332,
+      "neutral_axis_z_m": 0.0
+    },
+    {
+      "x_start_m": 0.006,
+      "x_end_m": 0.056,
+      "phi_coefficients_in_local_x": [
+        0.01080670453959082,
+        3.5639131992267603,
+        108.09185767700849,
+        -400.34021361854997
+      ],
+      "u0q_coefficients_in_local_x": [
+        0.0,
+        0.019167861764919962,
+        -0.10648812091622202
+      ],
+      "EI_N_m2": 0.03628703637487636,
+      "neutral_axis_z_m": 8.866468842729971e-05
+    },
+    {
+      "x_start_m": 0.056,
+      "x_end_m": 0.091,
+      "phi_coefficients_in_local_x": [
+        0.40918948199113137,
+        11.370547364788484,
+        127.73882434504517,
+        -1064.4902028753763
+      ],
+      "u0q_coefficients_in_local_x": [
+        0.0006921727859554431
+      ],
+      "EI_N_m2": 0.013647058333333332,
+      "neutral_axis_z_m": 0.0
+    },
+    {
+      "x_start_m": 0.091,
+      "x_end_m": 0.096,
+      "phi_coefficients_in_local_x": [
+        0.9179986821331269,
+        16.400263573374637
+      ],
+      "u0q_coefficients_in_local_x": [
+        0.0006921727859554431
+      ],
+      "EI_N_m2": null,
+      "neutral_axis_z_m": 0.0,
+      "rigid": true
+    }
+  ],
+  "unknowns": {
+    "damping_ratio": null,
+    "actual_PZT_grade": null,
+    "native_COMSOL_tensor": null,
+    "adhesive_geometry_and_moduli": null,
+    "electrode_mass": null,
+    "qualified_q_voltage_domain": null
+  },
+  "force_compatibility": {
+    "generalized_force": "Fz + psi_g*Fx - phi_prime_a*tau_y (beam-frame signs)",
+    "existing_transverse_fixed_tip_force_table": "not_automatically_compatible",
+    "must_resolve": "q-dependent tip orientation and axial translation, torque and consistent virtual work or explicit reviewed neglect assumption"
+  },
+  "parameter_values_sha256": "fc84a45169193f150feee2ee6863756ad81be133546fd8b1b4961e13454fd7e6",
+  "input_bindings_sha256": {
+    "parameters.json": "708be72ca53a698b8c364383cd29b00611516c32a517a7f092eef5ac87c55d2c",
+    "provenance.json": "e9256afd20b88ec08e22dd08c6e775b2e844a145c2fcbaf75bc17454960cfffe",
+    "beam_rom.py": "c920948956d9ee9e0ed84ddd44f4fd36179e828a5e42a038da4273ab27c9e5ec",
+    "sources/DoorBeam.java": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6"
+  }
+}

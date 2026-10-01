@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fixture_id": {
+      "type": "string"
+    },
+    "gap_label_mm": {
+      "type": "number"
+    },
+    "physical": {
+      "additionalProperties": false,
+      "properties": {
+        "driver_closed_center_world_m": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "driver_size_m": {
+          "const": [
+            0.02,
+            0.02,
+            0.02
+          ]
+        },
+        "force_from_world": {
+          "const": [
+            [
+              -1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ]
+        },
+        "initial_magnetization_force_axis": {
+          "const": [
+            1,
+            0,
+            0
+          ]
+        },
+        "opening_angle_rad": {
+          "maximum": 1.1344640137963142,
+          "minimum": 0,
+          "type": "number"
+        },
+        "opening_s": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "pivot_world_m": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "positive_q_world": {
+          "const": [
+            0,
+            1,
+            0
+          ]
+        },
+        "rotation_axis_world": {
+          "const": [
+            0,
+            0,
+            1
+          ]
+        },
+        "tip_center_world_m": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "tip_size_m": {
+          "const": [
+            0.01,
+            0.01,
+            0.01
+          ]
+        }
+      },
+      "required": [
+        "pivot_world_m",
+        "tip_center_world_m",
+        "driver_closed_center_world_m",
+        "rotation_axis_world",
+        "force_from_world",
+        "positive_q_world",
+        "tip_size_m",
+        "driver_size_m",
+        "initial_magnetization_force_axis",
+        "opening_s",
+        "opening_angle_rad"
+      ],
+      "type": "object"
+    },
+    "physical_coordinate_sha256": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "canonical-door-geometry-fixture-v1"
+    },
+    "source_design_family": {
+      "enum": [
+        "upstream-moving-driver",
+        "cloud-moving-product"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "fixture_id",
+    "source_design_family",
+    "gap_label_mm",
+    "physical",
+    "physical_coordinate_sha256",
+    "provenance"
+  ],
+  "type": "object"
+}

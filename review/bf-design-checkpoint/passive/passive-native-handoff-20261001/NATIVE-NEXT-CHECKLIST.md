@@ -1,0 +1,37 @@
+# Next native check: establish provenance before a new circuit run
+
+The completed passive pair supports one conditional source/storage comparison. Keep 47 µF as its control and 10 µF as its conditional candidate; neither is an admitted feasible device. This additive checklist changes no sealed result and authorizes no new solve.
+
+## 1. First action: inspect/import the existing native evidence
+
+Use the existing read-only collector request for source commit `338d60384d5805abf1e02252a4513860066a2c39`, rooted at `bf-agent-workbench/verification/closed-simulation-20260930`. Start with the small packet and baseline joint/numerical RAW files. Do not infer execution from a matching source hash or directory name.
+
+- Bind `final-receipt.json`, `acceptance-v2/receipt.json`, `cases.json`, `uncertainty.json`, `schema-validation.json`, and the baseline `result.json`/`design-spec.json`. Check `implementation`, `tools` (especially `tools.pmic_model`), `physics_hash`, `model_versions`, `stages.<stage>.key`, checkpoint `inputs`, dependency keys and file hashes. The referenced positive-module case is an externally powered module control, not a self-powered reference.
+- Resolve only the cache directories named by the Result. From the beam stage, inspect `rom.json`, `DoorBeam.java`, `solve.log`, `solver.log` and `checkpoint.json`. The native ROM fields are `k`, `mass`, `frequency_Hz`, `theta`, `cp`, `mesh_delta`, `scope` and `calibration`. Recompute their extraction from retained `BF_DATA` rows: stiffness from the 0.3 N tip test, mass from stiffness/eigenfrequency, theta from actuation, and cp from the actuation-charge subtraction. Audit signs and units, not just numerical similarity.
+- From the force stage, retain `force-table.npz`, `force-domain.json` and `checkpoint.json`; include the referenced `magnetic-confirmation.json`/`DoorMagnetic.java` and logs. Establish which tip path, force component, rotations, domains and failed refinement gates actually generated that table.
+- From baseline joint and numerical stages, retain final `system.cir`, `system.log`, `system.raw`, `solve.json`, `energy.json`, `coupling-iterations.json` and `load.pwl`, plus the associated `waveform.csv` and `program.csv`. Two baseline RAW files are the smallest first transient packet. CSV summaries alone cannot recompute extrema, power integrals or between-sample rail/PGOOD events.
+- Inspect the actual PMIC interface before interpreting node names. The optional, newly supplied `native-model-interface.json` must identify `model_sha256`, original `subckt_declaration`, `ordered_ports`, `provenance`, and, when supplied, `xu1_instance`, `xu1_nodes_in_order`, `port_mapping`. The existing schema deliberately labels this `operator-supplied-unverified`; consistency with `tools.pmic_model` does not authenticate the vendor model. Do not guess pin order or redistribute the encrypted model.
+
+This stage is a native-source/provenance and retained-data check. It needs no newly run licensed circuit. It may establish that essential evidence is absent; absence must remain explicit.
+
+## 2. Differences that prohibit direct migration
+
+- **Material:** the passive study selects scalar PSI-5A4E primitives. Native `DoorBeam.java` imports a COMSOL PZT-5A library material. The actual native tensor, dielectric constraint, density, polarization/axes and library/version must be exported or otherwise evidenced. A material name or four scalar constants cannot establish equivalence. The collector's existing small-file packet does not contain that full tensor.
+- **Coordinate/mode/port:** the passive study uses a named one-term Ritz shape, analytically integrated generalized mass, Cp_Ritz=18.7519736 nF, signed `Q=theta*q+Cp*Vp`, q-dependent axial COM motion/pitch and force-plus-torque projection. Native code extracts a static/eigen/actuation ROM and drives it with the legacy fixed-tip transverse table. Native theta is represented with a different equation/sign convention. Mode shape, q normalization, electrode polarity and generalized-force work must be mapped explicitly. Neither native `cp` nor an endpoint-static capacitance may silently replace Cp_Ritz.
+- **Circuit:** the passive study has an ideal full-wave bridge, a **series 100 kΩ resistor**, one ideal storage capacitor, no load and no reverse leakage. This is not the LTC3588 macro or the older optional native `passive-100000` control: that old control is a resistor directly across the piezo port, not a rectifier/storage topology. Matching “100000” in a folder name does not make the experiments equivalent.
+- **CAP/VIN2 and stored energy:** the native source deck includes `Ccap vin cap 1u`, `Cvin2 vin2 0 4.7u`, `L1 sw out 10u` and `Cout out 0 ...`, in addition to Cstorage. Their stores and any macro-internal initialization are absent from the new passive model. Physical zero Vp/Vs in the passive pair establishes none of those native initial states. Differential CAP energy uses V(vin,cap), not V(cap) alone.
+- **PGOOD/load:** the native deck saves PGOOD and couples a load schedule to V(out), including load before PGOOD; shared C code samples supply and PGOOD and iterates the load waveform. The passive benchmark has no output regulator, PGOOD, program or load. Vs is not Vout or readiness. A storage-energy or voltage ratio therefore cannot be translated into startup, packet or mission success.
+
+## 3. Only after that: a separately specified native circuit test
+
+If provenance and port/mode compatibility are established, review a new version of the actual circuit before a licensed run. Preserve the original source/deck/results. Adding missing saved signals creates a new instrumented test, not a repair to old RAW.
+
+The current source `.save` contains q, velocity, force, angle, piezo voltage, VIN, OUT, PGOOD, piezo-port current and load current. It omits the full auxiliary-rail/store evidence. A prospective instrumented deck should bind actual pin mapping and save at least V(vin), V(out), V(pgood), V(vin2), V(vin,cap), the relevant capacitor/inductor branch currents, I(Vsense), I(Bload), and actual initial states. Those observations should support piezo-port work, external stores/losses, startup trajectory and source/load feedback at matched numerical resolutions. Encrypted macro-internal stores/losses may still remain unobservable; do not claim they close merely because external traces exist.
+
+Separately obtain native material/mode evidence and prepared-initial-state/reset evidence. The source's UIC display-row correction must remain distinguished from real auxiliary-state measurement. Actual application timing/current and receiver attribution remain later evidence needs, not outputs of this source-only pair.
+
+**Concrete stopping point:** reconcile the existing baseline's source, ROM and port/rail evidence first. If the native tensor/mode mapping or PMIC interface/auxiliary observations are absent, report that specific missing item. Do not rerun a different licensed circuit as a substitute for provenance, launch another capacitance sweep, or treat 10 µF as a feasible-device recommendation.
+
+## Source bindings
+
+The accompanying `sources/` contains the already-read native extraction/deck code, collector request, interface schema and source-identity contract. `SOURCE-BINDINGS.json` records exact source paths and hashes. These are code/schema references, not newly collected native run outputs. No native model file, commercial binary, credential, license or new scientific trajectory is included.

@@ -1,0 +1,139 @@
+{
+  "schema_version": "bf-event-design-v2",
+  "mechanics": {
+    "mass_kg": 0.001,
+    "stiffness_n_m": 100,
+    "damping_ns_m": 0.01,
+    "coupling_n_v": 0.0005,
+    "piezo_capacitance_f": 1e-07
+  },
+  "drive": {
+    "kind": "force-pwl",
+    "trajectory": [
+      [
+        0,
+        0
+      ],
+      [
+        0.01,
+        2
+      ],
+      [
+        0.011,
+        0
+      ],
+      [
+        0.25,
+        0
+      ]
+    ]
+  },
+  "storage": {
+    "capacitance_f": 4.7e-05,
+    "initial_v": 0,
+    "leakage_a": 1e-07
+  },
+  "power": {
+    "start_v": 0.8,
+    "stop_v": 0.5,
+    "output_v": 0.4,
+    "efficiency": 0.8,
+    "quiescent_a": 1e-07
+  },
+  "diode": {
+    "saturation_a": 1e-09,
+    "emission_coefficient": 1.5,
+    "series_ohm": 2,
+    "junction_capacitance_f": 1e-12,
+    "transit_time_s": 1e-09
+  },
+  "workload": {
+    "origin": "estimate",
+    "firmware_sha256": null,
+    "idle_current_a": 1e-06,
+    "tx_stage": "tx",
+    "stages": [
+      {
+        "name": "boot",
+        "duration_s": 0.002,
+        "current_a": 0.003
+      },
+      {
+        "name": "tx",
+        "duration_s": 0.002,
+        "current_a": 0.008
+      }
+    ]
+  },
+  "simulation": {
+    "duration_s": 0.25,
+    "step_s": 1e-05
+  },
+  "requirements": {
+    "action_time_s": 0,
+    "deadline_s": 0.2,
+    "max_deflection_m": 0.03
+  },
+  "provenance": [
+    {
+      "parameter": "mechanics",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "mechanics",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "drive",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "drive",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "storage",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "storage",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "power",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "power",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "workload",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "workload",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "diode",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "diode",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "requirements",
+      "origin": "assumption",
+      "source": "generic numerical test fixture",
+      "locator": "requirements",
+      "conditions": "not a target product or measurement"
+    },
+    {
+      "parameter": "control",
+      "origin": "assumption",
+      "source": "prospective generic apparatus diagnostic v2",
+      "locator": "contracts/prospective-plan-v2.json",
+      "conditions": "Fixed mathematical reset timescale, not measured firmware or physical PMIC state"
+    }
+  ],
+  "control": {
+    "timer_reset_tau_s": 1e-06,
+    "feedback_mode": "reciprocal"
+  }
+}

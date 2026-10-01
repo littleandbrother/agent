@@ -1,0 +1,47 @@
+{
+  "schema_version": "ltc3588-dynamic-evidence-admission-v2",
+  "admitted": false,
+  "next_action": "Collect and independently verify bounded native interface/observable evidence before freezing any new transient model or prospective circuit comparison",
+  "scientific_runs_authorized_by_this_file": 0,
+  "required_bindings": {
+    "authoritative_world_id": null,
+    "native_model_sha256": null,
+    "native_solver_identity": null,
+    "exact_subcircuit_declaration": null,
+    "ordered_port_to_instance_mapping": null,
+    "electrical_initial_state": null,
+    "rail_transient_model": null,
+    "qualified_program_load_identity": null,
+    "prospective_native_numerical_criteria": null
+  },
+  "required_observables": [
+    "time", "VIN", "CAP", "VIN-CAP", "VIN2", "VOUT", "PGOOD",
+    "I(Ccap), VIN to CAP", "I(Cvin2), VIN2 to GND", "input source current and voltage",
+    "PMIC external port currents with declaration/sign", "inductor current", "load current",
+    "source-connected state", "complete program/TX/receiver states for later integrated use"
+  ],
+  "candidate_diagnostics_for_later_review": [
+    "Observe standard topology rail states through a bounded sub-UVLO input ramp",
+    "Observe same qualified source/input trajectory with added saves only",
+    "Charge then open source branch to distinguish retention and free discharge from source-driven sinking"
+  ],
+  "must_freeze_before_later_runs": [
+    "actual source impedance/ramp/time horizon and switch/leakage model",
+    "full capacitor and inductor initial states",
+    "data retention and sign conventions",
+    "numeric step/tolerance refinement and energy thresholds",
+    "independent settling-window parameters; no guessed time constant",
+    "per-run and total execution budget",
+    "admission rules separating component, native-reference and integrated mission claims"
+  ],
+  "forbidden_substitutions": [
+    "datasheet ideal rail diagram as a finite-time dynamic law",
+    "zero auxiliary energy merely because UVLO is off",
+    "65.664 microjoules as a second independent post-UVLO threshold",
+    "package physical pin numbering as the macro-model port order",
+    "generic 0.4 V causal fixture as LTC3588 behavior",
+    "hardware or qualified reference claims from closed-form static arithmetic",
+    "invented charging/discharge delay or fixed exponential decay"
+  ],
+  "existing_request_to_reconcile": "/workspace/shared/simulation-model-alignment-20261001/NATIVE-RAIL-OBSERVATION-REQUEST.json"
+}

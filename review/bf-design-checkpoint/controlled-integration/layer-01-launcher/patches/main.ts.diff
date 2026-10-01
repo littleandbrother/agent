@@ -1,0 +1,59 @@
+--- upstream/packages/bf-agent/src/main.ts
++++ overlay/packages/bf-agent/src/main.ts
+@@ -16,6 +16,32 @@
+ const config = JSON.parse(fs.readFileSync(process.argv[2] === "-" ? 0 : process.argv[2], "utf8"));
+ const cwd = path.resolve(config.workspace);
+ const sha = (file: string) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
++
++// Controlled activation evidence is emitted only after actual import/call.
++// A trusted supervisor binds the fresh process, nonce, exit status and trace.
++const binding = config.controlledActivation;
++if (!binding || config.dryRun !== true || !["solve", "improve"].includes(config.mode))
++    throw new Error("CONTROLLED_OVERLAY_TRUSTED_DRY_RUN_ONLY");
++if (binding.harnessSourceHash !== config.sourceManifest.source_hash ||
++    binding.appBuildHash !== sha(process.argv[1]) ||
++    binding.loaded.solver !== sha(config.solverModule) ||
++    binding.loaded.improver !== sha(config.improverModule))
++    throw new Error("CONTROLLED_ACTIVATION_IDENTITY_MISMATCH");
++const evidence = (phase: string, entrypoint: string, output: unknown = null) => {
++    console.log(JSON.stringify({type: "controlled_activation", phase, entrypoint,
++        nonce: binding.nonce, pid: process.pid, mode: config.mode,
++        harness_source_hash: binding.harnessSourceHash, loaded: binding.loaded,
++        app_build_hash: binding.appBuildHash, binding_hash: binding.bindingHash,
++        output: phase === "invoked" ? output : null,
++        output_hash: phase === "invoked"
++            ? crypto.createHash("sha256").update(JSON.stringify(output)).digest("hex") : null}));
++};
++const invoke = <T>(entrypoint: string, call: () => T): T => {
++    const result = call();
++    evidence("invoked", entrypoint, result);
++    return result;
++};
++
+ const activation = {
+ 	type: "harness_loaded",
+ 	pid: process.pid,
+@@ -26,10 +52,12 @@
+ };
+ console.log(JSON.stringify(activation));
+ const solver = await import(pathToFileURL(config.solverModule).href);
++evidence("post_import", "solver");
+ const improver = await import(pathToFileURL(config.improverModule).href);
++evidence("post_import", "improver");
+ let state = fs.existsSync(path.join(cwd, "state.json"))
+ 	? JSON.parse(fs.readFileSync(path.join(cwd, "state.json"), "utf8"))
+-	: solver.initialState();
++	: invoke("solver.initialState", () => solver.initialState());
+ const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify(state, null, 2));
+ const api = async (route: string, body?: unknown) => {
+ 	const response = await fetch(config.service + route, {
+@@ -202,7 +230,8 @@
+ if (!model) throw new Error("EXPLICIT_MODEL_UNAVAILABLE");
+ const task = config.mode === "solve" ? JSON.parse(fs.readFileSync(path.join(cwd, "task.json"), "utf8")) : null;
+ const prompt =
+-	config.mode === "solve" ? solver.solverPrompt(task, state) : improver.improvementPrompt(config.improvementContext);
++	config.mode === "solve" ? invoke("solver.solverPrompt", () => solver.solverPrompt(task, state))
++    : invoke("improver.improvementPrompt", () => improver.improvementPrompt(config.improvementContext));
+ const resources: ResourceLoader = {
+ 	getExtensions: () => ({ extensions: [], errors: [], runtime: createExtensionRuntime() }),
+ 	getSkills: () => ({ skills: [], diagnostics: [] }),

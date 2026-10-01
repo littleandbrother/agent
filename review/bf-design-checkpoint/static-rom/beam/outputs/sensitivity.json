@@ -1,0 +1,202 @@
+{
+  "schema": "bf-static-beam-sensitivity-v1",
+  "new_dynamic_runs": 0,
+  "physical_uncertainty_bounds": null,
+  "physical_uncertainty_reason": "Source constants are assumptions or typical values; no verified joint material, adhesive, manufacturing or clamp tolerances. Do not invent confidence intervals.",
+  "attachment_model_form_branches": [
+    {
+      "name": "rigid_overlap_at_proximal_edge",
+      "attachment_m": 0.091,
+      "values": {
+        "k_N_m": 87.16295936341257,
+        "mass_kg": 0.008693494536827093,
+        "theta_C_m": -0.00025557326500094804,
+        "Cp_ritz_F": 1.875197361378469e-08,
+        "f_SC_ritz_Hz": 15.936352314134517
+      },
+      "relative_to_rigid": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.0,
+        "theta_C_m": 0.0,
+        "Cp_ritz_F": 0.0,
+        "f_SC_ritz_Hz": 0.0
+      },
+      "magnet_pitch_slope_per_m": 16.400263573374637,
+      "magnet_axial_shape": -0.08565521492786202
+    },
+    {
+      "name": "flexible_overlap_point_attachment_at_centroid",
+      "attachment_m": 0.096,
+      "values": {
+        "k_N_m": 87.13976950568265,
+        "mass_kg": 0.008693774953486432,
+        "theta_C_m": -0.0002555052692869633,
+        "Cp_ritz_F": 1.875197361378469e-08,
+        "f_SC_ritz_Hz": 15.933975245475516
+      },
+      "relative_to_rigid": {
+        "k_N_m": -0.0002660517483491498,
+        "mass_kg": 3.2255919429236e-05,
+        "theta_C_m": -0.00026605174834892775,
+        "Cp_ritz_F": 0.0,
+        "f_SC_ritz_Hz": -0.0001491601473251336
+      },
+      "magnet_pitch_slope_per_m": 16.475715779082243,
+      "magnet_axial_shape": -0.08605265494469243
+    }
+  ],
+  "attachment_model_family_sampled_envelope": {
+    "scope": "only a in [91,96] mm with all other assumptions fixed; not guaranteed physical bounds",
+    "grid_points": 101,
+    "metrics": {
+      "k_N_m": {
+        "min": 87.13976950568265,
+        "max": 87.16295936341257
+      },
+      "mass_kg": {
+        "min": 0.008693494536827093,
+        "max": 0.008693774953486432
+      },
+      "theta_C_m": {
+        "min": -0.00025557326500094804,
+        "max": -0.0002555052692869633
+      },
+      "Cp_ritz_F": {
+        "min": 1.875197361378469e-08,
+        "max": 1.875197361378469e-08
+      },
+      "f_SC_ritz_Hz": {
+        "min": 15.933975245475516,
+        "max": 15.936352314134517
+      }
+    }
+  },
+  "capacitance_model_form": {
+    "Cp_scalar_S1_fixed_Tother0_F": 1.807325076512e-08,
+    "Cp_ritz_F": 1.875197361378469e-08,
+    "Cp_static_q_condensed_F": 1.9479399198883736e-08,
+    "Cfree_ritz_F": 1.950134805288459e-08,
+    "Cfree_continuum_static_F": 2.0228773637983637e-08,
+    "Cp_free_material_T_fixed_F": 2.1250050765120002e-08
+  },
+  "static_bending_relaxation_omitted_relative_to_Cp_Ritz": 0.038791947988040754,
+  "wrong_free_material_capacitance_excess_relative_to_Cp_Ritz": 0.13321675908817188,
+  "magnet_point_mass_omission": {
+    "omitted_generalized_mass_kg": 8.864719949205676e-05,
+    "relative_mass_error": 0.010196958095105764,
+    "frequency_increase_if_omitted": 0.005137805094971748
+  },
+  "beam_axial_rotary_mass_omission": {
+    "omitted_generalized_mass_kg": 2.3965042966138594e-08,
+    "relative_mass_error": 2.756663947348063e-06
+  },
+  "local_parameter_elasticities": {
+    "copper_young": {
+      "elasticities": {
+        "k_N_m": 0.7350467018517844,
+        "mass_kg": -4.067549876611312e-05,
+        "theta_C_m": 0.44630583566115606,
+        "Cp_ritz_F": -0.028461740858366644,
+        "f_SC_ritz_Hz": 0.36754368878939064
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 1.0488929169660821e-09,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "copper_density": {
+      "elasticities": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.12221508295404036,
+        "theta_C_m": -0.0,
+        "Cp_ritz_F": 0.0,
+        "f_SC_ritz_Hz": -0.061107541478057636
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 3.3439709334892598e-12,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "pzt_young_E1": {
+      "elasticities": {
+        "k_N_m": 0.26495329843318893,
+        "mass_kg": 4.067549477525888e-05,
+        "theta_C_m": 0.5536941649741529,
+        "Cp_ritz_F": -0.10475501828632908,
+        "f_SC_ritz_Hz": 0.1324563114921916
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 8.176910260004888e-10,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "pzt_density": {
+      "elasticities": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.004873895209003695,
+        "theta_C_m": -0.0,
+        "Cp_ritz_F": 0.0,
+        "f_SC_ritz_Hz": -0.002436947604604798
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 0.0,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "pzt_d31": {
+      "elasticities": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.0,
+        "theta_C_m": 0.9999999999989735,
+        "Cp_ritz_F": -0.2664335181764656,
+        "f_SC_ritz_Hz": 0.0
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 1.0604850331219495e-12,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "pzt_epsilon_T33_relative": {
+      "elasticities": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.0,
+        "theta_C_m": -0.0,
+        "Cp_ritz_F": 1.1332167590883846,
+        "f_SC_ritz_Hz": 0.0
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 0.0,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    },
+    "magnet_density": {
+      "elasticities": {
+        "k_N_m": 0.0,
+        "mass_kg": 0.8729110218399395,
+        "theta_C_m": -0.0,
+        "Cp_ritz_F": 0.0,
+        "f_SC_ritz_Hz": -0.4364555114385711
+      },
+      "finite_difference_h": 5e-05,
+      "h_halving_max_absolute_change": 1.5605199354951083e-09,
+      "interpretation": "local d ln|output| / d ln|parameter|; step is numerical, not a material tolerance"
+    }
+  },
+  "damping": {
+    "value": null,
+    "range": null,
+    "reason": "No measured assembled-device damping. Manufacturer ceramic Qm=80 is not its modal damping ratio."
+  },
+  "polarity": {
+    "physical_sign_known": false,
+    "conditional_sign": "+z poling, Vtop\u2212Vbottom",
+    "opposite_poling_changes": "theta sign only; Cp, k, m unchanged"
+  },
+  "inherited_q_support_audit": {
+    "abs_q_m": 0.008,
+    "magnet_pitch_abs_rad": 0.1312021085869971,
+    "magnet_axial_displacement_abs_m": 0.0006852417194228961,
+    "max_linear_fiber_strain_magnitude_at_V0": 0.0012998702765351798,
+    "physical_validity": "unknown"
+  },
+  "published_primitive_inconsistency": {
+    "derived_k31": 0.3866472726529568,
+    "published_k31": 0.35,
+    "relative_difference": 0.10470649329416237,
+    "treatment": "Y1E,d31,epsilon33T are declared independent primitives; published k31 is not simultaneously imposed or used as calibration"
+  }
+}

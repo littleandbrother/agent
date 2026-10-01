@@ -1,0 +1,90 @@
+{
+  "schema": "independent-native-observation-kit-review-v1",
+  "completed_at_utc": "2026-10-01T16:01:23.544877+00:00",
+  "decision": "STATIC_REVIEW_PASS_FOR_PRIVATE_PROSPECTIVE_HANDOFF_NOT_EXECUTION",
+  "exact_plan_sha256": "f4813037523ae580d3ada28a2c9dfebb36c030316c139e2c5b847568a47bafb9",
+  "prospective_source_manifest_sha256": "eb14c39bfdb33ca0fc6096bcd1af886f2d2ea806ecddf14617e1cbec3d4b67c5",
+  "source_files_independently_verified": 26,
+  "exact_decks": [
+    {
+      "file": "driven-down-coarse.cir",
+      "sha256": "82d7dc7e6cee5daa70a967d7b6ddda7dd9db7a1c489a81f7ecb10f4591aa4dbc",
+      "signals": 51,
+      "element_count": 27,
+      "static_pass": true,
+      "mode": "driven-down",
+      "resolution": "coarse"
+    },
+    {
+      "file": "driven-down-fine.cir",
+      "sha256": "7c62cfd0b62c57d4d11f534fc160a096d38ba2085351b32050f181c2e0f749fb",
+      "signals": 51,
+      "element_count": 27,
+      "static_pass": true,
+      "mode": "driven-down",
+      "resolution": "fine"
+    },
+    {
+      "file": "source-open-coarse.cir",
+      "sha256": "5f246fee25fa66d94f11bacc67b9b09a5fed200ca6cea7ea3db32165a2591a78",
+      "signals": 51,
+      "element_count": 27,
+      "static_pass": true,
+      "mode": "source-open",
+      "resolution": "coarse"
+    },
+    {
+      "file": "source-open-fine.cir",
+      "sha256": "306e237c2519d80f8a99dc216af35b87c383a8a7c2356641a3fca803fc5bc6cc",
+      "signals": 51,
+      "element_count": 27,
+      "static_pass": true,
+      "mode": "source-open",
+      "resolution": "fine"
+    }
+  ],
+  "tests": {
+    "producer_tests_independently_rerun": 45,
+    "independent_reader_tests": 15,
+    "independent_comparison_tests": 11,
+    "total_test_executions_in_final_suites": 71,
+    "all_final_suites_pass": true,
+    "independent_deck_audit_cases": 4,
+    "independent_synthetic_signed_power_identity_pass": true
+  },
+  "problems_found_and_fixed": [
+    "Four initial RAW-reader negative cases: duplicate count header, incorrect voltage/current types, malformed .meas token. Fixed without changing scientific thresholds; initial failure log preserved.",
+    "Five initial comparison cases: missing voltage fields in one/both reports, missing VIN reference family, truthy string numerical/zero-screen flags. Fixed with schema/type/finite checks; initial failure log preserved."
+  ],
+  "reviewed_physics": [
+    "All eleven port currents oriented into macro; same-package symbol-backed interface retains unobserved binary .SUBCKT",
+    "Explicit zero external ICs, 25C ambient, 27C nominal parameter; hidden macro initial state remains unknown",
+    "Fixed47uF control; grounded PZ clamp is an electrical fixture change, not open piezo or native door baseline",
+    "CAP differential energy, explicit Cout ESR/internal node, L ESR and fixed1T-ohm shunt accounted separately",
+    "Macro terminal absorption plus external source/control/sensor work and store/loss ledger; no hidden PMIC loss split",
+    "Distinct source-open/driven-down controls and finite switch leakage; 10pA off-current residual gate frozen before execution",
+    "PGOOD signal brackets, first assertion versus falling retention, unresolved/censored events and coarse/fine gates remain distinct"
+  ],
+  "additional_runtime_prerequisites": [
+    "Supported authorized runtime and matching executable/model/symbol hashes",
+    "Successful real RC smoke with retained RAW/log review; also exercise numdgt=15 all-double point-major output used by these PMIC decks. A float-only smoke does not qualify that native layout.",
+    "Root execution authorization bound to this exact plan hash and all four unchanged deck hashes",
+    "Enforce at most4 native attempts,300s each/1200s total,1GiB RAW per attempt/3GiB total; stop and retain partial evidence on failure without automatic retry"
+  ],
+  "native_executions": 0,
+  "scientific_solves": 0,
+  "runtime_ready": false,
+  "execution_authorized": false,
+  "old_review_preserved": {
+    "path": "/workspace/scratch/a372e1f1dc51/native-pmic-independent-review-20261001/BF_Native_PMIC_Independent_Review_20261001.zip",
+    "sha256": "d08fbb8a820ccb052d4b670a0d12ac33d77bb11f1615b669ea029a6b273b169e"
+  },
+  "relocated_producer_readback": {
+    "path": "reports/relocated-static-readback.json",
+    "sha256": "be93172ab0806c33385261c2bce3e81cac45edb2c220d28878dc5b6a76944ea0",
+    "reviewed": true,
+    "scope": "Producer report of45 relocated static/synthetic tests, source hashes and absent-vendor fail-closed gate; not native execution"
+  },
+  "final_package_verifier": "FILE-MANIFEST.json is assembled after this addendum. Producer/consumer must run verify_kit.py on the final package; this review independently verified PROSPECTIVE-SOURCE-MANIFEST instead.",
+  "publication": "Private user project artifact only. Preserve ADI restriction on public publication and third-party benchmark/comparison disclosure absent ADI written consent. No vendor executable, model body, symbol body, EULA or PDF included."
+}

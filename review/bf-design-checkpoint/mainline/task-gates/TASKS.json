@@ -1,0 +1,406 @@
+{
+  "schema": "bf-development-task-set-v1",
+  "warning": "These are two blocked development task templates, not two admitted commissions. One is a full design run and one a continuation; never pool their denominators.",
+  "tasks": [
+    {
+      "schema": "bf-development-task-contract-v1",
+      "revision": 1,
+      "status": "draft_blocked",
+      "evidence_tier": "computational_development_only",
+      "world": {
+        "excitation": "single_prescribed_door_open",
+        "opening_s": 2.0,
+        "open_angle_deg": 65.0,
+        "observation_s": 4.0,
+        "electrical_initial_V": 0.0,
+        "external_electrical_work_J": 0.0,
+        "door_driver_closed_world_mm": [
+          856,
+          45,
+          2140
+        ],
+        "angle_profile": "linear_0_to_65_degrees_over_2_seconds_then_hold",
+        "repeat_operations_per_trial": 1
+      },
+      "mission": {
+        "minimum_received_events": 1,
+        "receiver_deadline_s": 4.0,
+        "single_open_cold_start_required": true,
+        "no_motion_energy_max_J": 1e-09,
+        "weak_motion_case": null,
+        "correct_action_identity_required": true,
+        "maximum_duplicate_events": 0,
+        "physical_receiver_claim": false
+      },
+      "facts_status": "source_recovered_not_requirement_owner_frozen",
+      "scope_status": "architecture_open_api_incomplete",
+      "public_assumptions": [
+        "Nominal dimensions and installation are inherited design assumptions, not measured user requirements.",
+        "65 degree / 2 second motion and 4 second deadline are recovered declared computational settings.",
+        "Weak motion is required by inherited acceptance but its exact angle/time/trajectory is not frozen.",
+        "Correct action attribution and deduplication need an acceptance implementation beyond silence-based grouping.",
+        "The 8 mm bound is applicability of the inherited linear ROM, not a physical safety limit.",
+        "Initial closed-door magnetic equilibrium has nonzero mechanical energy; preparation/reset provenance must be explicit."
+      ],
+      "allowed_design": {
+        "all_main_arms": [
+          "Generic Agent",
+          "Domain-Guided Agent",
+          "Budget-Matched Search",
+          "BF-Design"
+        ],
+        "permissions_per_arm": {
+          "Generic Agent": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "Domain-Guided Agent": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "Budget-Matched Search": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "BF-Design": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          }
+        },
+        "candidate_components": [
+          "beam_and_piezo_geometry",
+          "magnet_geometry_and_mount",
+          "passive_mechanical_release",
+          "rectifier_and_power_topology",
+          "real_storage_components",
+          "firmware_policy_and_payload"
+        ],
+        "implementation_rule": "Every candidate change requires artifact-bound model support and independent validation over its actual domain. Unsupported does not mean failed design; request model extension or return insufficient_evidence.",
+        "hard_constraints_to_freeze": [
+          "allowed_installation_volume_and_placement",
+          "clearance_and_peak_actuation_force",
+          "material_and_component_catalog",
+          "weak_motion_case",
+          "receiver_protocol_and_action_identity",
+          "first_operation_mechanical_preparation_and_reset"
+        ],
+        "forbidden": [
+          "external_power_as_feasible_reference",
+          "electrical_precharge",
+          "stronger_or_faster_excitation",
+          "extra_operations",
+          "lowered_event_or_deadline_requirement",
+          "silent_model_parameter_edit",
+          "unsupported_ROM_extrapolation",
+          "hidden_reference_access",
+          "architecture_restriction_on_strong_baselines"
+        ]
+      },
+      "acceptance": {
+        "mission_pass_never_sufficient_alone": true,
+        "required_checks": [
+          "source_and_artifact_hashes",
+          "identical_world_and_mission",
+          "independent_design_space_membership",
+          "zero_external_electrical_energy",
+          "zero_initial_electrical_energy",
+          "mechanical_initial_state_and_reset_ledger",
+          "model_applicability",
+          "numerical_convergence",
+          "reciprocal_energy_balance",
+          "complete_firmware_tx",
+          "action_attributed_timely_receiver_event",
+          "no_motion_negative_control",
+          "weak_motion_defined_and_passed",
+          "native_CAD_EDA_binding",
+          "reference_independently_replayed"
+        ],
+        "inherited_numerical_targets": {
+          "max_rom_deflection_mm": 8.0,
+          "mesh_delta_pct": 5.0,
+          "time_step_energy_delta_pct": 5.0
+        },
+        "behavioral_campaign_stricter_targets": {
+          "energy_residual_strictly_below": 0.01,
+          "halfstep_energy_voltage_aux_relative": 0.01,
+          "displacement_relative": 0.005
+        },
+        "target_rule": "Provider-specific thresholds are frozen before a witness; current code/test logic does not qualify a new provider or relax any old threshold.",
+        "result_distinctions": [
+          "completed_unsatisfied",
+          "out_of_domain",
+          "numerical_fail",
+          "tool_fail",
+          "insufficient_evidence",
+          "qualified_model_mission_pass"
+        ],
+        "hardware_or_product_acceptance": false
+      },
+      "reference_witness": null,
+      "qualification": {
+        "facts_frozen": false,
+        "allowed_design_space_complete": false,
+        "evaluator_qualified": false,
+        "reference_independently_feasible": false,
+        "numerical_and_native_evidence_complete": false,
+        "mechanical_boundary_resolved": false,
+        "ordinary_reference_feasible": false,
+        "not_constructed_to_require_recomposition": false
+      },
+      "holdout": {
+        "state": "not_frozen",
+        "all_current_sources_are_development_exposed": true,
+        "exposed_cohorts": [
+          "20_gap_cap_designs",
+          "gap_eligibility_41_42_43",
+          "spatial_addendum",
+          "historical_external_power_diagnostics",
+          "current_native_published_baseline_and_positive_diagnostic"
+        ],
+        "rules": [
+          "New confirmation parent tasks must be distinct from these development states; paraphrases are clustered with their parent.",
+          "Reference solution and independent acceptance traces are stored separately from participant files.",
+          "All methods get the same initial request, fixed-facts answers, public sources and normal public checker feedback.",
+          "Independent final evaluation and held-out conditions never feed back to the same participant trial.",
+          "Freeze public design selection at budget slices; never select the best past candidate using hidden outcomes.",
+          "No reference from a participant trial or BF-Design-only privileged repair is admitted."
+        ],
+        "independent_reference_sha256": null,
+        "private_holdout_manifest_sha256": null
+      },
+      "formal_trials_authorized": false,
+      "new_dynamic_solves_authorized": false,
+      "task_id": "DEV-FEASIBLE-01",
+      "title": "Commission a first-opening switch",
+      "experimental_unit": "independent_design_run",
+      "purpose": "Ordinary end-to-end commissioning with at least one independently feasible in-space reference; no architecture revision is required or rewarded by construction.",
+      "starting_state": {
+        "type": "request_and_common_public_assets",
+        "solution_hint": null
+      },
+      "task_specific_gates": [
+        "ordinary_reference_feasible",
+        "not_constructed_to_require_recomposition"
+      ]
+    },
+    {
+      "schema": "bf-development-task-contract-v1",
+      "revision": 1,
+      "status": "draft_blocked",
+      "evidence_tier": "computational_development_only",
+      "world": {
+        "excitation": "single_prescribed_door_open",
+        "opening_s": 2.0,
+        "open_angle_deg": 65.0,
+        "observation_s": 4.0,
+        "electrical_initial_V": 0.0,
+        "external_electrical_work_J": 0.0,
+        "door_driver_closed_world_mm": [
+          856,
+          45,
+          2140
+        ],
+        "angle_profile": "linear_0_to_65_degrees_over_2_seconds_then_hold",
+        "repeat_operations_per_trial": 1
+      },
+      "mission": {
+        "minimum_received_events": 1,
+        "receiver_deadline_s": 4.0,
+        "single_open_cold_start_required": true,
+        "no_motion_energy_max_J": 1e-09,
+        "weak_motion_case": null,
+        "correct_action_identity_required": true,
+        "maximum_duplicate_events": 0,
+        "physical_receiver_claim": false
+      },
+      "facts_status": "source_recovered_not_requirement_owner_frozen",
+      "scope_status": "architecture_open_api_incomplete",
+      "public_assumptions": [
+        "Nominal dimensions and installation are inherited design assumptions, not measured user requirements.",
+        "65 degree / 2 second motion and 4 second deadline are recovered declared computational settings.",
+        "Weak motion is required by inherited acceptance but its exact angle/time/trajectory is not frozen.",
+        "Correct action attribution and deduplication need an acceptance implementation beyond silence-based grouping.",
+        "The 8 mm bound is applicability of the inherited linear ROM, not a physical safety limit.",
+        "Initial closed-door magnetic equilibrium has nonzero mechanical energy; preparation/reset provenance must be explicit."
+      ],
+      "allowed_design": {
+        "all_main_arms": [
+          "Generic Agent",
+          "Domain-Guided Agent",
+          "Budget-Matched Search",
+          "BF-Design"
+        ],
+        "permissions_per_arm": {
+          "Generic Agent": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "Domain-Guided Agent": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "Budget-Matched Search": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          },
+          "BF-Design": {
+            "architecture_changes": true,
+            "mechanical_changes": true,
+            "circuit_changes": true,
+            "firmware_changes": true,
+            "cross_domain_changes": true,
+            "same_tool_access": true
+          }
+        },
+        "candidate_components": [
+          "beam_and_piezo_geometry",
+          "magnet_geometry_and_mount",
+          "passive_mechanical_release",
+          "rectifier_and_power_topology",
+          "real_storage_components",
+          "firmware_policy_and_payload"
+        ],
+        "implementation_rule": "Every candidate change requires artifact-bound model support and independent validation over its actual domain. Unsupported does not mean failed design; request model extension or return insufficient_evidence.",
+        "hard_constraints_to_freeze": [
+          "allowed_installation_volume_and_placement",
+          "clearance_and_peak_actuation_force",
+          "material_and_component_catalog",
+          "weak_motion_case",
+          "receiver_protocol_and_action_identity",
+          "first_operation_mechanical_preparation_and_reset"
+        ],
+        "forbidden": [
+          "external_power_as_feasible_reference",
+          "electrical_precharge",
+          "stronger_or_faster_excitation",
+          "extra_operations",
+          "lowered_event_or_deadline_requirement",
+          "silent_model_parameter_edit",
+          "unsupported_ROM_extrapolation",
+          "hidden_reference_access",
+          "architecture_restriction_on_strong_baselines"
+        ]
+      },
+      "acceptance": {
+        "mission_pass_never_sufficient_alone": true,
+        "required_checks": [
+          "source_and_artifact_hashes",
+          "identical_world_and_mission",
+          "independent_design_space_membership",
+          "zero_external_electrical_energy",
+          "zero_initial_electrical_energy",
+          "mechanical_initial_state_and_reset_ledger",
+          "model_applicability",
+          "numerical_convergence",
+          "reciprocal_energy_balance",
+          "complete_firmware_tx",
+          "action_attributed_timely_receiver_event",
+          "no_motion_negative_control",
+          "weak_motion_defined_and_passed",
+          "native_CAD_EDA_binding",
+          "reference_independently_replayed"
+        ],
+        "inherited_numerical_targets": {
+          "max_rom_deflection_mm": 8.0,
+          "mesh_delta_pct": 5.0,
+          "time_step_energy_delta_pct": 5.0
+        },
+        "behavioral_campaign_stricter_targets": {
+          "energy_residual_strictly_below": 0.01,
+          "halfstep_energy_voltage_aux_relative": 0.01,
+          "displacement_relative": 0.005
+        },
+        "target_rule": "Provider-specific thresholds are frozen before a witness; current code/test logic does not qualify a new provider or relax any old threshold.",
+        "result_distinctions": [
+          "completed_unsatisfied",
+          "out_of_domain",
+          "numerical_fail",
+          "tool_fail",
+          "insufficient_evidence",
+          "qualified_model_mission_pass"
+        ],
+        "hardware_or_product_acceptance": false
+      },
+      "reference_witness": null,
+      "qualification": {
+        "facts_frozen": false,
+        "allowed_design_space_complete": false,
+        "evaluator_qualified": false,
+        "reference_independently_feasible": false,
+        "numerical_and_native_evidence_complete": false,
+        "mechanical_boundary_resolved": false,
+        "cross_domain_bottleneck_observed": true,
+        "independent_successful_intervention": false,
+        "matched_patch_evidence_without_forced_synergy": false
+      },
+      "holdout": {
+        "state": "not_frozen",
+        "all_current_sources_are_development_exposed": true,
+        "exposed_cohorts": [
+          "20_gap_cap_designs",
+          "gap_eligibility_41_42_43",
+          "spatial_addendum",
+          "historical_external_power_diagnostics",
+          "current_native_published_baseline_and_positive_diagnostic"
+        ],
+        "rules": [
+          "New confirmation parent tasks must be distinct from these development states; paraphrases are clustered with their parent.",
+          "Reference solution and independent acceptance traces are stored separately from participant files.",
+          "All methods get the same initial request, fixed-facts answers, public sources and normal public checker feedback.",
+          "Independent final evaluation and held-out conditions never feed back to the same participant trial.",
+          "Freeze public design selection at budget slices; never select the best past candidate using hidden outcomes.",
+          "No reference from a participant trial or BF-Design-only privileged repair is admitted."
+        ],
+        "independent_reference_sha256": null,
+        "private_holdout_manifest_sha256": null
+      },
+      "formal_trials_authorized": false,
+      "new_dynamic_solves_authorized": false,
+      "task_id": "DEV-COUPLING-01",
+      "title": "Recover cold-start event delivery",
+      "experimental_unit": "same_state_continuation",
+      "purpose": "Resolve the naturally observed mechanical-source / storage / startup bottleneck while retaining the same mission; retain any valid single-domain repair if one exists.",
+      "starting_state": {
+        "type": "development_failure_snapshot",
+        "case": "g42_ci0p1_co100_dt0125us",
+        "design_source": "best_design",
+        "physics_source": "best_physics",
+        "is_feasible": false,
+        "public_failure_feedback": "UVLO is reached repeatedly; auxiliary readiness, Vout, firmware boot and reception remain zero. Cout-only changes had no effect upstream."
+      },
+      "task_specific_gates": [
+        "cross_domain_bottleneck_observed",
+        "independent_successful_intervention",
+        "matched_patch_evidence_without_forced_synergy"
+      ]
+    }
+  ]
+}
