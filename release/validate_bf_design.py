@@ -4,14 +4,18 @@ The immutable checkpoint and historical receipts are never written to. Output is
 a new local integration revision, not a repaired historical seal or live runtime.
 """
 import argparse
+import ast
 import hashlib
+import io
 import json
 import os
 import platform
+import re
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tokenize
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT = ROOT / 'review/bf-design-checkpoint'
@@ -23,6 +27,44 @@ def sha(path):
 
 def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def relocate_python(source, mapping):
+    """Replace string values, never inject a filesystem path as Python syntax."""
+    lines = source.splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+    edits = []
+    for token in tokenize.generate_tokens(io.StringIO(source).readline):
+        if token.type != tokenize.STRING:
+            continue
+        try:
+            value = ast.literal_eval(token.string)
+        except (SyntaxError, ValueError):
+            continue
+        if not isinstance(value, str):
+            continue
+        changed = value
+        for old, new in mapping.items():
+            changed = changed.replace(old, new)
+        if changed != value:
+            begin = offsets[token.start[0] - 1] + token.start[1]
+            end = offsets[token.end[0] - 1] + token.end[1]
+            edits.append((begin, end, repr(changed)))
+    for begin, end, replacement in reversed(edits):
+        source = source[:begin] + replacement + source[end:]
+    ast.parse(source)
+    return source
+
+
+def test_coverage(text, code):
+    """unittest returns zero even when required coverage is skipped."""
+    skipped = re.search(r'OK \(skipped=(\d+)\)', text)
+    count = re.search(r'Ran (\d+) tests? in ', text)
+    return {'tests_run': int(count[1]) if count else None,
+            'skipped_count': int(skipped[1]) if skipped else 0,
+            'status': 'blocked' if code == 0 and skipped else ('passed' if code == 0 else 'failed')}
 
 
 def verify_checkpoint():
@@ -89,9 +131,7 @@ def prepare(output):
     relocations = []
     for path in sorted(service.rglob('*.py')):
         original = path.read_text()
-        text = original
-        for old, new in mapping.items():
-            text = text.replace(old, new)
+        text = relocate_python(original, mapping)
         if text != original:
             before = sha(path)
             path.write_text(text)
@@ -138,18 +178,23 @@ def main():
     checks = []
 
     def run(name, command, cwd, extra=None):
+        coverage = {}
         try:
             result = subprocess.run(command, cwd=cwd, env={**env, **(extra or {})},
                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=180)
             text, code = result.stdout, result.returncode
-            status = 'passed' if code == 0 else 'failed'
+            coverage = test_coverage(text, code)
+            status = coverage['status']
         except (OSError, subprocess.TimeoutExpired) as exc:
             text, code, status = str(exc), None, 'blocked'
         (logs / (name + '.log')).write_text(text)
         checks.append({'name': name, 'status': status, 'exit_code': code,
+                       **coverage,
                        'command': command, 'cwd': str(cwd), 'log': 'logs/' + name + '.log'})
         print(name + ': ' + status, flush=True)
+        return status == 'passed'
 
+    run('integration-regression', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'release', '-p', 'test_bf_design_validation.py', '-v'], ROOT)
     run('cache-contracts', [sys.executable, '-B', '-m', 'unittest',
         'test_simulation_chain.ContractsAndRecovery', 'test_simulation_chain.CacheConsistencyTests', '-v'],
         ROOT / 'battery-world/tests/agentlab', {'PYTHONPATH': str(ROOT / 'battery-world/packages/python/bfworld/src')})
@@ -179,9 +224,30 @@ def main():
     after = {str(p.relative_to(service)): sha(p) for p in service.rglob('*') if p.is_file()}
     checks.append({'name': 'generator-preserves-method', 'status': 'passed' if stopped.returncode != 0 and 'LEGACY_GENERATOR_DISABLED' in stopped.stderr and before == after else 'failed'})
     verify_checkpoint()
+    from bf_design_runtime import prepare_runtime, seal_runtime
+    compiler = ROOT / 'pi-bf-aiot/node_modules/.bin/tsgo'
+    if not compiler.is_file():
+        checks.append({'name': 'full-pi-build-and-service-probe', 'status': 'blocked',
+                       'reason': 'Pinned compiler missing. Restore pi-bf-aiot dependencies with npm ci --ignore-scripts --no-audit --no-fund; no install is performed by this entrypoint.'})
+    else:
+        built = run('pi-offline-build', ['npm', 'run', 'bf:build'], ROOT / 'pi-bf-aiot')
+        typed = run('pi-project-typecheck', [str(compiler), '--noEmit'], ROOT / 'pi-bf-aiot')
+        if built and typed:
+            pi = prepare_runtime(output, sources, service)
+            compiled = True
+            for package in ['bf-harness', 'bf-agent']:
+                compiled = run('overlay-' + package, [str(compiler), '-p', str(pi / 'packages' / package / 'tsconfig.json')], pi) and compiled
+            if compiled:
+                seal_runtime(output, sources, service)
+                probe = run('controlled-service-probe', [sys.executable, '-B', 'run_probe.py', '--method', 'bf_design', '--output', str(service / 'reports/local-probe')], service)
+                if probe:
+                    run('controlled-service-tests', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tests', '-v'], service)
+                run('runtime-lock-after-tests', [sys.executable, '-B', '-c',
+                    'import json; from local_inputs import verify_inputs; print(json.dumps(verify_inputs()))'], service / 'src')
+    run('source-preservation-after-tests', [sys.executable, '-B', '-c',
+        'from validate_bf_design import verify_checkpoint, verify_repository_sources; print(verify_checkpoint(), verify_repository_sources())'], ROOT / 'release')
     checks += [
         {'name': 'passive-and-authoritative-world-full-replay', 'status': 'unrun', 'reason': 'Separate modules retained; original source provenance, transitive paths and new execution receipts still required.'},
-        {'name': 'full-pi-build-and-service-probe', 'status': 'unrun', 'reason': 'Requires a new pinned build/input lock and fixture runtime; historical absolute-path locks are retained, not rewritten.'},
         {'name': 'historical-raw-replay', 'status': 'blocked', 'reason': 'Checkpoint excludes raw traces, vendor payloads, auth fixtures and runtime files; original sealed archives required.'},
         {'name': 'native-agent-method-experiments', 'status': 'unrun', 'reason': 'No vendor/model execution authorized; task qualification, model/budget authorization and participant isolation remain open.'},
         {'name': 'repository-init', 'status': 'unrun', 'reason': 'This entrypoint is a bounded offline suite, not full repository health verification.'},
@@ -191,7 +257,7 @@ def main():
     report = {'schema': 'bf-design-local-validation-v1', 'scope': 'offline software contracts only',
               'entrypoint_sha256': sha(Path(__file__)), 'python_version': platform.python_version(),
               'all_checks_passed': not failed and not blocked and not any(c['status'] == 'unrun' for c in checks),
-              'executed_checks_passed': not failed, 'scientific_success': False,
+              'executed_checks_passed': not failed and not any(c.get('skipped_count', 0) for c in checks), 'scientific_success': False,
               'native_execution': False, 'model_calls': 0, 'checks': checks}
     write(output / 'VALIDATION.json', report)
     print('Report: ' + str(output / 'VALIDATION.json'))

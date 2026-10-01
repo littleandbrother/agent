@@ -1,0 +1,306 @@
+{
+  "schema": "bf-design-local-validation-v1",
+  "scope": "offline software contracts only",
+  "entrypoint_sha256": "b7574d2d188ec688ae09391bcbae42e7972aa21df0fbe503dc4567d8ffc2308b",
+  "python_version": "3.12.14",
+  "all_checks_passed": false,
+  "executed_checks_passed": true,
+  "scientific_success": false,
+  "native_execution": false,
+  "model_calls": 0,
+  "checks": [
+    {
+      "name": "integration-regression",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 3,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "release",
+        "-p",
+        "test_bf_design_validation.py",
+        "-v"
+      ],
+      "cwd": "/workspace/agent",
+      "log": "logs/integration-regression.log"
+    },
+    {
+      "name": "cache-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 17,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "test_simulation_chain.ContractsAndRecovery",
+        "test_simulation_chain.CacheConsistencyTests",
+        "-v"
+      ],
+      "cwd": "/workspace/agent/battery-world/tests/agentlab",
+      "log": "logs/cache-contracts.log"
+    },
+    {
+      "name": "method-node",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "/workspace/bf-runtime-final/sources/method-patch/patch-work/tests/independent/activation.adversarial.test.mjs",
+        "/workspace/bf-runtime-final/sources/method-patch/patch-work/tests/independent/method.adversarial.test.mjs",
+        "/workspace/bf-runtime-final/sources/method-patch/patch-work/tests/independent/source-wiring.test.mjs"
+      ],
+      "cwd": "/workspace/bf-runtime-final/sources/method-patch/patch-work",
+      "log": "logs/method-node.log"
+    },
+    {
+      "name": "method-python",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 13,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-runtime-final/sources/method-patch/patch-work",
+      "log": "logs/method-python.log"
+    },
+    {
+      "name": "method-syntax",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "node",
+        "tests/build_offline.mjs"
+      ],
+      "cwd": "/workspace/bf-runtime-final/sources/method-patch/patch-work",
+      "log": "logs/method-syntax.log"
+    },
+    {
+      "name": "causal-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 14,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_causal_evaluator.py",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-runtime-final/sources/development/evidence/causal-evaluator-repair-20261001",
+      "log": "logs/causal-contracts.log"
+    },
+    {
+      "name": "beam-rom",
+      "status": "blocked",
+      "missing_prerequisites": [
+        "static-rom/beam/sources/piezo-material-20261001.html"
+      ],
+      "reason": "Excluded from the source checkpoint; do not fabricate provenance or retained results."
+    },
+    {
+      "name": "magnetic-interface",
+      "status": "blocked",
+      "missing_prerequisites": [
+        "static-rom/magnetic/outputs/STATIC-RESULTS.json",
+        "static-rom/magnetic/evidence-completion-replay/RAW-REPLAY-RESULTS.json"
+      ],
+      "reason": "Excluded from the source checkpoint; do not fabricate provenance or retained results."
+    },
+    {
+      "name": "native-kit-contracts",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 45,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-runtime-final/sources/native-observation",
+      "log": "logs/native-kit-contracts.log"
+    },
+    {
+      "name": "generator-preserves-method",
+      "status": "passed"
+    },
+    {
+      "name": "pi-offline-build",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "npm",
+        "run",
+        "bf:build"
+      ],
+      "cwd": "/workspace/agent/pi-bf-aiot",
+      "log": "logs/pi-offline-build.log"
+    },
+    {
+      "name": "pi-project-typecheck",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/workspace/agent/pi-bf-aiot/node_modules/.bin/tsgo",
+        "--noEmit"
+      ],
+      "cwd": "/workspace/agent/pi-bf-aiot",
+      "log": "logs/pi-project-typecheck.log"
+    },
+    {
+      "name": "overlay-bf-harness",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/workspace/agent/pi-bf-aiot/node_modules/.bin/tsgo",
+        "-p",
+        "/workspace/bf-runtime-final/service/pi-overlay/packages/bf-harness/tsconfig.json"
+      ],
+      "cwd": "/workspace/bf-runtime-final/service/pi-overlay",
+      "log": "logs/overlay-bf-harness.log"
+    },
+    {
+      "name": "overlay-bf-agent",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/workspace/agent/pi-bf-aiot/node_modules/.bin/tsgo",
+        "-p",
+        "/workspace/bf-runtime-final/service/pi-overlay/packages/bf-agent/tsconfig.json"
+      ],
+      "cwd": "/workspace/bf-runtime-final/service/pi-overlay",
+      "log": "logs/overlay-bf-agent.log"
+    },
+    {
+      "name": "controlled-service-probe",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "run_probe.py",
+        "--method",
+        "bf_design",
+        "--output",
+        "/workspace/bf-runtime-final/service/reports/local-probe"
+      ],
+      "cwd": "/workspace/bf-runtime-final/service",
+      "log": "logs/controlled-service-probe.log"
+    },
+    {
+      "name": "controlled-service-tests",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": 24,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "cwd": "/workspace/bf-runtime-final/service",
+      "log": "logs/controlled-service-tests.log"
+    },
+    {
+      "name": "runtime-lock-after-tests",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-c",
+        "import json; from local_inputs import verify_inputs; print(json.dumps(verify_inputs()))"
+      ],
+      "cwd": "/workspace/bf-runtime-final/service/src",
+      "log": "logs/runtime-lock-after-tests.log"
+    },
+    {
+      "name": "source-preservation-after-tests",
+      "status": "passed",
+      "exit_code": 0,
+      "tests_run": null,
+      "skipped_count": 0,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-c",
+        "from validate_bf_design import verify_checkpoint, verify_repository_sources; print(verify_checkpoint(), verify_repository_sources())"
+      ],
+      "cwd": "/workspace/agent/release",
+      "log": "logs/source-preservation-after-tests.log"
+    },
+    {
+      "name": "passive-and-authoritative-world-full-replay",
+      "status": "unrun",
+      "reason": "Separate modules retained; original source provenance, transitive paths and new execution receipts still required."
+    },
+    {
+      "name": "historical-raw-replay",
+      "status": "blocked",
+      "reason": "Checkpoint excludes raw traces, vendor payloads, auth fixtures and runtime files; original sealed archives required."
+    },
+    {
+      "name": "native-agent-method-experiments",
+      "status": "unrun",
+      "reason": "No vendor/model execution authorized; task qualification, model/budget authorization and participant isolation remain open."
+    },
+    {
+      "name": "repository-init",
+      "status": "unrun",
+      "reason": "This entrypoint is a bounded offline suite, not full repository health verification."
+    }
+  ]
+}

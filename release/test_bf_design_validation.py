@@ -10,9 +10,25 @@ import validate_bf_design as validation
 
 
 class IntegrationTests(unittest.TestCase):
+    def test_relocation_quotes_and_windows_backslashes_are_literal_values(self):
+        for path in ["/tmp/reviewer's copy", r'C:\Users\reviewer\BF Design']:
+            source = "ROOT = '/workspace/shared/example'\nCHILD = '/workspace/shared/example/child'\n"
+            fixed = validation.relocate_python(source, {'/workspace/shared/example': path})
+            namespace = {}
+            exec(compile(fixed, '<relocated-path>', 'exec'), namespace)
+            self.assertEqual(namespace['ROOT'], path)
+            self.assertEqual(namespace['CHILD'], path + '/child')
+
+    def test_unittest_skips_are_not_complete_coverage(self):
+        result = validation.test_coverage('Ran 17 tests in 0.1s\n\nOK (skipped=1)\n', 0)
+        self.assertEqual(result['status'], 'blocked')
+        self.assertEqual(result['tests_run'], 17)
+        self.assertEqual(result['skipped_count'], 1)
+        self.assertEqual(validation.test_coverage('Ran 17 tests in 0.1s\n\nOK\n', 0)['status'], 'passed')
+
     def test_final_method_survives_legacy_rebuild_and_inputs_stay_sealed(self):
         with tempfile.TemporaryDirectory() as tmp:
-            output = Path(tmp) / 'new'
+            output = Path(tmp) / "reviewer's integration"
             sources, service, patch = validation.prepare(output)
             rows = json.loads((patch / 'PATCH-SOURCE-MANIFEST.json').read_text())['files']
             for row in rows:
