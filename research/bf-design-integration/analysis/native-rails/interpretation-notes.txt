@@ -1,0 +1,10 @@
+Interpretation clarifications / 指标口径补充
+
+1. The frozen evaluator field signed_charge_consistency_error_C is the absolute value of C*ΔV − integral(i dt), despite its historical field name. Signed charge residuals are separately reported as signed_charge_residual_C under whole_trace_accounting and trailing_window_accounting.
+冻结 evaluator 的历史字段名 signed_charge_consistency_error_C 实际保存电荷平衡误差的绝对值；真正有符号残差另见 accounting 中的 signed_charge_residual_C。
+
+2. Reported time-weighted RMS is sqrt(trapezoid(error**2, grid_time)/elapsed_time). It is trapezoidal quadrature of squared error on the stated aligned grid, not exact analytic integration of the squared piecewise-linear interpolants. Neither RMS nor normalized differences have a predeclared convergence-acceptance gate.
+所报时间加权 RMS 是对指定对齐网格上误差平方作梯形求积后再开方，不是分段线性插值误差平方的解析积分。RMS 和归一化差值均无事先声明的收敛验收阈值。
+
+3. Script revisions changed help/security wording and added explicit refusal of a symlinked working directory before self-tests. They did not change frozen numerical methods. Earlier and final runs produce identical results.json bytes and SHA-256.
+脚本后续版本仅修正帮助信息并加强自检之前的工作目录 symlink 拒绝；冻结数值方法未变，前后 results.json 的字节与 SHA-256 完全相同。
