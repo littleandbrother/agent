@@ -1,0 +1,861 @@
+{
+  "schema": "bf-pilot-independent-receipt-audit-v1",
+  "status": "SCOPED_AUDIT_PASS_WITH_MISSING_RAW",
+  "archive": {
+    "sha256": "e1cdbed3c16d1469392b32ee178fcb107a3902951a23cda2ff0c2480c04b82c2",
+    "bytes": 14238702,
+    "members": 268,
+    "manifest_verified": 267
+  },
+  "identity": {
+    "sealed_base": "338d60384d5805abf1e02252a4513860066a2c39",
+    "publication_base": "87e7d75b4c5cd13c96560b8aaa4168a292ddc3c9",
+    "publication_is_not_sealed_run_base": true,
+    "task_hash": "667696fd9f33b4efe7abb7e6bd254904e42b2738addfe2c3110e6e2a702abfac",
+    "sealed_sources_verified": 17,
+    "program_sha256": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf",
+    "migration_paths": "P/R or source/runtime paths are location aliases, never independent replicas"
+  },
+  "cohort": {
+    "declared_designs": 12,
+    "cold_controls": 2,
+    "environment_recovery_attempts": 3,
+    "total_attempts": 17,
+    "all_attempt_statuses": {
+      "completed": 10,
+      "tool_fail": 3,
+      "out_of_domain": 4
+    },
+    "original_failures_preserved": true,
+    "pi_status": "not run"
+  },
+  "runs": {
+    "cin10": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "db5ce4fae194c616fccc428d522411ab0c9138b21cc728e36d6d4d0b52a2a56e",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.4961015282546897e-12,
+        "reported_max_path_residual_J": 1.3270489528224502e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.45542848110198975,
+        "sampled_peak_supply_V": 3.3548558349139057e-06
+      }
+    },
+    "cin100": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "da7750fd48e0ef3e156cf467d5f3476621fc5be04842f02adf91d9e859293cbb",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.941271037149417e-12,
+        "reported_max_path_residual_J": 1.3302057247583168e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.07404032349586487,
+        "sampled_peak_supply_V": 5.388172326092899e-07
+      }
+    },
+    "cin22": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "ab36c2fd63a4cb940b028d16c3f2d6293c9b9e53e64cb73edb9050a7e7c017fe",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 2.249910761170648e-12,
+        "reported_max_path_residual_J": 1.3263322958369586e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.26911333203315735,
+        "sampled_peak_supply_V": 1.9724841422430472e-06
+      }
+    },
+    "cout22": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "505e8f50cf3657479adfd2dae749e734b09e0c73c450bc2632fcced95a1e01ed",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.325126965621981e-12,
+        "reported_max_path_residual_J": 1.3236890446049164e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.145751491189003,
+        "sampled_peak_supply_V": 4.775569323101081e-06
+      }
+    },
+    "gap28": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "tool_fail",
+      "result_present": true,
+      "classification": "execution_failure; no physical verdict",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "737645242e3fda15af1ceb8a3ba730d7598244e40613783bef773ce0ee1d81ad",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap28-runtime-recovery1": {
+      "cohort": "environment_recovery",
+      "repeat_of": "gap28",
+      "status": "out_of_domain",
+      "result_present": true,
+      "classification": "model_domain_rejection; not product infeasibility",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "737645242e3fda15af1ceb8a3ba730d7598244e40613783bef773ce0ee1d81ad",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap36": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "tool_fail",
+      "result_present": true,
+      "classification": "execution_failure; no physical verdict",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "0d50802c0d53e083903db0ea989e0e25a99eeb3fb623a01fb163d401690d4554",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap36-runtime-recovery1": {
+      "cohort": "environment_recovery",
+      "repeat_of": "gap36",
+      "status": "out_of_domain",
+      "result_present": true,
+      "classification": "model_domain_rejection; not product infeasibility",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "0d50802c0d53e083903db0ea989e0e25a99eeb3fb623a01fb163d401690d4554",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap40": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "tool_fail",
+      "result_present": false,
+      "classification": "execution_failure; no physical verdict",
+      "observed_channels": "MISSING_RESULT_AND_RAW"
+    },
+    "gap40-cin10-cout22": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "out_of_domain",
+      "result_present": true,
+      "classification": "model_domain_rejection; not product infeasibility",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "6e2ca16f20d2f40c3fed8f112852265460a2447c6db11f9433f90f6f06ee4c03",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap40-runtime-recovery1": {
+      "cohort": "environment_recovery",
+      "repeat_of": "gap40",
+      "status": "out_of_domain",
+      "result_present": true,
+      "classification": "model_domain_rejection; not product infeasibility",
+      "nominal_task": "not_evaluable",
+      "physical_ranking": false,
+      "physics_hash": "411aa9111b958f26f2e9dbc278310227e98401a586b085afc338dc8e928c7c5f",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "observed_channels": "MISSING_RAW_AND_COMPLETED_WAVEFORM"
+    },
+    "gap44": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "60a9d7e95e8d36f33ed842a2115e9a86de18a671779fa39588f3e6f77bec0b2c",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.6340336202180783e-13,
+        "reported_max_path_residual_J": 2.6890058448143794e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.001470008471347555,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.24269486963748932,
+        "sampled_peak_supply_V": 1.7589633216630318e-06
+      }
+    },
+    "gap50": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "1943fc9f19b4664d153522a434c9a910e031593861ffed963518660cd04a471c",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": -8.742021863350491e-13,
+        "reported_max_path_residual_J": 9.310318021637891e-10,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0005621654699491252,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.10946064442396164,
+        "sampled_peak_supply_V": 8.035300993469718e-07
+      }
+    },
+    "interval200": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "1ad280fc505a4edb5b0b21f9d3f251b6ca34c712efedeb4c7d18762ce272a313",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.3251255561591568e-12,
+        "reported_max_path_residual_J": 1.3236890446049164e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.145751491189003,
+        "sampled_peak_supply_V": 1.0638084404490655e-06
+      }
+    },
+    "nominal": {
+      "cohort": "declared_design",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "cf2826343acc6cc2747e4fbf550d0238e5438f50067f485b086c96b2a285547b",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 1.3251255561591568e-12,
+        "reported_max_path_residual_J": 1.3236890446049164e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.145751491189003,
+        "sampled_peak_supply_V": 1.0638084404490655e-06
+      }
+    },
+    "nominal-cold-1": {
+      "cohort": "cold_control",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "cf2826343acc6cc2747e4fbf550d0238e5438f50067f485b086c96b2a285547b",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": 2.3403263918822526e-12,
+        "reported_max_path_residual_J": 1.3304282586636823e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372534327792,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.14575150609016418,
+        "sampled_peak_supply_V": 1.0638085541359033e-06
+      }
+    },
+    "nominal-cold-2": {
+      "cohort": "cold_control",
+      "repeat_of": null,
+      "status": "completed",
+      "result_present": true,
+      "classification": "completed_nominal_unsatisfied",
+      "nominal_task": "unsatisfied",
+      "physical_ranking": false,
+      "physics_hash": "cf2826343acc6cc2747e4fbf550d0238e5438f50067f485b086c96b2a285547b",
+      "model_version": "door-closed-simulation-v1",
+      "model_stage_keys": "matched saved stage keys; cache inputs/payloads not independently rehashed",
+      "tools": "declared hashes only; external binaries/vendor payloads absent",
+      "source_implementation_hashes_verified": true,
+      "energy": {
+        "endpoint_balance_J": -1.4327754477641563e-12,
+        "reported_max_path_residual_J": 1.3283767628089783e-09,
+        "endpoint_within_reported_max": true,
+        "scope": "scalar algebra only; integrals and path maximum NOT independently verified",
+        "initial_mechanical_piezo_J": 0.0007586372525310433,
+        "capacitor_initial_energy_J": 0.0
+      },
+      "observations": {
+        "waveform_rows": 4001,
+        "program_rows": 40001,
+        "waveform_channels": [
+          "time_s",
+          "tip_m",
+          "velocity_m_s",
+          "piezo_V",
+          "storage_V",
+          "supply_V",
+          "pgood_V"
+        ],
+        "program_channels": [
+          "time_s",
+          "supply_V",
+          "pgood_V",
+          "state",
+          "current_A"
+        ],
+        "waveform_max_step_s": 0.001000000000000334,
+        "program_max_step_s": 0.00010000000000021103,
+        "drive_stop_s": 2.0,
+        "drive_stop_sample_present": true,
+        "drive_stop_one_sided_power": "MISSING: no force/port-current channels or left/right power samples",
+        "program_states": [
+          0.0
+        ],
+        "program_state_transitions": [],
+        "receiver_events": 0,
+        "complete_tx": 0,
+        "event_resolution": "sampled SIL states and saved event list only; no sub-step/native event reconstruction",
+        "raw_native_grid": "MISSING_RAW",
+        "raw_hash_verified": false,
+        "energy_integral_reconstruction": "UNSUPPORTED: missing native grid, force, port current, ROM coefficients and losses",
+        "pmic_internal_loss": "NOT_OBSERVABLE: encrypted macro-model",
+        "sampled_peak_storage_V": 0.14575150609016418,
+        "sampled_peak_supply_V": 1.0638085541359033e-06
+      }
+    }
+  },
+  "cold_observed_comparisons": [
+    {
+      "id": "nominal-cold-1",
+      "waveform_relative_max": {
+        "tip_m": 1.1791824141482671e-07,
+        "velocity_m_s": 2.441504166465484e-07,
+        "piezo_V": 6.523119581549773e-06,
+        "storage_V": 1.0223677312648672e-07,
+        "supply_V": 1.0686777186466521e-07,
+        "pgood_V": 8.470239211078229e-10
+      },
+      "program_csv_identical": false,
+      "receiver_json_identical": true,
+      "program_time_state_current_identical": true,
+      "raw_peak_scalar_difference": "NOT_INDEPENDENTLY_VERIFIED: native RAW absent; sampled extrema are not native extrema",
+      "empty_cache_independence": "receipt assertion only; historical cache contents absent"
+    },
+    {
+      "id": "nominal-cold-2",
+      "waveform_relative_max": {
+        "tip_m": 2.864185867754026e-07,
+        "velocity_m_s": 5.928370772896142e-07,
+        "piezo_V": 1.5806297945361356e-05,
+        "storage_V": 2.0447353330367786e-07,
+        "supply_V": 1.997771245969792e-07,
+        "pgood_V": 1.6940307854651529e-09
+      },
+      "program_csv_identical": false,
+      "receiver_json_identical": true,
+      "program_time_state_current_identical": true,
+      "raw_peak_scalar_difference": "NOT_INDEPENDENTLY_VERIFIED: native RAW absent; sampled extrema are not native extrema",
+      "empty_cache_independence": "receipt assertion only; historical cache contents absent"
+    }
+  ],
+  "missing_artifacts": {
+    "hash_verified": false,
+    "declared_but_absent_counts": {
+      "assembly.step": 10,
+      "engineering-evidence.zip": 14,
+      "preview.png": 10,
+      "start.json": 16,
+      "task.json": 16
+    },
+    "large_native_index_entries": 24,
+    "local_path_read_attempts": 0,
+    "scope": "external hashes are declarations, not verified bytes"
+  },
+  "source_index": {
+    "configs/reference_cases/door-magnetic-v1/DoorBeam.java": {
+      "member": "source-snapshot/configs/reference_cases/door-magnetic-v1/DoorBeam.java",
+      "sha256": "85e7749eb5319b75cc81b5d57f14844ce6ce4e24dea63aad5867938447dc5be6"
+    },
+    "configs/reference_cases/door-magnetic-v1/DoorMagnetic.java": {
+      "member": "source-snapshot/configs/reference_cases/door-magnetic-v1/DoorMagnetic.java",
+      "sha256": "0ec36e006e77254838f93ee689726257da69d06b3ee5c70f1150411dfbebcdb3"
+    },
+    "configs/reference_cases/door-magnetic-v1/design.json": {
+      "member": "source-snapshot/configs/reference_cases/door-magnetic-v1/design.json",
+      "sha256": "75530fcb2726bcd8ab0138e9a197fe555a72ea5e5391eb86442db95f1dc1f667"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_cad.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/engineering_templates/product_cad.py",
+      "sha256": "f09fa990d13b3d19b80d51b23cede1d5adb1aeb0cdd80c4d036ab705b55958c3"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/runtime_config.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/runtime_config.py",
+      "sha256": "090799eeb3adb38728eab39186d88fea71ae4b1faa7080b286a57ca85dc6fa54"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/__init__.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/__init__.py",
+      "sha256": "8d1de851022ef58458d077a31614dd3392beda5f991450a3eecc00d2708f8db4"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cache.py",
+      "sha256": "82eb4b01dbe1e47fa737059bdde62116108fe0562f9cf9618a72423e3c594ea5"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cli.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/cli.py",
+      "sha256": "ecca226de3817009ff3aa9c00e23fa21755b88ba3f7b1c6eb53225e5134f6371"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/contracts.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/contracts.py",
+      "sha256": "00d7ffea6447f22515cc95a5a816a67ea3823bec533f87a2146a682370f638d5"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/native.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/native.py",
+      "sha256": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/pipeline.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/pipeline.py",
+      "sha256": "47a848f2216fdd9acda7de5c01ab4505770903f27b73a52a44830a6072e5c2d5"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/program.c": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/program.c",
+      "sha256": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py",
+      "sha256": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/simulation_tasks.py": {
+      "member": "source-snapshot/packages/python/bfworld/src/bfworld/agentlab/simulation_tasks.py",
+      "sha256": "25907cfe8d677e1b707f481f2d85ca8ede0966f57149e98a2d380d80527dbe27"
+    },
+    "scripts/build_pluck_product.py": {
+      "member": "source-snapshot/scripts/build_pluck_product.py",
+      "sha256": "9af611163cefdb44653ea3d5efa11ee5e87a6a1fd333a304042d1059ee7db3c3"
+    },
+    "scripts/door_case/build_cad.py": {
+      "member": "source-snapshot/scripts/door_case/build_cad.py",
+      "sha256": "798046ca942c41a2891656ad25abd4d8392bd9067682bb2669e7ad86e47be882"
+    },
+    "scripts/pluck_receiver.py": {
+      "member": "source-snapshot/scripts/pluck_receiver.py",
+      "sha256": "c7fa56d78c0f621af59e2b9dde30c834155e7b1bec57d17f26e770b40dca3f81"
+    }
+  },
+  "execution": {
+    "native_calls": 0,
+    "provider_calls": 0,
+    "new_trajectories": 0,
+    "scientific_success": false
+  },
+  "limitations": [
+    "No new physics, evaluation gate, report figure or force quadrature.",
+    "No independent continuous energy integration or PMIC loss certification from resampled channels.",
+    "Drive-stop and SIL observations do not supply one-sided native event power.",
+    "No Agent benefit, hardware feasibility or design ranking claim."
+  ]
+}

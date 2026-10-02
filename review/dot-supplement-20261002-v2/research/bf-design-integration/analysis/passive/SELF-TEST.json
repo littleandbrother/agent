@@ -1,0 +1,76 @@
+{
+  "schema": "bf-passive-analysis-selftest-v2",
+  "all_pass": true,
+  "tests": [
+    {
+      "test": "deterministic_readonly_replay",
+      "pass": true
+    },
+    {
+      "test": "missing_archive_fail_closed",
+      "pass": true,
+      "observed_error_type": "FileNotFoundError"
+    },
+    {
+      "test": "one_byte_archive_corruption_fail_closed",
+      "pass": true,
+      "observed_error": "archive SHA mismatch: BF_Conditional_Passive_20261001_core.zip"
+    },
+    {
+      "test": "immutable_archive_output_rejected",
+      "pass": true
+    },
+    {
+      "test": "existing_regular_output_rejected",
+      "pass": true
+    },
+    {
+      "test": "existing_source_file_rejected",
+      "pass": true
+    },
+    {
+      "test": "symlink_to_source_rejected",
+      "pass": true
+    },
+    {
+      "test": "broken_symlink_rejected",
+      "pass": true
+    },
+    {
+      "test": "hardlink_to_source_rejected",
+      "pass": true
+    },
+    {
+      "test": "existing_directory_rejected",
+      "pass": true
+    },
+    {
+      "test": "synthetic_original_and_broken_target_preserved",
+      "pass": true
+    },
+    {
+      "test": "original_extracted_evidence_output_rejected",
+      "pass": true,
+      "protected_member_basename": "raw.npz",
+      "sha256_before_equals_after": "7a38de26c0b95399aeda37434a69a0e05ea0f77aa6f84203fa99f67a604e8800"
+    },
+    {
+      "test": "final_write_is_exclusive_creation",
+      "pass": true
+    },
+    {
+      "test": "all_original_archives_unchanged",
+      "pass": true
+    }
+  ],
+  "script_sha256": "d4168fa03c54c8f806c872edc682827f9fee49d43e28259d00d5e5af3f98e7d9",
+  "self_test_script_sha256": "7f4e8f96f58d1320e1f8015fdb0f896f36107b83d9775a2973347905f49e89d3",
+  "results_sha256": "6e1cb30df620fb2161d9fea0d2c27b80a69ed4b6b41bc215e8e05d266fabc8f2",
+  "new_scientific_solves": 0,
+  "temporary_fixtures_removed": true,
+  "original_archive_sha256_after": {
+    "BF_Conditional_Passive_20261001_core.zip": "e43d54c5289d7100c50a700429c2f08dfdc4a0531c5cbd0bb99097d3d1e497ec",
+    "BF_Conditional_Passive_20261001_raw47.tar.xz": "83ff27440bf80cfa19b568a690bbfa8dfacf7d773ee30d66862146bdbfa6d19d",
+    "BF_Conditional_Passive_20261001_raw10.tar.xz": "35b93a24df43518538492a35857f70f8ede441524533aed43bd4bc6fdd9ca089"
+  }
+}

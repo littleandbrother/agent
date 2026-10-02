@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import {
 	createAgentSession,
@@ -13,6 +14,7 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
+import { digest as methodDigest, methodInstructions, profile as methodProfile } from "./research-method.ts";
 
 const input = readline.createInterface({ input: process.stdin });
 const commands: any[] = [];
@@ -61,10 +63,14 @@ let state = fs.existsSync(path.join(cwd, "state.json"))
 	? JSON.parse(fs.readFileSync(path.join(cwd, "state.json"), "utf8"))
 	: solver.initialState();
 const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify(state, null, 2));
-const api = async (route: string, body?: unknown) => {
+const api = async (route: string, body?: unknown, bounded = false) => {
 	const response = await fetch(config.service + route, {
 		method: body === undefined ? "GET" : "POST",
-		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
+		headers: {
+			Authorization: `Bearer ${config.token}`,
+			"Content-Type": "application/json",
+			...(bounded ? { "X-BF-Tool-Response": "bounded-v1" } : {}),
+		},
 		...(body === undefined ? {} : { body: JSON.stringify(body) }),
 		signal: AbortSignal.timeout(100000),
 	});
@@ -72,6 +78,7 @@ const api = async (route: string, body?: unknown) => {
 	if (!response.ok) throw new Error(value.error ?? "SERVICE_ERROR");
 	return value;
 };
+const engineeringApi = (route: string, body?: unknown) => api(route, body, true);
 const briefJob = (j: any) => ({
 	...j,
 	project: j.project ? { manifest: j.project.manifest, sha256: j.project_sha256 } : undefined,
@@ -150,7 +157,7 @@ const reply = (value: any) => {
 	)
 		throw Error("TOOL_RECORD_PATH_DENIED");
 	fs.mkdirSync(folder, { recursive: true });
-	const target = path.join(folder, digest + ".json");
+	const target = path.join(folder, `${digest}.json`);
 	if (fs.existsSync(target) && (fs.lstatSync(target).isSymbolicLink() || sha(target) !== digest))
 		throw Error("TOOL_RECORD_CONFLICT");
 	if (!fs.existsSync(target)) fs.writeFileSync(target, text, { flag: "wx" });
@@ -207,7 +214,8 @@ if (config.mode === "solve") {
 	save();
 }
 const productContext = await api("/api/product");
-const simulationTask = (await api("/api/engineering/task")).binding;
+const engineeringEnabled = !config.sharedContext?.tools || config.sharedContext.tools.includes("bf_engineering");
+const simulationTask = engineeringEnabled ? (await api("/api/engineering/task")).binding : null;
 if (productContext.binding) config.taskId = productContext.binding.task_id;
 const tools: any[] = [
 	defineTool({
@@ -325,6 +333,7 @@ tools.push(
 				Type.Literal("search"),
 				Type.Literal("fetch"),
 				Type.Literal("read"),
+				Type.Literal("calculate"),
 				Type.Literal("adopt"),
 			]),
 			provider: Type.Optional(Type.Union([Type.Literal("crossref"), Type.Literal("github"), Type.Literal("web")])),
@@ -336,6 +345,17 @@ tools.push(
 			proposal_revision: Type.Optional(Type.Integer({ minimum: 1 })),
 			application: Type.Optional(Type.String()),
 			locator: Type.Optional(Type.String()),
+			calculation: Type.Optional(
+				Type.Object({
+					kind: Type.Union([
+						Type.Literal("elastic_displacement"),
+						Type.Literal("capacitor_energy"),
+						Type.Literal("natural_frequency"),
+					]),
+					inputs: Type.Record(Type.String(), Type.Number()),
+					reported_value: Type.Optional(Type.Number()),
+				}),
+			),
 			assumptions: Type.Optional(Type.String()),
 			differences: Type.Optional(Type.String()),
 			required_checks: Type.Optional(Type.String()),
@@ -488,7 +508,7 @@ tools.push(
 		name: "bf_engineering",
 		label: "Engineering tools",
 		description:
-			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Native files require action=artifact before local reading. Digital checks do not imply hardware qualification.",
+			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Large responses contain _response: use action=response_view with response_id and response_sha256, then next_offset to read all pages. Native files require action=artifact before local reading. Digital checks do not imply hardware qualification.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -500,6 +520,8 @@ tools.push(
 				Type.Literal("artifact_view"),
 				Type.Literal("eda_probe"),
 				Type.Literal("submit"),
+				Type.Literal("record_revision"),
+				Type.Literal("response_view"),
 			]),
 			engine: Type.Optional(
 				Type.Union([
@@ -518,6 +540,8 @@ tools.push(
 			skill_id: Type.Optional(Type.String()),
 			job_id: Type.Optional(Type.String()),
 			artifact_name: Type.Optional(Type.String()),
+			response_id: Type.Optional(Type.String()),
+			response_sha256: Type.Optional(Type.String()),
 			offset: Type.Optional(Type.Integer({ minimum: 0 })),
 			limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 16000 })),
 			channels: Type.Optional(Type.Array(Type.String())),
@@ -525,13 +549,19 @@ tools.push(
 			time_to: Type.Optional(Type.Number()),
 			operation_id: Type.Optional(Type.String()),
 			rationale: Type.Optional(Type.String()),
+			before_job_id: Type.Optional(Type.String()),
+			requested_kind: Type.Optional(
+				Type.Union([Type.Literal("parameter_refinement"), Type.Literal("architecture_recomposition")]),
+			),
+			falsifier: Type.Optional(Type.String()),
 			design_revision: Type.Optional(Type.Number()),
 			parameters: Type.Optional(Type.Record(Type.String(), Type.Unknown())), // Validated by the typed backend adapter.
 		}),
 		async execute(_id, args) {
+			if (args.action === "record_revision" || args.action === "response_view")
+				return reply(await engineeringApi("/api/engineering", args));
 			if (args.action === "inspect") {
-				const value = await api("/api/engineering");
-				return reply({ ...value, jobs: value.jobs?.map(briefJob) });
+				return reply(await engineeringApi("/api/engineering"));
 			}
 			if (args.action === "artifact") {
 				if (!/^eng-[a-f0-9]+$/.test(args.job_id || "") || !/^[A-Za-z0-9_.-]+$/.test(args.artifact_name || ""))
@@ -572,41 +602,57 @@ tools.push(
 			}
 			if (args.action === "job") {
 				if (!args.job_id) throw Error("ENGINEERING_JOB_ID_REQUIRED");
-				let job = await api(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
-				for (let i = 0; i < 40 && ["QUEUED", "RUNNING"].includes(job.status); i++) {
+				let job = await engineeringApi(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
+				for (let i = 0; i < (simulationTask ? 160 : 40) && ["QUEUED", "RUNNING"].includes(job.status); i++) {
 					await new Promise((resolve) => setTimeout(resolve, 500));
-					job = await api(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
+					job = await engineeringApi(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
 				}
-				const energy = job.result?.energy;
-				return reply({
-					...job,
-					assembly: job.assembly ? { revision: job.assembly.revision, hashes: job.assembly.hashes } : undefined,
-					result: job.result
-						? {
-								...job.result,
-								energy: energy
-									? {
-											...energy,
-											scenarios: energy.scenarios
-												? Object.fromEntries(
-														Object.entries(energy.scenarios).map(([k, v]: [string, any]) => [
-															k,
-															{ ...v, samples: undefined },
-														]),
-													)
-												: undefined,
-										}
-									: undefined,
-							}
-						: null,
-				});
+				return reply(job);
 			}
 			if (args.action === "run" && args.engine === "product-model" && args.design_revision !== undefined)
 				throw Error(
 					"PRODUCT_MODEL_OMIT_DESIGN_REVISION: use parameters.assembly_revision only; design_revision names the separate prose proposal, not the CAD assembly.",
 				);
-			const result = await api("/api/engineering", args);
-			return reply(result.id ? briefJob(result) : result);
+			// Native capacity is an executor wait, not a new model decision.
+			// ENGINEERING_BUSY is emitted before admission, so retrying the
+			// unchanged idempotency key cannot add another candidate.
+			const capacityDeadline = Date.now() + 1200000;
+			let result: any;
+			let waited = false;
+			for (;;) {
+				try {
+					result = await engineeringApi("/api/engineering", args);
+					break;
+				} catch (error) {
+					if (
+						!simulationTask ||
+						args.action !== "run" ||
+						!(error instanceof Error) ||
+						error.message !== "ENGINEERING_BUSY" ||
+						Date.now() >= capacityDeadline
+					)
+						throw error;
+					if (!waited)
+						console.log(
+							JSON.stringify({
+								type: "engineering_capacity_wait",
+								operation_id: args.operation_id,
+								model_calls: 0,
+							}),
+						);
+					waited = true;
+					await delay(2000);
+				}
+			}
+			if (waited)
+				console.log(
+					JSON.stringify({
+						type: "engineering_capacity_ready",
+						operation_id: args.operation_id,
+						job_id: result.id,
+					}),
+				);
+			return reply(result);
 		},
 	}),
 );
@@ -648,12 +694,48 @@ const executionInstructions = productContext.binding
 每次原生工程任务等待终态后核对检查，不把进程成功当成设计通过。交付说明和源码须发布到当前产品版本。禁止修改检查器或放宽既定要求来制造通过。
 模型费用、请求数、token 和时间以上游服务账本与实际返回为准；不得绕过或重置。当前状态摘要：${JSON.stringify(promptState)}`;
 const basePrompt = simulationTask
-	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n先读取原生失败依据，自主提出实际设计修改并执行。只使用 bf_engineering 的 inspect/skill/run/job/artifact_view/submit。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
+	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n先读取原生失败依据，自主提出实际设计修改并执行。只使用 bf_engineering 的 inspect/skill/run/job/artifact_view/response_view/record_revision/submit。大响应的 _response 可用 response_view 分页读回，提供 response_id 和 response_sha256，沿 next_offset 继续。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
 	: productHarness.productPrompt(executionInstructions, startupProduct(productContext));
 
+if (simulationTask)
+	console.log(
+		JSON.stringify({
+			type: "method_activation",
+			phase: "post_import",
+			pid: process.pid,
+			profile: methodProfile("strong_generic"),
+			method_source_sha256: config.sourceManifest.research_method?.source_sha256,
+			method_build_sha256: sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js")),
+			scientific_success: false,
+		}),
+	);
+const researchPolicy = simulationTask ? methodInstructions(methodProfile("strong_generic")) : "";
+if (simulationTask) {
+	const actualMethodBuild = sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js"));
+	if (config.sourceManifest.research_method?.build_sha256 !== actualMethodBuild)
+		throw Error("METHOD_BUILD_BINDING_DRIFT");
+	console.log(
+		JSON.stringify({
+			type: "method_activation",
+			phase: "invoked",
+			pid: process.pid,
+			profile: methodProfile("strong_generic"),
+			method_build_sha256: sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js")),
+			prompt_hash: methodDigest(researchPolicy),
+			instruction_text: researchPolicy,
+			execution_authorized: false,
+			scientific_success: false,
+		}),
+	);
+}
 const shared = config.sharedContext;
 const prompt =
 	basePrompt +
+	(researchPolicy
+		? "\n" +
+			researchPolicy +
+			"\n实际候选终态后可用 record_revision 记录 job_id、before_job_id（首轮可省略）、requested_kind、rationale 与 falsifier；后端从真实产物计算差异。"
+		: "") +
 	(shared?.folder_id
 		? `\nFolder shared context (unverified notes, not experiment facts): ${JSON.stringify({ folder: shared.folder_name, revision: shared.revision, memory: shared.memory })}\nFolder instructions: ${shared.prompt}\nUse bf_memory to read or update shared notes when available. Shared notes are not scientific verification. Enabled tools: ${shared.tools.join(", ")}.`
 		: "");
@@ -816,7 +898,7 @@ const execute = async () => {
 				userStopped = false;
 				const packet = await api("/api/product-context");
 				emit({ type: "product_context_snapshot", message_id: cmd.id, packet });
-				await session.prompt(productHarness.contextPrompt(packet) + "\n用户消息：" + cmd.text, {
+				await session.prompt(`${productHarness.contextPrompt(packet)}\n用户消息：${cmd.text}`, {
 					expandPromptTemplates: false,
 				});
 				// Explicit operator delivery goals only. Same message/lease/cost

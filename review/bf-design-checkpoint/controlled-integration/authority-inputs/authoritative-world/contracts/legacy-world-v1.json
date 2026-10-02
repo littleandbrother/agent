@@ -1,0 +1,459 @@
+{
+  "authority_registry_id": "0974249bd3c2765737b611170016baa8a3bb39bd09683f3363d232290d7819d9",
+  "circuit": {
+    "cin_F": 4.7e-05,
+    "cout_F": 0.0001,
+    "cp_rule": "blocked capacitance counted exactly once; reciprocal theta signs",
+    "energy_boundary": "full declared behavioral stores and assumed losses; not encrypted PMIC internals",
+    "load_taper_voltage_V": 0.1,
+    "model": "reciprocal-behavioral-power-v1.2-solver-provider-provenance"
+  },
+  "development_assumptions": [
+    {
+      "description": "Nominal dimensions and installation from upstream code; not measured user requirements.",
+      "id": "source_geometry",
+      "source": "upstream_native"
+    },
+    {
+      "description": "65 degree in 2 seconds; 4 second observation/deadline retained from published development settings.",
+      "id": "input_deadline",
+      "source": "alignment_upstream"
+    },
+    {
+      "description": "Uniform remanence 1.25T and recoil permeability one; damping ratio inherited, not calibrated.",
+      "id": "force_material",
+      "source": "upstream_contracts"
+    },
+    {
+      "description": "ViPSN-Pluck SP-SSHI/LTC3588-1/MIC841 author prototype phase energies converted to average currents; not SP-SECE nor measured binary.",
+      "id": "program_phase_load",
+      "source": "transition_readme"
+    },
+    {
+      "description": "Full scan, zero loss and deterministic seed are virtual development assumptions.",
+      "id": "virtual_link",
+      "source": "upstream_solver"
+    }
+  ],
+  "force": {
+    "model": "finite-uniform-cuboid-surface-charge-mur1",
+    "quadrature_order": 6,
+    "recoil_permeability": 1.0,
+    "remanence_T": 1.25
+  },
+  "geometry": {
+    "driver_size_m": [
+      0.02,
+      0.02,
+      0.02
+    ],
+    "family": "cloud-moving-product",
+    "force_from_world": [
+      [
+        -1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "gap_operation": "move_stationary_product_keep_rotating_driver_fixed",
+    "initial_magnetization_force_axis": [
+      1,
+      0,
+      0
+    ],
+    "nominal_driver_world_m": [
+      0.856,
+      0.045,
+      2.14
+    ],
+    "nominal_gap_m": 0.048,
+    "nominal_tip_world_m": [
+      0.904,
+      0.075265,
+      2.14
+    ],
+    "parameter_support_gap_m": [
+      0.028,
+      0.07
+    ],
+    "pivot_world_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "positive_q_world": [
+      0,
+      1,
+      0
+    ],
+    "rom_absolute_deflection_limit_m": 0.008,
+    "rotation_axis_world": [
+      0,
+      0,
+      1
+    ],
+    "support_is_physical_qualification": false,
+    "tip_size_m": [
+      0.01,
+      0.01,
+      0.01
+    ]
+  },
+  "initial_state": {
+    "all_electrical_stores_proven_zero": false,
+    "auxiliary_J": 0.0,
+    "mechanical_J": null,
+    "piezo_V": 0.0,
+    "preparation_reset_work_J": null,
+    "q0_rule": "solve k*q0=interpolated_F(angle=0,q0) within declared ROM",
+    "qdot_m_s": 0.0,
+    "scope": "legacy behavioral declared zero auxiliary state; no equivalence to native",
+    "vin_V": 0.0,
+    "vout_V": 0.0
+  },
+  "input": {
+    "angle_profile": "linear_then_hold",
+    "external_electrical_input_A": 0.0,
+    "external_electrical_work_J": 0.0,
+    "kind": "single_prescribed_door_open",
+    "no_motion_control": "same initial-state recipe; angle fixed at zero; initial stored mechanical energy must still be accounted",
+    "observation_s": 4.0,
+    "opening_angle_rad": 1.1344640137963142,
+    "opening_s": 2.0,
+    "repeat_operations": 1,
+    "status": "development_assumption_not_owner_frozen_user_requirement",
+    "weak_motion_case": null
+  },
+  "legacy_semantic_contract": {
+    "circuit": {
+      "cin_F": 4.7e-05,
+      "cout_F": 0.0001,
+      "cp_rule": "blocked capacitance counted exactly once; reciprocal theta signs",
+      "energy_boundary": "full declared behavioral stores and assumed losses; not encrypted PMIC internals",
+      "load_taper_voltage_V": 0.1,
+      "model": "reciprocal-behavioral-power-v1.2-solver-provider-provenance"
+    },
+    "contract_id": "cloud-behavioral-default-v1",
+    "firmware": {
+      "brownout_V": 1.7,
+      "parameters": {
+        "advertising_interval_s": 0.1,
+        "brownout_v": 1.7,
+        "currents_a": {
+          "boot": 0.003,
+          "clock": 0.003,
+          "init": 0.003,
+          "off": 1e-06,
+          "payload": 0.003,
+          "read": 0.003,
+          "reset": 0.003,
+          "sleep": 5e-06,
+          "tx": 0.0053
+        },
+        "device_id": [
+          305419896,
+          2427178479
+        ],
+        "durations_s": {
+          "boot": 0.003,
+          "clock": 0.001,
+          "init": 0.002,
+          "payload": 0.0002,
+          "read": 0.001,
+          "reset": 0.001,
+          "tx": 0.0012
+        },
+        "random_delay_s": 0.005,
+        "silence_s": 0.35,
+        "startup_v": 1.8
+      },
+      "pgood_low_inflight": "finish current TX; gate at boot exit or sleep",
+      "policy": "Python-off-reset-clock-boot-init-read-payload-tx-sleep + common C gate/encoding",
+      "startup_V": 1.8
+    },
+    "force": {
+      "model": "finite-uniform-cuboid-surface-charge-mur1",
+      "quadrature_order": 6,
+      "recoil_permeability": 1.0,
+      "remanence_T": 1.25
+    },
+    "geometry": {
+      "beam_source": "inherited COMSOL-derived constants; not newly recomputed",
+      "driver_magnet_m": [
+        0.02,
+        0.02,
+        0.02
+      ],
+      "gap_actuation": "move stationary product; rotating driver x=.856m fixed",
+      "gap_m": 0.048,
+      "rom_limit_m": 0.008,
+      "tip_magnet_m": [
+        0.01,
+        0.01,
+        0.01
+      ]
+    },
+    "initial_energy": {
+      "auxiliary_J": 0.0,
+      "mechanical_J": null,
+      "mechanical_state_rule": "k*q0 = interpolated F(angle=0,q0); qdot=0; equilibrium preload energy counted",
+      "piezo_V": 0.0,
+      "vin_V": 0.0,
+      "vout_V": 0.0
+    },
+    "mission": {
+      "cold_start_gate": "receiver stage counts completed timely packets grouped by silence; separate source cold-start mission contract",
+      "deadline_s": 4.0,
+      "diagnostic_excluded": true,
+      "duration_s": 4.0,
+      "minimum_groups": 1
+    },
+    "packet": {
+      "byte_order": "raw bytes in C; cloud can match with two little-endian uint32 IDs",
+      "bytes": 12,
+      "device_id_hex": "78563412efcdab90",
+      "protocol": "BFD2",
+      "sequence": false
+    },
+    "receiver": {
+      "capture_dedup": true,
+      "direction": "unknown",
+      "loss_probability": 0.0,
+      "scan_duty": 1.0,
+      "scan_period_s": null,
+      "seed": null,
+      "silence_s": 0.35
+    },
+    "schema_version": "simulation-semantic-contract-v1",
+    "scope": "source-defaults",
+    "source_trajectory": {
+      "angle_rad": 1.1344640137963142,
+      "coordinate_rule": "stationary tip x=.856+gap; driver x=.856*cos(a)-.045*sin(a), z=.856*sin(a)+.045*cos(a)-.075265",
+      "duration_s": 4.0,
+      "electrical_input": "none at baseline; controlled input replaces door with F=0, Vin source 6V/20ohm for .3s",
+      "opening_s": 2.0
+    },
+    "units": {
+      "angle": "rad",
+      "capacitance": "F",
+      "current": "A",
+      "energy": "J",
+      "firmware_input_conversion": "upstream dt milliseconds, current milliamps; adapters convert explicitly",
+      "force": "N",
+      "length": "m",
+      "time": "s",
+      "voltage": "V"
+    },
+    "version": {
+      "model": "reciprocal-behavioral-power-v1.2-solver-provider-provenance",
+      "native_evidence_available": false,
+      "numerical_semantics": "Radau2e-8/1e-13; accepted macro/event ticks; PMIC latches at macro boundaries",
+      "physics_hash": "d2580d31aa05d0c13f91a928c5e35142bc7f012d7e152d33587ae9809b1706d8",
+      "source_bound": true
+    }
+  },
+  "mission": {
+    "cold_start_gate": "receiver stage counts completed timely packets grouped by silence; separate source cold-start mission contract",
+    "deadline_s": 4.0,
+    "diagnostic_excluded": true,
+    "duration_s": 4.0,
+    "minimum_groups": 1
+  },
+  "name": "door-magnetic-legacy-cloud-development-v1",
+  "numerics": {
+    "numerical_semantics": "Radau2e-8/1e-13; accepted macro/event ticks; PMIC latches at macro boundaries",
+    "source_provider": "reciprocal-behavioral-power-v1.2-solver-provider-provenance"
+  },
+  "program": {
+    "brownout_V": 1.7,
+    "parameters": {
+      "advertising_interval_s": 0.1,
+      "brownout_v": 1.7,
+      "currents_a": {
+        "boot": 0.003,
+        "clock": 0.003,
+        "init": 0.003,
+        "off": 1e-06,
+        "payload": 0.003,
+        "read": 0.003,
+        "reset": 0.003,
+        "sleep": 5e-06,
+        "tx": 0.0053
+      },
+      "device_id": [
+        305419896,
+        2427178479
+      ],
+      "durations_s": {
+        "boot": 0.003,
+        "clock": 0.001,
+        "init": 0.002,
+        "payload": 0.0002,
+        "read": 0.001,
+        "reset": 0.001,
+        "tx": 0.0012
+      },
+      "random_delay_s": 0.005,
+      "silence_s": 0.35,
+      "startup_v": 1.8
+    },
+    "pgood_low_inflight": "finish current TX; gate at boot exit or sleep",
+    "policy": "Python-off-reset-clock-boot-init-read-payload-tx-sleep + common C gate/encoding",
+    "startup_V": 1.8
+  },
+  "qualification": {
+    "all_sources_development_exposed": true,
+    "computational_spec_frozen": true,
+    "formal_trial_admitted": false,
+    "physical_qualified": false,
+    "requirements_owner_frozen": false
+  },
+  "receiver": {
+    "capture_dedup": true,
+    "direction": "unknown",
+    "loss_probability": 0.0,
+    "packet": {
+      "byte_order": "raw bytes in C; cloud can match with two little-endian uint32 IDs",
+      "bytes": 12,
+      "device_id_hex": "78563412efcdab90",
+      "protocol": "BFD2",
+      "sequence": false
+    },
+    "scan_duty": 1.0,
+    "scan_period_s": null,
+    "seed": null,
+    "silence_s": 0.35
+  },
+  "schema": "bf-authoritative-development-world-v1",
+  "semantics_status": "computational_spec_frozen_physical_qualification_blocked",
+  "source_bindings": {
+    "alignment_geometry": "f4639b0fcb0adf782dfa3cf955451e8f5a1f56766c4239654a231b9ee49ec3a7",
+    "alignment_legacy": "599ec6eeb0d795091438b5b2cfbaebaf98c03636635ee06ed9f477da0a68eba7",
+    "alignment_lock": "e98250b21a63501162dd7208eb8adac6b5dce96b149debbe7c876c5659422244",
+    "alignment_upstream": "c9a9bf27e5479343ea5af1a95330f139ee43aaae10da758c0217a3f77696ad9f",
+    "legacy_tasks": "727e275bffc50e2117400b33f9eb4ca113b2d7ecd43883c28e46a29180eeb846",
+    "transition_readme": "1b6cab7955d8c1ca9f1e84201a48bf0dcdb208ae28194c45bf79f83c0fd3169e",
+    "upstream_agents": "e79122a6b6efc8ab24c1c0c3122af814bf3be910913f1dc824f06794d1431408",
+    "upstream_build_cad": "798046ca942c41a2891656ad25abd4d8392bd9067682bb2669e7ad86e47be882",
+    "upstream_build_product": "9af611163cefdb44653ea3d5efa11ee5e87a6a1fd333a304042d1059ee7db3c3",
+    "upstream_contracts": "00d7ffea6447f22515cc95a5a816a67ea3823bec533f87a2146a682370f638d5",
+    "upstream_feature": "ae6499c09ae7565c022341542eb8e4e16c2c57d3680761985b2441bbbd48c5b5",
+    "upstream_native": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07",
+    "upstream_program": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf",
+    "upstream_project": "58ad8686823cf339be8389d0b5183beff7976aef2088866a0b1d74ca6a593206",
+    "upstream_receiver": "c7fa56d78c0f621af59e2b9dde30c834155e7b1bec57d17f26e770b40dca3f81",
+    "upstream_solver": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782"
+  },
+  "units": {
+    "angle": "rad",
+    "capacitance": "F",
+    "current": "A",
+    "energy": "J",
+    "force": "N",
+    "length": "m",
+    "time": "s",
+    "voltage": "V"
+  },
+  "unresolved_facts": [
+    {
+      "id": "installation_limits",
+      "reason": "Allowed volume, placement, clearance and peak actuation force have not been requirement-owner frozen.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "weak_motion",
+      "reason": "Exact weak-motion angle, duration and trajectory are not frozen.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "material_component_catalog",
+      "reason": "Allowed physical materials/components and architecture implementation coverage remain incomplete.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "mechanical_preparation_reset",
+      "reason": "Closed magnetic equilibrium is a computational initial condition; physical first-operation preparation and reset work are unknown.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "initial_mechanical_energy_J",
+      "reason": "Requires design-specific qualified stiffness and equilibrium; no fabricated scalar.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "auxiliary_initial_energy_J",
+      "reason": "Native CAP/VIN2 initial/internal stores lack retained observation and cannot be presumed zero.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "native_pin_port_order",
+      "reason": "Current native deck is preserved source semantics; independently verified vendor pin/port binding is absent.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "native_auxiliary_dynamics",
+      "reason": "CAP/VIN2 readiness/settling and encrypted internal losses are not fully observed or qualified.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "magnetic_full_domain",
+      "reason": "Prior sparse unrotated magnetic mesh result 11.3% exceeds 5%; rotation/full-trajectory validation absent.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "mechanical_nonlinearity",
+      "reason": "Inherited +/-8mm ROM support is not a measured safety bound or nonlinear qualification.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "binary_power_timing",
+      "reason": "Phase-average currents/durations derive from author prototype assumptions, not measured execution of this C binary.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "receiver_action_identity",
+      "reason": "BFD2 has no sequence, reboot or physical action identity; silence grouping cannot establish true direction or dedup radio events.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "independent_feasible_reference",
+      "reason": "No admitted in-space no-Agent feasible witness is available.",
+      "status": "unknown",
+      "value": null
+    },
+    {
+      "id": "private_holdout",
+      "reason": "Existing sources are development-exposed; independently frozen confirmation holdout absent.",
+      "status": "unknown",
+      "value": null
+    }
+  ],
+  "upstream_commit": "338d60384d5805abf1e02252a4513860066a2c39",
+  "user_requirement_status": {
+    "inherited_values_are_not_user_requirements": true,
+    "numerical_and_physical_requirements_owner_frozen": false
+  },
+  "version": 1
+}

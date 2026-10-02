@@ -1,0 +1,41 @@
+{
+  "id": "conditional-passive-source-storage-20261001",
+  "status": "preflight_only_pending_dynamic_approval",
+  "hypothesis": "Within one declared conditional q-only passive model, changing Cin alone can create numerically resolved changes in source/storage trajectory and energy partition",
+  "falsifier": "A source/identity/domain/energy/refinement failure makes the comparison insufficient; effects smaller than the fixed resolution rule are unresolved",
+  "owned_paths": [
+    "/workspace/shared/passive-source-storage-20261001"
+  ],
+  "schema_changes": [
+    "bf-conditional-passive-study-plan-v1",
+    "bf-conditional-qonly-passive-bridge-storage-v1"
+  ],
+  "tests": [
+    "25 bounded no-trajectory controls recorded in outputs/TESTS-REVISION2.log; prior 18-test preflight and rejected seal preserved",
+    "all four planned numerical/energy/path checks only after approval"
+  ],
+  "negative_controls": [
+    "out-of-support q",
+    "negative storage",
+    "nonfinite state",
+    "unauthorized dynamics",
+    "missing reciprocal sign diagnostic"
+  ],
+  "command": "bash init.sh; authorized exact four-case order in PLAN.json; python passive_runner.py --compare",
+  "artifacts": [
+    "PLAN.json",
+    "PLAN-SEAL.json",
+    "SOURCE-MANIFEST.json",
+    "outputs"
+  ],
+  "cost_boundary": "No paid calls or commercial solvers; four trajectories maximum, 420 seconds each and 1800 seconds overall with finite RHS/force/step limits",
+  "claim_boundary": "Conditional numerical passive source/storage comparison only",
+  "limitations": [
+    "assumed one-coordinate path",
+    "actual native material, damping, loss, axial and omitted modes unqualified",
+    "physical equilibrium preparation and reset unknown",
+    "no PMIC/firmware/receiver/mission or hardware feasibility"
+  ],
+  "handoff": "Independent review and root approval must bind the exact plan seal before any dynamic solve; retain all failures and stop without tuning",
+  "implementation_revision": 2
+}

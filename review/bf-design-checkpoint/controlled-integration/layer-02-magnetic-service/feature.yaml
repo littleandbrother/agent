@@ -1,0 +1,15 @@
+schema_version: magnetic-service-integration-feature-v1
+id: controlled-magnetic-service-integration-20261001
+status: trusted-offline-registry-integration-tested-live-blocked
+owned_paths: [/workspace/shared/controlled-magnetic-service-integration-20261001]
+hypothesis: An exact magnetic task registry and explicit execution packet can replace legacy task/model/cap literals in the existing Pi-to-service route without opening native or participant dispatch.
+falsifier: Legacy alias accepted, packet/model/budget drift accepted, missing raw upload identity, duplicate job effect, missing activation accepted, invented native tools, provider call or unqualified native dispatch.
+schema_changes: [magnetic-execution-packet-v1, explicit-offline-runtime-profile-v1, magnetic-service-trusted-probe-v1]
+tests: [real Pi registered bf_experiment, actual HTTP handler, exact task-world-evaluator binding, explicit model-budget packet, strict trace readback, old aliases, packet mutations, upload recovery, partial writes, exact source retention, duplicate and concurrent jobs, budget stop, provider and native denial]
+command: python -B -m unittest discover -s tests -v && python -B run_probe.py --output reports/NEW-probe
+artifacts: [patches/, src/, reports/BUILD-RECEIPT.json, reports/tests-final-24.log, reports/probe-v1/, reports/probe-v2/, reports/probe-v3/]
+cost_boundary: Zero model, participant and native solver calls. Local process timing is measured; complete historical H-loop cost is not reconstructed.
+claim_boundary: Scripted trusted registered-tool transport and identity test through actual Pi and existing HTTP handler; no autonomous participant decision, approved model, qualified reference, native experiment or scientific success.
+stop_condition: Missing identity, qualification, approval, isolation or budget; unknown source, stale packet, corrupt upload, conflicting retry or cap reached.
+limitations: [fictional SDK model only, no live provider attached, task qualification 0/2, native tool identities absent, no production deployment, no whole application regression]
+handoff: Preserve both independently reviewed layers, artifacts and locks. Any live extension requires the remaining authorization, task/reference, native identity and runtime isolation gates.

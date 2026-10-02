@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 from bfworld.agentlab.provider import Provider
 from bfworld.agentlab.recovery import ObservedHTTPSHandler, RequestNotSent, is_not_sent
-from bfworld.agentlab.store import Store
+from bfworld.agentlab.store import Store, identity
 
 
 class RecoveryTests(unittest.TestCase):
@@ -115,6 +115,37 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'MODEL_OWNER_USD_BUDGET'): self.provider.complete('chat', self.payload)
             transport.assert_not_called()
         self.assertEqual(0, self.provider.status()['calls'])
+
+    def test_explicit_prior_liability_is_scoped_hashed_and_still_charged(self):
+        self.message()
+        with patch('urllib.request.OpenerDirector.open', side_effect=ssl.SSLEOFError('uncertain')):
+            with self.assertRaises(ssl.SSLEOFError): self.provider.complete('operator', self.payload)
+        before = self.provider.status()
+        now = time.time()
+        with self.store.connect() as db:
+            row = dict(db.execute('SELECT * FROM model_requests').fetchone())
+            db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',
+                       ('review', now, now+600, .1, 'deepseek-flash', 'new research authorized'))
+            db.execute('INSERT INTO research_model_owners VALUES(?,?,?)', ('chat','review','review-1'))
+            db.execute('INSERT INTO research_usage_continuations VALUES(?,?,?,?)',
+                       ('review',now,now+600,'continue while retaining prior liability'))
+            self.assertEqual(1, len(self.recovery.unknown_blockers(db,'chat')))
+            db.execute('INSERT INTO research_usage_carryforwards VALUES(?,?,?,?,?)',
+                       ('review',row['id'],identity(row),'explicit request-scoped carry forward',now))
+            self.assertEqual([], self.recovery.unknown_blockers(db,'chat'))
+            self.assertEqual(1, len(self.recovery.unknown_blockers(db,'other')))
+            db.execute('UPDATE model_limits SET total_usd=?', (before['upper_bound_usd'],))
+        with patch('urllib.request.OpenerDirector.open') as transport:
+            with self.assertRaisesRegex(ValueError, 'MODEL_USD_BUDGET'):
+                self.provider.complete('chat', self.payload)
+            transport.assert_not_called()
+        self.assertEqual(before['requests'], self.provider.status()['requests'])
+        with self.store.connect() as db:
+            db.execute("UPDATE model_requests SET error='changed'")
+            self.assertEqual(1, len(self.recovery.unknown_blockers(db,'chat')))
+            db.execute('UPDATE model_requests SET error=?', (row['error'],))
+            db.execute('UPDATE research_usage_continuations SET expires=0')
+            self.assertEqual(1, len(self.recovery.unknown_blockers(db,'chat')))
 
     def test_forged_historical_source_cannot_release_unknown(self):
         source = Path(self.tmp.name) / 'fake-ssl.c'

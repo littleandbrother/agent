@@ -1,0 +1,32 @@
+{
+  "schema": "bf-development-task-gates-feature-receipt-v1",
+  "owned_path": "/workspace/shared/bf-development-task-gates-20261001",
+  "hypothesis": "Honest task admission must remain blocked until a matched, independently feasible self-powered reference and adequate cross-domain evidence exist.",
+  "falsifier": "A source-matched independent reference passes all preserved mission, initial-energy, model, artifact and numerical gates.",
+  "implementation": "New standalone task contracts, source extraction, arithmetic and fail-closed admission/test code; no pinned source edits.",
+  "tests": {
+    "passed": 38,
+    "failed": 0,
+    "new_scientific_solves": 0,
+    "participant_calls": 0
+  },
+  "readiness": {
+    "valid_draft_contracts": 2,
+    "admitted_tasks": 0,
+    "formal_launch_allowed": false
+  },
+  "claim_boundary": [
+    "Conditional old negative evidence preserved",
+    "Startup model sufficiency questioned, not replaced",
+    "No feasible reference or hardware claim",
+    "No assumption-only firmware speed/current improvement"
+  ],
+  "commands": [
+    "python build_artifacts.py",
+    "python startup_analysis.py",
+    "python -m unittest test_admission -v",
+    "python admission.py --output ADMISSION-RECEIPT.json"
+  ],
+  "expected_admission_exit_code": 2,
+  "external_ADI_document_redistributed": false
+}

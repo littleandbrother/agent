@@ -25,7 +25,7 @@ CONTROLLER_SOURCE_HASH=filehash(__file__)
 
 def world_binding():
     base=Path(__file__).resolve().parent
-    paths=[base/name for name in ['programmed.py','experiments.py','store.py','provider.py','recovery.py','references.py','event_design.py','event_measurement.py']]
+    paths=[base/name for name in ['programmed.py','experiments.py','store.py','provider.py','recovery.py','references.py','reference_checks.py','event_design.py','event_measurement.py']]
     paths += [base.parent/'coupled'/name for name in ['engine.py','profiled.py']]
     return {str(p):filehash(p) for p in paths}
 
@@ -33,7 +33,7 @@ def world_binding():
 def delivery_binding():
     # Product delivery capability is outside the frozen scientific apparatus.
     base=Path(__file__).resolve().parent
-    paths=[base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
+    paths=[base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base/'tool_responses.py', base/'request_evidence.py', base/'engineering.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
     return {str(p):filehash(p) for p in paths}
 
 def freeze(source=PI/'packages/bf-harness',label='H0',home_root=HOME_ROOT,app_entry='main.js'):
@@ -56,7 +56,9 @@ def _freeze_locked(source,label,home_root,app_entry):
         files['src/product.ts']=(PI/'packages/bf-harness/src/product.ts').read_text()
     digest=identity(files)
     bindings={'source':digest,'app':filehash(PI/'packages/bf-agent/dist'/app_entry),'lock':filehash(PI/'package-lock.json'),'world':world_binding()}
-    if app_entry=='chat-product.js':bindings['delivery']=delivery_binding()
+    if app_entry=='chat-product.js':
+        bindings['delivery']=delivery_binding()
+        bindings['research_method']={kind:filehash(PI/('packages/bf-agent/'+folder+'/research-method.'+suffix)) for kind,folder,suffix in [('source_sha256','src','ts'),('build_sha256','dist','js')]}
     binding=identity(bindings)
     dest=Path(home_root)/'harnesses'/(label+'-'+binding[:12])
     if (dest/'manifest.json').exists():
@@ -87,7 +89,9 @@ def _freeze_locked(source,label,home_root,app_entry):
       'resource_hashes':{str(p.relative_to(PI)):filehash(p) for p in sorted((PI/'packages/ai/src/providers/data').rglob('*.json'))},
       'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
       'model':'deepseek-flash','resources':'explicit-empty-no-ancestry','world':'coupled-programmed-reference-v3'}
-    if app_entry=='chat-product.js':manifest['delivery_binding']=delivery_binding()
+    if app_entry=='chat-product.js':
+        manifest['delivery_binding']=delivery_binding()
+        manifest['research_method']=bindings['research_method']
     manifest['identity']=identity(manifest)
     (dest/'manifest.json').write_text(canonical(manifest))
     return dest

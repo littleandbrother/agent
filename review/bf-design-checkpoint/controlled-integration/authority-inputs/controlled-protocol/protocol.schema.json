@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bf:controlled-agent-protocol:v1",
+  "title": "Prospective controlled D/H protocol",
+  "description": "Nulls represent explicit unresolved decisions and never pass launch preflight. This shape schema is complemented by preflight.py semantic constraints. No schema validation authorizes spending.",
+  "type": "object",
+  "required": [
+    "task_manifest_hash",
+    "world_id",
+    "facts_hash",
+    "evaluator_hash",
+    "holdout_manifest_hash",
+    "analysis_plan_hash",
+    "reuse_source_manifest_hash",
+    "schema_version",
+    "status",
+    "model",
+    "per_episode_budget",
+    "global_budget_ledger_id",
+    "global_money_cap",
+    "unsettled_costs",
+    "assigned_episodes",
+    "denominator",
+    "d_loop",
+    "h_loop",
+    "world_freeze_receipt",
+    "no_agent_reference",
+    "runtime",
+    "independence",
+    "approval"
+  ],
+  "properties": {
+    "task_manifest_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "world_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "facts_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evaluator_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "holdout_manifest_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "analysis_plan_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reuse_source_manifest_hash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "schema_version": {
+      "const": "bf-controlled-agent-protocol-v1"
+    },
+    "status": {
+      "enum": [
+        "prospective-draft",
+        "prospective-owner-frozen"
+      ]
+    },
+    "model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/model"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "per_episode_budget": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/budget"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "global_budget_ledger_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "global_money_cap": {
+      "anyOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unsettled_costs": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "assigned_episodes": {
+      "anyOf": [
+        {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "denominator": {
+      "const": "all_assigned_episodes_including_failures_and_retries"
+    },
+    "d_loop": {
+      "type": "object"
+    },
+    "h_loop": {
+      "type": "object"
+    },
+    "world_freeze_receipt": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "no_agent_reference": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "runtime": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "independence": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "model": {
+      "type": "object",
+      "required": [
+        "provider",
+        "model_id",
+        "revision",
+        "fingerprint",
+        "reasoning",
+        "seed_policy",
+        "context_tokens",
+        "vision",
+        "temperature"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fingerprint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasoning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "vision": {
+          "type": "boolean"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "required": [
+        "model_calls",
+        "input_tokens",
+        "output_tokens",
+        "solver_calls",
+        "verifier_calls",
+        "candidate_branches",
+        "wall_seconds",
+        "local_cpu_seconds",
+        "money",
+        "currency"
+      ],
+      "properties": {
+        "model_calls": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "input_tokens": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "output_tokens": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "solver_calls": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "verifier_calls": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "candidate_branches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "wall_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "local_cpu_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "money": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

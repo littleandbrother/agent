@@ -198,6 +198,9 @@ class ProductResults:
         for r in results:
             r.setdefault('source_type','engineering')
             r['presentations']=self.presentations(owner,r)
+        from .design_pilot_view import projection
+        pilot=projection(self.store,owner)
+        if pilot['trials']:value['design_pilot']=pilot
         value['snapshot_sha256']=identity(value)
         return value
 

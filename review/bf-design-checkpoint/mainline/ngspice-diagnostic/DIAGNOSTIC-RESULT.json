@@ -1,0 +1,509 @@
+{
+  "schema_version": "ngspice-matched-step-diagnostic-v1",
+  "source_commit": "338d60384d5805abf1e02252a4513860066a2c39",
+  "diagnostic_only": true,
+  "gate_promoted": false,
+  "maximum_solver_runs": 4,
+  "solver_runs_started": 4,
+  "python": "3.11.16 (main, Sep 24 2026, 17:56:40) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "ngspice_version": "******\n** ngspice-44.2 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2024, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Jan 12 08:19:15 UTC 2025\n******\n",
+  "ngspice_path": "/workspace/shared/current-cache-integration-20261001/toolchains/ngspice/usr/bin/ngspice",
+  "ngspice_sha256": "5854f6506e3e54e0553b687401a5d82aec82229c2c28a93b7eb37b6e079dda84",
+  "source_sha256": {
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/tests/agentlab/test_reference_event.py": "0b6602d354a038cc9c4b544803c7237e26cb53a4c5147b579ce141462a24664a",
+    "/workspace/shared/current-cache-integration-20261001/working/battery-world/packages/python/bfworld/src/bfworld/agentlab/event_design.py": "e7c6b978f4afb43d09cf0f9beeb83dd04d9412e74a84b5607c974016c3d8083d"
+  },
+  "settings": {
+    "duration_s": 0.25,
+    "steps_s": [
+      1e-05,
+      5e-06
+    ],
+    "reltol": 1e-05,
+    "abstol": 1e-11,
+    "vntol": 1e-08,
+    "method": "gear",
+    "initial_conditions": "original uic, q/u/p=0, storage=0",
+    "timer_reset_time_constant": "step/10 (original model retained)"
+  },
+  "cases": {
+    "baseline-10us": {
+      "configuration": "baseline",
+      "step_s": 1e-05,
+      "command": [
+        "/workspace/shared/current-cache-integration-20261001/toolchains/ngspice/usr/bin/ngspice",
+        "-n",
+        "-b",
+        "test.cir"
+      ],
+      "cwd": "/workspace/shared/ngspice-gate-addendum-20261001/runs/baseline-10us",
+      "deck_sha256": "1ec19fb45e4cca3f43f34745de35d13c1e6cc0758c47ac26626d65ab1fce5167",
+      "input_sha256": "e628db39ec0427cc8725faa84934fd31bd815aa3096ec625209d8fe1e0a8dbbb",
+      "returncode": 0,
+      "wall_seconds": 0.2147523179955897,
+      "summary": {
+        "checks": {
+          "storage_balance": true,
+          "nonnegative_rectifier_loss": true,
+          "deflection_within_requirement": true,
+          "source_applicability_screen": true,
+          "simulated_event_in_deadline": true,
+          "transient_complete": true
+        },
+        "startup_times_s": [
+          0.104744812
+        ],
+        "brownout_times_s": [],
+        "tx_complete_times_s": [
+          0.108748882
+        ],
+        "receiver": {
+          "kind": "simulation-assuming-reception",
+          "events": 1,
+          "duplicate_tx_attempts": 0,
+          "latency_s": 0.108748882,
+          "physical_reception_verified": false,
+          "deduplication": "single input action window; physical multi-action identity unverified"
+        },
+        "peak_storage_v": 6.46077388,
+        "peak_deflection_m": 0.0247397317,
+        "energy_j": {
+          "mechanical_port_work": 0.031349923855568125,
+          "damping_loss": 0.02759630716081817,
+          "rectified": 0.001072432613400604,
+          "load_input": 9.132119129979658e-05,
+          "quiescent_and_leakage": 1.945873535103314e-07,
+          "storage_change": 0.0009809275795195208,
+          "remaining_mechanical": 0.002309299129516716,
+          "remaining_piezo": 2.731122605346607e-06,
+          "inferred_rectifier_loss": 0.00036915382922729023,
+          "storage_balance_residual": -1.0744772223651375e-08
+        },
+        "scope": "\u5355\u6a21\u6001\u673a\u7535\u8026\u5408\u3001\u4e8c\u6781\u7ba1\u6574\u6d41\u3001\u884c\u4e3a\u7535\u6e90\u7ba1\u7406\u53ca\u9636\u6bb5\u8d1f\u8f7d\u7684 ngspice \u77ac\u6001\u8ba1\u7b97\uff1b\u4e0d\u662f\u5df2\u6821\u51c6\u78c1\u4f53\u3001\u539f\u5382 PMIC \u6a21\u578b\u6216\u786c\u4ef6\u9a8c\u6536\u3002",
+        "hardware_verified": false,
+        "firmware_measured": false
+      },
+      "rows": 25329,
+      "peak_row": {
+        "time_s": 0.012115,
+        "drive": 0.0,
+        "displacement_m": 0.0247397317,
+        "velocity_m_s": -0.00906340413,
+        "piezo_v": 1.13242296,
+        "storage_v": 0.260744455,
+        "enabled": 1e-12,
+        "stage_time_s": 0.0,
+        "force_n": 0.0,
+        "rectifier_a": 7.53430144e-05,
+        "load_a": 0.0,
+        "diode_loss_w": 6.56764587e-05,
+        "quiescent_a": 1.9261296e-07
+      },
+      "maximum_actual_load_a": 0.00893668107,
+      "enabled_rows": 14661,
+      "post_stage_idle_rows": 14242,
+      "final_time_s": 0.25,
+      "first_data_line": "1.00000000e-07  2.00000000e-05  1.99999800e-16  1.99999800e-09  9.99988973e-13  5.04870979e-28  1.00000000e-12  0.00000000e+00  2.00000000e-05  2.06795153e-25  0.00000000e+00  1.00245908e-29  1.00974196e-32",
+      "artifacts": {
+        "process.log": {
+          "sha256": "8c9f70b1b547587dfedf160c8045d067e87d9f79fbb3c6ea1c0c54af1c4cf191",
+          "bytes": 376
+        },
+        "test.cir": {
+          "sha256": "1ec19fb45e4cca3f43f34745de35d13c1e6cc0758c47ac26626d65ab1fce5167",
+          "bytes": 1518
+        },
+        "input.json": {
+          "sha256": "e628db39ec0427cc8725faa84934fd31bd815aa3096ec625209d8fe1e0a8dbbb",
+          "bytes": 2810
+        },
+        "out.tsv": {
+          "sha256": "90f825beac4bc6468601e31029268deca172dbad1717dbe7d6e623d8cd217aa3",
+          "bytes": 5293970
+        }
+      }
+    },
+    "baseline-5us": {
+      "configuration": "baseline",
+      "step_s": 5e-06,
+      "command": [
+        "/workspace/shared/current-cache-integration-20261001/toolchains/ngspice/usr/bin/ngspice",
+        "-n",
+        "-b",
+        "test.cir"
+      ],
+      "cwd": "/workspace/shared/ngspice-gate-addendum-20261001/runs/baseline-5us",
+      "deck_sha256": "a8bee799fab10a9d95a87f6021a0aa56e90b06b5babb41ee9bf2aef6ee4c9938",
+      "input_sha256": "e628db39ec0427cc8725faa84934fd31bd815aa3096ec625209d8fe1e0a8dbbb",
+      "returncode": 0,
+      "wall_seconds": 0.41604983499564696,
+      "summary": {
+        "checks": {
+          "storage_balance": true,
+          "nonnegative_rectifier_loss": true,
+          "deflection_within_requirement": true,
+          "source_applicability_screen": true,
+          "simulated_event_in_deadline": true,
+          "transient_complete": true
+        },
+        "startup_times_s": [
+          0.104744489
+        ],
+        "brownout_times_s": [],
+        "tx_complete_times_s": [
+          0.108745131
+        ],
+        "receiver": {
+          "kind": "simulation-assuming-reception",
+          "events": 1,
+          "duplicate_tx_attempts": 0,
+          "latency_s": 0.108745131,
+          "physical_reception_verified": false,
+          "deduplication": "single input action window; physical multi-action identity unverified"
+        },
+        "peak_storage_v": 6.46083408,
+        "peak_deflection_m": 0.0247398292,
+        "energy_j": {
+          "mechanical_port_work": 0.03134995409307784,
+          "damping_loss": 0.027596330091244375,
+          "rectified": 0.0010724472369814991,
+          "load_input": 9.13097248358717e-05,
+          "quiescent_and_leakage": 1.945894527082841e-07,
+          "storage_change": 0.0009809458597183018,
+          "remaining_mechanical": 0.0023092854442753707,
+          "remaining_piezo": 2.7310984082471584e-06,
+          "inferred_rectifier_loss": 0.0003691602221683509,
+          "storage_balance_residual": -2.9370253826644516e-09
+        },
+        "scope": "\u5355\u6a21\u6001\u673a\u7535\u8026\u5408\u3001\u4e8c\u6781\u7ba1\u6574\u6d41\u3001\u884c\u4e3a\u7535\u6e90\u7ba1\u7406\u53ca\u9636\u6bb5\u8d1f\u8f7d\u7684 ngspice \u77ac\u6001\u8ba1\u7b97\uff1b\u4e0d\u662f\u5df2\u6821\u51c6\u78c1\u4f53\u3001\u539f\u5382 PMIC \u6a21\u578b\u6216\u786c\u4ef6\u9a8c\u6536\u3002",
+        "hardware_verified": false,
+        "firmware_measured": false
+      },
+      "rows": 50176,
+      "peak_row": {
+        "time_s": 0.0121125,
+        "drive": 0.0,
+        "displacement_m": 0.0247398292,
+        "velocity_m_s": -0.00290532213,
+        "piezo_v": 1.13443648,
+        "storage_v": 0.260741219,
+        "enabled": 1e-12,
+        "stage_time_s": 0.0,
+        "force_n": 0.0,
+        "rectifier_a": 7.73190383e-05,
+        "load_a": 0.0,
+        "diode_loss_w": 6.75549296e-05,
+        "quiescent_a": 1.92612872e-07
+      },
+      "maximum_actual_load_a": 0.00893752749,
+      "enabled_rows": 29102,
+      "post_stage_idle_rows": 28285,
+      "final_time_s": 0.25,
+      "first_data_line": "5.00000000e-08  1.00000000e-05  2.49999875e-17  4.99999750e-10  1.24998686e-13  3.78653235e-29  1.00000000e-12  0.00000000e+00  1.00000000e-05  3.87740912e-26  0.00000000e+00  3.11825070e-31  7.57306469e-34",
+      "artifacts": {
+        "process.log": {
+          "sha256": "44d907d7df64f6b4644e4cf9060289a047e30c2b2fb1763494dfbe9b3b522ec4",
+          "bytes": 408
+        },
+        "test.cir": {
+          "sha256": "a8bee799fab10a9d95a87f6021a0aa56e90b06b5babb41ee9bf2aef6ee4c9938",
+          "bytes": 1518
+        },
+        "input.json": {
+          "sha256": "e628db39ec0427cc8725faa84934fd31bd815aa3096ec625209d8fe1e0a8dbbb",
+          "bytes": 2810
+        },
+        "out.tsv": {
+          "sha256": "28efb4f1bbc39f5e066da601df35a3713455ca47ea55b6728b7917b294a38e8f",
+          "bytes": 10486993
+        }
+      }
+    },
+    "feedback-10us": {
+      "configuration": "feedback",
+      "step_s": 1e-05,
+      "command": [
+        "/workspace/shared/current-cache-integration-20261001/toolchains/ngspice/usr/bin/ngspice",
+        "-n",
+        "-b",
+        "test.cir"
+      ],
+      "cwd": "/workspace/shared/ngspice-gate-addendum-20261001/runs/feedback-10us",
+      "deck_sha256": "7d3f003c79c5b10cd13c16db2583122fc19a507c7464ea57d0a0c663b00928db",
+      "input_sha256": "064a115f222d3f94987ab59c73902e28c2518f774f8a035f54f8802e6af84c69",
+      "returncode": 0,
+      "wall_seconds": 0.2921101699976134,
+      "summary": {
+        "checks": {
+          "storage_balance": true,
+          "nonnegative_rectifier_loss": true,
+          "deflection_within_requirement": true,
+          "source_applicability_screen": true,
+          "simulated_event_in_deadline": true,
+          "transient_complete": true
+        },
+        "startup_times_s": [
+          0.0238394034,
+          0.0376044365,
+          0.0481351571,
+          0.0583788342,
+          0.0686378893,
+          0.0789651252,
+          0.0894357928,
+          0.100360255,
+          0.113927792,
+          0.129432684,
+          0.14426165,
+          0.163583103,
+          0.183917887,
+          0.205173668,
+          0.226861689,
+          0.24869386
+        ],
+        "brownout_times_s": [
+          0.133357804
+        ],
+        "tx_complete_times_s": [
+          0.0278423445,
+          0.0416074868,
+          0.0521388896,
+          0.0623821364,
+          0.0726438724,
+          0.0829716299,
+          0.0934424114,
+          0.104368169,
+          0.117929131,
+          0.148267347,
+          0.167583792,
+          0.187925743,
+          0.209175943,
+          0.230864075
+        ],
+        "receiver": {
+          "kind": "simulation-assuming-reception",
+          "events": 1,
+          "duplicate_tx_attempts": 13,
+          "latency_s": 0.0278423445,
+          "physical_reception_verified": false,
+          "deduplication": "single input action window; physical multi-action identity unverified"
+        },
+        "peak_storage_v": 0.846699444,
+        "peak_deflection_m": 0.0247397317,
+        "energy_j": {
+          "mechanical_port_work": 0.031349923855568125,
+          "damping_loss": 0.028090325963101456,
+          "rectified": 0.00022730322688348744,
+          "load_input": 0.00021374639384919892,
+          "quiescent_and_leakage": 3.138249312215729e-08,
+          "storage_change": 1.3528192019464348e-05,
+          "remaining_mechanical": 0.002639807007369201,
+          "remaining_piezo": 1.466755835935034e-07,
+          "inferred_rectifier_loss": 0.0003923409826303877,
+          "storage_balance_residual": -2.7414782979920122e-09
+        },
+        "scope": "\u5355\u6a21\u6001\u673a\u7535\u8026\u5408\u3001\u4e8c\u6781\u7ba1\u6574\u6d41\u3001\u884c\u4e3a\u7535\u6e90\u7ba1\u7406\u53ca\u9636\u6bb5\u8d1f\u8f7d\u7684 ngspice \u77ac\u6001\u8ba1\u7b97\uff1b\u4e0d\u662f\u5df2\u6821\u51c6\u78c1\u4f53\u3001\u539f\u5382 PMIC \u6a21\u578b\u6216\u786c\u4ef6\u9a8c\u6536\u3002",
+        "hardware_verified": false,
+        "firmware_measured": false
+      },
+      "rows": 29286,
+      "peak_row": {
+        "time_s": 0.012115,
+        "drive": 0.0,
+        "displacement_m": 0.0247397317,
+        "velocity_m_s": -0.00906340413,
+        "piezo_v": 1.13242296,
+        "storage_v": 0.260744455,
+        "enabled": 1e-12,
+        "stage_time_s": 0.0,
+        "force_n": 0.0,
+        "rectifier_a": 7.53430144e-05,
+        "load_a": 0.0,
+        "diode_loss_w": 6.56764587e-05,
+        "quiescent_a": 1.9261296e-07
+      },
+      "maximum_actual_load_a": 0.00999999831,
+      "enabled_rows": 7503,
+      "post_stage_idle_rows": 1073,
+      "final_time_s": 0.25,
+      "first_data_line": "1.00000000e-07  2.00000000e-05  1.99999800e-16  1.99999800e-09  9.99988973e-13  5.04870979e-28  1.00000000e-12  0.00000000e+00  2.00000000e-05  2.06795153e-25  0.00000000e+00  1.00245908e-29  1.00974196e-32",
+      "artifacts": {
+        "process.log": {
+          "sha256": "acbae6008b9f06ff64af612e38ba619c5a7973b4363ad7f6b6fbc10a37ecda9d",
+          "bytes": 376
+        },
+        "test.cir": {
+          "sha256": "7d3f003c79c5b10cd13c16db2583122fc19a507c7464ea57d0a0c663b00928db",
+          "bytes": 1519
+        },
+        "input.json": {
+          "sha256": "064a115f222d3f94987ab59c73902e28c2518f774f8a035f54f8802e6af84c69",
+          "bytes": 2811
+        },
+        "out.tsv": {
+          "sha256": "7ee4052f4e75ddc09e6cc5999326e9c09ea5f9d3751760241569097c4f0de0da",
+          "bytes": 6125937
+        }
+      }
+    },
+    "feedback-5us": {
+      "configuration": "feedback",
+      "step_s": 5e-06,
+      "command": [
+        "/workspace/shared/current-cache-integration-20261001/toolchains/ngspice/usr/bin/ngspice",
+        "-n",
+        "-b",
+        "test.cir"
+      ],
+      "cwd": "/workspace/shared/ngspice-gate-addendum-20261001/runs/feedback-5us",
+      "deck_sha256": "a28beceadda3c71ec22cdb3fd155b91c771e6186e902ed1294f5f68451335d27",
+      "input_sha256": "064a115f222d3f94987ab59c73902e28c2518f774f8a035f54f8802e6af84c69",
+      "returncode": 0,
+      "wall_seconds": 0.4657812750010635,
+      "summary": {
+        "checks": {
+          "storage_balance": true,
+          "nonnegative_rectifier_loss": true,
+          "deflection_within_requirement": true,
+          "source_applicability_screen": true,
+          "simulated_event_in_deadline": true,
+          "transient_complete": true
+        },
+        "startup_times_s": [
+          0.0238393307,
+          0.0376045434,
+          0.0481350771,
+          0.0583790413,
+          0.0686382189,
+          0.0789666914,
+          0.0894368312,
+          0.100362632,
+          0.11392885,
+          0.129441223,
+          0.144266492,
+          0.163583311,
+          0.183923302,
+          0.205175931,
+          0.226863245,
+          0.248695772
+        ],
+        "brownout_times_s": [
+          0.133362825
+        ],
+        "tx_complete_times_s": [
+          0.0278400808,
+          0.041607386,
+          0.0521366684,
+          0.062381317,
+          0.0726401046,
+          0.0829690406,
+          0.0934414423,
+          0.104364021,
+          0.117931348,
+          0.148267146,
+          0.167585669,
+          0.187924027,
+          0.209178686,
+          0.230863456
+        ],
+        "receiver": {
+          "kind": "simulation-assuming-reception",
+          "events": 1,
+          "duplicate_tx_attempts": 13,
+          "latency_s": 0.0278400808,
+          "physical_reception_verified": false,
+          "deduplication": "single input action window; physical multi-action identity unverified"
+        },
+        "peak_storage_v": 0.846747893,
+        "peak_deflection_m": 0.0247398292,
+        "energy_j": {
+          "mechanical_port_work": 0.03134995409307784,
+          "damping_loss": 0.028090351611882492,
+          "rectified": 0.00022730157031091458,
+          "load_input": 0.00021374083225022736,
+          "quiescent_and_leakage": 3.138228797362447e-08,
+          "storage_change": 1.3529896844817302e-05,
+          "remaining_mechanical": 0.0026397950856248357,
+          "remaining_piezo": 1.4667099174738923e-07,
+          "inferred_rectifier_loss": 0.0003923591542678536,
+          "storage_balance_residual": -5.410721037083329e-10
+        },
+        "scope": "\u5355\u6a21\u6001\u673a\u7535\u8026\u5408\u3001\u4e8c\u6781\u7ba1\u6574\u6d41\u3001\u884c\u4e3a\u7535\u6e90\u7ba1\u7406\u53ca\u9636\u6bb5\u8d1f\u8f7d\u7684 ngspice \u77ac\u6001\u8ba1\u7b97\uff1b\u4e0d\u662f\u5df2\u6821\u51c6\u78c1\u4f53\u3001\u539f\u5382 PMIC \u6a21\u578b\u6216\u786c\u4ef6\u9a8c\u6536\u3002",
+        "hardware_verified": false,
+        "firmware_measured": false
+      },
+      "rows": 54280,
+      "peak_row": {
+        "time_s": 0.0121125,
+        "drive": 0.0,
+        "displacement_m": 0.0247398292,
+        "velocity_m_s": -0.00290532213,
+        "piezo_v": 1.13443648,
+        "storage_v": 0.260741219,
+        "enabled": 1e-12,
+        "stage_time_s": 0.0,
+        "force_n": 0.0,
+        "rectifier_a": 7.73190383e-05,
+        "load_a": 0.0,
+        "diode_loss_w": 6.75549296e-05,
+        "quiescent_a": 1.92612872e-07
+      },
+      "maximum_actual_load_a": 0.00999999951,
+      "enabled_rows": 14520,
+      "post_stage_idle_rows": 1989,
+      "final_time_s": 0.25,
+      "first_data_line": "5.00000000e-08  1.00000000e-05  2.49999875e-17  4.99999750e-10  1.24998686e-13  3.78653235e-29  1.00000000e-12  0.00000000e+00  1.00000000e-05  3.87740912e-26  0.00000000e+00  3.11825070e-31  7.57306469e-34",
+      "artifacts": {
+        "process.log": {
+          "sha256": "7d9445bd007248017ed3c07d45f92ba7105f0b47330d875907b1dba4d0f775ea",
+          "bytes": 408
+        },
+        "test.cir": {
+          "sha256": "a28beceadda3c71ec22cdb3fd155b91c771e6186e902ed1294f5f68451335d27",
+          "bytes": 1519
+        },
+        "input.json": {
+          "sha256": "064a115f222d3f94987ab59c73902e28c2518f774f8a035f54f8802e6af84c69",
+          "bytes": 2811
+        },
+        "out.tsv": {
+          "sha256": "51ec344dd3b2567b67d548cd335ef7266eb05c30d9b3622783e7c44868ce5389",
+          "bytes": 11349677
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "matched_steps": {
+      "10us": {
+        "feedback_minus_baseline_m": 0.0,
+        "absolute_delta_m": 0.0,
+        "original_strict_gt_1e_minus_7": false
+      },
+      "5us": {
+        "feedback_minus_baseline_m": 0.0,
+        "absolute_delta_m": 0.0,
+        "original_strict_gt_1e_minus_7": false
+      }
+    },
+    "refinement": {
+      "baseline": {
+        "fine_minus_coarse_m": 9.750000000072201e-08,
+        "absolute_change_m": 9.750000000072201e-08,
+        "relative_change": 3.941013465069597e-06
+      },
+      "feedback": {
+        "fine_minus_coarse_m": 9.750000000072201e-08,
+        "absolute_change_m": 9.750000000072201e-08,
+        "relative_change": 3.941013465069597e-06
+      }
+    },
+    "original_mixed_step": {
+      "feedback_10us_minus_baseline_5us_m": -9.750000000072201e-08,
+      "absolute_delta_m": 9.750000000072201e-08,
+      "original_strict_gt_1e_minus_7": false
+    }
+  },
+  "completed": true,
+  "all_sources_unchanged": true
+}

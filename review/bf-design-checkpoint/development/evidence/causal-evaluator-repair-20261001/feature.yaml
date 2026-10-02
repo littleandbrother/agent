@@ -1,0 +1,18 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "causal-evaluator-repair-v2",
+  "status": "bounded-diagnostic-passed-native-startup-blocked",
+  "owner": "coordinator-authorized-development",
+  "hypothesis": "A fixed post-activation electrical intervention produces mechanical changes through reciprocal coupling, exceeding independently visible numerical variability and disappearing in no-feedback control.",
+  "falsifier": "Absent finite load activation, large no-feedback difference, failed refinement, insufficient causal separation or energy-port inconsistency prevents a passed diagnostic.",
+  "owned_paths": ["/workspace/shared/causal-evaluator-repair-20261001"],
+  "schema_changes": ["bf-event-design-v2", "bf-event-apparatus-v2-fixed-reset-ports", "bf-causal-evaluator-v2-postactivation", "ltc3588-rail-state-contract-v2-static-only"],
+  "tests": ["29 focused software tests", "exact 12-cell real ngspice diagnostic", "independent no-solver raw readback and quadrature"],
+  "negative_controls": ["no-feedback", "no activation", "unconverged trajectory", "nonfinite channels", "old schema", "invalid reset", "missing provenance", "partial cell matrix", "inconsistent PGOOD sleep event", "blocked transient rail prediction"],
+  "command": "See README.md, run_diagnostics.py and DIAGNOSTIC-RESULT.json; scientific rerun is refused in this directory",
+  "artifacts": ["PLAN-SEAL.json", "RUNNER-SEAL.json", "DIAGNOSTIC-RESULT.json", "EVALUATION-RESULT.json", "contracts/ltc3588-rail-state-v2.json", "reports/unit-tests-final.log", "FINAL-MANIFEST.json"],
+  "cost_cap": "12 ngspice solves maximum, each 40s timeout; no retries, paid calls, vendor solver, commit or push",
+  "claim_boundary": "Generic reduced-order computational apparatus diagnostic plus ideal datasheet rail/state semantics. No native PMIC, authoritative door-world, hardware or learning qualification.",
+  "limitations": "Empirical refinement envelope is not a rigorous global bound. Timer reset is explicit mathematical approximation, not measured firmware. Native rail dynamics and model interface remain unqualified. Production upstream source is unchanged and full init.sh has not been rerun.",
+  "handoff": "Review independent evidence, register distinct versions and applicability with authoritative-world contract; obtain qualified native rail observations before any integrated startup or feasibility comparison. Keep original failure and all sealed outputs."
+}

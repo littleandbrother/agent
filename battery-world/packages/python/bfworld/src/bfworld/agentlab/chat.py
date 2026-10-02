@@ -131,10 +131,11 @@ class Conversations:
             elif cid not in self.starting:self.start(cid)
             with self.store.connect() as db:return dict(db.execute('SELECT * FROM chat_messages WHERE id=?',(mid,)).fetchone())
 
-    def readiness(self):
+    def readiness(self,owner=None):
         model=self.app.provider.status(); reasons=[]
         if (self.home/'paid-window-closed.json').exists():reasons.append('PAID_WINDOW_CLOSED')
-        if any(r['status']=='UNKNOWN' for r in model['requests']):reasons.append('PROVIDER_USAGE_UNKNOWN_STOP')
+        with self.store.connect() as db:
+            if self.app.provider.recovery.unknown_blockers(db,owner):reasons.append('PROVIDER_USAGE_UNKNOWN_STOP')
         if any(r['error']=='PROVIDER_RESERVATION_EXCEEDED' for r in model['requests']):reasons.append('PROVIDER_RESERVATION_EXCEEDED')
         # Interactive wall time is granted only by a new explicit user message.
         # The original batch window remains unchanged for noninteractive owners.
@@ -146,13 +147,13 @@ class Conversations:
                 'concurrency':{'limit':MAX_CONVERSATIONS,'active':sorted(self.starting)},
                 'interactive_wall_seconds':INTERACTIVE_WALL_SECONDS,'network':'not_probed','note':'本地连接不代表模型响应；发送后以真实事件显示进展。'}
 
-    def gate(self):
-        status=self.readiness()
+    def gate(self,owner=None):
+        status=self.readiness(owner)
         if status['reasons']:raise ValueError(status['reasons'][0])
 
     def start(self,cid):
         try:
-            self.gate()
+            self.gate(cid)
             with self.store.connect() as db:
                 lease=self.app.provider.recovery.lease(db,cid)
                 if not lease or time.time()>lease['expires']:raise ValueError('CHAT_TURN_WALL_BUDGET')
@@ -202,6 +203,11 @@ class Conversations:
             if not self.event(cid,'trace-'+str(i),data):continue
             if data.get('type')=='input_accepted':
                 with self.store.connect() as db:db.execute("UPDATE chat_messages SET status='ACCEPTED' WHERE id=? AND conversation=? AND status='SENT'",(data['message_id'],cid))
+            # A queued follow-up can start inside the same Pi process after a
+            # failed turn. The previous turn's error is historical, not the
+            # state of this new response. Keep the error event in the trace.
+            if data.get('type')=='assistant_start' and self.get(cid)['status']=='FAILED':
+                self.state(cid,'RUNNING')
             if data.get('type')=='message' and data.get('message',{}).get('stopReason')=='error':
                 self.state(cid,'FAILED',data['message'].get('errorMessage','MODEL_RESPONSE_ERROR'))
             # Pi can recover an intermediate truncated tool write in the same
@@ -312,4 +318,4 @@ class Conversations:
         except (FileNotFoundError,KeyError):execution=None
         meta=self.app.organization.metadata(cid)
         events,cursor=self.snapshot_events(cid)
-        return {**conv,**meta,'title':meta['title'] or conv['title'],'recalls':self.recalls.list(cid),'shared_context':self.app.organization.context(cid),'messages':messages,'events':events,'event_cursor':cursor,'execution':execution,'jobs':self.store.jobs(cid),'product':self.app.products.projection(cid),'readiness':self.readiness()}
+        return {**conv,**meta,'title':meta['title'] or conv['title'],'recalls':self.recalls.list(cid),'shared_context':self.app.organization.context(cid),'messages':messages,'events':events,'event_cursor':cursor,'execution':execution,'jobs':self.store.jobs(cid),'product':self.app.products.projection(cid),'readiness':self.readiness(cid)}

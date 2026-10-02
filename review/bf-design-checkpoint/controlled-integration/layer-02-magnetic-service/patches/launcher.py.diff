@@ -1,0 +1,50 @@
+--- pinned-upstream
++++ isolated-protocol-overlay
+@@ -13,7 +13,7 @@
+ from .experiments import task,BASELINE_DESIGN,BASELINE_POLICY
+ from .recovery import Recovery, INTERACTIVE_WALL_SECONDS
+ 
+-from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
++from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH, REPO
+ NODE = str(NODE_PATH)
+ INTERACTIVE_SHUTDOWN_GRACE_SECONDS=10
+ 
+@@ -24,7 +24,7 @@
+ CONTROLLER_SOURCE_HASH=filehash(__file__)
+ 
+ def world_binding():
+-    base=Path(__file__).resolve().parent
++    base=REPO/'packages/python/bfworld/src/bfworld/agentlab'
+     paths=[base/name for name in ['programmed.py','experiments.py','store.py','provider.py','recovery.py','references.py','event_design.py','event_measurement.py']]
+     paths += [base.parent/'coupled'/name for name in ['engine.py','profiled.py']]
+     return {str(p):filehash(p) for p in paths}
+@@ -32,7 +32,7 @@
+ 
+ def delivery_binding():
+     # Product delivery capability is outside the frozen scientific apparatus.
+-    base=Path(__file__).resolve().parent
++    base=REPO/'packages/python/bfworld/src/bfworld/agentlab'
+     paths=[base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
+     return {str(p):filehash(p) for p in paths}
+ 
+@@ -83,10 +83,10 @@
+       'pi_git_revision':'7140838fdd5ee1ff21dbe50955a8801617b065ef',
+       'pi_lock_hash':filehash(PI/'package-lock.json'),'app_build_hash':filehash(PI/'packages/bf-agent/dist'/app_entry),
+       'app_entry':app_entry,'app_source_hash':filehash(PI/'packages/bf-agent/src'/app_entry.replace('.js','.ts')),'world_binding':world_binding(),
+-      'thinking':'off','session_caps':{'experiments':6,'model_requests':128 if app_entry=='chat-product.js' else 24,'wall_seconds':INTERACTIVE_WALL_SECONDS if app_entry in ('chat.js','chat-v2.js','chat-product.js') else 600},
++      'thinking':'off','session_caps':None,'session_cap_authority':'explicit-execution-packet',
+       'resource_hashes':{str(p.relative_to(PI)):filehash(p) for p in sorted((PI/'packages/ai/src/providers/data').rglob('*.json'))},
+       'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
+-      'model':'deepseek-flash','resources':'explicit-empty-no-ancestry','world':'coupled-programmed-reference-v3'}
++      'model':None,'model_authority':'explicit-execution-packet','resources':'explicit-empty-no-ancestry','world':None,'world_authority':'explicit-execution-packet','world_binding_scope':'legacy-controller-source-dependencies-only','legacy_source_world':'coupled-programmed-reference-v3'}
+     if app_entry=='chat-product.js':manifest['delivery_binding']=delivery_binding()
+     manifest['identity']=identity(manifest)
+     (dest/'manifest.json').write_text(canonical(manifest))
+@@ -163,6 +163,7 @@
+ 
+ 
+ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,store_root=None,dry_run=False,resume=False,interrupt_after_job=False,mutable=('solver.ts','improver.ts'),feedback=None,public_history=None,memory_in_prompt=False,process_lock=None,service_port=8768,on_process=None,home_root=None,shared_context=None,chat_upgrade=False,product=False,on_expire=None):
++    raise RuntimeError('LEGACY_LAUNCH_DISABLED_USE_CONTROLLED_SERVICE_GATE')
+     home_root=Path(home_root or HOME_ROOT)
+     if not dry_run and (home_root/'paid-window-closed.json').exists():raise ValueError('PAID_WINDOW_CLOSED')
+     session_lock=process_lock or (home_root/'pi-session.lock').open('a')

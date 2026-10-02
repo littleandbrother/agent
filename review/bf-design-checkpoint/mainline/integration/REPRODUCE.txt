@@ -1,0 +1,18 @@
+Base: littleandbrother/agent @ 338d60384d5805abf1e02252a4513860066a2c39
+
+1. Materialize an authorized checkout of that exact commit. source-verification.json identifies the 619/620 Battery World files verified here and the one 25,279,931-byte historical report not transferred through the connector. Full monorepo was not cloned. No credentials were extracted.
+2. In the checkout root: patch --dry-run -p1 < cache-v2-integrated.patch
+3. Then: patch -p1 < cache-v2-integrated.patch
+4. Use Python 3.11, Battery World's requirements.lock, numerical dependencies, CadQuery, and an official arm-none-eabi-gcc toolchain. installed-requirements.txt records this run's exact versions; package.json/pnpm-lock.yaml remain unchanged.
+5. Set BF_HOME to a NEW isolated directory, BF_CAD_PYTHON to the isolated CAD Python executable, and BF_ARM_GCC to the downloaded ARM compiler. Do not supply real provider credentials for this regression run.
+6. cd battery-world && PYTHONPATH=packages/python/bfworld/src <python3.11> -m unittest discover -s tests/agentlab -p test_simulation_chain.py -v
+   Expected integrated cache scope: 22 passing tests when the optional numerical/compiler dependencies are present.
+7. corepack pnpm install --frozen-lockfile; corepack pnpm run check:sdk; corepack pnpm run check:studio; node --test tests/agentlab/*.cjs
+8. Full ./init.sh must remain a separate gate. On this Linux host it fails closed in the macOS Seatbelt-bound B2 build; SDK/Studio type checks passing does not imply the full generated Studio build passes.
+9. unsupported-runtime-diagnostic/unsupported-runtime.patch is a SEPARATE proposal against build_b2_profiled.py. It improves the error and remains nonzero; it was not included in the cache working tree.
+
+Firmware scope: program.c plus generated policy.h are compiled to a Linux x86_64 shared object and a Cortex-M4 relocatable ARM object. Only the host library is executed by SIL. No ARM instruction execution, nRF52832 peripheral emulation, SoftDevice S132 timing, RF, flashing, measured power, or hardware validation is provided.
+
+Native CAD, force-table numerical construction, real deck generation, and firmware-host SIL are explicit narrow checks. No COMSOL/LTspice run or licensed model evidence is created. No new paid model calls. No scientific promotion, product acceptance, commit, or push.
+
+Final v2 adds the complete hash-verified Pi tree and real offline bf build. Use run_final_suite.py for final aggregate comparisons; it scopes the key-loader fixture only to existing mocked-HTTP provider unit tests and exports PYTHONPATH to subprocesses. Set BF_BLENDER and BF_NGSPICE to actual official local binaries; do not manufacture legacy hardcoded paths. See aggregate-*-v4 for final counts.

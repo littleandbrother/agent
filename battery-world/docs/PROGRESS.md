@@ -1,3 +1,10 @@
+
+## 2026-10-02 · paid Pi pilot completed
+
+Four real Pi submissions /12 candidates;5 completed but nominally unsatisfied,7 out of domain. No self-powered positive or formal method comparison. Fixed forwarded SSE keepalive, study-scoped UNKNOWN continuation, compact owner job index, stale failed-turn status and paid ENGINEERING_BUSY retry loop (now tool-local wait). Preserved all original attempts/seals and appended final reconciliation. Existing USD2 pooled for completion, upper-bound costUSD1.5573279 includingUNKNOWNUSD0.2002035. No active provider/native work. Final application init469tests +SDK/Studio/2803samples passed; independent ownership/task/result audit and215fileZIP passed. No Git commit/push.
+
+Report: docs/agentlab/PAID-PILOT-CLOSURE-20261002.md. Evidence: /Users/depengsu/Documents/bf-agent-workbench/verification/dot-integration-20261002/pilot-evidence-v3.zip. Next is energy-transfer/model-boundary review and a justified structure freedom, not more blind paid retries. General>24KBfull-response bridge remains unpromoted.
+
 ## 2026-10-01 BFA-030 — 全仿真链路完成（受限参考模型范围）
 
 最终完整 ./init.sh 已通过：425项Python（4项隔离数值检查另在CAD Python中通过）、SDK类型检查、Studio类型/构建与2803样本复现均通过。Pi本地依赖曾出现空导出与锁接口错误；177份依赖读回校验后真实Pi工具/Skill测试与全量回归通过，未升级依赖、未绕过鉴权/锁/预算，原失败日志保留。云端按需文件读取的长期稳定性不由这次通过保证。
@@ -729,3 +736,37 @@ Completed shared Studio usage/product/delivery visual refinement: original openi
 Application init passed: 436 Python tests, SDK/Studio types/build, 2803-sample reproduction. Focused checks: 3 conversation + 9 delivery tests, 7 JS projection tests. Actual browser checks at 320/375/414/768/1280 and default 825 widths showed no horizontal overflow for recorded views; 1440 delivery columns also inspected. Actual 34 KB summary generation/link verified. Studio/Lab context preserved; final browser error log empty. Viewport override reset. No OS-level dark/transparency/reduced-motion emulation; CSS fallback review is not full accessibility certification.
 
 Evidence: /Users/depengsu/Documents/bf-agent-workbench/verification/studio-craft-20261002/receipt.json. Live 8768 frontend synchronized. 88 scientific features unchanged. No paid model calls, no native simulation reruns, no scientific verdict changes, no commit/push. BFA-031 remains waiting. PROJECT active_feature cleared after completion to keep the feature-state validator consistent. Coordinator scientific init not run or claimed.
+
+## 2026-10-02 BFA-035 integration started
+Selective main/Dot integration in a local worktree; user authorized USD2 / 12h pilot. No new experiment result yet. Original seals and failures retained.
+
+
+## 2026-10-02 BFA-035 — integration verified, paid pilot blocked
+
+Main/Dot/local glass selectively integrated. Cache v2 and artifact-bound method/action records, Studio/Lab shared SQLite projection, bounded historical-read process and portable evidence export implemented. 30/30 apparatus checks retain actual geometry/program differences. Six native LTspice observations re-read; unchanged-step baseline-fine rejected, separate genuine 50→25 μs baseline refinement executed. First real Pi baseline-r1 made 17 model requests and three autonomous candidates (gap34/40 out_of_domain, gap48/Cin220/Cout220/interval50 completed but unsatisfied). No final submission; other three trials not started. One sent request remains UNKNOWN, total upper cost $0.126963 including $0.0393837 reservation. No paid retry, reset or protocol drift. User USD2/12h authorization retained.
+
+Application init: 460 Python tests, SDK/Studio type/build and 2803 samples passed. Later focused projection/assets 4, isolated-read 2, research regression 30 and JS syntax passed; HTTP assets exact hashes verified. Historical research currently times out after 8s with original files retained; Pi view/export remains available. Visual browser QA unavailable. Dot adapter 38 offline checks, trajectory 22 on Python3.11 pass; Python3.14 symlink-loop failures retained. Missing original material/static replay files keep full Dot/model qualification blocked. P3/P4/RSI not started.
+
+Report: docs/agentlab/DOT-INTEGRATION-20261002.md. Evidence: bf-agent-workbench/verification/dot-integration-20261002/pilot-evidence-v2.zip (35 verified files). Original study/runtime seals preserved; usage reconciliation plus controlled new runtime amendment required before resuming. Feature stays in-progress with explicit blocked-provider-usage-reconciliation; no commit/push.
+
+Final source re-verification: application ./init.sh passed 463 Python tests, SDK/Studio types/build and 2803-sample projection. JS research read-failure fallback check passed. Real study remains 17 requests, 16 local SETTLED + 1 UNKNOWN; 3 actual candidates and 3 planned-only trials. No paid restart.
+
+
+## 2026-10-02 latest handoff — mechanical release review (supersedes earlier blocked-status summaries)
+
+Old pilot now sealed at v3: 4 real Pi submissions/12 candidates,5 completed-unsatisfied/7out-of-domain,0self-powered successes; upper USD1.5573279 incl retained unknown reservation. Two original per-ownerUSD0.50 allocation deviations preserved; operator pooling is not an explicit human numerical amendment.
+
+New separate review: Pi pi-chat-93e8b001635ae9b5 searched/fetched/read three papers;50 settled callsUSD0.3350694. Source/node/unit audit rejects blanket thousands-uF prior. Baseline energy:758.64uJ initial,-662.89uJ magnetic work,91.75uJ damping,3.99uJ PMIC. A real driver180degree polarity change rebuiltSTEP and ran nativeLTspice/SIL;16.25uJ port,0.434V storage,7.05mm tip,still0boot/TX/RX. Nativev3 includes corrected magnetization frames; v2 and erroneous first loading diagnostic remain preserved/excluded as appropriate. Not Pi autonomous architecture success.
+
+Pi report48.6mm arithmetic wrong: tool1.5358mm; correction still contains316x typo/overbroad lower-bound prose. Independent admission report rejects these; no8mm ROM relaxation. Added reference calculate/source hash binding, reference-only Pi startup fix, exact model-request receipts and owner/task-bound tool paging.
+
+Verification481Python + final23targeted pass; SDK/Studio type/build/2803projection and Pi tsgo pass. Plain init pnpm dependency-refresh noTTY blocked; explicit installed-dependency checks pass. Full Pi npm check has2legacywarnings/22infos. No new UI QA or COMSOL run.
+
+Authority remains integration checkout ~/.local/share/bf-agent-integration-20261002, live8768 loads it; runtime Pi source synchronized with backup. Original source/experiment seals not overwritten. Full report docs/agentlab/MECHANICAL-RELEASE-REVIEW-20261002.md; local evidence bf-agent-workbench/verification/dot-integration-20261002/mechanical-release-review/. Next: full driver loading work + rotated FEM/model-domain, then prospective structural-v2 Pi contract; no formal comparison until qualified. No commit/push requested this turn. Coordinator scientific88features unchanged; no coordinator repository-health claim.
+
+
+## 2026-10-02 — Git publication verification
+
+User explicitly requested publication of this round. Application checks passed:482Python tests, SDK/Studio type/build and2803sample projection. Init stopped after successful Python tests at pnpm non-TTY dependency auto-refresh; remaining stages ran explicitly with --config.verify-deps-before-run=false and passed. Pi npm run check passed after bounded lint/import cleanup; bf-agent/bf-harness compiled. First attempt used dependency symlinks outside the Pi sandbox and failed14tests/2errors; isolated local dependencies with exact BF source passed all482tests. No sandbox weakening, live service restart, new paid calls or formal research reruns.
+
+Release includes integration source, immutable Dot review snapshots, pilot closure and selected mechanical evidence. Credentials, session DBs, private request bodies, installed dependencies and regenerated runtime reports excluded. See release/MECHANICAL-RELEASE-20261002.md and publication-verification-20261002.json in the aggregate repository. Original seals remain unchanged. BFA-035 remains in-progress for physical qualification and formal structural experiments.

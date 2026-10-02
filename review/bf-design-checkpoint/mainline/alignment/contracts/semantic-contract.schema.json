@@ -1,0 +1,390 @@
+{
+  "$id": "urn:bf:simulation-semantic-contract:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "circuit": {
+      "additionalProperties": false,
+      "properties": {
+        "cin_F": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "cout_F": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "cp_rule": {
+          "type": "string"
+        },
+        "energy_boundary": {
+          "type": "string"
+        },
+        "load_taper_voltage_V": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "cin_F",
+        "cout_F",
+        "cp_rule",
+        "energy_boundary",
+        "load_taper_voltage_V"
+      ],
+      "type": "object"
+    },
+    "contract_id": {
+      "type": "string"
+    },
+    "firmware": {
+      "additionalProperties": false,
+      "properties": {
+        "brownout_V": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "pgood_low_inflight": {
+          "type": "string"
+        },
+        "policy": {
+          "type": "string"
+        },
+        "startup_V": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "policy",
+        "brownout_V",
+        "startup_V",
+        "pgood_low_inflight",
+        "parameters"
+      ],
+      "type": "object"
+    },
+    "force": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "quadrature_order": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "recoil_permeability": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "remanence_T": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "remanence_T",
+        "recoil_permeability",
+        "quadrature_order"
+      ],
+      "type": "object"
+    },
+    "geometry": {
+      "additionalProperties": false,
+      "properties": {
+        "beam_source": {
+          "type": "string"
+        },
+        "driver_magnet_m": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "gap_actuation": {
+          "type": "string"
+        },
+        "gap_m": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "rom_limit_m": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "tip_magnet_m": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        }
+      },
+      "required": [
+        "tip_magnet_m",
+        "driver_magnet_m",
+        "gap_m",
+        "gap_actuation",
+        "rom_limit_m",
+        "beam_source"
+      ],
+      "type": "object"
+    },
+    "initial_energy": {
+      "additionalProperties": false,
+      "properties": {
+        "auxiliary_J": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mechanical_J": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mechanical_state_rule": {
+          "type": "string"
+        },
+        "piezo_V": {
+          "type": "number"
+        },
+        "vin_V": {
+          "type": "number"
+        },
+        "vout_V": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "mechanical_J",
+        "piezo_V",
+        "vin_V",
+        "vout_V",
+        "auxiliary_J",
+        "mechanical_state_rule"
+      ],
+      "type": "object"
+    },
+    "mission": {
+      "additionalProperties": false,
+      "properties": {
+        "cold_start_gate": {
+          "type": "string"
+        },
+        "deadline_s": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "diagnostic_excluded": {
+          "type": "boolean"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "minimum_groups": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "duration_s",
+        "deadline_s",
+        "minimum_groups",
+        "cold_start_gate",
+        "diagnostic_excluded"
+      ],
+      "type": "object"
+    },
+    "packet": {
+      "additionalProperties": false,
+      "properties": {
+        "byte_order": {
+          "type": "string"
+        },
+        "bytes": {
+          "const": 12
+        },
+        "device_id_hex": {
+          "pattern": "^[0-9a-f]{16}$",
+          "type": "string"
+        },
+        "protocol": {
+          "const": "BFD2"
+        },
+        "sequence": {
+          "const": false
+        }
+      },
+      "required": [
+        "protocol",
+        "bytes",
+        "device_id_hex",
+        "sequence",
+        "byte_order"
+      ],
+      "type": "object"
+    },
+    "receiver": {
+      "additionalProperties": false,
+      "properties": {
+        "capture_dedup": {
+          "type": "boolean"
+        },
+        "direction": {
+          "const": "unknown"
+        },
+        "loss_probability": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "scan_duty": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "scan_period_s": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "silence_s": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "silence_s",
+        "loss_probability",
+        "scan_duty",
+        "scan_period_s",
+        "seed",
+        "capture_dedup",
+        "direction"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "simulation-semantic-contract-v1"
+    },
+    "scope": {
+      "enum": [
+        "source-defaults",
+        "synthetic-matched-fixture"
+      ]
+    },
+    "source_trajectory": {
+      "additionalProperties": false,
+      "properties": {
+        "angle_rad": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "coordinate_rule": {
+          "type": "string"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "electrical_input": {
+          "type": "string"
+        },
+        "opening_s": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "opening_s",
+        "angle_rad",
+        "duration_s",
+        "coordinate_rule",
+        "electrical_input"
+      ],
+      "type": "object"
+    },
+    "units": {
+      "const": {
+        "angle": "rad",
+        "capacitance": "F",
+        "current": "A",
+        "energy": "J",
+        "firmware_input_conversion": "upstream dt milliseconds, current milliamps; adapters convert explicitly",
+        "force": "N",
+        "length": "m",
+        "time": "s",
+        "voltage": "V"
+      }
+    },
+    "version": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "native_evidence_available": {
+          "type": "boolean"
+        },
+        "numerical_semantics": {
+          "type": "string"
+        },
+        "physics_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_bound": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "model",
+        "source_bound",
+        "native_evidence_available",
+        "physics_hash",
+        "numerical_semantics"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "contract_id",
+    "schema_version",
+    "scope",
+    "geometry",
+    "force",
+    "initial_energy",
+    "source_trajectory",
+    "circuit",
+    "firmware",
+    "packet",
+    "receiver",
+    "mission",
+    "units",
+    "version"
+  ],
+  "type": "object"
+}

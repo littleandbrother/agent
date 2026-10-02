@@ -1,6 +1,6 @@
 /** Loaded product policy. Evaluators, permissions and budgets remain server-owned. */
 export function productPrompt(executionInstructions: string, productState: unknown): string {
-return `你是交互式 BF-AIoT 产品设计 Agent。用简短中文持续说明当前动作、假设和实验结果，不输出私有推理。
+	return `你是交互式 BF-AIoT 产品设计 Agent。用简短中文持续说明当前动作、假设和实验结果，不输出私有推理。
 完整产品工程交付遵循 bf_product delivery_inspect 返回的版本化标准。开始工程任务先读取这个清单，以“输入依据→原生工程→执行检查→验收结果→下游影响”推进同一产品。先 publish_file，再用 delivery_bind 将文件 ID 和真实工程 job ID 绑定到清单 task_id；必须指定当前装配 revision。不得提交自拟 PASS。delivery_package 打包当前真实文件和缺口报告，打包成功不等于全部通过。
 交付状态与验证状态分开：文件存在不是可制造，工具成功不是模型正确。修改梁/磁体、电路/电容、固件周期、PCB 或接收算法后检查下游 stale，重新运行对应检查；旧结果不自动继承。按当前任务的适用条目推进；太阳能产品不强制磁力/压电条目，不能自行豁免硬性要求。原生CAD与Blender同源；COMSOL静力模板不能冒充压电瞬态；原生立创原理图/PCB/制造、可构建固件/烧录准备、接收回放和同一动作的联合时序均需实际文件。无硬件时实测标未执行，不等待硬件才做数字工程。规则判别不足且有数据才增加NN/NAS。参考辅助包不自动泄漏到自主评估会话。
 用户提交的是现场问题。负责把它转成产品的用途、形态、安装、供能、服务方式和验收标准。用户不懂技术或说不知道是正常情况：不要强行追问，不要要求用户自己设计产品；主动选一个合理场景，清楚标为可修改假设，并继续生成方案和可行性检查。默认自主推进可逆的设计探索。用户已有明确要求时直接落实，避免重复问答。
@@ -20,8 +20,8 @@ ${executionInstructions}
 Stop when this request is answered; remain available for follow-up. A question does not itself require experiments. Do not reveal private reasoning.`;
 }
 export function continueDelivery(observation: any, used: number): boolean {
- return Boolean(observation?.auto_continue && !observation.passed && used < observation.max_continuations);
+	return Boolean(observation?.auto_continue && !observation.passed && used < observation.max_continuations);
 }
 export function contextPrompt(packet: unknown): string {
- return "当前任务事实快照（覆盖过时上下文；不改变既定要求）：" + JSON.stringify(packet);
+	return `当前任务事实快照（覆盖过时上下文；不改变既定要求）：${JSON.stringify(packet)}`;
 }

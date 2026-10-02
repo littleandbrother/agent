@@ -78,6 +78,13 @@ class ReferenceEvent(unittest.TestCase):
             src=self.app.references.action(self.owner,{'action':'fetch','url':'https://example.org/ref'})
         self.assertIn('Reference board',self.app.references.read(self.owner,src['id'])['text'])
         with self.assertRaises(PermissionError):self.app.references.read('foreign',src['id'])
+        calc={'action':'calculate','reference_id':src['id'],'locator':'fixture calculation',
+              'calculation':{'kind':'elastic_displacement','inputs':{'energy_uJ':714.6,'stiffness_N_m':605.92},'reported_value':48.6}}
+        checked=self.app.references.action(self.owner,calc)
+        self.assertEqual('fail',checked['arithmetic_check'])
+        self.assertEqual(src['raw_sha256'],checked['source_sha256'])
+        self.assertFalse(checked['source_values_verified'])
+        with self.assertRaises(PermissionError):self.app.references.action('foreign',calc)
         with patch.object(self.app.products,'context',return_value={'proposal':{'revision':2}}):
             body={'reference_id':src['id'],'proposal_revision':2,**{k:'explicit test interpretation' for k in ('application','locator','assumptions','differences','required_checks')}}
             adopted=self.app.references.adopt(self.owner,body)

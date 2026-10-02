@@ -1,0 +1,50 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-034-studio-liquid-glass",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "objective": "Increase visible liquid-glass depth in Studio navigation, composer and delivery controls while keeping engineering evidence readable.",
+  "hypothesis": "Layered translucent navigation and interactive controls with crisp reflected edges make the requested glass treatment visible without reducing task clarity.",
+  "falsifier": "Glass obscures text, breaks focus, increases motion under reduced-motion settings, obstructs scrolling or hides engineering failures.",
+  "paper_claim": "No scientific or autonomous-design claim. Product UX only.",
+  "owned_paths": [
+    "apps/agent-studio/",
+    "project/features/BFA-034-studio-liquid-glass/",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/agentlab/STUDIO-GLASS-REVIEW.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-glass-20261002",
+    "/Users/depengsu/.local/share/bf-agent-runtime/battery-world/"
+  ],
+  "schema_changes": [],
+  "tests": [
+    "Existing UI and projection regression, application init.sh, actual browser audit at desktop and narrow widths, keyboard interactions."
+  ],
+  "negative_controls": [
+    "Empty project",
+    "Long title",
+    "Missing files",
+    "Failed conclusion",
+    "Reduced motion"
+  ],
+  "command": "./init.sh",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-glass-20261002",
+  "cost_cap": "0 paid model calls; no native simulation runs",
+  "claim_boundary": "A visual quality review, not award certification or a new scientific verdict.",
+  "stop_condition": "Preserve active computations, project/source hashes and existing histories. No fabricated artifacts or verdicts.",
+  "evidence": [
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-glass-20261002/receipt.json",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-glass-20261002/browser-audit.json",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/studio-glass-20261002/init.log",
+    "docs/agentlab/STUDIO-GLASS-REVIEW.md"
+  ],
+  "limitations": [
+    "CSS glass treatment, not native Apple Liquid Glass or optical refraction.",
+    "Dark, increased contrast, reduced transparency and reduced motion variants were source reviewed; OS preferences were not switched.",
+    "Existing missing artifacts and unaccepted design conclusions remain unchanged."
+  ],
+  "handoff": "Studio glass surfaces are live at localhost:8768. UI-only; no new model/native simulation, Git commit or push. Research BFA-031 status unchanged."
+}

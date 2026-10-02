@@ -6,7 +6,7 @@ import time
 import unittest
 from unittest.mock import patch
 
-from bfworld.agentlab.simulation_tasks import load_task, check_candidate, evaluate, NUMERICAL, PHYSICAL
+from bfworld.agentlab.simulation_tasks import load_task, check_candidate, evaluate, NUMERICAL, PHYSICAL, TASK_ROOT
 from bfworld.agentlab.simulation_chain.contracts import validate, write_json
 
 
@@ -63,6 +63,44 @@ class TaskRules(unittest.TestCase):
 
 
 class TaskService(unittest.TestCase):
+    def test_real_pi_reference_only_folder_starts_without_engineering_permission(self):
+        import threading
+        from http.server import ThreadingHTTPServer
+        from bfworld.agentlab.server import Workbench, handler
+        from bfworld.agentlab.provider import MODEL
+        with tempfile.TemporaryDirectory() as tmp:
+            app=Workbench(Path(tmp)/'state')
+            server=ThreadingHTTPServer(('127.0.0.1',0),handler(app))
+            app.conversations.port=server.server_port
+            threading.Thread(target=server.serve_forever,daemon=True).start()
+            requests=[]
+            def fake_model(owner,payload,on_chunk=None):
+                requests.append(payload)
+                names=[t['function']['name'] for t in payload['tools']]
+                self.assertIn('bf_reference',names)
+                self.assertNotIn('bf_engineering',names)
+                self.assertNotIn('bash',names)
+                base={'id':'fixture-reference','object':'chat.completion.chunk','created':int(time.time()),'model':MODEL}
+                on_chunk({**base,'choices':[{'index':0,'delta':{'role':'assistant','content':'Reference-only startup fixture.'},'finish_reason':None}]})
+                on_chunk({**base,'choices':[{'index':0,'delta':{},'finish_reason':'stop'}]})
+                return {'model':MODEL,'usage':{'prompt_tokens':20,'completion_tokens':5,'total_tokens':25}}
+            try:
+                app.provider.complete=fake_model
+                folder=app.organization.create_folder('reference only')
+                app.organization.configure(folder['id'],{**folder['config'],'tools':['bf_reference','read','write']},0)
+                c=app.conversations.create('Read sources only.',None,'reference-fixture',folder['id'])
+                end=time.time()+35
+                while c['id'] in app.conversations.starting and time.time()<end:time.sleep(.05)
+                final=app.conversations.get(c['id'])
+                self.assertEqual('IDLE',final['status'],final['error'])
+                self.assertEqual(1,len(requests))
+                self.assertEqual([],app.engineering.jobs(c['id']))
+            finally:
+                for cid in list(app.conversations.processes):app.conversations.stop(cid)
+                end=time.time()+8
+                while app.conversations.starting and time.time()<end:time.sleep(.05)
+                server.shutdown();server.server_close();app.stop.set();app.thread.join(3);app.lock.close()
+
     def test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider(self):
         """Real Pi process / fixture model and native result: integration, not design evidence."""
         import threading
@@ -75,35 +113,70 @@ class TaskService(unittest.TestCase):
             app.conversations.port=server.server_port
             threading.Thread(target=server.serve_forever,daemon=True).start()
             requests=[]
+            response_ref=[]
+            admission_attempts=[]
+            original_submit=app.engineering.submit
+            def busy_then_admit(owner,body,initiator='unrecorded'):
+                admission_attempts.append(json.loads(json.dumps(body)))
+                if len(admission_attempts)<=2:raise ValueError('ENGINEERING_BUSY')
+                return original_submit(owner,body,initiator)
+            app.engineering.submit=busy_then_admit
             def fake_model(owner,payload,on_chunk=None):
                 requests.append(payload);step=len(requests)
                 self.assertEqual(['bf_engineering'],[t['function']['name'] for t in payload['tools']])
+                properties=payload['tools'][0]['function']['parameters']['properties']
+                self.assertIn('requested_kind',properties)
+                self.assertIn('falsifier',properties)
                 job=app.engineering.jobs(owner)
+                if step==4:
+                    tool=next(m for m in reversed(payload['messages']) if m.get('role')=='tool')
+                    descriptor=json.loads(tool['content'])
+                    self.assertFalse(descriptor['full_response_inline'])
+                    response_ref.append(descriptor['_response'])
+                if step==5:
+                    tool=next(m for m in reversed(payload['messages']) if m.get('role')=='tool')
+                    page=json.loads(tool['content'])
+                    self.assertEqual(response_ref[0],page['_response'])
+                    self.assertIsNotNone(page['next_offset'])
+                    self.assertIn(job[0]['id'],page['text'])
+                    self.assertLess(len(tool['content'].encode()),24000)
                 args=({'action':'run','engine':'closed-simulation','parameters':{'candidate':{'circuit':{'cin_uF':22}}},'operation_id':'fixture-candidate'} if step==1 else
-                      {'action':'job','job_id':job[0]['id']} if step==2 else
-                      {'action':'artifact_view','job_id':job[0]['id'],'artifact_name':'task-evaluation.json'} if step==3 else
+                      {'action':'inspect'} if step==2 else
+                      {'action':'job','job_id':job[0]['id']} if step==3 else
+                      {'action':'response_view','response_id':response_ref[0]['response_id'],'response_sha256':response_ref[0]['sha256'],'offset':0,'limit':16000} if step==4 else
+                      {'action':'artifact_view','job_id':job[0]['id'],'artifact_name':'task-evaluation.json'} if step==5 else
                       {'action':'submit','job_id':job[0]['id'],'rationale':'Fixture negative candidate; not actual design evidence.'})
+                if step==3:
+                    tool=next(m for m in reversed(payload['messages']) if m.get('role')=='tool')
+                    index=json.loads(tool['content'])
+                    self.assertEqual(job[0]['id'],index['jobs'][0]['id'])
+                    self.assertNotIn('record_file',index)
+                    self.assertLess(len(tool['content'].encode()),24000)
                 base={'id':'fixture-'+str(step),'object':'chat.completion.chunk','created':int(time.time()),'model':MODEL}
-                delta={'role':'assistant','tool_calls':[{'index':0,'id':'call-'+str(step),'type':'function','function':{'name':'bf_engineering','arguments':json.dumps(args)}}]} if step<=4 else {'role':'assistant','content':'测试夹具已提交，不能作为真实设计结果。'}
+                delta={'role':'assistant','tool_calls':[{'index':0,'id':'call-'+str(step),'type':'function','function':{'name':'bf_engineering','arguments':json.dumps(args)}}]} if step<=6 else {'role':'assistant','content':'测试夹具已提交，不能作为真实设计结果。'}
                 on_chunk({**base,'choices':[{'index':0,'delta':delta,'finish_reason':None}]})
-                on_chunk({**base,'choices':[{'index':0,'delta':{},'finish_reason':'tool_calls' if step<=4 else 'stop'}]})
+                on_chunk({**base,'choices':[{'index':0,'delta':{},'finish_reason':'tool_calls' if step<=6 else 'stop'}]})
                 on_chunk({**base,'choices':[],'usage':{'prompt_tokens':20,'completion_tokens':5,'total_tokens':25}})
                 return {'model':MODEL,'usage':{'prompt_tokens':20,'completion_tokens':5,'total_tokens':25}}
             def fake_native(engine,job,directory,deadline):
                 write_json(directory/'design-spec.json',job['parameters']['candidate'])
                 write_json(directory/'receiver.json',{'transmitted':[],'delivered':[],'events':[]})
-                return {'run_status':'completed','checks':dict.fromkeys(NUMERICAL,True),'metrics':{'cold_start_reached':False},'artifacts':[],'product_verified':False}
+                return {'run_status':'completed','checks':dict.fromkeys(NUMERICAL,True),'metrics':{'cold_start_reached':False},'artifacts':[],'product_verified':False,'oversized_native_detail':'x'*60000}
             try:
                 app.provider.complete=fake_model
                 with app.store.connect() as db:
-                    db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',('door-design-pilot-v1',time.time(),time.time()+90,2,MODEL,'fixture only'))
+                    db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',(json.loads((TASK_ROOT/'protocol.json').read_text())['id'],time.time(),time.time()+90,2,MODEL,'fixture only'))
                 with patch('bfworld.agentlab.simulation_chain.run',side_effect=fake_native):
                     trial=app.engineering.tasks.create_trial(app,'baseline-r1','Fixture integration only: exercise tools and seal the negative candidate.')
                     end=time.time()+35
                     while trial['id'] in app.conversations.starting and time.time()<end:time.sleep(.05)
                     final=app.conversations.get(trial['id'])
                 self.assertEqual('IDLE',final['status'],final['error'])
-                self.assertEqual(5,len(requests))
+                self.assertEqual(7,len(requests))
+                self.assertEqual(3,len(admission_attempts))
+                self.assertEqual(admission_attempts[0],admission_attempts[1])
+                self.assertEqual(admission_attempts[1],admission_attempts[2])
+                self.assertEqual(1,len(app.engineering.jobs(trial['id'])))
                 with app.store.connect() as db:
                     receipt=json.loads(db.execute('SELECT receipt FROM simulation_task_submissions WHERE owner=?',(trial['id'],)).fetchone()[0])
                 self.assertEqual('unsatisfied',receipt['evaluation']['nominal_task_status'])
@@ -122,7 +195,7 @@ class TaskService(unittest.TestCase):
             try:
                 with app.store.connect() as db:
                     db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',
-                        ('door-design-pilot-v1',time.time(),time.time()+60,2,'deepseek-flash','fixture only'))
+                        (json.loads((TASK_ROOT/'protocol.json').read_text())['id'],time.time(),time.time()+60,2,'deepseek-flash','fixture only'))
                 inspected=[]
                 def inspect(cid,text,operation):
                     self.assertEqual(3,app.engineering.tasks.binding(cid)['max_candidates'])

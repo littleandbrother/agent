@@ -39,6 +39,40 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(403,self.req('/api/conversations',headers={'Authorization':'Bearer '+alice})[0])
         for path,body in [('/api/organization',None),('/api/folders',{'name':'denied'}),('/api/sidebar/invalid',{'action':'delete'}),('/api/folder-memory',None)]:
             self.assertEqual(403,self.req(path,body,headers={'Authorization':'Bearer '+alice})[0])
+
+    def test_provider_keepalive_is_forwarded_as_sse_comment(self):
+        def fake(owner,payload,on_chunk=None):
+            on_chunk(None)
+            on_chunk({'model':MODEL,'choices':[{'delta':{'content':'ready'},'finish_reason':'stop'}]})
+            return {'usage':{'prompt_tokens':1,'completion_tokens':1,'total_tokens':2}}
+        self.app.provider.complete=fake
+        req=urllib.request.Request('http://127.0.0.1:'+str(self.server.server_port)+'/v1/chat/completions',
+            data=json.dumps({'model':MODEL,'stream':True,'messages':[]}).encode(),
+            headers={'Authorization':'Bearer '+self.token,'Content-Type':'application/json'})
+        with urllib.request.urlopen(req) as response: wire=response.read().decode()
+        self.assertTrue(wire.startswith(': upstream keepalive\n\n'))
+        self.assertIn('ready',wire)
+        self.assertTrue(wire.endswith('data: [DONE]\n\n'))
+
+    def test_queued_followup_clears_previous_turn_failure_without_erasing_trace(self):
+        (self.app.store.root.parent/'paid-window-closed.json').write_text('{}')
+        _,conversation=self.req('/api/conversations',{'text':'original','operation_id':'failed-followup'})
+        cid=conversation['id'];chat=self.app.conversations
+        folder=chat.home/'sessions'/cid;folder.mkdir(parents=True,exist_ok=True)
+        path=folder/'trace.jsonl'
+        failure={'type':'turn_error','error':'PROVIDER_STREAM_ERROR'}
+        path.write_text(json.dumps(failure)+'\n')
+        chat.ingest(cid)
+        self.assertEqual('FAILED',chat.get(cid)['status'])
+        with path.open('a') as stream:stream.write(json.dumps({'type':'assistant_start','id':'followup'})+'\n')
+        chat.ingest(cid)
+        self.assertEqual('RUNNING',chat.get(cid)['status'])
+        self.assertIsNone(chat.get(cid)['error'])
+        with path.open('a') as stream:stream.write(json.dumps({'type':'chat_idle'})+'\n')
+        chat.ingest(cid)
+        self.assertEqual('IDLE',chat.get(cid)['status'])
+        errors=[e['data'] for e in chat.events(cid) if e['data']['type']=='turn_error']
+        self.assertEqual([failure],errors)
     def test_closed_window_persists_one_session_and_message_without_dispatch(self):
         (self.app.store.root.parent/'paid-window-closed.json').write_text('{}')
         body={'text':'设计一个计算任务','operation_id':'op','task_id':'dev-01'}

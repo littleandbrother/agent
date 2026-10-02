@@ -165,6 +165,22 @@ class TurnBudget(unittest.TestCase):
         with self.store.connect() as db:db.execute('INSERT INTO chat_messages VALUES(?,?,?)',(mid,'chat','QUEUED'))
         self.provider.recovery.issue('chat',mid)
 
+    def test_wire_evidence_records_projection_not_discarded_source_messages(self):
+        self.message('wire-check')
+        self.payload['messages']=[{'role':'user','content':'Earlier'},
+            {'role':'assistant','tool_calls':[{'id':'old'}]},
+            {'role':'tool','tool_call_id':'old','content':'x'*140000},
+            {'role':'user','content':'Continue'},
+            {'role':'assistant','tool_calls':[{'id':'recent'}]},
+            {'role':'tool','tool_call_id':'recent','content':'Current feedback'}]
+        self.complete()
+        with self.store.connect() as db:
+            row=db.execute('SELECT wire,receipt FROM model_request_evidence').fetchone()
+        self.assertNotIn('old',[m.get('tool_call_id') for m in json.loads(row['wire'])['messages']])
+        receipt=json.loads(row['receipt'])
+        self.assertEqual(['recent'],[item['tool_call_id'] for item in receipt['feedback']])
+        self.assertEqual(140000,len(self.payload['messages'][2]['content']))
+
     def complete(self):
         result={'model':'deepseek-flash','usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}}
         with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(json.dumps(result).encode())):

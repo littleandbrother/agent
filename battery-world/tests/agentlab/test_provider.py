@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 from bfworld.agentlab.store import Store
 from bfworld.agentlab.provider import Provider
+from scripts.export_request_evidence import audit
 
 class ProviderBudget(unittest.TestCase):
     def setUp(self):
@@ -25,6 +26,31 @@ class ProviderBudget(unittest.TestCase):
         with self.store.connect() as db:db.execute('UPDATE model_limits SET total_usd=.00001')
         with self.assertRaisesRegex(ValueError,'USD_BUDGET'):self.provider.complete('operator',self.payload)
         self.assertEqual(1,self.provider.status()['calls'])
+
+    def test_evidence_is_exact_final_wire_and_never_added_to_model_payload(self):
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()) as opening:
+            self.provider.complete('operator',self.payload)
+        raw=opening.call_args.args[0].data
+        with self.store.connect() as db:
+            row=db.execute('SELECT e.*,r.request_hash FROM model_request_evidence e JOIN model_requests r ON r.id=e.request_id').fetchone()
+        self.assertEqual(raw,row['wire'].encode())
+        receipt=json.loads(row['receipt'])
+        self.assertEqual(row['request_hash'],receipt['wire_sha256'])
+        self.assertEqual('unknown',receipt['method']['status'])
+        self.assertEqual(self.payload['messages'],json.loads(raw)['messages'])
+        self.assertNotIn('receipt',json.loads(raw))
+        with self.store.connect() as db:
+            report=audit(db,['operator'])
+            self.assertEqual(1,report['counts']['with_wire_receipt'])
+            self.assertFalse(report['integrity_errors'])
+            db.execute("UPDATE model_request_evidence SET wire='{}'")
+        with self.store.connect() as db:
+            self.assertEqual('WIRE_IDENTITY_MISMATCH',audit(db,['operator'])['integrity_errors'][0]['error'])
+            db.execute('DELETE FROM model_request_evidence')
+        with self.store.connect() as db:
+            report=audit(db,['operator'])
+            self.assertEqual(1,report['counts']['historical_unknown'])
+            self.assertEqual('unknown',report['requests'][0]['method']['status'])
     def test_unknown_usage_stops_future_dispatch_and_restart(self):
         with patch('urllib.request.OpenerDirector.open',return_value=self.response(False)):
             with self.assertRaisesRegex(ValueError,'USAGE_MISSING'):self.provider.complete('operator',self.payload)
@@ -75,5 +101,101 @@ class ProviderBudget(unittest.TestCase):
         self.assertEqual('UNKNOWN',self.provider.status()['requests'][0]['status'])
         with self.assertRaisesRegex(ValueError,'UNKNOWN_STOP'):
             self.provider.complete('operator',self.payload)
+
+    def test_terminal_usage_is_settled_even_without_done_output_still_fails(self):
+        c={'model':'deepseek-flash','choices':[],
+           'usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}}
+        with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(('data: '+json.dumps(c)+'\n\n').encode())):
+            with self.assertRaisesRegex(ValueError,'STREAM_TRUNCATED'):
+                self.provider.complete('operator',self.payload,on_chunk=lambda c:None)
+        row=self.provider.status()['requests'][0]
+        self.assertEqual('SETTLED',row['status'])
+        self.assertIn('STREAM_TRUNCATED',row['error'])
+
+    def test_provider_keepalive_over_90_seconds_can_finish_inside_bound(self):
+        clock=[0.]
+        class SlowResponse(io.BytesIO):
+            def __iter__(self):
+                yield b': keepalive\n';clock[0]=100.
+                yield b': keepalive\n'
+                yield ('data: '+json.dumps({'id':'provider-id','model':'deepseek-flash','choices':[],
+                    'usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}})+'\n').encode()
+                yield b'data: [DONE]\n'
+        with patch('urllib.request.OpenerDirector.open',return_value=SlowResponse()),patch('bfworld.agentlab.provider.time.monotonic',side_effect=lambda:clock[0]):
+            self.provider.complete('operator',self.payload,on_chunk=lambda c:None)
+        self.assertEqual('SETTLED',self.provider.status()['requests'][0]['status'])
+
+    def test_stream_wall_limit_still_holds_reservation_without_usage(self):
+        clock=[0.]
+        class TooSlow(io.BytesIO):
+            def __iter__(self):
+                clock[0]=301.;yield b': keepalive\n'
+        with patch('urllib.request.OpenerDirector.open',return_value=TooSlow()),patch('bfworld.agentlab.provider.time.monotonic',side_effect=lambda:clock[0]):
+            with self.assertRaisesRegex(ValueError,'STREAM_LIMIT'):
+                self.provider.complete('operator',self.payload,on_chunk=lambda c:None)
+        self.assertEqual('UNKNOWN',self.provider.status()['requests'][0]['status'])
+
+    def test_explicit_study_continuation_retains_unknown_and_scope(self):
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response(False)):
+            with self.assertRaises(ValueError):self.provider.complete('operator',self.payload)
+        original=self.provider.status()['requests'][0]
+        now=time.time()
+        with self.store.connect() as db:
+            db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',('pilot',now,now+60,.5,'deepseek-flash','original'))
+            db.execute('INSERT INTO research_model_owners VALUES(?,?,?)',('operator','pilot','one'))
+            db.execute('INSERT INTO research_usage_continuations VALUES(?,?,?,?)',('pilot',now,now+60,'explicit continuation'))
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()):self.provider.complete('operator',self.payload)
+        after=self.provider.status()
+        self.assertEqual(original,after['requests'][0])
+        self.assertGreater(after['upper_bound_usd'],original['reserved'])
+        self.store.grant('outsider',[],6,now+60)
+        with self.assertRaisesRegex(ValueError,'UNKNOWN_STOP'):self.provider.complete('outsider',self.payload)
+        with self.store.connect() as db:db.execute('UPDATE research_model_studies SET max_usd=?',(original['reserved']+.00001,))
+        with self.assertRaisesRegex(ValueError,'RESEARCH_MODEL_USD_BUDGET'):self.provider.complete('operator',self.payload)
+        with self.store.connect() as db:db.execute('UPDATE research_usage_continuations SET expires=0')
+        with self.assertRaisesRegex(ValueError,'UNKNOWN_STOP'):self.provider.complete('operator',self.payload)
+
+    def test_authorized_study_accepts_slow_keepalive_without_cancelling(self):
+        now=time.time()
+        with self.store.connect() as db:
+            db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',('slow',now,now+3600,.5,'deepseek-flash','original'))
+            db.execute('INSERT INTO research_model_owners VALUES(?,?,?)',('operator','slow','one'))
+            db.execute('INSERT INTO research_usage_continuations VALUES(?,?,?,?)',('slow',now,now+3600,'continue'))
+        clock=[0.]
+        class Slow(io.BytesIO):
+            def __iter__(self):
+                clock[0]=600.;yield b': keepalive\n'
+                yield ('data: '+json.dumps({'model':'deepseek-flash','choices':[],
+                    'usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}})+'\n').encode()
+                yield b'data: [DONE]\n'
+        with patch('urllib.request.OpenerDirector.open',return_value=Slow()),patch('bfworld.agentlab.provider.time.monotonic',side_effect=lambda:clock[0]):
+            self.provider.complete('operator',self.payload,on_chunk=lambda c:None)
+        self.assertEqual('SETTLED',self.provider.status()['requests'][0]['status'])
+
+    def test_upstream_sse_error_is_terminal_and_keeps_unknown_reservation(self):
+        seen=[]
+        wire=b': keepalive\n\ndata: {"error":{"code":"upstream_failed"}}\n\n'
+        with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(wire)) as opening:
+            with self.assertRaisesRegex(ValueError,'PROVIDER_STREAM_ERROR'):
+                self.provider.complete('operator',self.payload,on_chunk=seen.append)
+        self.assertEqual([None],seen)
+        self.assertEqual(1,opening.call_count,'Never silently repeat a possibly billed completion')
+        row=self.provider.status()['requests'][0]
+        self.assertEqual('UNKNOWN',row['status']);self.assertGreater(row['reserved'],0)
+        self.assertIsNone(row['usage'])
+
+    def test_upstream_read_idle_timeout_is_not_success_or_zero_usage(self):
+        class Idle(io.BytesIO):
+            def __iter__(self):
+                yield b': keepalive\n'
+                raise TimeoutError('The read operation timed out')
+        seen=[]
+        with patch('urllib.request.OpenerDirector.open',return_value=Idle()) as opening:
+            with self.assertRaisesRegex(TimeoutError,'read operation'):
+                self.provider.complete('operator',self.payload,on_chunk=seen.append)
+        self.assertEqual([None],seen);self.assertEqual(1,opening.call_count)
+        row=self.provider.status()['requests'][0]
+        self.assertEqual('UNKNOWN',row['status']);self.assertEqual(0,row['charged'])
+        self.assertGreater(row['reserved'],0);self.assertIsNone(row['usage'])
 
 if __name__=='__main__':unittest.main()

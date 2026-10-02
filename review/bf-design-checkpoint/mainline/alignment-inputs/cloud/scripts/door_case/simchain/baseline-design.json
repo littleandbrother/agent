@@ -1,0 +1,159 @@
+{
+  "schema_version": "simchain-design-v1",
+  "mechanics": {
+    "reference_design": {
+      "case_id": "door-magnetic-v1",
+      "revision": "D2",
+      "units": "mm",
+      "title": "\u95e8\u8fd0\u52a8\u78c1\u62e8\u52a8\u538b\u7535\u65e0\u7ebf\u4e8b\u4ef6\u8282\u70b9 \u00b7 \u6570\u5b57\u5de5\u7a0b\u6837\u673a",
+      "scope": "Reference-assisted digital design; no hardware calibration or radio reception claim.",
+      "door": {
+        "width": 900,
+        "height": 2100,
+        "thickness": 40,
+        "open_angle_deg": 65,
+        "opening_s": 2,
+        "frame_clearance": 5,
+        "installation": "lintel front; door-top driver bracket",
+        "product_origin_world_mm": [
+          1004,
+          70,
+          2140
+        ],
+        "driver_closed_world_mm": [
+          856,
+          45,
+          2140
+        ]
+      },
+      "beam": {
+        "length": 100,
+        "free_length": 96,
+        "width": 10,
+        "thickness": 0.53,
+        "clamp_end_x": 4,
+        "young_Pa": 110000000000,
+        "density_kg_m3": 8960,
+        "material": "copper, nominal linear elastic"
+      },
+      "pzt": {
+        "length": 50,
+        "width": 8,
+        "thickness": 0.3,
+        "start_x": 10,
+        "material": "COMSOL PZT-5A library, assumed grade; perfect bond; +z polarization"
+      },
+      "magnets": {
+        "tip_mm": [
+          10,
+          10,
+          10
+        ],
+        "driver_mm": [
+          20,
+          20,
+          20
+        ],
+        "tip_center_mm": [
+          100,
+          0,
+          5.265
+        ],
+        "remanence_T": 1.25,
+        "relative_permeability": 1.05,
+        "polarization": "both +x, attractive axial alignment",
+        "source": "custom NdFeB N42 nominal; Br, coercivity and tolerances require supplier qualification",
+        "nominal_center_separation_x_mm": 48
+      },
+      "enclosure": {
+        "outer_mm": [
+          136,
+          62,
+          66
+        ],
+        "wall": 2,
+        "material": "PETG prototype",
+        "tolerance_mm": 0.25,
+        "lid": "2 mm polycarbonate"
+      },
+      "board": {
+        "size_mm": [
+          80,
+          30,
+          1.6
+        ],
+        "holes_mm": [
+          [
+            4,
+            4
+          ],
+          [
+            76,
+            4
+          ],
+          [
+            4,
+            26
+          ],
+          [
+            76,
+            26
+          ]
+        ],
+        "hole_diameter_mm": 2.4,
+        "layers": 2,
+        "pmic": "LTC3588EMSE-1#TRPBF / LCSC C685115",
+        "radio": "Raytac MDBT42Q-512KV2 / LCSC C2828282",
+        "vout_V": 3.3,
+        "cin_uF": 47,
+        "cout_uF": 100,
+        "inductor_uH": 10
+      },
+      "acceptance": {
+        "step_valid": true,
+        "unrouted_nets": 0,
+        "native_drc_errors": 0,
+        "single_open_cold_start_required": true,
+        "cold_start_initial_V": 0,
+        "minimum_radio_events": 1,
+        "nominal_gap_and_weak_motion_required": true,
+        "mesh_delta_target_pct": 5,
+        "time_step_energy_delta_target_pct": 5,
+        "no_motion_energy_max_J": 1e-09,
+        "stress_limit_status": "not qualified: report stress; no fatigue certification",
+        "max_rom_deflection_mm": 8
+      },
+      "assumptions": [
+        "Door dimensions and installation are explicit design assumptions, not measured premises.",
+        "PZT grade, bonding, damping and magnet remanence are nominal; uncertainty must remain visible.",
+        "No neural network is needed for a binary motion-event transmitter; no artificial NAS claim.",
+        "Animation door rotation is prescribed; beam animation must be labelled by its actual solved or imposed origin."
+      ],
+      "revision_reason": "D1 dx=26 mm produces approx 4 N transverse magnetic force; beyond 8 mm linear-ROM validity. D2 increases magnetic center x separation to 48 mm; acceptance limits retained."
+    },
+    "installation_gap_mm": 48,
+    "opening_s": 2,
+    "open_angle_deg": 65,
+    "mode": "door"
+  },
+  "power": {
+    "input_capacitance_uF": 47,
+    "output_capacitance_uF": 100,
+    "output_voltage_V": 3.3
+  },
+  "program": {},
+  "mission": {
+    "duration_s": 4,
+    "step_s": 0.0005,
+    "minimum_radio_events": 1,
+    "receiver_deadline_s": 4,
+    "cold_start_initial_V": 0,
+    "single_open_cold_start_required": true
+  },
+  "visualization": {
+    "camera": {
+      "azimuth_deg": 35,
+      "elevation_deg": 20
+    }
+  }
+}

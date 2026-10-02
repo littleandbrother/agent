@@ -51,7 +51,7 @@ const activation = {
 };
 console.log(JSON.stringify(activation));
 const solver = await import(pathToFileURL(config.solverModule).href);
-const improver = await import(pathToFileURL(config.improverModule).href);
+const _improver = await import(pathToFileURL(config.improverModule).href);
 let state = fs.existsSync(path.join(cwd, "state.json"))
 	? JSON.parse(fs.readFileSync(path.join(cwd, "state.json"), "utf8"))
 	: solver.initialState();
@@ -59,7 +59,7 @@ const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify
 const api = async (route: string, body?: unknown) => {
 	const response = await fetch(config.service + route, {
 		method: body === undefined ? "GET" : "POST",
-		headers: { Authorization: "Bearer " + config.token, "Content-Type": "application/json" },
+		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
 		...(body === undefined ? {} : { body: JSON.stringify(body) }),
 		signal: AbortSignal.timeout(100000),
 	});
@@ -79,7 +79,7 @@ const compact = (job: any) => ({
 });
 if (config.mode === "solve") {
 	for (const [operation, pending] of Object.entries(state.pending) as [string, any][]) {
-		const job = await api("/api/operations/" + encodeURIComponent(operation));
+		const job = await api(`/api/operations/${encodeURIComponent(operation)}`);
 		if (job.status === "NOT_SUBMITTED") {
 			state.pending[operation] = { ...pending, status: "NOT_SUBMITTED" };
 			continue;
@@ -137,10 +137,10 @@ const tools = [
 		executionMode: "sequential",
 		parameters: Type.Object({ job_id: Type.String() }),
 		async execute(_id, { job_id }) {
-			let job = await api("/api/jobs/" + encodeURIComponent(job_id));
+			let job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			for (let i = 0; i < 80 && ["QUEUED", "RUNNING"].includes(job.status); i++) {
 				await new Promise((resolve) => setTimeout(resolve, 250));
-				job = await api("/api/jobs/" + encodeURIComponent(job_id));
+				job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			}
 			for (const [op, pending] of Object.entries(state.pending) as [string, any][]) {
 				if (pending.job_id === job_id) state.pending[op] = { ...pending, status: job.status };
@@ -171,7 +171,7 @@ const tools = [
 			view: Type.Union([Type.Literal("summary"), Type.Literal("decisions"), Type.Literal("energy")]),
 		}),
 		async execute(_id, { job_id, view }) {
-			const job = await api("/api/jobs/" + encodeURIComponent(job_id));
+			const job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			if (!job.result) throw new Error("RUN_NOT_COMPLETE");
 			return reply(
 				view === "summary"
@@ -202,7 +202,7 @@ const runtime = await ModelRuntime.create({
 	modelsPath: path.join(cwd, ".pi/models.json"),
 });
 runtime.registerProvider("bf-deepseek", {
-	baseUrl: config.service + "/v1",
+	baseUrl: `${config.service}/v1`,
 	api: "openai-completions",
 	apiKey: config.token,
 	models: [
@@ -273,7 +273,7 @@ const expectedTools = [
 if (expectedTools.some((name) => !session.getActiveToolNames().includes(name)))
 	throw new Error("ACTIVE_TOOL_SET_INCOMPLETE");
 const instance = crypto.randomUUID();
-let messages = 0;
+let _messages = 0;
 let assistantId = 0;
 const emit = (value: any) => console.log(JSON.stringify({ ...value, time: Date.now() / 1000 }));
 let interrupted = false;
@@ -283,9 +283,9 @@ const stop = async () => {
 	await session.abort();
 	for (const pending of Object.values(state.pending) as any[]) {
 		if (!pending.job_id) continue;
-		const job = await api("/api/jobs/" + encodeURIComponent(pending.job_id));
+		const job = await api(`/api/jobs/${encodeURIComponent(pending.job_id)}`);
 		if (["QUEUED", "RUNNING"].includes(job.status))
-			await api("/api/jobs/" + encodeURIComponent(pending.job_id) + "/cancel", {});
+			await api(`/api/jobs/${encodeURIComponent(pending.job_id)}/cancel`, {});
 	}
 	save();
 };
@@ -295,10 +295,10 @@ process.on("SIGINT", () => {
 session.subscribe((event) => {
 	if (event.type === "message_start" && (event.message as any).role === "assistant") {
 		assistantId++;
-		emit({ type: "assistant_start", id: instance + "-" + assistantId });
+		emit({ type: "assistant_start", id: `${instance}-${assistantId}` });
 	}
 	if (event.type === "message_update" && event.assistantMessageEvent.type === "text_delta")
-		emit({ type: "text_delta", id: instance + "-" + assistantId, delta: event.assistantMessageEvent.delta });
+		emit({ type: "text_delta", id: `${instance}-${assistantId}`, delta: event.assistantMessageEvent.delta });
 	if (event.type === "tool_execution_end")
 		emit({
 			type: event.type,
@@ -309,14 +309,14 @@ session.subscribe((event) => {
 		});
 	if (event.type === "message_end") {
 		const message = event.message as any;
-		if (message.role === "assistant") messages++;
+		if (message.role === "assistant") _messages++;
 		const safe = {
 			...message,
 			content: Array.isArray(message.content)
 				? message.content.filter((c: any) => c.type !== "thinking")
 				: message.content,
 		};
-		emit({ type: "message", id: instance + "-" + assistantId, message: safe });
+		emit({ type: "message", id: `${instance}-${assistantId}`, message: safe });
 	}
 	if (event.type === "tool_execution_start")
 		console.log(

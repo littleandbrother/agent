@@ -1,0 +1,314 @@
+{
+  "schema_version": "closed-simulation-result-v1",
+  "model_version": "door-closed-simulation-v1",
+  "run_status": "completed",
+  "design_status": "insufficient_evidence",
+  "failed_stage": null,
+  "unreached_stages": [
+    "powered-radio-completion",
+    "virtual-reception"
+  ],
+  "model_versions": {
+    "cad": "3224a404850a29505b022bb315e1e7261c78538ee0f17b47733e6bf9faff7513",
+    "beam": "d47343f71215a447060d4902e6115a57c4fc6dca972c70b61f4c18c6952f5cd9",
+    "force": "1646051ae5bdc27883ff0e8cbe117fd74c50f8143c5696c1de89d4157ac101e1",
+    "firmware": "6236c56c1bdd2a51a585b83094840276fb75be308f7c4cca53c1311552d4b8b4",
+    "joint": "ed96876fd04c6f538b2570df997750e0a4f4157be25c634df9dd8b0b6d428f75",
+    "numerical": "570e89b98b21a67b3312c4a12fe52a362935fc39f429c9d70323c3b358bead30",
+    "magnetic-confirmation": "abde94f5c494c728147f88330e7ea6a8c8a9cea2558ecf333dcdb63936fc3e49"
+  },
+  "applicability": {
+    "force": {
+      "angle_rad": [
+        0,
+        1.1344640137963142
+      ],
+      "tip_m": [
+        -0.008,
+        0.008
+      ],
+      "max_interpolation_error_over_peak": 0.007870222231003587,
+      "quadrature_error_over_peak": 8.2925940927646e-10,
+      "recoil_permeability": 1.0,
+      "model": "finite uniform cuboid surface-charge v1",
+      "outside_domain": "reject; LTspice clamps only to permit detection and returns out_of_domain afterward",
+      "native_confirmation": "separate COMSOL anchors; table is not a full FEM grid"
+    },
+    "beam": "static-condensed first-mode ROM; PZT-5A perfect bond; small deflection <=8mm; no contact/fatigue",
+    "sufficiency": "not qualified for full product acceptance",
+    "full_rotated_FEM_coverage": false,
+    "diagnostic_only": false,
+    "confirmation_requested": true
+  },
+  "energy_ledger": {
+    "initial_mechanical_piezo_J": 0.0007586372534327792,
+    "final_mechanical_piezo_J": 3.0570943240358805e-12,
+    "external_force_work_J": -0.0006628930616678013,
+    "mechanical_loss_J": 9.175362882026342e-05,
+    "pmic_port_energy_J": 3.990562149996516e-06,
+    "mechanical_piezo_residual_J": 1.3304642678909663e-09,
+    "relative_residual": 1.7537555160529106e-06,
+    "pmic_initial_storage_J": 0.0,
+    "diagnostic_source_energy_J": 0.0,
+    "load_energy_J": 2.2999946511069903e-19,
+    "cp_count": 1,
+    "pmic_internal_loss": "not independently observable from encrypted macro-model; full PMIC energy residual not certified",
+    "initial_state_handling": "Explicit capacitor/ROM ICs; LTspice UIC display-only zero row corrected in derived arrays, original RAW unchanged."
+  },
+  "events": [],
+  "product_verified": false,
+  "hardware_calibrated": false,
+  "stages": {
+    "cad": {
+      "key": "3224a404850a29505b022bb315e1e7261c78538ee0f17b47733e6bf9faff7513",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "beam": {
+      "key": "d47343f71215a447060d4902e6115a57c4fc6dca972c70b61f4c18c6952f5cd9",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "force": {
+      "key": "1646051ae5bdc27883ff0e8cbe117fd74c50f8143c5696c1de89d4157ac101e1",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "firmware": {
+      "key": "6236c56c1bdd2a51a585b83094840276fb75be308f7c4cca53c1311552d4b8b4",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "joint": {
+      "key": "ed96876fd04c6f538b2570df997750e0a4f4157be25c634df9dd8b0b6d428f75",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "numerical": {
+      "key": "570e89b98b21a67b3312c4a12fe52a362935fc39f429c9d70323c3b358bead30",
+      "cache_hit": false,
+      "status": "completed"
+    },
+    "magnetic-confirmation": {
+      "key": "abde94f5c494c728147f88330e7ea6a8c8a9cea2558ecf333dcdb63936fc3e49",
+      "cache_hit": false,
+      "status": "completed"
+    }
+  },
+  "limitations": [
+    "Uniform hard-magnet force table; sparse FEM anchors do not confirm the entire rotated trajectory.",
+    "Small-deflection static-condensed single-mode beam, no contact/nonlinear release/fatigue model.",
+    "Shared C policy SIL with assumed timing/current; no nRF52 SoC, SoftDevice or RF emulation.",
+    "Encrypted PMIC internal losses are not independently audited; mechanical/piezo port balance is checked."
+  ],
+  "physics_hash": "c5842bb82e43ada13b90f05264286ac8885372097a6c7626e5ed95d76c4821a6",
+  "presentation_hash": "20176af2e55d168c1eecb01abf1ab3c91b7d9d144f8cfd8af0596f797309d8d4",
+  "tools": {
+    "pmic_model": "53775f934b1b1c7929282b753a7fba947dc9d249314e0c39a06eb8aa06899a62",
+    "ltspice_launcher": "41cb95d1c5c11389fa78cf0a8ae867719771e253ac2bcb8657603a0ffdb99139",
+    "ltspice_executable": "a94eb1789084db9f46375cce05110e03578f9cdb931867a0faaca5b200793f06",
+    "comsol_launcher": "21f558902c86fe459f457159034546f32abf76e0d2150d6e4ae49d7474bfff96",
+    "comsol_binary": "dd1515e9a549d785df2fb16e795eac2c60e8dbec65448fe47ab4c0a6aa33249b",
+    "arm_compiler": "fa5913126e8e9d51cac10f74593cc7502018ff6bbcf90ed6e126b568034ed0f0",
+    "host_compiler": "3e7d30871a9740446f33a907b14d28f10ebe6d4e1c146a4c0788308f573a6609",
+    "python": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+    "libraries": {
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "cadquery": "2.8.0",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "metrics": {
+    "coupling_converged": true,
+    "iterations": [
+      {
+        "iteration": 0,
+        "max_current_difference_A": 0.0,
+        "max_supply_difference_V": null,
+        "packets": 0
+      }
+    ],
+    "energy_ledger": {
+      "initial_mechanical_piezo_J": 0.0007586372534327792,
+      "final_mechanical_piezo_J": 3.0570943240358805e-12,
+      "external_force_work_J": -0.0006628930616678013,
+      "mechanical_loss_J": 9.175362882026342e-05,
+      "pmic_port_energy_J": 3.990562149996516e-06,
+      "mechanical_piezo_residual_J": 1.3304642678909663e-09,
+      "relative_residual": 1.7537555160529106e-06,
+      "pmic_initial_storage_J": 0.0,
+      "diagnostic_source_energy_J": 0.0,
+      "load_energy_J": 2.2999946511069903e-19,
+      "cp_count": 1,
+      "pmic_internal_loss": "not independently observable from encrypted macro-model; full PMIC energy residual not certified",
+      "initial_state_handling": "Explicit capacitor/ROM ICs; LTspice UIC display-only zero row corrected in derived arrays, original RAW unchanged."
+    },
+    "peak_tip_mm": 4.537013825029135,
+    "peak_piezo_V": 0.54678775370121,
+    "peak_storage_V": 0.14575150609016418,
+    "peak_supply_V": 1.0638085541359033e-06,
+    "tx_completed": 0,
+    "received_events": 0,
+    "cold_start_reached": false,
+    "program_states_reached": [
+      0
+    ],
+    "q0_m": -0.004171286377004429,
+    "numerical_energy_passed": true,
+    "diagnostic_only": false
+  },
+  "checks": {
+    "energy_balance": true,
+    "force_interpolation": true,
+    "beam_mesh": true,
+    "program_power_fixed_point": true,
+    "time_step": true,
+    "magnetic_mesh": false,
+    "magnetic_anchor_agreement": true
+  },
+  "predicted_design_status": "unsatisfied",
+  "module_diagnostic_passed": false,
+  "numerical_checks_passed": false,
+  "summary_zh": "本次联合仿真未达到冷启动/接收目标。 完整产品依据仍不足；详见适用范围与检查。",
+  "elapsed_s": 158.44177675247192,
+  "implementation": {
+    "__init__.py": "8d1de851022ef58458d077a31614dd3392beda5f991450a3eecc00d2708f8db4",
+    "cache.py": "47700dc880a5c713b269f9c7895443fb5ce38acc5f971a5e08f1826dbd3dc147",
+    "cli.py": "ecca226de3817009ff3aa9c00e23fa21755b88ba3f7b1c6eb53225e5134f6371",
+    "contracts.py": "00d7ffea6447f22515cc95a5a816a67ea3823bec533f87a2146a682370f638d5",
+    "native.py": "a2e2937aa9aa0b5aecf6a98ea29f37185f6355c315c5560d08df1c3125903c07",
+    "pipeline.py": "47a848f2216fdd9acda7de5c01ab4505770903f27b73a52a44830a6072e5c2d5",
+    "program.c": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf",
+    "solver.py": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782"
+  },
+  "evidence_archive_sha256": "511aa05b6163bd4f8b7cd54c1b7cdd8131e9433bc19236833620c608baec045b",
+  "artifacts": [
+    {
+      "name": "assembly.step",
+      "bytes": 609987,
+      "sha256": "ff83762e36c603107dfe81f00a58e4e069a2f2cc30a09197c4b9a087c582d17d"
+    },
+    {
+      "name": "candidate.json",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "name": "convergence.json",
+      "bytes": 375,
+      "sha256": "478f97f54c1759d9615545884806be9a4f7a6620913968464adeb5ccb803f247"
+    },
+    {
+      "name": "coupling-iterations.json",
+      "bytes": 123,
+      "sha256": "5782c8efe80fa3789606195d42a3cd7aba868b51b3a49be635848623d4753702"
+    },
+    {
+      "name": "design-spec.json",
+      "bytes": 781,
+      "sha256": "1520130e2782518e1114710b569ee82d1bd50dbdc7cd2e1b33f51411c399fd3b"
+    },
+    {
+      "name": "energy.json",
+      "bytes": 760,
+      "sha256": "8a737376c0c190ef250354ad4bb44e618a6f581d89f2c167c12267c0485c6563"
+    },
+    {
+      "name": "engineering-evidence.zip",
+      "bytes": 58818624,
+      "sha256": "511aa05b6163bd4f8b7cd54c1b7cdd8131e9433bc19236833620c608baec045b"
+    },
+    {
+      "name": "magnetic-confirmation.json",
+      "bytes": 1930,
+      "sha256": "ec1791e87f3d4cdb96653dae5ce8dd337f923db058535590f83b654b891b7f18"
+    },
+    {
+      "name": "policy.h",
+      "bytes": 196,
+      "sha256": "3dbad99db51a3ad70212a43faa28b5566dfd4296672c537db35a214342effb45"
+    },
+    {
+      "name": "preview.png",
+      "bytes": 185068,
+      "sha256": "501330b93b38a6574c09e4b02e5a29f089791aae1fe7085b4f4ed6fb56b02fdf"
+    },
+    {
+      "name": "program.c",
+      "bytes": 1454,
+      "sha256": "9fe95cfc2f66235963f9c49d1d15f4bd46185513203a7b9766b88134aff35baf"
+    },
+    {
+      "name": "program.csv",
+      "bytes": 5000187,
+      "sha256": "dda6e8d4061002997e187690a17f3f93f54cb0625a69bc3e046337cfa83a029b"
+    },
+    {
+      "name": "receiver.json",
+      "bytes": 172,
+      "sha256": "042e9a3ec5af98ae920216ddf0aa4b0456b7734f93beaba191d41cffa06a64d6"
+    },
+    {
+      "name": "runner.log",
+      "bytes": 334,
+      "sha256": "e68d8ad9991ff988420521666f0c3a9131105d1c6644b9c3b78d2a3949f9a196"
+    },
+    {
+      "name": "start.json",
+      "bytes": 253,
+      "sha256": "1696d37fac80f06641491f6b0af35b54d6a6109031305fed60018a7f1c2f01d6"
+    },
+    {
+      "name": "system.cir",
+      "bytes": 26960,
+      "sha256": "b94367c7749e19777d52a3f541e0894a7576fd1703aa4de07bd6fb295f4cb31c"
+    },
+    {
+      "name": "trace.jsonl",
+      "bytes": 2194,
+      "sha256": "022a475bac66735356c95886adc4a6c70ce3c5172ce48da7770e70473c06826c"
+    },
+    {
+      "name": "waveform.csv",
+      "bytes": 706042,
+      "sha256": "44131b538ae3e92684f0b0fef720c6431e1674d7b149c1213b874ef957da08f1"
+    },
+    {
+      "name": "task.json",
+      "bytes": 3524,
+      "sha256": "e06d27e5bb9abc2982ba9b8b29443ec0302760c776193405c7cbb169d9df8557"
+    },
+    {
+      "name": "task-evaluation.json",
+      "bytes": 1199,
+      "sha256": "26736de895a156e131275f36019209979bec37215cd1d4cfd5c00d866ef33ec0"
+    }
+  ],
+  "task_evaluation": {
+    "schema_version": "simulation-task-evaluation-v1",
+    "task_id": "door-event-nominal-v1",
+    "task_hash": "667696fd9f33b4efe7abb7e6bd254904e42b2738addfe2c3110e6e2a702abfac",
+    "candidate_hash": "c3b0c885995e99d63726739c1f36f65fb28069ab18ac2a2f64b38761625c2539",
+    "input_violations": [],
+    "run_status": "completed",
+    "diagnostic_only": false,
+    "pilot_observation_eligible": true,
+    "prediction_comparison_scope": "fixed nominal model only; not physically qualified design ranking",
+    "nominal_prediction_eligible": true,
+    "nominal_task_status": "unsatisfied",
+    "design_ranking_eligible": false,
+    "unpassed_numerical_checks": [],
+    "unpassed_physical_checks": [
+      "magnetic_mesh",
+      "full_rotated_FEM_coverage"
+    ],
+    "timely_correct_packets": 0,
+    "first_correct_packet_s": null,
+    "silence_groups": 0,
+    "exactly_once_semantics_qualified": false,
+    "product_verified": false,
+    "hardware_calibrated": false,
+    "scope": "Fixed nominal door/piezo/PMIC family, assumed shared-C SIL and virtual receiver. At-least-once packet by deadline only; no direction, exactly-once, physical safety, hardware or architecture-synthesis qualification. Missing physical gates prohibit design ranking."
+  }
+}

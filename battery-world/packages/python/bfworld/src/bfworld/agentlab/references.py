@@ -29,6 +29,13 @@ Use bf_reference search with provider=crossref for papers, github for public
 repositories, or web for web search. Search results are discovery metadata,
 not a claim that a full paper was read. Fetch selected public URLs, then read
 the saved text by offset. Follow author, publisher, datasheet and source links.
+Before adopting a numerical inference, call calculate with reference_id,
+locator and calculation={kind,inputs,reported_value(optional)}. Supported kinds:
+elastic_displacement inputs energy_uJ/stiffness_N_m returns mm;
+capacitor_energy inputs capacitance_uF/voltage_V returns uJ;
+natural_frequency inputs stiffness_N_m/mass_g returns Hz.
+This checks arithmetic only; do not equate harvested electric energy to initial
+mechanical energy or mix dimensions/threshold min/typ/max across devices.
 If a provider returns a challenge or inaccessible page, record the failure and
 use another public source; do not infer the missing contents.
 Record an adoption with source locator, application, assumptions, differences
@@ -319,6 +326,16 @@ class References:
                 return self.fetch(owner, body.get('url'))
             if action == 'read':
                 return self.read(owner, body.get('reference_id'), body.get('offset', 0), body.get('limit', 8000))
+            if action == 'calculate':
+                from .reference_checks import calculate
+                source=self.get(owner,body.get('reference_id'))
+                if source['kind']!='source':raise ValueError('REFERENCE_FETCH_SOURCE_BEFORE_CALCULATION')
+                self.blob(source['raw_sha256'])
+                locator=body.get('locator')
+                if not isinstance(locator,str) or not 1<=len(locator)<=6000:raise ValueError('SOURCE_LOCATOR_REQUIRED')
+                return self.put(owner,'calculation',{**calculate(body.get('calculation')),
+                    'reference_id':source['id'],'source_sha256':source['raw_sha256'],'locator':locator,
+                    'source_values_verified':False})
             if action == 'adopt':
                 return self.adopt(owner, body)
             raise ValueError('REFERENCE_ACTION_INVALID')

@@ -1,0 +1,287 @@
+schema_version: battery-world-research-roadmap-v1
+program:
+  product: Battery World Studio
+  method: EpiDesign
+  domain: battery-free intelligent edge design
+  anchor_world: Rotary-TENG
+  central_scientific_question: Can a fixed general-purpose coding agent convert the cost of past experiments into executable, verifiable, and transferable knowledge that reduces trial and error and expands capability on future scientific design tasks?
+  dual_delivery:
+    current_task: a verified system design
+    future_tasks: a measurably more capable designer
+  primary_endpoint: future-task capability and amortized total cost
+  supporting_endpoints:
+    - physical mission pass
+    - evidence admissibility
+    - verified mission success
+    - prediction validity on held-out interventions
+    - cost to first valid design
+    - knowledge transfer and removal effect
+  non_goals:
+    - claiming universal battery-free coverage from one Rotary-TENG world
+    - treating interface guards or visualization alone as scientific novelty
+    - treating plugin count, code volume, or iteration count as self-improvement
+    - requiring every failure to create a new representation
+    - allowing a participant to edit, inspect, or self-certify reference truth
+
+layers:
+  - id: engineering-object
+    deliverable: an executable battery-free environment closing energy, computation, information, communication, and mission outcome
+    success: the system is physically and informationally closed under an independently evaluated mission
+  - id: user-interface
+    deliverable: a replayable Studio for observing, comparing, intervening, and auditing runs and knowledge lineage
+    success: a user can understand implementation, failure, evidence, and revision without reading source code
+  - id: agent-method
+    deliverable: EpiDesign, which compiles experimental experience into executable knowledge used and revised on later tasks
+    success: the same base model demonstrates measurable cross-task capability growth under controlled information and cost
+  - id: paper-question
+    deliverable: a causal comparison of raw history, text memory, and executable knowledge
+    success: future-task gains survive independent conditions, total-cost accounting, transfer, removal, and scope tests
+
+authority_model:
+  task_contract:
+    mutable_by_participant: false
+    role: visible service objectives, constraints, allowed interventions, and budgets
+  design_artifact:
+    mutable_by_participant: true
+    role: component, topology, model, window, schedule, and communication choices
+  candidate_world_model:
+    mutable_by_participant: true
+    role: executable participant prediction and explanation
+  reality_world:
+    alias: reference environment
+    mutable_by_participant: false
+    role: independent simulation, measurement, or device truth with explicit fidelity and uncertainty
+  experiment_record:
+    mutable_after_seal: false
+    role: prediction, intervention, observation, cost, provenance, and version bindings
+  executable_knowledge:
+    mutable_after_promotion: false
+    role: independently qualified programmatic knowledge reusable outside its originating session
+
+update_types:
+  - id: design-revision
+    meaning: changes the engineered system
+  - id: world-model-revision
+    meaning: changes the executable understanding used to predict the system
+  - id: workflow-revision
+    meaning: changes experiment selection, tool routing, search, or recovery behavior
+
+knowledge_lifecycle:
+  provisional_contract:
+    required_fields:
+      - knowledge_type
+      - executable_program
+      - input_contract
+      - applicability_domain
+      - uncertainty
+      - source_experiments
+      - independent_tests
+      - acquisition_cost
+      - execution_cost
+      - known_failures
+      - version
+  knowledge_types:
+    - prediction-model
+    - experiment-procedure
+    - design-rule
+    - execution-skill
+  candidate_states:
+    - PROPOSED
+    - EXPLANATION_VALIDATED
+    - USE_VALIDATED
+    - PROMOTED
+    - RESTRICTED
+    - REJECTED
+    - SUPERSEDED
+  promotion_rule: A candidate must pass held-out explanation tests and future-task use tests against an independent reference; current-episode repair alone is insufficient.
+  independence_rule: Promotion feedback must include information not generated solely by the candidate model being evaluated.
+  no_update_is_valid: true
+  self_promotion_allowed: false
+
+research_questions:
+  RQ1: Is the world sufficiently coupled and independently anchored to support credible design tasks?
+  RQ2: Does executable knowledge improve design on future tasks versus equal-history raw retrieval, text memory, and classical baselines?
+  RQ3: Are gains attributable to learned world knowledge, learned design workflow, or their interaction?
+  RQ4: Can knowledge transfer, survive removal tests, recognize out-of-scope use, be falsified, and be revised?
+
+study_controls:
+  RQ2_arms:
+    - general-agent-plus-raw-history
+    - general-agent-plus-text-memory
+    - general-agent-plus-executable-knowledge
+    - classical-identification-or-surrogate-optimization
+  RQ3_factorial:
+    - fixed-world-model-plus-fixed-design-strategy
+    - learned-world-model-plus-fixed-design-strategy
+    - fixed-world-model-plus-learned-design-strategy
+    - learned-world-model-plus-learned-design-strategy
+  fairness:
+    - equal historical information
+    - equal base model and scientific tools
+    - learning, qualification, maintenance, and solve cost included
+    - sealed final confirmation excluded from candidate selection
+    - task ordering randomized or counterbalanced
+    - no-revision and infeasible controls retained
+    - scientific replications labeled separately from executor-equivalent retries
+
+evidence_anchors:
+  A-001:
+    status: verified
+    bundle_hash: sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059
+    claim: deterministic F1-simplified Rotary-TENG computational reference only
+  B0-000:
+    status: verified
+    manifest_hash: sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618
+    claim: deterministic semantic fixtures only
+
+milestones:
+  - id: A1
+    title: Visible Current World
+    status: complete
+    evidence:
+      - docs/studio/projection-validation.json
+      - docs/studio/browser-validation.json
+    objective: Project only implemented A-001 and B0 truth into a unified, trace-faithful Studio while showing absent components as unimplemented.
+    features:
+      - A1-001-visible-current-world-studio
+    deliverables:
+      - Study Atlas derived from repository manifests and validation artifacts
+      - synchronized A run timeline and component view
+      - prediction, observation, threshold, failure-certainty, and provenance inspection
+      - grey explicit placeholders for unimplemented PMIC, MCU inference, receiver, Agent, and knowledge layers
+    exit_gates:
+      - id: visible-values-source-bound
+        status: passed
+      - id: studio-computes-no-scientific-verdict
+        status: passed
+      - id: sealed-run-replays-offline
+        status: passed
+      - id: unimplemented-capability-not-simulated
+        status: passed
+      - id: a001-identity-unchanged
+        status: passed
+  - id: A2
+    title: Complete Coupled Mission
+    status: complete
+    evidence: [docs/coupled/validation.json, docs/coupled/A2-VALIDATION.md]
+    blocked_by: [A1]
+    objective: Close energy and information in one Rotary-TENG reference mission with normal, overvoltage, action-time brownout, and wrong-diagnosis runs.
+    features:
+      - A2-001-minimum-closed-experiment-contracts
+    exit_gates:
+      - id: load-voltage-feedback-closed
+        status: passed
+      - id: request-to-receiver-chain-complete
+        status: passed
+      - id: component-fidelity-matrix-complete
+        status: passed
+      - id: energy-ledger-within-declared-numerical-tolerance
+        status: passed
+      - id: independent-or-cross-implementation-anchor-present
+        status: passed
+  - id: B1
+    title: General Agent Closed Loop
+    status: complete
+    evidence: [docs/campaign/preflight.json, docs/campaign/audit.json, docs/campaign/report.json]
+    blocked_by: [A2]
+    objective: Let one fixed general coding agent predict, design, request experiments, revise, recover, and submit through a thin control plane.
+    features:
+      - B1-001-agent-api-and-recovery
+      - B1-002-single-agent-pilot
+    exit_gates:
+      - id: no-agent-reference-passes
+        status: passed
+      - id: design-model-workflow-revisions-distinguished
+        status: passed
+      - id: crash-and-budget-reconciliation-passes
+        status: passed
+      - id: participant-hidden-access-zero
+        status: passed
+      - id: at-least-one-end-to-end-agent-submission
+        status: passed
+  - id: B2
+    title: First Knowledge Transfer
+    status: in-progress
+    blocked_by: [B1]
+    objective: Qualify one executable knowledge object on held-out prediction and show causal benefit on a new task without the originating conversation.
+    features:
+      - B2-001-executable-knowledge-capsule
+      - B2-002-first-transfer-study
+      - B2-003-repair-and-blind-transfer
+    exit_gates:
+      - id: knowledge-runs-outside-origin-session
+        status: passed
+      - id: explanation-test-passes
+        status: pending
+      - id: use-test-passes
+        status: pending
+      - id: equal-history-text-and-raw-controls-run
+        status: pending
+        note: Pilot conditions ran, but G0 text was empty and executable treatment inactive. An activated new comparison is still required.
+      - id: removal-and-transplant-effects-measured
+        status: pending
+      - id: total-cost-reported
+        status: pending
+  - id: C1
+    title: Continual Learning
+    status: blocked
+    blocked_by: [B2]
+    objective: Across counterbalanced task campaigns, add, reuse, reject, restrict, supersede, and revise knowledge while measuring future capability and amortization.
+    features:
+      - C1-001-knowledge-registry-lifecycle
+      - C1-002-continual-learning-campaign
+    exit_gates:
+      - id: multi-campaign-gain-on-sealed-future-tasks
+        status: pending
+      - id: knowledge-conflict-and-regression-governed
+        status: pending
+      - id: no-update-and-infeasible-controls-pass
+        status: pending
+      - id: world-model-vs-workflow-factorial-complete
+        status: pending
+      - id: amortization-break-even-reported
+        status: pending
+  - id: C2
+    title: Cross-Reality Confirmation
+    status: blocked
+    blocked_by: [C1]
+    objective: Test transfer and scope recognition on a new device/session, independent implementation, hardware condition, or second energy source.
+    features:
+      - C2-001-second-reference-or-device
+      - C2-002-cross-reality-confirmation
+    exit_gates:
+      - id: independent-information-source-present
+        status: pending
+      - id: correct-and-incorrect-boundary-cases-covered
+        status: pending
+      - id: in-domain-transfer-measured
+        status: pending
+      - id: out-of-domain-scope-recognition-measured
+        status: pending
+      - id: claim-limited-to-observed-reference
+        status: pending
+
+current:
+  as_of: 2026-09-07
+  foundation_features_completed:
+    - FND-001-repository-bootstrap
+    - A-001-rotary-world-kernel
+    - B0-000-semantic-golden-episodes
+    - FND-002-experiments-to-expertise-roadmap
+  research_milestones_completed: [A1, A2, B1]
+  next_feature: B2-003-repair-and-blind-transfer
+  current_verified_capability: Frozen A/B0 and finite model pilot retained; B2 explicit phase-load reference, public negative controls, measured replay, provider-backed recovery and independent world/workflow qualification execution are tested without new real model calls. Public simple-ordering controls reduce replayed probes but are not learned knowledge. Concrete owner-review protocol exists; formal experiments, qualified transfer and factorial benefit remain unestablished.
+  current_missing_capability: Beneficial qualified transfer, effective world/workflow factorial, sustained multi-campaign gains, complete local compute accounting and physical confirmation remain open. A completed pilot is not RSI.
+
+progress_policy:
+  status_source: manifests, feature receipts, tests, and sealed artifacts
+  manual_percent_complete_forbidden: true
+  historical_prototype_credit: forbidden unless reproduced inside this repository under a current feature receipt
+  milestone_complete_rule: every exit gate passed and bound to runnable evidence
+  claim_ladder:
+    - runs
+    - reproduces
+    - independently_validated
+    - used_in_complete_mission
+    - hidden_qualified
+    - hardware_or_cross_reality_confirmed

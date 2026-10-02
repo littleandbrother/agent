@@ -1,0 +1,10 @@
+* Passive RC double-RAW installation smoke only; UNEXECUTED; not a PMIC/candidate run
+V1 in 0 PULSE(0 1 0 1n 1n 100m 200m)
+R1 in out 1k
+C1 out 0 1u
+.tran 0 10m 0 10u
+.meas tran vout_1tau FIND V(out) AT=1m
+.meas tran vout_5tau FIND V(out) AT=5m
+.meas tran vout_10tau FIND V(out) AT=10m
+.options plotwinsize=0 numdgt=15
+.end

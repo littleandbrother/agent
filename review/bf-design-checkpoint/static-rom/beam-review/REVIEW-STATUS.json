@@ -1,0 +1,52 @@
+{
+  "schema": "bf-independent-transparent-static-rom-review-v1",
+  "status": "PASS_CONDITIONAL_STATIC_PROVIDER_ONLY",
+  "producer_final_seal_sha256": "9d76f4002e4149cdffb2d8d98d62df15ae5490eb1a3400551ff0ae0b98638878",
+  "producer_base_manifest_sha256": "8632e9ec0fac8fbb12dca2eb3cef1ca4f6dff8a9a5b514a3f1b1ff0a1b51e530",
+  "base_files_verified": 23,
+  "additive_seal_files_verified": 6,
+  "producer_tests_passed": 26,
+  "producer_tests_log_sha256": "6fdd24e363d273809af487a90a866ba56a5dc7d7c012204c5351096990d0c069",
+  "independent_hermite_schur_report": {
+    "path": "reports/hermite-schur-readback.json",
+    "sha256": "1dd77120c8a6c9c8226c086df4cb154ed218036448d5862d8ab10db68f022fba",
+    "quantities_compared": 15,
+    "max_relative_difference": 1.1341342700093083e-15
+  },
+  "independent_axial_bar_report": {
+    "path": "reports/axial-bar-readback.json",
+    "sha256": "96c1a574078dfe3477c8d6fcaceeac61a066e7f5bb82b53817b161972815ad33",
+    "alpha_m_per_N": 1.3776587893378664e-07,
+    "beta_m_per_V": 6.7655786350148354e-09,
+    "fixed_eta_capacitance_F": 1.841972113863757e-08
+  },
+  "source_and_equations_review": {
+    "path": "reports/SOURCE-AND-EQUATIONS-REVIEW.md",
+    "sha256": "0f63896e8fde673603bb7d649883752fd1b1ff8e8b7e0163a867a97f43c93987"
+  },
+  "verified_scope": [
+    "Conditional PSI-5A4E scalar constitutive conversion and source parameters",
+    "Axial section Schur reduction and reciprocal projected charge",
+    "Fixed-Ritz capacitance distinct from endpoint-static condensed capacitance",
+    "Consistent modal normalization and distributed/rigid-body mass",
+    "COM force/torque Jacobian signs via independent synthetic potential",
+    "Static axial extension enthalpy, charge response and signed stored-energy increment",
+    "No invented material/loss uncertainty bounds or dynamic admission"
+  ],
+  "material_source_identity": "new conditional branch, not the unknown native COMSOL PZT tensor",
+  "frame_status": "source-code installation transform is bound by additive note; not measured installation qualification",
+  "blockers_for_dynamic_use": [
+    "Generalized magnetic force must use consistent retained pose/frame; old fixed-orientation Fz table is not transferable",
+    "V=0/q-only pose omits voltage-induced axial translation; nonzero Fx/torque excite omitted coordinates",
+    "Static N=0 condensation is not exact under arbitrary loaded axial boundary",
+    "No actual verified force/voltage/gradient envelope; no negligibility or contraction bound has been established",
+    "Damping, full material tensor/native evidence, nonlinear validity and dynamic PMIC/reference evidence remain missing"
+  ],
+  "new_dynamic_runs_by_reviewer": 0,
+  "new_magnetic_evaluations_by_reviewer": 0,
+  "native_equivalent": false,
+  "physical_qualified": false,
+  "dynamic_admitted": false,
+  "frozen_world_checkpoint_changed": false,
+  "distribution": "Exclude snapshot/ and full third-party PDF/HTML/page images; share verified URLs and compact factual provenance."
+}

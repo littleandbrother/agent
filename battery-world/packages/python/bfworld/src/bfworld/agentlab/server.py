@@ -277,6 +277,11 @@ def handler(workbench):
             cookie=SimpleCookie(self.headers.get('Cookie',''))
             return workbench.store.authenticate(cookie['bf_operator'].value if 'bf_operator' in cookie else '')
 
+        def engineering_reply(self, owner, status, value):
+            if self.headers.get('X-BF-Tool-Response') == 'bounded-v1':
+                value = workbench.engineering.responses.wrap(owner, value)
+            return self.reply(status, value)
+
         def local_host(self):
             if self.headers.get('Host') not in ('127.0.0.1:'+str(self.server.server_port),'localhost:'+str(self.server.server_port)):
                 raise PermissionError('HOST_DENIED')
@@ -300,7 +305,7 @@ def handler(workbench):
                 nonlocal started
                 if not started:
                     self.send_response(200);self.send_header('Content-Type','text/event-stream');self.send_header('Cache-Control','no-store');self.end_headers();started=True
-                self.wfile.write(('data: '+canonical(value)+'\n\n').encode());self.wfile.flush()
+                self.wfile.write(b': upstream keepalive\n\n' if value is None else ('data: '+canonical(value)+'\n\n').encode());self.wfile.flush()
             try:
                 workbench.provider.complete(owner,body,on_chunk=chunk)
                 if started:self.wfile.write(b'data: [DONE]\n\n');self.wfile.flush()
@@ -371,9 +376,9 @@ def handler(workbench):
                     target=query.get('session',[owner])[0] if operator else owner
                     if not operator:workbench.engineering.authorize(owner)
                     if path=='/api/engineering/task':return self.reply(200,{'binding':workbench.engineering.tasks.binding(target)})
-                    if path=='/api/engineering':return self.reply(200,{**workbench.engineering.catalog(target),'jobs':workbench.engineering.jobs(target if target!='operator' else None)})
+                    if path=='/api/engineering':return self.engineering_reply(target,200,{**workbench.engineering.catalog(target),'jobs':workbench.engineering.jobs(target if target!='operator' else None)})
                     parts=path.strip('/').split('/')
-                    if len(parts)==4 and parts[2]=='jobs':return self.reply(200,workbench.engineering.get(owner,parts[3],operator))
+                    if len(parts)==4 and parts[2]=='jobs':return self.engineering_reply(target,200,workbench.engineering.get(owner,parts[3],operator))
                     if len(parts)==5 and parts[2]=='jobs' and parts[4]=='artifact':
                         file=workbench.engineering.artifact(owner,parts[3],query.get('name',[''])[0],operator)
                         kind={'.png':'image/png','.json':'application/json','.glb':'model/gltf-binary','.csv':'text/csv','.log':'text/plain'}.get(file.suffix,'application/octet-stream')
@@ -447,14 +452,25 @@ def handler(workbench):
                 if path.startswith('/api/developer'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     query=parse_qs(urlparse(self.path).query)
+                    if path=='/api/developer/design-pilot':
+                        from .design_pilot_view import projection
+                        return self.reply(200,projection(workbench.store))
+                    if path=='/api/developer/design-pilot/export':
+                        from .design_pilot_view import export_projection
+                        return self.reply(200,export_projection(workbench.store))
+                    if path=='/api/developer/design-pilot/evidence':
+                        from .design_pilot_view import evidence_file
+                        file = evidence_file(query.get('protocol',[''])[0],query.get('name',[''])[0])
+                        return self.reply(200,file,{'.png':'image/png','.svg':'image/svg+xml','.zip':'application/zip'}[file.suffix])
                     if path in ('/api/developer/research','/api/developer/research/export','/api/developer/research/record'):
-                        from .research import Research
-                        research=Research(workbench.store.root.parent)
+                        from .research.read_model import read
+                        home=workbench.store.root.parent
                         if path.endswith('/export'):
-                            return self.reply(200,research.export())
+                            from .design_pilot_view import export_projection
+                            return self.reply(200,{**read(home,'export'), 'design_pilot':export_projection(workbench.store)})
                         if path.endswith('/record'):
-                            return self.reply(200,research.get(query.get('kind',[''])[0],query.get('id',[''])[0]))
-                        return self.reply(200,research.project())
+                            return self.reply(200,read(home,'record',query.get('kind',[''])[0],query.get('id',[''])[0]))
+                        return self.reply(200,read(home))
                     if path=='/api/developer/panorama':
                         return self.reply(200,workbench.panorama.projection(query.get('snapshot',[None])[0],query.get('baseline',[None])[0]))
                     if path=='/api/developer/panorama/file':
@@ -566,23 +582,29 @@ def handler(workbench):
                     target=body.get('session_id',owner) if operator else owner
                     if operator and target!='operator':workbench.conversations.get(target)
                     action=body.get('action','run')
+                    if action=='response_view':
+                        return self.reply(200,workbench.engineering.responses.view(target,body))
+                    if action=='record_revision':
+                        from .research_methods import record
+                        return self.engineering_reply(target,200,record(workbench.engineering,target,body))
                     if action=='pilot_trial':
                         if not operator:raise PermissionError('OPERATOR_REQUIRED')
                         return self.reply(201,workbench.engineering.tasks.create_trial(workbench,body.get('trial_id'),body.get('text')))
                     if action=='artifact_view':
-                        return self.reply(200,workbench.engineering.tasks.artifact_view(workbench.engineering,target,body))
+                        value=workbench.engineering.tasks.artifact_view(workbench.engineering,target,body)
+                        return self.engineering_reply(target,200,{**value,'job_id':body.get('job_id'),'artifact_name':body.get('artifact_name')})
                     if action=='task_bind':
                         if not operator:raise PermissionError('OPERATOR_REQUIRED')
                         return self.reply(200,workbench.engineering.tasks.bind(target,body.get('task_id'),body.get('max_candidates',3)))
                     if action=='submit':
-                        return self.reply(200,workbench.engineering.tasks.submit(workbench.engineering,target,body.get('job_id'),body.get('rationale')))
+                        return self.engineering_reply(target,200,workbench.engineering.tasks.submit(workbench.engineering,target,body.get('job_id'),body.get('rationale')))
                     if action=='eda_probe':return self.reply(200,workbench.engineering.eda.probe(target))
                     if action in ('eda_context','eda_bind'):
                         if not operator:raise PermissionError('OPERATOR_REQUIRED')
                         if action=='eda_context':return self.reply(200,workbench.engineering.eda.context(body.get('window_id')))
                         return self.reply(200,workbench.engineering.eda.bind(target,body.get('window_id'),body.get('project_uuid'),body.get('board_uuid')))
-                    if action=='skill':return self.reply(200,workbench.engineering.skill(target,body.get('skill_id'),actor['role']))
-                    if action=='run':return self.reply(202,workbench.engineering.submit(target,body,actor['role']))
+                    if action=='skill':return self.engineering_reply(target,200,workbench.engineering.skill(target,body.get('skill_id'),actor['role']))
+                    if action=='run':return self.engineering_reply(target,202,workbench.engineering.submit(target,body,actor['role']))
                     raise ValueError('ENGINEERING_ACTION_INVALID')
                 if path=='/api/assembly':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner
@@ -715,6 +737,19 @@ def main():
     workbench = Workbench(args.root)
     server = ThreadingHTTPServer(('127.0.0.1', args.port), handler(workbench))
     workbench.conversations.port=server.server_port
+    # Bind experiment attempts to loaded code, not only a mutable checkout.
+    import hashlib, marshal, os, sys
+    from . import provider as provider_module
+    receipt={'pid':os.getpid(),'started':time.time(),'python':sys.version,'port':args.port,
+        'provider_file':str(Path(provider_module.__file__).resolve()),
+        'provider_source_sha256':hashlib.sha256(Path(provider_module.__file__).read_bytes()).hexdigest(),
+        'provider_code_sha256':hashlib.sha256(marshal.dumps(provider_module.Provider.complete.__code__)).hexdigest(),
+        'server_source_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'authorized_study_stream_seconds':1200,'default_stream_seconds':provider_module.STREAM_SECONDS,
+        'keepalive_forwarded':True}
+    receipts=workbench.store.root/'runtime-receipts';receipts.mkdir(exist_ok=True)
+    (receipts/(str(os.getpid())+'.json')).write_text(json.dumps(receipt,indent=2))
+    (workbench.store.root/'active-runtime.json').write_text(json.dumps(receipt,indent=2))
     link = f'http://127.0.0.1:{args.port}/#access=' + (workbench.store.root / 'operator.token').read_text()
     (workbench.store.root / 'launch-url.txt').write_text(link)
     (workbench.store.root / 'launch-url.txt').chmod(0o600)

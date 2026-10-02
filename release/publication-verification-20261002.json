@@ -1,0 +1,86 @@
+{
+  "schema": "bf-publication-verification-v1",
+  "date": "2026-10-02",
+  "application": {
+    "command": "env npm_config_verify_deps_before_run=false BF_PI_ROOT=<isolated-local-pi> BF_CAD_PYTHON=<installed-cad-python> BF_CMSIS=<installed-cmsis> ./init.sh",
+    "init_exit_code": 1,
+    "python_test_exit_code": 0,
+    "python_tests": 482,
+    "sdk_typecheck": "passed",
+    "studio_typecheck_build": "passed",
+    "projection_samples": 2803,
+    "init_environment_limit": "After Python passed, pnpm attempted dependency auto-refresh and refused non-TTY removal. All remaining init stages completed explicitly using --config.verify-deps-before-run=false.",
+    "remaining_stage_exit_code": 0,
+    "log_sha256": "c3619e2c1faa4b3ee19f951fb99cc076c599914443ef2aba0f1b71504b877b66",
+    "remaining_stage_log_sha256": "b4859e07fd7bbad2cc424e56de9e40bf793e6e56c7e995b9a3aff35471809266"
+  },
+  "pi": {
+    "command": "npm run check",
+    "exit_code": 0,
+    "checked_files": 1306,
+    "source_packages_compiled": [
+      "bf-agent",
+      "bf-harness"
+    ],
+    "fixture_dependency_layout": "independent local clone of installed dependencies with exact staged BF source overlay",
+    "tested_source_hashes": [
+      {
+        "path": "packages/bf-agent/src/chat-product.ts",
+        "sha256": "f37db31d38c8c6b18392f4be514ac721ae54257e283dd66b1a68f1a9897ccbdb"
+      },
+      {
+        "path": "packages/bf-agent/src/chat-recall.ts",
+        "sha256": "02643c0826286443fc6f505c0fe6c760937f4798c6d6776ac6523c3d0076d5a4"
+      },
+      {
+        "path": "packages/bf-agent/src/chat-v2.ts",
+        "sha256": "3295c187d61d09e04e9e00d429a6f62d9190aea643573f92f26c3080517e12fa"
+      },
+      {
+        "path": "packages/bf-agent/src/chat.ts",
+        "sha256": "8e27142d27f48ede7ebf2a5d01a9cd1346523e202298ba27343c19768d0a10f5"
+      },
+      {
+        "path": "packages/bf-agent/src/main.ts",
+        "sha256": "a5b2ebe3e274200671c5d3ee3fcb707c18d33bbead13556ca45e0cf98ef836e7"
+      },
+      {
+        "path": "packages/bf-agent/src/research-method.ts",
+        "sha256": "fdd42082af404ca2fbeefbfdbb9b356c3ce48126af23b39be5a32f8b4284d483"
+      },
+      {
+        "path": "packages/bf-agent/tsconfig.json",
+        "sha256": "5e5c49620a58021f020b0f2f9cd6a85fa920495faba49dab615a8bb8dd24aeec"
+      },
+      {
+        "path": "packages/bf-harness/src/improver.ts",
+        "sha256": "edead00abf91b3c7ec6153d34bbbe86eb5aa22e91393cbf3ec8cbb6037219213"
+      },
+      {
+        "path": "packages/bf-harness/src/product.ts",
+        "sha256": "f67fd88e185db5dd380aed564c4bd7be49b776b0e2e239cbe46540220e43bc60"
+      },
+      {
+        "path": "packages/bf-harness/src/solver.ts",
+        "sha256": "8e6335647f17225d9dbda3db667850f78d673286d15bf4756bafae086ec78616"
+      },
+      {
+        "path": "packages/bf-harness/tsconfig.json",
+        "sha256": "64c65d3e08009e75f318faed13551202b5504a4f66b8fd63624b45ab4104e7d5"
+      }
+    ]
+  },
+  "first_attempt": {
+    "exit_code": 1,
+    "failures": 14,
+    "errors": 2,
+    "cause": "Sandbox cannot import Pi dependencies symlinked outside the allowed Pi directory",
+    "log_sha256": "99720d99e259ffc3d1b29f2c784b18b984d472fa2095f31b15fc73465734aafd",
+    "resolution": "Isolated dependency copy; no sandbox relaxation; full rerun"
+  },
+  "external_model_calls_during_publication": 0,
+  "new_formal_research_runs": 0,
+  "live_service_restarted": false,
+  "visual_browser_qa": "not performed in publication turn",
+  "claim_boundary": "Software verification and byte identity only; no physical qualification or Agent superiority claim"
+}

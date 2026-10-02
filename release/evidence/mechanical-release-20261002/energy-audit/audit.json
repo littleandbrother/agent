@@ -1,0 +1,224 @@
+{
+  "schema_version": "mechanical-release-audit-v1",
+  "source_hashes": {
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/runs/nominal/energy.json": {
+      "sha256": "8a737376c0c190ef250354ad4bb44e618a6f581d89f2c167c12267c0485c6563",
+      "bytes": 760
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/runs/nominal/design-spec.json": {
+      "sha256": "1520130e2782518e1114710b569ee82d1bd50dbdc7cd2e1b33f51411c399fd3b",
+      "bytes": 781
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/runs/nominal/waveform.csv": {
+      "sha256": "44131b538ae3e92684f0b0fef720c6431e1674d7b149c1213b874ef957da08f1",
+      "bytes": 706042
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/runs/nominal/result.json": {
+      "sha256": "15fbf815f83d777309a939d4ee87c611ae399134a8308be5eb3972be25dc1cd3"
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/mapping-cache/simulation-cache-v2/beam/d47343f71215a447060d4902e6115a57c4fc6dca972c70b61f4c18c6952f5cd9/checkpoint.json": {
+      "sha256": "e0cce969b8378fb7e54a05ca4a2d9de852902f2332ae3927605fa53c0825048e"
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/mapping-cache/simulation-cache-v2/beam/d47343f71215a447060d4902e6115a57c4fc6dca972c70b61f4c18c6952f5cd9/rom.json": {
+      "sha256": "854bd9eee771dc4136afd96b46d07d7864345d13343d4ffcca4189c9595735cf",
+      "bytes": 418
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/mapping-cache/simulation-cache-v2/force/1646051ae5bdc27883ff0e8cbe117fd74c50f8143c5696c1de89d4157ac101e1/checkpoint.json": {
+      "sha256": "8a30702f4c9a29265181bcbc869d4847dff635f7d2c3fe367134390faa0ac3fd"
+    },
+    "/Users/depengsu/.local/share/bf-agent-runtime/studies/door-integration-pilot-20261002/mapping-cache/simulation-cache-v2/force/1646051ae5bdc27883ff0e8cbe117fd74c50f8143c5696c1de89d4157ac101e1/force-table.npz": {
+      "sha256": "221d312fb8fee2804e9c28aa088420752d49aa07c33fc8936f0c2176bf4c9d58",
+      "bytes": 10386
+    }
+  },
+  "rom": {
+    "k": 87.2015383928396,
+    "mass": 0.008720428864016309,
+    "frequency_Hz": 15.915243335920728,
+    "theta": 0.00021680096711309201,
+    "cp": 1.7234553616929623e-08,
+    "mesh_delta": 0.0016338305504499937,
+    "scope": "static-condensed first-mode ROM; PZT-5A perfect bond; small deflection <=8mm; no contact/fatigue",
+    "calibration": "fresh native COMSOL stiffness/eigen/reciprocal actuation; not hardware calibration"
+  },
+  "sealed_native_energy_ledger": {
+    "initial_mechanical_piezo_J": 0.0007586372534327792,
+    "final_mechanical_piezo_J": 3.0570943240358805e-12,
+    "external_force_work_J": -0.0006628930616678013,
+    "mechanical_loss_J": 9.175362882026342e-05,
+    "pmic_port_energy_J": 3.990562149996516e-06,
+    "mechanical_piezo_residual_J": 1.3304642678909663e-09,
+    "relative_residual": 1.7537555160529106e-06,
+    "pmic_initial_storage_J": 0.0,
+    "diagnostic_source_energy_J": 0.0,
+    "load_energy_J": 2.2999946511069903e-19,
+    "cp_count": 1,
+    "pmic_internal_loss": "not independently observable from encrypted macro-model; full PMIC energy residual not certified",
+    "initial_state_handling": "Explicit capacitor/ROM ICs; LTspice UIC display-only zero row corrected in derived arrays, original RAW unchanged."
+  },
+  "fractions_of_initial_elastic_energy": {
+    "external_force_work_J": -0.8737945027986139,
+    "mechanical_loss_J": 0.12094532453433421,
+    "pmic_port_energy_J": 0.005260171619492067
+  },
+  "sampled_equilibrium_counts": [
+    1
+  ],
+  "minimum_stable_effective_stiffness_N_m": 77.21424394173593,
+  "controls": [
+    {
+      "control": "fixed_door",
+      "scope": "SciPy reciprocal ROM with 1 MOhm resistor; no PMIC/application verdict",
+      "status": "completed",
+      "initial_elastic_J": 0.0007586372534327792,
+      "resistor_energy_J": 2.0348663727509757e-26,
+      "magnetic_work_on_beam_J": 1.573558213391343e-14,
+      "damping_loss_J": 5.225547766694619e-26,
+      "final_stored_J": 0.0007586372534485542,
+      "peak_tip_mm": 4.171286377086507,
+      "peak_velocity_m_s": 3.895893929956094e-12,
+      "peak_voltage_V": 5.192612785916998e-10,
+      "relative_energy_residual": 5.200252878104798e-14,
+      "diagnostic_only": true,
+      "instant_removal_is_not_realizable_design": false,
+      "full_door_loading_work_observed": false
+    },
+    {
+      "control": "rotary_path",
+      "scope": "SciPy reciprocal ROM with 1 MOhm resistor; no PMIC/application verdict",
+      "status": "completed",
+      "initial_elastic_J": 0.0007586372534327792,
+      "resistor_energy_J": 5.2044726787812826e-05,
+      "magnetic_work_on_beam_J": -0.0006294247680213964,
+      "damping_loss_J": 7.716775849957675e-05,
+      "final_stored_J": 1.2729673209123057e-13,
+      "peak_tip_mm": 4.533883027072436,
+      "peak_velocity_m_s": 0.2150564879676257,
+      "peak_voltage_V": 32.243821106475444,
+      "relative_energy_residual": 8.303629008584113e-11,
+      "diagnostic_only": true,
+      "instant_removal_is_not_realizable_design": false,
+      "full_door_loading_work_observed": false
+    },
+    {
+      "control": "instant_force_removal",
+      "scope": "SciPy reciprocal ROM with 1 MOhm resistor; no PMIC/application verdict",
+      "status": "completed",
+      "initial_elastic_J": 0.0007586372534327792,
+      "resistor_energy_J": 0.00019942214996108,
+      "magnetic_work_on_beam_J": 0.0,
+      "damping_loss_J": 0.0005592151031185536,
+      "final_stored_J": 3.531404516702967e-13,
+      "peak_tip_mm": 4.171286377004429,
+      "peak_velocity_m_s": 0.3995425732399706,
+      "peak_voltage_V": 51.687316325006485,
+      "relative_energy_residual": 8.003208567000338e-15,
+      "diagnostic_only": true,
+      "instant_removal_is_not_realizable_design": true,
+      "full_door_loading_work_observed": false
+    }
+  ],
+  "capacitor_threshold_energy_bounds": [
+    {
+      "capacitance_uF": 10,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 71.06450000000001
+    },
+    {
+      "capacitance_uF": 10,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 127.51249999999999
+    },
+    {
+      "capacitance_uF": 22,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 156.3419
+    },
+    {
+      "capacitance_uF": 22,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 280.5275
+    },
+    {
+      "capacitance_uF": 47,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 334.00315
+    },
+    {
+      "capacitance_uF": 47,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 599.3087499999999
+    },
+    {
+      "capacitance_uF": 100,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 710.645
+    },
+    {
+      "capacitance_uF": 100,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 1275.125
+    },
+    {
+      "capacitance_uF": 220,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 1563.4189999999999
+    },
+    {
+      "capacitance_uF": 220,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 2805.275
+    },
+    {
+      "capacitance_uF": 330,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 2345.1285
+    },
+    {
+      "capacitance_uF": 330,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 4207.912499999999
+    },
+    {
+      "capacitance_uF": 1000,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 7106.45
+    },
+    {
+      "capacitance_uF": 1000,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 12751.25
+    },
+    {
+      "capacitance_uF": 2200,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 15634.19
+    },
+    {
+      "capacitance_uF": 2200,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 28052.75
+    },
+    {
+      "capacitance_uF": 4700,
+      "threshold_V": 3.77,
+      "ideal_charge_energy_uJ": 33400.315
+    },
+    {
+      "capacitance_uF": 4700,
+      "threshold_V": 5.05,
+      "ideal_charge_energy_uJ": 59930.875
+    }
+  ],
+  "interpretation_limits": [
+    "Negative magnetic work is energy leaving the beam/piezo subsystem; it is not a measured door-input efficiency.",
+    "Initial beam preload provenance and full loading/closing cycle are absent.",
+    "Equilibria only examine interpolated short-circuit static ROM within +/-8mm; absence of a sampled fold is not global stability proof.",
+    "Instant force removal isolates stored-energy availability, not a manufacturable mechanism.",
+    "Physical magnetic qualification remains failed; controls share the unqualified force table.",
+    "Capacitance-to-threshold bounds omit converter, ESR and load losses; cannot prove startup."
+  ],
+  "new_native_solver_calls": 0,
+  "new_model_calls_in_this_script": 0,
+  "sealed_apparatus_modified": false
+}

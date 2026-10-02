@@ -1,0 +1,67 @@
+{
+  "schema": "mechanical-assumption-review-v1",
+  "reviewer": "coordinator-independent-of-Pi-report",
+  "items": [
+    {
+      "id": "storage-capacitance",
+      "status": "premise-rejected",
+      "claim": "All referenced storage capacitors must be thousands of uF",
+      "facts": "ViPSN10uF; simulation papers22-330uF; bind node/topology/mission before selection"
+    },
+    {
+      "id": "startup-threshold",
+      "status": "corrected",
+      "fact": "LTC3588-1 3.3V-output UVLO rise4.73/5.05/5.37V min/typ/max",
+      "authority": "coordinator-local-datasheet, Pi fetch unsuccessful"
+    },
+    {
+      "id": "Pi-displacement",
+      "status": "rejected-initial-and-partially-corrected-prose",
+      "original_mm": 48.6,
+      "arithmetic_mm": 1.5358,
+      "factor_approximately": 31.64,
+      "physical_inference": "conditional energy-equivalent displacement; no general initial displacement bound"
+    },
+    {
+      "id": "ROM-domain",
+      "status": "unchanged-pending-physical-review",
+      "limit_abs_mm": 8,
+      "reason": "Neither literature arithmetic nor numerical energy residual qualifies a wider domain"
+    },
+    {
+      "id": "loading-history",
+      "status": "model-incomplete",
+      "fact": "Existing native task begins at static preload; full preceding driver work not recorded"
+    },
+    {
+      "id": "magnetic-path",
+      "status": "mechanism-probe-executed",
+      "fact": "Negative magnetic work in baseline; reversal changes sign and PMIC port extraction",
+      "success": false
+    },
+    {
+      "id": "magnet-frame",
+      "status": "metadata-corrected-and-native-rerun",
+      "accepted_run": "orientation-v3",
+      "superseded_metadata": "orientation-v2"
+    },
+    {
+      "id": "FEM-domain",
+      "status": "unresolved",
+      "fact": "Prior mesh error about11.3%; rotated trajectory independent confirmation missing"
+    },
+    {
+      "id": "loading-screen-first-attempt",
+      "status": "excluded",
+      "reason": "Endpoint force bug; original preserved; final tests and v3 correct angle(t)"
+    },
+    {
+      "id": "architecture-optimization",
+      "status": "not-admitted-to-formal-Pi-v2-task",
+      "reason": "Need full mechanical input and magnetic qualification before scored autonomous search"
+    }
+  ],
+  "old_pilot_mutated": false,
+  "hardware_validation": false,
+  "physical_success": false
+}

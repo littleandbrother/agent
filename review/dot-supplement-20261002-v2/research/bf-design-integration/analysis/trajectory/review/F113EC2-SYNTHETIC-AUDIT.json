@@ -1,0 +1,127 @@
+{
+  "schema": "bf-method-behavior-audit-v1",
+  "status": "RECORDED_EVIDENCE_ONLY",
+  "evidence_kind": "synthetic",
+  "owner": "synthetic-owner",
+  "protocol_hash": "8b06c8f5234426210350b5fff9aa3470350145e43a7131b426dec506b32e40f2",
+  "sources": {
+    "config": "a7648a41ece650ff473629bd14376ad98fd4bf3eeefd3fcf0841b7c19127bdff",
+    "delivery1": "9a345b41af68b4dfadb867be8822f35e41237a6a28feb5a17870d66972aa3cba",
+    "action1": "ab53d891040a839416938ec01a224be47fca2dceb0bd404b02f228f108877d8a",
+    "terminal1": "3d23c2e1ee1bc1710421710d757c60aee73841261aae1216bbb8bfe0502cab7a",
+    "feedback1": "9ba88675a94a037a62ecc74fb7bb951484a627e8ab0bc6443daa4e64701477a5",
+    "delivery2": "a95a23c7928ee62724ee681b78a1984168447c05c645c9c9d15ac7514bba567b",
+    "revision2": "cd7b21ea5d4cddf45f0b1c6d5ed236bea2806e66632bc25a776dfa18efa07fcb",
+    "action2": "9616d6f7d4f382e4c7744cb5b7e7e048a4a5aa3fd3b028cd822e382e5eb85d53",
+    "developer-patch": "37bef432bbb1233d558eb04f4a4f6af3cbe32ad36e71faa4f13ff8a6cb90e731"
+  },
+  "levels": {
+    "configuration_loaded": {
+      "status": "recorded",
+      "records": [
+        "config"
+      ]
+    },
+    "instruction_delivered": {
+      "status": "recorded",
+      "records": [
+        "delivery1",
+        "delivery2"
+      ]
+    },
+    "candidate_action_recorded": {
+      "status": "recorded",
+      "records": [
+        "action1",
+        "action2"
+      ]
+    },
+    "feedback_available": {
+      "status": "recorded",
+      "records": [
+        "feedback1"
+      ]
+    },
+    "feedback_linked_numeric_revision": {
+      "status": "recorded",
+      "records": [
+        {
+          "source": "action2",
+          "revision_source": "revision2",
+          "changes": {
+            "circuit.cin_uF": {
+              "before": 47.0,
+              "after": 22
+            }
+          },
+          "interpretation": "recorded feedback/action linkage; model reading and causality unproven"
+        }
+      ]
+    },
+    "terminal_result_bound": {
+      "status": "recorded",
+      "records": [
+        {
+          "source": "terminal1",
+          "status": "FAILED",
+          "verification": "sanitized receipt hash and identity only; external artifact bytes not provided",
+          "external_artifact_hash_verified": false
+        }
+      ]
+    }
+  },
+  "actions": [
+    {
+      "source": "action1",
+      "operation_id": "op1",
+      "dispatch": "acknowledged",
+      "changes_from_baseline": {},
+      "change_class": "numeric only; not architecture",
+      "retry": false
+    },
+    {
+      "source": "action2",
+      "operation_id": "op2",
+      "dispatch": "unknown",
+      "changes_from_baseline": {
+        "circuit.cin_uF": {
+          "before": 47.0,
+          "after": 22
+        }
+      },
+      "change_class": "numeric only; not architecture",
+      "retry": false
+    }
+  ],
+  "distinct_operations": 2,
+  "operation_ids": [
+    "op1",
+    "op2"
+  ],
+  "candidate_action_records": 2,
+  "cost": {
+    "status": "unknown",
+    "records": [],
+    "aggregate_usd": null
+  },
+  "manual_intervention": {
+    "status": "unknown",
+    "records": []
+  },
+  "h_changes": [
+    {
+      "source": "developer-patch",
+      "authorship": "developer",
+      "artifact_sha256": "e89f3a7bd657dd4ffdfebd5637d9a5bfba6256a53b9601e242ccfa9fc4f5f374",
+      "classification": "developer patch; not participant H1",
+      "executable_H1_verified": false,
+      "H_experiment_performed": false
+    }
+  ],
+  "notes": [],
+  "model_read_feedback": "unknown; availability or explicit linkage is not proof of reading",
+  "scientific_qualification": "not assessed or promoted",
+  "method_benefit": "not established",
+  "causality": "not established",
+  "limits": "Hashes bind supplied sanitized records, not authentic authorship or omitted history. No external artifact bytes, raw transcript, runtime execution or scientific score."
+}

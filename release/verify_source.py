@@ -1,10 +1,14 @@
 """Verify exported source bytes, without reading credentials or running models."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parents[1]
-manifest = json.loads((ROOT / "release/source-manifest.json").read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--manifest', default='release/source-manifest.json')
+args = parser.parse_args()
+manifest = json.loads((ROOT / args.manifest).read_text())
 failures = []
 for entry in manifest["files"]:
     path = (ROOT / entry["path"]).resolve()

@@ -1,32 +1,44 @@
 {
   "schema_version": "door-design-pilot-v1",
-  "id": "door-design-pilot-v1",
-  "baseline_release": "338d60384d5805abf1e02252a4513860066a2c39",
+  "id": "door-integration-pilot-20261002",
+  "baseline_release": "87e7d75b4c5cd13c96560b8aaa4168a292ddc3c9",
   "task_id": "door-event-nominal-v1",
-  "purpose": "development pilot: legal feedback-driven revision and bounded work-domain mapping",
+  "purpose": "New cache identity integration pilot; two fresh native starting states, four actual Pi trajectories; not R/Q comparison",
   "formal_method_comparison": false,
-  "native_total_wall_s": 21600,
+  "native_total_wall_s": 10800,
   "candidate_wall_s": 3600,
   "mapping_candidates": [
-    {"id":"nominal","candidate":{}},
-    {"id":"gap28","candidate":{"mechanical":{"gap_mm":28}}},
-    {"id":"gap36","candidate":{"mechanical":{"gap_mm":36}}},
-    {"id":"gap40","candidate":{"mechanical":{"gap_mm":40}}},
-    {"id":"gap44","candidate":{"mechanical":{"gap_mm":44}}},
-    {"id":"gap50","candidate":{"mechanical":{"gap_mm":50}}},
-    {"id":"cin10","candidate":{"circuit":{"cin_uF":10}}},
-    {"id":"cin22","candidate":{"circuit":{"cin_uF":22}}},
-    {"id":"cin100","candidate":{"circuit":{"cin_uF":100}}},
-    {"id":"cout22","candidate":{"circuit":{"cout_uF":22}}},
-    {"id":"interval200","candidate":{"firmware":{"interval_ms":200}}},
-    {"id":"gap40-cin10-cout22","candidate":{"mechanical":{"gap_mm":40},"circuit":{"cin_uF":10,"cout_uF":22}}}
+    {
+      "id": "nominal",
+      "candidate": {}
+    },
+    {
+      "id": "gap28",
+      "candidate": {
+        "mechanical": {
+          "gap_mm": 28
+        }
+      }
+    }
   ],
-  "cold_controls": ["nominal-cold-1", "nominal-cold-2"],
+  "cold_controls": [],
   "pi_trials": [
-    {"id":"baseline-r1","initial":"nominal"},
-    {"id":"domain-r1","initial":"gap28"},
-    {"id":"baseline-r2","initial":"nominal"},
-    {"id":"domain-r2","initial":"gap28"}
+    {
+      "id": "baseline-r1",
+      "initial": "nominal"
+    },
+    {
+      "id": "domain-r1",
+      "initial": "gap28"
+    },
+    {
+      "id": "baseline-r2",
+      "initial": "nominal"
+    },
+    {
+      "id": "domain-r2",
+      "initial": "gap28"
+    }
   ],
   "pi_max_candidates_per_trial": 3,
   "pi_max_wall_s_per_trial": 2700,
@@ -37,5 +49,14 @@
   "cache_policy": "Mapping has its own cache; two cold controls each have an empty cache. Each Pi owner has an isolated cache. Report logical invocations and actual wall/archives separately; no speedup claim.",
   "intervention_policy": "No operator-chosen next candidate during a Pi trajectory; any runtime repair or prompt continuation is recorded as intervention. No held-out method comparison in this pilot.",
   "p3_trigger": "Use mapping and real Pi failures to select one physical architecture freedom only after this pilot; no automatic broadening.",
-  "p4_trigger": "Useful/ineffective/boundary candidates and at least one complete feedback trajectory; physical ranking gates remain explicit."
+  "p4_trigger": "Useful/ineffective/boundary candidates and at least one complete feedback trajectory; physical ranking gates remain explicit.",
+  "integration_sources": {
+    "dot": "4be17f5ff3d8fb073029be6a7cef165284f07bd9",
+    "local_glass": "BFA-034"
+  },
+  "method": {
+    "id": "strong_generic",
+    "policy_version": "bf-method-policy-v2-mainline",
+    "candidate_opportunities": 3
+  }
 }

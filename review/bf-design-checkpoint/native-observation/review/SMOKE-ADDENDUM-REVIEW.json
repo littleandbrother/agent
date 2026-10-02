@@ -1,0 +1,71 @@
+{
+  "schema": "independent-smoke-addendum-review-v1",
+  "reviewed_at_utc": "2026-10-01T16:07:14.502528+00:00",
+  "decision": "PASS_STATIC_ADDITIVE_DOUBLE_RAW_SMOKE_DEFINITION",
+  "files": [
+    {
+      "path": "smoke/rc_double_smoke.cir",
+      "sha256": "b7c5775db6aed4b5a94e36e795f3690adada6c6cecd63f53953224e83e926287",
+      "bytes": 323
+    },
+    {
+      "path": "SMOKE-QUALIFICATION-ADDENDUM.md",
+      "sha256": "58c00781b7ca57eb64a4ec0c94dbd2e4d16364bb1e165fb28c8e9980651b842d",
+      "bytes": 1860
+    },
+    {
+      "path": "EXACT-PLAN.json",
+      "sha256": "f4813037523ae580d3ada28a2c9dfebb36c030316c139e2c5b847568a47bafb9",
+      "bytes": 10511
+    },
+    {
+      "path": "PROSPECTIVE-SOURCE-MANIFEST.json",
+      "sha256": "eb14c39bfdb33ca0fc6096bcd1af886f2d2ea806ecddf14617e1cbec3d4b67c5",
+      "bytes": 4380
+    }
+  ],
+  "original_smoke": {
+    "sha256": "01e646b5cedcf0fca9c88b9df68047770a72132418d6d69342d076469fb87983",
+    "unchanged": true
+  },
+  "operational_diff": [
+    {
+      "original": ".options plotwinsize=0",
+      "additive": ".options plotwinsize=0 numdgt=15"
+    }
+  ],
+  "unchanged_circuit": {
+    "R_ohm": 1000,
+    "C_F": 1e-06,
+    "tau_s": 0.001,
+    "source_PULSE": "0 1 0 1n 1n 100m 200m",
+    "stop_s": 0.01,
+    "maxstep_s": 1e-05,
+    "measurement_times_s": [
+      0.001,
+      0.005,
+      0.01
+    ]
+  },
+  "analytic_orientation_only": {
+    "ideal_instantaneous_unit_step_values_V": [
+      0.6321205588285577,
+      0.9932620530009145,
+      0.9999546000702375
+    ],
+    "note": "Analytic guidance only, not simulated values or fixed native qualification. Actual source has a1ns linear rise; retain full-resolution sample brackets and native measurements."
+  },
+  "runtime_qualification_required": [
+    "Authorized supported runtime and actual executable/deck identity",
+    "Completed native log and unmodified complete RAW",
+    "Reader metadata explicitly confirms real point-major all-double profile",
+    "Actual RC response and native measurements independently checked against full-resolution RAW",
+    "No PMIC launch from this additive file or review receipt"
+  ],
+  "native_runs": 0,
+  "scientific_solves": 0,
+  "execution_authorized": false,
+  "main_review_addendum_sha256_unchanged": "227ed707c80130d80843421f28d4a13b3a4030461f29ee1b9cfd16164b1797ce",
+  "main_plan_and_source_seal_unchanged": true,
+  "scope": "Two additive smoke-definition files only; no changes to any completed review, four PMIC decks, plan or source seal. Final package manifest must include these additions."
+}

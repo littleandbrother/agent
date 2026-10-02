@@ -9,11 +9,14 @@ from pathlib import Path
 from .store import canonical
 from .recovery import Recovery, ObservedHTTPSHandler, is_not_sent
 from .context import ContextArchive, REQUEST_BYTES, project_interactive
+from .request_evidence import describe as describe_request
 
 MODEL='deepseek-flash'
 RATE={'input_usd_per_million':.30,'output_usd_per_million':1.20,'cache_hit_usd_per_million':.006}
 from .runtime_config import KEY_PATH
 PRICING_SOURCE='https://api-docs.deepseek.com/quick_start/pricing/'
+STREAM_SECONDS=300
+STREAM_BYTES=2000000
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,*args,**kwargs):raise ValueError('PROVIDER_REDIRECT_DENIED')
@@ -32,6 +35,8 @@ class Provider:
               usage TEXT, response_hash TEXT, error TEXT);
             CREATE TABLE IF NOT EXISTS model_request_context(request_id TEXT PRIMARY KEY,owner TEXT NOT NULL,
               message_id TEXT NOT NULL,created REAL NOT NULL,projection TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS model_request_evidence(request_id TEXT PRIMARY KEY,owner TEXT NOT NULL,
+              created REAL NOT NULL,wire TEXT NOT NULL,receipt TEXT NOT NULL);
             ''')
             # Conservative engineering caps inside the user's <$0.20 / <$3 bounds.
             db.execute('INSERT OR IGNORE INTO model_limits VALUES (1,2.90,.19,9000000,?)',(time.time()+6*3600,))
@@ -88,7 +93,7 @@ class Provider:
             self.recovery.check_window(db,owner,grant,limit)
             rows=list(db.execute('SELECT * FROM model_requests'))
             resolved=self.recovery.resolved(db)
-            if any(r['status']=='UNKNOWN' and r['id'] not in resolved for r in rows):raise ValueError('PROVIDER_USAGE_UNKNOWN_STOP')
+            if self.recovery.unknown_blockers(db,owner):raise ValueError('PROVIDER_USAGE_UNKNOWN_STOP')
             if any(r['error']=='PROVIDER_RESERVATION_EXCEEDED' for r in rows):raise ValueError('PROVIDER_RESERVATION_EXCEEDED')
             held=sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows)
             used_tokens=sum(json.loads(r['usage'])['total_tokens'] if r['usage'] else 0 for r in rows)
@@ -114,28 +119,65 @@ class Provider:
             if used_tokens+pending_tokens+input_bound+output>limit['max_tokens']:raise ValueError('MODEL_TOKEN_BUDGET')
             db.execute('INSERT INTO model_requests VALUES (?,?,?,?,?,?,?,NULL,NULL,NULL)',
                        (request_id,owner,time.time(),hashlib.sha256(raw).hexdigest(),reservation,0.,'DISPATCHED'))
+            evidence=describe_request(db,owner,body,raw)
+            evidence['request_id']=request_id
+            db.execute('INSERT INTO model_request_evidence VALUES(?,?,?,?,?)',
+                       (request_id,owner,time.time(),raw.decode(),canonical(evidence)))
             if lease:
                 db.execute('INSERT INTO model_request_context VALUES(?,?,?,?,?)',
                            (request_id,owner,lease['message_id'],time.time(),canonical({**projection,'max_output_tokens':output,'wire_sha256':hashlib.sha256(raw).hexdigest()})))
-        self.store.event(owner,owner,'model_dispatched',{'request_id':request_id,'reserved_usd':reservation,'model_id':MODEL})
+        self.store.event(owner,owner,'model_dispatched',{'request_id':request_id,'reserved_usd':reservation,'model_id':MODEL,
+            'request_evidence_sha256':hashlib.sha256(canonical(evidence).encode()).hexdigest()})
         req=urllib.request.Request('https://api.deepseek.com/chat/completions',data=raw,
             headers={'Authorization':'Bearer '+KEY_PATH.read_text().strip(),'Content-Type':'application/json'})
-        settled=False
+        with self.store.connect() as db:
+            continuation=self.recovery.usage_continuation(db,owner=owner)
+        stream_seconds=min(1200,max(1,continuation['expires']-time.time())) if continuation else STREAM_SECONDS
+        settled=False;observed_final_usage=None;chunks=[]
+        transport={'request_id':request_id,'provider_request_id':None,'bytes':0,
+                   'time_limit_s':stream_seconds,'byte_limit':STREAM_BYTES}
+        def settle_usage(usage,data,output_error=None):
+            nonlocal settled
+            if not isinstance(usage,dict) or any(type(usage.get(k)) is not int or usage[k]<0 for k in ['prompt_tokens','completion_tokens','total_tokens']):
+                raise ValueError('PROVIDER_USAGE_MISSING')
+            if usage['prompt_tokens']+usage['completion_tokens']!=usage['total_tokens']:
+                raise ValueError('PROVIDER_USAGE_INCONSISTENT')
+            charge=(usage['prompt_tokens']*.30+usage['completion_tokens']*1.20)/1000000
+            violation='PROVIDER_RESERVATION_EXCEEDED' if charge>reservation else 'PROVIDER_TOKEN_BOUND_VIOLATION' if usage['prompt_tokens']>input_bound or usage['completion_tokens']>output else None
+            with self.store.connect() as db:
+                db.execute("UPDATE model_requests SET status='SETTLED',charged=?,usage=?,response_hash=?,error=? WHERE id=?",
+                           (charge,canonical(usage),hashlib.sha256(data).hexdigest(),violation or output_error,request_id))
+            settled=True
+            self.store.event(owner,owner,'model_settled',{'request_id':request_id,'upper_bound_usd':charge,'usage':usage,'output_error':violation or output_error})
+            return violation
         try:
             with urllib.request.build_opener(NoRedirect(),ObservedHTTPSHandler()).open(req,timeout=90) as response:
                 if on_chunk:
-                    chunks=[];size=0;started=time.monotonic();usage=None;done=False
+                    size=0;started=time.monotonic();usage=None;done=False
                     for line in response:
                         size+=len(line)
-                        if size>2000000 or time.monotonic()-started>90:raise ValueError('PROVIDER_STREAM_LIMIT')
+                        transport.update(bytes=size,elapsed_s=time.monotonic()-started)
+                        if size>STREAM_BYTES or transport['elapsed_s']>stream_seconds:raise ValueError('PROVIDER_STREAM_LIMIT')
+                        if line.startswith(b':'):
+                            try:on_chunk(None)  # SSE keepalive, never model content or usage
+                            except (BrokenPipeError,ConnectionResetError):pass
                         if not line.startswith(b'data:'):continue
                         raw_chunk=line[5:].strip()
                         if raw_chunk==b'[DONE]':done=True;break
                         chunk=json.loads(raw_chunk)
                         if chunk.get('error'):raise ValueError('PROVIDER_STREAM_ERROR')
                         if chunk.get('model')!=MODEL:raise ValueError('RESPONSE_MODEL_ID_MISMATCH')
+                        if transport['provider_request_id'] is None and chunk.get('id'):
+                            transport['provider_request_id']=chunk['id']
+                            self.store.event(owner,owner,'provider_transport_started',dict(transport))
                         chunks.append(chunk)
-                        if chunk.get('usage'):usage=chunk['usage']
+                        if chunk.get('usage'):
+                            usage=chunk['usage']
+                            choices=chunk.get('choices',[])
+                            if not choices or any(c.get('finish_reason') for c in choices):
+                                observed_final_usage=usage
+                                self.store.event(owner,owner,'provider_terminal_usage',
+                                    {**transport,'usage':usage})
                         # A disconnected browser/SDK does not cancel usage settlement.
                         try:on_chunk(chunk)
                         except (BrokenPipeError,ConnectionResetError):pass
@@ -147,25 +189,24 @@ class Provider:
                     result=json.loads(data)
             usage=result.get('usage')
             if result.get('model')!=MODEL:raise ValueError('RESPONSE_MODEL_ID_MISMATCH')
-            if not isinstance(usage,dict) or any(type(usage.get(k)) is not int or usage[k]<0 for k in ['prompt_tokens','completion_tokens','total_tokens']):
-                raise ValueError('PROVIDER_USAGE_MISSING')
-            if usage['prompt_tokens']+usage['completion_tokens']!=usage['total_tokens']:
-                raise ValueError('PROVIDER_USAGE_INCONSISTENT')
-            charge=(usage['prompt_tokens']*.30+usage['completion_tokens']*1.20)/1000000
-            violation='PROVIDER_RESERVATION_EXCEEDED' if charge>reservation else 'PROVIDER_TOKEN_BOUND_VIOLATION' if usage['prompt_tokens']>input_bound or usage['completion_tokens']>output else None
             # A rejected output can still have known billing. Settle observed
             # usage first instead of converting it to an UNKNOWN global block.
-            with self.store.connect() as db:
-                db.execute("UPDATE model_requests SET status='SETTLED',charged=?,usage=?,response_hash=?,error=? WHERE id=?",
-                           (charge,canonical(usage),hashlib.sha256(data).hexdigest(),violation,request_id))
-            settled=True
-            self.store.event(owner,owner,'model_settled',{'request_id':request_id,'upper_bound_usd':charge,'usage':usage,'output_error':violation})
+            violation=settle_usage(usage,data)
+            self.store.event(owner,owner,'provider_transport_completed',{**transport,'settled':True})
             if violation:raise ValueError(violation)
             return result
         except Exception as exc:
-            # Unknown billing is held in full and stops dispatch; never assume free.
+            # A final provider usage chunk followed by a missing DONE marker is
+            # known billing with failed output. It is not a successful answer.
+            if not settled and observed_final_usage is not None:
+                try:settle_usage(observed_final_usage,canonical(chunks).encode(),str(exc)[:200])
+                except ValueError:pass  # invalid usage still retains UNKNOWN
+            # Unknown billing stays reserved; only an explicit study amendment permits continuation.
             if not settled:
                 with self.store.connect() as db:
                     status='NOT_SENT' if is_not_sent(exc) else 'UNKNOWN'
                     db.execute("UPDATE model_requests SET status=?,error=? WHERE id=?",(status,type(exc).__name__+': '+str(exc)[:200],request_id))
+            self.store.event(owner,owner,'provider_transport_failed',
+                {**transport,'settled':settled,'error':type(exc).__name__+': '+str(exc)[:200],
+                 'automatic_retry':False})
             raise

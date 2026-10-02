@@ -81,6 +81,8 @@ class Engineering:
         self.eda=JLCEDA(self)
         from .simulation_tasks import SimulationTasks
         self.tasks=SimulationTasks(self.store)
+        from .tool_responses import ToolResponses
+        self.responses=ToolResponses(self)
 
     def authorize(self,owner,operator=False):
         if operator:return
@@ -113,6 +115,8 @@ class Engineering:
             history=[j for j in self.jobs(owner) if j['engine']==item['id']] if owner else []
             item.update(runnable=item['installed'],probe_status='not_probed',last_execution=history[0]['status'] if history else None)
         result['task_binding']=self.tasks.binding(owner) if owner else None
+        from .research_methods import profile, capabilities
+        result['research_method']={'profile':profile(), 'capabilities':capabilities()} if result['task_binding'] else None
         return result
 
     def event(self,owner,job,kind,data):

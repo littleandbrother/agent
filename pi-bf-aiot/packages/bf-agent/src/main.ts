@@ -34,7 +34,7 @@ const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify
 const api = async (route: string, body?: unknown) => {
 	const response = await fetch(config.service + route, {
 		method: body === undefined ? "GET" : "POST",
-		headers: { Authorization: "Bearer " + config.token, "Content-Type": "application/json" },
+		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
 		...(body === undefined ? {} : { body: JSON.stringify(body) }),
 		signal: AbortSignal.timeout(100000),
 	});
@@ -54,7 +54,7 @@ const compact = (job: any) => ({
 });
 if (config.mode === "solve") {
 	for (const [operation, pending] of Object.entries(state.pending) as [string, any][]) {
-		const job = await api("/api/operations/" + encodeURIComponent(operation));
+		const job = await api(`/api/operations/${encodeURIComponent(operation)}`);
 		if (job.status === "NOT_SUBMITTED") {
 			state.pending[operation] = { ...pending, status: "NOT_SUBMITTED" };
 			continue;
@@ -112,10 +112,10 @@ const tools = [
 		executionMode: "sequential",
 		parameters: Type.Object({ job_id: Type.String() }),
 		async execute(_id, { job_id }) {
-			let job = await api("/api/jobs/" + encodeURIComponent(job_id));
+			let job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			for (let i = 0; i < 80 && ["QUEUED", "RUNNING"].includes(job.status); i++) {
 				await new Promise((resolve) => setTimeout(resolve, 250));
-				job = await api("/api/jobs/" + encodeURIComponent(job_id));
+				job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			}
 			for (const [op, pending] of Object.entries(state.pending) as [string, any][]) {
 				if (pending.job_id === job_id) state.pending[op] = { ...pending, status: job.status };
@@ -146,7 +146,7 @@ const tools = [
 			view: Type.Union([Type.Literal("summary"), Type.Literal("decisions"), Type.Literal("energy")]),
 		}),
 		async execute(_id, { job_id, view }) {
-			const job = await api("/api/jobs/" + encodeURIComponent(job_id));
+			const job = await api(`/api/jobs/${encodeURIComponent(job_id)}`);
 			if (!job.result) throw new Error("RUN_NOT_COMPLETE");
 			return reply(
 				view === "summary"
@@ -177,7 +177,7 @@ const runtime = await ModelRuntime.create({
 	modelsPath: path.join(cwd, ".pi/models.json"),
 });
 runtime.registerProvider("bf-deepseek", {
-	baseUrl: config.service + "/v1",
+	baseUrl: `${config.service}/v1`,
 	api: "openai-completions",
 	apiKey: config.token,
 	models: [
@@ -246,9 +246,9 @@ const stop = async () => {
 	await session.abort();
 	for (const pending of Object.values(state.pending) as any[]) {
 		if (!pending.job_id) continue;
-		const job = await api("/api/jobs/" + encodeURIComponent(pending.job_id));
+		const job = await api(`/api/jobs/${encodeURIComponent(pending.job_id)}`);
 		if (["QUEUED", "RUNNING"].includes(job.status))
-			await api("/api/jobs/" + encodeURIComponent(pending.job_id) + "/cancel", {});
+			await api(`/api/jobs/${encodeURIComponent(pending.job_id)}/cancel`, {});
 	}
 	save();
 };

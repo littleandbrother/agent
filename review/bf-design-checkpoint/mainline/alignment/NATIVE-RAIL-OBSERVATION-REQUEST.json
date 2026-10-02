@@ -1,0 +1,147 @@
+{
+  "boundaries": [
+    "Capacitor negative power shows that capacitor releases energy; it does not identify destination/backflow without port current accounting",
+    "Expose PMIC port currents using documented external zero-volt current-sense elements if transfer direction is claimed; doing so creates a distinct fixture",
+    "No claim about real PMIC rail transient/backflow from datasheet static ideal equations",
+    "Existing rail-free RAW cannot be post-processed into unrecorded states; import remains useful for original metrics",
+    "A new physical startup surrogate, if justified, requires a new model/schema and qualification, not numerical event-v2 relabeling"
+  ],
+  "current_observability": {
+    "rail_charge_discharge_observable": false,
+    "raw_header_still_required": true,
+    "recommended_missing": [
+      "I(Cstorage)",
+      "I(Cout)",
+      "I(L1)",
+      "I(Idiagnostic)"
+    ],
+    "required_missing": [
+      "V(vin2)",
+      "V(cap)",
+      "V(vin,cap)",
+      "I(Ccap)",
+      "I(Cvin2)"
+    ],
+    "saved": [
+      "V(q)",
+      "V(u)",
+      "V(force)",
+      "V(angle)",
+      "V(pz1,pz2)",
+      "V(vin)",
+      "V(out)",
+      "V(pgood)",
+      "I(Vsense)",
+      "I(Bload)"
+    ],
+    "subcircuit_port_order_verified": false
+  },
+  "energy_definitions": {
+    "E_cap_J": "0.5*1e-6*(V(vin)-V(cap))^2",
+    "E_vin2_J": "0.5*4.7e-6*V(vin2)^2",
+    "signed_cap_power_W": "(V(vin)-V(cap))*I(Ccap), positive current direction from element declaration vin\u2192cap",
+    "signed_vin2_power_W": "V(vin2)*I(Cvin2), positive direction vin2\u2192ground"
+  },
+  "fixtures": [
+    {
+      "can_reuse_original_historical_results": false,
+      "change": "Add saves only to a copied matched/native baseline deck",
+      "id": "original-baseline-observation-only",
+      "purpose": "Observe rail charging relative to measured UVLO/Vout/PGOOD in original trajectory"
+    },
+    {
+      "change": "Separate electrical diagnostic: explicit Vin drive0\u21924V with finite source impedance, no mechanical forcing, fixed original passive/load components",
+      "id": "sub-UVLO-ramp",
+      "parameter_gate": "Pick bounded ramp, Rsource and load profile prospectively; no threshold tuning after results",
+      "purpose": "Observe rail charge before native conversion; bind actual current, source work and absence/presence of Vout rather than infer from nominal threshold"
+    },
+    {
+      "change": "Separate diagnostic: charge through finite impedance then OPEN source branch; keep Vin storage, rail capacitors, output/load and PMIC connected",
+      "id": "charge-and-disconnect",
+      "parameter_gate": "Do not replace disconnection with a zero-volt sink; declare switch leakage and timing",
+      "purpose": "Observe retained charge and discharge after source removal; distinguish energy decay from external source sinking"
+    },
+    {
+      "change": "Optional separate externally driven Vin ramp-down with known sink path",
+      "id": "driven-down-sensitivity",
+      "purpose": "Quantify source-induced discharge distinct from source-open case; not equivalent to free decay"
+    }
+  ],
+  "interface_sidecar": {
+    "collection_flag": "--include-model-interface",
+    "missing_behavior": "Record missing; never infer macro port order from physical package pin numbers; do not download/copy vendor model or license",
+    "optional_filename": "verification/closed-simulation-20260930/native-model-interface.json",
+    "placement": "Only under the explicit operator workbench root; collector may copy only this supplied sidecar, not scan outside root; this is a new proposed interface, not an existing338d603 artifact",
+    "required_content": [
+      "Exact original single-line .SUBCKT LTC3588-1 declaration and ordered_ports; wrapped declarations remain unsupported until a new schema can preserve their exact continuation lines; no model body",
+      "SHA256 of the complete originating model file computed by its authorized local owner",
+      "Tool/model version and declaration provenance, or equivalent independently verified interface metadata",
+      "Mapping from declared port order to the exact XU1 instance only after verification"
+    ],
+    "schema_version": "native-model-interface-v1"
+  },
+  "minimal_new_save": [
+    "V(vin2)",
+    "V(cap)",
+    "V(vin,cap)",
+    "I(Ccap)",
+    "I(Cvin2)"
+  ],
+  "new_evidence": [
+    "Original and modified decks with diff, checksums and explicit initial conditions",
+    "Native RAW header listing saved rail variables and complete rail samples",
+    "Native log, vendor/tool identity, source/load traces, source energy and capacitor-energy ledgers",
+    "Original/fine maxstep and tolerance results; count thresholds only from actual observed traces"
+  ],
+  "original_source": {
+    "lines": [
+      48,
+      93
+    ],
+    "path": "/workspace/shared/current-source-reconciliation-20261001/checkout/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py",
+    "sha256": "c6e09edd277f8014fc6c410df70ec967c71863108fcc4e1fe12362bb49784782",
+    "source": "upstream_solver",
+    "url": "https://github.com/littleandbrother/agent/blob/338d60384d5805abf1e02252a4513860066a2c39/battery-world/packages/python/bfworld/src/bfworld/agentlab/simulation_chain/solver.py"
+  },
+  "recommended_new_save": [
+    "I(Cstorage)",
+    "I(Cout)",
+    "I(L1)",
+    "I(Idiagnostic)"
+  ],
+  "required_first": [
+    "Exact .SUBCKT LTC3588-1 port declaration and mapped XU1 instance; package pin numbers are not a substitute",
+    "Licensed local tool availability and operator-authorized execution",
+    "Bound vendor model and executable hashes; do not upload encrypted model or license files"
+  ],
+  "save_only_generator": "python -B src/rail_observation.py --input retained/system.cir --output NEW/observation-only.cir",
+  "schema_version": "native-rail-observability-request-v1",
+  "status": "requires_new_native_evidence_no_execution_authorized_or_performed",
+  "trace_settling_contract": {
+    "columns": [
+      "time_s",
+      "vin_V",
+      "cap_V",
+      "vin2_V",
+      "icap_A",
+      "ivin2_A",
+      "source_connected"
+    ],
+    "criterion": "After last source-state change, observe two full windows W and2W. Both rails in both windows must pass voltage peak-to-peak, linear slope\u00d7window span, energy drift and signed integral-current versus capacitor-charge consistency. At least8 full-resolution samples and declared maximum sample spacing in each window. Short trace is insufficient, not settled.",
+    "evaluator": "src/settling_validator.py",
+    "meaning": "Settled only over observed declared windows; no guessed fixed startup/discharge time, asymptotic claim or identification of released-energy destination",
+    "no_native_result": "Four synthetic tests verify validator behavior only; their numeric windows/tolerances do not become native criteria",
+    "required_parameters": [
+      "window_s",
+      "voltage_peak_to_peak_tol_V",
+      "slope_voltage_change_tol_V",
+      "energy_drift_tol_J",
+      "charge_consistency_tol_C",
+      "max_sample_interval_s",
+      "cap_F",
+      "vin2_F",
+      "phase"
+    ],
+    "selection": "Fixture owner must bind all tolerances and window before native execution; no numeric defaults or result-dependent relaxation"
+  }
+}

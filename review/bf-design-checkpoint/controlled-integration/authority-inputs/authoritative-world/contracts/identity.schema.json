@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "continuation_checkpoint_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "design_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "experimental_unit": {
+      "enum": [
+        "independent_design_run",
+        "same_state_continuation"
+      ]
+    },
+    "initial_state_binding": {
+      "enum": [
+        "realized_computational_state",
+        "recipe_only_not_run_evidence"
+      ]
+    },
+    "initial_state_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "input_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "model_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "program_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "run_identity": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "bf-run-identity-v1"
+    },
+    "solver_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "task_contract_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "world_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "world_id",
+    "design_id",
+    "task_contract_id",
+    "model_id",
+    "solver_id",
+    "program_id",
+    "source_id",
+    "input_id",
+    "initial_state_id",
+    "initial_state_binding",
+    "continuation_checkpoint_id",
+    "experimental_unit",
+    "run_identity"
+  ],
+  "type": "object"
+}

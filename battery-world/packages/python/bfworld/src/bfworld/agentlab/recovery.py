@@ -45,7 +45,37 @@ class Recovery:
             CREATE TABLE IF NOT EXISTS research_model_studies(protocol TEXT PRIMARY KEY,created REAL NOT NULL,
               expires REAL NOT NULL,max_usd REAL NOT NULL,model TEXT NOT NULL,authorization TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS research_model_owners(owner TEXT PRIMARY KEY,protocol TEXT NOT NULL,trial TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS research_usage_continuations(protocol TEXT PRIMARY KEY,
+              created REAL NOT NULL,expires REAL NOT NULL,authorization TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS research_usage_carryforwards(protocol TEXT NOT NULL,
+              request_id TEXT NOT NULL,original_row_hash TEXT NOT NULL,authorization TEXT NOT NULL,
+              created REAL NOT NULL,PRIMARY KEY(protocol,request_id));
             ''')
+
+    def usage_continuation(self, db, owner=None, protocol=None):
+        if protocol is None:
+            row = db.execute('SELECT protocol FROM research_model_owners WHERE owner=?', (owner,)).fetchone()
+            if not row: return None
+            protocol = row['protocol']
+        row = db.execute('''SELECT c.* FROM research_usage_continuations c
+            JOIN research_model_studies s ON s.protocol=c.protocol
+            WHERE c.protocol=? AND c.expires>? AND s.expires>?''', (protocol,time.time(),time.time())).fetchone()
+        return dict(row) if row else None
+
+    def unknown_blockers(self, db, owner=None):
+        policy = self.usage_continuation(db, owner=owner)
+        allowed = {r['owner'] for r in db.execute('SELECT owner FROM research_model_owners WHERE protocol=?',
+                   (policy['protocol'],))} if policy else set()
+        # A new exploratory study may explicitly carry a known historical liability.
+        # This is not a usage resolution: the original row and reservation stay intact,
+        # and Provider still counts them against the global monetary ceiling.
+        carried = {r['request_id']:r['original_row_hash'] for r in db.execute(
+            'SELECT * FROM research_usage_carryforwards WHERE protocol=? AND authorization<>?',
+            (policy['protocol'],''))} if policy else {}
+        resolved = self.resolved(db)
+        return [dict(r) for r in db.execute("SELECT * FROM model_requests WHERE status='UNKNOWN'")
+                if r['id'] not in resolved and r['owner'] not in allowed
+                and carried.get(r['id']) != identity(dict(r))]
 
     def resolved(self, db):
         return {r['request_id'] for r in db.execute("SELECT request_id FROM model_resolutions WHERE kind='NOT_SENT'")}

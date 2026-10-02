@@ -1,0 +1,95 @@
+{
+  "schema_version": "native-model-interface-v2-vendor-symbol-proposal",
+  "status": "verified-local-official-package-symbol-order-no-execution",
+  "source_url_reported_by_installer": "https://ltspice.analog.com/software/LTspice64.msi",
+  "installed_package_version_reported_by_installer": "26.1.1.0",
+  "installer": {
+    "consumer_local_path": "/workspace/scratch/a372e1f1dc51/authorized-ltspice-20261001/downloads/LTspice64.msi",
+    "bytes": 187368960,
+    "sha256": "249ebde3c84e01f4ce5b5ff78c6c7588f049bac85ae1635f968cfdbe4f4ecd03"
+  },
+  "model_archive": {
+    "consumer_local_path": "/workspace/scratch/a372e1f1dc51/authorized-ltspice-20261001/install/ltspice-payload/LocalAppDataFolder/LTspice/lib.zip",
+    "bytes": 41715470,
+    "sha256": "4e40dafdf286bd5b0b32f20d069356d08dd1e0a51905d4de2596dc53fc4019ee"
+  },
+  "example_archive": {
+    "consumer_local_path": "/workspace/scratch/a372e1f1dc51/authorized-ltspice-20261001/install/ltspice-payload/LocalAppDataFolder/LTspice/examples.zip",
+    "bytes": 4199493,
+    "sha256": "0d0909fe2dd452920b00d2d6c48a6a9ea43c917eea06fc765e38ed5989db5e52"
+  },
+  "model": {
+    "archive_entry": "lib/sub/LTC3588-1.sub",
+    "bytes": 1710,
+    "sha256": "53775f934b1b1c7929282b753a7fba947dc9d249314e0c39a06eb8aa06899a62"
+  },
+  "symbol": {
+    "archive_entry": "lib/sym/PowerProducts/LTC3588-1.asy",
+    "bytes": 1006,
+    "sha256": "c34f7eeca0b2557a71ab9c23e556c15ded91771624293cda377ede35a06e2478"
+  },
+  "example": {
+    "archive_entry": "examples/Applications/LTC3588-1.asc",
+    "bytes": 1533,
+    "sha256": "5e8b885b8b833a53c45bd7aac0154372651c62055e58ae91610e66723bd0bda6"
+  },
+  "symbol_attributes": {
+    "Value": "LTC3588-1",
+    "Prefix": "X",
+    "SpiceModel": "LTC3588-1.sub",
+    "Value2": "LTC3588-1",
+    "Description": "Piezoelectric Energy Harvesting Power Supply"
+  },
+  "ordered_ports": [
+    "PZ1",
+    "PZ2",
+    "CAP",
+    "Vin",
+    "SW",
+    "Vout",
+    "Vin2",
+    "D1",
+    "D0",
+    "Pgood",
+    "GND"
+  ],
+  "order_evidence": "PINATTR SpiceOrder from same-package .asy; not a copied .SUBCKT declaration",
+  "subckt_declaration": null,
+  "subckt_declaration_status": "unobserved-opaque-native-model",
+  "xu1_instance": "XU1 port pz2 cap vin sw out vin2 vin2 0 pgood 0 LTC3588-1",
+  "xu1_nodes_in_order": [
+    "port",
+    "pz2",
+    "cap",
+    "vin",
+    "sw",
+    "out",
+    "vin2",
+    "vin2",
+    "0",
+    "pgood",
+    "0"
+  ],
+  "port_mapping": {
+    "PZ1": "port",
+    "PZ2": "pz2",
+    "CAP": "cap",
+    "Vin": "vin",
+    "SW": "sw",
+    "Vout": "out",
+    "Vin2": "vin2",
+    "D1": "vin2",
+    "D0": "0",
+    "Pgood": "pgood",
+    "GND": "0"
+  },
+  "executed": false,
+  "tool_executable_hash": null,
+  "historical_run_model_authentication": false,
+  "limitations": [
+    "Does not authenticate missing historical native runs",
+    "Does not expose model-internal nodes, states, sources, losses or initialization",
+    "No fabricated single-line declaration and no silent coercion into v1",
+    "Exact executable identity, final diagnostic pin terminations and native runtime compatibility remain pre-run gates"
+  ]
+}

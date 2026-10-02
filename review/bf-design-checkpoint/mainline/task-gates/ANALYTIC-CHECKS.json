@@ -1,0 +1,168 @@
+{
+  "schema": "bf-task-bounded-analytic-checks-v1",
+  "execution": "existing artifact extraction and arithmetic only; zero new scientific solves",
+  "unique_fine_designs": 20,
+  "mission_successes": 0,
+  "halfstep_passes": 20,
+  "best_peak_aux_uJ": 11.104952032522164,
+  "assumed_aux_target_uJ": 65.664,
+  "peak_fraction_of_assumed_target": 0.1691178123861197,
+  "initial_mechanical_uJ": 2147.4849600498765,
+  "ROM_elastic_energy_at_8mm_uJ": 2790.449228570867,
+  "net_piezo_electrical_work_uJ": 40.05082318079078,
+  "best_case_uvlo_activations": 44,
+  "best_case_aux_ready": false,
+  "best_case_boots": 0,
+  "capacitor_energy_at_5p05V_uJ": {
+    "0.1": 1.2751249999999998,
+    "0.22": 2.8052749999999995,
+    "0.47": 5.993087499999999,
+    "1": 12.751249999999997,
+    "47": 599.3087499999999
+  },
+  "Cout_invariance": [
+    {
+      "input_cap_uF": 0.1,
+      "Cout_uF": [
+        1.0,
+        10.0,
+        47.0,
+        100.0
+      ],
+      "fields": [
+        "metrics__peak_auxiliary_energy_J",
+        "metrics__peak_vin_V",
+        "metrics__peak_vout_V",
+        "packets",
+        "grouped_events"
+      ],
+      "all_identical": true
+    },
+    {
+      "input_cap_uF": 0.22,
+      "Cout_uF": [
+        1.0,
+        10.0,
+        47.0,
+        100.0
+      ],
+      "fields": [
+        "metrics__peak_auxiliary_energy_J",
+        "metrics__peak_vin_V",
+        "metrics__peak_vout_V",
+        "packets",
+        "grouped_events"
+      ],
+      "all_identical": true
+    },
+    {
+      "input_cap_uF": 0.47,
+      "Cout_uF": [
+        1.0,
+        10.0,
+        47.0,
+        100.0
+      ],
+      "fields": [
+        "metrics__peak_auxiliary_energy_J",
+        "metrics__peak_vin_V",
+        "metrics__peak_vout_V",
+        "packets",
+        "grouped_events"
+      ],
+      "all_identical": true
+    },
+    {
+      "input_cap_uF": 1,
+      "Cout_uF": [
+        1.0,
+        10.0,
+        47.0,
+        100.0
+      ],
+      "fields": [
+        "metrics__peak_auxiliary_energy_J",
+        "metrics__peak_vin_V",
+        "metrics__peak_vout_V",
+        "packets",
+        "grouped_events"
+      ],
+      "all_identical": true
+    }
+  ],
+  "interpretation": [
+    "pmic_started means at least one UVLO enable; it does not mean completed cold start.",
+    "The 2.790 mJ elastic-energy number is not harvestable electrical energy or a witness.",
+    "The 65.664 uJ target and 0.1 s decay are behavioral model assumptions, not established vendor cold-start facts.",
+    "44 enables and 11.105 uJ peak do not establish that all architectures are infeasible.",
+    "No nonlinear release, contact or reset-cycle model is in the inherited solver."
+  ],
+  "best_case": {
+    "campaign_identity": {
+      "D_id": "49f666156d084dc964f4e465342ea0106e5d992c9f9a984377a73c41ad7bee2d",
+      "case": "g42_ci0p1_co100_dt0125us",
+      "component_qualification": "UNQUALIFIED",
+      "design_status": "unsatisfied",
+      "dt_s": 0.000125,
+      "execution_id": "2a40502c8634c9d33401b2c78164c64e6cbb7ec0f05c49c11190fcbd92602d4e",
+      "firmware_build_identity": "bfa1497c4cde0cb3c32da934a96931e4c33bd1c7126ada4406e26c3a0ac8d8f6",
+      "gap_mm": 42,
+      "grouped_events": 0,
+      "input_cap_uF": 0.1,
+      "model_assumptions_id": "359f7d2387b3fd1dad27ec198eb43061d3c41ce2f8e91091a17b5f4fd0f52df0",
+      "model_form_id": "4a3db24a6f62e5de959695d62642965fa6f8fcde8099df6ecfcb5fb50cd34d05",
+      "model_id": "4ecfbf096d813f586b230ef3f033ed153fd3da585023cc75a4e9561e2909133e",
+      "output_cap_uF": 100,
+      "packets": 0,
+      "plan_sha256": "c9309982eb664fe7c158571fe869cba7b93bf868c6d2395223921f4416839b78",
+      "run_scope": "developmental-design-search-under-event-and-grid-qualified-behavioralmodel",
+      "run_status": "completed",
+      "solver_wall_s": 86.19377690200054,
+      "world_id": "6b3758e1bee5ec28b6a7d103ac377c2c3554945b4729fb0c7ea5b41e35157908"
+    },
+    "energy_ledger_J": {
+      "balance_residual": -5.2519620596935823e-14,
+      "bridge_loss": 3.5908711958382086e-06,
+      "controlled_source_resistor_loss": 0.0,
+      "conversion_loss": 0.0,
+      "external_electrical_work": 0.0,
+      "final_aux_rail": 2.6897426610701122e-21,
+      "final_input_capacitor": 1.5513220363652512e-191,
+      "final_output_capacitor": 0.0,
+      "final_piezo": 1.1075593048779224e-14,
+      "final_stored": 9.904006371648902e-12,
+      "firmware_load": 0.0,
+      "initial_mechanical": 0.0021474849600498763,
+      "mechanical_damping": 0.0002774919251063492,
+      "mechanical_negative_work_magnitude": 0.004831736107573971,
+      "mechanical_positive_work": 0.003001793905756774,
+      "mechanical_work": -0.0018299422018172857,
+      "quiescent_and_leakage": 3.645995197387697e-05
+    },
+    "metrics": {
+      "accepted_segments": 32088,
+      "final_vout_V": 0.0,
+      "hybrid_event_count": 88,
+      "max_energy_residual_J": 8.160881909483053e-14,
+      "max_interval_rhs_evaluations": 1978,
+      "numerical_pass": true,
+      "peak_auxiliary_energy_J": 1.1104952032522164e-05,
+      "peak_tip_mm": 7.704921672968547,
+      "peak_vin_V": 5.0500000000001295,
+      "peak_vout_V": 0.0,
+      "pgood_observed": false,
+      "pmic_enable_intervals": 44,
+      "pmic_enabled_duration_s": 0.007384881467702352,
+      "pmic_started": true,
+      "relative_energy_residual": 1.0417885545335547e-11,
+      "rhs_evaluations": 1373709
+    },
+    "parameters": {
+      "cp": 1.7234553637335904e-08,
+      "k": 87.2015383928396,
+      "mass": 0.00872042950739764,
+      "theta": 0.00021680095937004604,
+      "zeta": 0.02
+    }
+  }
+}

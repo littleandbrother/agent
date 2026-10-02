@@ -1,0 +1,15 @@
+schema_version: controlled-launcher-integration-feature-v1
+id: controlled-launcher-integration-20261001
+status: trusted-offline-integration-tested-live-blocked
+owned_paths: [/workspace/shared/controlled-launcher-integration-20261001]
+hypothesis: Actual pinned Pi function activation can be evidenced after import and invocation while preserving externally owned task, evidence, budget and lineage boundaries.
+falsifier: Pre-import log accepted as activation, invocation failure accepted, stale source/build accepted, recovery repeats a process, hidden/exposed task accepted, manual fixture promoted, or draft protocol starts a participant.
+schema_changes: [controlled-attempt-receipt-v1, controlled-launch-readiness-v1, controlled-launcher-integration-result-v1]
+tests: [actual Pi solver and improver activation, import and call failures, build failure, timeout, stale build, output hash, nonce and pid, receipt tamper, interrupted receipt recovery, uncertain-effect stop, all-attempt budget, old ledger settlement and uncertainty, H0 reload, lineage, exposed physics, native handoff]
+command: python -B -m unittest discover -s tests -v && python -B run_controls.py --output reports/NEW-retained-controls
+artifacts: [patches/main.ts.diff, reports/BUILD-RECEIPT.json, reports/tests-final-v2.log, reports/retained-controls-v1/RESULT.json, reports/retained-controls-v2/RESULT.json, reports/retained-controls-v2/LIVE-READINESS.json, INPUT-LOCK.json, FINAL-RECEIPT.json]
+cost_boundary: Zero model, participant and native-solver calls. Dedicated isolated usage-receipt ledger tests are synthetic and never mixed with production accounting. Actual local process and preparation timing recorded; no historical-cost reconstruction.
+claim_boundary: Actual trusted Pi runtime integration only; no participant efficacy, participant-authored H1, promotion, qualified isolation, admitted task, native solve or scientific success.
+stop_condition: Draft protocol, missing qualified task/reference, unsupported Seatbelt, stale evidence, unresolved effect/cost, caps reached or unknown code.
+limitations: [old service lacks new magnetic-task route, model/caps still legacy, no approved model/budget, qualified tasks 0/2, no actual-host participant isolation, no complete application regression]
+handoff: Retain the source/build and all-attempt receipts; register the qualified native magnetic task in the existing service and approved runtime only after all authorization and reference gates pass.

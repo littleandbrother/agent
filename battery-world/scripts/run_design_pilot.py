@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded native pilot. No model calls, ledger resets, or silent failed-run replacement."""
+"""Bounded native and paid Pi pilot; preserve seals, costs and failed attempts."""
 import argparse
 import fcntl
 import json
@@ -18,7 +18,7 @@ from bfworld.agentlab.simulation_chain.contracts import digest, file_hash, write
 from bfworld.agentlab.simulation_tasks import load_task, check_candidate, attach_evaluation
 
 CONFIG = REPO / 'configs/reference_cases/design-pilot/protocol.json'
-DEFAULT_ROOT = HOME_ROOT / 'studies/door-design-pilot-v1'
+DEFAULT_ROOT = HOME_ROOT / 'studies/door-integration-pilot-20261002'
 
 
 def sources():
@@ -174,7 +174,7 @@ def api(route, body=None):
     request = urllib.request.Request('http://127.0.0.1:8768'+route,
         data=json.dumps(body).encode() if body is not None else None,
         headers={'Authorization':'Bearer '+token, 'Content-Type':'application/json'})
-    with urllib.request.urlopen(request, timeout=100) as response:
+    with urllib.request.build_opener(urllib.request.ProxyHandler({})).open(request, timeout=100) as response:
         return json.loads(response.read())
 
 
@@ -237,9 +237,9 @@ def trial_prompt(root, trial):
         +json.dumps(facts,ensure_ascii=False,separators=(',',':')))
 
 
-def collect_trial(root, trial, cid, started):
+def collect_trial(root, trial, cid, started, target=None, continuations=0):
     db=sqlite3.connect((HOME_ROOT/'state/workbench.sqlite').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
-    target=root/'trials'/trial['id'];target.mkdir(parents=True,exist_ok=True)
+    target=target or root/'trials'/trial['id'];target.mkdir(parents=True,exist_ok=True)
     try:
         events=[dict(r) for r in db.execute('SELECT * FROM chat_events WHERE conversation=? ORDER BY seq',(cid,))]
         jobs=[dict(r) for r in db.execute('SELECT * FROM engineering_jobs WHERE owner=? ORDER BY created',(cid,))]
@@ -252,32 +252,129 @@ def collect_trial(root, trial, cid, started):
             'cost_usd':sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in usage),
             'all_usage_settled':all(r['status']=='SETTLED' for r in usage), 'new_candidates':len(jobs),
             'participant_submitted':bool(selected),'end_to_end_s':time.time()-started,
-            'operator_next_candidates':0,'prompt_continuations':0,'injected_crash_tested':False}
+            'operator_next_candidates':0,'prompt_continuations':max(continuations,db.execute('SELECT COUNT(*) FROM chat_messages WHERE conversation=?',(cid,)).fetchone()[0]-1),'injected_crash_tested':False}
         write_json(target/'receipt.json',receipt)
         return receipt
     finally: db.close()
 
 
-def freeze_agent_runtime(root, protocol):
+def freeze_agent_runtime(root, protocol, amendment=False):
     """Capture the actual compiled agent and backend before any paid dispatch."""
     app = REPO/'packages/python/bfworld/src/bfworld/agentlab'
     paths = {str(p.relative_to(REPO)): file_hash(p) for p in sorted(app.rglob('*.py'))}
     pi_paths = [PI/'package.json', PI/'package-lock.json']
-    for name in ['bf-agent', 'ai', 'agent', 'coding-agent', 'protocol']:
+    for name in ['bf-agent', 'bf-harness', 'ai', 'agent', 'coding-agent', 'protocol']:
         package = PI/'packages'/name
         pi_paths += [package/'package.json']
         pi_paths += sorted((package/'dist').rglob('*.js'))
-        if name == 'bf-agent': pi_paths += sorted((package/'src').rglob('*.ts'))
+        if name in ('bf-agent','bf-harness'): pi_paths += sorted((package/'src').rglob('*.ts'))
     value = {'model': protocol['model'], 'task_hash': prepare(root)['task']['task_hash'],
         'backend': paths, 'pi': {str(p.relative_to(PI)): file_hash(p) for p in pi_paths},
         'node': subprocess.check_output([str(NODE), '--version'], text=True).strip(),
         'runner_sha256': file_hash(Path(__file__)), 'tools': ['bf_engineering'],
-        'scope': 'same compiled runtime across all four pilot trajectories; no method superiority comparison'}
+        'scope': 'Runtime identity per attempt; transport continuation separately recorded; no method superiority comparison'}
     path = root/'agent-runtime-seal.json'
+    if amendment or (root/'continuation-authorization.json').exists():
+        path = root/'agent-runtime-continuation-seal.json'
     if path.exists() and json.loads(path.read_text()) != value:
-        raise ValueError('PILOT_AGENT_RUNTIME_DRIFT')
+        old=json.loads(path.read_text())
+        allowed={'packages/python/bfworld/src/bfworld/agentlab/'+n for n in ('provider.py','recovery.py','chat.py','server.py')}
+        changed={k for k in old['backend'].keys()|value['backend'].keys() if old['backend'].get(k)!=value['backend'].get(k)}
+        pi_changed={k for k in old['pi'].keys()|value['pi'].keys() if old['pi'].get(k)!=value['pi'].get(k)}
+        pi_allowed={}
+        for name in ('tool-delivery-amendment.json','tool-capacity-amendment.json'):
+            tool_amendment=root/name
+            if tool_amendment.exists():pi_allowed.update({e['path']:e['new_sha256'] for e in json.loads(tool_amendment.read_text())['files']})
+        if not (root/'continuation-authorization.json').exists() or not changed<=allowed or any(old[k]!=value[k] for k in ('task_hash','model','tools','node')) or not pi_changed<=pi_allowed.keys() or any(value['pi'][k]!=pi_allowed[k] for k in pi_changed):
+            raise ValueError('PILOT_AGENT_RUNTIME_DRIFT')
+        amended=root/'runtime-amendments'/(digest(value)+'.json')
+        amended.parent.mkdir(exist_ok=True)
+        if not amended.exists():write_json(amended,value)
+        write_json(root/'active-runtime-amendment.json',{'runtime':str(amended.relative_to(root)),'sha256':file_hash(amended),'original_seal_sha256':file_hash(path),'allowed_transport_changes':sorted(changed)})
     if not path.exists(): write_json(path, value)
     return value
+
+
+def authorize_continuation(root, explicit_authorization):
+    if not explicit_authorization:raise ValueError('EXPLICIT_CONTINUATION_REQUIRED')
+    protocol=prepare(root)['protocol']
+    path=root/'continuation-authorization.json'
+    if path.exists():
+        value=json.loads(path.read_text())
+        if value['authorization']!=explicit_authorization:raise ValueError('CONTINUATION_IMMUTABLE')
+        freeze_agent_runtime(root,protocol)
+        return value
+    from bfworld.agentlab.store import Store
+    from bfworld.agentlab.recovery import Recovery
+    store=Store(HOME_ROOT/'state');Recovery(store)
+    with store.connect() as db:
+        study=dict(db.execute('SELECT * FROM research_model_studies WHERE protocol=?',(protocol['id'],)).fetchone())
+        if time.time()>=study['expires']:raise ValueError('STUDY_WINDOW_EXPIRED')
+        value={'protocol':protocol['id'],'created':time.time(),'expires':study['expires'],
+               'authorization':explicit_authorization,'max_usd':study['max_usd'],
+               'original_runtime_sha256':file_hash(root/'agent-runtime-seal.json'),
+               'original_failed_receipt_sha256':file_hash(root/'trials/baseline-r1/receipt.json'),
+               'policy':'UNKNOWN remains UNKNOWN and fully reserved; same-study continuation only; no quota or limit reset',
+               'runtime_changes':'300s transport window; scoped continuation gate; read-only research projections and method audit binding'}
+        freeze_agent_runtime(root,protocol,amendment=True)
+        value['runtime_sha256']=file_hash(root/'agent-runtime-continuation-seal.json')
+        db.execute('INSERT INTO research_usage_continuations VALUES(?,?,?,?)',
+                   (protocol['id'],value['created'],value['expires'],explicit_authorization))
+        write_json(path,value)
+    return value
+
+
+def wait_trial(root, trial, cid, started, study):
+    while True:
+        with sqlite3.connect((HOME_ROOT/'state/workbench.sqlite').as_uri()+'?mode=ro',uri=True) as db:
+            status=db.execute('SELECT status FROM conversations WHERE id=?',(cid,)).fetchone()[0]
+            pending=db.execute("SELECT count(*) FROM chat_messages WHERE conversation=? AND status IN ('QUEUED','SENT')",(cid,)).fetchone()[0]
+            in_flight=db.execute("SELECT count(*) FROM model_requests WHERE owner=? AND status='DISPATCHED'",(cid,)).fetchone()[0]
+        launch=HOME_ROOT/'sessions'/cid/'receipt.json'
+        process_live=False
+        if launch.exists():
+            receipt=json.loads(launch.read_text())
+            if receipt.get('status')=='RUNNING' and receipt.get('pid'):
+                try:os.kill(receipt['pid'],0);process_live=True
+                except ProcessLookupError:pass
+        terminal=status in ('FAILED','BLOCKED','PAUSED','INTERRUPTED') or status=='IDLE' and not pending
+        if terminal and not in_flight and not process_live:return
+        if time.time()-started>prepare(root)['protocol']['pi_max_wall_s_per_trial'] or time.time()>=study['expires']:
+            api('/api/conversations/'+cid+'/stop',{});return
+        time.sleep(10)
+
+
+def recover_trial(root, trial_id):
+    protocol=prepare(root)['protocol'];freeze_agent_runtime(root,protocol)
+    authorization=json.loads((root/'continuation-authorization.json').read_text())
+    trial=next(t for t in protocol['pi_trials'] if t['id']==trial_id)
+    original=root/'trials'/trial_id
+    previous=json.loads((original/'receipt.json').read_text())
+    if previous['participant_submitted']:raise ValueError('ALREADY_SUBMITTED')
+    attempt=1
+    while (original/('continuation-'+str(attempt))/'receipt.json').exists():
+        prior=json.loads((original/('continuation-'+str(attempt))/'receipt.json').read_text())
+        if prior['participant_submitted']:return prior
+        attempt+=1
+    if attempt>6:raise ValueError('TRANSPORT_CONTINUATION_ATTEMPTS_EXHAUSTED')
+    target=original/('continuation-'+str(attempt));target.mkdir(exist_ok=True)
+    if (target/'receipt.json').exists():return json.loads((target/'receipt.json').read_text())
+    cid=previous['conversation']
+    prompt=('继续完成这条固定任务。上次因模型传输中断而停止，原始记录已保留。'
+            '先核对当前已有任务与结果，不要重复派发已有候选，不增加候选额度，不改变约束。'
+            '继续原任务的自主设计、仿真、比较与提交。已有结果先复用，未用候选额度仍按原任务执行；用 bf_engineering submit 提交已运行候选并如实报告。'
+            '不要以准备执行或重试派发的文字结束；请实际调用工具，或说明工具返回的明确阻塞。求解器忙时工具会等待，不需要重复模型请求。'
+            '这是一次传输恢复续跑，不代表上次已成功。')
+    if not (target/'start.json').exists():
+        write_json(target/'start.json',{'started':time.time(),'conversation':cid,'original_receipt_sha256':file_hash(original/'receipt.json'),'loaded_service':json.loads((HOME_ROOT/'state/active-runtime.json').read_text())})
+        write_json(target/'input.json',{'text':prompt,'operator_next_candidates':0})
+    started=json.loads((target/'start.json').read_text())['started']
+    api('/api/conversations/'+cid+'/messages',{'text':prompt,'operation_id':protocol['id']+'-'+trial_id+'-transport-continuation-'+str(attempt)})
+    print('PI_RECOVER',trial_id,cid,flush=True)
+    wait_trial(root,trial,cid,started,authorization)
+    result=collect_trial(root,trial,cid,started,target,attempt)
+    print('PI_RECOVERY_END',trial_id,result['status']['status'],result['participant_submitted'],result['cost_usd'],flush=True)
+    return result
 
 
 def trials(root):
@@ -300,19 +397,12 @@ def trials(root):
             write_json(target/'input.json',{'text':prompt,'initial':trial['initial'],'actual_initial_run':initial_run(root,trial).name,'initial_result_sha256':file_hash(initial_run(root,trial)/'result.json')})
             started=time.time()
             conversation=api('/api/engineering',{'action':'pilot_trial','trial_id':trial['id'],'text':prompt})
-            cid=conversation['id'];write_json(target/'start.json',{'started':started,'conversation':cid})
+            cid=conversation['id'];write_json(target/'start.json',{'started':started,'conversation':cid,'loaded_service':json.loads((HOME_ROOT/'state/active-runtime.json').read_text())})
         print('PI_TRIAL',trial['id'],cid,flush=True)
-        while True:
-            with sqlite3.connect((HOME_ROOT/'state/workbench.sqlite').as_uri()+'?mode=ro',uri=True) as db:
-                status=db.execute('SELECT status FROM conversations WHERE id=?',(cid,)).fetchone()[0]
-                pending=db.execute("SELECT count(*) FROM chat_messages WHERE conversation=? AND status IN ('QUEUED','SENT')",(cid,)).fetchone()[0]
-            if status in ('FAILED','BLOCKED','PAUSED','INTERRUPTED') or status=='IDLE' and not pending: break
-            if time.time()-started>protocol['pi_max_wall_s_per_trial'] or time.time()>=study['expires']:
-                api('/api/conversations/'+cid+'/stop',{});break
-            time.sleep(10)
+        wait_trial(root,trial,cid,started,study)
         receipt=collect_trial(root,trial,cid,started)
         print('PI_END',json.dumps(receipt,ensure_ascii=False),flush=True)
-        if not receipt['all_usage_settled']: raise ValueError('PILOT_USAGE_UNRESOLVED_STOP')
+        if not receipt['all_usage_settled'] and not (root/'continuation-authorization.json').exists(): raise ValueError('PILOT_USAGE_UNRESOLVED_STOP')
         with sqlite3.connect((HOME_ROOT/'state/workbench.sqlite').as_uri()+'?mode=ro',uri=True) as db:
             if db.execute("SELECT 1 FROM engineering_jobs WHERE owner=? AND status IN ('RUNNING','QUEUED','UNKNOWN')",(cid,)).fetchone():
                 raise ValueError('PILOT_NATIVE_JOB_REQUIRES_RECONCILIATION')
@@ -321,7 +411,7 @@ def trials(root):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['prepare', 'map', 'child', 'authorize', 'trials'])
+    parser.add_argument('action', choices=['prepare', 'map', 'child', 'authorize', 'trials','authorize-continuation','recover-trial'])
     parser.add_argument('--root', type=Path, default=DEFAULT_ROOT)
     parser.add_argument('--only', nargs='+')
     parser.add_argument('--recover', nargs='+', help='At most three preserved runtime failures; new run IDs, same design and total wall cap')
@@ -332,6 +422,8 @@ def main():
         value = prepare(args.root); print(json.dumps({'seal': digest(value), 'root': str(args.root)}))
     elif args.action == 'map': map_candidates(args.root, args.only, args.recover)
     elif args.action == 'authorize': print(json.dumps(authorize(args.root,args.authorization),ensure_ascii=False))
+    elif args.action == 'authorize-continuation':print(json.dumps(authorize_continuation(args.root,args.authorization),ensure_ascii=False))
+    elif args.action == 'recover-trial':recover_trial(args.root,args.name)
     elif args.action == 'trials': trials(args.root)
     else: child(args.root, args.name, json.loads(args.spec.read_text()), args.cache)
 
