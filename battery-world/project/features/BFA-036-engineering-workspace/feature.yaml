@@ -1,0 +1,63 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-036-engineering-workspace",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "objective": "Add a neutral white and clear-glass engineering workspace on the right of the Studio conversation, without redesigning the project sidebar or Studio/Lab navigation.",
+  "hypothesis": "Task-bound section tabs, readable previews and explicit provenance make existing engineering results discoverable during the conversation.",
+  "falsifier": "The workspace shows another owner's files, implies an absent diagram or failed calculation passed, loses scope on refresh, breaks resizing or changes the sidebar/Lab flow.",
+  "paper_claim": "Product UI and source-bound result projection only.",
+  "owned_paths": [
+    "apps/agent-studio/",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py",
+    "tests/agentlab/test_engineering_workspace.py",
+    "tests/agentlab/test_engineering_workspace.cjs",
+    "project/features/BFA-036-engineering-workspace/",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "docs/agentlab/ENGINEERING-WORKSPACE-20261003.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/Documents/bf-agent-workbench/verification/engineering-workspace-20261003"
+  ],
+  "schema_changes": [],
+  "tests": [
+    "Pure section/file classification and invalid-data controls",
+    "Existing result/Studio/conversation regression",
+    "Browser interaction, read-only previews, task switching, keyboard resizing and responsive audit"
+  ],
+  "negative_controls": [
+    "Empty task",
+    "Missing files",
+    "Failed result",
+    "Foreign or stale async response",
+    "Unavailable PCB or BOM",
+    "Non-finite series values",
+    "Lab mode"
+  ],
+  "command": "./init.sh; node tests/agentlab/test_engineering_workspace.cjs; browser audit",
+  "artifacts": "/Users/depengsu/Documents/bf-agent-workbench/verification/engineering-workspace-20261003",
+  "cost_cap": "USD0 new provider calls; no production native simulation dispatch; existing isolated verification fixtures allowed",
+  "claim_boundary": "Existing records and archived files only; no invented sample metrics or hardware acceptance.",
+  "stop_condition": "No scientific evaluator or frozen study edits. Existing histories and user drafts remain intact.",
+  "limitations": [
+    "Read-only engineering viewer, not an EDA editor or new solver",
+    "Browser CSS translucency, not Apple's native optical material"
+  ],
+  "handoff": "Right engineering viewer complete. Preserve BFA-035 research status and physical qualification gaps. User authorized GitHub publication; receipt and scoped changes are ready.",
+  "evidence": {
+    "report": "docs/agentlab/ENGINEERING-WORKSPACE-20261003.md",
+    "receipt": "/Users/depengsu/Documents/bf-agent-workbench/verification/engineering-workspace-20261003/receipt.json",
+    "projection_assertions": 27,
+    "python_targeted": 24,
+    "full_init_passed": false,
+    "full_init_failures": 2,
+    "nas_recheck_passed": true,
+    "cad_recheck_passed": false,
+    "sdk_studio_checks": "passed",
+    "browser_desktop_mobile": "passed",
+    "new_paid_calls": 0
+  }
+}

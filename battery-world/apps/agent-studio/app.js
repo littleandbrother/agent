@@ -19,7 +19,7 @@ function markdown(text){
 }
 const access=new URLSearchParams(location.hash.slice(1)).get('access');if(access){sessionStorage.setItem('bf-access',access);history.replaceState(null,'',location.pathname)}
 const headers=()=>({'Content-Type':'application/json',...(sessionStorage.getItem('bf-access')?{Authorization:'Bearer '+sessionStorage.getItem('bf-access')}:{})});
-async function api(path,body){let response=await fetch(path,{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:headers(),...(body===undefined?{}:{body:JSON.stringify(body)})});if(response.status===403&&sessionStorage.getItem('bf-access')){sessionStorage.removeItem('bf-access');response=await fetch(path,{method:body===undefined?'GET':'POST',headers:headers(),...(body===undefined?{}:{body:JSON.stringify(body)})})}const value=await response.json();if(!response.ok)throw Error(value.error||'请求失败');return value}
+async function api(path,body,options={}){let response=await fetch(path,{...options,method:body===undefined?'GET':'POST',credentials:'same-origin',headers:headers(),...(body===undefined?{}:{body:JSON.stringify(body)})});if(response.status===403&&sessionStorage.getItem('bf-access')){sessionStorage.removeItem('bf-access');response=await fetch(path,{...options,method:body===undefined?'GET':'POST',headers:headers(),...(body===undefined?{}:{body:JSON.stringify(body)})})}const value=await response.json();if(!response.ok)throw Error(value.error||'请求失败');return value}
 let selected=sessionStorage.getItem('bf-chat-selected')||null, conversations=[], folders=[], newFolder=sessionStorage.getItem('bf-chat-folder')||null, current=null, execution=null, events=[],cursor=0, stream=null, sending=false,section=localStorage.getItem('bf-section')||'proposal',renderTimer=null;
 const names={RECALLING:'正在撤回',RUNNING:'执行中',STARTING:'准备中',IDLE:'等待消息',COMPLETED:'已完成',FAILED:'执行中断',BLOCKED:'模型受阻',INTERRUPTED:'已中断',STOPPING:'正在停止',PAUSED:'已暂停'};
 const errors={CHAT_TURN_WALL_BUDGET:'本轮执行时间已用完，已暂停。历史消息和已生成文件保留；发送新消息可继续。',SESSION_WALL_LIMIT:'执行进程达到运行时限而中断。历史消息和已生成文件保留；发送新消息可继续。',CHAT_TURN_AUTH_REQUIRED:'当前消息已撤回，请发送新消息继续。',MODEL_OWNER_USD_BUDGET:'本次会话的模型额度已用完，已完成的内容保留。',MODEL_TOKEN_BUDGET:'模型 token 额度已用完，消息已保存。',RECALL_PENDING:'正在停止当前执行并撤回消息，请稍候。',RECALL_RETRY_REQUIRED:'上次撤回未完成，请再次点击对应消息的撤回按钮。',CONVERSATION_BUSY_STOP_FIRST:'请先停止当前执行，再移动会话。',FOLDER_HAS_RUNNING_SESSION:'文件夹内仍有会话正在执行，请先停止后再删除。',FOLDER_CHANGED_REFRESH:'共享配置已被其他会话更新，请重新打开后编辑。',MODEL_OWNER_GRANT_EXPIRED:'本次执行时限已用完，历史消息仍保留。发送新消息即可继续。',SESSION_REQUEST_CAP:'此会话已达到模型请求上限，历史消息仍保留。',PAID_WINDOW_CLOSED:'模型运行窗口已关闭。消息已保存，新的运行额度开启后可继续。',MODEL_WALL_BUDGET:'本次运行窗口已到期。消息已保存。',MODEL_USD_BUDGET:'当前模型额度不足，消息已保存。',PI_SESSION_ALREADY_RUNNING:'这个会话已有 Pi 进程在执行，请勿重复启动。',PI_BATCH_ALREADY_RUNNING:'独占实验批次正在执行。消息已保存，批次结束后可继续。',PI_CONVERSATION_CAPACITY:'已有 3 个任务在执行。消息已保存，可在空闲后继续。',PROVIDER_USAGE_UNKNOWN_STOP:'有模型请求的用量尚未核实，已暂停新请求。这是记账保护，与 token 余额不足不同。',AUTH_REQUIRED:'本地连接暂不可用，请刷新页面。'};
@@ -93,19 +93,20 @@ $('#stop-chat').onclick=async()=>{try{await api('/api/conversations/'+selected+'
 const fmt=v=>v===undefined||v===null?'—':typeof v==='object'?JSON.stringify(v):String(v);
 const metric=(k,v)=>`<div class="section-metric"><span>${esc(k)}</span><b>${esc(fmt(v))}</b></div>`;
 function renderSections(){
+  if(window.EngineeringWorkspace?.active()){window.EngineeringWorkspace.render();return;}
   if(!['model','proposal','files','deployment'].includes(section))section='proposal';
   document.querySelectorAll('[data-section]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.section===section)));
   if(window.Product)window.Product.panel($('#section-content'),section,current,execution);
 }
 document.querySelectorAll('[data-section]').forEach(b=>b.onclick=()=>{section=b.dataset.section;localStorage.setItem('bf-section',section);renderSections()});
-window.BF={api,esc,getSelection:()=>selected,getTitle:()=>conversations.find(c=>c.id===selected)?.title||'新项目',select,newChat,refresh,refreshDetail,getFolders:()=>folders,getCurrent:()=>current,getEvents:()=>events,getFolder:()=>current?.folder_id||(!selected?newFolder:null),setDraft:text=>{$('#message-input').value=text;$('#message-input').dispatchEvent(new Event('input'));$('#message-input').focus()},error:notice};
+window.BF={api,esc,refreshSections:renderSections,sectionVisible,getSelection:()=>selected,getTitle:()=>conversations.find(c=>c.id===selected)?.title||'新项目',select,newChat,refresh,refreshDetail,getFolders:()=>folders,getCurrent:()=>current,getEvents:()=>events,getFolder:()=>current?.folder_id||(!selected?newFolder:null),setDraft:text=>{$('#message-input').value=text;$('#message-input').dispatchEvent(new Event('input'));$('#message-input').focus()},error:notice};
 (async()=>{await refresh();if(selected)await select(selected);else{render();renderSections()}})();setInterval(async()=>{try{const v=await api('/api/conversations');conversations=v.sessions;folders=v.folders||[];list()}catch{}},5000);
 
 /* Pane resizing is browser-local and never changes a conversation or its work. */
 (() => {
   const key='bf-panel-widths.v1', root=document.documentElement;
   let preferred={}, frame=0, drag=null, observedMap=null;
-  try{const saved=JSON.parse(localStorage.getItem(key)||'{}');for(const side of ['left','right'])if(Number.isFinite(saved?.[side]))preferred[side]=saved[side]}catch{}
+  try{const saved=JSON.parse(localStorage.getItem(key)||'{}');for(const side of ['left','right','engineering'])if(Number.isFinite(saved?.[side]))preferred[side]=saved[side]}catch{}
   const clamp=(n,min,max)=>Math.round(Math.max(min,Math.min(max,n)));
   const visible=el=>!!el&&el.getClientRects().length>0;
   const persist=()=>{try{localStorage.setItem(key,JSON.stringify(preferred))}catch{}};
@@ -126,8 +127,13 @@ window.BF={api,esc,getSelection:()=>selected,getTitle:()=>conversations.find(c=>
     const leftMax=Math.max(180,Math.min(productMode&&width>900?260:420,width<=620?width-48:width-360-(taskDocked||mapDocked?240:0)));
     const left=clamp(preferred.left??(width<=620?220:width<=1100?200:224),180,leftMax);
     const taken=leftVisible&&width>620?left:0;
-    const rightMax=Math.max(240,Math.min(640,width>850?width-taken-360:width-48));
-    const right=clamp(preferred.right??(width>=1550?330:width<=850?280:width<=1100?250:286),240,rightMax);
+    const engineering=document.body.classList.contains('engineering-workspace-active');
+    const engineeringOverlay=engineering&&(document.body.classList.contains('studio-compact')||width<=850);
+    const available=width-taken;
+    const rightMax=Math.max(240,Math.min(engineering?1120:640,engineeringOverlay?available:width>850?width-taken-360:width-48));
+    const rightKey=engineering?'engineering':'right';
+    const right=clamp(preferred[rightKey]??(engineering?(engineeringOverlay?available:available*.64):(width>=1550?330:width<=850?280:width<=1100?250:286)),240,rightMax);
+    if(engineering)document.getElementById('section-inspector').style.setProperty('--ew-top',document.querySelector('.topbar').getBoundingClientRect().height+'px');
     const mapMax=Math.max(240,Math.min(productMode?(width<1400?300:420):640,width-taken-(width<=1150?32:48)-(productMode?500:302)));
     const map=clamp(preferred.right??(width<=1150?260:300),240,mapMax);
     css('--panel-left-width',left);css('--panel-right-width',right);css('--panel-map-width',map);
@@ -135,6 +141,7 @@ window.BF={api,esc,getSelection:()=>selected,getTitle:()=>conversations.find(c=>
     if(newMap!==observedMap){if(observedMap)observer.unobserve(observedMap);observedMap=newMap;if(newMap)observer.observe(newMap)}
     for(const pane of panes){
       const el=document.getElementById(pane.id), handle=pane.handle;
+      pane.preference=pane.id==='section-inspector'&&engineering?'engineering':pane.side;
       handle.hidden=!visible(el)||(pane.id==='map-inspector'&&width<=760)||(pane.id==='product-inspector'&&width<=900);
       if(handle.hidden)continue;
       const rect=el.getBoundingClientRect();
@@ -150,7 +157,7 @@ window.BF={api,esc,getSelection:()=>selected,getTitle:()=>conversations.find(c=>
   function finish(cancel=false){
     if(!drag)return;
     const {pane,pointer,prior}=drag;drag=null;
-    if(cancel){if(prior===undefined)delete preferred[pane.side];else preferred[pane.side]=prior}else persist();
+    if(cancel){if(prior===undefined)delete preferred[pane.preference||pane.side];else preferred[pane.preference||pane.side]=prior}else persist();
     document.body.classList.remove('panel-resizing');pane.handle.removeAttribute('aria-grabbed');
     if(pane.handle.hasPointerCapture(pointer))pane.handle.releasePointerCapture(pointer);
     schedule();
@@ -162,17 +169,17 @@ window.BF={api,esc,getSelection:()=>selected,getTitle:()=>conversations.find(c=>
     h.addEventListener('pointerdown',e=>{
       if(e.button!==0||drag)return;
       e.preventDefault();h.focus({preventScroll:true});h.setPointerCapture(e.pointerId);
-      drag={pane,pointer:e.pointerId,x:e.clientX,width:document.getElementById(pane.id).getBoundingClientRect().width,prior:preferred[pane.side]};
+      drag={pane,pointer:e.pointerId,x:e.clientX,width:document.getElementById(pane.id).getBoundingClientRect().width,prior:preferred[pane.preference||pane.side]};
       h.setAttribute('aria-grabbed','true');document.body.classList.add('panel-resizing');
     });
-    h.addEventListener('pointermove',e=>{if(drag?.pane!==pane||drag.pointer!==e.pointerId)return;preferred[pane.side]=clamp(drag.width+(e.clientX-drag.x)*pane.sign,pane.min,pane.max);schedule()});
+    h.addEventListener('pointermove',e=>{if(drag?.pane!==pane||drag.pointer!==e.pointerId)return;preferred[pane.preference||pane.side]=clamp(drag.width+(e.clientX-drag.x)*pane.sign,pane.min,pane.max);schedule()});
     h.addEventListener('pointerup',()=>finish());h.addEventListener('pointercancel',()=>finish(true));h.addEventListener('lostpointercapture',()=>finish(true));
-    h.addEventListener('dblclick',()=>{delete preferred[pane.side];persist();schedule()});
+    h.addEventListener('dblclick',()=>{delete preferred[pane.preference||pane.side];persist();schedule()});
     h.addEventListener('keydown',e=>{
       if(drag){if(e.key==='Escape'){e.preventDefault();finish(true)}return}
       if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
       e.preventDefault();const current=document.getElementById(pane.id).getBoundingClientRect().width;
-      preferred[pane.side]=e.key==='Home'?pane.min:e.key==='End'?pane.max:clamp(current+(e.key==='ArrowRight'?1:-1)*pane.sign*(e.shiftKey?40:10),pane.min,pane.max);
+      preferred[pane.preference||pane.side]=e.key==='Home'?pane.min:e.key==='End'?pane.max:clamp(current+(e.key==='ArrowRight'?1:-1)*pane.sign*(e.shiftKey?40:10),pane.min,pane.max);
       persist();schedule();
     });
   }
