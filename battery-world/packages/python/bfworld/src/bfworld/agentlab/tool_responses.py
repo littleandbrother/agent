@@ -76,6 +76,33 @@ class ToolResponses:
             result = {'_response': ref, 'full_response_inline': False,
                 'instruction': 'Read the exact saved JSON with bf_engineering action=response_view, response_id, response_sha256, offset and limit. Offsets count Unicode characters; continue from next_offset.',
                 **{k: value[k] for k in ('id', 'status', 'engine', 'operation') if k in value}}
+            # A large input/source snapshot must not hide the build failure or
+            # the small log/result files needed to decide the next action.
+            # This is an index of the exact receipt, never a new verdict.
+            if isinstance(value.get('error'), str):
+                result['error'] = value['error'][:2000]
+            outcome = value.get('result')
+            if isinstance(outcome, dict):
+                preview = {k: outcome[k] for k in (
+                    'product_verified', 'digital_checks_passed', 'nominal_status',
+                    'nominal_prediction_eligible', 'hardware_verified',
+                    'physical_qualification', 'fabrication_released')
+                    if isinstance(outcome.get(k), bool) or
+                    isinstance(outcome.get(k), str) and len(outcome[k]) <= 120}
+                artifacts = outcome.get('artifacts')
+                if isinstance(artifacts, list):
+                    preview['artifact_count'] = len(artifacts)
+                    preview['artifacts'] = []
+                    for artifact in artifacts:
+                        if not isinstance(artifact, dict):
+                            continue
+                        entry = {k: artifact[k] for k in ('name', 'sha256', 'bytes') if k in artifact}
+                        if len(canonical(preview).encode()) + len(canonical(entry).encode()) > 8000:
+                            break
+                        preview['artifacts'].append(entry)
+                    preview['artifact_index_complete'] = len(preview['artifacts']) == len(artifacts)
+                if preview:
+                    result['result'] = preview
             if jobs:
                 result['jobs'] = [{k: j[k] for k in ('id', 'status', 'engine', 'operation') if k in j}
                                   for j in jobs]

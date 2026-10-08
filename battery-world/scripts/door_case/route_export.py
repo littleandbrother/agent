@@ -90,9 +90,10 @@ def main():
     for ly,polygons in planes.items():
         for g in polygons:put('FILL',dict(layerId=1 if ly=='F.Cu' else 2,netName='GND',path=poly_path(g),width=0,fillStyle=0,locked=True,zIndex=0))
         for g in [box(*b['rf_keepout_mm']),box(*b['rf_notch_mm'])]:put('REGION',dict(layerId=1 if ly=='F.Cu' else 2,path=poly_path(g),width=1,prohibitType=[3,5,6,7,8],name='Antenna copper keepout',locked=True))
-    write_project(out,rr)
+    write_project(out,rr,b['design'])
     for layer,label in [('F.Cu','top'),('B.Cu','bottom'),('both','combined')]:
-        s=['<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="-5 -6 90 40"><rect x="-5" y="-6" width="90" height="40" fill="white"/><g transform="translate(0,30) scale(1,-1)"><rect width="80" height="30" rx="1" fill="#153e36" stroke="#152938" stroke-width=".15"/><rect x="52" y="24.2" width="18" height="5.8" fill="#d7c098" opacity=".65"/>']
+        s=['<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="-5 -6 90 40"><rect x="-5" y="-6" width="90" height="40" fill="white"/><g transform="translate(0,30) scale(1,-1)"><rect width="80" height="30" rx="1" fill="#153e36" stroke="#152938" stroke-width=".15"/>']
+        k=b['rf_keepout_mm'];s.append(f'<rect x="{k[0]}" y="{k[1]}" width="{k[2]-k[0]}" height="{k[3]-k[1]}" fill="#d7c098" opacity=".65"/>')
         for ly,polygons in planes.items():
             if layer not in ('both',ly):continue
             for g in polygons:
@@ -107,12 +108,12 @@ def main():
         for x,y,d in b['mounting_holes_mm']:s.append(f'<circle cx="{x}" cy="{y}" r="{d/2}" fill="white"/>')
         s.append('</g><g font-family="Arial" fill="#dce9e4" font-size=".9">')
         for c in b['components']:s.append(f'<text x="{c["x"]-1}" y="{30-c["y"]-2}">{c["ref"]}</text>')
-        s.append(f'</g><text x="0" y="-3" font-family="Arial" font-size="1.6">D2 · {label} copper · 80 × 30 mm · routing draft / NOT FOR FABRICATION</text><text x="0" y="33" font-family="Arial" font-size="1.2">Red: top / Blue: bottom. Antenna keepout shaded. Native ERC/DRC and RF review pending.</text></svg>');(out/f'pcb-{label}.svg').write_text('\n'.join(s))
+        s.append(f'</g><text x="0" y="-3" font-family="Arial" font-size="1.6">{b["design"]} · {label} copper · 80 × 30 mm · routing draft / NOT FOR FABRICATION</text><text x="0" y="33" font-family="Arial" font-size="1.2">Red: top / Blue: bottom. Antenna keepout shaded. Native ERC/DRC and RF review pending.</text></svg>');(out/f'pcb-{label}.svg').write_text('\n'.join(s))
     # RS-274X derived directly from the routed copper, as draft manufacturing
     # interchange. No ground plane is invented; release gate remains closed.
     gerber=out/'gerber-draft';gerber.mkdir(exist_ok=True)
     for ly,name in [('F.Cu','F_Cu.gtl'),('B.Cu','B_Cu.gbl')]:
-        s=['G04 D2 ENGINEERING DRAFT - NOT FOR FABRICATION*','%FSLAX46Y46*%','%MOMM*%','%LPD*%'];apertures={};draw=[]
+        s=['G04 '+b['design']+' ENGINEERING DRAFT - NOT FOR FABRICATION*','%FSLAX46Y46*%','%MOMM*%','%LPD*%'];apertures={};draw=[]
         def aperture(shape,w,h=None):
             key=(shape,round(w,6),round(h or w,6))
             if key not in apertures:

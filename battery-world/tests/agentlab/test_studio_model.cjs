@@ -36,3 +36,15 @@ test('same-label previews remain distinguishable',()=>{
  const labels=M.previewLabels([{id:'a',name:'schematic.svg'},{id:'b',name:'schematic.pdf'}]);
  assert.notEqual(labels[0].label,labels[1].label);assert.ok(labels[0].label.includes('.svg'));
 });
+test('empty assembly opens the latest explicitly published case without granting acceptance',()=>{
+ const cases=['D2','D3-electronics'].map((case_version,index)=>({id:case_version,case_id:'door',case_version,created:index+1,files:[],design_status:'FAIL'}));
+ const s={revision:2,files:[],results:cases,verdict:{passed:true}};
+ assert.equal(M.preferredScope(s),'case:door:D3-electronics');
+ assert.equal(M.preferredScope({...s,results:[...cases].reverse()}),'case:door:D3-electronics');
+ assert.equal(M.scoped(s,M.preferredScope(s)).verdict,null);
+ assert.equal(M.preferredScope({revision:2,files:[],results:[]}),'assembly');
+});
+test('readable current assembly keeps precedence over unrelated reference cases',()=>{
+ const s={revision:1,files:[{integrity:true,applicability:{state:'current'}}],results:[{case_id:'other',case_version:'D3'}]};
+ assert.equal(M.preferredScope(s),'assembly');
+});

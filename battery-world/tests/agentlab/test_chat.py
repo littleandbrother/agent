@@ -89,6 +89,28 @@ class ChatTests(unittest.TestCase):
         with self.app.store.connect() as db:self.assertEqual(0,db.execute('SELECT COUNT(*) FROM model_requests').fetchone()[0])
         events=self.app.conversations.events(c['id']);cursor=events[-1]['seq'];self.assertEqual([],self.app.conversations.events(c['id'],cursor))
 
+    def test_historical_terminal_events_do_not_close_resumed_process(self):
+        from unittest.mock import Mock
+        (self.app.store.root.parent/'paid-window-closed.json').write_text('{}')
+        _,conversation=self.req('/api/conversations',{'text':'resume','operation_id':'old-idle'})
+        cid=conversation['id'];chat=self.app.conversations
+        folder=chat.home/'sessions'/cid;folder.mkdir(parents=True,exist_ok=True)
+        path=folder/'trace.jsonl'
+        path.write_text(json.dumps({'type':'turn_error','error':'old crash'})+'\n'+json.dumps({'type':'chat_idle'})+'\n')
+        proc=Mock();proc.poll.return_value=None;proc.stdin=io.BytesIO()
+        chat.processes[cid]=proc;chat.state(cid,'STARTING')
+        try:
+            chat.ingest(cid,execution_state=False)
+            self.assertEqual('STARTING',chat.get(cid)['status'])
+            self.assertEqual(b'',proc.stdin.getvalue())
+            self.assertTrue(any(e['data'].get('error')=='old crash' for e in chat.events(cid)))
+            with path.open('a') as stream:stream.write(json.dumps({'type':'turn_error','error':'new failure'})+'\n')
+            chat.ingest(cid)
+            self.assertEqual('FAILED',chat.get(cid)['status'])
+            self.assertEqual('new failure',chat.get(cid)['error'])
+        finally:
+            chat.processes.pop(cid,None)
+
     def test_recovery_keeps_pending_input_and_does_not_renew_on_duplicate_or_retry(self):
         closed=self.app.store.root.parent/'paid-window-closed.json';closed.write_text('{}')
         body={'text':'继续','operation_id':'recover','model_cap_usd':.05}

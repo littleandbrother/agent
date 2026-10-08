@@ -17,7 +17,13 @@ def profile(name='strong_generic', opportunities=3):
             'candidate_opportunities': opportunities}
 
 
-def capabilities():
+def capabilities(binding=None):
+    if binding and binding['task'].get('engine')=='door-system':
+        return {'id':'door-loading-release-configuration-v1','numeric_parameters':True,
+                'structural_configuration':['mechanical.closed_dz_mm','mechanical.polarity'],
+                'artifact_binding':['native CAD bracket pose','joint rotated magnetic force'],
+                'architecture':False,'candidate_artifact_sources':False,
+                'scope':'Bounded physical configuration, storage and timing; fixed beam/PMIC/application core, no topology synthesis or method superiority claim.'}
     return {'id': 'mainline-numeric-candidate-only-v2', 'numeric_parameters': True,
             'architecture': False, 'candidate_artifact_sources': False,
             'scope': 'Four R/Q policies are available; this pilot uses strong_generic only.'}
@@ -62,7 +68,7 @@ def record(engineering, owner, body):
     unsupported = kind == 'architecture_recomposition'
     value = {'schema_version': 'method-capability-action-v1', 'owner': owner,
         'task_hash':binding['task_hash'],
-        'method_profile': profile(), 'capabilities': capabilities(), 'before_job_id': before_id,
+        'method_profile': profile(), 'capabilities': capabilities(binding), 'before_job_id': before_id,
         'job_id': after_id, 'before_artifacts': before_hashes, 'after_artifacts': after_hashes,
         'actual_changed_fields': changed, 'requested_kind': kind,
         'rationale': body['rationale'], 'falsifier': body['falsifier'],

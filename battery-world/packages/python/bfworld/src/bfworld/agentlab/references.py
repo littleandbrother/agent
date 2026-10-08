@@ -306,6 +306,31 @@ class References:
                         'proposal_revision': revision, **{k: body[k] for k in fields},
                         'evidence_level': 'participant-interpretation-not-validation'})
 
+    def materialize(self, owner, key, name):
+        """Preserve an acquired original without asking the model to retype it."""
+        from .responsibility_review import local_file
+        source = self.get(owner, key)
+        if source['kind'] != 'source':
+            raise ValueError('REFERENCE_FETCH_SOURCE_BEFORE_MATERIALIZE')
+        root = self.store.root.parent/'participants'/owner
+        target = local_file(root, name)
+        raw = self.blob(source['raw_sha256']).read_bytes()
+        if target.exists():
+            if not target.is_file() or hashlib.sha256(target.read_bytes()).hexdigest() != source['raw_sha256']:
+                raise ValueError('REFERENCE_DESTINATION_CONFLICT: choose a new path; existing bytes preserved')
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open('xb') as out:
+                out.write(raw)
+        if hashlib.sha256(target.read_bytes()).hexdigest() != source['raw_sha256']:
+            raise ValueError('REFERENCE_MATERIALIZE_HASH_MISMATCH')
+        return self.put(owner, 'materialization', {
+            'reference_id': key, 'url': source['url'], 'file_path': str(target.relative_to(root.resolve())),
+            'sha256': source['raw_sha256'], 'bytes': len(raw),
+            'evidence_level': 'acquired-not-reproduced', 'content_trust': 'external-untrusted-data',
+            'license': source.get('license', 'not-determined'),
+        })
+
     def action(self, owner, body):
         action = body.get('action')
         started = time.monotonic()
@@ -326,6 +351,8 @@ class References:
                 return self.fetch(owner, body.get('url'))
             if action == 'read':
                 return self.read(owner, body.get('reference_id'), body.get('offset', 0), body.get('limit', 8000))
+            if action == 'materialize':
+                return self.materialize(owner, body.get('reference_id'), body.get('file_path'))
             if action == 'calculate':
                 from .reference_checks import calculate
                 source=self.get(owner,body.get('reference_id'))

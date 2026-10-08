@@ -14,14 +14,27 @@ PHYSICAL = ('magnetic_mesh', 'magnetic_anchor_agreement')
 
 
 def load_task(task_id='door-event-nominal-v1'):
-    if task_id != 'door-event-nominal-v1':
+    if task_id not in ('door-event-nominal-v1','door-motion-structure-v2','door-selfpower-nominal-v1','door-selfpower-nominal-v2','door-selfpower-nominal-v3','door-selfpower-nominal-v4','door-selfpower-nominal-v5'):
         raise ValueError('SIMULATION_TASK_NOT_FOUND')
     task = json.loads((TASK_ROOT / (task_id + '.json')).read_text())
-    task['baseline'] = validate(task['baseline'])
+    if task_id in ('door-selfpower-nominal-v1','door-selfpower-nominal-v2','door-selfpower-nominal-v3','door-selfpower-nominal-v4','door-selfpower-nominal-v5'):
+        from .door_selfpower.contracts import normalize
+        task['baseline']=normalize(task['baseline'])
+        if task['frozen']!=task['baseline']['base_design']['frozen']:raise ValueError('SELFPOWER_TASK_FROZEN_MISMATCH')
+    elif task_id=='door-motion-structure-v2':
+        from .door_system.contracts import normalize, DEFAULT
+        task['baseline']=normalize({k:task['baseline'][k] for k in ('mechanical','circuit','firmware')})
+    else:task['baseline'] = validate(task['baseline'])
     return {'task': task, 'task_hash': digest(task)}
 
 
 def check_candidate(binding, parameters):
+    if binding['task'].get('engine')=='door-selfpower':
+        from .door_selfpower.evaluation import check_candidate as check
+        return check(binding,parameters)
+    if binding['task'].get('engine')=='door-system':
+        from .door_system.evaluation import check_candidate as check
+        return check(binding,parameters)
     task = binding['task']
     if digest(task) != binding['task_hash']:
         raise ValueError('SIMULATION_TASK_HASH_MISMATCH')
@@ -47,6 +60,12 @@ def check_candidate(binding, parameters):
 
 def evaluate(binding, spec, result, receiver):
     """No hidden success inference: missing checks, wrong/late payloads stay explicit."""
+    if binding['task'].get('engine')=='door-selfpower':
+        from .door_selfpower.evaluation import evaluate as evaluate_selfpower
+        return evaluate_selfpower(binding,spec,result,receiver)
+    if binding['task'].get('engine')=='door-system':
+        from .door_system.evaluation import evaluate as evaluate_system
+        return evaluate_system(binding,spec,result,receiver)
     errors = []
     try:
         check_candidate(binding, {'candidate': spec, 'confirmation': True})
@@ -137,7 +156,7 @@ class SimulationTasks:
     def guard(self, owner, engine, parameters):
         binding = self.binding(owner)
         if binding:
-            if engine != 'closed-simulation':
+            if engine != binding['task'].get('engine','closed-simulation'):
                 raise ValueError('TASK_ENGINE_NOT_ALLOWED')
             check_candidate(binding, parameters)
         return binding
@@ -191,9 +210,11 @@ class SimulationTasks:
         engineering.event(owner, job_id, 'task_submitted', receipt)
         return receipt
 
-    def create_trial(self, app, trial_id, text):
+    def create_trial(self, app, trial_id, text, protocol_id=None):
         """Operator-only preparation binds task, study and costs BEFORE the first send."""
-        protocol = json.loads((TASK_ROOT/'protocol.json').read_text())
+        protocol_file = {None: 'protocol.json', 'door-loading-release-20261006': 'loading-release-protocol.json'}.get(protocol_id)
+        if protocol_file is None: raise ValueError('PILOT_PROTOCOL_NOT_DECLARED')
+        protocol = json.loads((TASK_ROOT/protocol_file).read_text())
         if trial_id not in {t['id'] for t in protocol['pi_trials']}:
             raise ValueError('PILOT_TRIAL_NOT_DECLARED')
         operation = protocol['id'] + '-' + trial_id
@@ -201,6 +222,15 @@ class SimulationTasks:
             study = db.execute('SELECT * FROM research_model_studies WHERE protocol=?', (protocol['id'],)).fetchone()
             if not study or time.time() >= study['expires']:
                 raise ValueError('PILOT_STUDY_NOT_AUTHORIZED_OR_EXPIRED')
+            if study['model'] != protocol['model'] or study['max_usd'] != protocol['requested_paid_allocation_usd']:
+                raise ValueError('PILOT_STUDY_PROTOCOL_MISMATCH')
+            if protocol.get('native_gate'):
+                gate = protocol['native_gate']; path = Path(gate['result_path'])
+                if not path.is_file() or file_hash(path) != gate['sha256']:
+                    raise ValueError('PILOT_NATIVE_BASELINE_SEAL')
+                result = json.loads(path.read_text())
+                if result.get('source_stable') is not True or not result.get('qualification',{}).get('nominal_prediction_eligible'):
+                    raise ValueError('PILOT_NATIVE_BASELINE_GATE')
             old = db.execute('SELECT id FROM conversations WHERE operation=?', (operation,)).fetchone()
             if old:
                 message = db.execute('SELECT text FROM chat_messages WHERE conversation=? ORDER BY created LIMIT 1', (old['id'],)).fetchone()

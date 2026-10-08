@@ -11,6 +11,7 @@
   ].map(([id, label, description]) => ({id, label, description}));
   const path = f => [f.name, f.source_path, f.path].filter(Boolean).join(' ').toLowerCase();
   function belongs(f, id) {
+    if (Array.isArray(f.sections) && id !== 'overview') return f.sections.includes(id);
     const p = path(f), ext = (f.name || '').split('.').pop().toLowerCase();
     if (id === 'schematic') return /schematic|原理图|\.schdoc\b|\.sch\b|\.kicad_sch\b/.test(p);
     if (id === 'pcb') return f.domain !== 'mechanical' && !belongs(f, 'schematic') && !belongs(f, 'bom') && (/pcb|布线|gerber|drill|pick.?place|routing|\.brd\b|\.kicad_pcb\b/.test(p) || ['gbr','gbl','gtl','gbs','gts','drl','epro2','epru'].includes(ext));
@@ -26,7 +27,7 @@
     const ids = new Set(files(snapshot, id).map(f => f.id));
     return (snapshot.results || []).filter(r => (r.files || []).some(f => ids.has(f.id)) ||
       id === 'mechanical' && r.domain === 'mechanical' ||
-      id === 'simulation' && ['closed-simulation','spice','comsol','beam-event','event-transient','benchmark'].includes(r.kind));
+      id === 'simulation' && ['closed-simulation','door-system','spice','comsol','beam-event','event-transient','benchmark'].includes(r.kind));
   }
   function views(snapshot, id) {
     const allowed = new Set(files(snapshot, id).map(f => f.id));
@@ -41,8 +42,10 @@
       const kind = ['png','jpg','jpeg','svg','webp'].includes(ext) ? 'image' : ext === 'pdf' ? 'pdf' : ext === 'mp4' ? 'video' : ext === 'glb' ? 'model' : ['simulation','bom'].includes(id) && ['csv','tsv','raw'].includes(ext) ? 'series' : null;
       if (kind) out.push({r: (snapshot.results || []).find(r => (r.files || []).some(x => x.id === f.id)), v:{kind,file_id:f.id}, f});
     }
-    const rank = x => ({image:0,series:1,model:2,mesh:2,video:3,pdf:4}[x.v.kind] ?? 5) + (/combined|overview|installation|waveform/.test(path(x.f)) ? -.1 : 0);
-    return out.sort((a,b) => rank(a)-rank(b));
+    const curated=out.filter(x=>x.f.sections?.includes(id));
+    const visible=curated.length && ['mechanical','pcb'].includes(id)?curated:out;
+    const rank = x => (id==='mechanical'&&['model','mesh'].includes(x.v.kind)?-2:({image:0,series:1,model:2,mesh:2,video:3,pdf:4}[x.v.kind] ?? 5)) + (/combined|overview|installation|waveform/.test(path(x.f)) ? -.1 : 0);
+    return visible.sort((a,b) => rank(a)-rank(b));
   }
   function series(data) {
     if (data.table) return {table:true,headers:data.headers || [],rows:data.rows || []};
@@ -52,7 +55,7 @@
       .filter(c => rows.some(r => typeof r[c.index] === 'number' && Number.isFinite(r[c.index])));
     return {table:false,headers:data.headers || [],rows,columns,lo:rows.length?Math.min(...rows.map(r=>r[0])):null,hi:rows.length?Math.max(...rows.map(r=>r[0])):null};
   }
-  const labels = {'summary.maximum_storage_v':'最高储能电压 (V)','summary.minimum_input_v':'最低输入电压 (V)','energy_ledger.boot':'启动能量 (J)','energy_ledger.harvest':'采集能量 (J)','energy_ledger.dump':'钳位耗散 (J)','energy_ledger.esr_loss':'内阻损耗 (J)',peak_tip_mm:'梁端峰值 (mm)',peak_piezo_V:'压电峰值 (V)',peak_storage_V:'储能峰值 (V)',peak_supply_V:'供电峰值 (V)',VIN_peak_V:'输入峰值 (V)',tx_completed:'完整发送',received_events:'虚拟接收事件',displacement_mm:'位移 (mm)',max_von_mises_mpa:'等效应力 (MPa)',pads:'焊盘',tracks:'走线',vias:'过孔',flash_bytes:'Flash (bytes)',ram_static_bytes:'静态 RAM (bytes)',latency_ms:'延迟 (ms)',parameters:'模型参数量',power_mw:'功耗 (mW)',minimum_sampled_clearance_mm:'采样最小间距 (mm)',parts:'零件数量'};
+  const labels = {minimum_clearance_mm:'最小铜间距 (mm)',minimum_trace_width_mm:'最窄走线 (mm)',unique_parts:'料号种数',fitted_parts:'装配件数','summary.maximum_storage_v':'最高储能电压 (V)','summary.minimum_input_v':'最低输入电压 (V)','energy_ledger.boot':'启动能量 (J)','energy_ledger.harvest':'采集能量 (J)','energy_ledger.dump':'钳位耗散 (J)','energy_ledger.esr_loss':'内阻损耗 (J)',peak_tip_mm:'梁端峰值 (mm)',peak_piezo_V:'压电峰值 (V)',peak_storage_V:'储能峰值 (V)',peak_supply_V:'供电峰值 (V)',VIN_peak_V:'输入峰值 (V)',tx_completed:'完整发送',received_events:'虚拟接收事件',displacement_mm:'位移 (mm)',max_von_mises_mpa:'等效应力 (MPa)',pads:'焊盘',tracks:'走线',vias:'过孔',flash_bytes:'Flash (bytes)',ram_static_bytes:'静态 RAM (bytes)',latency_ms:'延迟 (ms)',parameters:'模型参数量',power_mw:'功耗 (mW)',minimum_sampled_clearance_mm:'采样最小间距 (mm)',parts:'零件数量'};
   const api = {sections,belongs,files,results,views,series,metricLabel:name=>labels[name] || name};
   if (typeof module !== 'undefined') module.exports=api; else root.EngineeringWorkspaceModel=api;
 })(typeof window !== 'undefined' ? window : this);

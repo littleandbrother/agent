@@ -1,0 +1,107 @@
+{
+  "schema_version": "simulation-task-v2",
+  "id": "door-motion-structure-v2",
+  "engine": "door-system",
+  "baseline": {
+    "schema_version": "bf-door-system-design-v2",
+    "revision": "D4",
+    "mechanical": {
+      "gap_mm": 48.0,
+      "closed_dz_mm": -30.265,
+      "polarity": -1
+    },
+    "circuit": {
+      "cin_uF": 47.0,
+      "cout_uF": 100.0
+    },
+    "firmware": {
+      "interval_ms": 100.0
+    }
+  },
+  "frozen": {
+    "task": {
+      "closing_s": 2.0,
+      "holding_s": 0.5,
+      "opening_s": 2.0,
+      "settling_s": 2.0,
+      "angle_deg": 65.0,
+      "initial_vin_V": 0.0,
+      "diagnostic_input_A": 0.0,
+      "event": "one completed motion notification during close-hold-open cycle",
+      "deadline_s": 6.5,
+      "link_loss_probability": 0.0,
+      "scan_duty": 1.0,
+      "seed": 17
+    },
+    "model": {
+      "remanence_T": 1.25,
+      "damping_ratio": 0.02,
+      "recoil_permeability": 1.0,
+      "tip_magnet_mm": [
+        10.0,
+        10.0,
+        10.0
+      ],
+      "driver_magnet_mm": [
+        20.0,
+        20.0,
+        20.0
+      ],
+      "beam_limit_m": 0.008,
+      "boot_ms": 53.8,
+      "init_ms": 13.0,
+      "tx_ms": 5.0,
+      "boot_mA": 0.41,
+      "init_mA": 1.596,
+      "tx_mA": 3.659,
+      "sleep_uA": 2.0,
+      "reset_uA": 0.3
+    },
+    "numerics": {
+      "max_step_s": 5e-05,
+      "firmware_step_s": 0.0001,
+      "reltol": 0.0001,
+      "max_coupling_iterations": 8,
+      "energy_residual_target": 0.01,
+      "mesh_target": 0.05,
+      "interpolation_target": 0.02
+    }
+  },
+  "allowed_design_variables": {
+    "mechanical": {
+      "gap_mm": [
+        28.0,
+        70.0
+      ],
+      "closed_dz_mm": [
+        -35.0,
+        5.0
+      ],
+      "polarity": [
+        -1,
+        1
+      ]
+    },
+    "circuit": {
+      "cin_uF": [
+        10.0,
+        4700.0
+      ],
+      "cout_uF": [
+        10.0,
+        470.0
+      ]
+    },
+    "firmware": {
+      "interval_ms": [
+        100.0,
+        500.0
+      ]
+    }
+  },
+  "service": {
+    "deadline_s": 6.5,
+    "expected_payload_hex": "424644320102030405060708"
+  },
+  "claim_boundary": "D4 nominal full-cycle motion notification; no open/closed state, arbitrary device architecture, exactly-once RF or physical product acceptance."
+}

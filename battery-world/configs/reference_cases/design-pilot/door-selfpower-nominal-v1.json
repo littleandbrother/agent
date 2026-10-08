@@ -1,0 +1,151 @@
+{
+  "schema_version": "simulation-task-v3",
+  "id": "door-selfpower-nominal-v1",
+  "engine": "door-selfpower",
+  "baseline": {},
+  "frozen": {
+    "task": {
+      "closing_s": 2.0,
+      "holding_s": 0.5,
+      "opening_s": 2.0,
+      "settling_s": 2.0,
+      "angle_deg": 65.0,
+      "initial_vin_V": 0.0,
+      "diagnostic_input_A": 0.0,
+      "event": "one completed motion notification during close-hold-open cycle",
+      "deadline_s": 6.5,
+      "link_loss_probability": 0.0,
+      "scan_duty": 1.0,
+      "seed": 17
+    },
+    "model": {
+      "remanence_T": 1.25,
+      "damping_ratio": 0.02,
+      "recoil_permeability": 1.0,
+      "tip_magnet_mm": [
+        10.0,
+        10.0,
+        10.0
+      ],
+      "driver_magnet_mm": [
+        20.0,
+        20.0,
+        20.0
+      ],
+      "beam_limit_m": 0.008,
+      "boot_ms": 53.8,
+      "init_ms": 13.0,
+      "tx_ms": 5.0,
+      "boot_mA": 0.41,
+      "init_mA": 1.596,
+      "tx_mA": 3.659,
+      "sleep_uA": 2.0,
+      "reset_uA": 0.3
+    },
+    "numerics": {
+      "max_step_s": 5e-05,
+      "firmware_step_s": 0.0001,
+      "reltol": 0.0001,
+      "max_coupling_iterations": 8,
+      "energy_residual_target": 0.01,
+      "mesh_target": 0.05,
+      "interpolation_target": 0.02
+    }
+  },
+  "allowed_design_variables": {
+    "mechanical.gap_mm": {
+      "range": [
+        28.0,
+        70.0
+      ]
+    },
+    "mechanical.closed_dz_mm": {
+      "range": [
+        -35.0,
+        5.0
+      ]
+    },
+    "mechanical.polarity": {
+      "values": [
+        -1,
+        1
+      ]
+    },
+    "circuit.cin_uF": {
+      "range": [
+        10.0,
+        4700.0
+      ]
+    },
+    "circuit.cout_uF": {
+      "range": [
+        10.0,
+        470.0
+      ]
+    },
+    "firmware.interval_ms": {
+      "range": [
+        100.0,
+        500.0
+      ]
+    },
+    "extraction.topology": {
+      "values": [
+        "direct",
+        "seh",
+        "psshi",
+        "sece"
+      ]
+    },
+    "extraction.envelope_pF": {
+      "values": [
+        68.0,
+        100.0,
+        220.0,
+        470.0,
+        680.0,
+        1000.0,
+        3000.0
+      ]
+    },
+    "extraction.diodes": {
+      "values": [
+        "BAT46WJ",
+        "BAS21HY"
+      ]
+    },
+    "gate": {
+      "values": [
+        "off",
+        "reserve-5v5",
+        "reserve-5v5-3v0",
+        "reserve-6v5",
+        "reserve-8v0",
+        "reserve-e96-6v1",
+        "reserve-e96-6v3",
+        "reserve-e96-6v3-2v96"
+      ]
+    },
+    "application.packet_policy": {
+      "values": [
+        "one-shot",
+        "beacon"
+      ]
+    }
+  },
+  "service": {
+    "deadline_s": 6.5,
+    "expected_payload_hex": "424644320102030405060708"
+  },
+  "required_checks": [
+    "rom_domain",
+    "force_interpolation",
+    "energy_balance",
+    "drive_balance",
+    "electrical_energy_lower_bound",
+    "component_ratings",
+    "program_power_fixed_point",
+    "time_step"
+  ],
+  "claim_boundary": "D5 nominal zero-charge full-cycle motion notification with sourced extraction/gating and shared compiled C. No exact open/closed truth, exactly-once semantics, RF, pulse thermal qualification, hardware or manufacturing acceptance."
+}

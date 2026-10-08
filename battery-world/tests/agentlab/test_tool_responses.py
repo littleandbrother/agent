@@ -75,6 +75,30 @@ class ResponseEvidence(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'HASH_MISMATCH'):
             self.bridge.view('alice', args)
 
+    def test_large_failure_keeps_log_index_and_negative_verdict_visible(self):
+        self.job.update(status='FAILED', error='PROJECT_PROCESS_EXIT_1')
+        self.job['result'].update(product_verified=False, hardware_verified=False)
+        self.job['result']['artifacts'] = [
+            {'name': 'process.log', 'sha256': 'c' * 64, 'bytes': 511}]
+        response = self.bridge.wrap('alice', self.job)
+        self.assertFalse(response['full_response_inline'])
+        self.assertEqual('FAILED', response['status'])
+        self.assertEqual('PROJECT_PROCESS_EXIT_1', response['error'])
+        self.assertFalse(response['result']['product_verified'])
+        self.assertFalse(response['result']['hardware_verified'])
+        self.assertEqual(self.job['result']['artifacts'], response['result']['artifacts'])
+        self.assertTrue(response['result']['artifact_index_complete'])
+        self.assertEqual(hashlib.sha256(canonical(self.job).encode()).hexdigest(),
+                         response['_response']['sha256'])
+
+    def test_large_artifact_index_remains_bounded_and_explicitly_partial(self):
+        self.job['result']['artifacts'] *= 1000
+        response = self.bridge.wrap('alice', self.job)
+        self.assertLessEqual(len(canonical(response).encode()), 22000)
+        self.assertEqual(1000, response['result']['artifact_count'])
+        self.assertFalse(response['result']['artifact_index_complete'])
+        self.assertGreater(len(response['result']['artifacts']), 0)
+
     def test_delivery_receipts_only_match_exact_post_projection_feedback(self):
         response = self.bridge.wrap('alice', self.job)
         page = self.bridge.view('alice', self.page_args(response))

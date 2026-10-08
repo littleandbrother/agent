@@ -77,7 +77,7 @@ class Conversations:
         with self.store.connect() as db:db.execute('UPDATE conversations SET status=?,error=?,updated=? WHERE id=?',(status,error,time.time(),cid))
         self.event(cid,'status-'+secrets.token_hex(8),{'type':'conversation_status','status':status,'error':error})
 
-    def create(self,text,task_id,operation,folder_id=None,attachments=None,model_cap_usd=None,preflight=None):
+    def create(self,text,task_id,operation,folder_id=None,attachments=None,model_cap_usd=None,preflight=None,defer_dispatch=False):
         self.validate_text(text,operation)
         self.app.products.validate_attachments(attachments or [])
         if model_cap_usd is not None and (type(model_cap_usd) not in (int,float) or not 0<model_cap_usd<=.05):raise ValueError('MODEL_CAP_INVALID')
@@ -101,7 +101,7 @@ class Conversations:
             if not task_id:self.app.products.create(cid,attachments)
             if folder_id:self.app.organization.change_entry(cid,{'action':'move','folder_id':folder_id})
             if preflight:preflight(cid)
-            self.send(cid,text,operation)
+            self.send(cid,text,operation,dispatch=not defer_dispatch)
             return self.get(cid)
 
     @staticmethod
@@ -109,7 +109,7 @@ class Conversations:
         if not isinstance(text,str) or not text.strip() or len(text)>12000:raise ValueError('MESSAGE_REQUIRED_MAX_12000')
         if not isinstance(operation,str) or not 1<=len(operation)<=100:raise ValueError('OPERATION_REQUIRED')
 
-    def send(self,cid,text,operation):
+    def send(self,cid,text,operation,dispatch=True):
         self.get(cid);self.validate_text(text,operation)
         if self.app.organization.metadata(cid)['deleted']:raise ValueError('CONVERSATION_DELETED')
         if self.recalls.pending(cid):raise ValueError('RECALL_PENDING')
@@ -126,6 +126,9 @@ class Conversations:
             self.app.provider.recovery.issue(cid,mid)
             self.app.provider.recovery.refresh_grant(cid)
             self.event(cid,mid,{'type':'user_message','id':mid,'text':text})
+            if not dispatch:
+                self.event(cid,mid+'-staged',{'type':'conversation_staged','reason':'Operator prepares tool bindings and immutable inputs before dispatch.'})
+                with self.store.connect() as db:return dict(db.execute('SELECT * FROM chat_messages WHERE id=?',(mid,)).fetchone())
             proc=self.processes.get(cid)
             if proc and proc.poll() is None:self.drain(cid,proc)
             elif cid not in self.starting:self.start(cid)
@@ -190,7 +193,7 @@ class Conversations:
             except (BrokenPipeError,ValueError):
                 self.state(cid,'INTERRUPTED','消息发送中断，请检查对话后再补充消息');break
 
-    def ingest(self,cid):
+    def ingest(self,cid,execution_state=True):
         path=self.home/'sessions'/cid/'trace.jsonl'
         if not path.exists():return
         content=path.read_text()
@@ -203,6 +206,9 @@ class Conversations:
             if not self.event(cid,'trace-'+str(i),data):continue
             if data.get('type')=='input_accepted':
                 with self.store.connect() as db:db.execute("UPDATE chat_messages SET status='ACCEPTED' WHERE id=? AND conversation=? AND status='SENT'",(data['message_id'],cid))
+            # Recovery must first archive unseen historical events. A previous
+            # process's error/idle must never terminate the newly launched one.
+            if not execution_state:continue
             # A queued follow-up can start inside the same Pi process after a
             # failed turn. The previous turn's error is historical, not the
             # state of this new response. Keep the error event in the trace.
@@ -259,6 +265,7 @@ class Conversations:
                     # started after the old process finishes saving its state.
                     self.state(cid,'STOPPING')
                     return True
+            self.ingest(cid,execution_state=False)
             watcher=threading.Thread(target=watch,daemon=True);watcher.start()
             receipt=launcher.launch(Path(harness),conv['task_id'],label=cid,store_root=self.store.root,resume=resume,
                            service_port=self.port,on_process=ready,home_root=self.home,process_lock=lock,shared_context=context,chat_upgrade=True,product=self.app.products.exists(cid),on_expire=expire)

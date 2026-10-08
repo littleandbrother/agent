@@ -27,6 +27,66 @@ class ProviderBudget(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'USD_BUDGET'):self.provider.complete('operator',self.payload)
         self.assertEqual(1,self.provider.status()['calls'])
 
+    def test_reasoning_stream_envelope_may_exceed_legacy_two_megabytes(self):
+        with self.store.connect() as db:
+            db.execute('INSERT INTO settings VALUES(?,?)', ('model_profile:operator',json.dumps('engineering-reasoning-v1')))
+        chunk={'id':'response-x','model':'deepseek-flash','choices':[{'index':0,'delta':{'reasoning_content':'x'*600},'finish_reason':None}]}
+        terminal={'id':'response-x','model':'deepseek-flash','choices':[{'index':0,'delta':{},'finish_reason':'stop'}],
+            'usage':{'prompt_tokens':10,'completion_tokens':8000,'total_tokens':8010}}
+        raw=(b'data: '+json.dumps(chunk).encode()+b'\n\n')*3200+b'data: '+json.dumps(terminal).encode()+b'\n\ndata: [DONE]\n\n'
+        self.assertGreater(len(raw),2000000)
+        with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(raw)):
+            self.provider.complete('operator',{**self.payload,'max_tokens':32768},on_chunk=lambda _:None)
+        self.assertEqual('SETTLED',self.provider.status()['requests'][0]['status'])
+
+    def test_operator_reasoning_profile_keeps_reasoning_and_is_owner_scoped(self):
+        with self.store.connect() as db:
+            db.execute('INSERT INTO settings VALUES(?,?)', ('model_profile:operator',json.dumps('engineering-reasoning-v1')))
+        messages=[{'role':'user','content':'design'},
+                  {'role':'assistant','content':'','reasoning_content':'retained reasoning',
+                   'tool_calls':[{'id':'c1','type':'function','function':{'name':'read','arguments':'{}'}}]},
+                  {'role':'tool','tool_call_id':'c1','content':'facts'}]
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()) as opening:
+            self.provider.complete('operator',{**self.payload,'messages':messages,'max_tokens':65536})
+        body=json.loads(opening.call_args.args[0].data)
+        self.assertEqual({'type':'enabled'},body['thinking'])
+        self.assertEqual('high',body['reasoning_effort'])
+        self.assertEqual(32768,body['max_tokens'])
+        self.assertEqual(messages,body['messages'])
+        self.store.grant('other',[],6,time.time()+60)
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()) as opening:
+            self.provider.complete('other',{**self.payload,'thinking':{'type':'enabled'},'max_tokens':65536})
+        body=json.loads(opening.call_args.args[0].data)
+        self.assertEqual({'type':'disabled'},body['thinking'])
+        self.assertEqual(8192,body['max_tokens'])
+
+    def test_reasoning_profile_still_respects_request_usd_ceiling(self):
+        with self.store.connect() as db:
+            db.execute('INSERT INTO settings VALUES(?,?)', ('model_profile:operator',json.dumps('engineering-reasoning-v1')))
+            db.execute('UPDATE model_limits SET request_usd=.04')
+        with self.assertRaisesRegex(ValueError,'MODEL_USD_BUDGET'):
+            self.provider.complete('operator',{**self.payload,'max_tokens':32768})
+        self.assertEqual(0,self.provider.status()['calls'])
+
+    def test_forced_tool_choice_thinking_rejected_before_network_or_reservation(self):
+        with self.store.connect() as db:
+            db.execute('INSERT INTO settings VALUES(?,?)', ('model_profile:operator',json.dumps('engineering-reasoning-v1')))
+        for choice in ('required',{'type':'function','function':{'name':'read'}}):
+            with self.assertRaisesRegex(ValueError,'THINKING_TOOL_CHOICE_UNSUPPORTED'):
+                self.provider.complete('operator',{**self.payload,'tool_choice':choice})
+        self.assertEqual(0,self.provider.status()['calls'])
+
+    def test_context_profile_preserves_current_reasoning_tool_round_trip(self):
+        from bfworld.agentlab.context import project_interactive
+        from bfworld.agentlab.model_profile import ENGINEERING
+        messages=[{'role':'user','content':'task'},
+                  {'role':'assistant','content':'','reasoning_content':'r'*10000,
+                   'tool_calls':[{'id':'x','type':'function','function':{'name':'read','arguments':'{}'}}]},
+                  {'role':'tool','tool_call_id':'x','content':'d'*130000}]
+        body,audit=project_interactive({'messages':messages}, request_bytes=ENGINEERING['request_bytes'],target_bytes=ENGINEERING['target_bytes'])
+        self.assertTrue(audit['fits'])
+        self.assertEqual(messages,body['messages'])
+
     def test_evidence_is_exact_final_wire_and_never_added_to_model_payload(self):
         with patch('urllib.request.OpenerDirector.open',return_value=self.response()) as opening:
             self.provider.complete('operator',self.payload)
@@ -131,7 +191,7 @@ class ProviderBudget(unittest.TestCase):
             def __iter__(self):
                 clock[0]=301.;yield b': keepalive\n'
         with patch('urllib.request.OpenerDirector.open',return_value=TooSlow()),patch('bfworld.agentlab.provider.time.monotonic',side_effect=lambda:clock[0]):
-            with self.assertRaisesRegex(ValueError,'STREAM_LIMIT'):
+            with self.assertRaisesRegex(ValueError,'PROVIDER_STREAM_TIME_LIMIT'):
                 self.provider.complete('operator',self.payload,on_chunk=lambda c:None)
         self.assertEqual('UNKNOWN',self.provider.status()['requests'][0]['status'])
 

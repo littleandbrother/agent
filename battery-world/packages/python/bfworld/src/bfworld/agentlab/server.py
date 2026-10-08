@@ -61,6 +61,8 @@ class Workbench:
         self.deliverables=Deliverables(self)
         from .engineering import Engineering
         self.engineering=Engineering(self)
+        from .eda_cli import EdaCLI
+        self.eda_cli=EdaCLI(self)
         from .product_results import ProductResults
         self.results=ProductResults(self)
         from .references import References
@@ -278,6 +280,8 @@ def handler(workbench):
             return workbench.store.authenticate(cookie['bf_operator'].value if 'bf_operator' in cookie else '')
 
         def engineering_reply(self, owner, status, value):
+            from .scientific_figures import public_response
+            value = public_response(value)
             if self.headers.get('X-BF-Tool-Response') == 'bounded-v1':
                 value = workbench.engineering.responses.wrap(owner, value)
             return self.reply(status, value)
@@ -334,7 +338,7 @@ def handler(workbench):
                     rel=path.removeprefix('/vendor/three/')
                     if rel not in allowed:return self.reply(404,{'error':'NOT_FOUND'})
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
-                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
+                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 if path in ('/api/reference-case','/api/reference-case/artifact'):
@@ -555,6 +559,12 @@ def handler(workbench):
                 # Pi sends its preserved history. The provider projects completed
                 # interactive tool exchanges before enforcing the 128 KB wire cap.
                 incoming_limit = 2 * 1024 * 1024 if path == '/v1/chat/completions' else 128000
+                if path == '/v1/chat/completions':
+                    with workbench.store.connect() as db:
+                        interactive_history = db.execute('SELECT 1 FROM interactive_leases WHERE owner=?', (owner,)).fetchone()
+                    if interactive_history:
+                        from .context import INTERACTIVE_HISTORY_BYTES
+                        incoming_limit = INTERACTIVE_HISTORY_BYTES
                 if not 0 < length <= incoming_limit:
                     raise ValueError('REQUEST_SIZE')
                 body = json.loads(self.rfile.read(length))
@@ -576,6 +586,20 @@ def handler(workbench):
                     if actor['role']!='operator':workbench.references.authorize(owner)
                     elif target!='operator':workbench.conversations.get(target)
                     return self.reply(200,workbench.references.action(target,body))
+                if path=='/api/eda-cli':
+                    operator=actor['role']=='operator'
+                    target=body.get('session_id',owner) if operator else owner
+                    return self.engineering_reply(target,200,workbench.eda_cli.action(target,body,operator))
+                if path=='/api/responsibility-review':
+                    target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    if actor['role']!='operator':workbench.engineering.authorize(owner)
+                    from .responsibility_review import inspect as review_responsibilities, contract, bind_contract, submit as submit_responsibilities
+                    if body.get('action')=='bind_contract':
+                        if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
+                        return self.reply(201,bind_contract(workbench,target,body))
+                    if body.get('action')=='submit':
+                        return self.engineering_reply(target,200,submit_responsibilities(workbench,target,body))
+                    return self.engineering_reply(target,200,review_responsibilities(workbench.eda_cli.workspace(target),contract(workbench,target)))
                 if path=='/api/engineering':
                     operator=actor['role']=='operator'
                     if not operator:workbench.engineering.authorize(owner)
@@ -589,7 +613,7 @@ def handler(workbench):
                         return self.engineering_reply(target,200,record(workbench.engineering,target,body))
                     if action=='pilot_trial':
                         if not operator:raise PermissionError('OPERATOR_REQUIRED')
-                        return self.reply(201,workbench.engineering.tasks.create_trial(workbench,body.get('trial_id'),body.get('text')))
+                        return self.reply(201,workbench.engineering.tasks.create_trial(workbench,body.get('trial_id'),body.get('text'),body.get('protocol_id')))
                     if action=='artifact_view':
                         value=workbench.engineering.tasks.artifact_view(workbench.engineering,target,body)
                         return self.engineering_reply(target,200,{**value,'job_id':body.get('job_id'),'artifact_name':body.get('artifact_name')})
@@ -641,7 +665,7 @@ def handler(workbench):
                 if path.startswith('/api/conversations'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     parts=path.strip('/').split('/')
-                    if len(parts)==2:return self.reply(201,workbench.conversations.create(body['text'],body.get('task_id'),body['operation_id'],body.get('folder_id'),body.get('attachments'),body.get('model_cap_usd')))
+                    if len(parts)==2:return self.reply(201,workbench.conversations.create(body['text'],body.get('task_id'),body['operation_id'],body.get('folder_id'),body.get('attachments'),body.get('model_cap_usd'),defer_dispatch=body.get('defer_dispatch') is True))
                     if len(parts)==4 and parts[3]=='approve':return self.reply(200,workbench.products.approve(parts[2],body['revision']))
                     if len(parts)==4 and parts[3]=='attachments':return self.reply(201,workbench.products.attach(parts[2],body))
                     if len(parts)==4 and parts[3]=='messages':return self.reply(202,workbench.conversations.send(parts[2],body['text'],body['operation_id']))

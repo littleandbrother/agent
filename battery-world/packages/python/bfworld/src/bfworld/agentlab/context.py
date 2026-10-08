@@ -7,6 +7,9 @@ from .store import canonical, identity
 
 REQUEST_BYTES = 128000
 TARGET_BYTES = 103000
+# Local authenticated Pi history is larger than the projected provider request.
+# This bounds ingestion only; it never raises the provider wire/token budget.
+INTERACTIVE_HISTORY_BYTES = 16 * 1024 * 1024
 PRODUCT_STATE_PREFIX = '本次启动的产品状态（可能随消息更新，操作前 inspect）：'
 
 
@@ -54,48 +57,48 @@ def _reference(record):
             'read_hint': '完整数据在当前工作区的 record_file。用 bash/Python 读取 JSON 并只提取本次需要的字段或片段，勿重复打印全文件。摘要不是新的验证。'}
 
 
-def project_interactive(payload, archive=None):
+def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, target_bytes=TARGET_BYTES):
+    if not 8000 <= target_bytes < request_bytes:
+        raise ValueError('CONTEXT_LIMITS_INVALID')
     messages = payload.get('messages', [])
     if not isinstance(messages, list) or not all(isinstance(m, dict) for m in messages):
         raise ValueError('MODEL_MESSAGES_INVALID')
     boundary = max((i for i, m in enumerate(messages) if m.get('role') == 'user'), default=0)
-    past = messages[:boundary]
-    returned = {m.get('tool_call_id') for m in past if m.get('role') == 'tool'}
+    # Observer JSON is machine state, not a new human requirement. Preserve the
+    # surrounding instruction verbatim, archive its full bytes, and keep compact
+    # findings. Otherwise repeated continuations crowd out the actual tool data.
+    working = list(messages)
+    observer_archives = []
+    templates = [('交付观察器的实际结果：',('bf-product-authority-v1','bf-responsibility-review-v1'),'。原始执行任务仍未完成。'),
+                 ('当前任务事实快照（覆盖过时上下文；不改变既定要求）：',('bf-product-context-v1',),'\n用户消息：')]
+    if archive and len(canonical(payload).encode()) > target_bytes:
+        for i, m in enumerate(messages[:boundary]):
+            raw_content = m.get('content')
+            content = raw_content
+            if isinstance(raw_content,list) and len(raw_content)==1 and isinstance(raw_content[0],dict) and raw_content[0].get('type')=='text':
+                content = raw_content[0].get('text')
+            if m.get('role') != 'user' or not isinstance(content, str): continue
+            template = next((x for x in templates if content.startswith(x[0])),None)
+            if template is None: continue
+            prefix, schemas, suffix_start = template
+            try: value, end = json.JSONDecoder().raw_decode(content[len(prefix):])
+            except (ValueError, TypeError): continue
+            suffix = content[len(prefix)+end:]
+            if not isinstance(value, dict) or value.get('schema_version') not in schemas or not suffix.startswith(suffix_start): continue
+            if len(canonical(value).encode()) < 2000: continue
+            record = archive(value)
+            review = value.get('responsibility_review', value)
+            compact = {k:review[k] for k in ('schema_version','status','source_revision','revision','requirements','assumptions','missing','errors','actionable','blocked','engineering_passed','agent_autonomy_proven') if k in review}
+            compact.update(_reference(record))
+            reduced = prefix + canonical(compact) + suffix
+            working[i] = {**m, 'content':[{**raw_content[0],'text':reduced}] if isinstance(raw_content,list) else reduced}
+            observer_archives.append({'kind':'delivery_observation' if len(schemas)>1 else 'product_context','source_index':i,'source_message_sha256':identity(m),**record})
+    # Keep real call/result pairs across user/observer boundaries. Dropping
+    # every previous-turn tool call while retaining its "I will read..." prose
+    # creates a false, action-free transcript and loses current engineering facts.
+    # Complete old exchanges are evicted atomically below only under pressure.
     removable = set()
-    for m in past:
-        calls = m.get('tool_calls') or []
-        ids = [c.get('id') for c in calls]
-        if m.get('role') == 'assistant' and ids and all(key and key in returned for key in ids):
-            removable.update(ids)
-    projected = []
-    for i, m in enumerate(messages):
-        if i < boundary and m.get('role') == 'tool' and m.get('tool_call_id') in removable:
-            continue
-        ids = [c.get('id') for c in m.get('tool_calls') or []]
-        if i < boundary and m.get('role') == 'assistant' and ids and all(key in removable for key in ids):
-            if m.get('content'):
-                projected.append({k: v for k, v in m.items() if k != 'tool_calls'})
-            continue
-        projected.append(m)
-    # A long engineering turn can exhaust the byte cap by repeatedly returning
-    # native source and trajectories. Remove only complete old exchanges, never
-    # an unmatched or the two most recent exchanges. Full trace is unchanged.
-    current_omitted=[]
-    while len(canonical({**payload, 'messages':projected}).encode()) > 104000:
-        returned={m.get('tool_call_id') for m in projected if m.get('role')=='tool'}
-        groups=[(i,[c.get('id') for c in m.get('tool_calls',[])]) for i,m in enumerate(projected)
-                if m.get('role')=='assistant' and m.get('tool_calls')]
-        complete=[(i,ids) for i,ids in groups if all(k and k in returned for k in ids)]
-        if len(complete)<=2:break
-        _,ids=complete[0];drop=set(ids);current_omitted.extend(ids);removable.update(ids)
-        reduced=[]
-        for m in projected:
-            if m.get('role')=='tool' and m.get('tool_call_id') in drop:continue
-            mids=[c.get('id') for c in m.get('tool_calls',[])]
-            if mids and set(mids)<=drop:
-                if m.get('content'):reduced.append({k:v for k,v in m.items() if k!='tool_calls'})
-            else:reduced.append(m)
-        projected=reduced
+    projected = list(working)
     # Repeated resumptions also accumulate assistant prose. Its original text
     # remains in the journal; discard only older assistant-only messages under
     # byte pressure. Never trim user requirements or unresolved tool exchanges.
@@ -104,7 +107,7 @@ def project_interactive(payload, archive=None):
         if m.get('role')=='assistant' and m.get('content')][-4:]}
     source_indices={id(m):i for i,m in enumerate(messages)}
     # Reserve space for the projection notice itself.
-    while len(canonical({**payload,'messages':projected}).encode()) > 103000:
+    while len(canonical({**payload,'messages':projected}).encode()) > target_bytes:
         candidate=next((i for i,m in enumerate(projected)
             if m.get('role')=='assistant' and not m.get('tool_calls')
             and id(m) not in recent_text),None)
@@ -116,17 +119,37 @@ def project_interactive(payload, archive=None):
                 if {k:v for k,v in original.items() if k!='tool_calls'}==m),None)
         omitted_text.append({'source_index':source_index,'sha256':identity(m),
                              'bytes':len(canonical(m).encode())})
+    # A long engineering turn can exhaust the byte cap by repeatedly returning
+    # native source and trajectories. Remove only complete old exchanges, never
+    # an unmatched or the two most recent exchanges. Full trace is unchanged.
+    current_omitted=[]
+    while len(canonical({**payload, 'messages':projected}).encode()) > target_bytes + 1000:
+        returned={m.get('tool_call_id') for m in projected if m.get('role')=='tool'}
+        groups=[(i,[c.get('id') for c in m.get('tool_calls',[])]) for i,m in enumerate(projected)
+                if m.get('role')=='assistant' and m.get('tool_calls')]
+        complete=[(i,ids) for i,ids in groups if all(k and k in returned for k in ids)]
+        if len(complete)<=2:break
+        source_pos,ids=complete[0];drop=set(ids);removable.update(ids)
+        if source_indices.get(id(projected[source_pos]), 0) >= boundary:
+            current_omitted.extend(ids)
+        reduced=[]
+        for m in projected:
+            if m.get('role')=='tool' and m.get('tool_call_id') in drop:continue
+            mids=[c.get('id') for c in m.get('tool_calls',[])]
+            if mids and set(mids)<=drop:continue
+            reduced.append(m)
+        projected=reduced
     # The last two exchanges and recent prose are useful, but not unbounded.
     # Spill only completed evidence/content to immutable owner-local records;
     # keep every call id/argument, system instruction and user message intact.
-    archived = []
+    archived = list(observer_archives)
     if archive:
         returned = {m.get('tool_call_id') for m in projected if m.get('role') == 'tool'}
         complete_ids = {key for m in projected if m.get('role') == 'assistant'
                         for ids in [[c.get('id') for c in m.get('tool_calls', [])]]
                         if ids and all(key and key in returned for key in ids) for key in ids}
         for i, m in enumerate(projected):
-            if len(canonical({**payload, 'messages': projected}).encode()) <= TARGET_BYTES:
+            if len(canonical({**payload, 'messages': projected}).encode()) <= target_bytes:
                 break
             if m.get('role') != 'system' or not isinstance(m.get('content'), str):
                 continue
@@ -159,7 +182,7 @@ def project_interactive(payload, archive=None):
                 or m.get('role') == 'assistant' and not m.get('tool_calls'))
             and m.get('content')), reverse=True)
         for size, i, m in candidates:
-            if len(canonical({**payload, 'messages': projected}).encode()) <= TARGET_BYTES:
+            if len(canonical({**payload, 'messages': projected}).encode()) <= target_bytes:
                 break
             if size <= 8000:
                 continue
@@ -179,8 +202,8 @@ def project_interactive(payload, archive=None):
              'current_turn_preserved': not current_omitted and not archived and not any(
                  x['source_index'] is not None and x['source_index']>=boundary for x in omitted_text),
              'bounded_turn_omitted_call_ids':current_omitted,'omitted_assistant_messages':omitted_text,
-             'archived_messages': archived, 'limit_bytes': REQUEST_BYTES,
-             'fits': len(canonical(result).encode()) <= REQUEST_BYTES,
+              'archived_messages': archived, 'limit_bytes': request_bytes,
+              'fits': len(canonical(result).encode()) <= request_bytes,
              'projected_bytes_by_role': {role: sum(len(canonical(m).encode()) for m in projected if m.get('role') == role)
                                          for role in ('system', 'user', 'assistant', 'tool')},
              'tool_schema_bytes': len(canonical(payload.get('tools', [])).encode())}

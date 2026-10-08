@@ -25,14 +25,17 @@
       <div class="engineering-artifacts">${files(j)}</div></article>`;
   }
   async function open(root,owner,compact=false){
+    if(root.id==='section-content'&&window.EngineeringWorkspace?.active())return;
+    const mode=document.body.dataset.studioMode,workspace=document.body.dataset.workspace;
     const gen=(generations.get(root)||0)+1;generations.set(root,gen);root.innerHTML='<p class="dev-hint">读取版本和交付证据…</p>';
+    const currentView=()=>gen===generations.get(root)&&root.isConnected&&window.BF.getSelection()===owner&&document.body.dataset.studioMode===mode&&document.body.dataset.workspace===workspace&&!(root.id==='section-content'&&window.EngineeringWorkspace?.active());
     if(!owner){root.innerHTML='<p class="dev-hint">选择一个会话查看交付与部署。</p>';return}
     try{
       const results=await api('/api/results?session='+encodeURIComponent(owner));
-      if(gen!==generations.get(root)||window.BF.getSelection()!==owner)return;
+      if(!currentView())return;
       const catalog=`<section class="deployment-record"><h4>统一成果目录 · ${results.files.length} 件文件</h4><p class="dev-hint">${results.coverage.map(d=>esc(d.label)+' '+d.files+' 件').join(' · ')}。方案、基准计算、独立工程和装配交付共用后台目录。</p><button data-result-open>查看成果与过程 →</button><details><summary>数据来源与绑定范围</summary>${results.results.map(r=>`<p>${esc(r.kind)} · ${esc(r.id)} · ${esc(r.status)} · ${esc(r.applicability.reason)}</p>`).join('')||'<p>暂无方案或执行记录。</p>'}</details></section>`;
       if(!results.revision){root.innerHTML='<h3>交付与部署</h3>'+catalog+'<p class="dev-hint">尚无产品装配与阶段验收记录。已有计算或独立仿真可查看，不能据此宣称整机交付。</p>';root.querySelector('[data-result-open]').onclick=()=>window.ProductWorkspace.showSession({view:'results'});return}
-      const [d,contract]=await Promise.all([api('/api/progress?session='+encodeURIComponent(owner)),api('/api/deliverables?session='+encodeURIComponent(owner))]);if(gen!==generations.get(root)||window.BF.getSelection()!==owner)return;
+      const [d,contract]=await Promise.all([api('/api/progress?session='+encodeURIComponent(owner)),api('/api/deliverables?session='+encodeURIComponent(owner))]);if(!currentView())return;
       root.innerHTML=`<div class="dev-heading"><div><h3>交付与部署</h3><p class="dev-hint">装配 ${d.revision?'v'+d.revision:'尚未建立'} · ${d.delivery?.passed?'当前声明阶段条件已满足':d.delivery?'逐项查看缺少的产物与验证':'按当前版本展示工程证据；未设置自动交付条件'}</p></div><button data-delivery-refresh class="quiet">刷新</button></div>
         <div class="delivery-stages">${d.stages.map(s=>`<article data-stage="${s.id}"><span class="delivery-dot ${s.state}"></span><div><b>${esc(s.title)}</b><p>${esc(s.detail)}</p></div><small>${names[s.state]||esc(s.state)}</small>${!compact?`<button class="quiet" data-stage-map="${s.module}" aria-label="在全景中定位${esc(s.title)}">↗</button>`:''}</article>`).join('')}</div>
         ${d.delivery?.stages?`<details class="dev-record"><summary>统一阶段判定 · ${esc(d.delivery.target_stage)} · ${d.delivery.passed?'通过':'待完成'}</summary>${d.delivery.stages.map(s=>`<p>${esc(s.label)}：${s.passed?'通过':s.status==='not_measured'?'未实测':'待完成'} · ${s.missing.length} 项缺口</p>`).join('')}<p class="dev-hint">判定 ${esc(d.delivery.verdict_sha256?.slice(0,16)||'')}</p></details>`:''}
@@ -52,12 +55,12 @@
       });
       root.querySelector('[data-delivery-trace]')?.addEventListener('click',()=>window.BFDeveloper.openModule('trace'));
       root.querySelectorAll('[data-stage-map]').forEach(b=>b.onclick=()=>window.Panorama.focus(b.dataset.stageMap));
-      if(d.deployments.some(j=>['QUEUED','RUNNING'].includes(j.status)))setTimeout(()=>{if(gen===generations.get(root)&&root.isConnected&&root.offsetParent!==null)open(root,owner,compact)},2000);
+      if(d.deployments.some(j=>['QUEUED','RUNNING'].includes(j.status)))setTimeout(()=>{if(currentView()&&root.offsetParent!==null)open(root,owner,compact)},2000);
       root.querySelectorAll('[data-build-engine]').forEach(b=>b.onclick=async()=>{
         b.disabled=true;const notice=root.querySelector('[data-build-notice]');notice.textContent='正在提交本机任务…';
         try{const parameters={...(b.dataset.buildEngine==='tinyml-nas'?JSON.parse(root.querySelector('[data-nas-params]').value):{}),assembly_revision:d.revision};const j=await api('/api/engineering',{session_id:owner,action:'run',engine:b.dataset.buildEngine,parameters,operation_id:'deploy-'+crypto.randomUUID()});notice.textContent='已提交 '+j.id+'，正在加载进度；Trace 保留完整过程。';setTimeout(()=>{if(gen===generations.get(root)&&root.isConnected&&window.BF.getSelection()===owner)open(root,owner,compact)},1500)}catch(e){notice.textContent=e.message}finally{b.disabled=false}
       });
-    }catch(e){if(gen===generations.get(root))root.innerHTML=`<p class="dev-hint">${esc(e.message)}</p>`}
+    }catch(e){if(currentView())root.innerHTML=`<p class="dev-hint">${esc(e.message)}</p>`}
   }
   window.DeliveryPanel={open,inventory};
 })();

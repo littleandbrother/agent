@@ -1,6 +1,12 @@
 # BF-AIoT Agent
 
-当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-02）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-08）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+
+## 2026-10-08 开发检查点
+
+本次更新补入 D5 自供能联合仿真与资格检查、六组证据及学术制图、原理图/PCB/BOM 成果展示、本地运行与审计恢复，以及真实 Pi 的立创工程操作、固件构建、责任清单和中断续接。详见 [本次修改与验证](release/SELFPOWER-PI-CHECKPOINT-20261008.md) 和 [Pi 全流程当前检查点](battery-world/docs/agentlab/PI-FULLFLOW-20261008.md)。
+
+Pi 的一个候选已通过声明模型内的联合仿真检查并完成一次发送；目标固件也已构建、核对向量和执行主机回归。**完整自主产品交付尚未验收：新板最终原生 DRC、机械包络适配和便携固件工程包仍有未完成项，实物与制造未验证。** 本次提交是可追溯的开发进度，不是完成全部产品验收的声明。后文 D2 与早期先导数据作为历史基线保留。
 
 ## 目录
 
@@ -25,7 +31,7 @@
 
 D2 包含门动画、22件 CAD/图纸、COMSOL 场图、LTspice 电源仿真、PCB 布线和目标固件。**单次开门冷启动和磁网格验收未通过；原生 EDA ERC/DRC、实物与制造未验收。** 源码包含 BFA-026/027 的全会话成果目录、BFA-028 的不可变工程案例发布、BFA-029/032/033 Studio/Lab 与交付体验、BFA-030 受限全仿真链路和 BFA-031 任务级实验约束，不包含用户会话数据库。
 
-最新发布加入真实 Pi 先导、精确工具反馈记录、来源/单位计算检查和机械加载—释放审查。当前验证与发布范围见 [本轮发布说明](release/MECHANICAL-RELEASE-20261002.md)；之前的 Studio 验证保留在 [上一轮记录](release/STUDIO-PILOT-VERIFICATION.md)。
+2026-10-02 发布加入真实 Pi 先导、精确工具反馈记录、来源/单位计算检查和机械加载—释放审查，其验证范围见 [历史发布说明](release/MECHANICAL-RELEASE-20261002.md)；之前的 Studio 验证保留在 [上一轮记录](release/STUDIO-PILOT-VERIFICATION.md)。
 
 BFA-031 已固定可修改设计变量、任务条件、候选配额和提交复核。早期无 Agent 空间摸底记录见 [原轻量研究记录](release/evidence/door-design-pilot-v1.zip)。随后四条真实 Pi 轨迹完成提交：12 个候选中 5 个可求解但未满足任务、7 个越界，尚无自供能正例。不能把二者合并为同一批试验，详见 [真实先导收尾](battery-world/docs/agentlab/PAID-PILOT-CLOSURE-20261002.md)。
 
@@ -48,7 +54,7 @@ D2 已提供原理图及实际布线，但原生立创验收及可制造图纸�
 ```bash
 git clone https://github.com/littleandbrother/agent.git
 cd agent
-python3 release/verify_source.py --manifest release/integration-source-manifest-20261002.json
+python3 release/verify_source.py --manifest release/source-manifest-20261008.json
 
 cd pi-bf-aiot
 npm ci --ignore-scripts --no-audit --no-fund
@@ -66,7 +72,7 @@ BFWORLD_BOOTSTRAP_PYTHON="$(command -v python3.11)" ./bootstrap.sh
 
 ```bash
 export BF_PI_ROOT="$(cd ../pi-bf-aiot && pwd)"
-export BF_HOME="$HOME/Documents/bf-agent-workbench"
+export BF_HOME="$HOME/.local/share/bf-agent-runtime/workbench"
 # 按本机实际安装位置设置 BF_CAD_PYTHON / BF_BLENDER / BF_COMSOL /
 # BF_NGSPICE / BF_ARM_GCC / BF_CMSIS；BF_NODE 可覆盖 Node 路径。
 # BF_PROVIDER_KEY_FILE 只指定受保护的本地文件，不将密钥写入仓库。
@@ -88,8 +94,8 @@ PYTHONPATH=packages/python/bfworld/src .venv/bin/python \
 
 ## 校验与来源
 
-`release/source-manifest.json` 保留原发布基线；本轮文件由 `release/integration-source-manifest-20261002.json` 记录 SHA-256。使用上面的 `--manifest` 命令验证当前版本；旧清单不会因本次更新被重写。源码校验不是运行或物理验收。
+`release/source-manifest.json` 和 `release/integration-source-manifest-20261002.json` 保留历史发布基线；当前文件由 `release/source-manifest-20261008.json` 记录 SHA-256。使用上面的 `--manifest` 命令验证当前版本；旧清单不会因本次更新被重写。源码校验不是运行或物理验收。
 
 Pi 来源：<https://github.com/earendil-works/pi>，基线 `7140838fdd5ee1ff21dbe50955a8801617b065ef`，包含本项目的 `bf-agent`/`bf-harness` 定制。保留 [Pi MIT LICENSE](pi-bf-aiot/LICENSE)、[Three.js LICENSE](battery-world/apps/agent-studio/vendor/three/LICENSE) 及各上游文件原有声明。本仓库是源码快照，不继承或声称拥有上游完整 Git 历史。
 
-本次验证范围见 [本轮发布说明](release/MECHANICAL-RELEASE-20261002.md)。前版界面验证见 [Studio 验证](release/STUDIO-PILOT-VERIFICATION.md)，前版闭环验证见 [全仿真验证](release/CLOSED-SIMULATION-VERIFICATION.md)，较早记录仍见 [原始验证](release/VERIFICATION.md)。
+本次验证范围见 [本次修改与验证](release/SELFPOWER-PI-CHECKPOINT-20261008.md)。前版界面验证见 [Studio 验证](release/STUDIO-PILOT-VERIFICATION.md)，前版闭环验证见 [全仿真验证](release/CLOSED-SIMULATION-VERIFICATION.md)，较早记录仍见 [原始验证](release/VERIFICATION.md)。

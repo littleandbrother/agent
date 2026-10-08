@@ -93,6 +93,25 @@ def verdict(app, owner, snapshot, assembly=None):
                  goal=legacy.get('goal') if legacy else {},
                  full_engineering_passed=records[3]['passed'], hardware_verified=False,
                  scope='当前目标阶段判定；阶段完成不代表整机、制造或实物完成。')
+    from .responsibility_review import contract, inspect
+    task_review = contract(app,owner)
+    if task_review:
+        try:
+            review = inspect(app.store.root.parent/'participants'/owner,task_review)
+        except (ValueError, OSError) as exc:
+            review = {'status':'invalid','errors':[str(exc)],'actionable':['repair_analysis_schema'],'engineering_passed':False}
+        value['responsibility_review'] = review
+        value['responsibility_contract_sha256'] = task_review['sha256']
+        value['engineering_missing'] = value['missing']
+        value['target_source'] = 'operator-responsibility-contract'
+        value['target_stage'] = 'analysis-inventory'
+        value['passed'] = False
+        value['scope'] = '本任务按冻结的责任清单检查文件与版本；清单齐套后仍须独立电气、布局布线与原生验收，不宣称工程通过。'
+        # Only the operator's bounded task can activate continuation. Inventory
+        # readiness never changes the engineering or physical verdict above.
+        value['auto_continue'] = bool(review.get('actionable') or review['status']=='missing')
+        value['max_continuations'] = task_review['max_continuations']
+        value['missing'] = review.get('missing',[]) + review.get('errors',[])
     value['verdict_sha256'] = identity(value)
     return value
 

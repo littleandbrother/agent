@@ -1,3 +1,68 @@
+<!-- d5-pcb-pilot-20261008 -->
+## 2026-10-08 · D5 新板真实 Pi 先导结束，候选未通过
+
+登录/原生连接恢复并新建独立工程，但完整D5原理图/PCB未完成。已实现持久分析清单、冻结来源/责任、typed EDA/Trace和证据提交发布；修复上下文、消息窗口归属、长历史入口、批量命令和导出窗口。53项针对测试及原任务页面报告/ZIP实际下载通过，未跑完整init，不声称全仓健康。
+
+实际结果：原理图7件/0线，PCB0件/0铜线；Pi BOM63行/40行待选型，63个矩形布局不是实际封装与走线；发现11端口网表仅保留5个网络。原始候选与不完整epro2保留，独立审查拒绝放行。593请求，已结算USD4.8931101，保留预留USD0.0677592；12次协调跟进，最终汇总由协调器完成，无Pi自主交付证据。USD5/12h先导结束，不继续改账重试。
+
+产品页成果范围选择「D5 新板候选 · 独立验收未通过 · D5-P1」。原D5自供能仿真/结构资料及D3参考不变。交付包218027字节/56成员、实际浏览器下载哈希通过。没有整机重算/硬件验收/Git提交；当前无活动付费/EDA/原生计算。保留其他QUEUED消息，禁止自动派发。
+
+下一步：先把一个供能/门控功能块的无损端口映射、行为模型到真实器件转换、原生连通与保存重载做通，再做整板MCU/RF/真实封装/布线；不要再靠重复读帮助和全面重跑消耗模型额度。父BFA-035与新板工程目标仍未完成。
+
+报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/D5-PCB-PILOT-20261008.md
+交付：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/door-selfpower-v1/delivery-pi-pcb-review/REPORT.zh.md
+收据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/door-selfpower-v1/pi-pcb-20261007/closeout.json
+<!-- /d5-pcb-pilot-20261008 -->
+
+<!-- runtime-maintenance-20261007 -->
+## 2026-10-07 · 本地入口与审计恢复、旧数据精简
+
+项目去重分配量约50.12→16.00GiB，APFS净释放约26.21GiB。当前原始D5 RAW约10.75GiB全部保留；源代码/环境/展示包与原始数据分开统计。旧发布11版退役，原payload保留数据库，当前D5 184入口完整；实际ZIP及图片/PDF下载哈希通过。数据库、工具链和活动工作目录转为本地runtime，旧入口为兼容链接。服务清理后冷启动通过，保护消息仍QUEUED。
+
+审计逐文件检查点、硬链接去重、单次顺序读双哈希、报告失败续写已实现。71个不同针对测试、SDK类型、CAD导入、Pi CLI通过。完整init本轮未跑，无完整发布健康声明，无付费或原生重算，无Git提交。D5执行器e2f4b265…及reference_ready=true保持，根88科学features哈希不变。
+
+同步归档移出迭代尚未启用；需要另一个有身份的执行器版本和有限队列验收，不把它算成本轮完成。当前两次原始结果不得为流程整理而重跑。
+
+报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/RUNTIME-MAINTENANCE-20261007.md
+收据：/Users/depengsu/.local/share/bf-agent-maintenance/20261007-minimal-runtime
+<!-- /runtime-maintenance-20261007 -->
+
+<!-- door-selfpower-20261007-current -->
+## 2026-10-07 · 自供能名义参考与D5交付通过
+
+外部应用BFA-035的两次独立原生冷启动及半步长均通过：每次标准/半步长各6迭代，共24次原生启动；每次26项独立检查、28份RAW归档记录全通过。固定6.5秒完整关—停—开—衰减任务，初始电能0，1次TX/1次虚拟RX于2.859秒。reference_ready=true。实际集电极0.539844A与电感0.608936A分开，真实三支路二极管网表最大单支0.200129A。名义正例不等于热/公差/实物资格。
+
+D5-selfpower已发布到会话pi-chat-390c76686d6d79a5：六组24子图、6页PDF、184公开入口。54.8MiB ZIP/472成员实际HTTP下载核对；前五组由下载包逐字节重绘，第六组迁移后正确保留冷审计待核对说明，原已审计图完整保留。浏览器连接受阻，无网页目视验收；六组图文件已逐张检查。E3.1本地CAS恢复1380唯一文件/1407入口，旧研究与失败不改写。
+
+完整本地应用init通过576Python、SDK/Studio类型/构建、2803样本；审计JSON修复后40针对测试通过。保留锁文件不同步警告、云占位环境失败、审计首次JSON写回失败。原生执行器始终e2f4b26558cdea18f6017ef93dce00fa63ea58e82c33449399ec6baaa4bf4d5d。
+
+按授权完成SHA可核对的冗余清理/无损压缩，活动原生任务未中断；第一阶段APFS净恢复10.46GB，与之后新数据占用分列。最终约2.81GiB可用，不派发更多大求解。D4 PCB仍不适配新提取器/门控，ARM对象不是完整可烧录镜像；BFA-035父任务仍in-progress。
+
+保护msg-64d80c38ed1b58e0保持QUEUED、对话BLOCKED，未自动重发。外部模型调用0；无Git提交/推送。根88科学features摘要保持16e3c12f9412dcb6e986bf668e384410e556743e5f024b5414f27fc3aa1302a1，根init未运行。
+
+报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/DOOR-SELFPOWER-20261007.md。
+总验收：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/door-selfpower-v1/D5-closeout-20261007.json。
+下一步：固定名义条件下的Pi独立修订先导；硬件/制造/正式方法比较不由本次结果自动放行。
+<!-- /door-selfpower-20261007-current -->
+
+
+## 2026-10-06 · D4整周期、有限FEM与真实Pi先导完成
+
+新共享设计合同固定同一门动作、零初始电能、负载/数值/接收条件；只开放实际CAD支架偏置、间距、磁极、Cin/Cout和允许的广播间隔。CAD、磁力、梁、原厂PMIC、共享C SIL和接收结果绑定同一身份，完整周期记录驱动反力功、返回功与端口能。20点无Agent初筛中5点在ROM范围、15点越界；独立原生冷复算及半步长检查通过，所有合法候选仍0冷启动/TX/RX。
+
+原旋转FEM网格收敛仍有最高62.16%偏差；加密驱动网格不能修复，扩大空气域后七个预选锚点全部通过，最大约0.4459%，网格差最大0.06773%。原失败与修正原生模型均保留，有限锚点不等于完整设计域或实物确认。实际D4 CAD/Blender动作与原生B场导出已归档；旧D3.3电子与D2目标HEX单独标历史，未称整机等价。
+
+两条真实Pi共81次已结算请求/USD0.6508728，实际6候选（4完成、2越界）和2份提交。Pi自主选择参数，无操作者代填；第二条提供主文URL定位后取得并读取3篇文献片段，两条信息条件不同、不做方法胜负比较。候选完成数误读、Cstore节点和UVLO先验错误保留，并作独立审查。历史UNKNOWN未清零。
+
+发布E3.1：六组70位置、66有来源/4缺证；93页PDF；1379封存来源；7个修正MPH。20个预声明仿真任务14项含操作者独立通过、仅1项Agent-owned（5%），没有80%自主或物理合格声明。真实浏览器1382条目ZIP逐哈希读回，解包重绘228图形逐字节相同、篡改负例拒绝。最终字体修订使用TTF，原E3不覆盖。
+
+应用完整init：525Python、SDK/Studio类型/构建与2803样本通过；最后字体6项、前端18项及27投影断言通过。实际E3/E3.1卡片、对话返回与右侧六图组版本一致，修复旧交付异步覆盖。总收据：/Users/depengsu/Documents/bf-agent-workbench/verification/door-system-20261006/acceptance.json；报告：docs/agentlab/DOOR-SYSTEM-20261006.md。只完成本子任务，BFA-035整体仍in-progress；P4正式比较、D4可烧录完整镜像、原生EDA制造与硬件仍未完成。未提交/推送；协调88科学features不变，未宣称根仓库健康。
+
+## 2026-10-04 · 门磁工程内容与采购修订
+
+当前磁耦合任务390c76686d6d79a5恢复130件旧D2封存内容，另发布D3.3-electronics 6组88件：原理图/实际双面PCB/三工况原生LTspice/嘉立创14装配件11料号BOM。右侧默认范围、格式选择、未检查状态、BOM0603及准确库存修复；四栏目与下载实际CUA验收，100条目ZIP SHA/CRC通过。原生原理图/PCB导入及ERC/DRC尚未完成，模块封装typed读取重复超时；独立二维路由通过不能等同制造放行。全部原生电源工况未冷启动，COMSOL沿用明确标记D2参考，本轮0模型调用/0购买。
+
+488项Python在与服务一致BF_PI_ROOT下通过；17定向Python/10JS、SDK/Studio类型/构建及2803样本投影通过。原缺省Pi路径/沙箱依赖不匹配失败、pnpm非TTY自动刷新停止日志保留；剩余检查用已安装依赖显式通过，未称plain init全程通过。报告docs/agentlab/ENGINEERING-CONTENT-20261003.md；收据bf-agent-workbench/verification/engineering-content-20261003/receipt.json。BFA-035物理校准/正式结构实验仍待推进；本轮未提交Git。
 
 ## 2026-10-02 · paid Pi pilot completed
 
@@ -777,3 +842,47 @@ Release includes integration source, immutable Dot review snapshots, pilot closu
 Added neutral white/clear-glass, task-bound right engineering viewer: overview/schematic/PCB/mechanical/simulation/BOM/documents. Existing project sidebar, Studio/Lab navigation and full product/delivery remain. Owner-bound archived data; explicit scope/run selection; actual previews/series; missing/failed/stale records retained; no model dispatch or invented acceptance. Independent engineering pane width, responsive overlay and keyboard accessibility checked.
 
 27 projection assertions +24 targeted Python tests pass; SDK/Studio type/build and2803samples pass. Browser1440/390, 38-part native model,4001-point waveform, scope/run/zoom/close/Lab/empty-state controls pass; console clean. Full init484tests failed two asynchronous engineering deadlines: NAS passes separate recheck, CAD remains timed out. No solver/sandbox/gate relaxation; full environment health not claimed. Report docs/agentlab/ENGINEERING-WORKSPACE-20261003.md; local receipt bf-agent-workbench/verification/engineering-workspace-20261003/receipt.json. BFA-036 complete; BFA-035 stays in-progress. User authorized GitHub publication of scoped source.
+
+
+## 2026-10-05 · 门磁 E1 六图证据交付完成
+
+现有门磁案例整理为产品、动作、比较、能量、时序、交付六组图；产品页和对话右侧共用来源绑定组件，旧版本仍可选。E1发布324件来源文件（323件封存），8页中文PDF、离线HTML及可重复绘图源。实际UI下载工程包和27文件报告包已解包校验；独立重建15项图文逐字节一致，3项故意时间/事件/状态错配被拒绝。桌面、390px、键盘及12组切换/预览通过，控制台无错误。
+
+应用完整init退出0：501Python、SDK/Studio类型和构建、2803样本投影通过；另12JS通过。使用BF_PI_ROOT指向现行runtime并以pnpm_config_verify_deps_before_run=false使用现有安装，未跳过gate阶段。报告docs/agentlab/DOOR-EVIDENCE-20261005.md；总收据bf-agent-workbench/verification/door-evidence-20261005/acceptance.json。
+
+仅证据交付子任务完成：基线及翻转候选仍0boot/TX/RX，混合D2/D3.3组件没有被提升为整机合格，制造放行/原生EDA/实物与自主复现待验证。本轮0模型调用、0新原生求解、未提交或推送。BFA-035整体仍in-progress。
+
+## 2026-10-05 · 逐子图学术图谱与 Agent 制图交付
+
+现有磁耦合压电门磁扩展为六组 / 70 个预声明子图，66 个有可追溯来源，4 个明确缺证；并建立六篇文献的 30 张主图、250 个一级字母子图参考索引。真实 CAD 来源的 Blender 功能剖切、爆炸、安装与共同相机动作图，新曲线的单位/来源/矢量规范，与产品页和对话右侧的逐图问题、图注、来源、下载共用同一投影。新增 bf_engineering scientific-figures 引擎：输入快照、最多 80 图/80 来源、单位和 owner/path/hash 拦截、逐图 provenance、离线复算；公开 Trace 不携带重复二进制。实际服务 operator 重放成功，不属于真实付费 Pi 自主设计。
+
+新增 12 个 SciPy 电阻控制与 4 个冷运行 LTspice + C SIL，输入电容 22/47/100/220 µF 峰值约 0.79735/0.43447/0.22175/0.10531 V；全部 0 boot/TX/RX。无新 COMSOL 或模型调用。磁网格约 11.29% > 5%、旋转确认、真实释放结构正例、EDA/RF/制造、重启事件语义和硬件寿命仍缺证。原 E1/E2 与失败、诊断和封存记录不改写，不声称 80% 自主复现或实物合格。
+
+90 页 PDF、70 个独立 PDF/SVG/PNG、六张组图、来源和便携计划已交付 E2.1。E2.1 只修复完整相对路径打包，原 E2 不覆盖。实际 UI 下载工程 ZIP 有 949 个来源路径，948 个封存哈希通过，篡改负例被拒绝；下载包独立重绘 228 个图像/矢量文件逐字节相同，70 份 provenance 仅来源路径身份重定位不同，其余契约一致。Hiragino PDF 字体在 Poppler 的类型警告和参考裁图边界局限明确保留。
+
+最终应用 ./init.sh：515 Python 测试、SDK/Studio 类型/构建、2803 样本投影通过；另 27 项交付定向检查。修复部署 Pi NodeNext 导入后集成与部署 bf-agent 构建通过。浏览器默认/390 px、六图组、逐图键盘、主/右阅读、版本保持和真实下载通过。报告：docs/agentlab/SCIENTIFIC-FIGURES-20261005.md。总收据：/Users/depengsu/Documents/bf-agent-workbench/verification/scientific-figures-20261005/acceptance.json。本子任务完成，BFA-035 整体保持 in-progress。无 Git 提交/推送。
+
+
+## 2026-10-06 · self-power correction started
+New versioned extraction/energy-ready gate work under BFA-035; reference circuit first, native same-mechanics controls, no new paid model calls or overwrite of D4/E3.1. Full hypothesis/falsifier/ownership declared before implementation.
+
+
+## 2026-10-07 · 结构与 PCB 可视化交付补充
+
+当前磁耦合任务 pi-chat-390c76686d6d79a5 发布 D5.3 资料版。原 D5 171 个来源文件哈希保持不变，增加从 22 个原生 STEP 实体直接生成的可旋转/内部/爆炸 GLB、结构图与核对回执；恢复 D3.3 80 × 30 mm 板的 14 个元件、89 条走线路径（139 段）、9 个过孔及 81 个焊盘，提供双面/分层图、简化三维、LCSC 料号 BOM 和重建 EPRU。产品页双入口、对话右侧结构/PCB/BOM 及下载已接入，同一后端 metadata 明确历史参考，不提升 D5 验收。
+
+验证：29 项定向 Python 测试及相关 Node 投影检查通过；15 个实际 HTTP 文件逐件 SHA-256 核对、ZIP CRC、原生机械尺寸和 EPRU 铜箔坐标对应通过。补充 ZIP 672,897 字节；证据位于 ~/.local/share/bf-agent-maintenance/20261007-mechanical-pcb/。本轮未跑完整 init，不声明全仓库健康。
+
+边界：D3 PCB 不是 D5 SECE/MIC841L/BSS84 新电路，原始归档缺铺铜，未虚构补回；连接器在读取时断开，重建 EPRU 尚未经新的原生导入/ERC/DRC。PCB 外形使用封装包络。当前完成展示/来源恢复，D5 可投板工程仍待设计验收。无付费调用、无联合求解重跑、未提交 Git。BFA-035 总体继续 in-progress。
+
+
+## 2026-10-08 · Pi 全流程恢复、固件复核与工程连接
+
+同一 Pi owner 8ae12ef0354d33bb 恢复执行；中断收据缺字段/历史 idle 重放两处修复经过16项定向测试。Pi 新目标固件 eng-e0516772a5a40e54 已生成，90项主机检查记录通过，独立 BIN/ELF 向量一致；导出包隔离运行却因路径/依赖缺失失败，保留反例让 Pi 修复。新原理图 Web EDA 4.1.71 已由用户打开并实际读回61器件与正确PCB身份；没有修改旧D3。已通过名义联合仿真未重跑，操作者未代写产品源。
+
+17:51/17:52 上游 DeepSeek 返回402 Insufficient Balance，任务尚未完整交付，充值待用户。运行/计费与失败保留；feedback27已离线准备、未触发新的模型请求。布线执行器同版JVM修复的原DSN诊断成功不等同Pi原生PCB通过。报告 docs/agentlab/PI-FULLFLOW-20261008.md；证据 runtime/reference-cases/door-selfpower-v1/pi-fullflow-20261008/。BFA-035仍in-progress，无硬件验证、无本轮提交/推送、无全仓库健康声明。
+
+
+## 2026-10-08 GitHub 开发检查点
+
+用户授权提交当前源码。版本范围与验收见 `release/SELFPOWER-PI-CHECKPOINT-20261008.md`：250 个受影响 Python 检查、18 个前端检查、8 个 Pi 检查及隔离锁文件安装后的 Pi 全仓库检查通过。init 在历史 deployment manifest 缺失处停止，不声称全量通过；真实产品交付仍未完成。密钥、运行数据库、参与者原文和大文件不上传。用户已告知余额恢复；提交后续接原 Pi owner，先读取 ENVIRONMENT-UPDATE-27.md，不重复创建工程或重派已完成仿真。

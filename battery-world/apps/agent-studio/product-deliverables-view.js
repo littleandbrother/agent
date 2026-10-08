@@ -46,7 +46,7 @@
   async function preview(file,context){
     close();const d=document.createElement('dialog'),controller=new AbortController();dialog=d;
     d.className='pd-preview-dialog';d.setAttribute('aria-labelledby','pd-preview-title');
-    d.innerHTML=`<header><div><h3 id="pd-preview-title">${esc(file.name)}</h3><p>${esc(context)}${file.referenceOnly?' · 参考资料，非本版交付':''} · ${esc(bytes(file.bytes))}</p></div><button data-preview-close aria-label="关闭交付物预览">×</button></header><div class="pd-preview-body" role="region" aria-label="文件预览"></div><footer><details><summary>文件来源与哈希</summary><p>${esc(short(file))}</p><code>${esc(file.sha256||file.digest||'未记录')}</code></details><a href="${esc(file.url)}" download="${esc(file.name)}">下载文件 ↗</a></footer>`;
+    d.innerHTML=`<header><div><h3 id="pd-preview-title">${esc(file.label||file.name)}</h3><p>${esc(context)}${file.referenceOnly||file.reference_only?' · 参考资料，非本版交付':''} · ${esc(bytes(file.bytes))}</p></div><button data-preview-close aria-label="关闭交付物预览">×</button></header><div class="pd-preview-body" role="region" aria-label="文件预览"></div><footer><details><summary>文件来源与哈希</summary><p>${esc(short(file))}</p><code>${esc(file.sha256||file.digest||'未记录')}</code></details><a href="${esc(file.url)}" download="${esc(file.name)}">下载文件 ↗</a></footer>`;
     document.body.append(d);d.querySelector('[data-preview-close]').onclick=()=>d.close();
     d.addEventListener('close',()=>{controller.abort();d.remove();if(dialog===d)dialog=null},{once:true});
     d.showModal();const body=d.querySelector('.pd-preview-body');

@@ -104,6 +104,12 @@ class ProductResultsTest(unittest.TestCase):
         a=self.app.results.inspect(self.owner);self.assertTrue(all(b['state']=='missing_files' for b in a['blockers']))
         self.assertFalse(any(b['id']=='magnetics' for b in a['blockers']))
 
+    def test_bom_preserves_package_identifiers_and_exact_stock(self):
+        key=self.job('spice',{'bom.csv':'ref,package,stock\nC1,0603,6232168\nC2,1206,58100732\n'})
+        result=self.app.results.series(self.owner,key+'/bom.csv')
+        self.assertTrue(result['table'])
+        self.assertEqual([['C1','0603','6232168'],['C2','1206','58100732']],result['rows'])
+
     def test_cached_zip_tamper_is_detected(self):
         self.job();catalog=self.app.results.inspect(self.owner);self.app.deliverables.package(self.owner)
         dest=next((self.app.store.root/'product-assemblies'/self.owner/'delivery-packages').glob('*.zip'))

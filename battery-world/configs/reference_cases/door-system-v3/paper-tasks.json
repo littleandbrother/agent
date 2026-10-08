@@ -1,0 +1,217 @@
+{
+  "schema_version": "bf-paper-reproduction-task-v1",
+  "id": "door-reference-assisted-digital-v1",
+  "source_papers": [
+    {
+      "id": "ViPSN-Pluck",
+      "url": "https://metal.shanghaitech.edu.cn/publication/J40.pdf",
+      "use": "System architecture, energy management and motion-event application"
+    },
+    {
+      "id": "Unified-framework",
+      "url": "https://sms-lab.github.io/publications/J101_Tang%20et%20al_2025_10.10881361-665xadd8d4.pdf",
+      "use": "Coupled mechanics/piezoelectric/converter simulation"
+    },
+    {
+      "id": "Cross-domain",
+      "url": "https://sms-lab.github.io/publications/J128_Tang%20et%20al_2026_10.11151.4071279.pdf",
+      "use": "Dynamics/power/application cross-domain validation"
+    }
+  ],
+  "scope": "Three-paper reference-assisted door-motion adaptation in a declared nominal model; not exact physical reproduction of each paper or arbitrary paper80% success.",
+  "declaration_stage": "Before new paid Pi trials, after disclosed operator development baseline; no retrospective statistical claim.",
+  "tasks": [
+    {
+      "id": "source-parameters",
+      "title": "原文参数与节点核对",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "原论文系统实现/数据表UVLO",
+      "acceptance": "Fetched primary content, page or section locator, exact units and node attribution; contradictions explicit."
+    },
+    {
+      "id": "design-contract",
+      "title": "共享设计身份",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "三篇系统接口",
+      "acceptance": "All native inputs and readbacks bound to one unchanged design_id."
+    },
+    {
+      "id": "cad-native",
+      "title": "可编辑机械工程",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN器件结构",
+      "acceptance": "Native STEP readback, valid solids and dimensional data."
+    },
+    {
+      "id": "drive-configuration",
+      "title": "真实加载配置修改",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Plucking geometry and excitation",
+      "acceptance": "Changed bracket/polarity enters both CAD and force input; no environment substitution."
+    },
+    {
+      "id": "beam-rom",
+      "title": "梁ROM来源",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Unified-framework dynamics",
+      "acceptance": "Pinned beam native source/ROM hashes and operating-range boundary."
+    },
+    {
+      "id": "reciprocity",
+      "title": "机电与磁势互易",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Cross-domain coupled equations",
+      "acceptance": "Independent derivative and ledger residual checks within declared numeric tolerances."
+    },
+    {
+      "id": "force-interpolation",
+      "title": "磁力插值",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Unified-framework force model",
+      "acceptance": "Whole prescribed angle/domain holdout interpolation check <=2%."
+    },
+    {
+      "id": "rotated-fem",
+      "title": "轨迹FEM确认",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Cross-domain dynamic coupling",
+      "acceptance": "Seven preselected trajectory anchors have three native meshes, delta<=5% and reference difference<=5%; finite-anchor scope."
+    },
+    {
+      "id": "full-cycle-ledger",
+      "title": "加载—释放账本",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Cross-domain energy transfer",
+      "acceptance": "Far initial equilibrium; complete close/hold/open/settle work; residual<=1%."
+    },
+    {
+      "id": "pmic-native",
+      "title": "原厂PMIC联合求解",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN energy management",
+      "acceptance": "Reciprocal native joint deck, RAW/.meas agreement, model provenance."
+    },
+    {
+      "id": "self-powered-start",
+      "title": "无外加源冷启动",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN battery-free startup",
+      "acceptance": "Zero electrical preload/diagnostic; admissible native candidate reaches start and correct event."
+    },
+    {
+      "id": "sil-coupling",
+      "title": "程序与供电反馈",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Cross-domain application",
+      "acceptance": "C software-in-loop current fixed-point converges and preserves brownout behavior."
+    },
+    {
+      "id": "time-step",
+      "title": "时步独立复算",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Unified-framework numerical validation",
+      "acceptance": "Independent half maximum step <=1% key peaks and same complete TX/RX counts."
+    },
+    {
+      "id": "packet-service",
+      "title": "正确及时的服务",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN wireless motion detection",
+      "acceptance": "Completed transmitted identity matches received payload within6.5s; no invented packet."
+    },
+    {
+      "id": "cold-repeat",
+      "title": "冷缓存重复性",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "System-level reproducibility",
+      "acceptance": "Two independent native launches with same sealed executor/task and declared repeat tolerances."
+    },
+    {
+      "id": "electronics-binding",
+      "title": "电子工程一致性",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN circuit topology",
+      "acceptance": "Selected components/footprints/netlist/CAD and simulated values match; native ERC/DRC included."
+    },
+    {
+      "id": "flash-core",
+      "title": "可烧录同源应用",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN firmware implementation",
+      "acceptance": "Same controlled application core in SIL and complete flashable target; model energy boundary explicit."
+    },
+    {
+      "id": "restart-semantics",
+      "title": "掉电与重复事件",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "ViPSN event application",
+      "acceptance": "Cross-restart event identity and incorrect/duplicate application behavior independently tested."
+    },
+    {
+      "id": "figure-provenance",
+      "title": "六组图可复算",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Three-paper evidence presentation",
+      "acceptance": "All declared charts have unit/source hashes; redraw identity and explicit gaps."
+    },
+    {
+      "id": "agent-delivery",
+      "title": "自主修订并提交",
+      "tier": "simulation",
+      "eligible": true,
+      "source_locator": "Reference-assisted design extension",
+      "acceptance": "Real Pi source retrieval, executed candidate, no human candidate fill-in, independent immutable submission and observed usage."
+    },
+    {
+      "id": "hardware-energy",
+      "title": "实测能量",
+      "tier": "hardware",
+      "eligible": false,
+      "source_locator": "ViPSN hardware application",
+      "acceptance": "Physical device/instrument receipt and independent measurement; unavailable in simulation-only study."
+    },
+    {
+      "id": "hardware-flash",
+      "title": "实际烧录",
+      "tier": "hardware",
+      "eligible": false,
+      "source_locator": "ViPSN hardware application",
+      "acceptance": "Physical device/instrument receipt and independent measurement; unavailable in simulation-only study."
+    },
+    {
+      "id": "hardware-rf",
+      "title": "实际无线",
+      "tier": "hardware",
+      "eligible": false,
+      "source_locator": "ViPSN hardware application",
+      "acceptance": "Physical device/instrument receipt and independent measurement; unavailable in simulation-only study."
+    },
+    {
+      "id": "lifetime",
+      "title": "疲劳/寿命",
+      "tier": "hardware",
+      "eligible": false,
+      "source_locator": "ViPSN hardware application",
+      "acceptance": "Physical device/instrument receipt and independent measurement; unavailable in simulation-only study."
+    }
+  ]
+}

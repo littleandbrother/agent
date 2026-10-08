@@ -65,6 +65,17 @@ class AssemblyTests(unittest.TestCase):
         d=self.app.assemblies.projection(self.owner)
         self.assertIn('solar',d['checks'][0]['missing_roles']);self.assertFalse(d['digital_model_available']);self.assertFalse(d['engineering_verified'])
 
+    def test_native_eda_netlist_delivery_preserves_bytes_and_private_path_boundary(self):
+        self.write();base=self.root/'participants'/self.owner
+        (base/'delivery').mkdir(parents=True,exist_ok=True)
+        netlist=b'{"native":"EasyEDA Pro","nets":[]}'
+        (base/'delivery/design.enet').write_bytes(netlist)
+        record=self.app.assemblies.register(self.owner,{'revision':1,'path':'delivery/design.enet','kind':'electronics'})
+        saved,_=self.app.assemblies.file(self.owner,record['id'])
+        self.assertEqual(saved.read_bytes(),netlist)
+        with self.assertRaises(PermissionError):
+            self.app.assemblies.register(self.owner,{'revision':1,'path':'.easyeda/design.enet','kind':'electronics'})
+
     def test_invalid_round_geometry_and_contacts_rejected(self):
         p=definition();next(x for x in p['parts'] if x['id']=='supercap')['geometry']['size_mm'][1]=20
         with self.assertRaisesRegex(ValueError,'ROUND_DIMENSIONS'):validate(p)

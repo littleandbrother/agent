@@ -156,5 +156,27 @@ cq.exporters.export(cq.Workplane("XY").box(23,11,7), "assembly.step")
         r=j['result']['independent_readback'];self.assertTrue(r['memory_fit']);self.assertGreater(r['flash_bytes'],0)
         self.assertFalse(r['flashed']);self.assertFalse(r['pin_binding_verified'])
 
+    @unittest.skipUnless(projects.GCC.is_file(),'local ARM compiler unavailable')
+    def test_real_nrf_project_snapshot_build_and_export(self):
+        parameters=self.project('firmware-nrf52832','main.c',
+            'volatile unsigned counter=9; int main(void){for(;;){counter++;}}\n')
+        with self.assertRaisesRegex(ValueError,'NRF_TARGET_REQUIRED'):
+            projects.request(self.app,self.owner,parameters)
+        path=self.workspace/'project.json';spec=json.loads(path.read_text())
+        spec['interfaces'].update(target='nRF52832-QFAA',softdevice=False)
+        path.write_text(json.dumps(spec))
+        j=self.run_project(parameters,'nrf')
+        report=j['result']['independent_readback']
+        self.assertEqual('nRF52832-QFAA',report['target'])
+        self.assertTrue(report['memory_fit']);self.assertFalse(report['radio_verified'])
+        self.assertFalse(report['flashed']);self.assertGreater(report['flash_bytes'],0)
+        for name in ('project-firmware.elf','project-firmware.hex','project-firmware.bin','project-firmware.map'):
+            self.assertGreater(self.app.engineering.artifact(self.owner,j['id'],name).stat().st_size,0)
+        import zipfile
+        with zipfile.ZipFile(self.app.engineering.root/j['id']/'project-source.zip') as archive:
+            self.assertIn('nrf52832.ld',archive.namelist())
+            self.assertIn('startup_nrf52832.c',archive.namelist())
+            self.assertIn('main.c',archive.namelist())
+
 
 if __name__=='__main__':unittest.main()

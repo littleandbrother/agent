@@ -12,6 +12,7 @@ from pathlib import Path
 from .store import Store,canonical,identity
 from .experiments import task,BASELINE_DESIGN,BASELINE_POLICY
 from .recovery import Recovery, INTERACTIVE_WALL_SECONDS
+from .model_profile import for_owner as model_profile
 
 from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
 NODE = str(NODE_PATH)
@@ -25,7 +26,7 @@ CONTROLLER_SOURCE_HASH=filehash(__file__)
 
 def world_binding():
     base=Path(__file__).resolve().parent
-    paths=[base/name for name in ['programmed.py','experiments.py','store.py','provider.py','recovery.py','references.py','reference_checks.py','event_design.py','event_measurement.py']]
+    paths=[base/name for name in ['programmed.py','experiments.py','store.py','provider.py','model_profile.py','recovery.py','references.py','reference_checks.py','event_design.py','event_measurement.py']]
     paths += [base.parent/'coupled'/name for name in ['engine.py','profiled.py']]
     return {str(p):filehash(p) for p in paths}
 
@@ -33,7 +34,9 @@ def world_binding():
 def delivery_binding():
     # Product delivery capability is outside the frozen scientific apparatus.
     base=Path(__file__).resolve().parent
-    paths=[base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base/'tool_responses.py', base/'request_evidence.py', base/'engineering.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
+    paths=[base/'eda_cli.py',base/'responsibility_review.py',base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base/'tool_responses.py', base/'request_evidence.py', base/'engineering.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
+    paths += [PI/'packages/bf-agent'/folder/('engineering-wait.'+ext) for folder,ext in [('src','ts'),('dist','js')]]
+    paths.append(base/'firmware_targets.py')
     return {str(p):filehash(p) for p in paths}
 
 def freeze(source=PI/'packages/bf-harness',label='H0',home_root=HOME_ROOT,app_entry='main.js'):
@@ -85,9 +88,9 @@ def _freeze_locked(source,label,home_root,app_entry):
       'pi_git_revision':'7140838fdd5ee1ff21dbe50955a8801617b065ef',
       'pi_lock_hash':filehash(PI/'package-lock.json'),'app_build_hash':filehash(PI/'packages/bf-agent/dist'/app_entry),
       'app_entry':app_entry,'app_source_hash':filehash(PI/'packages/bf-agent/src'/app_entry.replace('.js','.ts')),'world_binding':world_binding(),
-      'thinking':'off','session_caps':{'experiments':6,'model_requests':128 if app_entry=='chat-product.js' else 24,'wall_seconds':INTERACTIVE_WALL_SECONDS if app_entry in ('chat.js','chat-v2.js','chat-product.js') else 600},
+       'thinking':'owner-bound' if app_entry=='chat-product.js' else 'off','session_caps':{'experiments':6,'model_requests':128 if app_entry=='chat-product.js' else 24,'wall_seconds':INTERACTIVE_WALL_SECONDS if app_entry in ('chat.js','chat-v2.js','chat-product.js') else 600},
       'resource_hashes':{str(p.relative_to(PI)):filehash(p) for p in sorted((PI/'packages/ai/src/providers/data').rglob('*.json'))},
-      'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
+      'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product','bf_eda'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
       'model':'deepseek-flash','resources':'explicit-empty-no-ancestry','world':'coupled-programmed-reference-v3'}
     if app_entry=='chat-product.js':
         manifest['delivery_binding']=delivery_binding()
@@ -99,7 +102,21 @@ def _freeze_locked(source,label,home_root,app_entry):
 
 def seatbelt(workspace,harness,port=8768,mutable=None):
     def q(p):return str(Path(p).resolve()).replace('\\','\\\\').replace('"','\\"')
-    reads=' '.join(f'(subpath "{q(p)}")' for p in [workspace,harness,PI])
+    # An installed Pi checkout may share node_modules with the deployment
+    # checkout. macOS authorizes resolved paths, so allowing only PI makes ESM
+    # package manifests unreadable and produces a misleading missing index.js.
+    # Allow the actual vendor dependency root and installed Pi workspace
+    # packages, never the deployment home, provider credentials or evaluator.
+    dependencies=[PI/'node_modules']
+    scope=PI/'node_modules/@earendil-works'
+    if scope.is_dir():
+        for path in sorted(scope.iterdir()):
+            target=path.resolve()
+            if target.is_dir() and target.parent.name=='packages':
+                manifest=target/'package.json'
+                if manifest.is_file() and json.loads(manifest.read_text()).get('name')=='@earendil-works/'+path.name:
+                    dependencies.append(target)
+    reads=' '.join(f'(subpath "{p}")' for p in sorted({q(p) for p in [workspace,harness,PI,*dependencies]}))
     source_guards=''
     if mutable is not None:
         source_guards=' '.join(f'(deny file-write* (literal "{q(workspace / "harness" / name)}"))'
@@ -166,6 +183,30 @@ def wait_interactive(proc,store,owner,on_expire=None):
     return None
 
 
+def prepare_workspace(workspace, resume=False, staged=False):
+    """An operator-staged first launch may already have immutable task inputs."""
+    if workspace.is_symlink():raise ValueError('WORKSPACE_SYMLINK_DENIED')
+    if workspace.exists() and not resume:
+        if not staged or any((workspace/p).exists() for p in ('.pi','.tmp','task.json','design.json','policy.py')):
+            raise ValueError('WORKSPACE_ALREADY_INITIALIZED')
+    workspace.mkdir(parents=True,exist_ok=resume or staged)
+    (workspace/'.pi').mkdir(exist_ok=resume);(workspace/'.tmp').mkdir(exist_ok=resume)
+
+
+def previous_attempt_summary(previous):
+    """Keep missing terminal evidence explicit after an unclean process exit.
+
+    The session lock is acquired before resume; a leftover RUNNING receipt is
+    evidence of interrupted bookkeeping, not a still-live execution or success.
+    The complete original receipt is archived separately for chat upgrades.
+    """
+    summary = {k: previous.get(k) for k in ('started', 'ended', 'status', 'trace_hash')}
+    if previous.get('status') == 'RUNNING' or previous.get('ended') is None:
+        summary.update(status='INTERRUPTED', recorded_status=previous.get('status'),
+                       terminal_receipt_missing=True)
+    return summary
+
+
 def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,store_root=None,dry_run=False,resume=False,interrupt_after_job=False,mutable=('solver.ts','improver.ts'),feedback=None,public_history=None,memory_in_prompt=False,process_lock=None,service_port=8768,on_process=None,home_root=None,shared_context=None,chat_upgrade=False,product=False,on_expire=None):
     home_root=Path(home_root or HOME_ROOT)
     if not dry_run and (home_root/'paid-window-closed.json').exists():raise ValueError('PAID_WINDOW_CLOSED')
@@ -187,8 +228,12 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
         if manifest.get('world_binding',world_binding())!=world_binding():raise ValueError('WORLD_CHANGED_SINCE_FREEZE')
         if 'delivery_binding' in manifest and manifest['delivery_binding']!=delivery_binding():raise ValueError('DELIVERY_CHANGED_SINCE_FREEZE')
         owner=label or ('pi-'+mode+'-'+secrets.token_hex(5))
-        workspace=home_root/'participants'/owner;workspace.mkdir(parents=True,exist_ok=resume)
-        (workspace/'.pi').mkdir(exist_ok=resume);(workspace/'.tmp').mkdir(exist_ok=resume)
+        staged=False
+        if product and on_process and not resume:
+            with store.connect() as db:
+                staged=bool(db.execute("SELECT 1 FROM chat_events WHERE conversation=? AND json_extract(data,'$.type')='conversation_staged'",(owner,)).fetchone())
+        workspace=home_root/'participants'/owner
+        prepare_workspace(workspace,resume=resume,staged=staged)
         store.grant(owner,[] if product else [task_id],6,time.time()+620)
         if on_process:Recovery(store).refresh_grant(owner)
         token=store.issue(owner)
@@ -220,12 +265,13 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
         if mode=='solve' and resume:
             if (workspace/'public-history.json').exists():public_history=json.loads((workspace/'public-history.json').read_text())
             memory_in_prompt='public_development_memory' in json.loads((workspace/'task.json').read_text())
-        cfg={'workspace':str(workspace),'service':f'http://127.0.0.1:{service_port}','token':token,'taskId':task_id,'mode':mode,'dryRun':dry_run,
+        with store.connect() as db:profile=model_profile(db,owner)
+        cfg={'workspace':str(workspace),'service':f'http://127.0.0.1:{service_port}','token':token,'taskId':task_id,'mode':mode,'dryRun':dry_run,'modelProfile':profile,
           'productModule':str(Path(harness)/'dist/product.js'),'product':product,'sharedContext':shared_context,'solverModule':str(Path(harness)/'dist/solver.js'),'improverModule':str(Path(harness)/'dist/improver.js'),
           'sourceManifest':manifest,'improvementContext':{'parent':manifest,'allowed_paths':['harness/'+p for p in mutable],'experience_file':'experience.json','trace_files':'experience/*.json','reading':'The index and complete public traces are local files. Page or summarize large files instead of dumping all traces into context.','continuation_feedback':feedback}}
         command=['/usr/bin/sandbox-exec','-p',seatbelt(workspace,harness,port=service_port,mutable=mutable if mode=='improve' else None),NODE,str(PI/'packages/bf-agent/dist'/app_entry),'-']
         receipt={'owner':owner,'mode':mode,'dry_run':dry_run,'task_id':task_id,'harness_path':str(harness),'harness':manifest,'sandbox':checks,'started':time.time(),'status':'RUNNING','workspace':str(workspace),
-          'controller_hash':CONTROLLER_SOURCE_HASH,'public_history_hash':identity(public_history) if public_history is not None else None,'memory_in_prompt':memory_in_prompt,
+          'controller_hash':CONTROLLER_SOURCE_HASH,'model_profile':profile,'public_history_hash':identity(public_history) if public_history is not None else None,'memory_in_prompt':memory_in_prompt,
           'task_input_hash':filehash(workspace/'task.json') if mode=='solve' else None}
         if on_process:receipt['wall_policy']={'scope':'latest-valid-user-message','seconds':INTERACTIVE_WALL_SECONDS,'grace_seconds':INTERACTIVE_SHUTDOWN_GRACE_SECONDS}
         output=home_root/'sessions'/owner;output.mkdir(parents=True,exist_ok=resume)
@@ -238,7 +284,7 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
                 if not archive.exists():write_once(archive,previous)
                 receipt['previous_harness_identity']=previous['harness']['identity']
                 receipt['shared_context']=shared_context
-            receipt['previous_attempts']=previous.get('previous_attempts',[])+[{k:previous[k] for k in ['started','ended','status','trace_hash']}]
+            receipt['previous_attempts']=previous.get('previous_attempts',[])+[previous_attempt_summary(previous)]
         (output/'receipt.json').write_text(canonical(receipt))
         store.event(owner,owner,'session_started',{'mode':mode,'harness_id':manifest['identity'],'task_id':task_id})
         with (output/'trace.jsonl').open('a' if resume else 'w') as stdout,(output/'stderr.log').open('a' if resume else 'w') as stderr:

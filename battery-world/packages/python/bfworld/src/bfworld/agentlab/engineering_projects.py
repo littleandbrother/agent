@@ -19,18 +19,19 @@ import time
 
 from .runtime_config import CAD, SPICE, GCC, CMSIS
 from .store import identity, canonical
-from . import product_build, deployment
+from . import product_build, deployment, firmware_targets
 
 SCOPE = '参与者源码快照 → 隔离构建 → 独立原生读回；不等于产品功能、板级兼容或实测通过。'
 SKILL = '''# 可修改工程项目
 bf_engineering run engine=engineering-project parameters={assembly_revision:当前版本,project_path:"project/project.json"}。
-project.json: {schema_version:"bf-engineering-project-v1",kind:"cadquery"|"spice"|"firmware-stm32l031",entrypoint:"main.py",files:["main.py"],interfaces:{units:"mm"}}。
+project.json: {schema_version:"bf-engineering-project-v1",kind:"cadquery"|"spice"|"firmware-stm32l031"|"firmware-nrf52832",entrypoint:"main.py",files:["main.py"],interfaces:{units:"mm"}}。
 文件路径相对 project.json 的目录，最多32个UTF-8源文件，总计2MB，禁止符号链接。源码在提交时固定，修改后使用新 operation_id。不会执行自定义 shell/build 脚本。
 cadquery: units 必须 mm；Python 可 import cadquery，将 assembly.step 写到当前工作目录。原生 STEP 由另一个固定读回器检查有效实体/体积/尺寸，不采信自己的 PASS。
 spice: units=SI；entrypoint 为 .cir，完整自包含网表，使用 .tran/.ac/.dc/.op。禁止 .control/.include/.lib 和外部命令。求解器生成 trace.raw，独立读取数值。此入口不保证电路工作域或机电校准，使用 event-transient 做有定义的联合模型。
 firmware-stm32l031: units=SI，entrypoint为main.c，可包含项目内.h；清单中的所有.c一起编译，固定STM32L031K6、CMSIS和链接脚本。提供 Reset_Handler 所需 main；引脚/板时钟为显式工程责任，编译不能证明PCB兼容。平台独立读ELF资源，导出BIN/HEX/MAP，绝不烧录。
+firmware-nrf52832: 同样接收C/H，固定nRF52832-QFAA 512KiB Flash/64KiB RAM、Cortex-M4 soft-float、4KiB栈，输出ELF/HEX/BIN/MAP和独立向量/内存读回。interfaces必须明确target="nRF52832-QFAA",softdevice=false,units="SI"。固定启动代码初始化data/bss；参与者提供int main(void)及需要的SystemInit、SysTick_Handler、IRQ0_Handler..IRQ38_Handler（实际IRQ映射参考原厂手册），自行提供外设/无线驱动。没有隐含SoftDevice、CMSIS外设头文件或无线成功声明。可将同一program.c和policy.h用于主机测试与目标构建，必须明确负载模型与目标驱动尚未实测等价；HEX存在不表示真实烧录、无线通信或功耗通过。
 接口至少声明单位；项目可补充 frame、polarity、pins、clock_hz、events、load_source。它们是待验证声明，不是已验证接口。读取 job 和独立readback，失败据实修改源文件。'''
-KINDS = {'cadquery': CAD, 'spice': SPICE, 'firmware-stm32l031': GCC}
+KINDS = {'cadquery': CAD, 'spice': SPICE, 'firmware-stm32l031': GCC, 'firmware-nrf52832': GCC}
 
 
 def digest(path):
@@ -39,7 +40,7 @@ def digest(path):
 
 def validate(parameters):
     if not isinstance(parameters, dict) or set(parameters) != {'assembly_revision', 'project_path'}:
-        raise ValueError('PROJECT_PARAMETERS_REQUIRED')
+        raise ValueError('PROJECT_PARAMETERS_REQUIRED: supply exactly parameters={"assembly_revision":current_integer_revision,"project_path":"project/project.json"}; read assembly_inspect for the revision. The project kind belongs inside project.json, not parameters. No build was started.')
     if type(parameters['assembly_revision']) is not int or parameters['assembly_revision'] < 1 or not isinstance(parameters['project_path'], str):
         raise ValueError('PROJECT_PARAMETERS_INVALID')
     return parameters
@@ -71,8 +72,10 @@ def request(app, owner, parameters):
     interfaces = spec['interfaces']
     if not isinstance(interfaces, dict) or interfaces.get('units') != ('mm' if spec['kind']=='cadquery' else 'SI') or len(canonical(interfaces))>16000:
         raise ValueError('PROJECT_INTERFACE_UNITS')
-    extensions={'cadquery':{'.py','.json'}, 'spice':{'.cir'}, 'firmware-stm32l031':{'.c','.h'}}[spec['kind']]
-    if Path(spec['entrypoint']).suffix != {'cadquery':'.py','spice':'.cir','firmware-stm32l031':'.c'}[spec['kind']]:
+    extensions={'cadquery':{'.py','.json'}, 'spice':{'.cir'}}.get(spec['kind'],{'.c','.h'})
+    if spec['kind']=='firmware-nrf52832' and (interfaces.get('target')!='nRF52832-QFAA' or interfaces.get('softdevice') is not False):
+        raise ValueError('PROJECT_NRF_TARGET_REQUIRED')
+    if Path(spec['entrypoint']).suffix != {'cadquery':'.py','spice':'.cir'}.get(spec['kind'],'.c'):
         raise ValueError('PROJECT_ENTRYPOINT_TYPE')
     contents = {}; total = 0
     for name in names:
@@ -171,6 +174,21 @@ def run(engineering, job, root, deadline):
         command([exe,reader]);report=json.loads(relative_file(out,'readback.json').read_text())
     elif kind=='spice':
         command([exe,'-b','-r',out/'trace.raw',entry]);report=raw_readback(relative_file(out,'trace.raw'))
+    elif kind=='firmware-nrf52832':
+        startup,linker=firmware_targets.prepare_nrf(root)
+        sources=[src/name for name in project['manifest']['files'] if Path(name).suffix=='.c']
+        command([exe,'-mcpu=cortex-m4','-mthumb','-mfloat-abi=soft','-Os','-std=c11',
+                 '-ffreestanding','-fno-builtin','-ffunction-sections','-fdata-sections','-nostdlib',
+                 '-Wl,--gc-sections','-Wl,-Map='+str(out/'firmware.map'),'-I'+str(src),
+                 '-T'+str(linker),startup,*sources,'-lgcc','-o',out/'firmware.elf'])
+        for fmt,name in [('binary','firmware.bin'),('ihex','firmware.hex')]:
+            command([str(exe).replace('gcc','objcopy'),'-O',fmt,out/'firmware.elf',out/name])
+        report=firmware_targets.inspect_nrf(out/'firmware.elf',out/'firmware.bin')
+        (out/'readback.json').write_text(canonical(report))
+        (src/'build-apparatus.json').write_text(canonical({'target':'nRF52832-QFAA','startup_sha256':digest(startup),
+            'linker_sha256':digest(linker),'compiler':str(exe),'source':firmware_targets.NRF_SOURCE}))
+        # Preserve trusted build inputs alongside participant sources for rebuild.
+        (src/'startup_nrf52832.c').write_bytes(startup.read_bytes());(src/'nrf52832.ld').write_bytes(linker.read_bytes())
     else:
         # Fixed target and linker; participant controls C/H, never build commands.
         deployment.prepare(root);reads += [CMSIS]

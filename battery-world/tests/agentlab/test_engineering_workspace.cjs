@@ -37,3 +37,10 @@ assert.equal(M.views({files:[{id:'bom-old',name:'bom.csv',integrity:true}],resul
 assert.equal(M.views({files:[{id:'raw-old',name:'trace.raw',integrity:true}],results:[]},'simulation')[0].v.kind,'series','legacy solver data retains actual series preview');
 assert.equal(M.views({files:[{id:'deck',name:'pmic.cir',integrity:true}],results:[]},'simulation').length,0,'a circuit input is not a simulated waveform');
 console.log('engineering workspace: 27 projection and negative-control assertions passed');
+
+const curated=[{id:'model',name:'assembly.glb',domain:'mechanical',integrity:true,sections:['mechanical'],label:'Native assembly'},{id:'pic',name:'other.png',domain:'mechanical',integrity:true},{id:'historical-board',name:'board.glb',domain:'circuit',integrity:true,sections:['pcb'],reference_only:true,source_revision:'D3'}];
+assert.deepEqual(M.views({files:curated,results:[]},'mechanical').map(x=>x.f.id),['model']);
+assert.equal(M.belongs(curated[2],'mechanical'),false,'PCB GLB stays in PCB when explicitly classified');
+assert.equal(M.views({files:curated,results:[]},'pcb')[0].f.id,'historical-board');
+assert.equal(S.fileLabel(curated[0]),'Native assembly');
+assert.equal(S.verdict({reference_only:true,design_status:'PASS'}),'历史参考 · 待适配','reference badge cannot turn into current acceptance');

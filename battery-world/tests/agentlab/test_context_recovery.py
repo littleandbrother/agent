@@ -12,12 +12,98 @@ from bfworld.agentlab.store import canonical, identity
 
 
 class ContextProjection(unittest.TestCase):
+    def test_followup_keeps_recent_real_actions_and_evidence(self):
+        messages=[{'role':'system','content':'Rules'}, {'role':'user','content':'Design the full board'},
+            {'role':'assistant','content':'Checking actual pins','reasoning_content':'provider reasoning',
+             'tool_calls':[{'id':'pins','function':{'name':'read','arguments':'{}'}}]},
+            {'role':'tool','tool_call_id':'pins','content':'Native pin VDD maps to OUT'},
+            {'role':'assistant','content':'Pins read'}, {'role':'user','content':'Continue editing'}]
+        source={'messages':messages,'tools':[{'type':'function','function':{'name':'read'}}]}
+        result,audit=project_interactive(source)
+        self.assertEqual(source,result)
+        self.assertEqual([],audit['omitted_tool_call_ids'])
+        self.assertEqual('provider reasoning',result['messages'][2]['reasoning_content'])
+
+    def test_pressure_drops_whole_stale_actions_without_phantom_prose(self):
+        messages=[{'role':'user','content':'Frozen original requirement'}]
+        for i in range(8):
+            messages += [{'role':'assistant','content':f'Preparing stale action {i}',
+                'reasoning_content':'r'*24000,'tool_calls':[{'id':str(i)}]},
+                {'role':'tool','tool_call_id':str(i),'content':f'Actual evidence {i}'}]
+        messages += [{'role':'user','content':'Continue same work'}]
+        source={'messages':messages};before=canonical(source)
+        result,audit=project_interactive(source)
+        self.assertTrue(audit['fits']);self.assertEqual(before,canonical(source))
+        calls={c['id'] for m in result['messages'] for c in m.get('tool_calls',[])}
+        results={m['tool_call_id'] for m in result['messages'] if m['role']=='tool'}
+        self.assertEqual(calls,results);self.assertTrue({'6','7'}<=calls)
+        for k in audit['omitted_tool_call_ids']:
+            self.assertFalse(any(m.get('content')==f'Preparing stale action {k}' for m in result['messages']))
+        self.assertIn(messages[0],result['messages']);self.assertIn(messages[-1],result['messages'])
+
+    def test_repeated_machine_observations_do_not_evict_current_tool_evidence(self):
+        state={'schema_version':'bf-product-authority-v1','missing':['pcb'],
+               'responsibility_review':{'status':'incomplete','missing':['pcb'],'actionable':['pcb']},
+               'stages':['redundant state '*800]}
+        suffix='。原始执行任务仍未完成。Keep the frozen dimensions; never turn missing into PASS.'
+        messages=[{'role':'system','content':'Rules'},{'role':'user','content':'Human requirement: 80 x 30 mm, current circuit only.'}]
+        messages += [{'role':'user','content':'交付观察器的实际结果：'+canonical(state)+suffix} for _ in range(8)]
+        messages += [{'role':'user','content':'Continue actual editing'}]
+        for n in range(8):
+            messages += [{'role':'assistant','tool_calls':[{'id':str(n),'function':{'name':'read','arguments':'{}'}}]},
+                         {'role':'tool','tool_call_id':str(n),'content':'real component pin data '+('x'*3000)}]
+        payload={'messages':messages};original=canonical(payload)
+        with tempfile.TemporaryDirectory() as root:
+            result,audit=project_interactive(payload,ContextArchive(root,'chat'))
+            self.assertTrue(audit['fits']);self.assertEqual(original,canonical(payload))
+            self.assertEqual([],audit['bounded_turn_omitted_call_ids'])
+            self.assertEqual(8,len([m for m in result['messages'] if m['role']=='tool']))
+            self.assertIn(messages[1],result['messages']);self.assertIn(messages[10],result['messages'])
+            for m in result['messages']:
+                if m.get('content','').startswith('交付观察器的实际结果：'):self.assertTrue(m['content'].endswith(suffix))
+            for item in audit['archived_messages']:
+                self.assertEqual(state,json.loads((Path(root)/'participants/chat'/item['record_file']).read_text()))
+            self.assertEqual(8,len(audit['archived_messages']))
+
+    def test_old_product_snapshots_keep_human_text_and_requirements(self):
+        prefix='当前任务事实快照（覆盖过时上下文；不改变既定要求）：'
+        state={'schema_version':'bf-product-context-v1','requirements':['80 x 30 mm'],'evidence':['x'*40000]}
+        suffix='\n用户消息：Do not change the current circuit. This instruction must remain exact.'
+        messages=[{'role':'user','content':prefix+canonical(state)+suffix} for _ in range(4)]
+        messages += [{'role':'user','content':'Current request'}]
+        with tempfile.TemporaryDirectory() as root:
+            result,audit=project_interactive({'messages':messages},ContextArchive(root,'chat'))
+            self.assertTrue(audit['fits'])
+            for m in result['messages']:
+                if m.get('content','').startswith(prefix):
+                    self.assertTrue(m['content'].endswith(suffix));self.assertIn('80 x 30 mm',m['content'])
+            self.assertEqual(4,len(audit['archived_messages']))
+            self.assertIn(messages[-1],result['messages'])
+
+    def test_sdk_text_part_array_is_compacted_without_changing_modality(self):
+        prefix='当前任务事实快照（覆盖过时上下文；不改变既定要求）：'
+        state={'schema_version':'bf-product-context-v1','requirements':['80 x 30 mm'],'evidence':['x'*60000]}
+        suffix='\n用户消息：Keep all human instructions.'
+        old={'role':'user','content':[{'type':'text','text':prefix+canonical(state)+suffix}]}
+        current={'role':'user','content':[{'type':'text','text':'Continue'}]}
+        payload={'messages':[old,old,current]};original=canonical(payload)
+        with tempfile.TemporaryDirectory() as root:
+            result,audit=project_interactive(payload,ContextArchive(root,'chat'))
+            self.assertLess(audit['projected_bytes'],5000);self.assertEqual(original,canonical(payload))
+            self.assertEqual(2,len(audit['archived_messages']))
+            for m in result['messages'][1:-1]:
+                self.assertIsInstance(m['content'],list)
+                self.assertTrue(m['content'][0]['text'].endswith(suffix))
+            self.assertIn(current,result['messages'])
+
     def test_removes_completed_old_tool_details_preserves_users_text_and_active_pairs(self):
         source={'model':'deepseek-flash','messages':[
             {'role':'system','content':'Rules'}, {'role':'user','content':'Keep original constraints'},
             {'role':'assistant','content':'Checking','tool_calls':[{'id':'old','function':{'name':'read','arguments':'{}'}}]},
             {'role':'tool','tool_call_id':'old','content':'x'*140000},
-            {'role':'assistant','content':'Past answer with limitations'}, {'role':'user','content':'Continue'},
+            {'role':'assistant','content':'Past answer with limitations'},
+            {'role':'assistant','tool_calls':[{'id':'recent-past'}]}, {'role':'tool','tool_call_id':'recent-past','content':'Persisted source pin map'},
+            {'role':'user','content':'Continue'},
             {'role':'assistant','tool_calls':[{'id':'current'}]}, {'role':'tool','tool_call_id':'current','content':'Current evidence'}]}
         original=json.dumps(source)
         projected,audit=project_interactive(source)
@@ -25,7 +111,7 @@ class ContextProjection(unittest.TestCase):
         self.assertEqual(['old'],audit['omitted_tool_call_ids'])
         self.assertLess(audit['projected_bytes'],2000)
         self.assertEqual(source['messages'][-3:],projected['messages'][-3:])
-        self.assertIn({'role':'assistant','content':'Checking'},projected['messages'])
+        self.assertNotIn({'role':'assistant','content':'Checking'},projected['messages'])
         self.assertIn(source['messages'][0],projected['messages'])
         self.assertIn(source['messages'][1],projected['messages'])
         self.assertIn(source['messages'][4],projected['messages'])
@@ -170,6 +256,8 @@ class TurnBudget(unittest.TestCase):
         self.payload['messages']=[{'role':'user','content':'Earlier'},
             {'role':'assistant','tool_calls':[{'id':'old'}]},
             {'role':'tool','tool_call_id':'old','content':'x'*140000},
+            {'role':'assistant','tool_calls':[{'id':'recent-past'}]},
+            {'role':'tool','tool_call_id':'recent-past','content':'Real recent check'},
             {'role':'user','content':'Continue'},
             {'role':'assistant','tool_calls':[{'id':'recent'}]},
             {'role':'tool','tool_call_id':'recent','content':'Current feedback'}]
@@ -178,7 +266,7 @@ class TurnBudget(unittest.TestCase):
             row=db.execute('SELECT wire,receipt FROM model_request_evidence').fetchone()
         self.assertNotIn('old',[m.get('tool_call_id') for m in json.loads(row['wire'])['messages']])
         receipt=json.loads(row['receipt'])
-        self.assertEqual(['recent'],[item['tool_call_id'] for item in receipt['feedback']])
+        self.assertEqual(['recent-past','recent'],[item['tool_call_id'] for item in receipt['feedback']])
         self.assertEqual(140000,len(self.payload['messages'][2]['content']))
 
     def complete(self):
@@ -202,6 +290,17 @@ class TurnBudget(unittest.TestCase):
             self.assertEqual(4096,json.loads(record['projection'])['max_output_tokens'])
         self.assertEqual(before,self.provider.status()['limits'])
         self.assertEqual(129,self.provider.status()['calls'])
+
+    def test_extended_old_lease_does_not_capture_new_message_usage(self):
+        self.message('old')
+        with self.store.connect() as db:
+            db.execute('UPDATE interactive_leases SET expires=? WHERE message_id=?',(time.time()+86400,'old'))
+        self.message('new');self.complete()
+        with self.store.connect() as db:
+            self.assertEqual('new',db.execute('SELECT message_id FROM model_request_context').fetchone()[0])
+            db.execute('UPDATE interactive_leases SET expires=0 WHERE message_id=?',('new',))
+        with self.assertRaisesRegex(ValueError,'CHAT_TURN_WALL_BUDGET'):self.complete()
+        self.assertEqual(1,self.provider.status()['calls'])
 
     def test_tiny_interactive_output_is_rejected_without_billable_dispatch(self):
         self.message('first');self.payload['max_tokens']=1
@@ -247,3 +346,18 @@ class TurnBudget(unittest.TestCase):
         with self.store.connect() as db:db.execute('UPDATE model_limits SET max_tokens=100')
         with self.assertRaisesRegex(ValueError,'MODEL_TOKEN_BUDGET'):self.complete()
         self.assertEqual(24,self.provider.status()['calls'])
+
+    def test_multi_megabyte_local_history_still_sends_bounded_provider_request(self):
+        from bfworld.agentlab.context import INTERACTIVE_HISTORY_BYTES
+        self.message('long-eda')
+        self.payload['messages'] += [
+            {'role':'assistant','tool_calls':[{'id':'native','type':'function','function':{'name':'read','arguments':'{}'}}]},
+            {'role':'tool','tool_call_id':'native','content':'native evidence\n'*160000}]
+        original=canonical(self.payload)
+        self.assertGreater(len(original.encode()),2*1024*1024)
+        self.assertLess(len(original.encode()),INTERACTIVE_HISTORY_BYTES)
+        result={'model':'deepseek-flash','usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}}
+        with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(json.dumps(result).encode())) as transport:
+            self.provider.complete('chat',self.payload)
+            self.assertLess(len(transport.call_args.args[0].data),128000)
+        self.assertEqual(original,canonical(self.payload))

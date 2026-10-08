@@ -34,6 +34,25 @@ def is_not_sent(exc):
     return isinstance(exc, RequestNotSent) or isinstance(getattr(exc, 'reason', None), RequestNotSent)
 
 
+def open_before_send(opener, request, *, timeout, retry_record, before_retry, attempts=3):
+    """Retry only verified connect failures; no model HTTP bytes were sent.
+
+    The caller retains one reservation and the exact request identity. A timeout
+    after connection, a response error, or unknown transmission is never replayed.
+    """
+    for attempt in range(1, attempts+1):
+        try:
+            return opener.open(request,timeout=timeout)
+        except Exception as exc:
+            if not is_not_sent(exc) or attempt == attempts: raise
+            try:
+                before_retry()
+            except Exception as denied:
+                raise RequestNotSent('Retry not permitted: '+str(denied)) from exc
+            retry_record({'attempt':attempt,'next_attempt':attempt+1,'max_attempts':attempts,
+                          'transmission':'not_sent','reason':type(exc).__name__+': '+str(exc)[:200]})
+
+
 class Recovery:
     def __init__(self, store):
         self.store = store
@@ -97,7 +116,7 @@ class Recovery:
             return None
         row = db.execute("""SELECT l.* FROM interactive_leases l JOIN chat_messages m ON m.id=l.message_id
             WHERE l.owner=? AND m.conversation=? AND m.status NOT IN ('WITHDRAWN','RECALLING','CANCELLED')
-            ORDER BY l.expires DESC LIMIT 1""", (owner, owner)).fetchone()
+            ORDER BY l.created DESC, l.message_id DESC LIMIT 1""", (owner, owner)).fetchone()
         return dict(row) if row else None
 
     def refresh_grant(self, owner):

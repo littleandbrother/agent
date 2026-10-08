@@ -15,7 +15,7 @@ from .store import canonical, identity
 ID = re.compile(r'^[A-Za-z][A-Za-z0-9_.-]{0,79}$')
 KINDS = {'box', 'rounded_box', 'cylinder', 'sphere', 'shell'}
 ROLES = {'housing', 'cover', 'solar', 'storage', 'pcb', 'controller', 'power', 'input', 'feedback', 'mount', 'connector', 'decoration'}
-FILE_TYPES = {'.json', '.jsonl', '.md', '.txt', '.csv', '.gz', '.png', '.jpg', '.glb', '.blend', '.step', '.stl', '.brep', '.svg', '.pdf', '.epro2', '.zip', '.c', '.h', '.py', '.java', '.mph', '.mp4', '.gif', '.elf', '.out', '.bin', '.hex', '.map', '.ld', '.net', '.cir', '.dsn', '.ses', '.epro-source', '.su'}
+FILE_TYPES = {'.json', '.jsonl', '.md', '.txt', '.csv', '.gz', '.png', '.jpg', '.glb', '.blend', '.step', '.stl', '.brep', '.svg', '.pdf', '.epro2', '.zip', '.c', '.h', '.py', '.java', '.mph', '.mp4', '.gif', '.elf', '.out', '.bin', '.hex', '.map', '.ld', '.net', '.enet', '.cir', '.dsn', '.ses', '.epro-source', '.su'}
 
 
 def vector(value, low, high, name):
@@ -149,7 +149,7 @@ class Assemblies:
                 else:
                     current = db.execute('SELECT COALESCE(MAX(revision),0) FROM assembly_revisions WHERE owner=?', (owner,)).fetchone()[0]
                     if body.get('expected_revision') != current:
-                        raise ValueError('ASSEMBLY_REVISION_CONFLICT')
+                        raise ValueError('ASSEMBLY_REVISION_CONFLICT: current revision=' + str(current) + '; read assembly_inspect and reconcile the current assembly before resubmitting with expected_revision. No revision was written.')
                     revision = current + 1
                     db.execute('INSERT INTO assembly_revisions VALUES(?,?,?,?,?,?,?)', (owner, revision, op, source, canonical(p), canonical(hashes), time.time()))
             self.app.conversations.event(owner, 'assembly-' + str(revision), {'type': 'assembly_revision', 'revision': revision, **hashes})
@@ -170,7 +170,7 @@ class Assemblies:
         path = base / rel
         kind = body.get('kind', 'document')
         if kind not in ('document', 'geometry', 'electronics', 'firmware', 'energy', 'source'):
-            raise ValueError('PRODUCT_FILE_KIND')
+            raise ValueError('PRODUCT_FILE_KIND: choose document, geometry, electronics, firmware, energy or source. No file was published.')
         if path.is_symlink() or not path.resolve().is_relative_to(base.resolve()):
             raise PermissionError('PRODUCT_FILE_PATH_DENIED')
         if not path.is_file():

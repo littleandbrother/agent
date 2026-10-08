@@ -82,7 +82,8 @@
     if(!readiness)return;
     // Execution failures belong to the durable conversation, not below the draft.
     $('#runtime-block')?.remove();
-    $('#connection').textContent=readiness.reasons?.length?'本地已连接 · 模型受阻':'本地已连接';
+    const scoped=window.BF?.getCurrent()?.readiness||readiness;
+    $('#connection').textContent=scoped.reasons?.length?'本地已连接 · 模型受阻':'本地已连接';
   }
   $('#attach-file').onclick=()=>{
     const current=window.BF.getCurrent();

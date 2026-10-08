@@ -8,8 +8,10 @@ from pathlib import Path
 import numpy as np
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('case',type=Path);a=p.parse_args();root=a.case
- out=root/'circuit'/'ltspice-D2';out.mkdir(exist_ok=True)
+ p=argparse.ArgumentParser();p.add_argument('case',type=Path);p.add_argument('--output',type=Path);p.add_argument('--load-a',type=float,default=.002);p.add_argument('--inductor-dcr-ohm',type=float,default=.4);a=p.parse_args();root=a.case
+ if not 0<a.load_a<=.020:raise ValueError('LOAD_ENVELOPE_OUT_OF_RANGE')
+ if not 0<a.inductor_dcr_ohm<=2:raise ValueError('INDUCTOR_DCR_OUT_OF_RANGE')
+ out=a.output or root/'circuit'/'ltspice-D2';out.mkdir(parents=True,exist_ok=True)
  tool=root.parents[1]/'toolchains/ltspice-26/Package.pkg/Payload/Applications/LTspice.app/Contents/SharedSupport/ltspice'
  model=tool/'support/ltspice/drive_c/users/crossover/AppData/Local/LTspice/lib/sub/LTC3588-1.sub'
  rom=root/'simulation/coupled-D2';params=json.loads((rom/'parameters.json').read_text())
@@ -19,7 +21,7 @@ def main():
   np.savetxt(d/'current.pwl',np.column_stack([data['t_s'],params['theta_N_V']*data['velocity_m_s']]),fmt='%.10g')
   shutil.copy2(model,d/'LTC3588-1.sub')
   deck=d/'power.cir';duration=float(data['t_s'][-1])
-  deck.write_text(f'''* D2 one-way ROM Norton source, vendor LTC3588-1, zero initial energy
+  deck.write_text(f'''* one-way ROM Norton source, vendor LTC3588-1, zero initial energy
 XU1 pz1 pz2 cap vin sw out vin2 vin2 0 pgood 0 LTC3588-1
 Ipiezo pz2 pz1 PWL FILE="current.pwl"
 Cpiezo pz1 pz2 {params['blocked_capacitance_F']}
@@ -27,10 +29,10 @@ Rleak pz2 0 1G
 Cstorage vin 0 47u
 Ccap vin cap 1u
 Cvin2 vin2 0 4.7u
-L1 sw out 10u Rser=0.4
+L1 sw out 10u Rser={a.inductor_dcr_ohm}
 Cout out 0 100u Rser=0.02
 Roff out 0 10Meg
-Bload out 0 I=if(V(pgood)>2.5,0.002,0)
+Bload out 0 I=if(V(pgood)>2.5,{a.load_a},0)
 .lib LTC3588-1.sub
 .tran 0 {duration} 0 50u uic
 .options plotwinsize=0
@@ -54,6 +56,6 @@ Bload out 0 I=if(V(pgood)>2.5,0.002,0)
   r['cold_start']=r['startup'] is not None;r['native_solver_completed']=True;results[label]=r;print(label,r,flush=True)
  (out/'report.json').write_text(json.dumps({'engine':'ADI LTspice 26.0.2, native vendor macro-model','model_sha256':hashlib.sha256(model.read_bytes()).hexdigest(),
   'coupling':'ONE-WAY. Norton current theta*qdot from coupled 100kohm ROM + its Cp. PMIC back-action is not fed back into beam; cannot qualify a positive mission result.',
-  'load':'2mA demand when PGOOD>2.5V, an explicit design envelope; not binary-measured MCU energy.',
-  'initial_V':0,'cin_uF':47,'cout_uF':100,'vin2_bypass_uF':4.7,'cases':results,'hardware_calibrated':False},indent=2))
+  'load':f'{a.load_a*1000:g}mA constant demand when PGOOD>2.5V, a conservative TX-envelope check; not binary-measured MCU energy.', 'radio_load_A':a.load_a,
+  'initial_V':0,'cin_uF':47,'cout_uF':100,'vin2_bypass_uF':4.7,'inductor_dcr_ohm':a.inductor_dcr_ohm,'cases':results,'hardware_calibrated':False},indent=2))
 if __name__=='__main__':main()

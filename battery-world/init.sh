@@ -4,7 +4,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
 
-if [[ -x .venv/bin/python ]]; then
+if [[ -n "${BFWORLD_PYTHON:-}" ]]; then
+  PYTHON_BIN="$BFWORLD_PYTHON"
+elif [[ -x "$HOME/.local/share/bf-agent-runtime/product-cad/bin/python" ]]; then
+  PYTHON_BIN="$HOME/.local/share/bf-agent-runtime/product-cad/bin/python"
+elif [[ -x .venv/bin/python ]]; then
   PYTHON_BIN=.venv/bin/python
 else
   PYTHON_BIN="${BFWORLD_PYTHON:-/usr/local/bin/python3}"

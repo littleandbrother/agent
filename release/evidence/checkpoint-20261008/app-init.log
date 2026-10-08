@@ -1,0 +1,37 @@
+=== Battery World environment ===
+{"dependencies":{"PyYAML":"6.0.2","jsonschema":"4.23.0","pyarrow":"22.0.0"},"expected_python":"3.11.x","problems":{},"python":"3.11.9","schema_version":"bfworld-environment-check-v1","status":"passed"}
+=== Canonical A materialization and fresh reproduction ===
+{"canonical":{"baseline_overvoltage_observed":true,"bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","event_head":"sha256:80ac2e7c35fd6479742126e842a795a9c81466e411f6c268fb6e4f4540bf6180","fine_validation_passed":true,"hardware_result":false,"model_calls":0,"revision_passed":true,"run_id":"run-9b86a46b1f0cbcd204c70ef580a019845e3c7a6d3bcda89c7df74e38dbda7cca","schema_version":"bfworld-verification-report-v1","scientific_hash":"sha256:5c5a9374104130aa3d8d8de38dc28dc7ed50324cdb3bf33f9b0300498b7ab986","status":"passed"},"fresh_reproduction":{"bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","output":"/var/folders/j4/7j4r85ls1tdf96wzf4lsqnk40000gn/T/bfworld-a-reproduce-erca5avz/bundle","run_id":"run-9b86a46b1f0cbcd204c70ef580a019845e3c7a6d3bcda89c7df74e38dbda7cca","scientific_hash":"sha256:5c5a9374104130aa3d8d8de38dc28dc7ed50324cdb3bf33f9b0300498b7ab986"},"gates":{"baseline_overvoltage":true,"byte_identical_reproduction":true,"fine_step_validation":true,"hardware_result":false,"independent_verification":true,"typed_revision":true,"zero_model_calls":true},"schema_version":"bfworld-a-validation-v1","status":"passed"}
+=== B0 semantic golden episodes and byte-identical reproduction ===
+{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","byte_identical_rebuild":true,"episode_count":4,"feature_receipt_bound":true,"manifest_hash":"sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618","schema_version":"bfworld-semantic-suite-audit-v0","status":"passed","validation":{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","episodes":[{"content_hash":"sha256:e4494a08f5d55753d7dba345f5387a9f45310487aee20c8ca5f90a4ca6c22191","ea":true,"energy_residual":0.004166666667,"episode_id":"G0-PASS","false_admission":false,"pmp":true,"vms":true},{"content_hash":"sha256:9e4afe771f07c876fc33d211ec9e59963d8ea14fe5593133dc6ec44d49aeb7b5","ea":true,"energy_residual":0.003571428571,"episode_id":"G1-OVERVOLTAGE","false_admission":true,"pmp":false,"vms":false},{"content_hash":"sha256:94118f6e32e00372aed09c28948b70ff552889477b00f7c1c562f732ddbeec67","ea":true,"energy_residual":0.004166666667,"episode_id":"G2-BROWNOUT","false_admission":true,"pmp":false,"vms":false},{"content_hash":"sha256:7f24ac0c4d8fa7da3e3ad026901b980972c2f25bc268fb2da06e5cb28bdc2f8f","ea":true,"energy_residual":0.004166666667,"episode_id":"G3-WRONG-DIAGNOSIS","false_admission":true,"pmp":false,"vms":false}],"gates":{"authority_separation":true,"energy_conservation":true,"pmp_ea_vms_recomputable":true,"request_level_information_ring":true,"same_energy_twin_diverges":true,"same_time_event_order":true,"unconfirmed_causality_not_promoted":true,"visual_provenance_complete":true},"schema_version":"bfworld-semantic-golden-validation-v0","status":"passed"}}
+=== Evidence-gated project roadmap and progress ===
+{"a001_bundle_hash":"sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059","active_feature":"BFA-035-dot-integration-pilot","b0_manifest_hash":"sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618","foundation_features_complete":4,"method":"EpiDesign","next_feature":"B2-003-repair-and-blind-transfer","product":"Battery World Studio","research_milestones_complete":3,"research_milestones_total":6,"schema_version":"battery-world-project-state-validation-v1","status":"passed"}
+{
+  "schema_version": "pilot-readiness-v1",
+  "launchable": true,
+  "blockers": [],
+  "external_calls_made": 0,
+  "scope": "configuration preflight only; actual isolation and provider identities require independent verification"
+}
+{"status": "pass", "trials": 36, "model_calls": 63, "usage_tokens": 463487, "cost_upper_cny": 1.463445, "computational_verified_success": 18, "false_admissions": 0, "qualified_candidates": 0, "report_hash": "sha256:ada2a6fc80d4f571c50c327985d19f525daddaf1d032e0f528063aa7dc7f6a47", "scope": "hashes, derived verdicts, guarded treatment activation and usage-based budget; not an independent physical calibration"}
+=== Python contract, boundary, integration, replay, chaos, semantic, and project tests ===
+Traceback (most recent call last):
+  File "/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/scripts/build_deployments.py", line 30, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/scripts/build_deployments.py", line 19, in main
+    run=execute(name,design);root=seal(REPO/'runs/deployments',run)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/packages/python/bfworld/src/bfworld/deployments/artifacts.py", line 25, in seal
+    if root.exists():verify(root);return root
+                     ^^^^^^^^^^^^
+  File "/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/packages/python/bfworld/src/bfworld/deployments/artifacts.py", line 44, in verify
+    manifest=json.loads((root/'run-manifest.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/runs/deployments/ba42e44751a897fc555f5656af78c6f10baad5a8b1cf5682dc25947bde5ad306/run-manifest.json'

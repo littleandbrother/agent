@@ -60,7 +60,8 @@ class SystemResultsTest(unittest.TestCase):
         a=self.app.results.inspect(self.owner);r=next(r for r in a['results'] if r['id']==key)
         self.assertEqual({'series','image','model'},{p['kind'] for p in r['presentations']})
         self.assertEqual('unbound',r['applicability']['state'])
-        table=self.app.results.series(self.owner,key+'/solver-table.csv');self.assertTrue(table['table']);self.assertEqual(['fine',.002],table['rows'][1])
+        table=self.app.results.series(self.owner,key+'/solver-table.csv');self.assertTrue(table['table']);self.assertEqual(['fine','0.002'],table['rows'][1])
+        # Mixed engineering/BOM tables preserve source spelling, including numeric-looking part identifiers.
 
     def test_empty_deleted_and_unknown(self):
         owner=self.app.conversations.create('connection only',None,'empty')['id']

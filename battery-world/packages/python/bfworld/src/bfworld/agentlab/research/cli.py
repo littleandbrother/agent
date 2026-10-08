@@ -9,7 +9,8 @@ from ..store import canonical
 def main():
     p = argparse.ArgumentParser(description='Source-bound development studies; never auto-promote research claims.')
     p.add_argument('command', choices=['prepare', 'status', 'export', 'pilot-b', 'pilot-a', 'audit-c', 'authorize-a', 'audit-energy', 'audit-scope'])
-    p.add_argument('--home', type=Path, default=Path('/Users/depengsu/Documents/bf-agent-workbench'))
+    from ..runtime_config import HOME_ROOT
+    p.add_argument('--home', type=Path, default=HOME_ROOT)
     p.add_argument('--study', default='abc-development-v1')
     p.add_argument('--input', type=Path)
     p.add_argument('--output', type=Path)

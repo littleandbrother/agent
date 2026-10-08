@@ -144,19 +144,39 @@ class ProductResults:
                        applicability=apply,integrity=valid,error=error,role=role(name),status=j['status'],job_id=j['id'],
                        url='/api/results/file?'+urlencode({'session':owner,'id':j['id']+'/'+name}))
                 outputs.append(f);files.append(f)
-            label=('受控供电 · 程序接收诊断' if raw.get('metrics',{}).get('diagnostic_only') else '门磁设计 · 全链路仿真') if k=='closed-simulation' else DOMAINS[d]
+            label='门动作设计 · 加载释放联合仿真' if k=='door-system' else ('受控供电 · 程序接收诊断' if raw.get('metrics',{}).get('diagnostic_only') else '门磁设计 · 全链路仿真') if k=='closed-simulation' else DOMAINS[d]
             results.append(dict(id=j['id'],kind=k,domain=d,label=label,created=j['created'],status=j['status'],error=j['error'],
                 created_revision=(old or {}).get('revision'),applicability=applicability(old,selected,input_keys(k,'')),
                 design_inputs=(old or {}).get('payload',{}),
                 inputs=j.get('parameters') or {},interfaces=(j.get('project') or {}).get('manifest',{}).get('interfaces',{}),
-                conditions=j.get('event_spec') or {},metrics=([{'name':n,'value':raw['metrics'][n]} for n in ['peak_tip_mm','peak_piezo_V','peak_storage_V','peak_supply_V','tx_completed','received_events'] if n in raw.get('metrics',{})] if k=='closed-simulation' else flatten_metrics(raw)),checks=raw.get('checks') or {},
+                conditions=j.get('event_spec') or {},metrics=([{'name':n,'value':raw['metrics'][n]} for n in ['peak_tip_mm','peak_piezo_V','peak_storage_V','peak_supply_V','tx_completed','received_events'] if n in raw.get('metrics',{})] if k in ('closed-simulation','door-system') else flatten_metrics(raw)),checks=raw.get('checks') or {},
                 scope=(raw.get('summary_zh') or raw.get('scope') or '工程执行记录；尚无独立产品验收'),files=outputs,
                 run_status=raw.get('run_status'),design_status=raw.get('design_status'),predicted_design_status=raw.get('predicted_design_status'),
-                simulation_stages=raw.get('stages') if k=='closed-simulation' else None,
-                simulation=({n:raw.get(n) for n in ('physics_hash','presentation_hash','applicability','energy_ledger','limitations','failed_stage','unreached_stages','module_diagnostic_passed')} if k=='closed-simulation' else None),
+                simulation_stages=raw.get('stages') if k in ('closed-simulation','door-system') else None,
+                simulation=({n:raw.get(n) for n in ('physics_hash','presentation_hash','applicability','energy_ledger','limitations','failed_stage','unreached_stages','module_diagnostic_passed','qualification','task_evaluation','design_id')} if k in ('closed-simulation','door-system') else None),
                 source_files=list(((j.get('project') or {}).get('sources') or {}).keys()),
                 source_sha256=identity(j),readback_passed=raw.get('readback_passed',raw.get('numerical_checks_passed',False)),
                 hardware_verified=False))
+            if k=='scientific-figures' and raw.get('schema_version')=='bf-scientific-figure-index-v1':
+                byname={f['name']:f for f in outputs}
+                parent_result=results[-1]
+                source_manifest={}
+                source_file=byname.get('figure-sources.json')
+                if source_file and source_file['integrity']:
+                    source_manifest={s['id']:s for s in json.loads((self.app.engineering.root/j['id']/'figure-sources.json').read_text())}
+                for group in raw.get('groups',[]):
+                    if group.get('figure') not in byname:continue
+                    panels=[]
+                    for p in group.get('panels',[]):
+                        refs={key+'_id':byname.get(p.get(name),{}).get('id') for key,name in [('figure','figure'),('pdf','pdf'),('svg','vector'),('provenance','provenance')]}
+                        panels.append({**p,**refs,'source_files':[byname[s['archive_file']]['id'] for sid in p.get('dependencies',[]) if (s:=source_manifest.get(sid)) and s['archive_file'] in byname]})
+                    story={**group,'file_id':byname[group['figure']]['id'],'baseline_id':'figures-'+j['id'],
+                        'baseline_version':raw['version'],'baseline_source_identity':raw['source_identity'],
+                        'source_identity':raw['source_identity'],'baseline_conclusion':raw['conclusion'],
+                        'dependencies':list(source_manifest),'panels':panels}
+                    results.append({**parent_result,'id':j['id']+'-figure-'+str(group['order']),
+                        'case_id':story['baseline_id'],'case_version':raw['version'],'case_title':raw['title'],
+                        'source_type':'engineering-figure','evidence_story':story,'label':group['title']})
         bindings=self.app.deliverables._bindings(owner) if product_enabled else {}
         with self.store.connect() as db:published=[dict(r) for r in db.execute('SELECT * FROM assembly_files WHERE owner=? ORDER BY created',(owner,))]
         for f in published:
@@ -309,9 +329,10 @@ class ProductResults:
             headers=[c[0] for c in cols];units=[{'time':'s','voltage':'V','current':'A','frequency':'Hz'}.get(c[1],c[1]) for c in cols]
         elif path.suffix in ('.csv','.tsv'):
             reader=csv.reader(io.StringIO(path.read_text()),delimiter='\t' if path.suffix=='.tsv' else ',')
-            headers=next(reader);units=[{'s':'s','v':'V','a':'A','w':'W','j':'J','mm':'mm','m':'m','pa':'Pa'}.get(h.rsplit('_',1)[-1].lower(),'字段单位') for h in headers];rows=[];textual=False
+            headers=next(reader);units=[{'s':'s','v':'V','a':'A','w':'W','j':'J','mm':'mm','m':'m','pa':'Pa'}.get(h.rsplit('_',1)[-1].lower(),'字段单位') for h in headers];rows=[];source_rows=[];textual=False
             for row in reader:
                 if len(row)!=len(headers):raise ValueError('TABLE_PREVIEW_NONNUMERIC')
+                source_rows.append(row)
                 values=[]
                 for x in row:
                     try:
@@ -325,9 +346,11 @@ class ProductResults:
             count=len(rows)
             if not rows or len(headers)<2:raise ValueError('TABLE_PREVIEW_EMPTY')
             if textual:
-                return dict(table=True,headers=headers,rows=rows[:200],total_points=count,source_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),scope='原始表格预览，最多显示 200 行；含分类字段，不将类别强行绘为连续曲线。')
+                # Component packages and identifiers may be numeric-looking:
+                # 0603 must stay 0603, and stock must not be rounded by charts.
+                return dict(table=True,headers=headers,rows=source_rows[:200],total_points=count,source_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),scope='原始表格预览，最多显示 200 行；保留原始字段文本，不将类别强行绘为连续曲线。')
         else:raise ValueError('SERIES_PREVIEW_UNSUPPORTED')
         # Preserve first/last and disclose downsampling; raw download is authoritative.
         step=max(1,math.ceil(len(rows)/1000));sample=rows[::step]
         if sample[-1]!=rows[-1]:sample.append(rows[-1])
-        return dict(headers=headers,units=units,rows=sample,total_points=count,sample_stride=step,source_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),scope='原始求解器数据；等间隔抽样预览，极值判断请读取完整数据。')
+        return dict(headers=headers,units=units,rows=sample,total_points=count,sample_stride=step,source_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),scope='归档数值数据；等间隔抽样预览。若来源是派生预览，请核对其采样凭据；极值判断以完整原始数据为准。')

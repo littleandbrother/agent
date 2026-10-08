@@ -7,9 +7,10 @@ import time
 import urllib.request
 from pathlib import Path
 from .store import canonical
-from .recovery import Recovery, ObservedHTTPSHandler, is_not_sent
+from .recovery import Recovery, ObservedHTTPSHandler, is_not_sent, open_before_send
 from .context import ContextArchive, REQUEST_BYTES, project_interactive
 from .request_evidence import describe as describe_request
+from .model_profile import for_owner as model_profile
 
 MODEL='deepseek-flash'
 RATE={'input_usd_per_million':.30,'output_usd_per_million':1.20,'cache_hit_usd_per_million':.006}
@@ -69,18 +70,23 @@ class Provider:
         if payload.get('model')!=MODEL:raise ValueError('MODEL_ID_MISMATCH')
         with self.store.connect() as db:
             interactive=db.execute('SELECT 1 FROM interactive_leases WHERE owner=?',(owner,)).fetchone()
+            profile=model_profile(db,owner)
         projection=None
         if interactive:
-            payload,projection=project_interactive(payload, ContextArchive(self.store.root.parent, owner))
-        if len(canonical(payload).encode())>REQUEST_BYTES:
+            payload,projection=project_interactive(payload, ContextArchive(self.store.root.parent, owner),
+                request_bytes=profile['request_bytes'],target_bytes=profile['target_bytes'])
+        if len(canonical(payload).encode())>profile['request_bytes']:
             self.store.event(owner, owner, 'model_context_rejected', projection or {
-                'projected_bytes':len(canonical(payload).encode()), 'limit_bytes':REQUEST_BYTES})
+                'projected_bytes':len(canonical(payload).encode()), 'limit_bytes':profile['request_bytes']})
             raise ValueError('MODEL_CONTEXT_BYTE_LIMIT')
-        output=min(int(payload.get('max_tokens') or payload.get('max_completion_tokens') or 4096),8192)
+        output=min(int(payload.get('max_tokens') or payload.get('max_completion_tokens') or 4096),profile['max_output_tokens'])
         if output<1:raise ValueError('OUTPUT_LIMIT')
         if interactive and output<1024:raise ValueError('MODEL_OUTPUT_BUDGET_TOO_SMALL')
         body={k:payload[k] for k in ('model','messages','tools','tool_choice','temperature') if k in payload}
-        body.update({'max_tokens':output,'stream':bool(on_chunk),'thinking':{'type':'disabled'}})
+        body.update({'max_tokens':output,'stream':bool(on_chunk),'thinking':{'type':profile['thinking']}})
+        if profile['reasoning_effort']:body['reasoning_effort']=profile['reasoning_effort']
+        if profile['thinking']=='enabled' and body.get('tool_choice') not in (None,'auto','none'):
+            raise ValueError('MODEL_THINKING_TOOL_CHOICE_UNSUPPORTED')
         if on_chunk:body['stream_options']={'include_usage':True}
         raw=canonical(body).encode()
         input_bound=len(raw)+4096
@@ -97,7 +103,8 @@ class Provider:
             if any(r['error']=='PROVIDER_RESERVATION_EXCEEDED' for r in rows):raise ValueError('PROVIDER_RESERVATION_EXCEEDED')
             held=sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows)
             used_tokens=sum(json.loads(r['usage'])['total_tokens'] if r['usage'] else 0 for r in rows)
-            pending_tokens=sum(128000+4096+8192 for r in rows if r['status']=='DISPATCHED')
+            pending_tokens=sum(model_profile(db,r['owner'])['request_bytes']+4096+
+                model_profile(db,r['owner'])['max_output_tokens'] for r in rows if r['status']=='DISPATCHED')
             lease=self.recovery.lease(db,owner)
             if lease:
                 bindings={r['request_id']:r['message_id'] for r in db.execute('SELECT request_id,message_id FROM model_request_context WHERE owner=?',(owner,))}
@@ -125,7 +132,7 @@ class Provider:
                        (request_id,owner,time.time(),raw.decode(),canonical(evidence)))
             if lease:
                 db.execute('INSERT INTO model_request_context VALUES(?,?,?,?,?)',
-                           (request_id,owner,lease['message_id'],time.time(),canonical({**projection,'max_output_tokens':output,'wire_sha256':hashlib.sha256(raw).hexdigest()})))
+                            (request_id,owner,lease['message_id'],time.time(),canonical({**projection,'model_profile':profile,'max_output_tokens':output,'wire_sha256':hashlib.sha256(raw).hexdigest()})))
         self.store.event(owner,owner,'model_dispatched',{'request_id':request_id,'reserved_usd':reservation,'model_id':MODEL,
             'request_evidence_sha256':hashlib.sha256(canonical(evidence).encode()).hexdigest()})
         req=urllib.request.Request('https://api.deepseek.com/chat/completions',data=raw,
@@ -133,9 +140,12 @@ class Provider:
         with self.store.connect() as db:
             continuation=self.recovery.usage_continuation(db,owner=owner)
         stream_seconds=min(1200,max(1,continuation['expires']-time.time())) if continuation else STREAM_SECONDS
+        # SSE envelope overhead is much larger than token text. A 32k-token
+        # reasoning answer must not hit the legacy 2 MB transport cap first.
+        stream_bytes=max(STREAM_BYTES, min(64*1024*1024, output*1024))
         settled=False;observed_final_usage=None;chunks=[]
         transport={'request_id':request_id,'provider_request_id':None,'bytes':0,
-                   'time_limit_s':stream_seconds,'byte_limit':STREAM_BYTES}
+                   'time_limit_s':stream_seconds,'byte_limit':stream_bytes}
         def settle_usage(usage,data,output_error=None):
             nonlocal settled
             if not isinstance(usage,dict) or any(type(usage.get(k)) is not int or usage[k]<0 for k in ['prompt_tokens','completion_tokens','total_tokens']):
@@ -150,14 +160,22 @@ class Provider:
             settled=True
             self.store.event(owner,owner,'model_settled',{'request_id':request_id,'upper_bound_usd':charge,'usage':usage,'output_error':violation or output_error})
             return violation
+        def check_retry_window():
+            with self.store.connect() as db:
+                self.recovery.check_window(db,owner,db.execute('SELECT * FROM grants WHERE owner=?',(owner,)).fetchone(),
+                    db.execute('SELECT * FROM model_limits WHERE id=1').fetchone())
         try:
-            with urllib.request.build_opener(NoRedirect(),ObservedHTTPSHandler()).open(req,timeout=90) as response:
+            response = open_before_send(urllib.request.build_opener(NoRedirect(),ObservedHTTPSHandler()),req,timeout=90,
+                before_retry=check_retry_window,
+                retry_record=lambda item:self.store.event(owner,owner,'provider_connect_retry',{'request_id':request_id,**item}))
+            with response:
                 if on_chunk:
                     size=0;started=time.monotonic();usage=None;done=False
                     for line in response:
                         size+=len(line)
                         transport.update(bytes=size,elapsed_s=time.monotonic()-started)
-                        if size>STREAM_BYTES or transport['elapsed_s']>stream_seconds:raise ValueError('PROVIDER_STREAM_LIMIT')
+                        if size>stream_bytes:raise ValueError('PROVIDER_STREAM_BYTE_LIMIT')
+                        if transport['elapsed_s']>stream_seconds:raise ValueError('PROVIDER_STREAM_TIME_LIMIT')
                         if line.startswith(b':'):
                             try:on_chunk(None)  # SSE keepalive, never model content or usage
                             except (BrokenPipeError,ConnectionResetError):pass
@@ -185,7 +203,8 @@ class Provider:
                     result={'model':MODEL,'usage':usage,'choices':[]}
                     data=canonical(chunks).encode()
                 else:
-                    data=response.read(2000000)
+                    data=response.read(stream_bytes+1)
+                    if len(data)>stream_bytes:raise ValueError('PROVIDER_RESPONSE_BYTE_LIMIT')
                     result=json.loads(data)
             usage=result.get('usage')
             if result.get('model')!=MODEL:raise ValueError('RESPONSE_MODEL_ID_MISMATCH')
@@ -196,6 +215,12 @@ class Provider:
             if violation:raise ValueError(violation)
             return result
         except Exception as exc:
+            # Keep a bounded provider diagnostic, never the Authorization header.
+            # The body explains schema rejection; it does not establish zero billing.
+            if isinstance(exc,urllib.error.HTTPError):
+                diagnostic=exc.read(8192).decode('utf-8',errors='replace')
+                self.store.event(owner,owner,'provider_http_error',{'request_id':request_id,
+                    'http_status':exc.code,'body':diagnostic,'automatic_retry':False})
             # A final provider usage chunk followed by a missing DONE marker is
             # known billing with failed output. It is not a successful answer.
             if not settled and observed_final_usage is not None:

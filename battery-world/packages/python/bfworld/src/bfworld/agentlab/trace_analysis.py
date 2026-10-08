@@ -60,7 +60,7 @@ def analyze(snapshot, engineering=None, capability_events=None):
     for call in snapshot['calls']:
         status = 'error' if call['error'] else 'completed' if call['finished'] else 'unknown'
         args=obj(call['input']);name=call['name'] or 'tool'
-        category='mcp' if name.startswith('mcp__') else 'skill' if (name in ('bf_engineering','bf_reference') and args.get('action')=='skill') or (name=='read' and str(args.get('path',args.get('file_path',''))).endswith('SKILL.md')) else 'reference' if name=='bf_reference' else 'tool'
+        category='mcp' if name.startswith('mcp__') else 'skill' if (name in ('bf_engineering','bf_reference','bf_eda') and args.get('action')=='skill') or (name=='read' and str(args.get('path',args.get('file_path',''))).endswith('SKILL.md')) else 'reference' if name=='bf_reference' else 'tool'
         timeline.append({'id': 'tool-' + str(call['seq']), 'lane': 'tools', 'label': call['name'], 'time': number(call['start_time']),
                          'end': number(call['end_time']), 'duration_ms': call['duration_ms'], 'turn_id': row_turn.get(call['seq'], 'unassigned'),
                          'seq': call['seq'], 'status': status, 'category':category, 'detail': call})

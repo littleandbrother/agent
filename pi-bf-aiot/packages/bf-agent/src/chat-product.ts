@@ -14,6 +14,8 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
+import { assertEdaExecution } from "./eda-outcome.ts";
+import { waitForEngineeringJob } from "./engineering-wait.ts";
 import { digest as methodDigest, methodInstructions, profile as methodProfile } from "./research-method.ts";
 
 const input = readline.createInterface({ input: process.stdin });
@@ -41,6 +43,7 @@ async function nextCommand() {
 }
 const config = await nextCommand();
 if (!config) throw Error("CONFIG_REQUIRED");
+const reasoningEnabled = config.modelProfile?.thinking === "enabled";
 const cwd = path.resolve(config.workspace);
 const sha = (file: string) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 const activation = {
@@ -54,6 +57,7 @@ const activation = {
 		product: sha(config.productModule),
 	},
 	model: "deepseek-flash",
+	model_profile: config.modelProfile ?? { thinking: "disabled" },
 };
 console.log(JSON.stringify(activation));
 const solver = await import(pathToFileURL(config.solverModule).href);
@@ -142,6 +146,7 @@ const promptState = {
 				owner: state.budget.owner,
 				expires: state.budget.expires,
 				remaining_experiments: state.budget.remaining_experiments,
+				scope: "remaining_experiments counts bf_experiment simulations only; it does not limit EDA commands, components, file edits or library lookups. Paid requests and wall time are enforced independently by runtime.",
 				receipt_ref: state.budget.receipt_ref,
 			}
 		: undefined,
@@ -324,7 +329,7 @@ tools.push(
 		name: "bf_reference",
 		label: "Reference research",
 		description:
-			"Search public papers/repositories/web, fetch and page source text, record applicability and differences. Acquisition is not reproduction or measurement. No task-specific sources are preloaded. Web search may be unavailable; failures are retained. Read skill for source and evidence rules.",
+			"Search public papers/repositories/web, fetch and page source text, record applicability and differences. materialize(reference_id,file_path) copies the exact acquired raw bytes to a workspace-relative file (headers, source, PDFs), verifies hash and refuses conflicting overwrites. Prefer it to retyping a source or network shell commands. Acquisition is not reproduction or measurement. No task-specific sources are preloaded. Web search may be unavailable; failures are retained. Read skill for source and evidence rules.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -333,6 +338,7 @@ tools.push(
 				Type.Literal("search"),
 				Type.Literal("fetch"),
 				Type.Literal("read"),
+				Type.Literal("materialize"),
 				Type.Literal("calculate"),
 				Type.Literal("adopt"),
 			]),
@@ -340,6 +346,7 @@ tools.push(
 			query: Type.Optional(Type.String()),
 			url: Type.Optional(Type.String()),
 			reference_id: Type.Optional(Type.String()),
+			file_path: Type.Optional(Type.String()),
 			offset: Type.Optional(Type.Integer({ minimum: 0 })),
 			limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 16000 })),
 			proposal_revision: Type.Optional(Type.Integer({ minimum: 1 })),
@@ -365,6 +372,54 @@ tools.push(
 		},
 	}),
 	defineTool({
+		name: "bf_eda",
+		label: "EasyEDA native engineering",
+		description:
+			"Operate the bound independent EasyEDA project through typed CLI. Read skill; offset and limit are CHARACTER counts (default 12000), not lines; use next_offset for remaining text. command argv omit easyeda, use stable operation_id. Server pins project; all file paths workspace-relative. Commands run serially; job waits for the original job without model polling, unless wait_for_completion=false. No arbitrary JS or GUI fallback. Native receipts copied into eda-receipts for full readback.",
+		executionMode: "sequential",
+		parameters: Type.Object({
+			action: Type.Union([
+				Type.Literal("inspect"),
+				Type.Literal("skill"),
+				Type.Literal("command"),
+				Type.Literal("job"),
+			]),
+			argv: Type.Optional(Type.Array(Type.String())),
+			operation_id: Type.Optional(Type.String()),
+			job_id: Type.Optional(Type.String()),
+			path: Type.Optional(Type.String()),
+			offset: Type.Optional(Type.Integer()),
+			limit: Type.Optional(Type.Integer()),
+			wait_for_completion: Type.Optional(Type.Boolean()),
+		}),
+		async execute(_id, args, signal) {
+			if (args.action === "job") {
+				if (!args.job_id) throw Error("EDA_JOB_ID_REQUIRED");
+				return reply(
+					assertEdaExecution(
+						await waitForEngineeringJob(
+							() => engineeringApi("/api/eda-cli", { action: "job", job_id: args.job_id }),
+							{
+								wait: args.wait_for_completion !== false,
+								signal,
+								progress: (j) =>
+									console.log(
+										JSON.stringify({
+											type: "eda_job_wait",
+											job_id: args.job_id,
+											status: j.status,
+											model_calls: 0,
+										}),
+									),
+							},
+						),
+					),
+				);
+			}
+			return reply(assertEdaExecution(await engineeringApi("/api/eda-cli", args)));
+		},
+	}),
+	defineTool({
 		name: "bf_product",
 		label: "Product proposal",
 		description:
@@ -380,6 +435,8 @@ tools.push(
 				Type.Literal("assembly_write"),
 				Type.Literal("publish_file"),
 				Type.Literal("delivery_inspect"),
+				Type.Literal("analysis_inspect"),
+				Type.Literal("analysis_submit"),
 				Type.Literal("delivery_bind"),
 				Type.Literal("delivery_package"),
 			]),
@@ -395,7 +452,16 @@ tools.push(
 						"Existing file path relative to this conversation workspace, such as delivery/PRODUCT.md. Create the file first; absolute paths are not accepted.",
 				}),
 			),
-			file_kind: Type.Optional(Type.String()),
+			file_kind: Type.Optional(
+				Type.Union([
+					Type.Literal("document"),
+					Type.Literal("geometry"),
+					Type.Literal("electronics"),
+					Type.Literal("firmware"),
+					Type.Literal("energy"),
+					Type.Literal("source"),
+				]),
+			),
 			operation_id: Type.Optional(Type.String()),
 			payload: Type.Optional(
 				Type.Object({
@@ -424,9 +490,25 @@ tools.push(
 			rationale: Type.Optional(Type.String()),
 		}),
 		async execute(_id, args) {
+			if (args.action === "analysis_submit") {
+				const result = await engineeringApi("/api/responsibility-review", {
+					action: "submit",
+					file_path: args.file_path,
+				});
+				if (result.submitted) {
+					requireAnalysisActions = false;
+					analysisSubmitted = true;
+				}
+				return reply(result);
+			}
+			if (args.action === "analysis_inspect") return reply(await engineeringApi("/api/responsibility-review", {}));
 			if (args.action === "delivery_inspect") return reply(briefDelivery(await api("/api/deliverables")));
 			if (args.action === "delivery_package") return reply(await api("/api/deliverables", { action: "package" }));
-			if (args.action === "delivery_bind")
+			if (args.action === "delivery_bind") {
+				if (!args.operation_id || !args.delivery_task_id || !Number.isInteger(args.revision))
+					throw Error(
+						"DELIVERY_BIND_ARGUMENTS_REQUIRED: supply operation_id (stable unique id), delivery_task_id (one task id from delivery_inspect), revision (current assembly revision), file_ids and job_ids. Tasks can be bound individually. Missing arguments are not a requirement to complete every task at once. No binding was recorded.",
+					);
 				return reply(
 					briefDelivery(
 						await api("/api/deliverables", {
@@ -439,6 +521,7 @@ tools.push(
 						}),
 					),
 				);
+			}
 			if (args.action === "assembly_inspect") return reply(await api("/api/assembly"));
 			if (args.action === "assembly_write") {
 				if (!args.assembly_path) throw Error("ASSEMBLY_PATH_REQUIRED");
@@ -459,6 +542,10 @@ tools.push(
 				if (!Number.isInteger(args.revision) || !args.file_path || !args.file_kind)
 					throw Error(
 						"PRODUCT_FILE_ARGUMENTS_REQUIRED: publish_file requires revision (assembly_inspect.current.revision), file_path (existing workspace-relative file), and file_kind (document/source/firmware/energy/electronics). Nothing was published. Read assembly_inspect and retry with the explicit version.",
+					);
+				if (args.file_path.startsWith(".easyeda/artifacts/"))
+					throw Error(
+						"PRODUCT_FILE_EXPORT_LOCATION: hidden working directories are not publication paths. Copy this native EDA export to delivery/ or exports/, verify its bytes/hash are unchanged, then publish_file with that visible relative path. Do not regenerate or rename another format as a native file.",
 					);
 				return reply(
 					await api("/api/assembly", {
@@ -508,7 +595,7 @@ tools.push(
 		name: "bf_engineering",
 		label: "Engineering tools",
 		description:
-			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Large responses contain _response: use action=response_view with response_id and response_sha256, then next_offset to read all pages. Native files require action=artifact before local reading. Digital checks do not imply hardware qualification.",
+			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. door-selfpower is the versioned D5 extractor/reserve-gate engine, requires a qualified no-Agent reference, primary-source checks and its own skill; D4 boards remain stale. door-system accepts frozen D4 full-cycle bracket/polarity/storage revisions; read its skill, reference primary papers with bf_reference, and inspect its design identity and drive ledger. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Large responses contain _response: use action=response_view with response_id and response_sha256, then next_offset to read all pages. Native files require action=artifact before local reading. scientific-figures accepts parameters.plan_path, snapshots source hashes and units, and preserves missing panels; read its skill before building a plan. Use individual or per-group artifacts for inspection. Figure availability is not replication or product acceptance. Digital checks do not imply hardware qualification.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -535,10 +622,19 @@ tools.push(
 					Type.Literal("engineering-project"),
 					Type.Literal("beam-event"),
 					Type.Literal("closed-simulation"),
+					Type.Literal("door-system"),
+					Type.Literal("door-selfpower"),
+					Type.Literal("scientific-figures"),
 				]),
 			),
 			skill_id: Type.Optional(Type.String()),
 			job_id: Type.Optional(Type.String()),
+			wait_for_completion: Type.Optional(
+				Type.Boolean({
+					description:
+						"action=job defaults to waiting for a terminal native result without more model calls. Set false for a one-time status read while doing other work. Use bf_engineering for eng-* IDs, never bf_job.",
+				}),
+			),
 			artifact_name: Type.Optional(Type.String()),
 			response_id: Type.Optional(Type.String()),
 			response_sha256: Type.Optional(Type.String()),
@@ -557,7 +653,7 @@ tools.push(
 			design_revision: Type.Optional(Type.Number()),
 			parameters: Type.Optional(Type.Record(Type.String(), Type.Unknown())), // Validated by the typed backend adapter.
 		}),
-		async execute(_id, args) {
+		async execute(_id, args, signal) {
 			if (args.action === "record_revision" || args.action === "response_view")
 				return reply(await engineeringApi("/api/engineering", args));
 			if (args.action === "inspect") {
@@ -602,11 +698,22 @@ tools.push(
 			}
 			if (args.action === "job") {
 				if (!args.job_id) throw Error("ENGINEERING_JOB_ID_REQUIRED");
-				let job = await engineeringApi(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
-				for (let i = 0; i < (simulationTask ? 160 : 40) && ["QUEUED", "RUNNING"].includes(job.status); i++) {
-					await new Promise((resolve) => setTimeout(resolve, 500));
-					job = await engineeringApi(`/api/engineering/jobs/${encodeURIComponent(args.job_id)}`);
-				}
+				const job = await waitForEngineeringJob(
+					() => engineeringApi(`/api/engineering/jobs/${encodeURIComponent(args.job_id!)}`),
+					{
+						wait: args.wait_for_completion !== false,
+						signal,
+						progress: (j) =>
+							console.log(
+								JSON.stringify({
+									type: "engineering_job_wait",
+									job_id: args.job_id,
+									status: j.status,
+									model_calls: 0,
+								}),
+							),
+					},
+				);
 				return reply(job);
 			}
 			if (args.action === "run" && args.engine === "product-model" && args.design_revision !== undefined)
@@ -625,7 +732,6 @@ tools.push(
 					break;
 				} catch (error) {
 					if (
-						!simulationTask ||
 						args.action !== "run" ||
 						!(error instanceof Error) ||
 						error.message !== "ENGINEERING_BUSY" ||
@@ -668,16 +774,19 @@ runtime.registerProvider("bf-deepseek", {
 		{
 			id: "deepseek-flash",
 			name: "DeepSeek V4.1 Flash",
-			reasoning: false,
+			reasoning: reasoningEnabled,
 			input: ["text"],
 			cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0.3 },
 			contextWindow: 1048576,
-			maxTokens: 8192,
+			maxTokens: config.modelProfile?.max_output_tokens ?? 8192,
 			compat: {
 				supportsDeveloperRole: false,
 				supportsStore: false,
 				supportsUsageInStreaming: true,
 				maxTokensField: "max_tokens",
+				supportsReasoningEffort: true,
+				thinkingFormat: "deepseek",
+				requiresReasoningContentOnAssistantMessages: true,
 			},
 		},
 	],
@@ -694,7 +803,7 @@ const executionInstructions = productContext.binding
 每次原生工程任务等待终态后核对检查，不把进程成功当成设计通过。交付说明和源码须发布到当前产品版本。禁止修改检查器或放宽既定要求来制造通过。
 模型费用、请求数、token 和时间以上游服务账本与实际返回为准；不得绕过或重置。当前状态摘要：${JSON.stringify(promptState)}`;
 const basePrompt = simulationTask
-	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n先读取原生失败依据，自主提出实际设计修改并执行。只使用 bf_engineering 的 inspect/skill/run/job/artifact_view/response_view/record_revision/submit。大响应的 _response 可用 response_view 分页读回，提供 response_id 和 response_sha256，沿 next_offset 继续。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
+	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n${simulationTask.task?.engine === "door-system" ? "先用 bf_reference 搜索并获取原论文/数据表，核对电容节点、单位和模型假设，形成依据表；检索失败如实记录，不自动改变冻结条件。" : ""}先读取原生失败依据，自主提出实际设计修改并执行。使用 bf_engineering 的 inspect/skill/run/job/artifact_view/response_view/record_revision/submit。大响应的 _response 可用 response_view 分页读回，提供 response_id 和 response_sha256，沿 next_offset 继续。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
 	: productHarness.productPrompt(executionInstructions, startupProduct(productContext));
 
 if (simulationTask)
@@ -740,7 +849,11 @@ const prompt =
 		? `\nFolder shared context (unverified notes, not experiment facts): ${JSON.stringify({ folder: shared.folder_name, revision: shared.revision, memory: shared.memory })}\nFolder instructions: ${shared.prompt}\nUse bf_memory to read or update shared notes when available. Shared notes are not scientific verification. Enabled tools: ${shared.tools.join(", ")}.`
 		: "");
 const selectedTools = shared?.tools ?? ["read", "edit", "write", "bash", ...tools.map((tool) => tool.name)];
-const availableTools = simulationTask ? ["bf_engineering"] : [...new Set([...selectedTools, "bf_product"])];
+const availableTools = simulationTask
+	? simulationTask.task?.engine === "door-system"
+		? ["bf_engineering", "bf_reference"]
+		: ["bf_engineering"]
+	: [...new Set([...selectedTools, "bf_product", "bf_eda"])];
 if (shared?.folder_id)
 	tools.push(
 		defineTool({
@@ -799,7 +912,7 @@ const { session, modelFallbackMessage } = await createAgentSession({
 	agentDir: path.join(cwd, ".pi"),
 	model,
 	modelRuntime: runtime,
-	thinkingLevel: "off",
+	thinkingLevel: reasoningEnabled ? "high" : "off",
 	resourceLoader: resources,
 	tools: availableTools,
 	customTools: config.mode === "solve" ? tools.filter((tool) => availableTools.includes(tool.name)) : [],
@@ -817,12 +930,17 @@ const instance = crypto.randomUUID();
 // Only an explicit unmet delivery goal can request one action on continuation.
 // Subsequent tool responses and ordinary user questions keep normal tool choice.
 let requireOneDeliveryAction = false;
+let requireAnalysisActions = false;
+let analysisSubmitted = false;
 const originalPayload = session.agent.onPayload;
 session.agent.onPayload = async (payload, model) => {
 	const value = (await originalPayload?.(payload, model)) ?? payload;
-	if (requireOneDeliveryAction) {
+	if (requireOneDeliveryAction || requireAnalysisActions) {
 		requireOneDeliveryAction = false;
-		return { ...(value as Record<string, unknown>), tool_choice: "required" };
+		// DeepSeek thinking supports tool calls but rejects required/named choices.
+		// Completion remains gated by the independent delivery observer, not by
+		// a provider-incompatible request flag.
+		if (!reasoningEnabled) return { ...(value as Record<string, unknown>), tool_choice: "required" };
 	}
 	return value;
 };
@@ -896,6 +1014,8 @@ const execute = async () => {
 				responseTruncated = false;
 				responseError = false;
 				userStopped = false;
+				analysisSubmitted = false;
+				requireAnalysisActions = false;
 				const packet = await api("/api/product-context");
 				emit({ type: "product_context_snapshot", message_id: cmd.id, packet });
 				await session.prompt(`${productHarness.contextPrompt(packet)}\n用户消息：${cmd.text}`, {
@@ -905,7 +1025,7 @@ const execute = async () => {
 				// accounting: this cannot reset a paid or wall-clock budget.
 				for (let n = 0; n < 12 && !closing && !userStopped && !responseError && !responseTruncated; n++) {
 					const observation = (await api("/api/deliverables")).verdict;
-					if (!observation) break;
+					if (!observation || analysisSubmitted) break;
 					emit({ type: "delivery_observation", message_id: cmd.id, observation });
 					state.deliveryContinuations ||= {};
 					const used = state.deliveryContinuations[cmd.id] || 0;
@@ -913,23 +1033,28 @@ const execute = async () => {
 					state.deliveryContinuations[cmd.id] = used + 1;
 					save();
 					requireOneDeliveryAction = true;
+					requireAnalysisActions = Boolean(observation.responsibility_contract_sha256);
 					emit({
 						type: "delivery_continuation",
 						message_id: cmd.id,
 						index: used + 1,
 						missing: observation.missing,
-						tool_choice: "required_once",
+						tool_choice: reasoningEnabled
+							? "auto_with_delivery_observer"
+							: requireAnalysisActions
+								? "required_until_submission"
+								: "required_once",
 					});
 					await session.prompt(
 						"交付观察器的实际结果：" +
-							JSON.stringify(observation) +
-							"。原始执行任务仍未完成。刚才的分析、读文件或准备执行都不是交付。把尚未执行的动作直接落实为工具调用；复用自己的文件，根据已有反馈实际编辑、重跑、读回并发布。只读取下一次修改确实缺少的字段，避免反复列目录或打印完整文件。不要修改要求或检查器来通过。受原消息费用与时间预算限制。若外部阻塞则保留产物并明确报告。",
+							JSON.stringify(observation.responsibility_review ?? observation) +
+							"。原始执行任务仍未完成。刚才的分析、读文件或准备执行都不是交付。把尚未执行的动作直接落实为工具调用；复用自己的文件，根据已有反馈实际编辑、重跑、读回并发布。只读取下一次修改确实缺少的字段，避免反复列目录或打印完整文件。不要修改要求或检查器来通过。受原消息费用与时间预算限制。若外部阻塞则保留产物并明确报告。责任清单工程任务必须通过 bf_product analysis_submit file_path=报告相对路径 明确收尾；先完成实际修改再更新 analysis.json。blocked 条目需 blocker_reason 和实际失败证据文件；不可用一句计划结束。",
 						{ expandPromptTemplates: false },
 					);
 				}
 				if (!closing && !userStopped && !responseError && !responseTruncated) {
 					const finalObservation = (await api("/api/deliverables")).verdict;
-					if (finalObservation?.auto_continue && !finalObservation.passed) {
+					if (!analysisSubmitted && finalObservation?.auto_continue && !finalObservation.passed) {
 						emit({ type: "delivery_observation", message_id: cmd.id, observation: finalObservation });
 						emit({ type: "turn_error", error: "PRODUCT_DELIVERY_INCOMPLETE", missing: finalObservation.missing });
 						continue;

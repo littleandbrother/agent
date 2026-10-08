@@ -3,22 +3,32 @@
 No credentials or participant state are read when this module is imported.
 """
 import os
+import json
 from pathlib import Path
 import shutil
 
 REPO = Path(__file__).resolve().parents[6]
 
 
+RUNTIME_ROOT = Path(os.environ.get('BF_RUNTIME_ROOT', str(Path.home() / '.local/share/bf-agent-runtime'))).expanduser().absolute()
+CONFIG_PATH = Path(os.environ.get('BF_RUNTIME_CONFIG', str(RUNTIME_ROOT / 'runtime.json'))).expanduser()
+# A single local operator file applies to service, CLI, tests and child solvers.
+# Explicit BF_* environment overrides retain precedence for isolated tests.
+_CONFIG = json.loads(CONFIG_PATH.read_text()) if CONFIG_PATH.is_file() else {}
+if _CONFIG and _CONFIG.get('schema_version') != 'bf-runtime-layout-v1':
+    raise ValueError('RUNTIME_CONFIG_SCHEMA_INVALID')
+
+
 def configured(name, default):
-    value = os.environ.get('BF_' + name)
+    value = os.environ.get('BF_' + name) or _CONFIG.get('paths', {}).get(name)
     return Path(value).expanduser().absolute() if value else Path(default).expanduser().absolute()
 
 
-HOME_ROOT = configured('HOME', Path.home() / 'Documents/bf-agent-workbench')
-PI = configured('PI_ROOT', REPO.parent / 'pi-bf-aiot')
+HOME_ROOT = configured('HOME', RUNTIME_ROOT / 'workbench')
+PI = configured('PI_ROOT', RUNTIME_ROOT / 'pi-bf-aiot')
 NODE = configured('NODE', shutil.which('node') or '/opt/homebrew/bin/node')
 KEY_PATH = configured('PROVIDER_KEY_FILE', HOME_ROOT / 'secrets/deepseek.key')
-CAD = configured('CAD_PYTHON', HOME_ROOT / 'toolchains/product-cad/bin/python')
+CAD = configured('CAD_PYTHON', RUNTIME_ROOT / 'product-cad/bin/python')
 BLENDER = configured('BLENDER', '/Applications/Blender.app/Contents/MacOS/Blender')
 COMSOL = configured('COMSOL', '/Applications/COMSOL62/Multiphysics/bin/comsol')
 SPICE = configured('NGSPICE', shutil.which('ngspice') or '/opt/homebrew/bin/ngspice')

@@ -1,0 +1,32 @@
+{
+  "schema_version": "door-design-pilot-v2",
+  "id": "door-loading-release-20261006",
+  "task_id": "door-motion-structure-v2",
+  "model": "deepseek-flash",
+  "purpose": "Two serial exploratory real Pi trajectories using primary-reference retrieval and a full loading/release native apparatus; no method comparison.",
+  "pi_trials": [
+    {
+      "id": "nominal-r1",
+      "initial": "sealed-reference-v2"
+    },
+    {
+      "id": "domain-r1",
+      "initial": "screen-v2 gap28"
+    }
+  ],
+  "pi_max_candidates_per_trial": 3,
+  "pi_max_wall_s_per_trial": 1800,
+  "requested_paid_allocation_usd": 1.0,
+  "max_usd_per_trial": 0.5,
+  "max_usd_per_request": 0.19,
+  "study_wall_s": 21600,
+  "native_gate": {
+    "result_path": "/Users/depengsu/Documents/bf-agent-workbench/reference-cases/door-system-v3/sealed-reference-v2/result.json",
+    "sha256": "edaf585af52253195325ebbfa365ec35b545ff4ae5dd1c112894a9cae6959e1f"
+  },
+  "executor_sha256": "4dd2149392d22e16a0f6f8844f6fb4c44dd3aa5995fba712a9602b5571db4a8c",
+  "task_hash": "89dbc0b3dd7aa423f470abc7cdb109e740deb07be969529157034dbe5214ecb1",
+  "cache_policy": "No success cache in D4; each native candidate independently runs the solver and half-step check; report outer job time separately.",
+  "intervention_policy": "No operator-chosen next design or result rewriting. Tool/runtime repairs and subsequent prompts are interventions. All failed and out-of-domain candidates retained.",
+  "claim_boundary": "Source-supported bounded configuration refinement under nominal hard-magnet/beam/load assumptions. No positive self-powered reference established; not architecture topology synthesis or physical reproduction."
+}

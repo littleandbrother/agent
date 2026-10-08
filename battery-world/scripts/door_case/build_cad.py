@@ -6,7 +6,8 @@ from pathlib import Path
 import cadquery as cq
 
 APP=Path(__file__).resolve().parents[2]
-def build(out,design_path=None):
+sys.path.insert(0,str(APP/'packages/python/bfworld/src'))
+def build(out,design_path=None,system_design=None):
  out=Path(out);out.mkdir(parents=True,exist_ok=True)
  design=json.loads(Path(design_path or APP/'configs/reference_cases/door-magnetic-v1/design.json').read_text())
  modspec=importlib.util.spec_from_file_location('reference',APP/'scripts/build_pluck_product.py');mod=importlib.util.module_from_spec(modspec);modspec.loader.exec_module(mod)
@@ -37,6 +38,24 @@ def build(out,design_path=None):
   add('pcb_screw_'+str(i),[2,2,5],[x,y,-23.3],'M2 nylon screw envelope','connector',kind='cylinder')
  for part in spec['parts']:
   if part['id'].startswith('driver_'):part['geometry']['center_mm'][0]+=design['magnets']['nominal_center_separation_x_mm']-26
+ if system_design is not None:
+  # New apparatus only. D2 behavior and existing sealed drawings remain intact.
+  # Local z is world y; keep bracket's door-top mounting face fixed while the
+  # shelf length and retainer position physically implement transverse offset.
+  from bfworld.agentlab.door_system.contracts import verify_design
+  verify_design(system_design);mech=system_design['mechanical'];new_z=5.265+mech['closed_dz_mm']
+  spec['design_revision']='D4';spec['system_design_id']=system_design['design_id']
+  for part in spec['parts']:
+   g=part['geometry']
+   if part['id']=='driver_magnet':
+    g['center_mm'][2]=new_z;g['rotation_deg']=[0,0,180 if mech['polarity']==-1 else 0]
+    part['source']['magnetization']='part +x; assembly rotation about local z applies physical polarity exactly once'
+   if part['id']=='driver_retainer':g['center_mm'][2]=new_z+11
+   if part['id']=='driver_bracket_shelf':
+    end=new_z+10;g['size_mm'][2]=end-(-40);g['center_mm'][2]=(end-40)/2
+  spec['interfaces'] += ['D4 design_id='+system_design['design_id'],
+     'Driver closed world center = (904-gap,75.265+closed_dz,2140) mm; matches joint solver.',
+     'Larger transverse shelf is geometry only; strength, fatigue and mounting screw preload remain unqualified.']
  # No fake chip blocks: board assembly awaits native footprint/STEP import.
  spec['allowed_contacts']=[['main_pcb','pcb_screw_'+str(i)] for i in range(4)]
  spec['allowed_contacts'] += [['housing','pcb_screw_'+str(i)] for i in range(4)]
@@ -90,6 +109,10 @@ def build(out,design_path=None):
   s=s.rotate((0,0,0),(0,1,1),180).translate((1004,70,2140));install.add(s,name=name)
  install.save(str(out/'installation.step'))
  (out/'drawing-index.json').write_text(json.dumps({'revision':'D2','drawings':[str(p.relative_to(out)) for p in draw.glob('*.svg')],'readback':'cad-readback.json','dimensions':'input.json','no_hardware_claim':True},indent=2))
+ if system_design is not None:
+  # Label generated files with actual version, never relabel old sealed files.
+  for p in draw.glob('*.svg'):p.write_text(p.read_text().replace(' / D2 / ',' / D4 / '))
+  (out/'drawing-index.json').write_text(json.dumps({'revision':'D4','design_id':system_design['design_id'],'drawings':[str(p.relative_to(out)) for p in draw.glob('*.svg')],'readback':'cad-readback.json','dimensions':'input.json','no_hardware_claim':True},indent=2))
  print(json.dumps({'case':'D2','parts':len(solids),'drawings':len(list(draw.glob('*.svg'))),'collisions':read['collisions']}))
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('output');p.add_argument('--design');a=p.parse_args();build(a.output,a.design)
+ p=argparse.ArgumentParser();p.add_argument('output');p.add_argument('--design');p.add_argument('--system-design');a=p.parse_args();build(a.output,a.design,json.loads(Path(a.system_design).read_text()) if a.system_design else None)
