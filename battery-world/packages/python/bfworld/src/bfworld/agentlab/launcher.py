@@ -13,6 +13,7 @@ from .store import Store,canonical,identity
 from .experiments import task,BASELINE_DESIGN,BASELINE_POLICY
 from .recovery import Recovery, INTERACTIVE_WALL_SECONDS
 from .model_profile import for_owner as model_profile
+from .skill_resources import source_bundle, freeze_resources, verify as verify_resources
 
 from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
 NODE = str(NODE_PATH)
@@ -36,7 +37,9 @@ def delivery_binding():
     base=Path(__file__).resolve().parent
     paths=[base/'eda_cli.py',base/'responsibility_review.py',base/'deliverables.py', base/'product_authority.py', base/'runtime_config.py', base/'engineering_projects.py', base/'beam_event.py', base/'design_review.py', base/'assembly.py', base/'tool_responses.py', base/'request_evidence.py', base/'engineering.py', base.parents[5]/'configs/reference_cases/engineering-delivery-v1.json']
     paths += [PI/'packages/bf-agent'/folder/('engineering-wait.'+ext) for folder,ext in [('src','ts'),('dist','js')]]
-    paths.append(base/'firmware_targets.py')
+    paths += [base/name for name in ('firmware_targets.py','nordic_sdk.py','stm32_l432.py','spice_observation.py','assembly_contract.py')]
+    paths += [base/name for name in ('skill_resources.py','native_outcome.py','context.py','product_dependencies.py')]
+    paths += [PI/'packages/bf-agent'/folder/('skill-resources.'+ext) for folder,ext in [('src','ts'),('dist','js')]]
     return {str(p):filehash(p) for p in paths}
 
 def freeze(source=PI/'packages/bf-harness',label='H0',home_root=HOME_ROOT,app_entry='main.js'):
@@ -61,6 +64,8 @@ def _freeze_locked(source,label,home_root,app_entry):
     bindings={'source':digest,'app':filehash(PI/'packages/bf-agent/dist'/app_entry),'lock':filehash(PI/'package-lock.json'),'world':world_binding()}
     if app_entry=='chat-product.js':
         bindings['delivery']=delivery_binding()
+        resources=source_bundle()
+        bindings['resources']=resources[0]['sha256']
         bindings['research_method']={kind:filehash(PI/('packages/bf-agent/'+folder+'/research-method.'+suffix)) for kind,folder,suffix in [('source_sha256','src','ts'),('build_sha256','dist','js')]}
     binding=identity(bindings)
     dest=Path(home_root)/'harnesses'/(label+'-'+binding[:12])
@@ -72,6 +77,8 @@ def _freeze_locked(source,label,home_root,app_entry):
             if filehash(dest/'dist'/(name+'.js'))!=value:raise ValueError('FROZEN_BUILD_TAMPER')
         for name,value in manifest.get('loaded_files',{}).items():
             if filehash(dest/'dist'/name)!=value:raise ValueError('FROZEN_BUILD_TAMPER')
+        if manifest.get('resource_manifest'):
+            verify_resources(dest/'resources',manifest['resource_manifest']['sha256'])
         return dest
     dest.mkdir(parents=True,exist_ok=True)
     (dest/'src').mkdir(exist_ok=True)
@@ -93,6 +100,10 @@ def _freeze_locked(source,label,home_root,app_entry):
       'tools':['read','edit','write','bash','bf_experiment','bf_job','bf_inspect_run','bf_submit']+(['bf_product','bf_eda'] if app_entry=='chat-product.js' else [])+(['bf_engineering','bf_reference'] if app_entry in ('chat-product.js','chat-v2.js') else []),
       'model':'deepseek-flash','resources':'explicit-empty-no-ancestry','world':'coupled-programmed-reference-v3'}
     if app_entry=='chat-product.js':
+        freeze_resources(dest/'resources',resources)
+        manifest['resource_manifest']=resources[0]
+        manifest['resources']='frozen-project-catalog-v1'
+        manifest['tools'].append('bf_skill')
         manifest['delivery_binding']=delivery_binding()
         manifest['research_method']=bindings['research_method']
     manifest['identity']=identity(manifest)
@@ -227,6 +238,8 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
         if filehash(PI/'package-lock.json')!=manifest['pi_lock_hash']:raise ValueError('LOCK_CHANGED_SINCE_FREEZE')
         if manifest.get('world_binding',world_binding())!=world_binding():raise ValueError('WORLD_CHANGED_SINCE_FREEZE')
         if 'delivery_binding' in manifest and manifest['delivery_binding']!=delivery_binding():raise ValueError('DELIVERY_CHANGED_SINCE_FREEZE')
+        if manifest.get('resource_manifest'):
+            verify_resources(Path(harness)/'resources',manifest['resource_manifest']['sha256'])
         owner=label or ('pi-'+mode+'-'+secrets.token_hex(5))
         staged=False
         if product and on_process and not resume:
@@ -267,6 +280,7 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
             memory_in_prompt='public_development_memory' in json.loads((workspace/'task.json').read_text())
         with store.connect() as db:profile=model_profile(db,owner)
         cfg={'workspace':str(workspace),'service':f'http://127.0.0.1:{service_port}','token':token,'taskId':task_id,'mode':mode,'dryRun':dry_run,'modelProfile':profile,
+          'resourceRoot':str(Path(harness)/'resources') if manifest.get('resource_manifest') else None,
           'productModule':str(Path(harness)/'dist/product.js'),'product':product,'sharedContext':shared_context,'solverModule':str(Path(harness)/'dist/solver.js'),'improverModule':str(Path(harness)/'dist/improver.js'),
           'sourceManifest':manifest,'improvementContext':{'parent':manifest,'allowed_paths':['harness/'+p for p in mutable],'experience_file':'experience.json','trace_files':'experience/*.json','reading':'The index and complete public traces are local files. Page or summarize large files instead of dumping all traces into context.','continuation_feedback':feedback}}
         command=['/usr/bin/sandbox-exec','-p',seatbelt(workspace,harness,port=service_port,mutable=mutable if mode=='improve' else None),NODE,str(PI/'packages/bf-agent/dist'/app_entry),'-']

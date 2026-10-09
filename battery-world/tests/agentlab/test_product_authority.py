@@ -70,6 +70,17 @@ class ProductAuthority(unittest.TestCase):
         d=self.app.deliverables.configure_stage(self.owner,{**body,'expected_revision':1,'target_stage':'hardware'})
         self.assertFalse(d['verdict']['passed']);self.assertFalse(d['hardware_verified'])
 
+    def test_native_outline_changes_stale_mechanical_delivery_without_rerunning_power(self):
+        for task in ('requirements','cad','spice','firmware','pcb-checks'):
+            self.app.deliverables.bind(self.owner,dict(action='bind',operation_id=task,task_id=task,revision=1,files=[],jobs=[]))
+        with self.app.store.connect() as db:
+            db.execute('INSERT INTO eda_cli_jobs VALUES(?,?,?,?,?,?,?,?)',('native-outline',self.owner,'outline',
+                json.dumps({'argv':['pcb','outline-set','--points','0,0;80,0;80,30;0,30'],'project':'bound-project'}),'SUCCEEDED',None,time.time(),time.time()))
+        view=self.app.deliverables.inspect(self.owner)
+        self.assertIn('cad',view['stale_tasks']);self.assertIn('pcb-checks',view['stale_tasks'])
+        self.assertNotIn('spice',view['stale_tasks']);self.assertNotIn('firmware',view['stale_tasks'])
+        self.assertEqual([],self.app.engineering.jobs(self.owner))
+
     def test_geometry_rom_changes_with_physics_not_camera(self):
         from bfworld.agentlab.beam_event import derive
         from bfworld.agentlab.assembly import identities

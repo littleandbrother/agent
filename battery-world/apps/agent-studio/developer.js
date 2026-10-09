@@ -1,7 +1,7 @@
 (() => {
   const {api, esc} = window.BF;
   const q = s => document.querySelector(s);
-  const modules = {referenceCase:['参考案例','复现'],research:['Research','研究'], delivery:['交付与部署','进展'], trace:['Trace','轨迹'], memory:['Memory','记忆'], harness:['Harness','程序'], rsi:['RSI','演化'], tools:['Tools','工具'], context:['Context','上下文'], experiments:['Experiments','实验']};
+  const modules = {learning:['学习与改进','论文 · 轨迹 · 方法'],referenceCase:['参考案例','复现'],research:['Research','研究'], delivery:['交付与部署','进展'], trace:['Trace','轨迹'], memory:['Memory','记忆'], harness:['Harness','程序'], rsi:['RSI','演化'], tools:['Tools','工具'], context:['Context','上下文'], experiments:['Experiments','实验']};
   let mode = localStorage.getItem('bf-studio-mode') || 'task';
   let module = localStorage.getItem('bf-dev-module') || 'trace';
   if (!modules[module]) module='memory';
@@ -14,7 +14,7 @@
   const session = () => data?.session;
   const money = n => '$'+Number(n||0).toFixed(4);
   function notice(text,bad=false){q('#dev-notice').textContent=text;q('#dev-notice').classList.toggle('bad-text',bad)}
-  const groups={trace:{name:'运行',members:['trace','context','delivery']},validation:{name:'实验',members:['experiments','research','referenceCase']},config:{name:'系统',members:['memory','harness','tools','rsi']}};
+  const groups={trace:{name:'运行',members:['trace','context','delivery']},validation:{name:'实验',members:['experiments','research','referenceCase','learning']},config:{name:'系统',members:['memory','harness','tools','rsi']}};
   const group=()=>Object.keys(groups).find(k=>groups[k].members.includes(module))||'trace';
   function setMode(value){
     mode=({runtime:'task',developer:'console'})[value]||value;
@@ -41,7 +41,7 @@
   q('#console-map').onclick=()=>window.Panorama.focus(({memory:'memory',harness:'harness',tools:'tools',trace:'trace',context:'sessions',experiments:'runtime',rsi:'validation',delivery:'sessions',research:'research',referenceCase:'runtime'})[module]);
   q('#dev-content').before(Object.assign(document.createElement('p'),{id:'dev-notice',className:'dev-hint'}));
   q('#dev-notice').setAttribute('role','status');
-  async function load(){const turn=++request;navigation();q('#dev-content').setAttribute('aria-busy','true');notice('正在读取…');try{const selected=['trace','tools','delivery','research','referenceCase'].includes(module)?null:window.BF.getSelection();const value=await api('/api/developer'+(selected?'?session='+encodeURIComponent(selected):''));if(turn!==request)return;data=value;notice('');render();renderRevisions()}catch(e){if(turn===request)notice(e.message==='SESSION_NOT_FOUND'?'当前会话尚未启动 Pi。保存配置后可用于下一次运行。':e.message,true)}finally{if(turn===request)q('#dev-content').setAttribute('aria-busy','false')}}
+  async function load(){const turn=++request;navigation();q('#dev-content').setAttribute('aria-busy','true');notice('正在读取…');try{const selected=['trace','tools','delivery','research','referenceCase','learning'].includes(module)?null:window.BF.getSelection();const value=await api('/api/developer'+(selected?'?session='+encodeURIComponent(selected):''));if(turn!==request)return;data=value;notice('');render();renderRevisions()}catch(e){if(turn===request)notice(e.message==='SESSION_NOT_FOUND'?'当前会话尚未启动 Pi。保存配置后可用于下一次运行。':e.message,true)}finally{if(turn===request)q('#dev-content').setAttribute('aria-busy','false')}}
   window.addEventListener('bf-selection',()=>{if(mode==='console')load()});
   q('#refresh').addEventListener('click',()=>{if(mode==='console')load()});
   const jobButton = id => `<button class="quiet" data-job-detail="${esc(id)}">查看实验 ↗</button>`;
@@ -51,9 +51,10 @@
     const s=session();q('#dev-session').textContent=s?`${s.id} · ${s.harness.label} · ${s.mode==='chat'?'对话':s.mode==='solve'?'求解':'改进'}`:data.note;
     let html='';q('#dev-content').dataset.module=module;
     q('#revision-panel').hidden=group()!=='config';
-    const range=module==='referenceCase'?'项目 · 参考辅助工程':module==='rsi'?'项目 · 已记录试验':module==='tools'?'本机能力'+(window.BF.getSelection()?' · 所选会话调用':' · 未选择会话'):module==='experiments'?'工作区检查 / 所选会话实验':(window.BF.getSelection()||'未选择任务会话');
+    const range=module==='learning'?'项目 · 十篇论文与方法实验':module==='referenceCase'?'项目 · 参考辅助工程':module==='rsi'?'项目 · 已记录试验':module==='tools'?'本机能力'+(window.BF.getSelection()?' · 所选会话调用':' · 未选择会话'):module==='experiments'?'工作区检查 / 所选会话实验':(window.BF.getSelection()||'未选择任务会话');
     q('#console-scope').innerHTML=`<span>BF Agent</span><span>${esc(range)}</span><span>更新于 ${new Date().toLocaleTimeString('zh-CN',{hour12:false})}</span>`;
 
+    if(module==='learning'){q('#dev-session').textContent='近期论文 · 实际工程与方法版本';window.LiteratureLearning.open(q('#dev-content'));return}
     if(module==='referenceCase'){q('#dev-session').textContent='三篇论文 · 单次动作无线节点';window.ReferenceCasePanel.open(q('#dev-content'));return}
     if(module==='research'){q('#dev-session').textContent='A/B/C · 开发与机制先导';window.ResearchPanel.open(q('#dev-content'));return}
     if(module==='delivery'){q('#dev-session').textContent=window.BF.getSelection()||'选择产品会话';window.DeliveryPanel.open(q('#dev-content'),window.BF.getSelection());return}

@@ -18,6 +18,25 @@ class ProviderBudget(unittest.TestCase):
         result={'model':'deepseek-flash','choices':[{'message':{'content':'ok'}}]}
         if usage:result['usage']={'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}
         return io.BytesIO(json.dumps(result).encode())
+    def test_function_union_root_is_rejected_before_send_or_reservation(self):
+        # The actual failed bf_skill request had only anyOf at its root.
+        schema={'anyOf':[{'type':'object','properties':{'action':{'const':'catalog'}}}]}
+        payload={**self.payload,'tools':[{'type':'function','function':{'name':'bf_skill','parameters':schema}}]}
+        with patch('urllib.request.OpenerDirector.open') as outbound:
+            with self.assertRaisesRegex(ValueError,'PARAMETERS_OBJECT_REQUIRED:bf_skill'):
+                self.provider.complete('operator',payload)
+            outbound.assert_not_called()
+        self.assertEqual(0,self.provider.status()['calls'])
+
+    def test_explicit_object_skill_schema_reaches_provider_unchanged(self):
+        schema={'type':'object','properties':{'action':{'enum':['catalog','activate']},'skill_id':{'type':'string'}},'required':['action'],'additionalProperties':False}
+        payload={**self.payload,'tools':[{'type':'function','function':{'name':'bf_skill','parameters':schema}}]}
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()) as outbound:
+            self.provider.complete('operator',payload)
+        wire=json.loads(outbound.call_args.args[0].data)
+        self.assertEqual(schema,wire['tools'][0]['function']['parameters'])
+        self.assertEqual('SETTLED',self.provider.status()['requests'][0]['status'])
+
     def test_settlement_and_strict_budget(self):
         with patch('urllib.request.OpenerDirector.open',return_value=self.response()):
             self.provider.complete('operator',self.payload)
@@ -141,6 +160,52 @@ class ProviderBudget(unittest.TestCase):
             db.execute('UPDATE model_limits SET total_usd=10,max_tokens=50000000')
         with self.assertRaisesRegex(ValueError,'UNKNOWN_STOP'):
             self.provider.complete('operator',self.payload)
+    def per_owner_settings(self):
+        owner='pi-chat-0123456789abcdef';self.store.grant(owner,[],6,time.time()+60)
+        with self.store.connect() as db:
+            db.execute("INSERT INTO settings VALUES('model_budget_scope','\"per-owner\"')")
+            db.execute("INSERT INTO settings VALUES('interactive_default_owner_usd','30')")
+        return owner
+    def test_other_session_spend_does_not_consume_independent_owner_cap(self):
+        owner=self.per_owner_settings()
+        with self.store.connect() as db:
+            db.execute('INSERT INTO model_requests VALUES(?,?,?,?,?,?,?,NULL,NULL,NULL)',
+                       ('old','pi-chat-other',time.time(),'hash',29.99,29.99,'SETTLED'))
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response()):
+            self.provider.complete(owner,{**self.payload,'max_tokens':1024})
+        status=self.provider.status();self.assertEqual('per-owner',status['budget_scope'])
+        current=next(x for x in status['owner_limits'] if x['owner']==owner)
+        self.assertEqual(30,current['cap_usd']);self.assertGreater(current['remaining_usd'],29)
+    def test_independent_owner_cannot_exceed_its_own_thirty_dollar_cap(self):
+        owner=self.per_owner_settings()
+        with self.store.connect() as db:
+            db.execute('INSERT INTO model_requests VALUES(?,?,?,?,?,?,?,NULL,NULL,NULL)',
+                       ('old',owner,time.time(),'hash',29.999,29.999,'SETTLED'))
+        with patch('urllib.request.OpenerDirector.open') as opening:
+            with self.assertRaisesRegex(ValueError,'OWNER_USD_BUDGET'):
+                self.provider.complete(owner,{**self.payload,'max_tokens':1024})
+            opening.assert_not_called()
+        self.assertEqual(1,self.provider.status()['calls'])
+    def test_per_owner_mode_retains_request_cap_and_unknown_usage_gate(self):
+        owner=self.per_owner_settings()
+        with self.store.connect() as db:db.execute('UPDATE model_limits SET request_usd=.0001')
+        with self.assertRaisesRegex(ValueError,'MODEL_USD_BUDGET'):
+            self.provider.complete(owner,{**self.payload,'max_tokens':1024})
+        with self.store.connect() as db:db.execute('UPDATE model_limits SET request_usd=.19')
+        with patch('urllib.request.OpenerDirector.open',return_value=self.response(False)):
+            with self.assertRaisesRegex(ValueError,'USAGE_MISSING'):
+                self.provider.complete(owner,{**self.payload,'max_tokens':1024})
+        with self.assertRaisesRegex(ValueError,'UNKNOWN_STOP'):
+            self.provider.complete(owner,{**self.payload,'max_tokens':1024})
+    def test_per_owner_setting_keeps_scientific_operator_aggregate_semantics(self):
+        self.per_owner_settings()
+        with self.store.connect() as db:db.execute('UPDATE model_limits SET total_usd=.0001')
+        with self.assertRaisesRegex(ValueError,'MODEL_USD_BUDGET'):
+            self.provider.complete('operator',self.payload)
+    def test_invalid_scope_fails_before_reservation(self):
+        with self.store.connect() as db:db.execute("INSERT INTO settings VALUES('model_budget_scope','\"unlimited\"')")
+        with self.assertRaisesRegex(ValueError,'SCOPE_INVALID'):self.provider.complete('operator',self.payload)
+        with self.store.connect() as db:self.assertEqual(0,db.execute('SELECT COUNT(*) FROM model_requests').fetchone()[0])
     def test_stream_delivers_chunks_and_settles_even_when_reader_disconnects(self):
         chunks=[{'model':'deepseek-flash','choices':[{'delta':{'content':'real chunk'}}]},
                 {'model':'deepseek-flash','choices':[],'usage':{'prompt_tokens':10,'completion_tokens':2,'total_tokens':12}}]

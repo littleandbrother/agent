@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: nonzero native CLI exit is an execution error with its receipt and partial-effects boundary
+ok 1 - nonzero native CLI exit is an execution error with its receipt and partial-effects boundary
+  ---
+  duration_ms: 2.412625
+  type: 'test'
+  ...
+# Subtest: a valid negative DRC result remains an ordinary fact, not a tool failure
+ok 2 - a valid negative DRC result remains an ordinary fact, not a tool failure
+  ---
+  duration_ms: 0.275167
+  type: 'test'
+  ...
+# Subtest: native API ok=false and terminal failure remain visible
+ok 3 - native API ok=false and terminal failure remain visible
+  ---
+  duration_ms: 0.236875
+  type: 'test'
+  ...
+# Subtest: pending jobs and plain text help are not re-dispatched or rejected
+ok 4 - pending jobs and plain text help are not re-dispatched or rejected
+  ---
+  duration_ms: 0.233125
+  type: 'test'
+  ...
+# Subtest: native wait preserves job identity and returns terminal facts
+ok 5 - native wait preserves job identity and returns terminal facts
+  ---
+  duration_ms: 3.975917
+  type: 'test'
+  ...
+# Subtest: nonblocking lookup and native failure do not retry or resubmit
+ok 6 - nonblocking lookup and native failure do not retry or resubmit
+  ---
+  duration_ms: 0.306125
+  type: 'test'
+  ...
+# Subtest: cancellation stops waiting without changing the native job
+ok 7 - cancellation stops waiting without changing the native job
+  ---
+  duration_ms: 0.822584
+  type: 'test'
+  ...
+# Subtest: transport failure remains visible instead of dispatching a replacement
+ok 8 - transport failure remains visible instead of dispatching a replacement
+  ---
+  duration_ms: 0.451167
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 189.171625

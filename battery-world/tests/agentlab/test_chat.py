@@ -54,6 +54,20 @@ class ChatTests(unittest.TestCase):
         self.assertIn('ready',wire)
         self.assertTrue(wire.endswith('data: [DONE]\n\n'))
 
+    def test_runtime_and_skill_http_views_are_owner_scoped_and_observe_only(self):
+        (self.app.store.root.parent/'paid-window-closed.json').write_text('{}')
+        _,c=self.req('/api/conversations',{'text':'no execution','operation_id':'runtime-projection'})
+        status,view=self.req('/api/runtime-view?session='+c['id'])
+        self.assertEqual(200,status);self.assertEqual(c['id'],view['owner'])
+        self.assertFalse(view['hardware_verified']);self.assertEqual([],view['jobs'])
+        status,catalog=self.req('/api/skills?session='+c['id'])
+        self.assertEqual(200,status);self.assertFalse(catalog['frozen'])
+        foreign=self.app.store.issue('pi-chat-1111111111111111')
+        for endpoint in ('/api/runtime-view','/api/skills'):
+            self.assertNotEqual(200,self.req(endpoint+'?session='+c['id'],headers={'Authorization':'Bearer '+foreign})[0])
+        self.assertEqual(400,self.req('/api/skills',{'action':'activate','session_id':c['id'],'name':'easyeda-agent'})[0])
+        with self.app.store.connect() as db:self.assertEqual(0,db.execute('SELECT COUNT(*) FROM model_requests').fetchone()[0])
+
     def test_queued_followup_clears_previous_turn_failure_without_erasing_trace(self):
         (self.app.store.root.parent/'paid-window-closed.json').write_text('{}')
         _,conversation=self.req('/api/conversations',{'text':'original','operation_id':'failed-followup'})
@@ -182,6 +196,39 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(c['id'],packet['owner']);self.assertIn(packet['sha256'],json.dumps(requests))
         self.assertEqual(1,len(requests),'A question must not trigger automatic engineering continuation')
         self.assertTrue(any(e['data']['type']=='turn_complete' for e in events))
+        self.assertIn('bf_skill',[t['function']['name'] for t in requests[0]['tools']])
+        self.assertIn('easyeda-pcb-routing',json.dumps(requests[0]['messages']))
+        self.assertIn('resource_manifest',loaded['source'])
+        self.assertIn('bf-task-recovery',[s['id'] for s in self.app.skills.catalog(c['id'])['active']])
+
+    def test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation(self):
+        calls=[]
+        def fake(owner,payload,on_chunk=None):
+            calls.append(payload)
+            base={'id':'skill-fixture','object':'chat.completion.chunk','created':int(time.time()),'model':MODEL}
+            if len(calls)<=2:
+                args={'action':'activate',('name' if len(calls)==1 else 'skill_id'):'easyeda-pcb-routing'}
+                delta={'role':'assistant','tool_calls':[{'index':0,'id':'skill-'+str(len(calls)),'type':'function',
+                    'function':{'name':'bf_skill','arguments':json.dumps(args)}}]};finish='tool_calls'
+            else:delta={'role':'assistant','content':'冻结技能已加载'};finish='stop'
+            on_chunk({**base,'choices':[{'index':0,'delta':delta,'finish_reason':None}]})
+            on_chunk({**base,'choices':[{'index':0,'delta':{},'finish_reason':finish}]})
+            on_chunk({**base,'choices':[],'usage':{'prompt_tokens':20,'completion_tokens':3,'total_tokens':23}})
+            return {'model':MODEL}
+        self.app.provider.complete=fake
+        _,c=self.req('/api/conversations',{'text':'读取 PCB 技能即可，不操作工程','operation_id':'skill-loader-fixture'})
+        deadline=time.monotonic()+25
+        while time.monotonic()<deadline:
+            events=self.app.conversations.events(c['id'])
+            if any(e['data']['type']=='turn_complete' for e in events):break
+            time.sleep(.1)
+        self.assertEqual(3,len(calls),str(events[-5:]))
+        ends=[e['data'] for e in events if e['data']['type']=='tool_execution_end']
+        self.assertTrue(ends[0]['isError']);self.assertFalse(ends[1]['isError'])
+        active=self.app.skills.catalog(c['id'])['active']
+        self.assertIn('easyeda-pcb-routing',[s['id'] for s in active])
+        self.assertEqual([],self.app.engineering.jobs(c['id']))
+        with self.app.store.connect() as db:self.assertEqual(0,db.execute('SELECT COUNT(*) FROM model_requests').fetchone()[0])
 
     def test_actual_pi_stream_and_mid_turn_message_without_external_provider(self):
         requests=[];stream_started=threading.Event()
@@ -353,6 +400,7 @@ class ChatTests(unittest.TestCase):
             d=self.app.conversations.detail(c['id'])
             if c['id'] not in self.app.conversations.starting:break
             time.sleep(.1)
+        d=self.app.conversations.detail(c['id'])
         self.assertEqual('FAILED',d['status'])
         self.assertEqual('MODEL_OUTPUT_TRUNCATED',d['error'])
         types=[e['data']['type'] for e in d['events']]

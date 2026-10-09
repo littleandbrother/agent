@@ -11,6 +11,23 @@ TARGET_BYTES = 103000
 # This bounds ingestion only; it never raises the provider wire/token budget.
 INTERACTIVE_HISTORY_BYTES = 16 * 1024 * 1024
 PRODUCT_STATE_PREFIX = '本次启动的产品状态（可能随消息更新，操作前 inspect）：'
+PRODUCT_STATE_PREFIXES = (PRODUCT_STATE_PREFIX, '启动事实快照（操作前 inspect 核对）：')
+
+
+class _RequestSize:
+    """Exact canonical UTF-8 size, without serializing the whole history per eviction."""
+    def __init__(self, payload):
+        self.base = len(canonical({**payload, 'messages': []}).encode())
+        self.cache = {}
+
+    def __call__(self, messages):
+        sizes = []
+        for m in messages:
+            key = id(m)
+            if key not in self.cache:
+                self.cache[key] = (m, len(canonical(m).encode()))
+            sizes.append(self.cache[key][1])
+        return self.base + sum(sizes) + max(0, len(messages)-1)
 
 
 class ContextArchive:
@@ -57,18 +74,76 @@ def _reference(record):
             'read_hint': '完整数据在当前工作区的 record_file。用 bash/Python 读取 JSON 并只提取本次需要的字段或片段，勿重复打印全文件。摘要不是新的验证。'}
 
 
-def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, target_bytes=TARGET_BYTES):
+def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, target_bytes=TARGET_BYTES, active_skills=(), compact_state=False):
     if not 8000 <= target_bytes < request_bytes:
         raise ValueError('CONTEXT_LIMITS_INVALID')
+    if type(compact_state) is not bool:
+        raise ValueError('CONTEXT_STRATEGY_INVALID')
+    state_prefixes = PRODUCT_STATE_PREFIXES if compact_state else (PRODUCT_STATE_PREFIX,)
     messages = payload.get('messages', [])
     if not isinstance(messages, list) or not all(isinstance(m, dict) for m in messages):
         raise ValueError('MODEL_MESSAGES_INVALID')
+    # Server-owned frozen methods survive completed tool-pair compaction. They
+    # never contain task facts or promote untrusted tool output into policy.
+    if active_skills:
+        methods='\n\n'.join('Skill '+x['id']+' @ '+x['sha256']+'\n'+x['content'] for x in active_skills)
+        protected={'role':'system','content':'本运行已激活的专业方法（不改变用户任务、权限或预算）：\n'+methods}
+        messages=[*messages[:1],protected,*messages[1:]]
+        payload={**payload,'messages':messages}
+    request_size = _RequestSize(payload)
     boundary = max((i for i, m in enumerate(messages) if m.get('role') == 'user'), default=0)
     # Observer JSON is machine state, not a new human requirement. Preserve the
     # surrounding instruction verbatim, archive its full bytes, and keep compact
     # findings. Otherwise repeated continuations crowd out the actual tool data.
     working = list(messages)
     observer_archives = []
+    # Current startup state has a new explicit machine tag. Compact it before
+    # evicting useful exchanges. Human text copied into it may be omitted only
+    # when the same text is still verbatim in an actual user message.
+    user_texts = []
+    for m in messages:
+        if m.get('role') != 'user':
+            continue
+        c = m.get('content', '')
+        user_texts.append(c if isinstance(c, str) else '\n'.join(
+            p.get('text', '') for p in c if isinstance(p, dict)) if isinstance(c, list) else '')
+    if archive and compact_state:
+        for i, m in enumerate(messages):
+            if m.get('role') != 'system' or not isinstance(m.get('content'), str):
+                continue
+            lines = m['content'].splitlines(keepends=True)
+            changed = False
+            for j, line in enumerate(lines):
+                p = next((p for p in state_prefixes if line.startswith(p)), None)
+                if not p:
+                    continue
+                raw = line[len(p):]
+                try:
+                    value = json.loads(raw)
+                except (ValueError, TypeError):
+                    continue
+                if not isinstance(value, dict) or len(raw.encode()) <= 8000:
+                    continue
+                record = archive(value)
+                reference = _reference(record)
+                for key in ('current_revision', 'binding', 'assembly', 'engineering', 'instruction'):
+                    if key in value and len(canonical(value[key]).encode()) <= 4000:
+                        reference[key] = value[key]
+                copied = value.get('messages')
+                if isinstance(copied, list):
+                    duplicated = all(isinstance(x, dict) and isinstance(x.get('text'), str)
+                                     and any(x['text'] in u for u in user_texts) for x in copied)
+                    if duplicated:
+                        reference['human_messages_preserved_in_user_history'] = True
+                    else:
+                        reference['messages'] = copied
+                reference['preview'] = _preview(raw)
+                lines[j] = p + canonical(reference) + ('\n' if line.endswith('\n') else '')
+                observer_archives.append({'kind':'product_state','source_index':i,
+                                          'source_message_sha256':identity(m),**record})
+                changed = True
+            if changed:
+                working[i] = {**m,'content':''.join(lines)}
     templates = [('交付观察器的实际结果：',('bf-product-authority-v1','bf-responsibility-review-v1'),'。原始执行任务仍未完成。'),
                  ('当前任务事实快照（覆盖过时上下文；不改变既定要求）：',('bf-product-context-v1',),'\n用户消息：')]
     if archive and len(canonical(payload).encode()) > target_bytes:
@@ -107,7 +182,7 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
         if m.get('role')=='assistant' and m.get('content')][-4:]}
     source_indices={id(m):i for i,m in enumerate(messages)}
     # Reserve space for the projection notice itself.
-    while len(canonical({**payload,'messages':projected}).encode()) > target_bytes:
+    while request_size(projected) > target_bytes:
         candidate=next((i for i,m in enumerate(projected)
             if m.get('role')=='assistant' and not m.get('tool_calls')
             and id(m) not in recent_text),None)
@@ -123,7 +198,7 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
     # native source and trajectories. Remove only complete old exchanges, never
     # an unmatched or the two most recent exchanges. Full trace is unchanged.
     current_omitted=[]
-    while len(canonical({**payload, 'messages':projected}).encode()) > target_bytes + 1000:
+    while request_size(projected) > target_bytes + 1000:
         returned={m.get('tool_call_id') for m in projected if m.get('role')=='tool'}
         groups=[(i,[c.get('id') for c in m.get('tool_calls',[])]) for i,m in enumerate(projected)
                 if m.get('role')=='assistant' and m.get('tool_calls')]
@@ -149,7 +224,7 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
                         for ids in [[c.get('id') for c in m.get('tool_calls', [])]]
                         if ids and all(key and key in returned for key in ids) for key in ids}
         for i, m in enumerate(projected):
-            if len(canonical({**payload, 'messages': projected}).encode()) <= target_bytes:
+            if request_size(projected) <= target_bytes:
                 break
             if m.get('role') != 'system' or not isinstance(m.get('content'), str):
                 continue
@@ -157,22 +232,26 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
             for j, line in enumerate(lines):
                 # Only the explicitly tagged, machine-generated JSON state is
                 # replaceable. Surrounding instructions are never truncated.
-                if not line.startswith(PRODUCT_STATE_PREFIX):
+                matched_prefix = next((p for p in state_prefixes if line.startswith(p)), None)
+                if matched_prefix is None:
                     continue
-                raw = line[len(PRODUCT_STATE_PREFIX):]
+                raw = line[len(matched_prefix):]
                 try:
                     state = json.loads(raw)
                 except (ValueError, TypeError):
                     continue
                 if not isinstance(state, dict) or len(raw.encode()) <= 8000:
                     continue
+                if compact_state and state.get('context_projection') == 'archived_not_deleted':
+                    continue  # Never recursively spill protected copied human text.
                 record = archive(state)
                 reference = _reference(record)
-                for key in ('current_revision', 'binding'):
+                fields = ('current_revision', 'binding', 'assembly', 'engineering', 'instruction') if compact_state else ('current_revision', 'binding')
+                for key in fields:
                     if key in state and len(canonical(state[key]).encode()) <= 1000:
                         reference[key] = state[key]
                 reference['preview'] = _preview(raw)
-                lines[j] = PRODUCT_STATE_PREFIX + canonical(reference) + ('\n' if line.endswith('\n') else '')
+                lines[j] = matched_prefix + canonical(reference) + ('\n' if line.endswith('\n') else '')
                 archived.append({'kind': 'product_state', 'source_index': source_indices.get(id(m)),
                                  'source_message_sha256': identity(m), **record})
             projected[i] = {**m, 'content': ''.join(lines)}
@@ -182,7 +261,7 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
                 or m.get('role') == 'assistant' and not m.get('tool_calls'))
             and m.get('content')), reverse=True)
         for size, i, m in candidates:
-            if len(canonical({**payload, 'messages': projected}).encode()) <= target_bytes:
+            if request_size(projected) <= target_bytes:
                 break
             if size <= 8000:
                 continue
@@ -206,5 +285,8 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
               'fits': len(canonical(result).encode()) <= request_bytes,
              'projected_bytes_by_role': {role: sum(len(canonical(m).encode()) for m in projected if m.get('role') == role)
                                          for role in ('system', 'user', 'assistant', 'tool')},
-             'tool_schema_bytes': len(canonical(payload.get('tools', [])).encode())}
+             'tool_schema_bytes': len(canonical(payload.get('tools', [])).encode()),
+             'active_skills': [{k:x[k] for k in ('id','version','sha256','manifest_sha256')} | {
+                 'present_in_projected_request': any(x['content'] in m.get('content','') for m in projected if isinstance(m.get('content'),str))
+             } for x in active_skills]}
     return result, audit

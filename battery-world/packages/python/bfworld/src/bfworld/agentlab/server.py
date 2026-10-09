@@ -63,6 +63,8 @@ class Workbench:
         self.engineering=Engineering(self)
         from .eda_cli import EdaCLI
         self.eda_cli=EdaCLI(self)
+        from .skill_resources import SkillResources
+        self.skills=SkillResources(self)
         from .product_results import ProductResults
         self.results=ProductResults(self)
         from .references import References
@@ -248,7 +250,9 @@ class Workbench:
                 'artifacts': ['bundle/evidence.json', 'bundle/run-manifest.json', 'bundle/events.jsonl', 'bundle/world.ir.json']}
 
 
-def handler(workbench):
+def handler(workbench,paper_sessions=None):
+    from .paper_sessions import PaperSessions
+    papers=paper_sessions or PaperSessions(workbench)
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
             pass
@@ -291,12 +295,13 @@ def handler(workbench):
                 raise PermissionError('HOST_DENIED')
 
         def conversation_stream(self,cid,after):
-            workbench.conversations.get(cid)
+            source=papers.view() if papers.has(cid) else workbench
+            source.conversations.get(cid)
             self.send_response(200);self.send_header('Content-Type','application/x-ndjson');self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.end_headers()
             deadline=time.monotonic()+25
             try:
                 while time.monotonic()<deadline:
-                    rows=workbench.conversations.events(cid,after)
+                    rows=source.conversations.events(cid,after)
                     for row in rows:
                         self.wfile.write((canonical(row)+'\n').encode());after=row['seq']
                     if not rows:self.wfile.write(b'{"heartbeat":true}\n')
@@ -333,14 +338,50 @@ def handler(workbench):
                     return self.reply(200, ui_index() if path=='/' else (UI / name).read_bytes(), kind + '; charset=utf-8')
                 if path in ('/model-viewer.html','/model-viewer.js','/model-viewer.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/html' if path.endswith('.html') else 'text/css' if path.endswith('.css') else 'text/javascript')+'; charset=utf-8')
+                if path in ('/runtime-studio.js','/runtime-studio-model.js','/runtime-studio.css'):
+                    return self.reply(200,(UI/path[1:]).read_bytes(),('text/css' if path.endswith('.css') else 'text/javascript')+'; charset=utf-8')
+                if path in ('/literature-learning.js','/literature-learning.css'):
+                    return self.reply(200,(UI/path[1:]).read_bytes(),('text/css' if path.endswith('.css') else 'text/javascript')+'; charset=utf-8')
+                if path.startswith('/runtime-scene/'):
+                    root=(UI/'runtime-scene').resolve();file=(UI/path[1:]).resolve()
+                    kinds={'.js':'text/javascript','.css':'text/css','.webp':'image/webp','.json':'application/json','.txt':'text/plain'}
+                    if not file.is_relative_to(root) or not file.is_file() or file.suffix not in kinds:
+                        return self.reply(404,{'error':'NOT_FOUND'})
+                    return self.reply(200,file.read_bytes(),kinds[file.suffix])
                 if path.startswith('/vendor/three/'):
                     allowed={'build/three.module.js','build/three.core.js','examples/jsm/loaders/GLTFLoader.js','examples/jsm/controls/OrbitControls.js','examples/jsm/utils/BufferGeometryUtils.js'}
                     rel=path.removeprefix('/vendor/three/')
                     if rel not in allowed:return self.reply(404,{'error':'NOT_FOUND'})
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
-                if path in ('/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
+                if path in ('/artifact-workspace.js','/artifact-workspace.css','/result-catalog.js','/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
+                query=parse_qs(urlparse(self.path).query)
+                paper_owner=papers.target(path,query) if actor['role']=='operator' else None
+                view=papers.view() if paper_owner else workbench
+                if path in ('/api/literature-learning','/api/literature-learning/artifact'):
+                    if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_LEARNING_VIEW')
+                    from .literature_campaign import projection, bound_file, DEFAULT_ROOT
+                    data=projection()
+                    if path.endswith('/artifact'):
+                        name=parse_qs(urlparse(self.path).query).get('path',[''])[0]
+                        record=next((a for a in data.get('artifacts',[]) if a['path']==name),None)
+                        if not record:raise ValueError('LEARNING_ARTIFACT_NOT_LISTED')
+                        file=bound_file(DEFAULT_ROOT,name,record['sha256'])
+                        kind={'.pdf':'application/pdf','.json':'application/json','.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                              '.zip':'application/zip','.step':'application/step','.elf':'application/octet-stream','.bin':'application/octet-stream',
+                              '.stl':'application/octet-stream','.raw':'application/octet-stream','.csv':'text/csv; charset=utf-8'}.get(file.suffix,'text/plain; charset=utf-8')
+                        return self.reply(200,file,kind)
+                    return self.reply(200,data)
+                if path=='/api/skills':
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    return self.reply(200,view.skills.catalog(target))
+                if path=='/api/runtime-view':
+                    from .runtime_view import snapshot
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    return self.reply(200,snapshot(view,target))
                 if path in ('/api/reference-case','/api/reference-case/artifact'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_REFERENCE_CASE')
                     from .pluck_case import projection, digest
@@ -358,52 +399,55 @@ def handler(workbench):
                 if path in ('/api/references','/api/references/source'):
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
-                    if actor['role']!='operator':workbench.references.authorize(owner)
+                    if actor['role']!='operator':view.references.authorize(owner)
                     if path.endswith('/source'):
-                        record=workbench.references.get(target,query.get('id',[''])[0])
+                        record=view.references.get(target,query.get('id',[''])[0])
                         if record['kind']!='source':raise ValueError('REFERENCE_SOURCE_REQUIRED')
-                        return self.reply(200,workbench.references.blob(record['raw_sha256']).read_bytes(),'application/octet-stream')
-                    return self.reply(200,workbench.references.projection(target))
+                        return self.reply(200,view.references.blob(record['raw_sha256']).read_bytes(),'application/octet-stream')
+                    return self.reply(200,view.references.projection(target))
                 if path=='/api/product-context':
                     from .product_authority import context_packet
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
-                    return self.reply(200,context_packet(workbench,target))
+                    return self.reply(200,context_packet(view,target))
                 if path=='/api/progress':
                     from .progress import project
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
-                    return self.reply(200,project(workbench,target))
+                    return self.reply(200,project(view,target))
                 if path.startswith('/api/engineering'):
                     query=parse_qs(urlparse(self.path).query)
                     operator=actor['role']=='operator'
                     target=query.get('session',[owner])[0] if operator else owner
-                    if not operator:workbench.engineering.authorize(owner)
-                    if path=='/api/engineering/task':return self.reply(200,{'binding':workbench.engineering.tasks.binding(target)})
-                    if path=='/api/engineering':return self.engineering_reply(target,200,{**workbench.engineering.catalog(target),'jobs':workbench.engineering.jobs(target if target!='operator' else None)})
+                    if not operator:view.engineering.authorize(owner)
+                    if path=='/api/engineering/task':return self.reply(200,{'binding':view.engineering.tasks.binding(target)})
+                    if path=='/api/engineering':return self.engineering_reply(target,200,{**view.engineering.catalog(target),'jobs':view.engineering.jobs(target if target!='operator' else None)})
                     parts=path.strip('/').split('/')
-                    if len(parts)==4 and parts[2]=='jobs':return self.engineering_reply(target,200,workbench.engineering.get(owner,parts[3],operator))
+                    if len(parts)==4 and parts[2]=='jobs':return self.engineering_reply(target,200,view.engineering.get(owner,parts[3],operator))
                     if len(parts)==5 and parts[2]=='jobs' and parts[4]=='artifact':
-                        file=workbench.engineering.artifact(owner,parts[3],query.get('name',[''])[0],operator)
+                        file=view.engineering.artifact(owner,parts[3],query.get('name',[''])[0],operator)
                         kind={'.png':'image/png','.json':'application/json','.glb':'model/gltf-binary','.csv':'text/csv','.log':'text/plain'}.get(file.suffix,'application/octet-stream')
                         return self.reply(200,file,kind)
                     return self.reply(404,{'error':'NOT_FOUND'})
                 if path=='/api/ui-version':
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     return self.reply(200,{'schema_version':'bf-ui-build-v1','build':ui_build()})
+                if path=='/api/assembly/schema':
+                    from .assembly_contract import contract
+                    return self.reply(200,contract())
                 if path in ('/api/assembly','/api/assembly/file'):
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
                     if path.endswith('/file'):
-                        file,meta=workbench.assemblies.file(target,query.get('id',[''])[0])
+                        file,meta=view.assemblies.file(target,query.get('id',[''])[0])
                         import mimetypes
                         return self.reply(200,file,mimetypes.guess_type(meta['name'])[0] or 'application/octet-stream')
-                    return self.reply(200,workbench.assemblies.projection(target))
+                    return self.reply(200,view.assemblies.projection(target))
                 if path in ('/api/studio/delivery','/api/studio/archive'):
                     from .studio_delivery import StudioDelivery
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
-                    delivery=StudioDelivery(workbench.results)
+                    delivery=StudioDelivery(view.results)
                     if path.endswith('/archive'):
                         return self.reply(200,delivery.archive(target,query.get('id',[''])[0]),'application/zip')
                     revision=query.get('revision',[''])[0]
@@ -411,28 +455,29 @@ def handler(workbench):
                 if path.startswith('/api/results'):
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
+                    if path=='/api/results/version':return self.reply(200,view.results.version(target))
                     if path=='/api/results':
                         revision=query.get('revision',[''])[0]
-                        return self.reply(200,workbench.results.inspect(target,int(revision) if revision else None))
+                        return self.reply(200,view.results.inspect(target,int(revision) if revision else None))
                     if path=='/api/results/archive':
-                        file=workbench.results.archive(target,query.get('snapshot',[''])[0])
+                        file=view.results.archive(target,query.get('snapshot',[''])[0])
                         return self.reply(200,file,'application/zip')
                     if path=='/api/results/file':
                         import mimetypes
-                        file,name=workbench.results.file(target,query.get('id',[''])[0])
+                        file,name=view.results.file(target,query.get('id',[''])[0])
                         kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
                         if kind in ('text/html','application/javascript'):kind='text/plain'
                         return self.reply(200,file,kind)
                     if path=='/api/results/source':
-                        return self.reply(200,workbench.results.source(target,query.get('result',[''])[0],query.get('name',[None])[0]))
+                        return self.reply(200,view.results.source(target,query.get('result',[''])[0],query.get('name',[None])[0]))
                     if path=='/api/results/series':
-                        return self.reply(200,workbench.results.series(target,query.get('id',[''])[0]))
+                        return self.reply(200,view.results.series(target,query.get('id',[''])[0]))
                     return self.reply(404,{'error':'NOT_FOUND'})
                 if path=='/api/deliverables':
                     query=parse_qs(urlparse(self.path).query)
                     target=query.get('session',[owner])[0] if actor['role']=='operator' else owner
-                    return self.reply(200,workbench.deliverables.inspect(target))
-                if path=='/api/product':return self.reply(200,workbench.products.context(owner))
+                    return self.reply(200,view.deliverables.inspect(target))
+                if path=='/api/product':return self.reply(200,view.products.context(paper_owner or owner))
                 if path=='/api/health':
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     return self.reply(200,workbench.conversations.readiness())
@@ -443,15 +488,15 @@ def handler(workbench):
                 if path.startswith('/api/conversations'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                     parts=path.strip('/').split('/')
-                    if len(parts)==2:return self.reply(200,{'sessions':workbench.conversations.list(),'folders':workbench.organization.folders()})
+                    if len(parts)==2:return self.reply(200,{'sessions':workbench.conversations.list()+papers.list(),'folders':workbench.organization.folders()})
                     if len(parts)==4 and parts[3]=='events':
                         after=int(parse_qs(urlparse(self.path).query).get('after',['0'])[0])
                         return self.conversation_stream(parts[2],after)
                     if len(parts)==4 and parts[3]=='file':
-                        workbench.conversations.get(parts[2])
+                        view.conversations.get(parts[2])
                         key=parse_qs(urlparse(self.path).query).get('id',[''])[0]
-                        return self.reply(200,workbench.products.file(parts[2],key))
-                    if len(parts)==3:return self.reply(200,workbench.conversations.detail(parts[2]))
+                        return self.reply(200,view.products.file(parts[2],key))
+                    if len(parts)==3:return self.reply(200,papers.detail(parts[2]) if paper_owner else workbench.conversations.detail(parts[2]))
                     return self.reply(404,{'error':'NOT_FOUND'})
                 if path.startswith('/api/developer'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
@@ -568,6 +613,27 @@ def handler(workbench):
                 if not 0 < length <= incoming_limit:
                     raise ValueError('REQUEST_SIZE')
                 body = json.loads(self.rfile.read(length))
+                query=parse_qs(urlparse(self.path).query)
+                paper_owner=papers.target(path,query,body) if actor['role']=='operator' else None
+                if paper_owner:
+                    parts=path.strip('/').split('/')
+                    if parts[:2]==['api','sidebar']:return self.reply(200,papers.change_entry(paper_owner,body))
+                    if parts[:2]==['api','conversations'] and len(parts)==4:
+                        action=parts[3]
+                        if action=='messages':return self.reply(202,papers.enqueue(paper_owner,body['operation_id'],body['text']))
+                        if action=='retry':return self.reply(202,papers.enqueue(paper_owner,'retry-'+str(time.time_ns())))
+                        if action=='stop':return self.reply(202,papers.cancel_pending(paper_owner))
+                    view=papers.view()
+                    if path=='/api/studio/package':
+                        from .studio_delivery import StudioDelivery
+                        return self.reply(200,StudioDelivery(view.results).package(paper_owner,body))
+                    if path=='/api/results/package':return self.reply(200,view.results.package(paper_owner,body.get('snapshot_sha256'),body.get('revision')))
+                    if path=='/api/deliverables' and body.get('action')=='package':return self.reply(201,view.deliverables.package(paper_owner,body.get('snapshot_sha256'),body.get('revision')))
+                    raise PermissionError('PAPER_CHANGE_REQUIRES_PI_MESSAGE: send this change to the original Pi conversation')
+                if path=='/api/skills':
+                    target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    if actor['role']!='operator':workbench.engineering.authorize(owner)
+                    return self.reply(200,workbench.skills.action(target,body))
                 if path=='/api/studio/package':
                     from .studio_delivery import StudioDelivery
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner

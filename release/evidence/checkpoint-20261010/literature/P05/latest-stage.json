@@ -1,0 +1,1205 @@
+{
+  "paper": "P05",
+  "task": "P05-native-8fa5ff1446dd-b07e7bdb",
+  "stage": "native",
+  "owner": "pi-chat-c5766cc7b28004ae",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-dd1c9063402dbf8e",
+        "kind": "firmware-stm32l031",
+        "project_sha256": "726e463dd985b6e5a3808b4fc325b65a0aee66482b73bee381eb8f877121607c",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "093c54021fc8260a58a2abd1d5dff10d11e909a8c59a5b4ad4e8b869f021ba6e",
+        "native_readback": {
+          "flash_bytes": 2456,
+          "flashed": false,
+          "memory_fit": true,
+          "pin_binding_verified": false,
+          "ram_static_bytes": 136,
+          "reserved_stack_bytes": 1024,
+          "target": "STM32L031K6T6"
+        },
+        "functional_passed": false,
+        "participant_project_path": "project/firmware-stm32l031/project.json",
+        "project_manifest": {
+          "entrypoint": "main.c",
+          "files": [
+            "main.c",
+            "traffic_core.c",
+            "traffic_core.h",
+            "tc_config.h",
+            "mini_libc.c"
+          ],
+          "interfaces": {
+            "clock_hz": 16000000,
+            "clock_note": "engineering choice: HSI16 as SYSCLK, 0 flash wait states; board clock is an explicit engineering responsibility and is NOT printed by the paper",
+            "events": [
+              "sensor_A_rising_onset",
+              "sensor_B_rising_onset",
+              "undervoltage_asserted",
+              "energy_admission_failed"
+            ],
+            "formulas": {
+              "S": "distance between the two harvesters; NOT printed by the paper -> explicit assumption TC_SENSOR_SPACING_MM",
+              "speed": "v = S / dt  (paper Eq.5)",
+              "wheelbase": "L = v * dT - S  (paper Eq.6)"
+            },
+            "frame": {
+              "layout": [
+                "magic 0xA5",
+                "version 0x01",
+                "seq u8",
+                "flags u8",
+                "direction u8 (0 invalid,1 forward,2 reverse)",
+                "speed_mm_s u16 LE (0 if invalid)",
+                "wheelbase_mm u16 LE",
+                "weight_kg u16 LE (0xFFFF = unavailable)",
+                "crc8 poly 0x07 over bytes 0..10"
+              ],
+              "length_bytes": 12,
+              "transport": "UART2 9600 8N1 explicit rebuild; the paper does not publish a wireless protocol",
+              "weight_unavailable": 65535
+            },
+            "load_source": "TENG + front-end stored energy (behavioural single-unit anchors only: 2.2 mW average, 49.722 uJ/cycle); transmit admission is a computed budget, never a measurement",
+            "pins": {
+              "sensor_A": "PA0 (EXTI0)",
+              "sensor_B": "PA1 (EXTI1)",
+              "uart_rx": "unused (TX-only reporting)",
+              "uart_tx": "PA2 (USART2_TX, AF4, 9600 8N1)",
+              "vsense_adc": "PA4 (ADC_IN4)"
+            },
+            "polarity": {
+              "exti_trigger": "rising edge only; debounce/noise rejection is done in traffic_core.c",
+              "wheel_onset": "rising edge = wheel first contact; inputs active-high with internal pull-down"
+            },
+            "runtime": "freestanding: no C library is linked; memset/memcpy/memmove are provided by mini_libc.c; arithmetic is 32-bit integer only (no 64-bit divide helpers)",
+            "target": "STM32L031K6T6",
+            "units": "SI"
+          },
+          "kind": "firmware-stm32l031",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project/firmware-stm32l031/main.c": "f6a416565abb0eecb8f3394253ec6acbae19a58537316c70bb9f9341ffba70d6",
+          "project/firmware-stm32l031/mini_libc.c": "2408e51228e60ccf6434eee52edd944c8b0d735c281262fc0c362e576106bcf1",
+          "project/firmware-stm32l031/tc_config.h": "691e059418e37539d4a2221a678667bfa7b2440afd21b83ee7430ab1101d7773",
+          "project/firmware-stm32l031/traffic_core.c": "ad9e70fdd7e2092c5d130c65e75bfbd7eb9056d56e8507c7bdbce33a108ce334",
+          "project/firmware-stm32l031/traffic_core.h": "4301b68080fbd84c5d316dfcceb5d515ef44229d6bc0b98fe16d1a6060da15f3"
+        }
+      },
+      {
+        "job_id": "eng-eac8ea09e5a70a84",
+        "kind": "spice",
+        "project_sha256": "5e5f06702194e550a42490426d16c65a1bc040a7ec1859e9f710149a0ec80493",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "093c54021fc8260a58a2abd1d5dff10d11e909a8c59a5b4ad4e8b869f021ba6e",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 110413,
+              "variables": 14
+            }
+          ],
+          "points": 110413,
+          "raw_sha256": "bf9e85c8096253c10792209605cd2079be53f8d77188ab3469c8053249b396f1",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 14
+        },
+        "functional_passed": false,
+        "participant_project_path": "project/spice/project.json",
+        "project_manifest": {
+          "entrypoint": "storage_load_stage.cir",
+          "files": [
+            "storage_load_stage.cir"
+          ],
+          "interfaces": {
+            "anchors_from_paper": {
+              "charge_level_V": 5.0,
+              "charge_time_s_at_5Hz": 130.0,
+              "contact_resistance_ohm": 1000000,
+              "electrode_current_peak_A": 0.00012,
+              "release_level_V": 3.0,
+              "storage_capacitance_F": 0.001
+            },
+            "assumptions_explicit": [
+              "5 Hz excitation, two 25 ms rectified bursts per 200 ms cycle, 120 uA peak, 1 ms edges",
+              "rectifier modelled as idealised diode IS=1e-12 N=1.0 RS=10 ohm",
+              "20 Mohm storage leakage equivalent",
+              "release latch modelled as comparator with RC positive feedback (5.0 V / 3.0 V, 40 mV softness, 10 ms feedback); real device not modelled",
+              "load modelled as 2.2 kohm equivalent stand-in for the reporting event",
+              "transducer intrinsic capacitance 1 nF"
+            ],
+            "load_source": "2.2 kohm equivalent load, switched by the 5 V/3 V release latch",
+            "max_step_s": 0.005,
+            "polarity": "bursts are the already-rectified charge delivery; bridge output positive at node nca",
+            "scope": "bounded sub-circuit downstream of the triboelectric transducer; generation mechanism, real diode/threshold-switch parts and array-scale claims are NOT modelled",
+            "stimulus": {
+              "events_per_cycle": 2,
+              "freq_Hz": 5.0,
+              "shape": "pulse burst train"
+            },
+            "subsystem": "RTE harvester power stage: rectifier + 1000 uF storage + 5 V/3 V release latch + load (P05)",
+            "units": "SI",
+            "window_s": 200.0
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project/spice/storage_load_stage.cir": "b9b4b3a349cc304c5dd7d81b6c99e0811ef6a1a16e95a1ad6d80d71325f43781"
+        }
+      },
+      {
+        "job_id": "eng-fffbf70d5591dd5e",
+        "kind": "cadquery",
+        "project_sha256": "86d333d2911cd1329f0a4f05235f000e400bb9117cb0f8eeb8dcf9c1dd6eceed",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "093c54021fc8260a58a2abd1d5dff10d11e909a8c59a5b4ad4e8b869f021ba6e",
+        "native_readback": {
+          "bounds_mm": [
+            100.00000021123093,
+            100.0000002,
+            140.0000001
+          ],
+          "native_valid": true,
+          "solid_count": 60,
+          "volume_mm3": 555123.9962018029
+        },
+        "functional_passed": false,
+        "participant_project_path": "project/cadquery/project.json",
+        "project_manifest": {
+          "entrypoint": "rte_harvester.py",
+          "files": [
+            "rte_harvester.py"
+          ],
+          "interfaces": {
+            "key_interfaces": {
+              "ball_diameter_mm": 4.0,
+              "ball_displacement_mm": 2.0,
+              "electrode_gap_mm": 6.0,
+              "fep_thickness_mm": 0.05,
+              "overall_envelope_mm": [
+                100.0,
+                100.0,
+                140.0
+              ],
+              "tengh_envelope_mm": [
+                85.0,
+                80.0
+              ]
+            },
+            "parts": [
+              "housing_barrel",
+              "top_dome_shell",
+              "impact_pad",
+              "load_post",
+              "wave_spring_LM45_H1",
+              "teng_fep_film_XX_lower",
+              "teng_substrate_XX",
+              "teng_cu_electrode_XX",
+              "teng_fep_film_XX_upper",
+              "stack_clamp_ring",
+              "pom_ball_layer_XX",
+              "fastener_M4_N"
+            ],
+            "subsystem": "RTE harvester mechanical assembly (P05)",
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project/cadquery/rte_harvester.py": "d97bd7413ad0acbe9ea1ba65f5dc69da7b15967796c5ada940b05b997c867dbf"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 621,
+  "model_profile": {
+    "version": "engineering-reasoning-v1",
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_output_tokens": 32768,
+    "request_bytes": 256000,
+    "target_bytes": 220000
+  },
+  "work_phase": "firmware",
+  "phase_task_sha256": "28b15a863348d7f372fa92b2b5b8a96d6f8f557a102c6278b49ed7c8e8012e60",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 102,
+  "budget": {
+    "owner": "pi-chat-c5766cc7b28004ae",
+    "cap_usd": null,
+    "liability_usd": 10.513720200000007,
+    "remaining_usd": null,
+    "unbounded": true,
+    "unknown_requests": [
+      "llm-9ebd6b08eff0bbb9cbc4"
+    ],
+    "exhausted": false
+  },
+  "method_identity": "fe043b368d441e4745735d35d58944e4284f595ab16705178a7ee4f2a13a3838",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/native-report.json",
+      "sha256": "40a05173de38abf9f4803387165867aae01bccc7d352337fc465ae791177369e",
+      "label": "P05 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/delivery/manifest.json",
+      "sha256": "3151bb81c7657b5aa318ae4fc4018f864020efc1dbcefc5d3d3fd51b948b7d5e",
+      "label": "P05 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/delivery/UNVERIFIED.md",
+      "sha256": "2427315001a4a2d3bf46717aae3cfdb1b5c790c4000e161743ea4d98e63f2a02",
+      "label": "P05 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/assembly.json",
+      "sha256": "458586be052e8526b91384251e116d82223d1f4145e0b3b18441273574fd6020",
+      "label": "P05 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/BOM-NETS.md",
+      "sha256": "57a80e8a636070afcced47d0df9c6975620d14da2d4cff5b2c995cdf2fdd55a7",
+      "label": "P05 delivery/BOM-NETS.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/CHECKLIST-MAP.md",
+      "sha256": "aa979e790e66b41064b4b9cfb4efc88e37918245fb46b64b558ec10a429deecd",
+      "label": "P05 delivery/CHECKLIST-MAP.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/FIRMWARE.md",
+      "sha256": "56f06dc5d6f4fc540b63872e65d6c0d633c57ee69db54aad7f7501e25e0eb420",
+      "label": "P05 delivery/FIRMWARE.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/REPRODUCE.md",
+      "sha256": "1d4d90b39702e68c2ccdd47a5f39fea3cb17000ed96a12320413575ae4d1d400",
+      "label": "P05 delivery/REPRODUCE.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/SOURCE-MAP.md",
+      "sha256": "036b9df22d96eef7b55fd5b9608cec848b63d1b8e352f15b002eb0ca8e45281f",
+      "label": "P05 delivery/SOURCE-MAP.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "2427315001a4a2d3bf46717aae3cfdb1b5c790c4000e161743ea4d98e63f2a02",
+      "label": "P05 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/attempts/README.md",
+      "sha256": "15b989e6aa4584d357924428315f3fc7e4bbc3667c2facbd2546011c008d2fca",
+      "label": "P05 delivery/attempts/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/attempts/spice-hysteresis-gate-attempt-v4.cir",
+      "sha256": "b47a2255d9c4fd8b80b7426b040699d68858ed0d037fd145c8d32b07c668071a",
+      "label": "P05 delivery/attempts/spice-hysteresis-gate-attempt-v4.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/attempts/spice-scr-macromodel-attempt.cir",
+      "sha256": "59fa298414941e00488264157c24b2aea91ae4063553782b8f9679e7c6e8cce2",
+      "label": "P05 delivery/attempts/spice-scr-macromodel-attempt.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/build/project-firmware.bin",
+      "sha256": "e381f4a461fea8630d43c4f1e03e0a998663e5fd74f95cd37dc93e3eef07c86f",
+      "label": "P05 delivery/build/project-firmware.bin",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/build/project-firmware.elf",
+      "sha256": "e8e2656f5e8969709d7b5dc29776d5e8eedf0786f520269956bf2ddb343780d6",
+      "label": "P05 delivery/build/project-firmware.elf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/build/project-firmware.hex",
+      "sha256": "c76f4aec22f405433cf26a7e1e920c616cc614672f6fc6374bed69d29060c5db",
+      "label": "P05 delivery/build/project-firmware.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/build/project-firmware.map",
+      "sha256": "fe9135947986ab4108e1379403259b0f5f989ace8e195784ab99f37a0ba9a2cb",
+      "label": "P05 delivery/build/project-firmware.map",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/build/project-readback.json",
+      "sha256": "1a0cff8b73e16d10f37bea3e75a58388904de0644e6d0f6887c4cf40528b5e29",
+      "label": "P05 delivery/build/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/records/firmware-load-model.csv",
+      "sha256": "3d5780e4e921c7f0a13f96b354de4479c878722a69a4642fa78c8af0ea2676e6",
+      "label": "P05 delivery/records/firmware-load-model.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/records/firmware-resources.json",
+      "sha256": "6a7dde96b352d13c2268f59fb7abf8ca2d8557e04a876495338a41788ffecdce",
+      "label": "P05 delivery/records/firmware-resources.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/records/spice-results-summary.csv",
+      "sha256": "8e4dcfc82b20d1c3242b11258b265a0800289f399e1e4c0dfbb362f473dba736",
+      "label": "P05 delivery/records/spice-results-summary.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-eac8ea09e5a70a84/project-numeric-observations.json",
+      "sha256": "54874d5701dc3fba35a1ce4039d9a961c00a5252c3af5fc7a46f06223c3652ef",
+      "label": "P05 engineering-artifacts/eng-eac8ea09e5a70a84/project-numeric-observations.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-eac8ea09e5a70a84/result.json",
+      "sha256": "fb4f03ccbebcfea7cd1bd4560b2a3e3f5a2b8498c2af56f665b342b187537255",
+      "label": "P05 engineering-artifacts/eng-eac8ea09e5a70a84/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-fffbf70d5591dd5e/project-assembly.step",
+      "sha256": "0539b98fd57c2043e087d20be6810f4c11101488b57032d1d0291a1fea342f23",
+      "label": "P05 engineering-artifacts/eng-fffbf70d5591dd5e/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-fffbf70d5591dd5e/project-readback.json",
+      "sha256": "a262e94644592270e309d6449b16984566a38b786a9f9f4c148e7acd034b0cc0",
+      "label": "P05 engineering-artifacts/eng-fffbf70d5591dd5e/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-fffbf70d5591dd5e/result.json",
+      "sha256": "c45cb6f9452526a4cd478974ab74542db92e80dc0c174168cef42c92260a8787",
+      "label": "P05 engineering-artifacts/eng-fffbf70d5591dd5e/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native-report.json",
+      "sha256": "40a05173de38abf9f4803387165867aae01bccc7d352337fc465ae791177369e",
+      "label": "P05 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/cases.json",
+      "sha256": "a0c2dace1e97dbde94a52d910258321a3f41d3e5d1e7cc76df93120c3f8e37de",
+      "label": "P05 native/firmware/sil/cases.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/cases_generated.h",
+      "sha256": "7be2ed85a5b63626c64d654c63792381b5da17c04a1e4003fbf462a1e52d29ce",
+      "label": "P05 native/firmware/sil/cases_generated.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/check_sil.py",
+      "sha256": "88db608848ca75a2d1dd9b49721086183235c9ff1995043c9ec7a56278030469",
+      "label": "P05 native/firmware/sil/check_sil.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/gen_cases.py",
+      "sha256": "d1814456491da5b0ad9fd65b973e6d86ce3dbfd4ff2ffa45731de2856d97f8c4",
+      "label": "P05 native/firmware/sil/gen_cases.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/observations.jsonl",
+      "sha256": "92a298ebaa59a1902642620c30197b9b9b75565d4b4dfc7739364b8b83c075b3",
+      "label": "P05 native/firmware/sil/observations.jsonl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/run_sil.sh",
+      "sha256": "ebaa0d7335ee2df56c8d11f065753382f01cfa99f790d695eb1a219cedb7280c",
+      "label": "P05 native/firmware/sil/run_sil.sh",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/sil-results.json",
+      "sha256": "0362f5a57046697112ec011dfd82bf8865942cbfd472532d5fef00787e02e775",
+      "label": "P05 native/firmware/sil/sil-results.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/sil_test_ubsan",
+      "sha256": "553db05ca3d52dc901fa469bfaea84785ca3683a0cc3e0a08a2970801873f2e1",
+      "label": "P05 native/firmware/sil/sil_test_ubsan",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/sil_ubsan.stderr.log",
+      "sha256": "1cb9ba87b8f56b1d7152906a48a244744c654a09a4c7316d48b031b6e5f3f668",
+      "label": "P05 native/firmware/sil/sil_ubsan.stderr.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/test_core.c",
+      "sha256": "6474b150c075f5c3cfc68dd477856fb3d17b208e2430f2f0a8a7b4777cba43ad",
+      "label": "P05 native/firmware/sil/test_core.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/ubsan.build.log",
+      "sha256": "733baa0b91fd1f2ea4aebedc659853420fd2c64350a1201cbff4fe68e10004b4",
+      "label": "P05 native/firmware/sil/ubsan.build.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/cadquery/project.json",
+      "sha256": "3c330ad59af7e61bc6a89a0bc6224c71fcc287cc4a8bb61ea47b9501b7387550",
+      "label": "P05 project/cadquery/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/cadquery/rte_harvester.py",
+      "sha256": "d97bd7413ad0acbe9ea1ba65f5dc69da7b15967796c5ada940b05b997c867dbf",
+      "label": "P05 project/cadquery/rte_harvester.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/main.c",
+      "sha256": "f6a416565abb0eecb8f3394253ec6acbae19a58537316c70bb9f9341ffba70d6",
+      "label": "P05 project/firmware-stm32l031/main.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/mini_libc.c",
+      "sha256": "2408e51228e60ccf6434eee52edd944c8b0d735c281262fc0c362e576106bcf1",
+      "label": "P05 project/firmware-stm32l031/mini_libc.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/project.json",
+      "sha256": "85fef58f59be44b7911c38b395883de6e81f6bdfd04cbe4e10ca1eb045f587ce",
+      "label": "P05 project/firmware-stm32l031/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/tc_config.h",
+      "sha256": "691e059418e37539d4a2221a678667bfa7b2440afd21b83ee7430ab1101d7773",
+      "label": "P05 project/firmware-stm32l031/tc_config.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/traffic_core.c",
+      "sha256": "ad9e70fdd7e2092c5d130c65e75bfbd7eb9056d56e8507c7bdbce33a108ce334",
+      "label": "P05 project/firmware-stm32l031/traffic_core.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/firmware-stm32l031/traffic_core.h",
+      "sha256": "4301b68080fbd84c5d316dfcceb5d515ef44229d6bc0b98fe16d1a6060da15f3",
+      "label": "P05 project/firmware-stm32l031/traffic_core.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/spice/project.json",
+      "sha256": "af2a6ce5316379e51eb95d6154eba78418673c1fc01f96dcb2029735ce7940ac",
+      "label": "P05 project/spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/project/spice/storage_load_stage.cir",
+      "sha256": "b9b4b3a349cc304c5dd7d81b6c99e0811ef6a1a16e95a1ad6d80d71325f43781",
+      "label": "P05 project/spice/storage_load_stage.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.bin",
+      "sha256": "e381f4a461fea8630d43c4f1e03e0a998663e5fd74f95cd37dc93e3eef07c86f",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.bin",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.elf",
+      "sha256": "e8e2656f5e8969709d7b5dc29776d5e8eedf0786f520269956bf2ddb343780d6",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.elf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.hex",
+      "sha256": "c76f4aec22f405433cf26a7e1e920c616cc614672f6fc6374bed69d29060c5db",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.map",
+      "sha256": "fe9135947986ab4108e1379403259b0f5f989ace8e195784ab99f37a0ba9a2cb",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.map",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/project-readback.json",
+      "sha256": "1a0cff8b73e16d10f37bea3e75a58388904de0644e6d0f6887c4cf40528b5e29",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-dd1c9063402dbf8e/result.json",
+      "sha256": "292f73c4a1369d0f21362f2efaba51e968e0619604c7d3561b3a294d1979b88f",
+      "label": "P05 engineering-artifacts/eng-dd1c9063402dbf8e/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/delivery/NOTES-P05-fault-closure.md",
+      "sha256": "4628cfdafeaaa18f954c9a480ea24f681b0d216fce5520b9f6bdb4ab676e38fb",
+      "label": "P05 delivery/NOTES-P05-fault-closure.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/driver.c",
+      "sha256": "2724465c0c81b3e69f78c5c3b7c2dc4364e6a2af43121b862ef5abee00860622",
+      "label": "P05 native/firmware/sil/public-driver/driver.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/replay.sh",
+      "sha256": "b15e517f1337e894dfa49f61f20d43e37fe3c07a49ca95b35cfa812822d55f57",
+      "label": "P05 native/firmware/sil/public-driver/replay.sh",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/check_public.py",
+      "sha256": "07253d201c72d91861197d8b145080f08ea021728c4619d3888a955ed4a83815",
+      "label": "P05 native/firmware/sil/public-driver/check_public.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/observations-after-fix.txt",
+      "sha256": "f3173e05eb4e5f20ef9553e54fc1a1bdd7e2dd78281081da38f2da18dd79c581",
+      "label": "P05 native/firmware/sil/public-driver/observations-after-fix.txt",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/replay.stderr.log",
+      "sha256": "9caaf8d736d78af467c61563a0dd5a93bdfd0187037b694c7abfd9e1bcc933cb",
+      "label": "P05 native/firmware/sil/public-driver/replay.stderr.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/participant-files/native/firmware/sil/public-driver/public_driver_replay",
+      "sha256": "950986ae2d2095a20aa8b1a52fa5098c06a6a2f522ca2372f3395178a7c521a3",
+      "label": "P05 native/firmware/sil/public-driver/public_driver_replay",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-source.zip",
+      "sha256": "59a155ccf1b89399755a55c68b6c4875e3ab98e0d15bbead6254f6b8349cc4de",
+      "label": "P05 eng-dd1c9063402dbf8e project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/result.json",
+      "sha256": "292f73c4a1369d0f21362f2efaba51e968e0619604c7d3561b3a294d1979b88f",
+      "label": "P05 eng-dd1c9063402dbf8e result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/input.json",
+      "sha256": "c6d6ac33898e507c49b85bcd5d3e6b87f06a077a9edef4a15ee2fcec088ee3b1",
+      "label": "P05 eng-dd1c9063402dbf8e input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-firmware.bin",
+      "sha256": "e381f4a461fea8630d43c4f1e03e0a998663e5fd74f95cd37dc93e3eef07c86f",
+      "label": "P05 eng-dd1c9063402dbf8e project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-firmware.hex",
+      "sha256": "c76f4aec22f405433cf26a7e1e920c616cc614672f6fc6374bed69d29060c5db",
+      "label": "P05 eng-dd1c9063402dbf8e project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-firmware.elf",
+      "sha256": "e8e2656f5e8969709d7b5dc29776d5e8eedf0786f520269956bf2ddb343780d6",
+      "label": "P05 eng-dd1c9063402dbf8e project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-readback.json",
+      "sha256": "1a0cff8b73e16d10f37bea3e75a58388904de0644e6d0f6887c4cf40528b5e29",
+      "label": "P05 eng-dd1c9063402dbf8e project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dd1c9063402dbf8e/project-firmware.map",
+      "sha256": "fe9135947986ab4108e1379403259b0f5f989ace8e195784ab99f37a0ba9a2cb",
+      "label": "P05 eng-dd1c9063402dbf8e project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-source.zip",
+      "sha256": "8e942085b5ad789c97e9451d4417ee4a6b5efc5c44434f49fe72310985c0b805",
+      "label": "P05 eng-392adbdfb67ce47c project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/result.json",
+      "sha256": "adef7a79526c38059cc31aa2924b6501008709b5264f07c5ecf70ce4ba5259d8",
+      "label": "P05 eng-392adbdfb67ce47c result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/input.json",
+      "sha256": "aef5edd6b7b947738d397f20d2a7dfe1458b6ff24ee6165b6b3b65b903d9d778",
+      "label": "P05 eng-392adbdfb67ce47c input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-firmware.bin",
+      "sha256": "326b38b0d0c19f5113e0a7ec3d196d70928a53163f6862708b4c0bf4a6b18fb6",
+      "label": "P05 eng-392adbdfb67ce47c project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-firmware.hex",
+      "sha256": "03c95f358b7b0d73d8bb1a15e0d1b586d39482d1874cd9477c11caee74b10145",
+      "label": "P05 eng-392adbdfb67ce47c project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-firmware.elf",
+      "sha256": "ee52bc398c88ba4aed633d86f3cf6a38a3cd5b2cdf19d8754101f402306ab35f",
+      "label": "P05 eng-392adbdfb67ce47c project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-readback.json",
+      "sha256": "17ee08402cbbbe92102985fe5410f82e961d8c9274080b65830ce72c8e63dde1",
+      "label": "P05 eng-392adbdfb67ce47c project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-392adbdfb67ce47c/project-firmware.map",
+      "sha256": "240cca6b2a6f0c932c6f00d82ef6e5cf9268aafb7d3b257988422f747dc5941e",
+      "label": "P05 eng-392adbdfb67ce47c project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-612536124ae34ed8/input.json",
+      "sha256": "5b98feb15528ab4df8a63b4b8e5c01cd283527ec2cbb15de0c926279fc737136",
+      "label": "P05 eng-612536124ae34ed8 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-eac8ea09e5a70a84/project-source.zip",
+      "sha256": "daebdd034059f591cb94dacf89e70d71e4eacacfad84f52b72e7609e8aab2e99",
+      "label": "P05 eng-eac8ea09e5a70a84 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-eac8ea09e5a70a84/result.json",
+      "sha256": "fb4f03ccbebcfea7cd1bd4560b2a3e3f5a2b8498c2af56f665b342b187537255",
+      "label": "P05 eng-eac8ea09e5a70a84 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-eac8ea09e5a70a84/input.json",
+      "sha256": "e37785bef172e51cf7ed37c9720465e2cf9bc974a2900636de3cdbac96b94056",
+      "label": "P05 eng-eac8ea09e5a70a84 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-eac8ea09e5a70a84/project-trace.raw",
+      "sha256": "bf9e85c8096253c10792209605cd2079be53f8d77188ab3469c8053249b396f1",
+      "label": "P05 eng-eac8ea09e5a70a84 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-eac8ea09e5a70a84/project-numeric-observations.json",
+      "sha256": "54874d5701dc3fba35a1ce4039d9a961c00a5252c3af5fc7a46f06223c3652ef",
+      "label": "P05 eng-eac8ea09e5a70a84 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9e5c6937b7815c50/project-source.zip",
+      "sha256": "82bd1f80d533b631972d592d5c25c7169e84f8bbf4be16d56d2e0ac533b2fae9",
+      "label": "P05 eng-9e5c6937b7815c50 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9e5c6937b7815c50/result.json",
+      "sha256": "154be2a8414b1232a309ce7a547bf315ebbeebeee73e8ddd4e366f074c13feeb",
+      "label": "P05 eng-9e5c6937b7815c50 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9e5c6937b7815c50/input.json",
+      "sha256": "b67aa554043bc69a3d7fa370eb16505f397be933825a14a3cb0d961ecf0cd5cf",
+      "label": "P05 eng-9e5c6937b7815c50 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9e5c6937b7815c50/project-trace.raw",
+      "sha256": "1aa759d45f26d5dbda2b261e738b5ec82292f742d7967ffbb4094871eb7ff8c5",
+      "label": "P05 eng-9e5c6937b7815c50 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9e5c6937b7815c50/project-numeric-observations.json",
+      "sha256": "91391a7e4060ba6eabace4c38ef747346254074ee8a64009c549fb9633da69a0",
+      "label": "P05 eng-9e5c6937b7815c50 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/project-source.zip",
+      "sha256": "e10b6f22773aab282c04a8defd46a842fc74ae3f12d5ec987540a66437f41ef1",
+      "label": "P05 eng-fffbf70d5591dd5e project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/result.json",
+      "sha256": "c45cb6f9452526a4cd478974ab74542db92e80dc0c174168cef42c92260a8787",
+      "label": "P05 eng-fffbf70d5591dd5e result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/input.json",
+      "sha256": "31696749981dc0d98c191b99a5bd101b5b0e1b8964e0efacb2dbc244ae7f156a",
+      "label": "P05 eng-fffbf70d5591dd5e input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/project-assembly.step",
+      "sha256": "0539b98fd57c2043e087d20be6810f4c11101488b57032d1d0291a1fea342f23",
+      "label": "P05 eng-fffbf70d5591dd5e project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/project-readback.json",
+      "sha256": "a262e94644592270e309d6449b16984566a38b786a9f9f4c148e7acd034b0cc0",
+      "label": "P05 eng-fffbf70d5591dd5e project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-fffbf70d5591dd5e/project-preview-mesh.json",
+      "sha256": "644627274b80a25e12032e5cec01e4dfb0a09baebbe8552830b9dab6ada20437",
+      "label": "P05 eng-fffbf70d5591dd5e project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-2263c3cfc422bc4f/input.json",
+      "sha256": "437f28a35e832d8279f39b6561eff83a43bceeee4566cd55013c5527a2eec0f3",
+      "label": "P05 eng-2263c3cfc422bc4f input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-a17b30445afedb91/input.json",
+      "sha256": "3a8f25a4db33654292e343d67127d80e2b1594e45532e3f95abe74b16ed0c00c",
+      "label": "P05 eng-a17b30445afedb91 input.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "assembly.json",
+        "sha256": "458586be052e8526b91384251e116d82223d1f4145e0b3b18441273574fd6020",
+        "bytes": 19046
+      },
+      {
+        "path": "delivery/BOM-NETS.md",
+        "sha256": "57a80e8a636070afcced47d0df9c6975620d14da2d4cff5b2c995cdf2fdd55a7",
+        "bytes": 5923
+      },
+      {
+        "path": "delivery/CHECKLIST-MAP.md",
+        "sha256": "aa979e790e66b41064b4b9cfb4efc88e37918245fb46b64b558ec10a429deecd",
+        "bytes": 7460
+      },
+      {
+        "path": "delivery/FIRMWARE.md",
+        "sha256": "56f06dc5d6f4fc540b63872e65d6c0d633c57ee69db54aad7f7501e25e0eb420",
+        "bytes": 15892
+      },
+      {
+        "path": "delivery/REPRODUCE.md",
+        "sha256": "1d4d90b39702e68c2ccdd47a5f39fea3cb17000ed96a12320413575ae4d1d400",
+        "bytes": 3637
+      },
+      {
+        "path": "delivery/SOURCE-MAP.md",
+        "sha256": "036b9df22d96eef7b55fd5b9608cec848b63d1b8e352f15b002eb0ca8e45281f",
+        "bytes": 7245
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "2427315001a4a2d3bf46717aae3cfdb1b5c790c4000e161743ea4d98e63f2a02",
+        "bytes": 6926
+      },
+      {
+        "path": "delivery/attempts/README.md",
+        "sha256": "15b989e6aa4584d357924428315f3fc7e4bbc3667c2facbd2546011c008d2fca",
+        "bytes": 1973
+      },
+      {
+        "path": "delivery/attempts/spice-hysteresis-gate-attempt-v4.cir",
+        "sha256": "b47a2255d9c4fd8b80b7426b040699d68858ed0d037fd145c8d32b07c668071a",
+        "bytes": 692
+      },
+      {
+        "path": "delivery/attempts/spice-scr-macromodel-attempt.cir",
+        "sha256": "59fa298414941e00488264157c24b2aea91ae4063553782b8f9679e7c6e8cce2",
+        "bytes": 302
+      },
+      {
+        "path": "delivery/build/project-firmware.bin",
+        "sha256": "e381f4a461fea8630d43c4f1e03e0a998663e5fd74f95cd37dc93e3eef07c86f",
+        "bytes": 2456
+      },
+      {
+        "path": "delivery/build/project-firmware.elf",
+        "sha256": "e8e2656f5e8969709d7b5dc29776d5e8eedf0786f520269956bf2ddb343780d6",
+        "bytes": 9988
+      },
+      {
+        "path": "delivery/build/project-firmware.hex",
+        "sha256": "c76f4aec22f405433cf26a7e1e920c616cc614672f6fc6374bed69d29060c5db",
+        "bytes": 6965
+      },
+      {
+        "path": "delivery/build/project-firmware.map",
+        "sha256": "fe9135947986ab4108e1379403259b0f5f989ace8e195784ab99f37a0ba9a2cb",
+        "bytes": 21451
+      },
+      {
+        "path": "delivery/build/project-readback.json",
+        "sha256": "1a0cff8b73e16d10f37bea3e75a58388904de0644e6d0f6887c4cf40528b5e29",
+        "bytes": 172
+      },
+      {
+        "path": "delivery/records/firmware-load-model.csv",
+        "sha256": "3d5780e4e921c7f0a13f96b354de4479c878722a69a4642fa78c8af0ea2676e6",
+        "bytes": 790
+      },
+      {
+        "path": "delivery/records/firmware-resources.json",
+        "sha256": "6a7dde96b352d13c2268f59fb7abf8ca2d8557e04a876495338a41788ffecdce",
+        "bytes": 2177
+      },
+      {
+        "path": "delivery/records/spice-results-summary.csv",
+        "sha256": "8e4dcfc82b20d1c3242b11258b265a0800289f399e1e4c0dfbb362f473dba736",
+        "bytes": 1597
+      },
+      {
+        "path": "engineering-artifacts/eng-eac8ea09e5a70a84/project-numeric-observations.json",
+        "sha256": "54874d5701dc3fba35a1ce4039d9a961c00a5252c3af5fc7a46f06223c3652ef",
+        "bytes": 2856
+      },
+      {
+        "path": "engineering-artifacts/eng-eac8ea09e5a70a84/result.json",
+        "sha256": "fb4f03ccbebcfea7cd1bd4560b2a3e3f5a2b8498c2af56f665b342b187537255",
+        "bytes": 2246
+      },
+      {
+        "path": "engineering-artifacts/eng-fffbf70d5591dd5e/project-assembly.step",
+        "sha256": "0539b98fd57c2043e087d20be6810f4c11101488b57032d1d0291a1fea342f23",
+        "bytes": 523767
+      },
+      {
+        "path": "engineering-artifacts/eng-fffbf70d5591dd5e/project-readback.json",
+        "sha256": "a262e94644592270e309d6449b16984566a38b786a9f9f4c148e7acd034b0cc0",
+        "bytes": 135
+      },
+      {
+        "path": "engineering-artifacts/eng-fffbf70d5591dd5e/result.json",
+        "sha256": "c45cb6f9452526a4cd478974ab74542db92e80dc0c174168cef42c92260a8787",
+        "bytes": 1395
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "40a05173de38abf9f4803387165867aae01bccc7d352337fc465ae791177369e",
+        "bytes": 17895
+      },
+      {
+        "path": "native/firmware/sil/cases.json",
+        "sha256": "a0c2dace1e97dbde94a52d910258321a3f41d3e5d1e7cc76df93120c3f8e37de",
+        "bytes": 29617
+      },
+      {
+        "path": "native/firmware/sil/cases_generated.h",
+        "sha256": "7be2ed85a5b63626c64d654c63792381b5da17c04a1e4003fbf462a1e52d29ce",
+        "bytes": 15093
+      },
+      {
+        "path": "native/firmware/sil/check_sil.py",
+        "sha256": "88db608848ca75a2d1dd9b49721086183235c9ff1995043c9ec7a56278030469",
+        "bytes": 5577
+      },
+      {
+        "path": "native/firmware/sil/gen_cases.py",
+        "sha256": "d1814456491da5b0ad9fd65b973e6d86ce3dbfd4ff2ffa45731de2856d97f8c4",
+        "bytes": 13643
+      },
+      {
+        "path": "native/firmware/sil/observations.jsonl",
+        "sha256": "92a298ebaa59a1902642620c30197b9b9b75565d4b4dfc7739364b8b83c075b3",
+        "bytes": 17835
+      },
+      {
+        "path": "native/firmware/sil/run_sil.sh",
+        "sha256": "ebaa0d7335ee2df56c8d11f065753382f01cfa99f790d695eb1a219cedb7280c",
+        "bytes": 949
+      },
+      {
+        "path": "native/firmware/sil/sil-results.json",
+        "sha256": "0362f5a57046697112ec011dfd82bf8865942cbfd472532d5fef00787e02e775",
+        "bytes": 3432
+      },
+      {
+        "path": "native/firmware/sil/sil_test_ubsan",
+        "sha256": "553db05ca3d52dc901fa469bfaea84785ca3683a0cc3e0a08a2970801873f2e1",
+        "bytes": 53040
+      },
+      {
+        "path": "native/firmware/sil/sil_ubsan.stderr.log",
+        "sha256": "1cb9ba87b8f56b1d7152906a48a244744c654a09a4c7316d48b031b6e5f3f668",
+        "bytes": 26
+      },
+      {
+        "path": "native/firmware/sil/test_core.c",
+        "sha256": "6474b150c075f5c3cfc68dd477856fb3d17b208e2430f2f0a8a7b4777cba43ad",
+        "bytes": 4987
+      },
+      {
+        "path": "native/firmware/sil/ubsan.build.log",
+        "sha256": "733baa0b91fd1f2ea4aebedc659853420fd2c64350a1201cbff4fe68e10004b4",
+        "bytes": 278
+      },
+      {
+        "path": "project/cadquery/project.json",
+        "sha256": "3c330ad59af7e61bc6a89a0bc6224c71fcc287cc4a8bb61ea47b9501b7387550",
+        "bytes": 830
+      },
+      {
+        "path": "project/cadquery/rte_harvester.py",
+        "sha256": "d97bd7413ad0acbe9ea1ba65f5dc69da7b15967796c5ada940b05b997c867dbf",
+        "bytes": 15551
+      },
+      {
+        "path": "project/firmware-stm32l031/main.c",
+        "sha256": "f6a416565abb0eecb8f3394253ec6acbae19a58537316c70bb9f9341ffba70d6",
+        "bytes": 8465
+      },
+      {
+        "path": "project/firmware-stm32l031/mini_libc.c",
+        "sha256": "2408e51228e60ccf6434eee52edd944c8b0d735c281262fc0c362e576106bcf1",
+        "bytes": 1225
+      },
+      {
+        "path": "project/firmware-stm32l031/project.json",
+        "sha256": "85fef58f59be44b7911c38b395883de6e81f6bdfd04cbe4e10ca1eb045f587ce",
+        "bytes": 2186
+      },
+      {
+        "path": "project/firmware-stm32l031/tc_config.h",
+        "sha256": "691e059418e37539d4a2221a678667bfa7b2440afd21b83ee7430ab1101d7773",
+        "bytes": 2796
+      },
+      {
+        "path": "project/firmware-stm32l031/traffic_core.c",
+        "sha256": "ad9e70fdd7e2092c5d130c65e75bfbd7eb9056d56e8507c7bdbce33a108ce334",
+        "bytes": 11123
+      },
+      {
+        "path": "project/firmware-stm32l031/traffic_core.h",
+        "sha256": "4301b68080fbd84c5d316dfcceb5d515ef44229d6bc0b98fe16d1a6060da15f3",
+        "bytes": 5011
+      },
+      {
+        "path": "project/spice/project.json",
+        "sha256": "af2a6ce5316379e51eb95d6154eba78418673c1fc01f96dcb2029735ce7940ac",
+        "bytes": 1577
+      },
+      {
+        "path": "project/spice/storage_load_stage.cir",
+        "sha256": "b9b4b3a349cc304c5dd7d81b6c99e0811ef6a1a16e95a1ad6d80d71325f43781",
+        "bytes": 4647
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.bin",
+        "sha256": "e381f4a461fea8630d43c4f1e03e0a998663e5fd74f95cd37dc93e3eef07c86f",
+        "bytes": 2456
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.elf",
+        "sha256": "e8e2656f5e8969709d7b5dc29776d5e8eedf0786f520269956bf2ddb343780d6",
+        "bytes": 9988
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.hex",
+        "sha256": "c76f4aec22f405433cf26a7e1e920c616cc614672f6fc6374bed69d29060c5db",
+        "bytes": 6965
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/project-firmware.map",
+        "sha256": "fe9135947986ab4108e1379403259b0f5f989ace8e195784ab99f37a0ba9a2cb",
+        "bytes": 21451
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/project-readback.json",
+        "sha256": "1a0cff8b73e16d10f37bea3e75a58388904de0644e6d0f6887c4cf40528b5e29",
+        "bytes": 172
+      },
+      {
+        "path": "engineering-artifacts/eng-dd1c9063402dbf8e/result.json",
+        "sha256": "292f73c4a1369d0f21362f2efaba51e968e0619604c7d3561b3a294d1979b88f",
+        "bytes": 2775
+      },
+      {
+        "path": "delivery/NOTES-P05-fault-closure.md",
+        "sha256": "4628cfdafeaaa18f954c9a480ea24f681b0d216fce5520b9f6bdb4ab676e38fb",
+        "bytes": 6994
+      },
+      {
+        "path": "native/firmware/sil/public-driver/driver.c",
+        "sha256": "2724465c0c81b3e69f78c5c3b7c2dc4364e6a2af43121b862ef5abee00860622",
+        "bytes": 2339
+      },
+      {
+        "path": "native/firmware/sil/public-driver/replay.sh",
+        "sha256": "b15e517f1337e894dfa49f61f20d43e37fe3c07a49ca95b35cfa812822d55f57",
+        "bytes": 575
+      },
+      {
+        "path": "native/firmware/sil/public-driver/check_public.py",
+        "sha256": "07253d201c72d91861197d8b145080f08ea021728c4619d3888a955ed4a83815",
+        "bytes": 5674
+      },
+      {
+        "path": "native/firmware/sil/public-driver/observations-after-fix.txt",
+        "sha256": "f3173e05eb4e5f20ef9553e54fc1a1bdd7e2dd78281081da38f2da18dd79c581",
+        "bytes": 2051
+      },
+      {
+        "path": "native/firmware/sil/public-driver/replay.stderr.log",
+        "sha256": "9caaf8d736d78af467c61563a0dd5a93bdfd0187037b694c7abfd9e1bcc933cb",
+        "bytes": 278
+      },
+      {
+        "path": "native/firmware/sil/public-driver/public_driver_replay",
+        "sha256": "950986ae2d2095a20aa8b1a52fa5098c06a6a2f522ca2372f3395178a7c521a3",
+        "bytes": 34312
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [
+      "llm-9ebd6b08eff0bbb9cbc4"
+    ],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-dd1c9063402dbf8e",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-392adbdfb67ce47c",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-612536124ae34ed8",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-eac8ea09e5a70a84",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9e5c6937b7815c50",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-fffbf70d5591dd5e",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-2263c3cfc422bc4f",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-a17b30445afedb91",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P05-native-8fa5ff1446dd-b07e7bdb/continuations/turn-005/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-c5766cc7b28004ae/trace.jsonl",
+  "trace_sha256": "f39e5147066bcd2ceb9631d13e5dc00fb20ecc6f8b73dae24b2233ddab5955ee",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

@@ -10,6 +10,7 @@ from .store import canonical
 from . import experiments, launcher
 from .concurrency import conversation_slot, MAX_CONVERSATIONS
 from .recovery import INTERACTIVE_WALL_SECONDS
+from . import budget_policy
 
 class Conversations:
     def __init__(self, app):
@@ -135,18 +136,20 @@ class Conversations:
             with self.store.connect() as db:return dict(db.execute('SELECT * FROM chat_messages WHERE id=?',(mid,)).fetchone())
 
     def readiness(self,owner=None):
-        model=self.app.provider.status(); reasons=[]
+        model=self.app.provider.status(owner); reasons=[]
         if (self.home/'paid-window-closed.json').exists():reasons.append('PAID_WINDOW_CLOSED')
         with self.store.connect() as db:
             if self.app.provider.recovery.unknown_blockers(db,owner):reasons.append('PROVIDER_USAGE_UNKNOWN_STOP')
+            unbounded=bool(budget_policy.for_owner(db,owner or 'pi-chat-new'))
         if any(r['error']=='PROVIDER_RESERVATION_EXCEEDED' for r in model['requests']):reasons.append('PROVIDER_RESERVATION_EXCEEDED')
         # Interactive wall time is granted only by a new explicit user message.
         # The original batch window remains unchanged for noninteractive owners.
-        if model['upper_bound_usd']>=model['limits']['total_usd']-.005:reasons.append('MODEL_USD_BUDGET')
+        if not unbounded and model['upper_bound_usd']>=model['limits']['total_usd']-.005:reasons.append('MODEL_USD_BUDGET')
         used_tokens=sum(json.loads(r['usage'])['total_tokens'] for r in model['requests'] if r['usage'])
-        if used_tokens>=model['limits']['max_tokens']:reasons.append('MODEL_TOKEN_BUDGET')
+        if not unbounded and used_tokens>=model['limits']['max_tokens']:reasons.append('MODEL_TOKEN_BUDGET')
         return {'local':'connected','model':'blocked' if reasons else 'ready_for_dispatch','reasons':reasons,
-                'upper_bound_usd':model['upper_bound_usd'],'limit_usd':model['limits']['total_usd'],'expires':model['limits']['expires'],
+                'upper_bound_usd':model['upper_bound_usd'],'limit_usd':None if unbounded else model['limits']['total_usd'],
+                'token_limit':None if unbounded else model['limits']['max_tokens'],'unbounded':unbounded,'expires':model['limits']['expires'],
                 'concurrency':{'limit':MAX_CONVERSATIONS,'active':sorted(self.starting)},
                 'interactive_wall_seconds':INTERACTIVE_WALL_SECONDS,'network':'not_probed','note':'本地连接不代表模型响应；发送后以真实事件显示进展。'}
 

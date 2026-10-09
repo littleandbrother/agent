@@ -11,6 +11,7 @@ from urllib.parse import quote, urlencode
 import zipfile
 
 from .store import canonical, identity
+from .result_selection import choices,select
 
 
 class StudioDelivery:
@@ -20,36 +21,8 @@ class StudioDelivery:
 
     def inspect(self, owner, selection='session', revision=None):
         catalog = self.results.inspect(owner, revision)
-        rows = catalog['results']
-        options = [{'id': 'session', 'label': '全部记录 · 含历史与独立运行'}]
-        seen = set()
-        for r in rows:
-            if r.get('case_id'):
-                key = 'case:' + r['case_id'] + ':' + r['case_version']
-                if key not in seen:
-                    options.append({'id': key, 'label': r['case_title'] + ' · ' + r['case_version']})
-                    seen.add(key)
-        if catalog['revision'] is not None:
-            options.insert(0, {'id': 'assembly', 'label': '装配 v' + str(catalog['revision']) + ' · 适用成果'})
-        if selection not in {o['id'] for o in options}:
-            raise ValueError('STUDIO_SELECTION_NOT_FOUND')
-        if selection.startswith('case:'):
-            _, cid, version = selection.split(':')
-            rows = [r for r in rows if r.get('case_id') == cid and r.get('case_version') == version]
-            ids = {f['id'] for r in rows for f in r['files']}
-            files = [f for f in catalog['files'] if f['id'] in ids]
-            verdict = None
-        elif selection == 'assembly':
-            files = [f for f in catalog['files'] if f['applicability']['state'] in ('current', 'reused')]
-            ids = {f['result_id'] for f in files}
-            rows = [r for r in rows if r['id'] in ids]
-            file_ids = {f['id'] for f in files}
-            rows = [dict(r, files=[f for f in r['files'] if f['id'] in file_ids],
-                         presentations=[p for p in r.get('presentations', []) if p.get('file_id') in file_ids]) for r in rows]
-            verdict = catalog['verdict']
-        else:
-            files = catalog['files']
-            verdict = catalog['verdict']
+        options=choices(catalog)
+        rows,files,verdict=select(catalog,selection)
         payload = dict(schema_version='bf-studio-delivery-v1', owner=owner, title=catalog['title'],
                        selection=selection, selection_label=next(o['label'] for o in options if o['id'] == selection),
                        revision=catalog['revision'], options=options, results=rows, files=files, verdict=verdict,

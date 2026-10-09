@@ -1,0 +1,42 @@
+{
+  "schema_version": "bf-independent-stage-review-v1",
+  "paper": "P02",
+  "owner": "pi-chat-103e79405f0e0c6d",
+  "actor": "Codex independent public checker",
+  "created": 1791500872.974703,
+  "status": "UNEVALUABLE",
+  "job_id": "eng-71711517797fa688",
+  "project_sha256": "c37b8e3800f440456946983a4e511c12923bfccc7937e8986f005519472cd917",
+  "raw_sha256": "6f92fcd1102cc10196b5fc08806b6591f6a2f3235c2e81a1027cac6d451d74db",
+  "source_sha256": {
+    "project/spice-calib/opms_calib.cir": "b4622739a30dd90edc559bc60f90d1d33f02f6fdf7f393fca8055c4f75a85649"
+  },
+  "checks": [
+    {
+      "id": "unloaded_declared_source_charges_by_ten_seconds",
+      "status": "PASS",
+      "first_hit_s": 5.5605
+    },
+    {
+      "id": "same_weak_source_continuously_supplies_static_node_after_startup",
+      "status": "FAIL",
+      "sampled_floor_v": 3.449168907419347
+    },
+    {
+      "id": "weakest_source_or_physical_impedance_identified",
+      "status": "UNEVALUABLE",
+      "reason": "One passing arbitrary resistance is not the weakest compatible source. Published within-10-seconds datum does not identify the real load line or transient impedance."
+    }
+  ],
+  "observations": {
+    "sampled_static_range_after_10s_v": [
+      3.449168907419347,
+      3.549974177049174
+    ]
+  },
+  "new_solver_runs": 0,
+  "participant_files_modified": 0,
+  "full_product_passed": false,
+  "physical_verified": false,
+  "boundary": "Exact saved samples and declared ideal source/load conditions only; no physical TENG identification, RF, or full-system acceptance."
+}

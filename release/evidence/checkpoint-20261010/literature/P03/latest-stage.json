@@ -1,0 +1,2455 @@
+{
+  "paper": "P03",
+  "task": "P03-native-486bb1f0fcf4-f858d38c",
+  "stage": "native",
+  "owner": "pi-chat-23f915b7ee4e9fe6",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-d62a15330af1cdc5",
+        "kind": "firmware-stm32l432",
+        "project_sha256": "ebdfec1dbf85d1fc39a330286689e63c14c57985a12838fcbfbf7ba18dbe185a",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "95fac2f7fe0d0065034992d02915843486020f4317e8a216d6ec28512038efa2",
+        "native_readback": {
+          "allocated_sections": [
+            {
+              "address": 134217728,
+              "bytes": 396
+            },
+            {
+              "address": 134218124,
+              "bytes": 2068
+            },
+            {
+              "address": 536870912,
+              "bytes": 4
+            },
+            {
+              "address": 536870916,
+              "bytes": 232
+            }
+          ],
+          "boot_tested": false,
+          "flash_bytes": 2468,
+          "flash_origin": 134217728,
+          "flashed": false,
+          "initial_sp": 536936448,
+          "memory_fit": true,
+          "pin_binding_verified": false,
+          "power_model_equivalence_verified": false,
+          "radio_verified": false,
+          "ram_layout": "SRAM1 48KiB and SRAM2 16KiB contiguous alias; other alias not allocated",
+          "ram_static_bytes": 236,
+          "reserved_stack_bytes": 4096,
+          "reset_vector": 134218125,
+          "scope": "Native Cortex-M4 target build, vector and memory integrity only",
+          "source": "https://www.st.com/resource/en/datasheet/stm32l432kc.pdf",
+          "target": "STM32L432KCU6"
+        },
+        "functional_passed": false,
+        "participant_project_path": "固件与烧录/firmware-stm32l432/project.json",
+        "project_manifest": {
+          "entrypoint": "main.c",
+          "files": [
+            "main.c",
+            "ispet_app.c",
+            "ispet_app.h",
+            "ispet_target.c",
+            "ispet_target.h"
+          ],
+          "interfaces": {
+            "clock_hz": 16000000,
+            "clock_note": "HSI16, no PLL, VCORE range 1, 0 FLASH wait states; no radio clock",
+            "events": "TIM2 update interrupt 1 kHz as the time base; one duty-cycled burst every 1800000 ms (48 events/day, our assumption); ADC conversions are software-triggered inside the burst with a 2 ms bounded timeout",
+            "frame": "12 bytes: 0xA5 header, uint8 seq, 3x uint16 big-endian raw, uint8 flags, uint8 reserved, CRC16-CCITT (poly 0x1021, init 0xFFFF) big-endian",
+            "load_source": "reserve-gate PGOOD input (published 2.0 V / 3.0 V thresholds); the storage element value is unpublished",
+            "note": "target identity and vendor sources are fixed by the executor; the host run of the same core is not a board measurement, and radio/sensor/power behaviour is NOT verified",
+            "pins": {
+              "PA0": "ADC1_IN5 (pH channel) - assumed",
+              "PA1": "ADC1_IN6 (K+ channel) - assumed",
+              "PA6": "ADC1_IN11 (Ca2+ channel) - assumed",
+              "PB0": "PGOOD digital input from the storage-gate comparator, pull-down - assumed",
+              "note": "the paper publishes no pin map; this is an explicit design assumption"
+            },
+            "polarity": "storage gate PGOOD high = storage above 3.0 V; the comparator's 2.0 V / 3.0 V hysteresis is outside this MCU",
+            "target": "STM32L432KCU6",
+            "unimplemented_interfaces": {
+              "radio": "returns ISPET_HAL_RADIO_UNIMPLEMENTED; the BLE chip/module is not published",
+              "sensing_front_end": "returns ISPET_HAL_AFE_UNIMPLEMENTED; electrodes/amplifier/reference buffer/filter are not published"
+            },
+            "units": "SI"
+          },
+          "kind": "firmware-stm32l432",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "固件与烧录/firmware-stm32l432/ispet_app.c": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+          "固件与烧录/firmware-stm32l432/ispet_app.h": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+          "固件与烧录/firmware-stm32l432/ispet_target.c": "c544ac31575025f83c1b3ff7b06114aaaaac441caf7ca83c64e65dfd1e8370fe",
+          "固件与烧录/firmware-stm32l432/ispet_target.h": "96b4cc1dc81c1e76e25faf64d35a2e76e8d31f1bd874a4c2878fc264c46b5879",
+          "固件与烧录/firmware-stm32l432/main.c": "dae8b43129b6548c8662e9474056d9befe33b99a125d0575920ef3ca0e88adae"
+        }
+      },
+      {
+        "job_id": "eng-880a09803ccb2015",
+        "kind": "cadquery",
+        "project_sha256": "eea712849a710bc5f96029043024d07ca2c756b2b4c62606a692180da139572a",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "95fac2f7fe0d0065034992d02915843486020f4317e8a216d6ec28512038efa2",
+        "native_readback": {
+          "bounds_mm": [
+            46.0,
+            58.0,
+            24.0
+          ],
+          "native_valid": true,
+          "solid_count": 78,
+          "volume_mm3": 15861.41701528343
+        },
+        "functional_passed": false,
+        "participant_project_path": "cad/project.json",
+        "project_manifest": {
+          "entrypoint": "main.py",
+          "files": [
+            "main.py",
+            "params.py"
+          ],
+          "interfaces": {
+            "frame": "tag local frame, +X = tunnel length, +Z = cover side, -Y = ear/pig-head side",
+            "note": "assembly.step is a multi-solid STEP written into the project working directory; it is parametric CAD, not a manufacturing drawing",
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "cad/main.py": "9abaabc10d5042d8a8e3b63441aea8e5844ffceb73eded5a2009dc66375eedbb",
+          "cad/params.py": "414c0896f8823e520ac2baf35bb0db1053d035b6e8c14af184e3220e365ee822"
+        }
+      },
+      {
+        "job_id": "eng-4535cce81a7f8218",
+        "kind": "spice",
+        "project_sha256": "1297313b30059716563adde6820269bf30585e5686c76646fd620e801946c58d",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "95fac2f7fe0d0065034992d02915843486020f4317e8a216d6ec28512038efa2",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Operating Point",
+              "points": 1,
+              "variables": 41
+            },
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 831,
+              "variables": 42
+            },
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 6375,
+              "variables": 42
+            }
+          ],
+          "points": 6375,
+          "raw_sha256": "099fe7abddb148ae55a5bc1ff65843a3f183c54ee61e2c354462ee327854928e",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 42
+        },
+        "functional_passed": false,
+        "participant_project_path": "spice/project.json",
+        "project_manifest": {
+          "entrypoint": "main.cir",
+          "files": [
+            "main.cir"
+          ],
+          "interfaces": {
+            "analyses": [
+              "op",
+              "tran 0.02 s / 600 s (scenario A)",
+              "tran 1 us / 40 ms (scenario B)"
+            ],
+            "initial_conditions": ".ic V(7)=2.0 V(42)=2.0 V(50)=0 V(150)=0 - both branches start at the 2.0 V gate floor",
+            "node_map": {
+              "1/20/2": "TENG equivalent terminals and 2CL72 bridge AC input",
+              "112": "gated system load branch B",
+              "12": "gated system load branch A (0.66 mW level, 9.5 kOhm at 3 V)",
+              "13": "12.1 mW peak-burst branch (516 Ohm, 20 ms pulse)",
+              "150": "reserve-gate latch state, node 42 branch",
+              "3": "rectified high-voltage node (C1 100 pF, P6KE440A clamp)",
+              "42": "storage node B: same cell, 10x lower standby (3 MOhm) [sensitivity]",
+              "5/6": "SCR-triggered step-down node (L1 1 mH, C2, MUR460)",
+              "50": "reserve-gate latch state, node 7 branch (3.0 V set / 2.0 V reset)",
+              "7": "storage node A: 470 uF, implied 10 uA standby (300 kOhm) [assumed]"
+            },
+            "note": "bounded local equivalent of the harvest-storage-gate-load stage only; two branches expose the effect of the unpublished standby current",
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "spice/main.cir": "0b97b8a0a1a65a7f67945afba4d24885cdb15a4c2af46e798835840a441205fb"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 651,
+  "work_phase": "delivery",
+  "phase_task_sha256": "4f317e7ebca442310b95e2864dae9de79dacd93c1d580c7cce12791b9d7e2bc9",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 35,
+  "budget": {
+    "owner": "pi-chat-23f915b7ee4e9fe6",
+    "cap_usd": 30,
+    "liability_usd": 12.690242700000024,
+    "remaining_usd": 17.309757299999976,
+    "unknown_requests": [],
+    "exhausted": false
+  },
+  "method_identity": "44f8fdf6dc4fdde94324ba4f2ea820b4acb98cf20020d785930592a514a99576",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/native-report.json",
+      "sha256": "8dc8a98b93293ec11539af3b8f7644c694aa6a07220ce74be4d8421e4d456e5a",
+      "label": "P03 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/delivery/manifest.json",
+      "sha256": "50ad9895a2f0d1d199f7a1a2d3d25a1c04a93d39791746062e89735a98656659",
+      "label": "P03 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/delivery/UNVERIFIED.md",
+      "sha256": "3247cb7d1a20519b46769ae62898d4469bc449a5d125cf96bdc72c6de6a1e7f8",
+      "label": "P03 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/manufacturing/bom-manufacturing.csv",
+      "sha256": "2f880b1df42785e088eb25db448e77b32e005ffb6256ef529efca3c6d5291429",
+      "label": "P03 PCB与制造文件/manufacturing/bom-manufacturing.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/manufacturing/manufacturing.md",
+      "sha256": "a10ddeb3468845740c8c96663e3e153c38d9a89aba7ba7d803a2e6fadbe7ad50",
+      "label": "P03 PCB与制造文件/manufacturing/manufacturing.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb-checks/pcb-checks.csv",
+      "sha256": "3d25e4123150e27649f813a15ee37ad245d3ce31e28e19e43671a206125b2d04",
+      "label": "P03 PCB与制造文件/pcb-checks/pcb-checks.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb-checks/pcb-checks.json",
+      "sha256": "a3cff0bb06522dc39be95c77cd7c18ece9df253343f79110c4fb62834bae6def",
+      "label": "P03 PCB与制造文件/pcb-checks/pcb-checks.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb/BLOCKED.md",
+      "sha256": "4429136cd19308d378eb7aca121a27173f9b4f8b8c0cfe53a3176298fe51c081",
+      "label": "P03 PCB与制造文件/pcb/BLOCKED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb/board-review.svg",
+      "sha256": "35f69e74caaa786ad2248034aaf94b9159fec5fef8438843c1d6ca765f72b6f5",
+      "label": "P03 PCB与制造文件/pcb/board-review.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb/connectivity-map.csv",
+      "sha256": "9503c43ad323e35bd33ebc86c50957737b0162339acf699271b2b48c6e8b1e71",
+      "label": "P03 PCB与制造文件/pcb/connectivity-map.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb/pcb-blocked.json",
+      "sha256": "0eb95f129a66902307a7a0aaae23608cc457abb11b719d5c6953d435a9317174",
+      "label": "P03 PCB与制造文件/pcb/pcb-blocked.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/PCB与制造文件/pcb/pcb.md",
+      "sha256": "a2b083b1225c127d0c0a60759d6fe096c7870bad596e26abef15f7d3e01bba39",
+      "label": "P03 PCB与制造文件/pcb/pcb.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/assembly.json",
+      "sha256": "e7c84f0ca6ad0b2a22fa741ed53ca497396b5ce8a242be5892459cc8643670ce",
+      "label": "P03 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/cad/README.md",
+      "sha256": "1081ccd6b62fc82dca0f3dd9314dd0b010f3e8f475609dd3b43ebaf97957826e",
+      "label": "P03 cad/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/cad/main.py",
+      "sha256": "9abaabc10d5042d8a8e3b63441aea8e5844ffceb73eded5a2009dc66375eedbb",
+      "label": "P03 cad/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/cad/params.py",
+      "sha256": "414c0896f8823e520ac2baf35bb0db1053d035b6e8c14af184e3220e365ee822",
+      "label": "P03 cad/params.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/cad/project.json",
+      "sha256": "f3d18cc1db1302342e5b481dcb659283f774a2190ec5aeb1a5c1092db81dc656",
+      "label": "P03 cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "3247cb7d1a20519b46769ae62898d4469bc449a5d125cf96bdc72c6de6a1e7f8",
+      "label": "P03 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/architecture.md",
+      "sha256": "61e9850991a60155acc9bf07bf160c80fe4af1055c1a498f7d27366bd9b66a52",
+      "label": "P03 docs/architecture.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/cad.md",
+      "sha256": "38393094dc02423b1b23276174b31b5ad38bfa98ab434cc18c91914a4d2d42c3",
+      "label": "P03 docs/cad.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/clearance.md",
+      "sha256": "e7ceee91c2961fdbbb8e6e69cbd6a494955a90c71b1b66488a35afa9260e8d0c",
+      "label": "P03 docs/clearance.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/energy-account.md",
+      "sha256": "9a85f736f477ef1d944e251a5373465b6c2d577e977ec9cbc6b665c9b71f6c79",
+      "label": "P03 docs/energy-account.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/figures.md",
+      "sha256": "7ccc667efa9f56c599fcf3f6d50f07d740a88ce6486c951222016132adf5f961",
+      "label": "P03 docs/figures.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/firmware.md",
+      "sha256": "8b1129ba9b13b89facf6645c4ee7fd24a22f0c5fa7be1e168b1703e34ae46ab3",
+      "label": "P03 docs/firmware.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/flash-guide.md",
+      "sha256": "b19ff0beae4aca5e56f8c00bf53ae4239ebeb4fb1c8d88b2e3ee11e2b1c694a7",
+      "label": "P03 docs/flash-guide.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/manufacturing.md",
+      "sha256": "a10ddeb3468845740c8c96663e3e153c38d9a89aba7ba7d803a2e6fadbe7ad50",
+      "label": "P03 docs/manufacturing.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/matrix.md",
+      "sha256": "d42e13f5ad631e2b5ef24da601eeace7e73ea41a9d3fb1a4d597410b21e8fa7c",
+      "label": "P03 docs/matrix.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/pcb.md",
+      "sha256": "a2b083b1225c127d0c0a60759d6fe096c7870bad596e26abef15f7d3e01bba39",
+      "label": "P03 docs/pcb.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/presentation.md",
+      "sha256": "1f0501ca3f2097c04369bfd8253e778085ac2c2aa4e0a65ce9691644c7398849",
+      "label": "P03 docs/presentation.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/raw-data.md",
+      "sha256": "db2d3977babc5ff9d1afc7eb8334ac43a8bb1d5acb05be0ae6c2cb086c9655f3",
+      "label": "P03 docs/raw-data.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/receiver.md",
+      "sha256": "4fd84ab7ec4d1d06dc1b4e29ec55080a8e6e9a824f4eb8915f51e039ea195643",
+      "label": "P03 docs/receiver.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/references.md",
+      "sha256": "800ad6161ef5b85c47c11a86558c8fea3f3ea445bbc6471c70da7a6fbf29b8cb",
+      "label": "P03 docs/references.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/requirements.md",
+      "sha256": "1c1d79d301fcba8510e57d838e7ac8478ea47a2536dd46fe194bb954d0ac1026",
+      "label": "P03 docs/requirements.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/schematic.md",
+      "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+      "label": "P03 docs/schematic.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/docs/spice-results.md",
+      "sha256": "552ac261d19372d51d6b151ad6ba41239ecf2c4820b94c18af0b84986305000d",
+      "label": "P03 docs/spice-results.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/README.md",
+      "sha256": "e2556d693fba771814f65a967a8e4267038ee2a58044f2cf039810cc36798403",
+      "label": "P03 firmware/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/host/dump_frames.c",
+      "sha256": "3f9bbdd5f757904f6ba633ab698a149ba444a3caba08fa03501b4e5d5d4e4e3c",
+      "label": "P03 firmware/host/dump_frames.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/host/fault_tests.c",
+      "sha256": "e1f336eeb4eb5401bd5bb27a6165557f531630d475a3251038153ee244b1aa47",
+      "label": "P03 firmware/host/fault_tests.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/host/host_replay.c",
+      "sha256": "1236833bd6c5c0aa3b5260d9c2e121f80d6fce12bb86a98b9be7024ae204fc72",
+      "label": "P03 firmware/host/host_replay.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/src/ispet_app.c",
+      "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+      "label": "P03 firmware/src/ispet_app.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/firmware/src/ispet_app.h",
+      "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+      "label": "P03 firmware/src/ispet_app.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/native-report.json",
+      "sha256": "8dc8a98b93293ec11539af3b8f7644c694aa6a07220ce74be4d8421e4d456e5a",
+      "label": "P03 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/pcb/BLOCKED.md",
+      "sha256": "4429136cd19308d378eb7aca121a27173f9b4f8b8c0cfe53a3176298fe51c081",
+      "label": "P03 pcb/BLOCKED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/sources/P03/article-pages.json",
+      "sha256": "4a5c216202603893f42ab581dd2be339b2094e6408578621904ecc69dc1713bc",
+      "label": "P03 sources/P03/article-pages.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/sources/P03/article.pdf",
+      "sha256": "a62eb7a08e3d5a6b5fd31f44d52342805aba35c4d76f1cfc8f86f0f5c2bd8cda",
+      "label": "P03 sources/P03/article.pdf",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/sources/P03/article.xml",
+      "sha256": "dd619d7eef29318f8e25b8ed2d8b4e98a076b3f4f3a9e0df7a061a197b034115",
+      "label": "P03 sources/P03/article.xml",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/sources/P03/supplement-pages.json",
+      "sha256": "e2dfa722959befecf5e8975093c1b4f2618295ddbba5a050445b2181ba2fe015",
+      "label": "P03 sources/P03/supplement-pages.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/sources/P03/supplement.pdf",
+      "sha256": "776981cbaa08a87bd64985383d670a79993af94a09ce32643c59f74893066447",
+      "label": "P03 sources/P03/supplement.pdf",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/spice/README.md",
+      "sha256": "bff76049d672cafb41a81a07418ea8b683fa3be7e7237f0b9e847a67fa955a8d",
+      "label": "P03 spice/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/spice/main.cir",
+      "sha256": "0b97b8a0a1a65a7f67945afba4d24885cdb15a4c2af46e798835840a441205fb",
+      "label": "P03 spice/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/spice/project.json",
+      "sha256": "ed27363197dd617c2d8e5fbc0ef3e57e15355eac7f4bcc5bfe3aa404016cd9bf",
+      "label": "P03 spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/动力学与COMSOL/NOT_APPLICABLE.md",
+      "sha256": "f19a09cf40fba0c8467f487c8c894bb343980e07c3c540d077c2b949cf36f54d",
+      "label": "P03 动力学与COMSOL/NOT_APPLICABLE.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/动力学与COMSOL/mapping/param-map.csv",
+      "sha256": "441425edbeb95ac9fa354b717f7d22af894b8ba9d6fd761bf2397b15cdea2dfd",
+      "label": "P03 动力学与COMSOL/mapping/param-map.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/动力学与COMSOL/mapping/param-map.json",
+      "sha256": "82befefd3801cdb472534393a8881d75b054c475af875f77b81e7bcc6f9536c4",
+      "label": "P03 动力学与COMSOL/mapping/param-map.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/原始数据/host-replay.jsonl",
+      "sha256": "044b4e1697064ddb583d435f9d1f1ec46da549a2977359170c48aecaa700198c",
+      "label": "P03 原始数据/host-replay.jsonl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/原始数据/native-observations.csv",
+      "sha256": "00ee99a2f90ec68ffd03c1b623c15a185e3a69b70b6374f6df176c4fa4f8b937",
+      "label": "P03 原始数据/native-observations.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/原始数据/native-observations.json",
+      "sha256": "7aaf4d4826773431c21203750ae68c19ab91b2f649f8081edd97287687add243",
+      "label": "P03 原始数据/native-observations.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/原始数据/raw-data-index.json",
+      "sha256": "13d9bf63f4d3b0864e9864feb29364620c804702495101133495fd7dcc0e61e7",
+      "label": "P03 原始数据/raw-data-index.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/原始数据/raw-data.md",
+      "sha256": "db2d3977babc5ff9d1afc7eb8334ac43a8bb1d5acb05be0ae6c2cb086c9655f3",
+      "label": "P03 原始数据/raw-data.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/article-pages.json",
+      "sha256": "4a5c216202603893f42ab581dd2be339b2094e6408578621904ecc69dc1713bc",
+      "label": "P03 参考与采用说明/article-pages.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/article.pdf",
+      "sha256": "a62eb7a08e3d5a6b5fd31f44d52342805aba35c4d76f1cfc8f86f0f5c2bd8cda",
+      "label": "P03 参考与采用说明/article.pdf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/article.xml",
+      "sha256": "dd619d7eef29318f8e25b8ed2d8b4e98a076b3f4f3a9e0df7a061a197b034115",
+      "label": "P03 参考与采用说明/article.xml",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/reference-uses.json",
+      "sha256": "ec2c1ec5f70c7b796a7619f275e1df58fcf2216a3d7b79c8108326fbdb6e744e",
+      "label": "P03 参考与采用说明/reference-uses.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/references.md",
+      "sha256": "800ad6161ef5b85c47c11a86558c8fea3f3ea445bbc6471c70da7a6fbf29b8cb",
+      "label": "P03 参考与采用说明/references.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/supplement-pages.json",
+      "sha256": "e2dfa722959befecf5e8975093c1b4f2618295ddbba5a050445b2181ba2fe015",
+      "label": "P03 参考与采用说明/supplement-pages.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/参考与采用说明/supplement.pdf",
+      "sha256": "776981cbaa08a87bd64985383d670a79993af94a09ce32643c59f74893066447",
+      "label": "P03 参考与采用说明/supplement.pdf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/fault-tests.json",
+      "sha256": "71197a5002c011ede0ec05c27ddcdcc7466e462fc160351449b3e06f2c2872b6",
+      "label": "P03 固件与烧录/firmware-resources/fault-tests.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/fault_tests-run.txt",
+      "sha256": "7f6989707e28c44aba199b416f60795fc99eb0c311770cc77341754d0e4180c9",
+      "label": "P03 固件与烧录/firmware-resources/fault_tests-run.txt",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/firmware-resources.json",
+      "sha256": "9456b0c71acfba03192d639b4afb7b85540d7983db60680f5a6748bb76069aa6",
+      "label": "P03 固件与烧录/firmware-resources/firmware-resources.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/firmware-state.svg",
+      "sha256": "2d029d5f749e5996213ecabacb95701e3d3954bfadc8fe80e7c8a821865f8e4a",
+      "label": "P03 固件与烧录/firmware-resources/firmware-state.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/host-build.json",
+      "sha256": "9b3447aadb479bb54929916948081658dd88f9253f54721e6dabfc4ca197de90",
+      "label": "P03 固件与烧录/firmware-resources/host-build.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/host_replay-run.txt",
+      "sha256": "b95f62d15182ef21fc9f1b4e8d25eecb40c583c908626022654d92bec5731a4b",
+      "label": "P03 固件与烧录/firmware-resources/host_replay-run.txt",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/load-model.csv",
+      "sha256": "388f091f09c017c37d23d30e50cbce005d6af3b5f7904e09eb38ab97699b7f36",
+      "label": "P03 固件与烧录/firmware-resources/load-model.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-resources/receiver-tests-run.txt",
+      "sha256": "a6b76e4c72fda6f69c2e28a00ae3bf96928842bfcda657719429bf5bd9e270cc",
+      "label": "P03 固件与烧录/firmware-resources/receiver-tests-run.txt",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/artifact-index.json",
+      "sha256": "1b863ca7bd6b9d1bd90a3f030d684ea98a75065ba7453d6808634eb31e62748f",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/artifact-index.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/input.json",
+      "sha256": "cb5e07e0cdc2aafe68baff62d55d8dc0cdac03855036d8cf870ed64f4411be62",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/libc_init.c",
+      "sha256": "f3ffe4ea383876d01d77d56f55257bd444e893216055877f041afde130bf60b0",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/libc_init.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/process.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-firmware.bin",
+      "sha256": "02d3f2c9190bb117a780373e2cbce2546859748fc073e23c9f0a28edaa55a87e",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-firmware.bin",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-firmware.elf",
+      "sha256": "f3a19739ac380c708509b7059aef8901c4e117be0f857ec95ec86a95f7b7af02",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-firmware.elf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-firmware.hex",
+      "sha256": "83183603a0277c724defa2ef0ac38901932f672fba3ebd60c9d69b9955559295",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-firmware.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-firmware.map",
+      "sha256": "458d90e259e054afc4af74cea1e8bdfe6ca8585f09155dc5043046bd010fdf63",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-firmware.map",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-readback.json",
+      "sha256": "521cecf0421ee0a90060b9975461694cdebaaf43d7dbd56473920cb209c58b1c",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/project-source.zip",
+      "sha256": "33cd09e4b9b5156679848d644eefbd4b57a9f1fe58ededf1c7c451e9b698cd8d",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/result.json",
+      "sha256": "957a82c13c06cb6d7bf05fd2747ae431d3020416295df2ae4d6ddd4abcefc626",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432-build/stm32l432.ld",
+      "sha256": "6727c27149328248f1f849e8c46d1144bc60f5f356418c7fc85b9ad7889f54d0",
+      "label": "P03 固件与烧录/firmware-stm32l432-build/stm32l432.ld",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/ispet_app.c",
+      "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+      "label": "P03 固件与烧录/firmware-stm32l432/ispet_app.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/ispet_app.h",
+      "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+      "label": "P03 固件与烧录/firmware-stm32l432/ispet_app.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/ispet_target.c",
+      "sha256": "c544ac31575025f83c1b3ff7b06114aaaaac441caf7ca83c64e65dfd1e8370fe",
+      "label": "P03 固件与烧录/firmware-stm32l432/ispet_target.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/ispet_target.h",
+      "sha256": "96b4cc1dc81c1e76e25faf64d35a2e76e8d31f1bd874a4c2878fc264c46b5879",
+      "label": "P03 固件与烧录/firmware-stm32l432/ispet_target.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/main.c",
+      "sha256": "dae8b43129b6548c8662e9474056d9befe33b99a125d0575920ef3ca0e88adae",
+      "label": "P03 固件与烧录/firmware-stm32l432/main.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware-stm32l432/project.json",
+      "sha256": "9f69c4b018f68374dbae736bb5d588e8ceec73fd19f7129c3e597bd3ff478a36",
+      "label": "P03 固件与烧录/firmware-stm32l432/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/README.md",
+      "sha256": "e2556d693fba771814f65a967a8e4267038ee2a58044f2cf039810cc36798403",
+      "label": "P03 固件与烧录/firmware/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/build_host.py",
+      "sha256": "b9041f77651e83267464014978074bc5378fe7cb549c09e82a191ef177372ab0",
+      "label": "P03 固件与烧录/firmware/build_host.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/dump_frames.c",
+      "sha256": "3f9bbdd5f757904f6ba633ab698a149ba444a3caba08fa03501b4e5d5d4e4e3c",
+      "label": "P03 固件与烧录/firmware/dump_frames.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/fault_tests.c",
+      "sha256": "e1f336eeb4eb5401bd5bb27a6165557f531630d475a3251038153ee244b1aa47",
+      "label": "P03 固件与烧录/firmware/fault_tests.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/firmware-status.json",
+      "sha256": "278ca4bf2cc18728433f80a5850476c0e5f63b110d23367bc4ce1d4c93fd777b",
+      "label": "P03 固件与烧录/firmware/firmware-status.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/firmware.md",
+      "sha256": "8b1129ba9b13b89facf6645c4ee7fd24a22f0c5fa7be1e168b1703e34ae46ab3",
+      "label": "P03 固件与烧录/firmware/firmware.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/host-replay.log",
+      "sha256": "8281628607ca981d0b92d4df27f34e9fa21e9f2d181edddbb22dc13343663836",
+      "label": "P03 固件与烧录/firmware/host-replay.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/host_replay.c",
+      "sha256": "1236833bd6c5c0aa3b5260d9c2e121f80d6fce12bb86a98b9be7024ae204fc72",
+      "label": "P03 固件与烧录/firmware/host_replay.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/ispet_app.c",
+      "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+      "label": "P03 固件与烧录/firmware/ispet_app.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/ispet_app.h",
+      "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+      "label": "P03 固件与烧录/firmware/ispet_app.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/ispet_target.c",
+      "sha256": "c544ac31575025f83c1b3ff7b06114aaaaac441caf7ca83c64e65dfd1e8370fe",
+      "label": "P03 固件与烧录/firmware/ispet_target.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/ispet_target.h",
+      "sha256": "96b4cc1dc81c1e76e25faf64d35a2e76e8d31f1bd874a4c2878fc264c46b5879",
+      "label": "P03 固件与烧录/firmware/ispet_target.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/firmware/main.c",
+      "sha256": "dae8b43129b6548c8662e9474056d9befe33b99a125d0575920ef3ca0e88adae",
+      "label": "P03 固件与烧录/firmware/main.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/flash-guide/flash-guide.md",
+      "sha256": "b19ff0beae4aca5e56f8c00bf53ae4239ebeb4fb1c8d88b2e3ee11e2b1c694a7",
+      "label": "P03 固件与烧录/flash-guide/flash-guide.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/固件与烧录/flash-guide/flash_stm32l432.py",
+      "sha256": "cb5662a4da2fa92b50f49c948c1cc5684e13b60b08e2232da61782814a98983d",
+      "label": "P03 固件与烧录/flash-guide/flash_stm32l432.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/figure-native.json",
+      "sha256": "188e7325f21e067ec522940012344c37f6e741a8f2bddcb1bccc720367621119",
+      "label": "P03 图表与绘图程序/figure-native.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/figure-native.png",
+      "sha256": "f3c87ced4730976f16e451ad24c0322af772070f4528655343a5e6abbffe8d2e",
+      "label": "P03 图表与绘图程序/figure-native.png",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/figures.json",
+      "sha256": "da39913d263b0d2ff6608ea525f2aa8372b8cf82e19557d2fda6d98db5869f72",
+      "label": "P03 图表与绘图程序/figures.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/make_figure.py",
+      "sha256": "e6da333756c49f4b2e82736b311cb6b30ee23b221e28855a83f0589c99092afe",
+      "label": "P03 图表与绘图程序/make_figure.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/native-power-gate.png",
+      "sha256": "f0e3e98c8397a8debd73a511ad64aabf29870d16abcb2de8dd457c95e6d5ad9c",
+      "label": "P03 图表与绘图程序/native-power-gate.png",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/图表与绘图程序/plot_native.py",
+      "sha256": "b3c898235fc724d4375dfb2eb074586f549632d539bb8d3e5600b6dbff20dbde",
+      "label": "P03 图表与绘图程序/plot_native.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/direction/NOT_APPLICABLE.md",
+      "sha256": "631b772667aa5220c60db92d203117c79c75c33f98bd6d683b90e12f1dcbabcf",
+      "label": "P03 接收端与协议/direction/NOT_APPLICABLE.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver-tests/receiver-tests.json",
+      "sha256": "a782c9451c2bff2f992e26c43556ebe9a487db14edf12f5f64af12bc1abf3c48",
+      "label": "P03 接收端与协议/receiver-tests/receiver-tests.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver-tests/replay.jsonl",
+      "sha256": "044b4e1697064ddb583d435f9d1f1ec46da549a2977359170c48aecaa700198c",
+      "label": "P03 接收端与协议/receiver-tests/replay.jsonl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver-tests/test_receiver.py",
+      "sha256": "c362d67c007de41113ba5834286db2ab2ee9f3e9c3ebd8f7944f3b1629bafdde",
+      "label": "P03 接收端与协议/receiver-tests/test_receiver.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver/decoded-frames.jsonl",
+      "sha256": "e65f06cc458fc035dfa86d9d0f09517d95cfc01162f7c70b8a7694889bfab7ed",
+      "label": "P03 接收端与协议/receiver/decoded-frames.jsonl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver/receiver.md",
+      "sha256": "4fd84ab7ec4d1d06dc1b4e29ec55080a8e6e9a824f4eb8915f51e039ea195643",
+      "label": "P03 接收端与协议/receiver/receiver.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/接收端与协议/receiver/receiver.py",
+      "sha256": "d90574f9d7b7837a8307ba6a30ac0c8d041e699427796109574812730737af91",
+      "label": "P03 接收端与协议/receiver/receiver.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad-params.json",
+      "sha256": "d587c608126d4e343400ed18ed19dc52ad44d6cb57748029d19163f18d8c4722",
+      "label": "P03 机械CAD与装配/cad-params.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/README.md",
+      "sha256": "1081ccd6b62fc82dca0f3dd9314dd0b010f3e8f475609dd3b43ebaf97957826e",
+      "label": "P03 机械CAD与装配/cad/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/assembly.json",
+      "sha256": "e7c84f0ca6ad0b2a22fa741ed53ca497396b5ce8a242be5892459cc8643670ce",
+      "label": "P03 机械CAD与装配/cad/assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/cad-model.md",
+      "sha256": "38393094dc02423b1b23276174b31b5ad38bfa98ab434cc18c91914a4d2d42c3",
+      "label": "P03 机械CAD与装配/cad/cad-model.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/clearance.json",
+      "sha256": "b68f108a162efaae0fbfeff5e98afea079661c096b78e13f77f83413b9ccd040",
+      "label": "P03 机械CAD与装配/cad/clearance.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/clearance.md",
+      "sha256": "e7ceee91c2961fdbbb8e6e69cbd6a494955a90c71b1b66488a35afa9260e8d0c",
+      "label": "P03 机械CAD与装配/cad/clearance.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/main.py",
+      "sha256": "9abaabc10d5042d8a8e3b63441aea8e5844ffceb73eded5a2009dc66375eedbb",
+      "label": "P03 机械CAD与装配/cad/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/native-readback.json",
+      "sha256": "0675c835a401faca53098e279fcea4c41a1d696b249efabb60b3d9ec0a2edab9",
+      "label": "P03 机械CAD与装配/cad/native-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/params.py",
+      "sha256": "414c0896f8823e520ac2baf35bb0db1053d035b6e8c14af184e3220e365ee822",
+      "label": "P03 机械CAD与装配/cad/params.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/parts.csv",
+      "sha256": "cafc85a5395cfdb390f0d1559ac0abb54910341f5e963eae69df0722df83347d",
+      "label": "P03 机械CAD与装配/cad/parts.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/project-assembly.step",
+      "sha256": "c1e0fcac946f3cdedfd7e1058eaeb121cb0e825b2559e48ac5d1608d7a5fcdd4",
+      "label": "P03 机械CAD与装配/cad/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/cad/project.json",
+      "sha256": "f3d18cc1db1302342e5b481dcb659283f774a2190ec5aeb1a5c1092db81dc656",
+      "label": "P03 机械CAD与装配/cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/clearance/check_clearance.py",
+      "sha256": "d9fe24b34775c404b052b6a263772063c7640c6eb0751521344a320a4f508664",
+      "label": "P03 机械CAD与装配/clearance/check_clearance.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/clearance/clearance.json",
+      "sha256": "524c4ddac6cddda8493f51a604e2c973398f690a489275b04d3ac93997dea178",
+      "label": "P03 机械CAD与装配/clearance/clearance.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/clearance/envelope.svg",
+      "sha256": "516ae6fab829d7ce6f324cbd9876a9ed1c5996bfa30a73cdadbaa2b07564ba07",
+      "label": "P03 机械CAD与装配/clearance/envelope.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/drawings/assembly-notes.md",
+      "sha256": "454e3f0e2a5bd7c7f1620451c333cee0f57f8171f682a93aebcd84ffc5fb8c12",
+      "label": "P03 机械CAD与装配/drawings/assembly-notes.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/drawings/mechanical-bom.csv",
+      "sha256": "10edc6061b2309fb2c340e907e57879775b023b093233ffa45aa1e4adfc1ae5a",
+      "label": "P03 机械CAD与装配/drawings/mechanical-bom.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/机械CAD与装配/tag-assembly.step",
+      "sha256": "c1e0fcac946f3cdedfd7e1058eaeb121cb0e825b2559e48ac5d1608d7a5fcdd4",
+      "label": "P03 机械CAD与装配/tag-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/版本清单与验收报告/UNVERIFIED.md",
+      "sha256": "3247cb7d1a20519b46769ae62898d4469bc449a5d125cf96bdc72c6de6a1e7f8",
+      "label": "P03 版本清单与验收报告/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/版本清单与验收报告/build_release.py",
+      "sha256": "444b7dabb4ff4d4a9bd798d6beb89db5b3130ce3d63377319dfe0b040874d45a",
+      "label": "P03 版本清单与验收报告/build_release.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/版本清单与验收报告/native-report.json",
+      "sha256": "8dc8a98b93293ec11539af3b8f7644c694aa6a07220ce74be4d8421e4d456e5a",
+      "label": "P03 版本清单与验收报告/native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/版本清单与验收报告/release-report.md",
+      "sha256": "043abafeb3c190d73a06608aedd16571d2c09e177cc9393aac7bc6e199e2e5d8",
+      "label": "P03 版本清单与验收报告/release-report.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/版本清单与验收报告/reproduction-guide.md",
+      "sha256": "cebace6aa3fdce3d82d5ac27b793f048ed4776aab24336f5017f48127710a40b",
+      "label": "P03 版本清单与验收报告/reproduction-guide.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/electrical-checks/electrical-checks.csv",
+      "sha256": "bb11ca845cc59925e9d01c618f91c04c8c50cdafd3818e8a201d72b13348625f",
+      "label": "P03 电路原理图与SPICE/electrical-checks/electrical-checks.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/electrical-checks/electrical-checks.json",
+      "sha256": "f6e7239056f74d4df91c3f972f04eb836379c7bb79f010c8e703e946450987df",
+      "label": "P03 电路原理图与SPICE/electrical-checks/electrical-checks.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/energy-account.md",
+      "sha256": "9a85f736f477ef1d944e251a5373465b6c2d577e977ec9cbc6b665c9b71f6c79",
+      "label": "P03 电路原理图与SPICE/energy-account.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/schematic/bom.csv",
+      "sha256": "2a6614d408edda17253ab43916c0d52ccb351dfa1437447eefe5b3b8fac3c4f7",
+      "label": "P03 电路原理图与SPICE/schematic/bom.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/schematic/circuit-selection.json",
+      "sha256": "54084d0b2cdb4aa0512e8cd3015beac4383460c85b9269f06bd71e27fa1a03dc",
+      "label": "P03 电路原理图与SPICE/schematic/circuit-selection.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/schematic/circuit-selection.md",
+      "sha256": "6a2a6929f7f43810e791c361fc93a55d661c472292639cf8843d725fbf8677c0",
+      "label": "P03 电路原理图与SPICE/schematic/circuit-selection.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/schematic/review-schematic.svg",
+      "sha256": "06f777944df489fe6223b83bf832486e7025b631fa7f48795ff4ee9d5285bf51",
+      "label": "P03 电路原理图与SPICE/schematic/review-schematic.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/schematic/schematic.md",
+      "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+      "label": "P03 电路原理图与SPICE/schematic/schematic.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/README.md",
+      "sha256": "bff76049d672cafb41a81a07418ea8b683fa3be7e7237f0b9e847a67fa955a8d",
+      "label": "P03 电路原理图与SPICE/spice/README.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/main.cir",
+      "sha256": "0b97b8a0a1a65a7f67945afba4d24885cdb15a4c2af46e798835840a441205fb",
+      "label": "P03 电路原理图与SPICE/spice/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/models.json",
+      "sha256": "bd1dff45e89322934bbb7b73ed7d4e9cf227e416cb3c8cc307e8ef7fae8b3eb2",
+      "label": "P03 电路原理图与SPICE/spice/models.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/project.json",
+      "sha256": "ed27363197dd617c2d8e5fbc0ef3e57e15355eac7f4bcc5bfe3aa404016cd9bf",
+      "label": "P03 电路原理图与SPICE/spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/schematic.md",
+      "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+      "label": "P03 电路原理图与SPICE/spice/schematic.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/spice-native.json",
+      "sha256": "fe762c40d53347995e80c96cac2893346cfcf7150ef12ebc01d645df27d04338",
+      "label": "P03 电路原理图与SPICE/spice/spice-native.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/spice-observations.csv",
+      "sha256": "00ee99a2f90ec68ffd03c1b623c15a185e3a69b70b6374f6df176c4fa4f8b937",
+      "label": "P03 电路原理图与SPICE/spice/spice-observations.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/电路原理图与SPICE/spice/spice-results.md",
+      "sha256": "552ac261d19372d51d6b151ad6ba41239ecf2c4820b94c18af0b84986305000d",
+      "label": "P03 电路原理图与SPICE/spice/spice-results.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/joint/joint-timeline.csv",
+      "sha256": "8d80da970d550f451fad540d6c53c426acbe4ce5728596684f3b2d2eab95382a",
+      "label": "P03 联合仿真与测试/joint/joint-timeline.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/joint/joint_model.py",
+      "sha256": "ba07e16c256fbbeffdbf70fc4adcdfea22a21225939d69471a6e3ba78ed816ef",
+      "label": "P03 联合仿真与测试/joint/joint_model.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/joint/joint_summary.csv",
+      "sha256": "e30d3e897fe25e8d6b0b7131b065d5eeb4991db8f2dcacf12b8185ea73e74994",
+      "label": "P03 联合仿真与测试/joint/joint_summary.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/joint/joint_summary.json",
+      "sha256": "ff6f79148832c4bee46c139a456c117e98cc7303828a3e8c3a398a828d44b940",
+      "label": "P03 联合仿真与测试/joint/joint_summary.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/matrix/matrix-run.csv",
+      "sha256": "547ce85b06888748fded1877b46b50a6f322919b9a19bb3eb08333bc0e81ad33",
+      "label": "P03 联合仿真与测试/matrix/matrix-run.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/matrix/matrix.csv",
+      "sha256": "64aad56042295a03edfe6dc48c8df67c7bfb28da51eec12a72dbae82833f8755",
+      "label": "P03 联合仿真与测试/matrix/matrix.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/matrix/matrix.json",
+      "sha256": "481f2243093ada7d69a735e4d17e3f1f3832674bfd782492ef9eddb66b04228a",
+      "label": "P03 联合仿真与测试/matrix/matrix.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/matrix/matrix.md",
+      "sha256": "d42e13f5ad631e2b5ef24da601eeace7e73ea41a9d3fb1a4d597410b21e8fa7c",
+      "label": "P03 联合仿真与测试/matrix/matrix.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/matrix/run_matrix.py",
+      "sha256": "917b5ada02903038cd64fdf9a300557ae24d255436293667dc2c6c270627c4ff",
+      "label": "P03 联合仿真与测试/matrix/run_matrix.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/system-acceptance/system-acceptance.csv",
+      "sha256": "e74fdc2c65e3dfd71d2fb6a0eba548d574ede58aa98faa46f7a02d3deebf7f55",
+      "label": "P03 联合仿真与测试/system-acceptance/system-acceptance.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/联合仿真与测试/system-acceptance/system-acceptance.json",
+      "sha256": "80a83014cb2da2f07106d2a2ee3d83c0bb8cdd12686d2b63e074b788de4d0c3d",
+      "label": "P03 联合仿真与测试/system-acceptance/system-acceptance.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/需求与验收/interfaces.csv",
+      "sha256": "bb342daa81dece47a5f7c764c5c3fe5b73578405953b45b73a8c6d3943839dfe",
+      "label": "P03 需求与验收/interfaces.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/需求与验收/interfaces.json",
+      "sha256": "9d2264198220cf1bde668391739dea3ac1df5b25f682861aa87f0010071b8265",
+      "label": "P03 需求与验收/interfaces.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/需求与验收/interfaces.svg",
+      "sha256": "d91009e0941470aa5debe493cda6ceb748a193f3ec98d167b2f5b1a45dd3b518",
+      "label": "P03 需求与验收/interfaces.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/需求与验收/requirements.json",
+      "sha256": "da39f637d15868786a28f91ddc1d1708cf4a27c683c36dfdb9673b55aaf2aa2f",
+      "label": "P03 需求与验收/requirements.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/participant-files/需求与验收/requirements.md",
+      "sha256": "1c1d79d301fcba8510e57d838e7ac8478ea47a2536dd46fe194bb954d0ac1026",
+      "label": "P03 需求与验收/requirements.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-source.zip",
+      "sha256": "33cd09e4b9b5156679848d644eefbd4b57a9f1fe58ededf1c7c451e9b698cd8d",
+      "label": "P03 eng-d62a15330af1cdc5 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/result.json",
+      "sha256": "957a82c13c06cb6d7bf05fd2747ae431d3020416295df2ae4d6ddd4abcefc626",
+      "label": "P03 eng-d62a15330af1cdc5 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/input.json",
+      "sha256": "cb5e07e0cdc2aafe68baff62d55d8dc0cdac03855036d8cf870ed64f4411be62",
+      "label": "P03 eng-d62a15330af1cdc5 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-firmware.bin",
+      "sha256": "02d3f2c9190bb117a780373e2cbce2546859748fc073e23c9f0a28edaa55a87e",
+      "label": "P03 eng-d62a15330af1cdc5 project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-firmware.hex",
+      "sha256": "83183603a0277c724defa2ef0ac38901932f672fba3ebd60c9d69b9955559295",
+      "label": "P03 eng-d62a15330af1cdc5 project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-firmware.elf",
+      "sha256": "f3a19739ac380c708509b7059aef8901c4e117be0f857ec95ec86a95f7b7af02",
+      "label": "P03 eng-d62a15330af1cdc5 project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-vendor-license.txt",
+      "sha256": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d",
+      "label": "P03 eng-d62a15330af1cdc5 project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-readback.json",
+      "sha256": "521cecf0421ee0a90060b9975461694cdebaaf43d7dbd56473920cb209c58b1c",
+      "label": "P03 eng-d62a15330af1cdc5 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d62a15330af1cdc5/project-firmware.map",
+      "sha256": "458d90e259e054afc4af74cea1e8bdfe6ca8585f09155dc5043046bd010fdf63",
+      "label": "P03 eng-d62a15330af1cdc5 project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-source.zip",
+      "sha256": "0ac29fa003b3f46252a01a2569f814581c0fd9e9937c66817c6d489f8224da86",
+      "label": "P03 eng-e6d33f4e62493e60 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/result.json",
+      "sha256": "79adc75089970682bf135323a92303a23363ef80e6362d05c8aba57735d372b9",
+      "label": "P03 eng-e6d33f4e62493e60 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/input.json",
+      "sha256": "072616e5ca527ffae901508988bf6dbad893e82944cb6ab7e5adfc20c7007722",
+      "label": "P03 eng-e6d33f4e62493e60 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-firmware.bin",
+      "sha256": "7db287062f5103ab60fec4efdcaf3404a497b43f440b3b50f3e38a26d87ec5ce",
+      "label": "P03 eng-e6d33f4e62493e60 project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-firmware.hex",
+      "sha256": "c8edd663843b6845f9b86740b18bcb9dd1b6c96207c17fb94550dfb6cc1e6e2d",
+      "label": "P03 eng-e6d33f4e62493e60 project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-firmware.elf",
+      "sha256": "fb6271cd2058788604583f03e67f0ac572227438af92cd6f5261dc8f9ecc823a",
+      "label": "P03 eng-e6d33f4e62493e60 project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-vendor-license.txt",
+      "sha256": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d",
+      "label": "P03 eng-e6d33f4e62493e60 project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-readback.json",
+      "sha256": "aa58c8dd9464830bfee7021779d05b62ae57058c1b35336ebb98c0efb66032b8",
+      "label": "P03 eng-e6d33f4e62493e60 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e6d33f4e62493e60/project-firmware.map",
+      "sha256": "eaac0d1c6979234b82a0a8cb680baf83c9fb7306f8d9f6628d34c7844c4c760b",
+      "label": "P03 eng-e6d33f4e62493e60 project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-source.zip",
+      "sha256": "c9b030835d595e44fa06c29cd587b4952395a1c3be00f79f89da1e8e502eb84b",
+      "label": "P03 eng-9a6091a3c38d6166 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/result.json",
+      "sha256": "6f9cca960c10c5cc1695cc73ada8e643515ca7f4899c22482ce96c41e70f30bf",
+      "label": "P03 eng-9a6091a3c38d6166 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/input.json",
+      "sha256": "00e9b774fca2516b7cfd831d05f4b46d51c67f6c2760172713153270570121d9",
+      "label": "P03 eng-9a6091a3c38d6166 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-firmware.bin",
+      "sha256": "64cf535ffcaf8625ccafbd37034aee1ee37fa8bede76299354d2656dcbcf3336",
+      "label": "P03 eng-9a6091a3c38d6166 project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-firmware.hex",
+      "sha256": "207d722ad7f4573c74caf33d44013fd71087eec2c8c883bfa893b573a678ea68",
+      "label": "P03 eng-9a6091a3c38d6166 project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-firmware.elf",
+      "sha256": "f7b1d614f55d890de286ae5df6903e90f4a98d4d34d92a8a433c7280c08cb5d6",
+      "label": "P03 eng-9a6091a3c38d6166 project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-vendor-license.txt",
+      "sha256": "dadb755f51d36614173b28c5790cb4a991e8f4cc822e5b634fd66a4f4145824d",
+      "label": "P03 eng-9a6091a3c38d6166 project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-readback.json",
+      "sha256": "8892a087c7261eafb6f9cbc2c529a6cba5413da1dace3cd54d90315b53f5d087",
+      "label": "P03 eng-9a6091a3c38d6166 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9a6091a3c38d6166/project-firmware.map",
+      "sha256": "b98e34795f6a8b8429cc23422be9f153ad55bff15e86bd952eddb7164941aecd",
+      "label": "P03 eng-9a6091a3c38d6166 project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/project-source.zip",
+      "sha256": "f14921de778c920e2d2de765e5029bc3cfb297da736b90d8365ba6c42437103c",
+      "label": "P03 eng-880a09803ccb2015 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/result.json",
+      "sha256": "02e3612ee6202a298d4360d4d4ad63e86b51b0afc80f3d585e3210219d013768",
+      "label": "P03 eng-880a09803ccb2015 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/input.json",
+      "sha256": "ba004e772bfc3e0357b772fab8ae3c709124a21019ee5f3331331290a45b8012",
+      "label": "P03 eng-880a09803ccb2015 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/project-assembly.step",
+      "sha256": "c1e0fcac946f3cdedfd7e1058eaeb121cb0e825b2559e48ac5d1608d7a5fcdd4",
+      "label": "P03 eng-880a09803ccb2015 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/project-readback.json",
+      "sha256": "e069bfadda6de36f676b8b15c47c685528b66974875a37a3120edf72a1c9d428",
+      "label": "P03 eng-880a09803ccb2015 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-880a09803ccb2015/project-preview-mesh.json",
+      "sha256": "f03cb9748f4acf8e08503af5214537bfa88c4582639d25a14f35ab9ffd6bc9ad",
+      "label": "P03 eng-880a09803ccb2015 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-1b96b77069863fb8/input.json",
+      "sha256": "879abe8a62ca65b19be4bef2bd7b63895691d2017d855a898f04a6a20c4a5654",
+      "label": "P03 eng-1b96b77069863fb8 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4535cce81a7f8218/project-source.zip",
+      "sha256": "01171ec77f2db980c004e6b340993056516c876204f1505c5bf939853c9d876c",
+      "label": "P03 eng-4535cce81a7f8218 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4535cce81a7f8218/result.json",
+      "sha256": "b1dcfb24cdffb136368a393cd4c973b4f95b0a64a8f8b0c6e647eae7ce9e7332",
+      "label": "P03 eng-4535cce81a7f8218 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4535cce81a7f8218/input.json",
+      "sha256": "96634ad900119d6ca5a0292c77fdd2faec2d7b9efe8779e31724fdf3ed0c88b9",
+      "label": "P03 eng-4535cce81a7f8218 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4535cce81a7f8218/project-trace.raw",
+      "sha256": "099fe7abddb148ae55a5bc1ff65843a3f183c54ee61e2c354462ee327854928e",
+      "label": "P03 eng-4535cce81a7f8218 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4535cce81a7f8218/project-numeric-observations.json",
+      "sha256": "7aaf4d4826773431c21203750ae68c19ab91b2f649f8081edd97287687add243",
+      "label": "P03 eng-4535cce81a7f8218 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d81f1438df3c91f9/input.json",
+      "sha256": "3219fd50d46ef7004065a3465aa0355ff4e3151a9bf00d648fc580dba81c31b7",
+      "label": "P03 eng-d81f1438df3c91f9 input.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "PCB与制造文件/manufacturing/bom-manufacturing.csv",
+        "sha256": "2f880b1df42785e088eb25db448e77b32e005ffb6256ef529efca3c6d5291429",
+        "bytes": 570
+      },
+      {
+        "path": "PCB与制造文件/manufacturing/manufacturing.md",
+        "sha256": "a10ddeb3468845740c8c96663e3e153c38d9a89aba7ba7d803a2e6fadbe7ad50",
+        "bytes": 632
+      },
+      {
+        "path": "PCB与制造文件/pcb-checks/pcb-checks.csv",
+        "sha256": "3d25e4123150e27649f813a15ee37ad245d3ce31e28e19e43671a206125b2d04",
+        "bytes": 306
+      },
+      {
+        "path": "PCB与制造文件/pcb-checks/pcb-checks.json",
+        "sha256": "a3cff0bb06522dc39be95c77cd7c18ece9df253343f79110c4fb62834bae6def",
+        "bytes": 1191
+      },
+      {
+        "path": "PCB与制造文件/pcb/BLOCKED.md",
+        "sha256": "4429136cd19308d378eb7aca121a27173f9b4f8b8c0cfe53a3176298fe51c081",
+        "bytes": 453
+      },
+      {
+        "path": "PCB与制造文件/pcb/board-review.svg",
+        "sha256": "35f69e74caaa786ad2248034aaf94b9159fec5fef8438843c1d6ca765f72b6f5",
+        "bytes": 975
+      },
+      {
+        "path": "PCB与制造文件/pcb/connectivity-map.csv",
+        "sha256": "9503c43ad323e35bd33ebc86c50957737b0162339acf699271b2b48c6e8b1e71",
+        "bytes": 851
+      },
+      {
+        "path": "PCB与制造文件/pcb/pcb-blocked.json",
+        "sha256": "0eb95f129a66902307a7a0aaae23608cc457abb11b719d5c6953d435a9317174",
+        "bytes": 581
+      },
+      {
+        "path": "PCB与制造文件/pcb/pcb.md",
+        "sha256": "a2b083b1225c127d0c0a60759d6fe096c7870bad596e26abef15f7d3e01bba39",
+        "bytes": 2123
+      },
+      {
+        "path": "assembly.json",
+        "sha256": "e7c84f0ca6ad0b2a22fa741ed53ca497396b5ce8a242be5892459cc8643670ce",
+        "bytes": 22867
+      },
+      {
+        "path": "cad/README.md",
+        "sha256": "1081ccd6b62fc82dca0f3dd9314dd0b010f3e8f475609dd3b43ebaf97957826e",
+        "bytes": 1749
+      },
+      {
+        "path": "cad/main.py",
+        "sha256": "9abaabc10d5042d8a8e3b63441aea8e5844ffceb73eded5a2009dc66375eedbb",
+        "bytes": 9465
+      },
+      {
+        "path": "cad/params.py",
+        "sha256": "414c0896f8823e520ac2baf35bb0db1053d035b6e8c14af184e3220e365ee822",
+        "bytes": 3668
+      },
+      {
+        "path": "cad/project.json",
+        "sha256": "f3d18cc1db1302342e5b481dcb659283f774a2190ec5aeb1a5c1092db81dc656",
+        "bytes": 417
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "3247cb7d1a20519b46769ae62898d4469bc449a5d125cf96bdc72c6de6a1e7f8",
+        "bytes": 8254
+      },
+      {
+        "path": "docs/architecture.md",
+        "sha256": "61e9850991a60155acc9bf07bf160c80fe4af1055c1a498f7d27366bd9b66a52",
+        "bytes": 1594
+      },
+      {
+        "path": "docs/cad.md",
+        "sha256": "38393094dc02423b1b23276174b31b5ad38bfa98ab434cc18c91914a4d2d42c3",
+        "bytes": 3261
+      },
+      {
+        "path": "docs/clearance.md",
+        "sha256": "e7ceee91c2961fdbbb8e6e69cbd6a494955a90c71b1b66488a35afa9260e8d0c",
+        "bytes": 1179
+      },
+      {
+        "path": "docs/energy-account.md",
+        "sha256": "9a85f736f477ef1d944e251a5373465b6c2d577e977ec9cbc6b665c9b71f6c79",
+        "bytes": 4296
+      },
+      {
+        "path": "docs/figures.md",
+        "sha256": "7ccc667efa9f56c599fcf3f6d50f07d740a88ce6486c951222016132adf5f961",
+        "bytes": 827
+      },
+      {
+        "path": "docs/firmware.md",
+        "sha256": "8b1129ba9b13b89facf6645c4ee7fd24a22f0c5fa7be1e168b1703e34ae46ab3",
+        "bytes": 7692
+      },
+      {
+        "path": "docs/flash-guide.md",
+        "sha256": "b19ff0beae4aca5e56f8c00bf53ae4239ebeb4fb1c8d88b2e3ee11e2b1c694a7",
+        "bytes": 2058
+      },
+      {
+        "path": "docs/manufacturing.md",
+        "sha256": "a10ddeb3468845740c8c96663e3e153c38d9a89aba7ba7d803a2e6fadbe7ad50",
+        "bytes": 632
+      },
+      {
+        "path": "docs/matrix.md",
+        "sha256": "d42e13f5ad631e2b5ef24da601eeace7e73ea41a9d3fb1a4d597410b21e8fa7c",
+        "bytes": 2293
+      },
+      {
+        "path": "docs/pcb.md",
+        "sha256": "a2b083b1225c127d0c0a60759d6fe096c7870bad596e26abef15f7d3e01bba39",
+        "bytes": 2123
+      },
+      {
+        "path": "docs/presentation.md",
+        "sha256": "1f0501ca3f2097c04369bfd8253e778085ac2c2aa4e0a65ce9691644c7398849",
+        "bytes": 1669
+      },
+      {
+        "path": "docs/raw-data.md",
+        "sha256": "db2d3977babc5ff9d1afc7eb8334ac43a8bb1d5acb05be0ae6c2cb086c9655f3",
+        "bytes": 2915
+      },
+      {
+        "path": "docs/receiver.md",
+        "sha256": "4fd84ab7ec4d1d06dc1b4e29ec55080a8e6e9a824f4eb8915f51e039ea195643",
+        "bytes": 1252
+      },
+      {
+        "path": "docs/references.md",
+        "sha256": "800ad6161ef5b85c47c11a86558c8fea3f3ea445bbc6471c70da7a6fbf29b8cb",
+        "bytes": 1272
+      },
+      {
+        "path": "docs/requirements.md",
+        "sha256": "1c1d79d301fcba8510e57d838e7ac8478ea47a2536dd46fe194bb954d0ac1026",
+        "bytes": 1413
+      },
+      {
+        "path": "docs/schematic.md",
+        "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+        "bytes": 2696
+      },
+      {
+        "path": "docs/spice-results.md",
+        "sha256": "552ac261d19372d51d6b151ad6ba41239ecf2c4820b94c18af0b84986305000d",
+        "bytes": 2149
+      },
+      {
+        "path": "firmware/README.md",
+        "sha256": "e2556d693fba771814f65a967a8e4267038ee2a58044f2cf039810cc36798403",
+        "bytes": 1480
+      },
+      {
+        "path": "firmware/host/dump_frames.c",
+        "sha256": "3f9bbdd5f757904f6ba633ab698a149ba444a3caba08fa03501b4e5d5d4e4e3c",
+        "bytes": 3585
+      },
+      {
+        "path": "firmware/host/fault_tests.c",
+        "sha256": "e1f336eeb4eb5401bd5bb27a6165557f531630d475a3251038153ee244b1aa47",
+        "bytes": 11579
+      },
+      {
+        "path": "firmware/host/host_replay.c",
+        "sha256": "1236833bd6c5c0aa3b5260d9c2e121f80d6fce12bb86a98b9be7024ae204fc72",
+        "bytes": 4303
+      },
+      {
+        "path": "firmware/src/ispet_app.c",
+        "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+        "bytes": 8210
+      },
+      {
+        "path": "firmware/src/ispet_app.h",
+        "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+        "bytes": 5681
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "8dc8a98b93293ec11539af3b8f7644c694aa6a07220ce74be4d8421e4d456e5a",
+        "bytes": 11412
+      },
+      {
+        "path": "pcb/BLOCKED.md",
+        "sha256": "4429136cd19308d378eb7aca121a27173f9b4f8b8c0cfe53a3176298fe51c081",
+        "bytes": 453
+      },
+      {
+        "path": "sources/P03/article-pages.json",
+        "sha256": "4a5c216202603893f42ab581dd2be339b2094e6408578621904ecc69dc1713bc",
+        "bytes": 67032
+      },
+      {
+        "path": "sources/P03/article.pdf",
+        "sha256": "a62eb7a08e3d5a6b5fd31f44d52342805aba35c4d76f1cfc8f86f0f5c2bd8cda",
+        "bytes": 3695032
+      },
+      {
+        "path": "sources/P03/article.xml",
+        "sha256": "dd619d7eef29318f8e25b8ed2d8b4e98a076b3f4f3a9e0df7a061a197b034115",
+        "bytes": 111648
+      },
+      {
+        "path": "sources/P03/supplement-pages.json",
+        "sha256": "e2dfa722959befecf5e8975093c1b4f2618295ddbba5a050445b2181ba2fe015",
+        "bytes": 37305
+      },
+      {
+        "path": "sources/P03/supplement.pdf",
+        "sha256": "776981cbaa08a87bd64985383d670a79993af94a09ce32643c59f74893066447",
+        "bytes": 4017364
+      },
+      {
+        "path": "spice/README.md",
+        "sha256": "bff76049d672cafb41a81a07418ea8b683fa3be7e7237f0b9e847a67fa955a8d",
+        "bytes": 1969
+      },
+      {
+        "path": "spice/main.cir",
+        "sha256": "0b97b8a0a1a65a7f67945afba4d24885cdb15a4c2af46e798835840a441205fb",
+        "bytes": 4575
+      },
+      {
+        "path": "spice/project.json",
+        "sha256": "ed27363197dd617c2d8e5fbc0ef3e57e15355eac7f4bcc5bfe3aa404016cd9bf",
+        "bytes": 1241
+      },
+      {
+        "path": "动力学与COMSOL/NOT_APPLICABLE.md",
+        "sha256": "f19a09cf40fba0c8467f487c8c894bb343980e07c3c540d077c2b949cf36f54d",
+        "bytes": 980
+      },
+      {
+        "path": "动力学与COMSOL/mapping/param-map.csv",
+        "sha256": "441425edbeb95ac9fa354b717f7d22af894b8ba9d6fd761bf2397b15cdea2dfd",
+        "bytes": 595
+      },
+      {
+        "path": "动力学与COMSOL/mapping/param-map.json",
+        "sha256": "82befefd3801cdb472534393a8881d75b054c475af875f77b81e7bcc6f9536c4",
+        "bytes": 2815
+      },
+      {
+        "path": "原始数据/host-replay.jsonl",
+        "sha256": "044b4e1697064ddb583d435f9d1f1ec46da549a2977359170c48aecaa700198c",
+        "bytes": 504
+      },
+      {
+        "path": "原始数据/native-observations.csv",
+        "sha256": "00ee99a2f90ec68ffd03c1b623c15a185e3a69b70b6374f6df176c4fa4f8b937",
+        "bytes": 12639
+      },
+      {
+        "path": "原始数据/native-observations.json",
+        "sha256": "7aaf4d4826773431c21203750ae68c19ab91b2f649f8081edd97287687add243",
+        "bytes": 20761
+      },
+      {
+        "path": "原始数据/raw-data-index.json",
+        "sha256": "13d9bf63f4d3b0864e9864feb29364620c804702495101133495fd7dcc0e61e7",
+        "bytes": 6345
+      },
+      {
+        "path": "原始数据/raw-data.md",
+        "sha256": "db2d3977babc5ff9d1afc7eb8334ac43a8bb1d5acb05be0ae6c2cb086c9655f3",
+        "bytes": 2915
+      },
+      {
+        "path": "参考与采用说明/article-pages.json",
+        "sha256": "4a5c216202603893f42ab581dd2be339b2094e6408578621904ecc69dc1713bc",
+        "bytes": 67032
+      },
+      {
+        "path": "参考与采用说明/article.pdf",
+        "sha256": "a62eb7a08e3d5a6b5fd31f44d52342805aba35c4d76f1cfc8f86f0f5c2bd8cda",
+        "bytes": 3695032
+      },
+      {
+        "path": "参考与采用说明/article.xml",
+        "sha256": "dd619d7eef29318f8e25b8ed2d8b4e98a076b3f4f3a9e0df7a061a197b034115",
+        "bytes": 111648
+      },
+      {
+        "path": "参考与采用说明/reference-uses.json",
+        "sha256": "ec2c1ec5f70c7b796a7619f275e1df58fcf2216a3d7b79c8108326fbdb6e744e",
+        "bytes": 1162
+      },
+      {
+        "path": "参考与采用说明/references.md",
+        "sha256": "800ad6161ef5b85c47c11a86558c8fea3f3ea445bbc6471c70da7a6fbf29b8cb",
+        "bytes": 1272
+      },
+      {
+        "path": "参考与采用说明/supplement-pages.json",
+        "sha256": "e2dfa722959befecf5e8975093c1b4f2618295ddbba5a050445b2181ba2fe015",
+        "bytes": 37305
+      },
+      {
+        "path": "参考与采用说明/supplement.pdf",
+        "sha256": "776981cbaa08a87bd64985383d670a79993af94a09ce32643c59f74893066447",
+        "bytes": 4017364
+      },
+      {
+        "path": "固件与烧录/firmware-resources/fault-tests.json",
+        "sha256": "71197a5002c011ede0ec05c27ddcdcc7466e462fc160351449b3e06f2c2872b6",
+        "bytes": 661
+      },
+      {
+        "path": "固件与烧录/firmware-resources/fault_tests-run.txt",
+        "sha256": "7f6989707e28c44aba199b416f60795fc99eb0c311770cc77341754d0e4180c9",
+        "bytes": 1462
+      },
+      {
+        "path": "固件与烧录/firmware-resources/firmware-resources.json",
+        "sha256": "9456b0c71acfba03192d639b4afb7b85540d7983db60680f5a6748bb76069aa6",
+        "bytes": 7956
+      },
+      {
+        "path": "固件与烧录/firmware-resources/firmware-state.svg",
+        "sha256": "2d029d5f749e5996213ecabacb95701e3d3954bfadc8fe80e7c8a821865f8e4a",
+        "bytes": 1016
+      },
+      {
+        "path": "固件与烧录/firmware-resources/host-build.json",
+        "sha256": "9b3447aadb479bb54929916948081658dd88f9253f54721e6dabfc4ca197de90",
+        "bytes": 7750
+      },
+      {
+        "path": "固件与烧录/firmware-resources/host_replay-run.txt",
+        "sha256": "b95f62d15182ef21fc9f1b4e8d25eecb40c583c908626022654d92bec5731a4b",
+        "bytes": 685
+      },
+      {
+        "path": "固件与烧录/firmware-resources/load-model.csv",
+        "sha256": "388f091f09c017c37d23d30e50cbce005d6af3b5f7904e09eb38ab97699b7f36",
+        "bytes": 409
+      },
+      {
+        "path": "固件与烧录/firmware-resources/receiver-tests-run.txt",
+        "sha256": "a6b76e4c72fda6f69c2e28a00ae3bf96928842bfcda657719429bf5bd9e270cc",
+        "bytes": 2690
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/artifact-index.json",
+        "sha256": "1b863ca7bd6b9d1bd90a3f030d684ea98a75065ba7453d6808634eb31e62748f",
+        "bytes": 1248
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/input.json",
+        "sha256": "cb5e07e0cdc2aafe68baff62d55d8dc0cdac03855036d8cf870ed64f4411be62",
+        "bytes": 58708
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/libc_init.c",
+        "sha256": "f3ffe4ea383876d01d77d56f55257bd444e893216055877f041afde130bf60b0",
+        "bytes": 40
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/process.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-firmware.bin",
+        "sha256": "02d3f2c9190bb117a780373e2cbce2546859748fc073e23c9f0a28edaa55a87e",
+        "bytes": 2468
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-firmware.elf",
+        "sha256": "f3a19739ac380c708509b7059aef8901c4e117be0f857ec95ec86a95f7b7af02",
+        "bytes": 14240
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-firmware.hex",
+        "sha256": "83183603a0277c724defa2ef0ac38901932f672fba3ebd60c9d69b9955559295",
+        "bytes": 7015
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-firmware.map",
+        "sha256": "458d90e259e054afc4af74cea1e8bdfe6ca8585f09155dc5043046bd010fdf63",
+        "bytes": 30244
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-readback.json",
+        "sha256": "521cecf0421ee0a90060b9975461694cdebaaf43d7dbd56473920cb209c58b1c",
+        "bytes": 703
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/project-source.zip",
+        "sha256": "33cd09e4b9b5156679848d644eefbd4b57a9f1fe58ededf1c7c451e9b698cd8d",
+        "bytes": 17389
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/result.json",
+        "sha256": "957a82c13c06cb6d7bf05fd2747ae431d3020416295df2ae4d6ddd4abcefc626",
+        "bytes": 3261
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432-build/stm32l432.ld",
+        "sha256": "6727c27149328248f1f849e8c46d1144bc60f5f356418c7fc85b9ad7889f54d0",
+        "bytes": 1191
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/ispet_app.c",
+        "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+        "bytes": 8210
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/ispet_app.h",
+        "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+        "bytes": 5681
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/ispet_target.c",
+        "sha256": "c544ac31575025f83c1b3ff7b06114aaaaac441caf7ca83c64e65dfd1e8370fe",
+        "bytes": 16259
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/ispet_target.h",
+        "sha256": "96b4cc1dc81c1e76e25faf64d35a2e76e8d31f1bd874a4c2878fc264c46b5879",
+        "bytes": 4874
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/main.c",
+        "sha256": "dae8b43129b6548c8662e9474056d9befe33b99a125d0575920ef3ca0e88adae",
+        "bytes": 2924
+      },
+      {
+        "path": "固件与烧录/firmware-stm32l432/project.json",
+        "sha256": "9f69c4b018f68374dbae736bb5d588e8ceec73fd19f7129c3e597bd3ff478a36",
+        "bytes": 1804
+      },
+      {
+        "path": "固件与烧录/firmware/README.md",
+        "sha256": "e2556d693fba771814f65a967a8e4267038ee2a58044f2cf039810cc36798403",
+        "bytes": 1480
+      },
+      {
+        "path": "固件与烧录/firmware/build_host.py",
+        "sha256": "b9041f77651e83267464014978074bc5378fe7cb549c09e82a191ef177372ab0",
+        "bytes": 4781
+      },
+      {
+        "path": "固件与烧录/firmware/dump_frames.c",
+        "sha256": "3f9bbdd5f757904f6ba633ab698a149ba444a3caba08fa03501b4e5d5d4e4e3c",
+        "bytes": 3585
+      },
+      {
+        "path": "固件与烧录/firmware/fault_tests.c",
+        "sha256": "e1f336eeb4eb5401bd5bb27a6165557f531630d475a3251038153ee244b1aa47",
+        "bytes": 11579
+      },
+      {
+        "path": "固件与烧录/firmware/firmware-status.json",
+        "sha256": "278ca4bf2cc18728433f80a5850476c0e5f63b110d23367bc4ce1d4c93fd777b",
+        "bytes": 9559
+      },
+      {
+        "path": "固件与烧录/firmware/firmware.md",
+        "sha256": "8b1129ba9b13b89facf6645c4ee7fd24a22f0c5fa7be1e168b1703e34ae46ab3",
+        "bytes": 7692
+      },
+      {
+        "path": "固件与烧录/firmware/host-replay.log",
+        "sha256": "8281628607ca981d0b92d4df27f34e9fa21e9f2d181edddbb22dc13343663836",
+        "bytes": 526
+      },
+      {
+        "path": "固件与烧录/firmware/host_replay.c",
+        "sha256": "1236833bd6c5c0aa3b5260d9c2e121f80d6fce12bb86a98b9be7024ae204fc72",
+        "bytes": 4303
+      },
+      {
+        "path": "固件与烧录/firmware/ispet_app.c",
+        "sha256": "f33e0a28ae908f285f1c1e0381972071ba5bd8aab93a527400f1f5cd7c5bf9da",
+        "bytes": 8210
+      },
+      {
+        "path": "固件与烧录/firmware/ispet_app.h",
+        "sha256": "49ff96ef7ea2badb8157092ca49ac31d73aaf183ac27c97b174c74001c371e76",
+        "bytes": 5681
+      },
+      {
+        "path": "固件与烧录/firmware/ispet_target.c",
+        "sha256": "c544ac31575025f83c1b3ff7b06114aaaaac441caf7ca83c64e65dfd1e8370fe",
+        "bytes": 16259
+      },
+      {
+        "path": "固件与烧录/firmware/ispet_target.h",
+        "sha256": "96b4cc1dc81c1e76e25faf64d35a2e76e8d31f1bd874a4c2878fc264c46b5879",
+        "bytes": 4874
+      },
+      {
+        "path": "固件与烧录/firmware/main.c",
+        "sha256": "dae8b43129b6548c8662e9474056d9befe33b99a125d0575920ef3ca0e88adae",
+        "bytes": 2924
+      },
+      {
+        "path": "固件与烧录/flash-guide/flash-guide.md",
+        "sha256": "b19ff0beae4aca5e56f8c00bf53ae4239ebeb4fb1c8d88b2e3ee11e2b1c694a7",
+        "bytes": 2058
+      },
+      {
+        "path": "固件与烧录/flash-guide/flash_stm32l432.py",
+        "sha256": "cb5662a4da2fa92b50f49c948c1cc5684e13b60b08e2232da61782814a98983d",
+        "bytes": 2230
+      },
+      {
+        "path": "图表与绘图程序/figure-native.json",
+        "sha256": "188e7325f21e067ec522940012344c37f6e741a8f2bddcb1bccc720367621119",
+        "bytes": 3303
+      },
+      {
+        "path": "图表与绘图程序/figure-native.png",
+        "sha256": "f3c87ced4730976f16e451ad24c0322af772070f4528655343a5e6abbffe8d2e",
+        "bytes": 76778
+      },
+      {
+        "path": "图表与绘图程序/figures.json",
+        "sha256": "da39913d263b0d2ff6608ea525f2aa8372b8cf82e19557d2fda6d98db5869f72",
+        "bytes": 20180
+      },
+      {
+        "path": "图表与绘图程序/make_figure.py",
+        "sha256": "e6da333756c49f4b2e82736b311cb6b30ee23b221e28855a83f0589c99092afe",
+        "bytes": 8298
+      },
+      {
+        "path": "图表与绘图程序/native-power-gate.png",
+        "sha256": "f0e3e98c8397a8debd73a511ad64aabf29870d16abcb2de8dd457c95e6d5ad9c",
+        "bytes": 24508
+      },
+      {
+        "path": "图表与绘图程序/plot_native.py",
+        "sha256": "b3c898235fc724d4375dfb2eb074586f549632d539bb8d3e5600b6dbff20dbde",
+        "bytes": 2698
+      },
+      {
+        "path": "接收端与协议/direction/NOT_APPLICABLE.md",
+        "sha256": "631b772667aa5220c60db92d203117c79c75c33f98bd6d683b90e12f1dcbabcf",
+        "bytes": 649
+      },
+      {
+        "path": "接收端与协议/receiver-tests/receiver-tests.json",
+        "sha256": "a782c9451c2bff2f992e26c43556ebe9a487db14edf12f5f64af12bc1abf3c48",
+        "bytes": 5461
+      },
+      {
+        "path": "接收端与协议/receiver-tests/replay.jsonl",
+        "sha256": "044b4e1697064ddb583d435f9d1f1ec46da549a2977359170c48aecaa700198c",
+        "bytes": 504
+      },
+      {
+        "path": "接收端与协议/receiver-tests/test_receiver.py",
+        "sha256": "c362d67c007de41113ba5834286db2ab2ee9f3e9c3ebd8f7944f3b1629bafdde",
+        "bytes": 4534
+      },
+      {
+        "path": "接收端与协议/receiver/decoded-frames.jsonl",
+        "sha256": "e65f06cc458fc035dfa86d9d0f09517d95cfc01162f7c70b8a7694889bfab7ed",
+        "bytes": 653
+      },
+      {
+        "path": "接收端与协议/receiver/receiver.md",
+        "sha256": "4fd84ab7ec4d1d06dc1b4e29ec55080a8e6e9a824f4eb8915f51e039ea195643",
+        "bytes": 1252
+      },
+      {
+        "path": "接收端与协议/receiver/receiver.py",
+        "sha256": "d90574f9d7b7837a8307ba6a30ac0c8d041e699427796109574812730737af91",
+        "bytes": 3888
+      },
+      {
+        "path": "机械CAD与装配/cad-params.json",
+        "sha256": "d587c608126d4e343400ed18ed19dc52ad44d6cb57748029d19163f18d8c4722",
+        "bytes": 1053
+      },
+      {
+        "path": "机械CAD与装配/cad/README.md",
+        "sha256": "1081ccd6b62fc82dca0f3dd9314dd0b010f3e8f475609dd3b43ebaf97957826e",
+        "bytes": 1749
+      },
+      {
+        "path": "机械CAD与装配/cad/assembly.json",
+        "sha256": "e7c84f0ca6ad0b2a22fa741ed53ca497396b5ce8a242be5892459cc8643670ce",
+        "bytes": 22867
+      },
+      {
+        "path": "机械CAD与装配/cad/cad-model.md",
+        "sha256": "38393094dc02423b1b23276174b31b5ad38bfa98ab434cc18c91914a4d2d42c3",
+        "bytes": 3261
+      },
+      {
+        "path": "机械CAD与装配/cad/clearance.json",
+        "sha256": "b68f108a162efaae0fbfeff5e98afea079661c096b78e13f77f83413b9ccd040",
+        "bytes": 763
+      },
+      {
+        "path": "机械CAD与装配/cad/clearance.md",
+        "sha256": "e7ceee91c2961fdbbb8e6e69cbd6a494955a90c71b1b66488a35afa9260e8d0c",
+        "bytes": 1179
+      },
+      {
+        "path": "机械CAD与装配/cad/main.py",
+        "sha256": "9abaabc10d5042d8a8e3b63441aea8e5844ffceb73eded5a2009dc66375eedbb",
+        "bytes": 9465
+      },
+      {
+        "path": "机械CAD与装配/cad/native-readback.json",
+        "sha256": "0675c835a401faca53098e279fcea4c41a1d696b249efabb60b3d9ec0a2edab9",
+        "bytes": 638
+      },
+      {
+        "path": "机械CAD与装配/cad/params.py",
+        "sha256": "414c0896f8823e520ac2baf35bb0db1053d035b6e8c14af184e3220e365ee822",
+        "bytes": 3668
+      },
+      {
+        "path": "机械CAD与装配/cad/parts.csv",
+        "sha256": "cafc85a5395cfdb390f0d1559ac0abb54910341f5e963eae69df0722df83347d",
+        "bytes": 36
+      },
+      {
+        "path": "机械CAD与装配/cad/project-assembly.step",
+        "sha256": "c1e0fcac946f3cdedfd7e1058eaeb121cb0e825b2559e48ac5d1608d7a5fcdd4",
+        "bytes": 18244041
+      },
+      {
+        "path": "机械CAD与装配/cad/project.json",
+        "sha256": "f3d18cc1db1302342e5b481dcb659283f774a2190ec5aeb1a5c1092db81dc656",
+        "bytes": 417
+      },
+      {
+        "path": "机械CAD与装配/clearance/check_clearance.py",
+        "sha256": "d9fe24b34775c404b052b6a263772063c7640c6eb0751521344a320a4f508664",
+        "bytes": 1882
+      },
+      {
+        "path": "机械CAD与装配/clearance/clearance.json",
+        "sha256": "524c4ddac6cddda8493f51a604e2c973398f690a489275b04d3ac93997dea178",
+        "bytes": 1531
+      },
+      {
+        "path": "机械CAD与装配/clearance/envelope.svg",
+        "sha256": "516ae6fab829d7ce6f324cbd9876a9ed1c5996bfa30a73cdadbaa2b07564ba07",
+        "bytes": 974
+      },
+      {
+        "path": "机械CAD与装配/drawings/assembly-notes.md",
+        "sha256": "454e3f0e2a5bd7c7f1620451c333cee0f57f8171f682a93aebcd84ffc5fb8c12",
+        "bytes": 1295
+      },
+      {
+        "path": "机械CAD与装配/drawings/mechanical-bom.csv",
+        "sha256": "10edc6061b2309fb2c340e907e57879775b023b093233ffa45aa1e4adfc1ae5a",
+        "bytes": 782
+      },
+      {
+        "path": "机械CAD与装配/tag-assembly.step",
+        "sha256": "c1e0fcac946f3cdedfd7e1058eaeb121cb0e825b2559e48ac5d1608d7a5fcdd4",
+        "bytes": 18244041
+      },
+      {
+        "path": "版本清单与验收报告/UNVERIFIED.md",
+        "sha256": "3247cb7d1a20519b46769ae62898d4469bc449a5d125cf96bdc72c6de6a1e7f8",
+        "bytes": 8254
+      },
+      {
+        "path": "版本清单与验收报告/build_release.py",
+        "sha256": "444b7dabb4ff4d4a9bd798d6beb89db5b3130ce3d63377319dfe0b040874d45a",
+        "bytes": 7483
+      },
+      {
+        "path": "版本清单与验收报告/native-report.json",
+        "sha256": "8dc8a98b93293ec11539af3b8f7644c694aa6a07220ce74be4d8421e4d456e5a",
+        "bytes": 11412
+      },
+      {
+        "path": "版本清单与验收报告/release-report.md",
+        "sha256": "043abafeb3c190d73a06608aedd16571d2c09e177cc9393aac7bc6e199e2e5d8",
+        "bytes": 6664
+      },
+      {
+        "path": "版本清单与验收报告/reproduction-guide.md",
+        "sha256": "cebace6aa3fdce3d82d5ac27b793f048ed4776aab24336f5017f48127710a40b",
+        "bytes": 3362
+      },
+      {
+        "path": "电路原理图与SPICE/electrical-checks/electrical-checks.csv",
+        "sha256": "bb11ca845cc59925e9d01c618f91c04c8c50cdafd3818e8a201d72b13348625f",
+        "bytes": 281
+      },
+      {
+        "path": "电路原理图与SPICE/electrical-checks/electrical-checks.json",
+        "sha256": "f6e7239056f74d4df91c3f972f04eb836379c7bb79f010c8e703e946450987df",
+        "bytes": 1413
+      },
+      {
+        "path": "电路原理图与SPICE/energy-account.md",
+        "sha256": "9a85f736f477ef1d944e251a5373465b6c2d577e977ec9cbc6b665c9b71f6c79",
+        "bytes": 4296
+      },
+      {
+        "path": "电路原理图与SPICE/schematic/bom.csv",
+        "sha256": "2a6614d408edda17253ab43916c0d52ccb351dfa1437447eefe5b3b8fac3c4f7",
+        "bytes": 833
+      },
+      {
+        "path": "电路原理图与SPICE/schematic/circuit-selection.json",
+        "sha256": "54084d0b2cdb4aa0512e8cd3015beac4383460c85b9269f06bd71e27fa1a03dc",
+        "bytes": 1627
+      },
+      {
+        "path": "电路原理图与SPICE/schematic/circuit-selection.md",
+        "sha256": "6a2a6929f7f43810e791c361fc93a55d661c472292639cf8843d725fbf8677c0",
+        "bytes": 628
+      },
+      {
+        "path": "电路原理图与SPICE/schematic/review-schematic.svg",
+        "sha256": "06f777944df489fe6223b83bf832486e7025b631fa7f48795ff4ee9d5285bf51",
+        "bytes": 2049
+      },
+      {
+        "path": "电路原理图与SPICE/schematic/schematic.md",
+        "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+        "bytes": 2696
+      },
+      {
+        "path": "电路原理图与SPICE/spice/README.md",
+        "sha256": "bff76049d672cafb41a81a07418ea8b683fa3be7e7237f0b9e847a67fa955a8d",
+        "bytes": 1969
+      },
+      {
+        "path": "电路原理图与SPICE/spice/main.cir",
+        "sha256": "0b97b8a0a1a65a7f67945afba4d24885cdb15a4c2af46e798835840a441205fb",
+        "bytes": 4575
+      },
+      {
+        "path": "电路原理图与SPICE/spice/models.json",
+        "sha256": "bd1dff45e89322934bbb7b73ed7d4e9cf227e416cb3c8cc307e8ef7fae8b3eb2",
+        "bytes": 2079
+      },
+      {
+        "path": "电路原理图与SPICE/spice/project.json",
+        "sha256": "ed27363197dd617c2d8e5fbc0ef3e57e15355eac7f4bcc5bfe3aa404016cd9bf",
+        "bytes": 1241
+      },
+      {
+        "path": "电路原理图与SPICE/spice/schematic.md",
+        "sha256": "8fc7414565301f5ee3cb8a23529b835276468a3747e185773d7ce193654286ab",
+        "bytes": 2696
+      },
+      {
+        "path": "电路原理图与SPICE/spice/spice-native.json",
+        "sha256": "fe762c40d53347995e80c96cac2893346cfcf7150ef12ebc01d645df27d04338",
+        "bytes": 28334
+      },
+      {
+        "path": "电路原理图与SPICE/spice/spice-observations.csv",
+        "sha256": "00ee99a2f90ec68ffd03c1b623c15a185e3a69b70b6374f6df176c4fa4f8b937",
+        "bytes": 12639
+      },
+      {
+        "path": "电路原理图与SPICE/spice/spice-results.md",
+        "sha256": "552ac261d19372d51d6b151ad6ba41239ecf2c4820b94c18af0b84986305000d",
+        "bytes": 2149
+      },
+      {
+        "path": "联合仿真与测试/joint/joint-timeline.csv",
+        "sha256": "8d80da970d550f451fad540d6c53c426acbe4ce5728596684f3b2d2eab95382a",
+        "bytes": 3037
+      },
+      {
+        "path": "联合仿真与测试/joint/joint_model.py",
+        "sha256": "ba07e16c256fbbeffdbf70fc4adcdfea22a21225939d69471a6e3ba78ed816ef",
+        "bytes": 2215
+      },
+      {
+        "path": "联合仿真与测试/joint/joint_summary.csv",
+        "sha256": "e30d3e897fe25e8d6b0b7131b065d5eeb4991db8f2dcacf12b8185ea73e74994",
+        "bytes": 1315
+      },
+      {
+        "path": "联合仿真与测试/joint/joint_summary.json",
+        "sha256": "ff6f79148832c4bee46c139a456c117e98cc7303828a3e8c3a398a828d44b940",
+        "bytes": 3587
+      },
+      {
+        "path": "联合仿真与测试/matrix/matrix-run.csv",
+        "sha256": "547ce85b06888748fded1877b46b50a6f322919b9a19bb3eb08333bc0e81ad33",
+        "bytes": 3199
+      },
+      {
+        "path": "联合仿真与测试/matrix/matrix.csv",
+        "sha256": "64aad56042295a03edfe6dc48c8df67c7bfb28da51eec12a72dbae82833f8755",
+        "bytes": 2317
+      },
+      {
+        "path": "联合仿真与测试/matrix/matrix.json",
+        "sha256": "481f2243093ada7d69a735e4d17e3f1f3832674bfd782492ef9eddb66b04228a",
+        "bytes": 3455
+      },
+      {
+        "path": "联合仿真与测试/matrix/matrix.md",
+        "sha256": "d42e13f5ad631e2b5ef24da601eeace7e73ea41a9d3fb1a4d597410b21e8fa7c",
+        "bytes": 2293
+      },
+      {
+        "path": "联合仿真与测试/matrix/run_matrix.py",
+        "sha256": "917b5ada02903038cd64fdf9a300557ae24d255436293667dc2c6c270627c4ff",
+        "bytes": 3800
+      },
+      {
+        "path": "联合仿真与测试/system-acceptance/system-acceptance.csv",
+        "sha256": "e74fdc2c65e3dfd71d2fb6a0eba548d574ede58aa98faa46f7a02d3deebf7f55",
+        "bytes": 224
+      },
+      {
+        "path": "联合仿真与测试/system-acceptance/system-acceptance.json",
+        "sha256": "80a83014cb2da2f07106d2a2ee3d83c0bb8cdd12686d2b63e074b788de4d0c3d",
+        "bytes": 1471
+      },
+      {
+        "path": "需求与验收/interfaces.csv",
+        "sha256": "bb342daa81dece47a5f7c764c5c3fe5b73578405953b45b73a8c6d3943839dfe",
+        "bytes": 1190
+      },
+      {
+        "path": "需求与验收/interfaces.json",
+        "sha256": "9d2264198220cf1bde668391739dea3ac1df5b25f682861aa87f0010071b8265",
+        "bytes": 2469
+      },
+      {
+        "path": "需求与验收/interfaces.svg",
+        "sha256": "d91009e0941470aa5debe493cda6ceb748a193f3ec98d167b2f5b1a45dd3b518",
+        "bytes": 2937
+      },
+      {
+        "path": "需求与验收/requirements.json",
+        "sha256": "da39f637d15868786a28f91ddc1d1708cf4a27c683c36dfdb9673b55aaf2aa2f",
+        "bytes": 2659
+      },
+      {
+        "path": "需求与验收/requirements.md",
+        "sha256": "1c1d79d301fcba8510e57d838e7ac8478ea47a2536dd46fe194bb954d0ac1026",
+        "bytes": 1413
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-d62a15330af1cdc5",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-e6d33f4e62493e60",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9a6091a3c38d6166",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-880a09803ccb2015",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-1b96b77069863fb8",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-4535cce81a7f8218",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-d81f1438df3c91f9",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_-25"
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P03-native-486bb1f0fcf4-f858d38c/continuations/turn-006/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-23f915b7ee4e9fe6/trace.jsonl",
+  "trace_sha256": "ddf79a73aea0735eb83065a9a5c959954e6e9dc1adfa850b6d5c5079858e66d1",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "bf-p04-independent-current-target-preemption-v1",
+  "created": 1791541946.699955,
+  "paper": "P04",
+  "owner": "pi-chat-41ef51c671ce114a",
+  "actor": "Codex independent public development checker",
+  "job_id": "eng-e439448e44fe5d01",
+  "project_sha256": "e763de06d137e6577956aa890bcbe948381a90eab48e93f85a28ffa7fe794dda",
+  "input_sha256": "1fb8ac39ddf1a03f416b25bd66c1fa49d1507e885d216e9fe42f4e33e0b17678",
+  "source_sha256": {
+    "main.c": "0b9b460a4b2ab945cf3dff67f7edd16b9989caa3b458194d7def2e490862113a",
+    "nrf52_regs.h": "5673c91cd6e16b64d533d4310a955923526ea7e02e8d6480cc3fe0d69616e4f0",
+    "policy.h": "65f509320f39c1940251357ef7fa5d5619af489de469a30d7f27c77cc1b94072"
+  },
+  "checker_sha256": "077214756becf03bb9ec2ec07884ccdb2d600d08df2ea22efdf5907d0f938e44",
+  "observations": {
+    "started_irq_preemption_does_not_break_start": false,
+    "started_irq_mask_negative_control": true,
+    "periodic_timer_rearms": true,
+    "timer_disabled_short_negative_control": true,
+    "adc_matches_declared_p0_03": true,
+    "saadc_delayed_start_before_sample": true,
+    "saadc_complete_1000_sample_window": true,
+    "dma_capacity_and_guard": true,
+    "missing_started_rejected_without_sampling": true,
+    "target_boot_has_pending_wakeup_at_first_wfi": true,
+    "observations": {
+      "timer_events_3ms": 3,
+      "samples": 1000,
+      "source_got": 1000,
+      "virtual_ms": 1000,
+      "first_sleep_has_no_pending_source": 0,
+      "first_sleep_acquisition_started": 0
+    }
+  },
+  "status": "FAIL",
+  "failed_checks": [
+    "started_irq_preemption_does_not_break_start"
+  ],
+  "built_target_verified": true,
+  "built_target_scope": "Source snapshot produced SUCCEEDED bare-metal ELF/HEX; independent MMIO replay uses that exact source, not target execution",
+  "participant_edits": 0,
+  "paid_model_calls": 0,
+  "solver_runs": 0,
+  "new_target_builds": 0,
+  "physical_verified": false,
+  "full_product_passed": false,
+  "model_boundary": "Immutable Pi target input replay under ideal MMIO; no physical, NVIC priority, clocks, analog, RF or full-product claims",
+  "wall_seconds": 1.0179660320281982
+}

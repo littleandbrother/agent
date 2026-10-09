@@ -3,7 +3,7 @@
   const {api,esc}=window.BF, q=s=>document.querySelector(s), V=window.ProductDeliveryView;
   const domains={mechanical:'机械与结构',circuit:'电路与 PCB',firmware:'固件与模型',system:'系统与交付'};
   const kinds={'door-system':'加载释放联合仿真','closed-simulation':'全仿真链路','cadquery':'原生 CAD','product-model':'产品装配','spice':'电路仿真','beam-event':'机电耦合仿真','event-transient':'瞬态仿真','firmware-stm32l031':'MCU 固件','mcu-firmware':'MCU 固件','tinyml-nas':'模型与 NAS',blender:'三维展示',comsol:'结构仿真',jlceda:'原理图与 PCB',benchmark:'基准计算与波形',proposal:'需求与产品方案'};
-  const resultLabel=r=>(r.source_type==='engineering-case'||['closed-simulation','door-system'].includes(r.kind))&&r.label?r.label:(kinds[r.kind]||r.kind);
+  const resultLabel=r=>(r.source_type==='engineering-case'||['closed-simulation','door-system'].includes(r.kind))&&r.label?r.label:(kinds[r.kind]||(r.kind.startsWith('firmware-')?'MCU 固件':r.source_type==='eda'?r.label:r.kind));
   const states={case:'案例版本',current:'本版生成',reused:'可复用',stale:'需重验',unbound:'未绑定装配',future:'后续版本',reference:'参考工程',proposal:'方案记录',input:'输入资料'};
   const metricLabels={peak_tip_mm:'梁端峰值 (mm)',peak_piezo_V:'压电峰值 (V)',peak_storage_V:'储能峰值 (V)',peak_supply_V:'MCU供电峰值 (V)',tx_completed:'完整发送包数',received_events:'虚拟接收事件',bounds_mm:'原生尺寸 (mm)',volume_mm3:'实体体积 (mm³)',solid_count:'有效实体数',flash_bytes:'Flash 占用 (bytes)',ram_static_bytes:'静态 RAM (bytes)',reserved_stack_bytes:'保留栈 (bytes)',points:'求解数据点',variables:'求解变量数',target:'编译目标',memory_fit:'内存容量检查',native_valid:'原生几何有效',readback_passed:'独立读回通过',cold_start_ideal_lower_bound_hours:'理想冷启动下界 (h)',dark_interval_demand_j:'暗期能量需求 (J)',demand_j_day:'每日需求 (J)',effective_capacitance_f:'有效电容 (F)',event_j:'单次事件能量 (J)',harvest_j_day:'每日采集能量 (J)',margin_j_day:'日能量余量 (J)',displacement_mm:'位移 (mm)',max_von_mises_mpa:'最大等效应力 (MPa)',pads:'焊盘数量',tracks:'走线数量',vias:'过孔数量',latency_ms:'推理延迟 (ms)',parameters:'模型参数量',power_mw:'功耗 (mW)'};
   const metricLabel=name=>({'summary.maximum_storage_v':'最高储能电压 (V)','summary.minimum_input_v':'最低输入电压 (V)','energy_ledger.boot':'启动能耗 (J)','energy_ledger.harvest':'采集能量 (J)','energy_ledger.dump':'钳位耗散 (J)','energy_ledger.esr_loss':'内阻损耗 (J)','energy_ledger.idle':'待机能耗 (J)','energy_ledger.infer':'计算能耗 (J)','energy_ledger.leakage':'漏电损耗 (J)'})[name]||metricLabels[name.split('.').at(-1)]||name;
@@ -20,14 +20,16 @@
     q('.pd-heading').insertAdjacentHTML('afterend','<div id="pr-nav"></div><section id="pr-workspace" aria-label="产品成果工作区"></section>');
     q('#pr-nav').onclick=e=>{const b=e.target.closest('[data-pr-view]');if(b){view=b.dataset.prView;sessionStorage.setItem('bf-studio-product-view',view);paint();q('#pr-workspace').scrollTop=0}if(e.target.closest('#pr-update')){fullSnapshot=pending;snapshot=window.StudioModel.scoped(fullSnapshot,scopeChoice);pending=null;window.ProductWorkspace?.applyResults(snapshot);paint()}};
     q('#pr-workspace').onclick=e=>{
+      if(e.target.closest('#aw-files')){view='source';paint();return}
       const d=e.target.closest('[data-pr-domain]');if(d){domain=d.dataset.prDomain;selected='';comparison='';paint();q('#pr-workspace').scrollTop=0}
       const r=e.target.closest('[data-pr-result]');if(r){selected=r.dataset.prResult;visualChoice='';paint()}
       const visual=e.target.closest('[data-pr-visual]');if(visual){visualChoice=visual.dataset.prVisual;loadVisual(selectedResult(),++drawGeneration)}
       const f=e.target.closest('[data-pr-file]');if(f){const file=snapshot.files.find(x=>x.id===f.dataset.prFile);if(file)preview(file)}
       const s=e.target.closest('[data-pr-source]');if(s)source(s.dataset.prSource);
-      const evidence=e.target.closest('[data-pr-evidence]');if(evidence){const r=snapshot.results.find(x=>x.id===evidence.dataset.prEvidence);if(r){const d=document.createElement('dialog');d.className='artifact-dialog';const records=r.files.filter(f=>/\.(json|log|csv|pwl)$/.test(f.name));d.innerHTML=`<form method="dialog"><button aria-label="关闭计算记录">×</button></form><h3>${esc(r.label)}</h3>${note('操作者辅助工程记录；这里保留实际求解回执和数据，不生成不存在的 Agent Trace。')}${filesHTML(records)}<pre>${esc(JSON.stringify({checks:r.checks,scope:r.scope,design:r.design_inputs},null,2))}</pre>`;document.body.append(d);d.addEventListener('close',()=>d.remove(),{once:true});d.showModal();d.addEventListener('click',event=>{const b=event.target.closest('[data-pr-file]');if(b){const f=r.files.find(x=>x.id===b.dataset.prFile);if(f)preview(f)}})}return}
+      const evidence=e.target.closest('[data-pr-evidence]');if(evidence){const r=snapshot.results.find(x=>x.id===evidence.dataset.prEvidence);if(r){const d=document.createElement('dialog');d.className='artifact-dialog';const records=r.files.filter(f=>/\.(json|log|csv|pwl)$/.test(f.name));d.innerHTML=`<form method="dialog"><button aria-label="关闭计算记录">×</button></form><h3>${esc(r.label)}</h3>${note('此处保留实际操作回执、检查与数据；执行记录和产品验收分别核对。')}${filesHTML(records)}<pre>${esc(JSON.stringify({checks:r.checks,scope:r.scope,design:r.design_inputs},null,2))}</pre>`;document.body.append(d);d.addEventListener('close',()=>d.remove(),{once:true});d.showModal();d.addEventListener('click',event=>{const b=event.target.closest('[data-pr-file]');if(b){const f=r.files.find(x=>x.id===b.dataset.prFile);if(f)preview(f)}})}return}
       const t=e.target.closest('[data-pr-trace]');if(t){traceReturn={view,domain,selected,scroll:q('#pr-workspace').scrollTop};window.BFDeveloper.openTrace({job:t.dataset.prTrace})}
       if(e.target.closest('#pr-export'))window.StudioExperience.delivery(context.owner,scopeChoice,snapshot.revision);
+      const part=e.target.closest('[data-studio-section]');if(part){window.EngineeringWorkspace.open(part.dataset.studioSection,scopeChoice);return}
       const category=e.target.closest('[data-studio-domain]');if(category){view='results';domain=category.dataset.studioDomain;selected='';paint();q('#pr-workspace').scrollTop=0}
       const open=e.target.closest('[data-studio-result]');if(open){view='results';domain='';selected=open.dataset.studioResult;visualChoice=open.dataset.studioFile||'';paint();q('#pr-workspace').scrollTop=0}
       const verify=e.target.closest('[data-studio-verify]');if(verify){view='verification';paint()}
@@ -48,20 +50,38 @@
     if(!ctx.owner){q('#pr-workspace').innerHTML=note('选择左侧任务，查看其模型、计算结果、方案和交付物。');return}
     if(loading.has(key))return;
     loading.add(key);const gen=generation;
-    try{const next=await api('/api/results?'+new URLSearchParams({session:ctx.owner,revision:ctx.revision||''}));if(gen!==generation)return;
-      if(!snapshot){fullSnapshot=next;if(scopeOwner!==ctx.owner){scopeOwner=ctx.owner;scopeChoice=sessionStorage.getItem('bf-studio-scope-v3-'+ctx.owner)||window.StudioModel.preferredScope(next)}if(!window.StudioModel.choices(next).some(c=>c.id===scopeChoice))scopeChoice=window.StudioModel.preferredScope(next);snapshot=window.StudioModel.scoped(next,scopeChoice);window.ProductWorkspace?.applyResults(next);paint()}else if(fullSnapshot?.snapshot_sha256!==next.snapshot_sha256){pending=next;navigation()}else {window.ProductWorkspace?.applyResults(fullSnapshot);window.StudioExperience?.productHeader(fullSnapshot,scopeChoice);}
+    try{const next=await window.ResultCatalog.get(ctx.owner,ctx.revision);if(gen!==generation)return;
+      if(!snapshot){fullSnapshot=next;if(scopeOwner!==ctx.owner){scopeOwner=ctx.owner;scopeChoice=sessionStorage.getItem('bf-studio-scope-v4-'+ctx.owner)||window.StudioModel.preferredScope(next)}if(!window.StudioModel.choices(next).some(c=>c.id===scopeChoice))scopeChoice=window.StudioModel.preferredScope(next);snapshot=window.StudioModel.scoped(next,scopeChoice);window.ProductWorkspace?.applyResults(next);paint()}else if(fullSnapshot?.snapshot_sha256!==next.snapshot_sha256){accept(next)}else {window.ProductWorkspace?.applyResults(fullSnapshot);window.StudioExperience?.productHeader(fullSnapshot,scopeChoice);}
     }catch(e){if(gen===generation&&!snapshot)q('#pr-workspace').innerHTML=note('成果清单暂时无法读取：'+e.message)}finally{loading.delete(key)}
   }
+  function accept(next){
+    fullSnapshot=next;pending=null;
+    if(!window.StudioModel.choices(next).some(c=>c.id===scopeChoice))scopeChoice=window.StudioModel.preferredScope(next);
+    snapshot=window.StudioModel.scoped(next,scopeChoice);
+    window.ProductWorkspace?.applyResults(next);
+    const root=q('#pr-workspace');
+    if(view==='delivery'&&root?.dataset.exporting==='true'&&root.dataset.exportOwner===context.owner){root.dataset.refreshPending='true';return}
+    const scroll=root?.scrollTop||0;paint();if(root)root.scrollTop=scroll;
+  }
+  window.addEventListener('bf-results-updated',event=>{
+    const {owner,revision,catalog}=event.detail;
+    if(snapshot&&context?.scope!=='reference'&&owner===context?.owner&&String(revision||'')===String(context.revision||''))accept(catalog);
+  });
+  window.addEventListener('bf-results-status',event=>{
+    if(event.detail.owner!==context?.owner)return;
+    const state=q('#pr-sync');if(!state)return;
+    state.textContent=event.detail.connected?'已同步 · '+new Date(event.detail.checkedAt).toLocaleTimeString('zh-CN',{hour12:false}):'连接中断 · 保留上次产物';
+  });
   function navigation(){
     sessionStorage.setItem('bf-studio-product-view',view);window.dispatchEvent(new CustomEvent('bf-product-view',{detail:{view}}));
     q('#pr-nav').hidden=view==='delivery';
-    q('#pr-nav').innerHTML=`<nav aria-label="产品视图">${[['overview','概览'],['results','设计'],['verification','验证']].map(([id,label])=>`<button data-pr-view="${id}" aria-pressed="${view===id}">${label}</button>`).join('')}<details class="pr-more"><summary>更多</summary><div>${[['history','过程与比较'],['source','全部文件'],['graph','设计关系图']].map(([id,label])=>`<button data-pr-view="${id}" aria-pressed="${view===id}">${label}</button>`).join('')}</div></details></nav>${pending?'<button id="pr-update">有新结果 · 点击更新</button>':'<span>模型、曲线、源码与验收依据</span>'}`;
+    q('#pr-nav').innerHTML=`<nav aria-label="产品视图">${[['overview','概览'],['results','设计'],['verification','验证']].map(([id,label])=>`<button data-pr-view="${id}" aria-pressed="${view===id}">${label}</button>`).join('')}<details class="pr-more"><summary>更多</summary><div>${[['history','过程与比较'],['source','全部文件'],['graph','设计关系图']].map(([id,label])=>`<button data-pr-view="${id}" aria-pressed="${view===id}">${label}</button>`).join('')}</div></details></nav>${pending?'<button id="pr-update">有新结果 · 点击更新</button>':'<span id="pr-sync" role="status">自动同步产物</span>'}`;
     q('#product-view').classList.toggle('pr-graph',view==='graph');q('#pr-workspace').hidden=view==='graph';
     q('#pd-model').hidden=view!=='graph';q('#pd-trace').hidden=view!=='graph';
   }
-  function traceLink(r){return r.source_type==='engineering-case'?`<button class="quiet" data-pr-evidence="${esc(r.id)}">查看计算记录 ↗</button>`:`<button class="quiet" data-pr-trace="${esc(r.id)}">查看本次 Trace ↗</button>`}
+  function traceLink(r){return ['engineering-case','eda'].includes(r.source_type)?`<button class="quiet" data-pr-evidence="${esc(r.id)}">查看计算记录 ↗</button>`:`<button class="quiet" data-pr-trace="${esc(r.id)}">查看本次 Trace ↗</button>`}
   function filesHTML(files){return files.length?`<div class="pr-files">${files.map(f=>`<div><button data-pr-file="${esc(f.id)}" title="${esc(f.applicability.reason)}"><b>${esc(f.name)}</b><small>${f.created_revision?'生成 v'+f.created_revision+' · ':''}${esc(states[f.applicability.state])}${f.integrity===false?' · 校验失败':''}</small></button><a href="${esc(f.url)}" download="${esc(f.name)}" aria-label="下载 ${esc(f.name)}">↓</a></div>`).join('')}</div>`:note('尚无对应工程文件。')}
-  function selectedResult(){const rows=snapshot.results.filter(r=>!domain||r.domain===domain);return rows.find(r=>r.id===selected)||window.ProductGraph.featuredResults(rows)[0]}
+  function selectedResult(){const rows=snapshot.results.filter(r=>!domain||r.domain===domain||r.files.some(f=>f.domain===domain));return rows.find(r=>r.id===selected)||window.ProductGraph.featuredResults(rows)[0]}
   function resultList(rows){return rows.map(r=>`<button class="pr-result ${selectedResult()?.id===r.id?'selected':''}" data-pr-result="${r.id}"><b>${esc(resultLabel(r))}</b><small>${r.created_revision?'v'+r.created_revision+' · ':''}${time(r.created)} · ${esc(statuses[r.status]||r.status)}</small><span>${esc(states[r.applicability.state])} · ${r.files.length} 件产物</span></button>`).join('')}
   function summary(){
     if(!snapshot.reference)return ''; // Studio identity and conclusion are shown once, above the object.
@@ -79,9 +99,9 @@
     root.dataset.view=view;
     if(!snapshot){root.innerHTML=note(context?.owner?'正在整理当前任务的成果…':'选择左侧任务，查看其产品成果。');return}
     if(view==='delivery'&&!snapshot.reference){window.StudioExperience.renderDelivery(root,snapshot,scopeChoice);return}
-    if(!snapshot.reference&&['overview','verification'].includes(view)){root.innerHTML=view==='overview'?window.StudioExperience.overview(snapshot):window.StudioExperience.verification(snapshot);if(snapshot.design_pilot?.trials?.length){const t=snapshot.design_pilot.trials[0];root.insertAdjacentHTML('afterbegin',`<section class="pr-summary"><div><small>真实 Pi · ${esc(t.trial)}</small><h3>${esc(t.submission?.evaluation?.nominal_task_status==='satisfied'?'名义任务已满足':t.submission?'本轮已提交 · 未证明产品通过':!t.usage_settled&&!t.conservative_continuation?'本轮暂停 · 用量待核实':t.status==='FAILED'?'本轮未完成提交':'设计迭代进行中')}</h3><p>${t.jobs.length} 个候选 · ${t.model_calls} 次调用 · 费用上界 $${t.cost_upper_usd.toFixed(5)}</p></div></section>`);}window.StudioExperience.bindPreview(root,snapshot);return}
+    if(!snapshot.reference&&['overview','verification'].includes(view)){root.innerHTML=view==='overview'?window.StudioExperience.overview(snapshot):window.StudioExperience.verification(snapshot);window.StudioExperience.bindPreview(root,snapshot);return}
     const nav=`<nav class="pr-domains" aria-label="成果领域"><button data-pr-domain="" aria-pressed="${!domain}">全部成果</button>${Object.entries(domains).map(([k,v])=>`<button data-pr-domain="${k}" aria-pressed="${domain===k}">${v}<small>${snapshot.files.filter(f=>f.domain===k&&f.integrity!==false).length}</small></button>`).join('')}</nav>`;
-    const r=selectedResult(),rows=snapshot.results.filter(x=>!domain||x.domain===domain),files=snapshot.files.filter(x=>!domain||x.domain===domain);
+    const r=selectedResult(),rows=snapshot.results.filter(x=>!domain||x.domain===domain||x.files.some(f=>f.domain===domain)),files=snapshot.files.filter(x=>!domain||x.domain===domain);
     let body='';
     if(view==='results'&&snapshot.reference){body=referenceBody(files)}else if(view==='results'){
       const chosen=window.ProductGraph.featuredResults(rows);
@@ -155,5 +175,5 @@
     V.preview({...file,session:context.owner,stale:['stale','future'].includes(file.applicability.state)},`${snapshot.reference?'参考工程':snapshot.title} · ${file.created_revision?'生成 v'+file.created_revision:'独立记录'} · ${file.applicability.reason}`);
   }
   function focus(options={}){if(options.restore&&traceReturn){({view,domain,selected}=traceReturn);paint();q('#pr-workspace').scrollTop=traceReturn.scroll;return}view=options.view||'overview';domain=options.domain||domain;selected=options.result||selected;paint()}
-  window.ProductResults={update,focus,chart,preview,scope:(value)=>{if(!fullSnapshot||!window.StudioModel.choices(fullSnapshot).some(c=>c.id===value))return;scopeChoice=value;sessionStorage.setItem('bf-studio-scope-v3-'+context.owner,value);snapshot=window.StudioModel.scoped(fullSnapshot,value);selected='';domain='';paint()},getState:()=>({snapshot,scopeChoice,view,owner:context?.owner})};
+  window.ProductResults={update,focus,chart,preview,scope:(value)=>{if(!fullSnapshot||!window.StudioModel.choices(fullSnapshot).some(c=>c.id===value))return;scopeChoice=value;sessionStorage.setItem('bf-studio-scope-v4-'+context.owner,value);snapshot=window.StudioModel.scoped(fullSnapshot,value);selected='';domain='';paint()},getState:()=>({snapshot,scopeChoice,view,owner:context?.owner})};
 })();

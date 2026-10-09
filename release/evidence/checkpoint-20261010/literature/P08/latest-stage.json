@@ -1,0 +1,768 @@
+{
+  "paper": "P08",
+  "task": "P08-native-a805f38375dc-b07e7bdb",
+  "stage": "native",
+  "owner": "pi-chat-e0028698d50802cb",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-19eb09030ae354a8",
+        "kind": "spice",
+        "project_sha256": "01030b3e2428ed586856567e04d004263dc11a1b6d3664e73477c6d4a573c48d",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "6cf75373baa7420647a48d5be3905d93105b845f507d264a6df3c44926cb5fba",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 55305,
+              "variables": 32
+            }
+          ],
+          "points": 55305,
+          "raw_sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 32
+        },
+        "functional_passed": false,
+        "participant_project_path": "project/spice/project.json",
+        "project_manifest": {
+          "entrypoint": "main.cir",
+          "files": [
+            "main.cir"
+          ],
+          "interfaces": {
+            "model_boundary": "Cin-switch-L(Rint)-Cout with freewheeling diode string; GDT replaced by a voltage-controlled switch; secondary LTC3588 stage and TENG source not represented",
+            "scope": "primary LC stage of the multi-stage TENG power management circuit",
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project/spice/main.cir": "6caeda2c77c7e161cc35210a5534714a5fbb184b5e877a34153ecb98d65e82aa"
+        }
+      },
+      {
+        "job_id": "eng-41f52c8100b34a21",
+        "kind": "cadquery",
+        "project_sha256": "fa71bc87edb6e80363d6b227d0e0e221dc4c384b1ba03f3a6c717c2767050ae7",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "6cf75373baa7420647a48d5be3905d93105b845f507d264a6df3c44926cb5fba",
+        "native_readback": {
+          "bounds_mm": [
+            68.0,
+            66.181568431089,
+            82.15
+          ],
+          "native_valid": true,
+          "solid_count": 68,
+          "volume_mm3": 33714.94275897904
+        },
+        "functional_passed": false,
+        "participant_project_path": "project/cad/project.json",
+        "project_manifest": {
+          "entrypoint": "main.py",
+          "files": [
+            "main.py"
+          ],
+          "interfaces": {
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project/cad/main.py": "b645a6c5c7b6e5412f5a1f27c93107a476029760ba08247f1c48f1ab985d0afe"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 372,
+  "model_profile": {
+    "version": "engineering-reasoning-v1",
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_output_tokens": 32768,
+    "request_bytes": 256000,
+    "target_bytes": 220000
+  },
+  "work_phase": "engineering-review",
+  "phase_task_sha256": "59a2861715c1d814c69ceb5d68733ea0d4da9f443d2bc55d3989c59faae73463",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 100,
+  "budget": {
+    "owner": "pi-chat-e0028698d50802cb",
+    "cap_usd": null,
+    "liability_usd": 7.247491800000001,
+    "remaining_usd": null,
+    "unbounded": true,
+    "unknown_requests": [],
+    "exhausted": false
+  },
+  "method_identity": "fe043b368d441e4745735d35d58944e4284f595ab16705178a7ee4f2a13a3838",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/native-report.json",
+      "sha256": "9c26a1c206cadd74b4e48358d97b0231ce196838aeff8433d67c659d6494bc52",
+      "label": "P08 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/delivery/manifest.json",
+      "sha256": "4cf150d61924e5bebcecdd8b1acfd0052fab2de0a03a3a994d35e651ba4db0b5",
+      "label": "P08 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/delivery/UNVERIFIED.md",
+      "sha256": "0c4369f4e04ab0ef989d08f72180feba90c0ae2f316d33d9d94f5876a5e47526",
+      "label": "P08 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/project/cad/main.py",
+      "sha256": "b645a6c5c7b6e5412f5a1f27c93107a476029760ba08247f1c48f1ab985d0afe",
+      "label": "P08 project/cad/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/project/cad/project.json",
+      "sha256": "5606c78bd530522a7734411b72b9239c7722ff3e7a1f2df2d522d947094f7030",
+      "label": "P08 project/cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/project/spice/main.cir",
+      "sha256": "6caeda2c77c7e161cc35210a5534714a5fbb184b5e877a34153ecb98d65e82aa",
+      "label": "P08 project/spice/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/project/spice/project.json",
+      "sha256": "b8cefd14afb7b9bd6e7ed958b3abe88200f93290c8dfd4a4e8ba0dca25e52ce8",
+      "label": "P08 project/spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/assembly.json",
+      "sha256": "8913df01a94eae2285b356b43cf2b091703317720891e41221d87e72f2dcdbe2",
+      "label": "P08 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-19eb09030ae354a8/input.json",
+      "sha256": "9ded4b1a995819b0e0a61fb58b8fcb58f213b382003131bf7e0db29fc3a67c49",
+      "label": "P08 engineering-artifacts/eng-19eb09030ae354a8/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-19eb09030ae354a8/project-trace.raw",
+      "sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+      "label": "P08 engineering-artifacts/eng-19eb09030ae354a8/project-trace.raw",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-41f52c8100b34a21/input.json",
+      "sha256": "5247bda4809eede7a4d79b0651d3319b1762177db79818dab6a40dd4ecd7d4df",
+      "label": "P08 engineering-artifacts/eng-41f52c8100b34a21/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-41f52c8100b34a21/project-assembly.step",
+      "sha256": "63c99f84b6152968bc558b6c09a6dda32246c32deb068439934219f165ceef25",
+      "label": "P08 engineering-artifacts/eng-41f52c8100b34a21/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-41f52c8100b34a21/project-readback.json",
+      "sha256": "60acdebf265c6efbf6ba43c8886920dde518454757a576d9f609161f33aed741",
+      "label": "P08 engineering-artifacts/eng-41f52c8100b34a21/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/engineering-artifacts/eng-41f52c8100b34a21/project-geometry_report.json",
+      "sha256": "04f4ff071af59aae4a508153e7b9eed4ed705b02960d9ab974102bf1e871a75c",
+      "label": "P08 engineering-artifacts/eng-41f52c8100b34a21/project-geometry_report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/analyze.py",
+      "sha256": "1369437cba32f8022b01d37d030e318ab4d3f1f4be1902643bd3052e8917e6f8",
+      "label": "P08 analysis-spice/analyze.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/branch-accounting.py",
+      "sha256": "a7e6c2c9dfd3e4fd2d9cafc531aaed84350a9af1132a4c49b804982b676136ba",
+      "label": "P08 analysis-spice/branch-accounting.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/branch-accounting.json",
+      "sha256": "6d7820b35614783cf89978f99d3c8ee97c77d490cbf12a9692365758c459a7ba",
+      "label": "P08 analysis-spice/branch-accounting.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/make_report.py",
+      "sha256": "801c8924600e00518ac39ea8bc8499f433259338b792683d6660cf1cbd4f7507",
+      "label": "P08 analysis-spice/make_report.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/metrics.json",
+      "sha256": "cbe62a3b88cd2f1553d4c96170f0933500d8066d0a8a954ee80ed684dbe33318",
+      "label": "P08 analysis-spice/metrics.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/spice-results.csv",
+      "sha256": "e753e48d4397f0ad524290009568503fc1acb94e108d72033f01f1d568de6477",
+      "label": "P08 analysis-spice/spice-results.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/REPORT.md",
+      "sha256": "d91134f514f63547a960a7bc672dae569192cf5cdb71fa216a60a632b424af38",
+      "label": "P08 analysis-spice/REPORT.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/fig-spice-waveforms.svg",
+      "sha256": "ba51adb43299e64feb1c299a1aadff04ac3d35292c9f4b1fda070428748c415d",
+      "label": "P08 analysis-spice/fig-spice-waveforms.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/WORKNOTE-F1-F4.md",
+      "sha256": "24a6d1107a837e12b7ef3b7b88227906c823c1983b43b603f9243a153e1d6eb4",
+      "label": "P08 analysis-spice/WORKNOTE-F1-F4.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/raw-data-manifest.json",
+      "sha256": "c2975eec6fb3c04c3b4594f94b11cf188fa7630be37df791de87bd8f5d7f6515",
+      "label": "P08 analysis-spice/raw-data-manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/analysis-spice/project-trace.raw.gz",
+      "sha256": "adbcdb9854b14f0ced8a4987400603433bbb915863a11ea8c3ca84510b2d2ea3",
+      "label": "P08 analysis-spice/project-trace.raw.gz",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/BOM-interfaces.md",
+      "sha256": "af26b18da25bd6909a50e4640e19e03f1a34d9acebf0a03ae491f7868b30f2cd",
+      "label": "P08 delivery/BOM-interfaces.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/clearance-check.py",
+      "sha256": "82b61d568bc2a78edda70fb6b93139613e11f2abee823194c2077f9e10782079",
+      "label": "P08 delivery/clearance-check.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/clearance-results.json",
+      "sha256": "33f978f6f1666936115c90a0341642f55f80895edf3acf0f6ba79fb37a4f2271",
+      "label": "P08 delivery/clearance-results.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/energy-budget.csv",
+      "sha256": "610c877732d4c72531f9fabebe059b761b649d53e3c95d3096ae3b2871c1927b",
+      "label": "P08 delivery/energy-budget.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/envelope-drawing.svg",
+      "sha256": "16e23aedc64c675fa2a3827f9684b9ad485edbd4769282d120ff9b5678938b73",
+      "label": "P08 delivery/envelope-drawing.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/interfaces-system.svg",
+      "sha256": "d4fb8d99a814229be020650e3e19a0fa8a321fce200229f1d755226917940ddb",
+      "label": "P08 delivery/interfaces-system.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/interfaces.json",
+      "sha256": "f38734d15075a0cb4af685eab95d839c5ee56dc585ad2f229706201cbc21386c",
+      "label": "P08 delivery/interfaces.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/references-usage.md",
+      "sha256": "5dfe27c7384e64ebcad4f23110181d4a245c6c7d9da7c834c30e431bf6032731",
+      "label": "P08 delivery/references-usage.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/references.json",
+      "sha256": "4a260dfb4cc9c7c0c5cf2c6daa19a2cc050eac61e1e6a92c2d5583c17aecaa58",
+      "label": "P08 delivery/references.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/requirements.json",
+      "sha256": "d5a4dcb70ed615bc899a5c3d29d067d1e87738dbd67d81b9d0ad3ab9bf455d2b",
+      "label": "P08 delivery/requirements.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/requirements.md",
+      "sha256": "63783c23c17ab5b3731e3ba715cac87c31b7294ad9393cfe90326fbae7df62a3",
+      "label": "P08 delivery/requirements.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "0c4369f4e04ab0ef989d08f72180feba90c0ae2f316d33d9d94f5876a5e47526",
+      "label": "P08 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/participant-files/native-report.json",
+      "sha256": "9c26a1c206cadd74b4e48358d97b0231ce196838aeff8433d67c659d6494bc52",
+      "label": "P08 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-19eb09030ae354a8/project-source.zip",
+      "sha256": "7eed01e98a305d18088a9be1a43310c605b0166abbefe52bb83a25399d97b3bb",
+      "label": "P08 eng-19eb09030ae354a8 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-19eb09030ae354a8/result.json",
+      "sha256": "076729e688b12f1da3e44e8a793e3c3fbeccaf685e828fd59cb944210622c866",
+      "label": "P08 eng-19eb09030ae354a8 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-19eb09030ae354a8/input.json",
+      "sha256": "9ded4b1a995819b0e0a61fb58b8fcb58f213b382003131bf7e0db29fc3a67c49",
+      "label": "P08 eng-19eb09030ae354a8 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-19eb09030ae354a8/project-trace.raw",
+      "sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+      "label": "P08 eng-19eb09030ae354a8 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-1beeb5a3e16820c4/input.json",
+      "sha256": "110c5aef5693b77de68808120b5a8cc0ba12e07bbcea03976bc86816a0890a93",
+      "label": "P08 eng-1beeb5a3e16820c4 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8cb45b74d928907/project-source.zip",
+      "sha256": "0495b558211f26e868aad14fa24d818fde48f7c17b048dffa138caac300c7d6c",
+      "label": "P08 eng-b8cb45b74d928907 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8cb45b74d928907/result.json",
+      "sha256": "bb74a3f89a3232fd4acab7599800d858f247e6a17d096d1110edbab7fd1144d5",
+      "label": "P08 eng-b8cb45b74d928907 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8cb45b74d928907/input.json",
+      "sha256": "b57200ac13b9f8cc69fc15f49fed6da03a78248d4c1c2d6980af2d955ac1a2c9",
+      "label": "P08 eng-b8cb45b74d928907 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8cb45b74d928907/project-trace.raw",
+      "sha256": "183eb9dc587e57af9a05fe8408ef85d389f1929bbdb3d6fe0f16fb1d0c8a4b24",
+      "label": "P08 eng-b8cb45b74d928907 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/project-source.zip",
+      "sha256": "247b2e649a24eef639a82e39c020624929f56c0d475e835efc2f3e2b4dc6b5ff",
+      "label": "P08 eng-41f52c8100b34a21 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/project-geometry_report.json",
+      "sha256": "04f4ff071af59aae4a508153e7b9eed4ed705b02960d9ab974102bf1e871a75c",
+      "label": "P08 eng-41f52c8100b34a21 project-geometry_report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/result.json",
+      "sha256": "73fc3e6ea1fd6eb5dcc442d716ec5f15a73444218b0d4e99a8ee3d3dcb489b66",
+      "label": "P08 eng-41f52c8100b34a21 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/input.json",
+      "sha256": "5247bda4809eede7a4d79b0651d3319b1762177db79818dab6a40dd4ecd7d4df",
+      "label": "P08 eng-41f52c8100b34a21 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/project-assembly.step",
+      "sha256": "63c99f84b6152968bc558b6c09a6dda32246c32deb068439934219f165ceef25",
+      "label": "P08 eng-41f52c8100b34a21 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/project-readback.json",
+      "sha256": "60acdebf265c6efbf6ba43c8886920dde518454757a576d9f609161f33aed741",
+      "label": "P08 eng-41f52c8100b34a21 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-41f52c8100b34a21/project-preview-mesh.json",
+      "sha256": "47147e78635bf7a01154617e1798f8eed3bada27428dd32f902a168736a4b915",
+      "label": "P08 eng-41f52c8100b34a21 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/project-source.zip",
+      "sha256": "7f566341a7fd52f772c164a1c153abdd2a817d7921f7ba1cd8bf6a0b3d1ee9d8",
+      "label": "P08 eng-60428160d4200568 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/project-geometry_report.json",
+      "sha256": "80aead9369ff38115d3e563ae939ff3ac808f4ea9ecd3984f0172816ac03c275",
+      "label": "P08 eng-60428160d4200568 project-geometry_report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/result.json",
+      "sha256": "85753d9e016a667b5e085bc7674bf81639b07b24a1157a7414fbf0e2b1a67746",
+      "label": "P08 eng-60428160d4200568 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/input.json",
+      "sha256": "fbdb1b3612418346dc793b41ab515759f2409e101014cefeba0bf51eece5d92a",
+      "label": "P08 eng-60428160d4200568 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/project-assembly.step",
+      "sha256": "7e67cfdb90dff07232c4bab7116d3397f81441de8c18a87992bdae6df2e7f12b",
+      "label": "P08 eng-60428160d4200568 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/project-readback.json",
+      "sha256": "04928bee9adb78c299ecf4fc8f09df07b80395f10d61d55f4cda631caf00359a",
+      "label": "P08 eng-60428160d4200568 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-60428160d4200568/project-preview-mesh.json",
+      "sha256": "376a59ea4a1b1b101b6db3257fc89d9721646f6d7cfb8e16aef107a804ca9436",
+      "label": "P08 eng-60428160d4200568 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/project-source.zip",
+      "sha256": "65c2a19f8324cdafb5e6be13c98575a52fe09c9cb320f983cd9a26d8fca3952d",
+      "label": "P08 eng-064062c41095c7e7 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/project-geometry_report.json",
+      "sha256": "0a1baaf5619997f3cb53943233e239db481d4b8454ef7964afeb4bb843729013",
+      "label": "P08 eng-064062c41095c7e7 project-geometry_report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/result.json",
+      "sha256": "9a7baa7f5187bdf6dc0485baf9657ec3d8f1a8be7f2f89b4862b92a9d09a0c37",
+      "label": "P08 eng-064062c41095c7e7 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/input.json",
+      "sha256": "6b27566b4d966c495a8a0d68daebc059072f827a8bf5ad139117f879c4166faa",
+      "label": "P08 eng-064062c41095c7e7 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/project-assembly.step",
+      "sha256": "72d012feb240e4e565684a84e07033fff4d85474a8cfcdc0652b443ebd35d545",
+      "label": "P08 eng-064062c41095c7e7 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/project-readback.json",
+      "sha256": "b208730c907e20991baea21360b501efee6c9f3cfee3ba1e71347e18a8199ea0",
+      "label": "P08 eng-064062c41095c7e7 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-064062c41095c7e7/project-preview-mesh.json",
+      "sha256": "8e345d8a360ce2adc1ae143910a7d08a711cee5deaa39f65f386829d0cfa8543",
+      "label": "P08 eng-064062c41095c7e7 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "project/cad/main.py",
+        "sha256": "b645a6c5c7b6e5412f5a1f27c93107a476029760ba08247f1c48f1ab985d0afe",
+        "bytes": 12756
+      },
+      {
+        "path": "project/cad/project.json",
+        "sha256": "5606c78bd530522a7734411b72b9239c7722ff3e7a1f2df2d522d947094f7030",
+        "bytes": 166
+      },
+      {
+        "path": "project/spice/main.cir",
+        "sha256": "6caeda2c77c7e161cc35210a5534714a5fbb184b5e877a34153ecb98d65e82aa",
+        "bytes": 5149
+      },
+      {
+        "path": "project/spice/project.json",
+        "sha256": "b8cefd14afb7b9bd6e7ed958b3abe88200f93290c8dfd4a4e8ba0dca25e52ce8",
+        "bytes": 429
+      },
+      {
+        "path": "assembly.json",
+        "sha256": "8913df01a94eae2285b356b43cf2b091703317720891e41221d87e72f2dcdbe2",
+        "bytes": 6849
+      },
+      {
+        "path": "engineering-artifacts/eng-19eb09030ae354a8/input.json",
+        "sha256": "9ded4b1a995819b0e0a61fb58b8fcb58f213b382003131bf7e0db29fc3a67c49",
+        "bytes": 12763
+      },
+      {
+        "path": "engineering-artifacts/eng-19eb09030ae354a8/project-trace.raw",
+        "sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+        "bytes": 41556255
+      },
+      {
+        "path": "engineering-artifacts/eng-41f52c8100b34a21/input.json",
+        "sha256": "5247bda4809eede7a4d79b0651d3319b1762177db79818dab6a40dd4ecd7d4df",
+        "bytes": 20460
+      },
+      {
+        "path": "engineering-artifacts/eng-41f52c8100b34a21/project-assembly.step",
+        "sha256": "63c99f84b6152968bc558b6c09a6dda32246c32deb068439934219f165ceef25",
+        "bytes": 1103751
+      },
+      {
+        "path": "engineering-artifacts/eng-41f52c8100b34a21/project-readback.json",
+        "sha256": "60acdebf265c6efbf6ba43c8886920dde518454757a576d9f609161f33aed741",
+        "bytes": 119
+      },
+      {
+        "path": "engineering-artifacts/eng-41f52c8100b34a21/project-geometry_report.json",
+        "sha256": "04f4ff071af59aae4a508153e7b9eed4ed705b02960d9ab974102bf1e871a75c",
+        "bytes": 2112
+      },
+      {
+        "path": "analysis-spice/analyze.py",
+        "sha256": "1369437cba32f8022b01d37d030e318ab4d3f1f4be1902643bd3052e8917e6f8",
+        "bytes": 19225
+      },
+      {
+        "path": "analysis-spice/branch-accounting.py",
+        "sha256": "a7e6c2c9dfd3e4fd2d9cafc531aaed84350a9af1132a4c49b804982b676136ba",
+        "bytes": 14388
+      },
+      {
+        "path": "analysis-spice/branch-accounting.json",
+        "sha256": "6d7820b35614783cf89978f99d3c8ee97c77d490cbf12a9692365758c459a7ba",
+        "bytes": 17986
+      },
+      {
+        "path": "analysis-spice/make_report.py",
+        "sha256": "801c8924600e00518ac39ea8bc8499f433259338b792683d6660cf1cbd4f7507",
+        "bytes": 20593
+      },
+      {
+        "path": "analysis-spice/metrics.json",
+        "sha256": "cbe62a3b88cd2f1553d4c96170f0933500d8066d0a8a954ee80ed684dbe33318",
+        "bytes": 9388
+      },
+      {
+        "path": "analysis-spice/spice-results.csv",
+        "sha256": "e753e48d4397f0ad524290009568503fc1acb94e108d72033f01f1d568de6477",
+        "bytes": 1678
+      },
+      {
+        "path": "analysis-spice/REPORT.md",
+        "sha256": "d91134f514f63547a960a7bc672dae569192cf5cdb71fa216a60a632b424af38",
+        "bytes": 16625
+      },
+      {
+        "path": "analysis-spice/fig-spice-waveforms.svg",
+        "sha256": "ba51adb43299e64feb1c299a1aadff04ac3d35292c9f4b1fda070428748c415d",
+        "bytes": 164097
+      },
+      {
+        "path": "analysis-spice/WORKNOTE-F1-F4.md",
+        "sha256": "24a6d1107a837e12b7ef3b7b88227906c823c1983b43b603f9243a153e1d6eb4",
+        "bytes": 7055
+      },
+      {
+        "path": "analysis-spice/raw-data-manifest.json",
+        "sha256": "c2975eec6fb3c04c3b4594f94b11cf188fa7630be37df791de87bd8f5d7f6515",
+        "bytes": 858
+      },
+      {
+        "path": "analysis-spice/project-trace.raw.gz",
+        "sha256": "adbcdb9854b14f0ced8a4987400603433bbb915863a11ea8c3ca84510b2d2ea3",
+        "bytes": 15303420
+      },
+      {
+        "path": "delivery/BOM-interfaces.md",
+        "sha256": "af26b18da25bd6909a50e4640e19e03f1a34d9acebf0a03ae491f7868b30f2cd",
+        "bytes": 5554
+      },
+      {
+        "path": "delivery/clearance-check.py",
+        "sha256": "82b61d568bc2a78edda70fb6b93139613e11f2abee823194c2077f9e10782079",
+        "bytes": 6996
+      },
+      {
+        "path": "delivery/clearance-results.json",
+        "sha256": "33f978f6f1666936115c90a0341642f55f80895edf3acf0f6ba79fb37a4f2271",
+        "bytes": 3134
+      },
+      {
+        "path": "delivery/energy-budget.csv",
+        "sha256": "610c877732d4c72531f9fabebe059b761b649d53e3c95d3096ae3b2871c1927b",
+        "bytes": 3891
+      },
+      {
+        "path": "delivery/envelope-drawing.svg",
+        "sha256": "16e23aedc64c675fa2a3827f9684b9ad485edbd4769282d120ff9b5678938b73",
+        "bytes": 3583
+      },
+      {
+        "path": "delivery/interfaces-system.svg",
+        "sha256": "d4fb8d99a814229be020650e3e19a0fa8a321fce200229f1d755226917940ddb",
+        "bytes": 4014
+      },
+      {
+        "path": "delivery/interfaces.json",
+        "sha256": "f38734d15075a0cb4af685eab95d839c5ee56dc585ad2f229706201cbc21386c",
+        "bytes": 2856
+      },
+      {
+        "path": "delivery/references-usage.md",
+        "sha256": "5dfe27c7384e64ebcad4f23110181d4a245c6c7d9da7c834c30e431bf6032731",
+        "bytes": 1243
+      },
+      {
+        "path": "delivery/references.json",
+        "sha256": "4a260dfb4cc9c7c0c5cf2c6daa19a2cc050eac61e1e6a92c2d5583c17aecaa58",
+        "bytes": 6369
+      },
+      {
+        "path": "delivery/requirements.json",
+        "sha256": "d5a4dcb70ed615bc899a5c3d29d067d1e87738dbd67d81b9d0ad3ab9bf455d2b",
+        "bytes": 5957
+      },
+      {
+        "path": "delivery/requirements.md",
+        "sha256": "63783c23c17ab5b3731e3ba715cac87c31b7294ad9393cfe90326fbae7df62a3",
+        "bytes": 3804
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "0c4369f4e04ab0ef989d08f72180feba90c0ae2f316d33d9d94f5876a5e47526",
+        "bytes": 12637
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "9c26a1c206cadd74b4e48358d97b0231ce196838aeff8433d67c659d6494bc52",
+        "bytes": 9960
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-19eb09030ae354a8",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-1beeb5a3e16820c4",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_-25"
+    },
+    {
+      "id": "eng-b8cb45b74d928907",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-41f52c8100b34a21",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-60428160d4200568",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-064062c41095c7e7",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P08-native-a805f38375dc-b07e7bdb/continuations/turn-004/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-e0028698d50802cb/trace.jsonl",
+  "trace_sha256": "a70ec68c577b0cc940b65602dcbe3719bc47ab9be4626e3e902cc0aa3fb73bb5",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

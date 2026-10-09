@@ -145,7 +145,7 @@
   }
   async function refresh(){
     if(!active()||document.hidden||refreshBusy||scope==='reference'||!owner)return;
-    if(!owner.startsWith('pi-chat-')){window.ProductResults?.update({owner,scope,referenceData,revision});return}
+    if(window.ProductResults?.getState().view!=='graph'||!owner.startsWith('pi-chat-')){window.ProductResults?.update({owner,scope,referenceData,revision});return}
     refreshBusy=true;const id=owner,gen=generation;
     try{
       const [next,snapshot]=await Promise.all([api('/api/conversations/'+encodeURIComponent(id)),api('/api/deliverables?session='+encodeURIComponent(id)).catch(e=>{if(e.message==='PRODUCT_SESSION_REQUIRED')return {owner:id,revision:null,tasks:[]};throw e})]);
@@ -173,6 +173,7 @@
   function showSession(options={}){window.BFDeveloper.setMode('product');if(scope!=='session')setSource('session');window.ProductResults?.focus(options)}
   window.ProductWorkspace={open,showReference,showSession,applyResults};
   window.addEventListener('bf-selection',()=>{if(active())open()});
+  window.addEventListener('bf-product-view',e=>{if(e.detail.view==='graph')refresh()});
   window.addEventListener('bf-mode',e=>{if(e.detail.mode!=='product'){stop();V.close()}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else refresh()});
   q('#refresh').addEventListener('click',()=>{if(active())refresh()});

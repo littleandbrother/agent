@@ -274,6 +274,26 @@ class TurnBudget(unittest.TestCase):
         with patch('urllib.request.OpenerDirector.open',return_value=io.BytesIO(json.dumps(result).encode())):
             self.provider.complete('chat',self.payload)
 
+    def test_compact_profile_reaches_wire_without_lowering_reasoning_or_output(self):
+        from bfworld.agentlab.model_profile import COMPACT
+        self.message('compact-wire')
+        with self.store.connect() as db:
+            db.execute('INSERT INTO settings VALUES(?,?)',('model_profile:chat',json.dumps(COMPACT['version'])))
+        state={'engineering':[{'id':'eng-existing','status':'SUCCEEDED'}],'large':['事实'*15000]}
+        self.payload.update(max_tokens=65536,messages=[
+            {'role':'system','content':'Exact rule\n启动事实快照（操作前 inspect 核对）：'+canonical(state)},
+            {'role':'user','content':'复用现有作业，不重复仿真'}])
+        original=canonical(self.payload)
+        self.complete()
+        with self.store.connect() as db:wire=json.loads(db.execute('SELECT wire FROM model_request_evidence').fetchone()['wire'])
+        self.assertEqual(32768,wire['max_tokens'])
+        self.assertEqual({'type':'enabled'},wire['thinking'])
+        self.assertEqual('high',wire['reasoning_effort'])
+        self.assertIn('eng-existing',canonical(wire))
+        self.assertIn(self.payload['messages'][-1],wire['messages'])
+        self.assertLess(len(canonical(wire).encode()),10000)
+        self.assertEqual(original,canonical(self.payload))
+
     def test_quota_is_per_new_user_message_not_reset_by_duplicate_or_restart(self):
         self.message('first')
         before=self.provider.status()['limits']

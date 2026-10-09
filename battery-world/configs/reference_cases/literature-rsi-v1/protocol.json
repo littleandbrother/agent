@@ -1,0 +1,59 @@
+{
+  "schema_version": "bf-literature-rsi-development-v1",
+  "id": "literature-rsi-20261008",
+  "model": "deepseek-flash",
+  "model_identity_boundary": "Provider alias and observed response identity; exact vendor weight checkpoint is not exposed.",
+  "papers": [
+    {"id": "P01", "doi": "10.1038/s41378-026-01315-z", "title": "A self-powered microsystem with efficient power management for continuous wireless sensing", "published": "2026-05-13", "pmcid": "PMC13172475", "pages": [5, 6, 9, 11, 12]},
+    {"id": "P02", "doi": "10.1038/s41467-025-60418-9", "title": "Self-powered sensing platform based on triboelectric nanogenerators towards intelligent mining industry", "published": "2025-06-03", "pmcid": "PMC12134231", "pages": [7, 8, 9, 10, 11]},
+    {"id": "P03", "doi": "10.1038/s41467-026-73651-7", "title": "Machine learning-assisted self-powered ear tag for animal welfare", "published": "2026-06-02", "pmcid": "PMC13392078", "pages": [2, 3, 10, 11, 12]}
+  ],
+  "tasks": [
+    {
+      "id": "P01-ledger", "paper": "P01", "split": "development", "entry": "reference-recovery",
+      "inputs": {"connected_mcu_uW": 31.01, "cdc_uW": 4.50, "peak_detector_uW": 4.97, "other_management_uW": 33.60, "converter_uW": 20.33, "reported_total_uW": 94.40, "harvest_uW": 110.78, "excitation_Hz": 5, "boot_uJ": 847.1, "connection_uJ": 496.4},
+      "required_values": ["component_total_uW", "reported_nominal_margin_uW", "component_nominal_margin_uW", "boot_and_connection_uJ"],
+      "required_boundaries": {"physical_verified": false, "paper_reproduction_proven": false, "manual_start_preserved": true, "device_identity_resolved": false, "off_condition_harvest_known": false},
+      "deliverable": "answer.json and a short editable report.md. Identify both MCU and CDC conflicts by page and distinguish nominal averages from startup reserve; do not assign the integrated storage capacitance from the separate 220 uF charging comparison."
+    },
+    {
+      "id": "P01-reserve-change", "paper": "P01", "split": "new-variant", "entry": "design-change",
+      "inputs": {"boot_uJ": 847.1, "connection_uJ": 496.4, "upper_V": 5.6, "floor_V": 4.8, "efficiency": 0.8, "reserve_fraction": 0.2, "capacitor_options_uF": [220, 330, 470, 1000], "harvest_during_start_uJ": 0},
+      "required_values": ["required_energy_uJ", "minimum_capacitance_uF", "selected_capacitance_uF", "usable_energy_uJ", "margin_uJ"],
+      "required_boundaries": {"physical_verified": false, "paper_reproduction_proven": false, "manual_start_preserved": true, "synthetic_design_constraints": true},
+      "deliverable": "answer.json and report.md. Select the smallest listed capacitor that satisfies 0.5*C*(upper^2-floor^2)*efficiency >= (boot+connection)*(1+reserve). These voltage floor, efficiency, margin and choices are explicit new idealized design requirements, not the author's native circuit; keep the source's manual startup."
+    },
+    {
+      "id": "P02-duty-bound", "paper": "P02", "split": "cross-paper", "entry": "supply-diagnosis",
+      "inputs": {"capacitance_mF": 22, "upper_V": 5.05, "floor_V": 3.7, "node_V": 3.3, "idle_mA": 2.4, "peak_mA": 40, "window_s": 6, "efficiency": 1, "harvest_during_window_J": 0, "active_duration_s": null, "field_extra_harvester_arrays": 10},
+      "required_values": ["stored_energy_J", "idle_power_W", "peak_power_W", "idle_window_energy_J", "maximum_total_active_s"],
+      "required_boundaries": {"physical_verified": false, "paper_reproduction_proven": false, "duty_cycle_known": false, "synthetic_design_constraints": true, "extra_harvesters_preserved": true},
+      "deliverable": "answer.json and report.md. Derive an upper bound for total active time from E = P_idle*T + (P_peak-P_idle)*t under the declared ideal no-harvest window. Do not treat twice within six seconds as six seconds at peak power, and do not transplant P01's 5 Hz harvest power. The article's field test adds ten harvester arrays; the actual load waveform and conversion losses remain unverified."
+    }
+  ],
+  "answer_schema": {
+    "schema_version": "bf-literature-engineering-answer-v1",
+    "task_id": "exact public task id",
+    "source_sha256": "exact article PDF hash from sources.json",
+    "values": "object with the task's required finite numeric values in the specified units",
+    "boundaries": "object with the task's required booleans",
+    "source_locators": "nonempty list of article page/figure/method locators"
+  },
+  "method_candidate": {
+    "target": "literature_method_overlay",
+    "allowed_change": "A bounded reusable instruction file loaded in the existing Pi shared context. No tool, model, task, evaluator, budget, permission or source changes.",
+    "required_fields": ["target", "instruction", "hypothesis", "falsifier", "applies_to", "evidence_trials"],
+    "maximum_instruction_chars": 6000
+  },
+  "trial_plan": [
+    {"id": "M0-ledger", "method": "M0", "task": "P01-ledger"},
+    {"id": "M0-reserve", "method": "M0", "task": "P01-reserve-change"},
+    {"id": "M0-transfer", "method": "M0", "task": "P02-duty-bound"},
+    {"id": "M1-ledger", "method": "M1", "task": "P01-ledger"},
+    {"id": "M1-reserve", "method": "M1", "task": "P01-reserve-change"},
+    {"id": "M1-transfer", "method": "M1", "task": "P02-duty-bound"}
+  ],
+  "improver_visible_trials": ["M0-ledger"],
+  "qualification": "One paired run per local task is a development check, not a statistically established transfer or RSI result. New-variant and cross-paper feedback is withheld from the improver until the candidate is frozen.",
+  "adoption": "Independent arithmetic/source/claim checks; require a recovered development failure with no paired regression. Equal pass counts retain a candidate without claiming benefit. No automatic production publication."
+}

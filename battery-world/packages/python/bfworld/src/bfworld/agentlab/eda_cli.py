@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from .store import canonical, identity
 from .responsibility_review import local_file
+from .native_outcome import summarize
 
 SKILL = Path('/Users/depengsu/.codex/skills/easyeda-agent')
 CLI = shutil.which('easyeda') or '/opt/homebrew/bin/easyeda'
@@ -173,6 +174,12 @@ class EdaCLI:
     def action(self,owner,body,operator=False):
         if not operator:self.app.engineering.authorize(owner)
         root=self.workspace(owner);action=body.get('action','inspect')
+        fields = {'inspect': set(), 'bind': {'project_uuid','authorization','writable'},
+                  'skill': {'path','offset','limit'}, 'job': {'job_id','wait_for_completion'},
+                  'command': {'argv','operation_id','wait_for_completion'}}
+        if action not in fields: raise ValueError('EDA_ACTION_INVALID')
+        unknown = set(body) - fields[action] - {'action','session_id'}
+        if unknown: raise ValueError('EDA_UNEXPECTED_FIELDS: '+','.join(sorted(unknown)))
         if action=='bind':
             if not operator:raise PermissionError('OPERATOR_REQUIRED')
             return self.bind(owner,body.get('project_uuid'),body.get('authorization','Explicit product engineering task'),body.get('writable') is True)
@@ -180,10 +187,17 @@ class EdaCLI:
             return {'binding':self.binding(owner),'transport':'typed EasyEDA CLI 1.9',
                     'instructions':'Use skill then command argv (without easyeda); server pins project. File arguments are workspace-relative. Unknown CLI flags: use --help. command needs stable operation_id; job retrieves queued results. All same-window calls serialized. Do not use legacy jlceda for this binding.'}
         if action=='skill':
-            name=body.get('path','SKILL.md');path=local_file(SKILL,name)
-            if not path.is_file() or path.suffix not in ('.md','.json'):raise ValueError('EDA_SKILL_FILE_NOT_FOUND')
-            text=path.read_text();offset=max(0,int(body.get('offset',0)));limit=min(18000,max(1,int(body.get('limit',12000))))
-            return {'path':name,'text':text[offset:offset+limit],'next_offset':offset+limit if len(text)>offset+limit else None}
+            name=body.get('path')
+            if isinstance(name,str) and name.startswith('references/'):
+                value=self.app.skills.action(owner,{'action':'resource','path':'vendor/easyeda-typed/'+name,
+                    'offset':body.get('offset',0),'limit':body.get('limit',12000),'offset_unit':'characters'})
+                return {**value,'requested_path':name,'text':value['content']}
+            aliases={'SKILL.md':'easyeda-agent','easyeda-agent':'easyeda-agent',
+                     'easyeda-pcb-routing':'easyeda-pcb-routing'}
+            if name not in aliases:
+                raise ValueError('EDA_SKILL_NOT_FOUND: use path=easyeda-agent or easyeda-pcb-routing; use bf_skill resource for frozen references')
+            value=self.app.skills.action(owner,{'action':'activate','skill_id':aliases[name]})
+            return {**value,'requested_path':name,'text':value['content'],'next_offset':None}
         if action=='job':return self.get(owner,body.get('job_id'))
         if action!='command':raise ValueError('EDA_ACTION_INVALID')
         binding=self.binding(owner)
@@ -230,7 +244,8 @@ class EdaCLI:
         receipt={'schema_version':'bf-eda-cli-operation-v1','job_id':jid,'owner':owner,'project':binding['project'],'argv':argv,'status':status,**output}
         path=self.root/(jid+'.json');path.write_text(canonical(receipt))
         local=workspace/'eda-receipts';local.mkdir(exist_ok=True);(local/(jid+'.json')).write_text(canonical(receipt))
-        summary={**output,'receipt_path':'eda-receipts/'+jid+'.json','receipt_sha256':identity(receipt)}
+        outcome=summarize(receipt)
+        summary={**output,'outcome':outcome,'receipt_path':'eda-receipts/'+jid+'.json','receipt_sha256':identity(receipt)}
         if len(summary.get('stdout',''))>16000:summary['stdout']=summary['stdout'][:16000]+'\n[Full output in receipt_path]'
         with self.store.connect() as db:db.execute('UPDATE eda_cli_jobs SET status=?,result=?,ended=? WHERE id=?',(status,canonical(summary),time.time(),jid))
-        self.app.conversations.event(owner,jid,{'type':'eda_cli_operation','job_id':jid,'project':binding['project'],'status':status,'argv':argv,'receipt_sha256':identity(receipt)})
+        self.app.conversations.event(owner,jid,{'type':'eda_cli_operation','job_id':jid,'project':binding['project'],'status':status,'argv':argv,'outcome':outcome,'receipt_sha256':identity(receipt)})

@@ -1,0 +1,793 @@
+{
+  "paper": "P06",
+  "task": "P06-native-f2927d6ddffa-b07e7bdb",
+  "stage": "native",
+  "owner": "pi-chat-c5fec5f6fc802e72",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-7e1f00245b9fd22b",
+        "kind": "cadquery",
+        "project_sha256": "0297ba665c4afbee4d3c4809457c8ccb44db4ce9050514ec02312b93e7338892",
+        "assembly_revision": 4,
+        "assembly_physical_hash": "9e79e65e022a5b9d09f6de01a272d80caaa79362e986ea74dc46029c39181756",
+        "native_readback": {
+          "bounds_mm": [
+            160.0,
+            190.0,
+            147.0
+          ],
+          "native_source_sha256": "640c3ae4dd78e26ec02260a2816d46c83088f4ad855d20d4df96920a5d2fad86",
+          "native_valid": true,
+          "preview": {
+            "angular_tolerance_rad": 0.1,
+            "attempts": [
+              {
+                "angular_tolerance_rad": 0.1,
+                "linear_tolerance_mm": 0.15,
+                "triangles": 11040
+              }
+            ],
+            "available": true,
+            "linear_tolerance_mm": 0.15,
+            "scope": "Visualization only; exact STEP geometry remains authoritative.",
+            "source_sha256": "640c3ae4dd78e26ec02260a2816d46c83088f4ad855d20d4df96920a5d2fad86",
+            "triangle_limit": 200000,
+            "triangles": 11040
+          },
+          "solid_count": 51,
+          "volume_mm3": 970539.973725817
+        },
+        "functional_passed": false,
+        "participant_project_path": "cad/project.json",
+        "project_manifest": {
+          "entrypoint": "main.py",
+          "files": [
+            "main.py"
+          ],
+          "interfaces": {
+            "electret_area_mm2": 200,
+            "electret_count": 10,
+            "envelope_mm": [
+              160,
+              190,
+              147
+            ],
+            "frame": "Z-up, origin at centre of acrylic base plate footprint",
+            "housing_plate_mm": 5,
+            "input_gear_ratio": "1:5",
+            "note": "interfaces are declarations from paper Sec7 (recovered) plus explicit self-build assumptions; fits are static-envelope assumptions, not verified interfaces",
+            "output_gear_ratio": "1:5",
+            "shaft_dia_mm": 6,
+            "shaft_fits": {
+              "axial_chain": "rotor top 56.5 -> thrust bearing 56.5-58.5 -> stator bottom 58.5 (axial clearance 0)",
+              "bore_od_mm": {
+                "fixed_line_to_line": 6.0,
+                "free_rotation_stator": 6.3,
+                "support_bearing_clutch": 6.05
+              },
+              "by_relation": {
+                "fixed": 6,
+                "free-rotation": 1,
+                "support": 2
+              },
+              "fits": 9,
+              "placeholders_not_designed": [
+                "spiral spring module arbor",
+                "shaft-end bearing seats",
+                "gear meshing pair",
+                "one-way clutch function"
+              ],
+              "radial_clearance_mm": {
+                "fixed_line_to_line": 0.0,
+                "free_rotation_stator": 0.15,
+                "support_bearing_clutch": 0.025
+              },
+              "shaft_od_mm": 6.0,
+              "table_source": "main.py :: PART-TABLE (FITS)"
+            },
+            "stator_teeth_per_electrode": 10,
+            "teng_rotor_dia_mm": 94,
+            "teng_stator_dia_mm": 94,
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "cad/main.py": "57653e573385c7d8de266a2b8decc32bcb1877739def38c883c291ab6c974d1c"
+        }
+      },
+      {
+        "job_id": "eng-f39e70c29a612e85",
+        "kind": "spice",
+        "project_sha256": "52a844a71e6f8b336ec3c783f6666ae0b5e6436a47bb09e1c76a057b7d50064d",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "48e8a0689fe50d0b62cbada2f7afca652be11791419971f98193146eee29aea0",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 11013,
+              "variables": 11
+            }
+          ],
+          "points": 11013,
+          "raw_sha256": "2474922774aa822d97046e3fb29cf8e5843c8ed572683ad6aac377f13e9ba9a9",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 11
+        },
+        "functional_passed": false,
+        "model_input_reuse": {
+          "schema_version": "bf-native-model-input-reuse-v1",
+          "kind": "spice",
+          "project_sha256": "52a844a71e6f8b336ec3c783f6666ae0b5e6436a47bb09e1c76a057b7d50064d",
+          "original_assembly_revision": 2,
+          "original_assembly_physical_hash": "48e8a0689fe50d0b62cbada2f7afca652be11791419971f98193146eee29aea0",
+          "delivery_assembly_revision": 4,
+          "delivery_assembly_physical_hash": "9e79e65e022a5b9d09f6de01a272d80caaa79362e986ea74dc46029c39181756",
+          "current_project_bytes_verified": true,
+          "declared_energy_unchanged": true,
+          "model_subset_only": true,
+          "assembly_applicability_verified": false,
+          "scope": "Original immutable SPICE model/output only; mechanical/source calibration and joint applicability remain unverified."
+        },
+        "participant_project_path": "spice/project.json",
+        "project_manifest": {
+          "entrypoint": "stage.cir",
+          "files": [
+            "stage.cir"
+          ],
+          "interfaces": {
+            "load_source": {
+              "frequency_Hz": 50,
+              "r_th_ohm": 10000000,
+              "type": "teng-equivalent-thevenin (self-build, declared)",
+              "v_peak_V": 300
+            },
+            "loads": {
+              "max_power_load_ohm": 10000000
+            },
+            "note": "interfaces are declarations; unknown source calibration and diode model are explicit assumptions",
+            "rectifier": {
+              "junction_capacitance_pF": 15,
+              "part": "UF4007 x4 bridge (C1)",
+              "rated_V": 1000
+            },
+            "scope_boundary": "diode-bridge rectifier + storage/load only; source calibration, triboelectric field and mechanics NOT modelled",
+            "storage": {
+              "capacitance_F": 4.7e-05,
+              "leakage_ohm": 1000000
+            },
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "spice/stage.cir": "f6651a03a0039fbb2a14a27a300ec7c1f8912fb1b0471ead368930538ff759c2"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 311,
+  "model_profile": {
+    "version": "engineering-reasoning-v1",
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_output_tokens": 32768,
+    "request_bytes": 256000,
+    "target_bytes": 220000
+  },
+  "work_phase": "engineering-review",
+  "phase_task_sha256": "e44b498098614e20c2a2f0b6b4840266d615660eff3e19123f3b164e2d018cab",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 152,
+  "budget": {
+    "owner": "pi-chat-c5fec5f6fc802e72",
+    "cap_usd": null,
+    "liability_usd": 5.956547099999998,
+    "remaining_usd": null,
+    "unbounded": true,
+    "unknown_requests": [
+      "llm-a936e257f2562e17c933"
+    ],
+    "exhausted": false
+  },
+  "method_identity": "fe043b368d441e4745735d35d58944e4284f595ab16705178a7ee4f2a13a3838",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/native-report.json",
+      "sha256": "efa6767abff2409d49f7f0a033d0fc6ff6c89f1e6a726968b924f1b8d214d37c",
+      "label": "P06 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/delivery/manifest.json",
+      "sha256": "2628379bc06b21c0d1c9cba38a317ee7df5d23669902100f1884f056ff26b664",
+      "label": "P06 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/delivery/UNVERIFIED.md",
+      "sha256": "0157b734d5ba7b4e903052cd940fcb760adcffb30ebe95035aa51c6c05d7aa1e",
+      "label": "P06 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/assembly.json",
+      "sha256": "cd57f29ba17144e9528a775da83ce3eda1e60cf1eea462a5622be1be69021dc8",
+      "label": "P06 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/main.py",
+      "sha256": "57653e573385c7d8de266a2b8decc32bcb1877739def38c883c291ab6c974d1c",
+      "label": "P06 cad/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/project.json",
+      "sha256": "a08172cabad1cf64a3384e20faac29eb4b1d13b8a9854a0ca2a9fe5c7f250934",
+      "label": "P06 cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/fit_source.py",
+      "sha256": "63508564737b282c736cc20485de59b1dd04b3ba7a2abf6895414a7d96972d95",
+      "label": "P06 cad/fit_source.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/make_assembly.py",
+      "sha256": "ecb664bad8779bfe0cbc9a7fff14a8b1c9d623efc00afd6f0dc6ad4be3b45bdb",
+      "label": "P06 cad/make_assembly.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/verify_shaft_fits.py",
+      "sha256": "319da0e74e2cefe7596b69bf2c51077656519b3d0e8be0e30b9bce73e47475c2",
+      "label": "P06 cad/verify_shaft_fits.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/shaft-fit-check-rev4.json",
+      "sha256": "eed0cf2a6c86396e820a83d36665e03cb546ad9dd505d7403a0658622e3b72a4",
+      "label": "P06 cad/shaft-fit-check-rev4.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/shaft-fit-check-prer5.json",
+      "sha256": "ba3dc5bb475cc1ff8cf8908f4ab3eed96128d2db1c3d4d44764a3efe17397e50",
+      "label": "P06 cad/shaft-fit-check-prer5.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/verify_step_repairs.py",
+      "sha256": "134ee534bf02f3cc58b7b7d83e2b1b8ec10de86e515884e5bbb2cdaf8024723f",
+      "label": "P06 cad/verify_step_repairs.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/step-repair-check-rev3.json",
+      "sha256": "64d5a14a529cf35ac7312f6d797d80c5cdc42b3e45e24d14617e14ec061d5c80",
+      "label": "P06 cad/step-repair-check-rev3.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/verify_assembly_step_consistency.py",
+      "sha256": "fc1b98361c1c3246b83ec7df560dcdbb2da572f837e4536313f9fbc38d27acdc",
+      "label": "P06 cad/verify_assembly_step_consistency.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/assembly-step-consistency-rev3.json",
+      "sha256": "9f8a8e48ba0f1522ac53520b9337a518388838711a5d9bb603203aa10d84958a",
+      "label": "P06 cad/assembly-step-consistency-rev3.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/cad/assembly-rev3-pre-r5.json",
+      "sha256": "336c80b0c419ded9687d70f0fbee5859e99f59eaf55a33375ef8ca298a94972e",
+      "label": "P06 cad/assembly-rev3-pre-r5.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/spice/stage.cir",
+      "sha256": "f6651a03a0039fbb2a14a27a300ec7c1f8912fb1b0471ead368930538ff759c2",
+      "label": "P06 spice/stage.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/spice/project.json",
+      "sha256": "d298beff1eab3a15f92d75bc1be44ef0748c68a6f6c304a580ba89b7a3356184",
+      "label": "P06 spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/spice/spice-readback-summary.json",
+      "sha256": "2c2e004592d2a9524b85e02e29238ff52624c5bb9adbe36d0fdc8fcbf05454d8",
+      "label": "P06 spice/spice-readback-summary.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/delivery/BOM_interfaces.md",
+      "sha256": "24e1658f3afc7d14ea3dd8add98dc98eb68bb03f7ddcf5d2699008585cbb39c5",
+      "label": "P06 delivery/BOM_interfaces.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "0157b734d5ba7b4e903052cd940fcb760adcffb30ebe95035aa51c6c05d7aa1e",
+      "label": "P06 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/delivery/shaft-fit-interfaces.md",
+      "sha256": "8bc369b646e8568d8cea902193ff6ffe12330736c971e3e0949e6f7d766b3b57",
+      "label": "P06 delivery/shaft-fit-interfaces.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/delivery/WORKNOTE-shaft-fit.md",
+      "sha256": "47bd0b0ac34f415386ca375ea34c0b2971ae3dfa70296b1e672d845804475ca3",
+      "label": "P06 delivery/WORKNOTE-shaft-fit.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/native-report.json",
+      "sha256": "efa6767abff2409d49f7f0a033d0fc6ff6c89f1e6a726968b924f1b8d214d37c",
+      "label": "P06 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/input.json",
+      "sha256": "c3595206a16cc1ea22f5f51929f30aa0f66d6bd785ea5450dd016b5eb272f02e",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/result.json",
+      "sha256": "4f680d7a91a65c4540218315779ef0971e35d6fc2da8114f65e04b4b341b35f6",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/project-readback.json",
+      "sha256": "88c97d8702064c351e476d8a645a81735262d1add62e2c2ce1b8c06cd0ceaf96",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/project-preview-mesh.json",
+      "sha256": "238392813a424e2546bed384769ab0e5c36607874c5c53810c5b924cc0fef16f",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/project-preview-mesh.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/project-assembly.step",
+      "sha256": "640c3ae4dd78e26ec02260a2816d46c83088f4ad855d20d4df96920a5d2fad86",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/process.log",
+      "sha256": "79b8b272aa3bc7400fa290487fc10d2bf04b1f0415c6d763b9b43a4d2b7729e8",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/project-source.zip",
+      "sha256": "3ec400d2b7813f7ec7e15d7d45cbbc61a93691bc55bb68d0cea89a9fb10fbd8a",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-7e1f00245b9fd22b/trusted_readback.py",
+      "sha256": "ab390587ccbc5890fc4f8a3f511e93eb9b04c81190fe461ceef3a8b42f6003ab",
+      "label": "P06 engineering-artifacts/eng-7e1f00245b9fd22b/trusted_readback.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-f39e70c29a612e85/input.json",
+      "sha256": "c06a2fdd9207ba974b9cd62c70f3db3830693faae51f9675d7835658199edff5",
+      "label": "P06 engineering-artifacts/eng-f39e70c29a612e85/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-f39e70c29a612e85/result.json",
+      "sha256": "050dee0f2c5bb59a584ba81f872942a9bfe33af06d3f7ab6ec254b6926e7c546",
+      "label": "P06 engineering-artifacts/eng-f39e70c29a612e85/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-f39e70c29a612e85/project-trace.raw",
+      "sha256": "2474922774aa822d97046e3fb29cf8e5843c8ed572683ad6aac377f13e9ba9a9",
+      "label": "P06 engineering-artifacts/eng-f39e70c29a612e85/project-trace.raw",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-f39e70c29a612e85/process.log",
+      "sha256": "c83ea6f37f188b4b23591a8c74845560d0a3af0156fd2a5974f46f7dd52f95b6",
+      "label": "P06 engineering-artifacts/eng-f39e70c29a612e85/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-f39e70c29a612e85/project-source.zip",
+      "sha256": "72fabf32efb5fdb2a6539f404a7114696d7a5d716cbbc939f680ef872e9e6acd",
+      "label": "P06 engineering-artifacts/eng-f39e70c29a612e85/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/project-source.zip",
+      "sha256": "3ec400d2b7813f7ec7e15d7d45cbbc61a93691bc55bb68d0cea89a9fb10fbd8a",
+      "label": "P06 eng-7e1f00245b9fd22b project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/result.json",
+      "sha256": "4f680d7a91a65c4540218315779ef0971e35d6fc2da8114f65e04b4b341b35f6",
+      "label": "P06 eng-7e1f00245b9fd22b result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/input.json",
+      "sha256": "c3595206a16cc1ea22f5f51929f30aa0f66d6bd785ea5450dd016b5eb272f02e",
+      "label": "P06 eng-7e1f00245b9fd22b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/project-assembly.step",
+      "sha256": "640c3ae4dd78e26ec02260a2816d46c83088f4ad855d20d4df96920a5d2fad86",
+      "label": "P06 eng-7e1f00245b9fd22b project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/project-readback.json",
+      "sha256": "88c97d8702064c351e476d8a645a81735262d1add62e2c2ce1b8c06cd0ceaf96",
+      "label": "P06 eng-7e1f00245b9fd22b project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-7e1f00245b9fd22b/project-preview-mesh.json",
+      "sha256": "238392813a424e2546bed384769ab0e5c36607874c5c53810c5b924cc0fef16f",
+      "label": "P06 eng-7e1f00245b9fd22b project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/project-source.zip",
+      "sha256": "1cb7ef8563a66d88bb00b7878005be7d2920d176db8bbb8209c07975e0677719",
+      "label": "P06 eng-b3b072c8056c1021 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/result.json",
+      "sha256": "c5259dc25a71e7f809173e8d4db5aefdf1bae20f277390a2405bba7ded37760d",
+      "label": "P06 eng-b3b072c8056c1021 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/input.json",
+      "sha256": "1ce47ade4da154f329634dd2023dbb81f680181824c8ba67ab86fe97df499e98",
+      "label": "P06 eng-b3b072c8056c1021 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/project-assembly.step",
+      "sha256": "2eff5dddaf75ba6c989f08473f85346aaa9d88895e4d20fe06d5d44fcad06cd1",
+      "label": "P06 eng-b3b072c8056c1021 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/project-readback.json",
+      "sha256": "0e9037819926643e5524c9d64c81208eeb2b0bb8fe362ce602476581fe953bb4",
+      "label": "P06 eng-b3b072c8056c1021 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b3b072c8056c1021/project-preview-mesh.json",
+      "sha256": "f02aaa4bbe7f7a0c9e8d9ec6deba21813dacb7f787b62e580f2e1bd25bf08112",
+      "label": "P06 eng-b3b072c8056c1021 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f39e70c29a612e85/project-source.zip",
+      "sha256": "72fabf32efb5fdb2a6539f404a7114696d7a5d716cbbc939f680ef872e9e6acd",
+      "label": "P06 eng-f39e70c29a612e85 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f39e70c29a612e85/result.json",
+      "sha256": "050dee0f2c5bb59a584ba81f872942a9bfe33af06d3f7ab6ec254b6926e7c546",
+      "label": "P06 eng-f39e70c29a612e85 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f39e70c29a612e85/input.json",
+      "sha256": "c06a2fdd9207ba974b9cd62c70f3db3830693faae51f9675d7835658199edff5",
+      "label": "P06 eng-f39e70c29a612e85 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f39e70c29a612e85/project-trace.raw",
+      "sha256": "2474922774aa822d97046e3fb29cf8e5843c8ed572683ad6aac377f13e9ba9a9",
+      "label": "P06 eng-f39e70c29a612e85 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/project-source.zip",
+      "sha256": "14b5aa7ddc7b4c1008032cd88943e8c5c1c8e5e622ef12439a9cd864efc441c7",
+      "label": "P06 eng-9ab6b3405edb76be project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/result.json",
+      "sha256": "395d5e8129d180af1c390c0a868bd828c5139a58b38442f215f94605ccd83769",
+      "label": "P06 eng-9ab6b3405edb76be result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/input.json",
+      "sha256": "d3c08e7609f0d32edcdafb566a97a8fa360390ccc1e78708dee5a7cba00df795",
+      "label": "P06 eng-9ab6b3405edb76be input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/project-assembly.step",
+      "sha256": "bee6efc1dd45db6fc94df96f026eabbeb9c2c2d087a50bfbb14062bbdfe9b29a",
+      "label": "P06 eng-9ab6b3405edb76be project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/project-readback.json",
+      "sha256": "e95231d965a2cca634e11566a8cf16964da258c3856c2f55daafb14a611fe1b6",
+      "label": "P06 eng-9ab6b3405edb76be project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9ab6b3405edb76be/project-preview-mesh.json",
+      "sha256": "a558e63fa5dc3be62c137f75847d3715ddd29fb97e6db445be5b98d089302fca",
+      "label": "P06 eng-9ab6b3405edb76be project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "assembly.json",
+        "sha256": "cd57f29ba17144e9528a775da83ce3eda1e60cf1eea462a5622be1be69021dc8",
+        "bytes": 58046
+      },
+      {
+        "path": "cad/main.py",
+        "sha256": "57653e573385c7d8de266a2b8decc32bcb1877739def38c883c291ab6c974d1c",
+        "bytes": 18571
+      },
+      {
+        "path": "cad/project.json",
+        "sha256": "a08172cabad1cf64a3384e20faac29eb4b1d13b8a9854a0ca2a9fe5c7f250934",
+        "bytes": 1384
+      },
+      {
+        "path": "cad/fit_source.py",
+        "sha256": "63508564737b282c736cc20485de59b1dd04b3ba7a2abf6895414a7d96972d95",
+        "bytes": 1007
+      },
+      {
+        "path": "cad/make_assembly.py",
+        "sha256": "ecb664bad8779bfe0cbc9a7fff14a8b1c9d623efc00afd6f0dc6ad4be3b45bdb",
+        "bytes": 9092
+      },
+      {
+        "path": "cad/verify_shaft_fits.py",
+        "sha256": "319da0e74e2cefe7596b69bf2c51077656519b3d0e8be0e30b9bce73e47475c2",
+        "bytes": 26042
+      },
+      {
+        "path": "cad/shaft-fit-check-rev4.json",
+        "sha256": "eed0cf2a6c86396e820a83d36665e03cb546ad9dd505d7403a0658622e3b72a4",
+        "bytes": 40542
+      },
+      {
+        "path": "cad/shaft-fit-check-prer5.json",
+        "sha256": "ba3dc5bb475cc1ff8cf8908f4ab3eed96128d2db1c3d4d44764a3efe17397e50",
+        "bytes": 35040
+      },
+      {
+        "path": "cad/verify_step_repairs.py",
+        "sha256": "134ee534bf02f3cc58b7b7d83e2b1b8ec10de86e515884e5bbb2cdaf8024723f",
+        "bytes": 8977
+      },
+      {
+        "path": "cad/step-repair-check-rev3.json",
+        "sha256": "64d5a14a529cf35ac7312f6d797d80c5cdc42b3e45e24d14617e14ec061d5c80",
+        "bytes": 6203
+      },
+      {
+        "path": "cad/verify_assembly_step_consistency.py",
+        "sha256": "fc1b98361c1c3246b83ec7df560dcdbb2da572f837e4536313f9fbc38d27acdc",
+        "bytes": 2835
+      },
+      {
+        "path": "cad/assembly-step-consistency-rev3.json",
+        "sha256": "9f8a8e48ba0f1522ac53520b9337a518388838711a5d9bb603203aa10d84958a",
+        "bytes": 12341
+      },
+      {
+        "path": "cad/assembly-rev3-pre-r5.json",
+        "sha256": "336c80b0c419ded9687d70f0fbee5859e99f59eaf55a33375ef8ca298a94972e",
+        "bytes": 50449
+      },
+      {
+        "path": "spice/stage.cir",
+        "sha256": "f6651a03a0039fbb2a14a27a300ec7c1f8912fb1b0471ead368930538ff759c2",
+        "bytes": 1543
+      },
+      {
+        "path": "spice/project.json",
+        "sha256": "d298beff1eab3a15f92d75bc1be44ef0748c68a6f6c304a580ba89b7a3356184",
+        "bytes": 798
+      },
+      {
+        "path": "spice/spice-readback-summary.json",
+        "sha256": "2c2e004592d2a9524b85e02e29238ff52624c5bb9adbe36d0fdc8fcbf05454d8",
+        "bytes": 4680
+      },
+      {
+        "path": "delivery/BOM_interfaces.md",
+        "sha256": "24e1658f3afc7d14ea3dd8add98dc98eb68bb03f7ddcf5d2699008585cbb39c5",
+        "bytes": 10104
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "0157b734d5ba7b4e903052cd940fcb760adcffb30ebe95035aa51c6c05d7aa1e",
+        "bytes": 10192
+      },
+      {
+        "path": "delivery/shaft-fit-interfaces.md",
+        "sha256": "8bc369b646e8568d8cea902193ff6ffe12330736c971e3e0949e6f7d766b3b57",
+        "bytes": 8686
+      },
+      {
+        "path": "delivery/WORKNOTE-shaft-fit.md",
+        "sha256": "47bd0b0ac34f415386ca375ea34c0b2971ae3dfa70296b1e672d845804475ca3",
+        "bytes": 1900
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "efa6767abff2409d49f7f0a033d0fc6ff6c89f1e6a726968b924f1b8d214d37c",
+        "bytes": 10665
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/input.json",
+        "sha256": "c3595206a16cc1ea22f5f51929f30aa0f66d6bd785ea5450dd016b5eb272f02e",
+        "bytes": 66490
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/result.json",
+        "sha256": "4f680d7a91a65c4540218315779ef0971e35d6fc2da8114f65e04b4b341b35f6",
+        "bytes": 2397
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/project-readback.json",
+        "sha256": "88c97d8702064c351e476d8a645a81735262d1add62e2c2ce1b8c06cd0ceaf96",
+        "bytes": 593
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/project-preview-mesh.json",
+        "sha256": "238392813a424e2546bed384769ab0e5c36607874c5c53810c5b924cc0fef16f",
+        "bytes": 754125
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/project-assembly.step",
+        "sha256": "640c3ae4dd78e26ec02260a2816d46c83088f4ad855d20d4df96920a5d2fad86",
+        "bytes": 816332
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/process.log",
+        "sha256": "79b8b272aa3bc7400fa290487fc10d2bf04b1f0415c6d763b9b43a4d2b7729e8",
+        "bytes": 1265
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/project-source.zip",
+        "sha256": "3ec400d2b7813f7ec7e15d7d45cbbc61a93691bc55bb68d0cea89a9fb10fbd8a",
+        "bytes": 6498
+      },
+      {
+        "path": "engineering-artifacts/eng-7e1f00245b9fd22b/trusted_readback.py",
+        "sha256": "ab390587ccbc5890fc4f8a3f511e93eb9b04c81190fe461ceef3a8b42f6003ab",
+        "bytes": 2064
+      },
+      {
+        "path": "engineering-artifacts/eng-f39e70c29a612e85/input.json",
+        "sha256": "c06a2fdd9207ba974b9cd62c70f3db3830693faae51f9675d7835658199edff5",
+        "bytes": 33124
+      },
+      {
+        "path": "engineering-artifacts/eng-f39e70c29a612e85/result.json",
+        "sha256": "050dee0f2c5bb59a584ba81f872942a9bfe33af06d3f7ab6ec254b6926e7c546",
+        "bytes": 1447
+      },
+      {
+        "path": "engineering-artifacts/eng-f39e70c29a612e85/project-trace.raw",
+        "sha256": "2474922774aa822d97046e3fb29cf8e5843c8ed572683ad6aac377f13e9ba9a9",
+        "bytes": 2896653
+      },
+      {
+        "path": "engineering-artifacts/eng-f39e70c29a612e85/process.log",
+        "sha256": "c83ea6f37f188b4b23591a8c74845560d0a3af0156fd2a5974f46f7dd52f95b6",
+        "bytes": 1314
+      },
+      {
+        "path": "engineering-artifacts/eng-f39e70c29a612e85/project-source.zip",
+        "sha256": "72fabf32efb5fdb2a6539f404a7114696d7a5d716cbbc939f680ef872e9e6acd",
+        "bytes": 1404
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [
+      "llm-a936e257f2562e17c933"
+    ],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-7e1f00245b9fd22b",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-b3b072c8056c1021",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-f39e70c29a612e85",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9ab6b3405edb76be",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P06-native-f2927d6ddffa-b07e7bdb/continuations/turn-003/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-c5fec5f6fc802e72/trace.jsonl",
+  "trace_sha256": "26f6c89d1fb7fa71e2e0e7ce8713d180fb9f0d073579189e425e7ccef437249f",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

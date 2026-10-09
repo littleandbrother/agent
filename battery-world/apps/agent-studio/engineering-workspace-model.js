@@ -6,11 +6,13 @@
     ['pcb', 'PCB', '布线、层视图与制造资料'],
     ['mechanical', '结构', '模型、尺寸图纸与动作演示'],
     ['simulation', '仿真', '实际波形、计算结果与检查'],
+    ['firmware', '固件', '构建产物、源码与测试记录'],
     ['bom', 'BOM', '已归档的元器件与材料清单'],
-    ['documents', '文档', '报告、固件与设计记录']
+    ['documents', '文档', '报告与设计记录']
   ].map(([id, label, description]) => ({id, label, description}));
   const path = f => [f.name, f.source_path, f.path].filter(Boolean).join(' ').toLowerCase();
   function belongs(f, id) {
+    if(id==='runtime')return false;
     if (Array.isArray(f.sections) && id !== 'overview') return f.sections.includes(id);
     const p = path(f), ext = (f.name || '').split('.').pop().toLowerCase();
     if (id === 'schematic') return /schematic|原理图|\.schdoc\b|\.sch\b|\.kicad_sch\b/.test(p);
@@ -18,6 +20,7 @@
     if (id === 'mechanical') return f.domain === 'mechanical' || ['step','stp','stl','glb','blend','dxf'].includes(ext);
     if (id === 'simulation') return f.role === 'data' && f.domain !== 'firmware' && !belongs(f, 'bom') || /waveform|transient|simulation|simulat|\.raw\b|\.mph\b|\.cir\b|force.table|energy.balance|仿真|云图/.test(p);
     if (id === 'bom') return /\bbom\b|bill.of.material|元器件清单|材料清单|物料/.test(p);
+    if (id === 'firmware') return f.domain==='firmware'||['elf','hex','bin'].includes(ext);
     if (id === 'documents') return ['pdf','tex','md','c','h','cpp','py','ts','elf','hex','bin'].includes(ext) || f.domain === 'firmware' || f.role === 'report';
     return true;
   }
@@ -27,7 +30,8 @@
     const ids = new Set(files(snapshot, id).map(f => f.id));
     return (snapshot.results || []).filter(r => (r.files || []).some(f => ids.has(f.id)) ||
       id === 'mechanical' && r.domain === 'mechanical' ||
-      id === 'simulation' && ['closed-simulation','door-system','spice','comsol','beam-event','event-transient','benchmark'].includes(r.kind));
+      id === 'firmware' && r.domain === 'firmware' || r.kind==='easyeda-'+id ||
+      id === 'simulation' && ['door-selfpower','closed-simulation','door-system','spice','comsol','beam-event','event-transient','benchmark'].includes(r.kind));
   }
   function views(snapshot, id) {
     const allowed = new Set(files(snapshot, id).map(f => f.id));

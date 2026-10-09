@@ -3,6 +3,100 @@
   "id": "BFA-035-dot-integration-pilot",
   "owner": "bf-agent-coordinator",
   "status": "in-progress",
+  "artifact_workspace_20261008": {
+    "status": "implemented-targeted-verified",
+    "verification": "51 focused Python tests; 19 Node tests/groups; live product, delivery, full-pane animation, camera/mode/playback controls, clear glass actions and keyboard disclosure verified. Downloaded archive: 103 artifact hashes and ZIP integrity passed. No full init claim.",
+    "evidence": "/Users/depengsu/.local/share/bf-agent-runtime/ui-rollouts/20261008-artifacts-live/",
+    "deployment": "8768 serves updated local sources. Header defaults collapsed with hover, keyboard and touch disclosure. Full-pane scene has floating camera/mode controls, smaller Inter Regular vector station titles (about 20% less visible height) and no duplicate specialist or Dot labels/bubble. Live is default; preset demo is explicitly labeled and re-entry restores actual runtime status. Production Pi stays PAUSED / CHAT_TURN_WALL_BUDGET; model request count remains 4196.",
+    "authority": "User requested moving the running animation into the engineering workspace and fixing stale/mismatched product and delivery pages.",
+    "hypothesis": "A shared event-refreshed artifact catalog, explicit latest/history/assembly scopes and native EDA records remove hidden outputs and stale page projections without changing product acceptance.",
+    "falsifier": "A completed registered output remains absent, pages disagree on the selected scope, an old owner response replaces the active task, failed checks become accepted, or animation persists in the conversation body.",
+    "owned_paths": [
+      "apps/agent-studio/",
+      "packages/python/bfworld/src/bfworld/agentlab/",
+      "tests/agentlab/",
+      "docs/agentlab/",
+      "docs/PROGRESS.md",
+      "docs/SESSION-HANDOFF.md",
+      "project/features/BFA-035-dot-integration-pilot/"
+    ],
+    "schema_changes": [
+      "additive bf-product-results-v1 native EDA and latest-selection metadata",
+      "bf-result-version-v1"
+    ],
+    "tests": [
+      "owner isolation",
+      "native failed DRC projection",
+      "firmware target classification",
+      "latest scope agreement across product and export",
+      "event refresh and late-response rejection",
+      "animation workspace lifecycle",
+      "live preview and download"
+    ],
+    "negative_controls": [
+      "foreign owner receipt",
+      "tampered receipt",
+      "unbound output",
+      "stale cached request",
+      "new result during export"
+    ],
+    "command": "focused Python/Node regressions plus live 8768 browser and HTTP timing checks",
+    "output_artifact": "docs/agentlab/ARTIFACT-WORKSPACE-20261008.md",
+    "cost_cap": "USD0 model calls; no product/native simulations or native design edits",
+    "claim_boundary": "Artifact visibility, read performance and UI only; no new design, physical or autonomy pass",
+    "stop_condition": "Preserve active runs and immutable artifacts; restart service only with no active native/model work. No fee or authorization reset."
+  },
+  "runtime_architecture_20261008": {
+    "status": "implemented-targeted-verified",
+    "verification": "128 Python regressions, Node projection, two Pi package compiles, seven skill validations and real 8768 browser checks passed. Full Pi monorepo type check remains failed outside BF packages; no full init claim.",
+    "deployment": "Runtime Pi synchronized with backups; 8768 restarted with no active jobs. Frozen PRODUCT-fb02c43e9f4b prepared. Paused production conversation not resumed; zero new paid/native jobs and ledger unchanged.",
+    "evidence": "/Users/depengsu/.local/share/bf-agent-runtime/architecture-rollouts/20261008-203121/",
+    "authority": "User requested complete implementation of the reviewed prompt, skills, plugin, context and Three.js architecture.",
+    "hypothesis": "Locked skills, explicit capability contracts and a fact-only visual projection prevent silent skill substitution, context loss and false display completion while preserving existing engineering work.",
+    "falsifier": "Wrong skill resolves successfully, active instructions disappear from a projected request, a failed native check appears complete, or recovery duplicates an existing operation or resets costs.",
+    "owned_paths": [
+      "apps/agent-studio/",
+      "packages/python/bfworld/src/bfworld/agentlab/",
+      "tests/agentlab/",
+      "scripts/",
+      "docs/agentlab/",
+      "docs/PROGRESS.md",
+      "docs/SESSION-HANDOFF.md",
+      "project/features/BFA-035-dot-integration-pilot/",
+      "../pi-bf-aiot/packages/bf-agent/",
+      "../pi-bf-aiot/packages/bf-harness/"
+    ],
+    "schemas": [
+      "bf-skill-catalog-v1",
+      "bf-skill-activation-v1",
+      "bf-resource-manifest-v1",
+      "bf-runtime-view-v1",
+      "bf-native-outcome-v1"
+    ],
+    "targeted_tests": [
+      "skill identity and compatibility",
+      "resource tamper and path escape",
+      "active skill preservation and exact request visibility",
+      "native execution versus check outcome",
+      "display replay, switching, duplicates, pause and concurrent jobs",
+      "input-bound cross-domain invalidation",
+      "existing recovery and ledger regression"
+    ],
+    "negative_controls": [
+      "unknown skill/field",
+      "mutated frozen resource",
+      "wrong owner",
+      "stale or duplicated event",
+      "DRC failed with process exit zero",
+      "old receipt after restart",
+      "presentation-only edit"
+    ],
+    "command": "rtk proxy .venv/bin/python scripts/verify_runtime_architecture.py --output /absolute/new-directory; Pi npm run check; isolated browser verification",
+    "output_artifact": "docs/agentlab/RUNTIME-ARCHITECTURE-20261008.md",
+    "cost_cap": "USD0 provider calls for implementation verification. Native engineering jobs are not replayed. Any later product continuation retains the existing owner budget and unknown liabilities.",
+    "claim_boundary": "Runtime and interface implementation; no new physical or Agent efficacy claim. Current product acceptance remains independently evaluated.",
+    "stop_condition": "Concurrent writer, active native operation, source identity drift or exhausted execution authorization. Keep historical receipts and costs."
+  },
   "objective": "Selectively integrate main, local Studio glass and Dot cache/method/physical review; establish explicit apparatus alignment, native rail observations, four real Pi trajectories, and evidence-driven bounded architecture seam.",
   "hypothesis": "A source-bound common apparatus and method/action trace allows real Pi feedback revisions to be distinguished from operator runs and unsupported architecture proposals.",
   "paper_claim": "Development integration and bounded nominal-model pilot only; no superiority, physical qualification or RSI claim.",
@@ -1502,19 +1596,36 @@
       "model_followup_dispatched": false,
       "operator_product_source_edits": false
     }
+  },
+  "github_checkpoint_20261008": {
+    "status": "development-checkpoint",
+    "user_authorized": true,
+    "release_note": "release/SELFPOWER-PI-CHECKPOINT-20261008.md",
+    "verification": "release/evidence/checkpoint-20261008/verification.json",
+    "python_unique_tests_passed": 250,
+    "frontend_tests_passed": 18,
+    "pi_tool_tests_passed": 8,
+    "pi_full_check_passed": true,
+    "app_init_passed": false,
+    "app_init_blocker": "missing historical deployment run-manifest.json",
+    "product_delivery_complete": false,
+    "paid_execution_after_publication": "same-owner-after-user-balance-restored"
+  },
+  "github_checkpoint_20261010": {
+    "status": "development-checkpoint",
+    "user_authorized": true,
+    "release_note": "release/BF-AGENT-CHECKPOINT-20261010.md",
+    "verification": "release/evidence/checkpoint-20261010/verification.json",
+    "latest_acceptance": "release/evidence/checkpoint-20261010/literature/acceptance.json",
+    "full_products_accepted": 0,
+    "physical_validation": "NOT_TESTED",
+    "agent_improvement_proven": false,
+    "paid_requests_during_publication": 0,
+    "historical_records_preserved": true,
+    "pi_full_check_passed": true,
+    "pi_offline_build_passed": true,
+    "corrected_python_tests_passed": 89,
+    "app_init_passed": false,
+    "app_init_limitations": "Initial failures/timeout preserved; corrected implicated modules pass; full init not rerun"
   }
 }
-
-github_checkpoint_20261008:
-  status: development-checkpoint
-  user_authorized: true
-  release_note: release/SELFPOWER-PI-CHECKPOINT-20261008.md
-  verification: release/evidence/checkpoint-20261008/verification.json
-  python_unique_tests_passed: 250
-  frontend_tests_passed: 18
-  pi_tool_tests_passed: 8
-  pi_full_check_passed: true
-  app_init_passed: false
-  app_init_blocker: missing historical deployment run-manifest.json
-  product_delivery_complete: false
-  paid_execution_after_publication: same-owner-after-user-balance-restored

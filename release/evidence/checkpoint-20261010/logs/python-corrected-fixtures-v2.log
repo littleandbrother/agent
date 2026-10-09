@@ -1,0 +1,150 @@
+...........F...........FF.FFFFF.....F....F...........................F.FE.F.F............
+======================================================================
+ERROR: test_recall_branches_actual_pi_context_and_retains_raw_history (tests.agentlab.test_organization.OrganizationTests.test_recall_branches_actual_pi_context_and_retains_raw_history)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 114, in test_recall_branches_actual_pi_context_and_retains_raw_history
+    payload=json.dumps(self.requests[-1]['messages']);self.assertIn('KEEP_FIRST',payload);self.assertIn('AFTER_RECALL',payload);self.assertNotIn('REMOVE_SECOND',payload)
+                       ~~~~~~~~~~~~~^^^^
+IndexError: list index out of range
+
+======================================================================
+FAIL: test_real_pi_registers_engineering_and_reads_skill_without_paid_provider (tests.agentlab.test_trace_engineering.TraceEngineering.test_real_pi_registers_engineering_and_reads_skill_without_paid_provider)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_trace_engineering.py", line 153, in test_real_pi_registers_engineering_and_reads_skill_without_paid_provider
+    self.assertEqual('IDLE',d['status'],d['error']);self.assertEqual(3,len(requests))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs
+
+======================================================================
+FAIL: test_real_pi_reference_only_folder_starts_without_engineering_permission (tests.agentlab.test_simulation_tasks.TaskService.test_real_pi_reference_only_folder_starts_without_engineering_permission)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_simulation_tasks.py", line 95, in test_real_pi_reference_only_folder_starts_without_engineering_permission
+    self.assertEqual('IDLE',final['status'],final['error'])
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs
+
+======================================================================
+FAIL: test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider (tests.agentlab.test_simulation_tasks.TaskService.test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider)
+Real Pi process / fixture model and native result: integration, not design evidence.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_simulation_tasks.py", line 174, in test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider
+    self.assertEqual('IDLE',final['status'],final['error'])
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs
+
+======================================================================
+FAIL: test_actual_pi_deadline_pauses_saves_and_resumes_existing_session (tests.agentlab.test_chat.ChatTests.test_actual_pi_deadline_pauses_saves_and_resumes_existing_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 290, in test_actual_pi_deadline_pauses_saves_and_resumes_existing_session
+    else:self.fail('actual Pi never started its waiting tool')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: actual Pi never started its waiting tool
+
+======================================================================
+FAIL: test_actual_pi_length_stop_is_failed_and_never_completed (tests.agentlab.test_chat.ChatTests.test_actual_pi_length_stop_is_failed_and_never_completed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 405, in test_actual_pi_length_stop_is_failed_and_never_completed
+    self.assertEqual('MODEL_OUTPUT_TRUNCATED',d['error'])
+AssertionError: 'MODEL_OUTPUT_TRUNCATED' != "Cannot find module '/Users/depengsu/.loc[282 chars].mjs"
+- MODEL_OUTPUT_TRUNCATED
++ Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs
+
+
+======================================================================
+FAIL: test_actual_pi_stream_and_mid_turn_message_without_external_provider (tests.agentlab.test_chat.ChatTests.test_actual_pi_stream_and_mid_turn_message_without_external_provider)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 246, in test_actual_pi_stream_and_mid_turn_message_without_external_provider
+    self.assertTrue(stream_started.wait(12))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation (tests.agentlab.test_chat.ChatTests.test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 225, in test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation
+    self.assertEqual(3,len(calls),str(events[-5:]))
+AssertionError: 3 != 0 : [{'seq': 23, 'data': {'id': '03d86e44-6112-4e1e-92a3-2afe3455e6d5-1', 'time': 1791566940.693, 'type': 'assistant_start'}, 'time': 1791566940.769844}, {'seq': 24, 'data': {'id': '03d86e44-6112-4e1e-92a3-2afe3455e6d5-1', 'message': {'api': 'openai-completions', 'content': [], 'errorMessage': "Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs", 'model': 'deepseek-flash', 'provider': 'bf-deepseek', 'role': 'assistant', 'stopReason': 'error', 'timestamp': 1791566940692, 'usage': {'cacheRead': 0, 'cacheWrite': 0, 'cost': {'cacheRead': 0, 'cacheWrite': 0, 'input': 0, 'output': 0, 'total': 0}, 'input': 0, 'output': 0, 'totalTokens': 0}}, 'time': 1791566940.693, 'type': 'message'}, 'time': 1791566940.772313}, {'seq': 25, 'data': {'error': "Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs", 'status': 'FAILED', 'type': 'conversation_status'}, 'time': 1791566940.775465}, {'seq': 26, 'data': {'submitted': False, 'time': 1791566940.698, 'type': 'turn_complete'}, 'time': 1791566940.777129}, {'seq': 27, 'data': {'time': 1791566940.699, 'type': 'chat_idle'}, 'time': 1791566940.7787971}]
+
+======================================================================
+FAIL: test_actual_product_pi_loads_policy_and_current_context_without_paid_model (tests.agentlab.test_chat.ChatTests.test_actual_product_pi_loads_policy_and_current_context_without_paid_model)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 196, in test_actual_product_pi_loads_policy_and_current_context_without_paid_model
+    self.assertEqual(c['id'],packet['owner']);self.assertIn(packet['sha256'],json.dumps(requests))
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '0d3e66e601c1e97edf566f274f6da4049c460369478dac631d5e23dd9a78e9c1' not found in '[]'
+
+======================================================================
+FAIL: test_product_model_revision_error_explains_correct_field_without_native_dispatch (tests.agentlab.test_chat.ChatTests.test_product_model_revision_error_explains_correct_field_without_native_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 381, in test_product_model_revision_error_explains_correct_field_without_native_dispatch
+    self.assertEqual(2,len(calls))
+AssertionError: 2 != 0
+
+======================================================================
+FAIL: test_unfinished_product_executes_bounded_continuations_without_false_completion (tests.agentlab.test_chat.ChatTests.test_unfinished_product_executes_bounded_continuations_without_false_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 347, in test_unfinished_product_executes_bounded_continuations_without_false_completion
+    self.assertEqual(13,len(calls))
+AssertionError: 13 != 0
+
+======================================================================
+FAIL: test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration (tests.agentlab.test_organization.OrganizationTests.test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 74, in test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration
+    c=self.chat.create('fixture '+op,'dev-01',op,folder['id']);d=self.wait(c['id']);self.assertEqual('IDLE',d['status'])
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+
+
+======================================================================
+FAIL: test_real_pi_memory_tool_write_is_read_by_next_folder_session (tests.agentlab.test_organization.OrganizationTests.test_real_pi_memory_tool_write_is_read_by_next_folder_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 97, in test_real_pi_memory_tool_write_is_read_by_next_folder_session
+    self.assertEqual('AGENT_WRITTEN_SHARED_NOTE',self.org.folder(f['id'])['config']['memory'])
+AssertionError: 'AGENT_WRITTEN_SHARED_NOTE' != ''
+- AGENT_WRITTEN_SHARED_NOTE
++ 
+
+
+======================================================================
+FAIL: test_running_recall_stops_and_removes_current_input (tests.agentlab.test_organization.OrganizationTests.test_running_recall_stops_and_removes_current_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 117, in test_running_recall_stops_and_removes_current_input
+    self.delay=.5;c=self.chat.create('REMOVE_RUNNING','dev-01','one');cid=c['id'];self.assertTrue(self.started.wait(10))
+                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_three_actual_pi_processes_overlap_and_keep_messages_separate (tests.agentlab.test_parallel_chat.ParallelChatTests.test_three_actual_pi_processes_overlap_and_keep_messages_separate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_parallel_chat.py", line 161, in test_three_actual_pi_processes_overlap_and_keep_messages_separate
+    self.assertTrue(all_entered.wait(20), [app.conversations.get(c['id']) for c in conversations])
+AssertionError: False is not true : [{'id': 'pi-chat-73912e0e1229f48f', 'operation': 'parallel-0', 'title': '任务独立标记-0', 'task_id': None, 'created': 1791566996.702983, 'updated': 1791567005.478878, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': "Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs"}, {'id': 'pi-chat-f2e29e6a3f5574ff', 'operation': 'parallel-1', 'title': '任务独立标记-1', 'task_id': None, 'created': 1791566996.7342741, 'updated': 1791567006.7090418, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': "Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs"}, {'id': 'pi-chat-5278f28672413331', 'operation': 'parallel-2', 'title': '任务独立标记-2', 'task_id': None, 'created': 1791566996.777455, 'updated': 1791567008.218107, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': "Cannot find module 'verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/runs/runs.mjs' imported from verification://corrected/source/pi-bf-aiot/node_modules/openai/resources/evals/evals.mjs"}]
+
+----------------------------------------------------------------------
+Ran 89 tests in 149.898s
+
+FAILED (failures=14, errors=1)

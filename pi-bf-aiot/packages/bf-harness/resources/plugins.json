@@ -1,0 +1,74 @@
+{
+  "schema_version": "bf-plugin-registry-v1",
+  "plugins": [
+    {
+      "id": "bf-product",
+      "version": "1.0.0",
+      "adapter": "bf-product-v1",
+      "tools": [
+        "bf_product",
+        "bf_reference"
+      ],
+      "permissions": "existing owner-bound backend authority; no new grants",
+      "skills": [
+        {
+          "id": "bf-task-recovery",
+          "description": "恢复同一产品、核对有效作业和授权、建立任务与验收边界。",
+          "path": "skills/bf-task-recovery/SKILL.md"
+        },
+        {
+          "id": "bf-reference-reuse",
+          "description": "检索并复用论文、原厂器件资料和参考工程，记录条件与差异。",
+          "path": "skills/bf-reference-reuse/SKILL.md"
+        },
+        {
+          "id": "bf-product-delivery",
+          "description": "独立复核跨专业依赖、同版本文件与交付清单，不将打包成功当成验收。",
+          "path": "skills/bf-product-delivery/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "bf-easyeda",
+      "version": "1.0.0",
+      "adapter": "easyeda-typed-v1",
+      "tools": [
+        "bf_eda"
+      ],
+      "permissions": "existing owner-bound backend authority; no new grants",
+      "skills": [
+        {
+          "id": "easyeda-agent",
+          "description": "用当前 bf_eda typed CLI 制作与回读原理图、器件、BOM 和引脚网络。",
+          "path": "skills/easyeda-agent/SKILL.md"
+        },
+        {
+          "id": "easyeda-pcb-routing",
+          "description": "用 typed EasyEDA 完成板框、布局、布线与保存回读后的原生 DRC。",
+          "path": "skills/easyeda-pcb-routing/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "bf-multiphysics",
+      "version": "1.0.0",
+      "adapter": "bf-engineering-v1",
+      "tools": [
+        "bf_engineering"
+      ],
+      "permissions": "existing owner-bound backend authority; no new grants",
+      "skills": [
+        {
+          "id": "bf-mcu-firmware",
+          "description": "构建实际 MCU 固件并独立检查引脚、中断、时序、失败处理与功耗边界。",
+          "path": "skills/bf-mcu-firmware/SKILL.md"
+        },
+        {
+          "id": "bf-coupled-mechanical",
+          "description": "用实际 PCB、统一尺寸与参数维护机械装配和有适用范围的联合仿真。",
+          "path": "skills/bf-coupled-mechanical/SKILL.md"
+        }
+      ]
+    }
+  ]
+}

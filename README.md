@@ -1,6 +1,16 @@
 # BF-AIoT Agent
 
-当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-08）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-10）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
+
+## 2026-10-10 开发检查点
+
+本次更新包含 Three.js 运行动画、工程工作区与产品/交付展示、版本化技能与严格加载、十篇 2025–2026 论文的独立 Pi 任务、原生工程适配器、功能验收、恢复与上下文管理，以及无累计费用/token/请求数上限策略。时间授权仍独立生效；模型凭据和原账本不随源码发布。
+
+截至 2026-10-10 00:14 北京时间，十篇所选阶段交付的 588 条文件摘要一致，最新阶段回执 9/10 通过，68 项功能门为 21 PASS、39 NOT_CHECKED、7 UNEVALUABLE、1 FAIL。**完整数字产品验收为 0；物理验证未开展；Pi 方法改进尚未证明稳定迁移或 RSI。** 这些维度不能合并成一个完成率。
+
+[本次发布说明](release/BF-AGENT-CHECKPOINT-20261010.md) · [十篇项目与系统能力评估](battery-world/docs/agentlab/CURRENT-ASSESSMENT-20261010.md) · [封存验收快照](release/evidence/checkpoint-20261010/literature/acceptance.json) · [发布检查](release/evidence/checkpoint-20261010/verification.json)
+
+公开证据是去除机器路径的阶段/复查回执，保留原始文件与公开副本各自的 SHA-256。作者论文全文、完整模型请求、运行数据库、安装依赖和完整参与者工程目录不随这次源码检查点上传。原生完整工程包仍保存在原 Pi 运行目录；回执中的文件门 PASS 不表示这些工程包已经成为完整产品。
 
 ## 2026-10-08 开发检查点
 
@@ -54,7 +64,7 @@ D2 已提供原理图及实际布线，但原生立创验收及可制造图纸�
 ```bash
 git clone https://github.com/littleandbrother/agent.git
 cd agent
-python3 release/verify_source.py --manifest release/source-manifest-20261008.json
+python3 release/verify_source.py --manifest release/source-manifest-20261010.json
 
 cd pi-bf-aiot
 npm ci --ignore-scripts --no-audit --no-fund
@@ -94,7 +104,7 @@ PYTHONPATH=packages/python/bfworld/src .venv/bin/python \
 
 ## 校验与来源
 
-`release/source-manifest.json` 和 `release/integration-source-manifest-20261002.json` 保留历史发布基线；当前文件由 `release/source-manifest-20261008.json` 记录 SHA-256。使用上面的 `--manifest` 命令验证当前版本；旧清单不会因本次更新被重写。源码校验不是运行或物理验收。
+`release/source-manifest.json`、`release/integration-source-manifest-20261002.json` 和 `release/source-manifest-20261008.json` 保留历史发布基线；当前文件由 `release/source-manifest-20261010.json` 记录 SHA-256。使用上面的 `--manifest` 命令验证当前版本；旧清单不会因本次更新被重写。源码校验不是运行或物理验收。
 
 Pi 来源：<https://github.com/earendil-works/pi>，基线 `7140838fdd5ee1ff21dbe50955a8801617b065ef`，包含本项目的 `bf-agent`/`bf-harness` 定制。保留 [Pi MIT LICENSE](pi-bf-aiot/LICENSE)、[Three.js LICENSE](battery-world/apps/agent-studio/vendor/three/LICENSE) 及各上游文件原有声明。本仓库是源码快照，不继承或声称拥有上游完整 Git 历史。
 

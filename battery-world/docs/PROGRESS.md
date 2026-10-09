@@ -1,3 +1,14 @@
+<!-- artifact-workspace-20261008 -->
+## 2026-10-08 · 实时产物目录、交付清单与全幅运行动画已接入
+
+8768 已部署共享产物目录：Product、交付与工程面板使用相同的明确范围，默认显示最近真实产物，包含原生 EDA 回执/导出和最新 nRF 固件。事件触发刷新并以 2 秒轻量版本查询补漏，30 秒重新核对文件；旧请求和其他任务响应不能覆盖当前页面。最近产物可能跨版本，仍与同版验收区分。
+
+「工程工作区 / 运行动画」并列；动画铺满右侧，视角、实时/演示、播放/暂停为浮动控件，真实运行记录收纳为可展开玻璃条。五个重复悬浮标签与 Dot 名称/说明/气泡已移除；标题板恢复紧凑比例，使用更小的 Inter 常规字重矢量轮廓字（可见高度约缩小 20%）和最高 2 倍像素渲染。两个交付动作改为透明玻璃按钮；顶部默认收起，鼠标、点击或键盘可展开，不挤动内容。
+
+51 项 Python + 19 项 Node 测试/组通过；真实浏览器验证模式/视角切换、键盘导航、无重复标签及无控制台错误。UI 生成并下载工程包，103 件文件逐项 SHA-256 与 ZIP CRC 通过（105 成员，含清单/离线入口）。证据：/Users/depengsu/.local/share/bf-agent-runtime/ui-rollouts/20261008-artifacts-live/。详细报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/ARTIFACT-WORKSPACE-20261008.md。
+
+当前原任务 pi-chat-8ae12ef0354d33bb 仍 PAUSED / CHAT_TURN_WALL_BUDGET；4196 次模型请求保持不变，未派新付费/原生任务、未重跑仿真、未重置费用。PCB 原生 DRC 仍 24/36/1，机械/PCB 和 BOM/接口及同版交付仍需收口，无实物验证。复用 eng-28deaae4839d843d；固件实际作业 eng-e0516772a5a40e54。本次是界面/索引维护，不构成产品通过或 Pi 自主完成。未运行完整 init，未提交或推送。
+
 <!-- d5-pcb-pilot-20261008 -->
 ## 2026-10-08 · D5 新板真实 Pi 先导结束，候选未通过
 
@@ -886,3 +897,56 @@ New versioned extraction/energy-ready gate work under BFA-035; reference circuit
 ## 2026-10-08 GitHub 开发检查点
 
 用户授权提交当前源码。版本范围与验收见 `release/SELFPOWER-PI-CHECKPOINT-20261008.md`：250 个受影响 Python 检查、18 个前端检查、8 个 Pi 检查及隔离锁文件安装后的 Pi 全仓库检查通过。init 在历史 deployment manifest 缺失处停止，不声称全量通过；真实产品交付仍未完成。密钥、运行数据库、参与者原文和大文件不上传。用户已告知余额恢复；提交后续接原 Pi owner，先读取 ENVIRONMENT-UPDATE-27.md，不重复创建工程或重派已完成仿真。
+
+
+## 2026-10-08 · BF Agent 运行架构与 Three.js 接入
+
+用户要求完整实施后，在旧主会话停止且部署前无运行作业时，完成短核心提示词、21项版本化技能（7项产品方法+14项既有工程方法）、4个插件包声明、严格技能加载、受保护上下文与请求可见性记录、原生检查结果和PCB输入版本失效。用户现有高清Three.js组件已接入8768当前会话，按真实工具/作业状态显示；收起持久化、放大与390px布局通过。原始动画工程和移植包保留。
+
+128项Python、Node投影、两个Pi包编译、7项技能校验通过。Pi全仓npm check的通用Fetch类型错误仍在，排除BF两个包后亦复现；本轮不声明全仓健康，未运行根/应用init。部署备份与页面截图：~/.local/share/bf-agent-runtime/architecture-rollouts/20261008-203121/。完整说明：~/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/RUNTIME-ARCHITECTURE-20261008.md。
+
+原Pi owner pi-chat-8ae12ef0354d33bb仍PAUSED/CHAT_TURN_WALL_BUDGET；原生PCB DRC为24间距/36连接/1净表错误，最新固件eng-e0516772a5a40e54已执行，产品BOM/机械尺寸及统一交付待验收。新版harness PRODUCT-fb02c43e9f4b已准备，下次有效恢复时绑定；没有续期授权或派发付费任务。原名义仿真eng-28deaae4839d843d未重跑，生产模型调用与费用聚合完全不变。架构改动由Codex实施，不计为Pi自主工程结果，无物理验证、无Git提交/推送。BFA-035整体in-progress；根88科学feature内容不变。
+
+
+## 2026-10-09 · 近期论文 Pi 改进首轮启动
+
+按用户要求以2025–2026完整系统论文为主，归档P01/P02/P03三篇正文PDF、官方JATS和页文本并记录SHA-256，完成机械/电路/PCB/固件/工况/图组可重建性矩阵。P01图3与方法的MCU、CDC两组身份冲突未解；补充材料下载失败回执保留；作者原生CAD/PCB/固件未取得。未把算法开放代码称为板级固件，未混合人工启动与自动准入。
+
+形成三个冻结局部任务、独立经典算术参考和九个负例；固定当前Pi产品Harness，保留21项冻结资源。用户明确授权新实验$30/6h、最多6条设计轨迹和2个候选，截止北京时间2026-10-09 05:34:33；不转移旧门磁预算。首条Pi请求因bf_skill顶层Union Schema被DeepSeek HTTP400拒绝，未产生设计。UNKNOWN用量与$0.0494139预留均保留，不称零费；后续付费派发等待用户对这一具体未知费用的继续授权。
+
+Codex修复技能函数参数的Object根并加入代理预留/发送前检查，实际TypeBox序列化和49项定向测试通过；修复后基线LRSI-M0-schema1-20261008-8ae28c768edc、新版本revisions/tool-schema-v1已封存/audit通过。该修复是公共环境维护，不计为Pi自改进；同模型/环境的真实配对、Pi改进候选及采用尚未完成。Pi全仓check仍有既有通用Fetch/Response类型错误，无格式改写。未重跑已通过联合仿真、未重建旧产品、未改旧账本、未运行init、未提交/推送。
+
+报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/LITERATURE-RSI-20261008.md。运行：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/。BFA-035及本子任务保持in-progress；数字检查、Pi/Codex贡献、物理验证分别记录。
+
+
+<!-- bf-literature-ten-current-20261009 -->
+## 十篇独立论文工程与Pi方法实验
+
+十篇均使用独立任务、会话、工作目录、轨迹和USD30/6小时预算；22个资料/原生求解owner，无跨论文共享owner。最新资料核对10/10，原生文件与同版本清单7/10，完整产品验收0，物理未测试。
+
+当前公共执行器资格：181项检查、真实Nordic SDK/S132与STM32目标构建；当前任务保留原预算和原成功作业。固件和电路独立反例见实际复查；独立Web已连接；受论文owner约束的EDA阶段已通过181项检查，原生PCB仍待实际生成和验收。原工程与费用未重置。
+
+方法M1拒绝；M2局部恢复一项父版错误，成本更高，只获异步固件限定实验资格；生产未采用、RSI未证明。Pi负责源码/求解/候选，Codex负责公共条件、独立检查和展示；物理未测试。
+
+核对时间UTC 2026-10-09T00:02:59.041408+00:00。报告：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/LITERATURE-RSI-TEN-PAPERS-20261009.md；实际状态：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/CHECKPOINT.md。根科学features摘要16e3c12f9412dcb6e986bf668e384410e556743e5f024b5414f27fc3aa1302a1保持；未运行完整init、未提交。
+<!-- /bf-literature-ten-current-20261009 -->
+
+## 2026-10-09 · BF十篇论文原Pi文件夹与续跑
+
+BF Agent Studio 已建立“2025–2026 论文复现 · 10个 Pi 任务”（folder-e76b14742e431ed5），十篇均链接原 Pi owner、独立任务、工作目录、Trace 和账本。早先误建的十个 Codex 会话已停止并归档，公共审查产物保留。254项入口/原生/只读投影检查通过；实际8768页面验证原会话与P02修复执行。共享原生服务按原owner串行调度，旧门磁未恢复，已成功且输入未变的作业不重复执行。
+
+P01上一轮Pi误删会话日志，本轮0模型启动失败；Codex从原Trace恢复1046条公开消息和552组工具调用并通过SessionManager加载，仍保留原owner/session ID、损坏文件、原工程及480条费用记录。恢复回执独立记录为Codex运行维护，P01已重排队。
+
+每原owner累计USD30与本轮明确6h续期保留；按用户直接指令暂缓usage对账，UNKNOWN与全额预留不变。运行/文件门/功能/产品/物理结果分别记录，完整产品验收0，物理NOT_TESTED，M1/M2决策未改变，没有新RSI收益声明。
+
+当前实时索引：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/campaign/parallel-20261009/pi-session-index.json
+文档：/Users/depengsu/.local/share/bf-agent-integration-20261002/battery-world/docs/agentlab/PI-PAPER-PROJECT-FOLDER-20261009.md
+
+
+## 2026-10-10 · GitHub 源码与十篇状态检查点
+
+用户明确要求推送当前 BF Agent 内容。新增 release/BF-AGENT-CHECKPOINT-20261010.md、系统能力评估和 60 份公开阶段/复查回执；原始与路径替换副本各自保留哈希。588 条阶段文件一致、完整产品 0、物理 NOT_TESTED、RSI NOT_PROVEN。十个原 Pi owner、全部 UNKNOWN/预留和原账本不变，没有模型调用或参与者工程重跑。
+
+隔离锁文件安装后 Pi 全仓 check、离线 BF 构建、8 项 Pi 测试、17 JS 语法与前端投影通过。首次完整 init 的 873 项中 15 FAIL/26 ERROR 及 600 秒包装器超时保留；错误隔离配置、验证副本误排除的 SDK 目录、测试导入/夹具及字体生成脚本位置及新技能分支遗漏的调用者元数据修正后，涉及失败的 89 项复查通过。未重新完整跑 init，不能称全仓库健康。feature.yaml 格式修复保留原字段；BFA-035 仍 in-progress。
+
+发布记录：release/evidence/checkpoint-20261010/verification.json。当前任务授权时间已过期，本次源码发布不恢复推理，也未热部署运行服务；恢复前按资格流程重新核对源码。下一步仍是验收/版本收口、P04 S132、P02 供能和 P01 EDA；当前阶段包不替代完整产品。

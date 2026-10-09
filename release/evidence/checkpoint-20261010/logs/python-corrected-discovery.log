@@ -1,0 +1,156 @@
+...........F...........FF.FFFFE.....F....F...........................F.FE.F.F............
+======================================================================
+ERROR: test_actual_product_pi_loads_policy_and_current_context_without_paid_model (tests.agentlab.test_chat.ChatTests.test_actual_product_pi_loads_policy_and_current_context_without_paid_model)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 193, in test_actual_product_pi_loads_policy_and_current_context_without_paid_model
+    loaded=next(e['data'] for e in events if e['data']['type']=='harness_loaded')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+
+======================================================================
+ERROR: test_recall_branches_actual_pi_context_and_retains_raw_history (tests.agentlab.test_organization.OrganizationTests.test_recall_branches_actual_pi_context_and_retains_raw_history)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 110, in test_recall_branches_actual_pi_context_and_retains_raw_history
+    pointer=self.home/'participants'/cid/'.pi/chat-session-path';session=Path(pointer.read_text());before=session.read_bytes()
+                                                                              ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/j4/7j4r85ls1tdf96wzf4lsqnk40000gn/T/tmpstxovb6q/participants/pi-chat-2c58d978ca0626f0/.pi/chat-session-path'
+
+======================================================================
+FAIL: test_real_pi_registers_engineering_and_reads_skill_without_paid_provider (tests.agentlab.test_trace_engineering.TraceEngineering.test_real_pi_registers_engineering_and_reads_skill_without_paid_provider)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_trace_engineering.py", line 153, in test_real_pi_registers_engineering_and_reads_skill_without_paid_provider
+    self.assertEqual('IDLE',d['status'],d['error']);self.assertEqual(3,len(requests))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}
+
+======================================================================
+FAIL: test_real_pi_reference_only_folder_starts_without_engineering_permission (tests.agentlab.test_simulation_tasks.TaskService.test_real_pi_reference_only_folder_starts_without_engineering_permission)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_simulation_tasks.py", line 95, in test_real_pi_reference_only_folder_starts_without_engineering_permission
+    self.assertEqual('IDLE',final['status'],final['error'])
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}
+
+======================================================================
+FAIL: test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider (tests.agentlab.test_simulation_tasks.TaskService.test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider)
+Real Pi process / fixture model and native result: integration, not design evidence.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_simulation_tasks.py", line 174, in test_real_pi_restricted_tools_and_independent_submission_with_fixture_provider
+    self.assertEqual('IDLE',final['status'],final['error'])
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+ : PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}
+
+======================================================================
+FAIL: test_actual_pi_deadline_pauses_saves_and_resumes_existing_session (tests.agentlab.test_chat.ChatTests.test_actual_pi_deadline_pauses_saves_and_resumes_existing_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 290, in test_actual_pi_deadline_pauses_saves_and_resumes_existing_session
+    else:self.fail('actual Pi never started its waiting tool')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: actual Pi never started its waiting tool
+
+======================================================================
+FAIL: test_actual_pi_length_stop_is_failed_and_never_completed (tests.agentlab.test_chat.ChatTests.test_actual_pi_length_stop_is_failed_and_never_completed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 405, in test_actual_pi_length_stop_is_failed_and_never_completed
+    self.assertEqual('MODEL_OUTPUT_TRUNCATED',d['error'])
+AssertionError: 'MODEL_OUTPUT_TRUNCATED' != 'PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator"[58 chars]lse}'
+- MODEL_OUTPUT_TRUNCATED
++ PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}
+
+
+======================================================================
+FAIL: test_actual_pi_stream_and_mid_turn_message_without_external_provider (tests.agentlab.test_chat.ChatTests.test_actual_pi_stream_and_mid_turn_message_without_external_provider)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 246, in test_actual_pi_stream_and_mid_turn_message_without_external_provider
+    self.assertTrue(stream_started.wait(12))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation (tests.agentlab.test_chat.ChatTests.test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 225, in test_actual_pi_uses_strict_skill_tool_and_records_frozen_activation
+    self.assertEqual(3,len(calls),str(events[-5:]))
+AssertionError: 3 != 0 : [{'seq': 1, 'data': {'id': 'msg-99f5bd90e2f7412d', 'text': '读取 PCB 技能即可，不操作工程', 'type': 'user_message'}, 'time': 1791566681.693612}, {'seq': 2, 'data': {'error': None, 'status': 'STARTING', 'type': 'conversation_status'}, 'time': 1791566681.696977}, {'seq': 3, 'data': {'error': 'PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}', 'status': 'FAILED', 'type': 'conversation_status'}, 'time': 1791566684.2479591}]
+
+======================================================================
+FAIL: test_product_model_revision_error_explains_correct_field_without_native_dispatch (tests.agentlab.test_chat.ChatTests.test_product_model_revision_error_explains_correct_field_without_native_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 381, in test_product_model_revision_error_explains_correct_field_without_native_dispatch
+    self.assertEqual(2,len(calls))
+AssertionError: 2 != 0
+
+======================================================================
+FAIL: test_unfinished_product_executes_bounded_continuations_without_false_completion (tests.agentlab.test_chat.ChatTests.test_unfinished_product_executes_bounded_continuations_without_false_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_chat.py", line 347, in test_unfinished_product_executes_bounded_continuations_without_false_completion
+    self.assertEqual(13,len(calls))
+AssertionError: 13 != 0
+
+======================================================================
+FAIL: test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration (tests.agentlab.test_organization.OrganizationTests.test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 74, in test_actual_pi_two_sessions_share_memory_prompt_and_tool_registration
+    c=self.chat.create('fixture '+op,'dev-01',op,folder['id']);d=self.wait(c['id']);self.assertEqual('IDLE',d['status'])
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'IDLE' != 'FAILED'
+- IDLE
++ FAILED
+
+
+======================================================================
+FAIL: test_real_pi_memory_tool_write_is_read_by_next_folder_session (tests.agentlab.test_organization.OrganizationTests.test_real_pi_memory_tool_write_is_read_by_next_folder_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 97, in test_real_pi_memory_tool_write_is_read_by_next_folder_session
+    self.assertEqual('AGENT_WRITTEN_SHARED_NOTE',self.org.folder(f['id'])['config']['memory'])
+AssertionError: 'AGENT_WRITTEN_SHARED_NOTE' != ''
+- AGENT_WRITTEN_SHARED_NOTE
++ 
+
+
+======================================================================
+FAIL: test_running_recall_stops_and_removes_current_input (tests.agentlab.test_organization.OrganizationTests.test_running_recall_stops_and_removes_current_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_organization.py", line 117, in test_running_recall_stops_and_removes_current_input
+    self.delay=.5;c=self.chat.create('REMOVE_RUNNING','dev-01','one');cid=c['id'];self.assertTrue(self.started.wait(10))
+                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_three_actual_pi_processes_overlap_and_keep_messages_separate (tests.agentlab.test_parallel_chat.ParallelChatTests.test_three_actual_pi_processes_overlap_and_keep_messages_separate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "verification://corrected/source/battery-world/tests/agentlab/test_parallel_chat.py", line 161, in test_three_actual_pi_processes_overlap_and_keep_messages_separate
+    self.assertTrue(all_entered.wait(20), [app.conversations.get(c['id']) for c in conversations])
+AssertionError: False is not true : [{'id': 'pi-chat-fa581409c4147e0b', 'operation': 'parallel-0', 'title': '任务独立标记-0', 'task_id': None, 'created': 1791566755.303328, 'updated': 1791566757.8349252, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': 'PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}'}, {'id': 'pi-chat-ee1b5d9d613954c9', 'operation': 'parallel-1', 'title': '任务独立标记-1', 'task_id': None, 'created': 1791566755.3213482, 'updated': 1791566759.1254668, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': 'PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}'}, {'id': 'pi-chat-480288ff2c9042b3', 'operation': 'parallel-2', 'title': '任务独立标记-2', 'task_id': None, 'created': 1791566755.3527381, 'updated': 1791566760.480903, 'status': 'FAILED', 'harness': 'fixture://temporary-path', 'error': 'PI_SANDBOX_PREFLIGHT_FAILED: {"evaluator":true,"network":true,"secret":true,"shell":true,"write":false}'}]
+
+----------------------------------------------------------------------
+Ran 89 tests in 147.582s
+
+FAILED (failures=13, errors=2)

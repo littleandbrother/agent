@@ -14,6 +14,7 @@ import tempfile
 from .store import canonical, identity
 from .design_review import native_checks, cards
 from .product_authority import binding_inputs, profile, PLUCK_ONLY, verdict
+from .product_dependencies import native_inputs
 
 ROOT = Path(__file__).resolve().parents[6]
 CONTRACT = ROOT / 'configs/reference_cases/engineering-delivery-v1.json'
@@ -126,6 +127,7 @@ class Deliverables:
         payload = dict(task_id=body['task_id'], revision=current['revision'],
                        physical_hash=current['hashes']['physical_hash'],
                        input_dimensions=binding_inputs(body['task_id'], current),
+                       native_inputs=native_inputs(self.app,owner,body['task_id']),
                        files=files, jobs=jobs, contract_sha256=file_digest(CONTRACT))
         # Snapshot all direct dependency bindings. Future edits are discovered
         # from actual identities, without letting the participant waive them.
@@ -158,7 +160,10 @@ class Deliverables:
                 raise
             current = None
         changed = set()
+        native_changed = set()
         for key, value in bindings.items():
+            if value.get('native_inputs',{}) != native_inputs(self.app,owner,key):
+                native_changed.add(key)
             if not current or not current['source_valid'] or (value.get('input_dimensions') != binding_inputs(key, current) if 'input_dimensions' in value else value['physical_hash'] != current['hashes']['physical_hash']) or value['contract_sha256'] != file_digest(CONTRACT):
                 changed.add(key)
             if any(identity(bindings.get(dep)) != digest for dep, digest in value['dependencies'].items()):
@@ -177,7 +182,11 @@ class Deliverables:
                         self.app.engineering.artifact(owner, job['id'], meta['name'])
                 except (ValueError, PermissionError, OSError):
                     changed.add(key)
-        stale = set(dependent_ids(changed, spec['tasks']))
+        # A PCB outline edit changes CAD packaging, not the beam/magnet model.
+        # Native mutations already map to all direct consuming domains; feeding
+        # them through cad→magnetics→fem would invent a changed physics input.
+        # Actual assembly/artifact/dependency edits retain conservative propagation.
+        stale = set(dependent_ids(changed, spec['tasks'])) | native_changed
         family, profile_reason = profile(current)
         tasks = []
         for task in spec['tasks']:
@@ -214,7 +223,8 @@ class Deliverables:
                           'missing_files': missing, 'integrity_errors': errors, 'executions': executions})
         result = {'schema_version': 'bf-engineering-delivery-snapshot-v1', 'owner': owner,
                 'revision': current['revision'] if current else None, 'contract': spec,
-                'profile': family, 'profile_reason': profile_reason, 'tasks': tasks, 'changed_tasks': sorted(changed), 'stale_tasks': sorted(stale),
+                'profile': family, 'profile_reason': profile_reason, 'tasks': tasks, 'changed_tasks': sorted(changed | native_changed),
+                'native_changed_tasks': sorted(native_changed), 'stale_tasks': sorted(stale),
                 'complete': False, 'hardware_verified': False,
                 'scope': 'Source-bound inventory and freshness; no self-certification or reference answers.'}
         result['research_cards'] = cards(result, current)

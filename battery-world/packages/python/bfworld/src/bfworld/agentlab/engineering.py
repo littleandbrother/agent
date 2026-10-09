@@ -141,12 +141,25 @@ class Engineering:
         result['task_binding']=self.tasks.binding(owner) if owner else None
         from .research_methods import profile, capabilities
         result['research_method']={'profile':profile(), 'capabilities':capabilities()} if result['task_binding'] else None
+        if owner and not result['task_binding'] and hasattr(self.app,'skills'):
+            resource_catalog=self.app.skills.catalog(owner)
+            result['skills']=resource_catalog['skills']
+            result['eda_skills']=[s for s in result['skills'] if s['adapter']=='easyeda-typed-v1']
+            result['resource_manifest']={k:resource_catalog[k] for k in ('manifest_sha256','frozen','active','plugins')}
+            result['mcp']={'status':'not_probed','note':'插件声明方法与适配器；bf_eda 使用绑定的 typed CLI，legacy jlceda MCP 是独立接口。安装状态不等于连接或执行通过。'}
         return result
 
     def event(self,owner,job,kind,data):
         with self.store.connect() as db:db.execute('INSERT INTO engineering_events(owner,job_id,time,kind,data) VALUES(?,?,?,?,?)',(owner,job,time.time(),kind,canonical(data)))
 
     def skill(self,owner,key,initiator='unrecorded'):
+        if not self.tasks.binding(owner) and hasattr(self.app,'skills') and self.app.skills.catalog(owner)['frozen']:
+            value={**self.app.skills.action(owner,{'action':'activate','skill_id':key}),'initiator':initiator}
+            binding=self.tasks.binding(owner)
+            if binding and key in ('closed-simulation','door-system','door-selfpower'):
+                value={**value,'task_binding':binding}
+            self.event(owner,None,'skill_read',{k:v for k,v in value.items() if k!='content'})
+            return value
         if key not in SKILLS and key not in SKILL_PATHS:raise ValueError('SKILL_NOT_FOUND')
         content=SKILL_PATHS[key].read_text() if key in SKILL_PATHS else SKILLS[key]
         binding=self.tasks.binding(owner)

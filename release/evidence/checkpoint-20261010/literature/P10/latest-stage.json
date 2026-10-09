@@ -1,0 +1,1144 @@
+{
+  "paper": "P10",
+  "task": "P10-native-9e5a0078af9e-b07e7bdb",
+  "stage": "native",
+  "owner": "pi-chat-5df297583b1cd187",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-cf4e0d6931f29142",
+        "kind": "cadquery",
+        "project_sha256": "e015612fbd2d90963b1624f9d08c1f0ea35c4a08bc587920ed8211e38f24bfe0",
+        "assembly_revision": 5,
+        "assembly_physical_hash": "18312976035b740b582fb468f415279feb2a6a88c1343740b4f4712bc71f9236",
+        "native_readback": {
+          "bounds_mm": [
+            80.0,
+            80.0,
+            32.6
+          ],
+          "native_source_sha256": "2225b2b266c486484ea4bb7762d2b9a1768632c8e64a7e89128cac958c2758a0",
+          "native_valid": true,
+          "preview": {
+            "angular_tolerance_rad": 0.1,
+            "attempts": [
+              {
+                "angular_tolerance_rad": 0.1,
+                "linear_tolerance_mm": 0.15,
+                "triangles": 24628
+              }
+            ],
+            "available": true,
+            "linear_tolerance_mm": 0.15,
+            "scope": "Visualization only; exact STEP geometry remains authoritative.",
+            "source_sha256": "2225b2b266c486484ea4bb7762d2b9a1768632c8e64a7e89128cac958c2758a0",
+            "triangle_limit": 200000,
+            "triangles": 24628
+          },
+          "solid_count": 32,
+          "volume_mm3": 134365.81838862263
+        },
+        "functional_passed": false,
+        "participant_project_path": "native/cad/project.json",
+        "project_manifest": {
+          "entrypoint": "main.py",
+          "files": [
+            "main.py"
+          ],
+          "interfaces": {
+            "coil_outline_convention": "the published 60 mm coil diameter is the OUTER EDGE of the patterned copper; every spiral parameter here is that outer edge (spiral_ribbon starts its centreline at outer_edge - width/2), so no copper leaves the declared outline",
+            "electrical_behaviour": "not carried here; see native/spice",
+            "frame": "+Z out of the body towards the wearable transmitter, z=0 at the skin surface, origin on the coaxial transmitter/receiver axis; receiver at z<0",
+            "implant_depth_mm": 15.0,
+            "model_bodies_not_product_parts": [
+              "MODEL_skin",
+              "MODEL_muscle",
+              "MODEL_deep_tissue"
+            ],
+            "not_modelled": [
+              "liquid-metal routing topology/pad positions (not published)",
+              "component cavities in the ecoflex cover (the 1.0 mm component layer is the cavity body rx_ecoflex_interstitial_fill)",
+              "strain field, bending radius, twist and fatigue: this source is static size parameters only, so the published 0-50% strain / 2 cm bend radius / 3-turn twist / 5000-cycle figures are NOT modelled, parameterised or reproduced"
+            ],
+            "published_parts": {
+              "cu_thickness_mm": 0.0001,
+              "minimum_feature_mm": 0.2,
+              "phantom": {
+                "muscle_mm": 7.0,
+                "skin_mm": 3.0
+              },
+              "rx_coil_outer_diameter_mm": 60.0,
+              "tx_coil_outer_diameter_mm": 60.0
+            },
+            "self_built_parts": {
+              "layer_thicknesses_mm": {
+                "component_layer": 1.0,
+                "ecoflex_cover": 0.2,
+                "lm": 0.05,
+                "sbs": 0.05,
+                "sebs": 0.05,
+                "substrate": 0.1
+              },
+              "rx_bottom_turns": 8,
+              "rx_top_turns": 6,
+              "trace_width_mm": 0.5,
+              "tx_turns": 5
+            },
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "native/cad/main.py": "829e6b2d21890bcf8439558ac58e20754b7e2a9b0bd8602d5ab945e903ac6d5b"
+        }
+      },
+      {
+        "job_id": "eng-b90c3c8d2d227447",
+        "kind": "spice",
+        "project_sha256": "94653b2d54b19b7efe2a49fc540f39b43f21d7f2e7e837f76c96202af28431dd",
+        "assembly_revision": 2,
+        "assembly_physical_hash": "3ca7b614863f671a336fe467c397b17af2ecccda04231a154a8082df1cc6054a",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "DC transfer characteristic",
+              "points": 11,
+              "variables": 12
+            },
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Operating Point",
+              "points": 1,
+              "variables": 11
+            },
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 4024,
+              "variables": 12
+            }
+          ],
+          "points": 4024,
+          "raw_sha256": "500bad3878708a0aa3f05bb22ee4a54d8f684048fa8d338ffbd047fe5772e2be",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 12
+        },
+        "functional_passed": false,
+        "model_input_reuse": {
+          "schema_version": "bf-native-model-input-reuse-v1",
+          "kind": "spice",
+          "project_sha256": "94653b2d54b19b7efe2a49fc540f39b43f21d7f2e7e837f76c96202af28431dd",
+          "original_assembly_revision": 2,
+          "original_assembly_physical_hash": "3ca7b614863f671a336fe467c397b17af2ecccda04231a154a8082df1cc6054a",
+          "delivery_assembly_revision": 5,
+          "delivery_assembly_physical_hash": "18312976035b740b582fb468f415279feb2a6a88c1343740b4f4712bc71f9236",
+          "current_project_bytes_verified": true,
+          "declared_energy_unchanged": true,
+          "model_subset_only": true,
+          "assembly_applicability_verified": false,
+          "scope": "Original immutable SPICE model/output only; mechanical/source calibration and joint applicability remain unverified."
+        },
+        "participant_project_path": "native/spice/project.json",
+        "project_manifest": {
+          "entrypoint": "receiver-supply.cir",
+          "files": [
+            "receiver-supply.cir"
+          ],
+          "interfaces": {
+            "boundary_in": "VIN is driven by an equivalent DC source (VDC=4 V, RSRC=2 ohm); the rectifier, the coils and the transmitter are NOT modelled",
+            "boundary_out": "VOUT -> 24 mW average MCU load (published); burst profile is a self-built assumption",
+            "coverage_of_published_budget": "204 of 240 mW (85%); the 36 mW rectifier part is outside the boundary",
+            "domain": "DC/energy domain only (no RF model in this deck)",
+            "nodes": {
+              "en": "burst-load enable (PWL, self-built)",
+              "src": "ideal DC source node (boundary equivalent of the rectifier output)",
+              "vin": "DC-link storage node; the rectifier interface",
+              "vout": "regulated 3.3 V rail feeding the MCU load",
+              "vreg": "regulator internal output (after the dropout-limited pass element)"
+            },
+            "not_a_system_claim": "a local supply-stage solution is not evidence that the harvesting system works or is variation-tolerant",
+            "published_anchor": {
+              "receiver_consumption_mW": {
+                "ldo": 180,
+                "mcu": 24,
+                "rectifier": 36,
+                "total": 240
+              },
+              "regulated_output_mW": 24,
+              "source": "Supplementary Note 5 p.12 and Supplementary Note 7 p.13"
+            },
+            "units": "SI",
+            "unknowns_kept_explicit": [
+              "turns ratio and coupling coefficient",
+              "coil inductance and induced EMF",
+              "device models of the actual BOM parts",
+              "source calibration and DC-link voltage",
+              "2.64 MHz resonance / 2.6-4.0 MHz band",
+              "transmitter class-E operating point and 11 V cell discharge"
+            ]
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "native/spice/receiver-supply.cir": "039fa75b78611f2735243629eed6523833bdcaf09ab5ad2a43ce170a9c7f93e6"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 593,
+  "model_profile": {
+    "version": "engineering-reasoning-v1",
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_output_tokens": 32768,
+    "request_bytes": 256000,
+    "target_bytes": 220000
+  },
+  "work_phase": "engineering-review",
+  "phase_task_sha256": "ef7321a446fff3ab48c29ec19c0f05e18df2593d1ef2f79b4635c16bba7c3177",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 39,
+  "budget": {
+    "owner": "pi-chat-5df297583b1cd187",
+    "cap_usd": null,
+    "liability_usd": 11.443029000000003,
+    "remaining_usd": null,
+    "unbounded": true,
+    "unknown_requests": [
+      "llm-fe182a3b790029610afa",
+      "llm-cfb6e217496e868ec0ce"
+    ],
+    "exhausted": false
+  },
+  "method_identity": "fe043b368d441e4745735d35d58944e4284f595ab16705178a7ee4f2a13a3838",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/native-report.json",
+      "sha256": "715777d38d1e2a2e3b7be74a44dd42560d4c78dfb5a4c26aa70d0429400cc856",
+      "label": "P10 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/delivery/manifest.json",
+      "sha256": "e5da963e79e7abe0b8039840def9532520dbfb51f52d1b58c1f8ee433fac39f0",
+      "label": "P10 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/delivery/UNVERIFIED.md",
+      "sha256": "b307b2e2f5d8c36550d43a9a84d122e68f8fc5850513b89e0f1721c448bde15b",
+      "label": "P10 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/cad/main.py",
+      "sha256": "829e6b2d21890bcf8439558ac58e20754b7e2a9b0bd8602d5ab945e903ac6d5b",
+      "label": "P10 native/cad/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/cad/project.json",
+      "sha256": "8d13e38c947d6cd18cb8f9b567b76dd8f966f605508451a4714fb01775340b04",
+      "label": "P10 native/cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/spice/receiver-supply.cir",
+      "sha256": "039fa75b78611f2735243629eed6523833bdcaf09ab5ad2a43ce170a9c7f93e6",
+      "label": "P10 native/spice/receiver-supply.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/spice/project.json",
+      "sha256": "2ff4450e63be4b2d10f426c323f52b057c4e4c595eef74725d033c2e927c8d45",
+      "label": "P10 native/spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/spice/model-boundary.md",
+      "sha256": "3f214c3397b07dd76dfa2d9b246ef978509727e9b8d0a3ad770214bcd3b94c5e",
+      "label": "P10 native/spice/model-boundary.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/assembly.json",
+      "sha256": "bd0a0e0350497a717e9d5161a07d1cde27b7597f0f86b06e086b26c4242b15fb",
+      "label": "P10 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/pcb/BLOCKED-interconnect-intent.md",
+      "sha256": "804fbe6a1e974098dfb0d93514876bc1acbbc5b87c78ff21ae3fec688a050bde",
+      "label": "P10 native/pcb/BLOCKED-interconnect-intent.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/clearance-check.py",
+      "sha256": "3c2e73abda0a9457fc951bef30eb77a2f68ebe7160576b8e17bd6e39d168c791",
+      "label": "P10 机械CAD与装配/clearance-check.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/clearance-data.json",
+      "sha256": "e7caf3a8617e2e6b9d2d0a7b912f46379c7a82385d67d59fe9a48dbc9a991aa8",
+      "label": "P10 机械CAD与装配/clearance-data.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/clearance-front-view.svg",
+      "sha256": "bcf1cc6e69ca92d427b950e39f6de1087bd896049bcb4565753a13a881029cc4",
+      "label": "P10 机械CAD与装配/clearance-front-view.svg",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/coil-outline-check.py",
+      "sha256": "1534029f1603a9f7cfde5fa32aa3d1b15ac4ea1be0462ce2b9ba3bab7d0ba3e0",
+      "label": "P10 机械CAD与装配/coil-outline-check.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/coil-outline-check.json",
+      "sha256": "ccd6d69fcbb330c228181ce3bc320b2b9ea518b2b60d34b9520da304099642a1",
+      "label": "P10 机械CAD与装配/coil-outline-check.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/mesh_to_stl.py",
+      "sha256": "6fa9ccae8c7ba660fb4528acaeca0fe57f7dbed8e12e1288962c2f411ee10f11",
+      "label": "P10 机械CAD与装配/mesh_to_stl.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/机械CAD与装配/assembly-mesh.stl",
+      "sha256": "d30bc48670508523fac705f02409fe3d4f557c649ea8b56d997324ad2be6d330",
+      "label": "P10 机械CAD与装配/assembly-mesh.stl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/spice/verify-spice.py",
+      "sha256": "44fc9a8acc51a506b56a874803ad997741012ff8a96714c7c8058ce6a890ef13",
+      "label": "P10 native/spice/verify-spice.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native/spice/spice-checks.json",
+      "sha256": "a3b14bc253fec2e72c205a3c5dade0d534a71c3b909069f89f6309ecf35d3cb8",
+      "label": "P10 native/spice/spice-checks.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/build-delivery.py",
+      "sha256": "52a55fa772ac89e332ea6faa2e79f5875ccadcfdf2a2c26dad39f1031c8fd1b9",
+      "label": "P10 delivery/build-delivery.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/render-bom.py",
+      "sha256": "9747805fe8490fb3e7bcafaabb6793aa5379e157d96b624187cb29a3e60b634f",
+      "label": "P10 delivery/render-bom.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/BOM-INTERFACES.md",
+      "sha256": "37f99d6872ecfa42d005fd3549690ddbd16d9aa2c4252ed6d0aa1f4ff59cf3ce",
+      "label": "P10 delivery/BOM-INTERFACES.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "b307b2e2f5d8c36550d43a9a84d122e68f8fc5850513b89e0f1721c448bde15b",
+      "label": "P10 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/LDO-ENERGY-ACCOUNTING.md",
+      "sha256": "bc433c6b7705b59c3f6cae59b6e55b7515d1db3704eb8bd86981c2a5a3e3e192",
+      "label": "P10 delivery/LDO-ENERGY-ACCOUNTING.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/delivery/WORK-NOTES.md",
+      "sha256": "2f39df395d85673dd1ab1ea88e90cf86f41745c1bc9c90963c810238a33ff870",
+      "label": "P10 delivery/WORK-NOTES.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/native-report.json",
+      "sha256": "715777d38d1e2a2e3b7be74a44dd42560d4c78dfb5a4c26aa70d0429400cc856",
+      "label": "P10 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/input.json",
+      "sha256": "1f867ec914938db2b38fcc3004f9affc5acd4df8baaf109146c5a50dd1678466",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/process.log",
+      "sha256": "a34159f730a3fa68e2b3552805cf0866feb37f1310fce7f2ab5b46528cc0e1f9",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/project-source.zip",
+      "sha256": "7e996d41d0b51b597fd577d65d23e57055694d69224bc890aab7e171b01309e4",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/project-cad-params.json",
+      "sha256": "0ed68a3ef3ac9ea65e5c43ec83078a0fa1b4fafb1ddb5796b2b59858390cbf76",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/project-cad-params.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/project-readback.json",
+      "sha256": "c11759d7914eac8ca291752a10babc2b4691c112e002cf9d3740a372fd4ef323",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/project-preview-mesh.json",
+      "sha256": "653a93da45b9ee2ea8f550ba467918c2847ed1b2b834bcecbb7fe16bb4f17d3f",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/project-preview-mesh.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/project-assembly.step",
+      "sha256": "2225b2b266c486484ea4bb7762d2b9a1768632c8e64a7e89128cac958c2758a0",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-cf4e0d6931f29142/result.json",
+      "sha256": "c3b0a01e0bb770f7eaeb2604010f6a62c9ebb3c8ded691e166df82c687633fce",
+      "label": "P10 engineering-artifacts/eng-cf4e0d6931f29142/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/input.json",
+      "sha256": "bc255362d6b2b483c62d95a122a1db6a52e6e54eab0c99da0779f336f39336dc",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/process.log",
+      "sha256": "a5802adedf5e1cd43bfa906265306e98e504e38b946efdded96ff433fd24a4e1",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/project-source.zip",
+      "sha256": "5882010331e82840de63b3a5b8be2c129a6d41a7f39198766742f24a705afe87",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/project-trace.raw",
+      "sha256": "500bad3878708a0aa3f05bb22ee4a54d8f684048fa8d338ffbd047fe5772e2be",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/project-trace.raw",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/project-numeric-observations.json",
+      "sha256": "8930d24847acc33642e5b49bc3a7c4203e497830080e79bc9bb3407b57d5a5a5",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/project-numeric-observations.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/engineering-artifacts/eng-b90c3c8d2d227447/result.json",
+      "sha256": "24ae1ae4969335d2058e6d7919b189244c0715b2702984652937210673bd945a",
+      "label": "P10 engineering-artifacts/eng-b90c3c8d2d227447/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/campaign/reviews/P10/post-timeout-recovery-001/result.json",
+      "sha256": "c5e3cef57b0b11f9a8ceb2f880b45a5f72ce726852bd66ed8b5efce422e8ce80",
+      "label": "P10 campaign/reviews/P10/post-timeout-recovery-001/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/campaign/reviews/P10/current-coil-readback-001/result.json",
+      "sha256": "3a207ec78385850238cdf1b47ee7f472937e55cf25760407ed9f8915f9c327fa",
+      "label": "P10 campaign/reviews/P10/current-coil-readback-001/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/campaign/reviews/P10/version-energy-recheck-002/result.json",
+      "sha256": "d83793c5ad48210b644b82fae44bf09ef7e1650ed32d373b922eabccd344538a",
+      "label": "P10 campaign/reviews/P10/version-energy-recheck-002/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/campaign/recovery/P10/public-feedback-20261009-v1.json",
+      "sha256": "25d34aad95cccfaeb9f86a4a60e73a4c4c85f8feec91410299d4f0c803910635",
+      "label": "P10 campaign/recovery/P10/public-feedback-20261009-v1.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/participant-files/continuation-feedback.json",
+      "sha256": "a4b595ddb4ba37289e9b0add96aebda64c7ce8dbc4fc7d4bdf8b338518f46e3b",
+      "label": "P10 continuation-feedback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/project-source.zip",
+      "sha256": "7e996d41d0b51b597fd577d65d23e57055694d69224bc890aab7e171b01309e4",
+      "label": "P10 eng-cf4e0d6931f29142 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/result.json",
+      "sha256": "c3b0a01e0bb770f7eaeb2604010f6a62c9ebb3c8ded691e166df82c687633fce",
+      "label": "P10 eng-cf4e0d6931f29142 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/input.json",
+      "sha256": "1f867ec914938db2b38fcc3004f9affc5acd4df8baaf109146c5a50dd1678466",
+      "label": "P10 eng-cf4e0d6931f29142 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/project-assembly.step",
+      "sha256": "2225b2b266c486484ea4bb7762d2b9a1768632c8e64a7e89128cac958c2758a0",
+      "label": "P10 eng-cf4e0d6931f29142 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/project-cad-params.json",
+      "sha256": "0ed68a3ef3ac9ea65e5c43ec83078a0fa1b4fafb1ddb5796b2b59858390cbf76",
+      "label": "P10 eng-cf4e0d6931f29142 project-cad-params.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/project-readback.json",
+      "sha256": "c11759d7914eac8ca291752a10babc2b4691c112e002cf9d3740a372fd4ef323",
+      "label": "P10 eng-cf4e0d6931f29142 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cf4e0d6931f29142/project-preview-mesh.json",
+      "sha256": "653a93da45b9ee2ea8f550ba467918c2847ed1b2b834bcecbb7fe16bb4f17d3f",
+      "label": "P10 eng-cf4e0d6931f29142 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/project-source.zip",
+      "sha256": "aff25c763331cd94627656110a6a7699f26e1abc431546f0d89eea7e2752b014",
+      "label": "P10 eng-34eab01239663055 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/result.json",
+      "sha256": "fd402c94facf43e7d951b3ca073140849aede2b887b543eb0b66cacd0d9becdd",
+      "label": "P10 eng-34eab01239663055 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/input.json",
+      "sha256": "1c1a40abedd9a17b28b1ff6144d628ec55d9eb83aab84c5773a5faeb15e622da",
+      "label": "P10 eng-34eab01239663055 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/project-assembly.step",
+      "sha256": "f74546c30a3f7c8281eac7667758caba2a55b47e49124a9f37c44eb772b07ac2",
+      "label": "P10 eng-34eab01239663055 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/project-cad-params.json",
+      "sha256": "0ed68a3ef3ac9ea65e5c43ec83078a0fa1b4fafb1ddb5796b2b59858390cbf76",
+      "label": "P10 eng-34eab01239663055 project-cad-params.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/project-readback.json",
+      "sha256": "1e11005de0d50a98849d056dd83c60467c22510f344fbebc1d7b833d95ff80c5",
+      "label": "P10 eng-34eab01239663055 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-34eab01239663055/project-preview-mesh.json",
+      "sha256": "bdcf05ac351028c67404f166d5f88dbc057fd62e9b616f0ba6636cfa25c6bb1f",
+      "label": "P10 eng-34eab01239663055 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/project-source.zip",
+      "sha256": "62100610157fbb1b7baddd668dd54e3557955a23e774eab0c394cf1125359238",
+      "label": "P10 eng-87e77d6061ef63fb project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/result.json",
+      "sha256": "8cb931b2a875ce61d222c0f56a24cd3f1f49cc85027491d5696ff415baf43f3c",
+      "label": "P10 eng-87e77d6061ef63fb result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/input.json",
+      "sha256": "eef07dabe9a771badea00f0b394864e520de1722267a33be36f53bac9b0c66af",
+      "label": "P10 eng-87e77d6061ef63fb input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/project-assembly.step",
+      "sha256": "be06878f8fb65583424ffee0eb10ff4e37d39ccf73b9966412e91f833ff50a51",
+      "label": "P10 eng-87e77d6061ef63fb project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/project-cad-params.json",
+      "sha256": "2a92170a0d4f9539ef7197241ff73fa03e81771119180ffad4df16b75aff866e",
+      "label": "P10 eng-87e77d6061ef63fb project-cad-params.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/project-readback.json",
+      "sha256": "821346ea38b9e242b15a40988cac2524cb7841357705e586efb848dfb93d9939",
+      "label": "P10 eng-87e77d6061ef63fb project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-87e77d6061ef63fb/project-preview-mesh.json",
+      "sha256": "174d7086a001d5dbde9a72528f29a78870b1408e18810de9bfd9a5efdff84c48",
+      "label": "P10 eng-87e77d6061ef63fb project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b90c3c8d2d227447/project-source.zip",
+      "sha256": "5882010331e82840de63b3a5b8be2c129a6d41a7f39198766742f24a705afe87",
+      "label": "P10 eng-b90c3c8d2d227447 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b90c3c8d2d227447/result.json",
+      "sha256": "24ae1ae4969335d2058e6d7919b189244c0715b2702984652937210673bd945a",
+      "label": "P10 eng-b90c3c8d2d227447 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b90c3c8d2d227447/input.json",
+      "sha256": "bc255362d6b2b483c62d95a122a1db6a52e6e54eab0c99da0779f336f39336dc",
+      "label": "P10 eng-b90c3c8d2d227447 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b90c3c8d2d227447/project-trace.raw",
+      "sha256": "500bad3878708a0aa3f05bb22ee4a54d8f684048fa8d338ffbd047fe5772e2be",
+      "label": "P10 eng-b90c3c8d2d227447 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b90c3c8d2d227447/project-numeric-observations.json",
+      "sha256": "8930d24847acc33642e5b49bc3a7c4203e497830080e79bc9bb3407b57d5a5a5",
+      "label": "P10 eng-b90c3c8d2d227447 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/project-source.zip",
+      "sha256": "ecef372e6b004c36adde49d76a8fa6da5d9a03d4a98610d512bd75bcc2ea8d7b",
+      "label": "P10 eng-3b0d59b5043f1149 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/result.json",
+      "sha256": "96c09287f4469736fa692a7e8949e9ea031a9da6a199bdc407a7fd256938ae5e",
+      "label": "P10 eng-3b0d59b5043f1149 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/input.json",
+      "sha256": "9b8eb1823d0c0cd672e584f2221d39748710ebf97fe0a0fe7548a44eaac88c8f",
+      "label": "P10 eng-3b0d59b5043f1149 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/project-assembly.step",
+      "sha256": "c6a82bd43e5f787342d1e3ed44b7064384cc9c9b4cb8c4c66a125d2fe846f551",
+      "label": "P10 eng-3b0d59b5043f1149 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/project-cad-params.json",
+      "sha256": "7a027c12d229ee67e88bee235e6bb5c47f33c32bbae95d8e8af8073880124236",
+      "label": "P10 eng-3b0d59b5043f1149 project-cad-params.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/project-readback.json",
+      "sha256": "1c4d924f8e25abc395b7faa6034593aaa692c5a3f8f85c8d82f2703f9fda5b8c",
+      "label": "P10 eng-3b0d59b5043f1149 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-3b0d59b5043f1149/project-preview-mesh.json",
+      "sha256": "e1a4dd33c64a8c8dc9b7c6296442756ac3f00be050127497046b19e6dc6d0279",
+      "label": "P10 eng-3b0d59b5043f1149 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-987a47501166150a/project-source.zip",
+      "sha256": "516bf1088849f2058bdd6f236a1e6e49306050b46f0f825d144bc686a75fe602",
+      "label": "P10 eng-987a47501166150a project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-987a47501166150a/result.json",
+      "sha256": "060ee1d4f8d7963c2112430e855f2ac2a4cc05334a86f43a4a71abaa95f9e33e",
+      "label": "P10 eng-987a47501166150a result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-987a47501166150a/input.json",
+      "sha256": "4aa681bffa0b47ca4db155014e1ba7f0198926ce1c6ea653ada44783ab644354",
+      "label": "P10 eng-987a47501166150a input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-987a47501166150a/project-trace.raw",
+      "sha256": "497bedc0a8b159adb60c8bc4eab26db5ab8fc4b67eefdd8e09aee153b069637c",
+      "label": "P10 eng-987a47501166150a project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-987a47501166150a/project-numeric-observations.json",
+      "sha256": "faf7470a4c0014c66b9f8569096fcc64d342c35818b2ee2dc58c89298435080f",
+      "label": "P10 eng-987a47501166150a project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9aeb22feb16af68b/project-source.zip",
+      "sha256": "cf778d2151022fcca81977dd18e36ef62ca5f244abaa61df031cf4d6b0c32fe7",
+      "label": "P10 eng-9aeb22feb16af68b project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9aeb22feb16af68b/result.json",
+      "sha256": "266a6c5124ca11cad550ae14344206c7fd2cd63c9969d23d9f3251243ce123a9",
+      "label": "P10 eng-9aeb22feb16af68b result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9aeb22feb16af68b/input.json",
+      "sha256": "97bad5d3f852a7507a57bfa22bc1b6896b13f2ecc1667983ce3f63355ec90090",
+      "label": "P10 eng-9aeb22feb16af68b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9aeb22feb16af68b/project-trace.raw",
+      "sha256": "ca2679aa7ef358f3a054be371daffb73edcaaa0250329492c63de208e34e5e76",
+      "label": "P10 eng-9aeb22feb16af68b project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9aeb22feb16af68b/project-numeric-observations.json",
+      "sha256": "bba05148f3f1106bfb4682b6955971c58f4b0996bcb9d2a72ce11a050dd9c5d7",
+      "label": "P10 eng-9aeb22feb16af68b project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f2aa0ef0164acb4f/project-source.zip",
+      "sha256": "89507e280879d9b07dc499ec2a5607d29f89f2dda6857e46afb681caaab31916",
+      "label": "P10 eng-f2aa0ef0164acb4f project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f2aa0ef0164acb4f/result.json",
+      "sha256": "c44b9145c28927b492e35573345be969872b2ef3fd734a557c6e98f663913b0b",
+      "label": "P10 eng-f2aa0ef0164acb4f result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f2aa0ef0164acb4f/input.json",
+      "sha256": "4150d7b0243cc1414a8b65bf5b2c71c1cd0c33e76f225ddbf26ecb34eee0a859",
+      "label": "P10 eng-f2aa0ef0164acb4f input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f2aa0ef0164acb4f/project-trace.raw",
+      "sha256": "5e1a92852be3866beeea1dfc16fbfd1cbac34f0af5b646d95ec57ab0fa19ce89",
+      "label": "P10 eng-f2aa0ef0164acb4f project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-f2aa0ef0164acb4f/project-numeric-observations.json",
+      "sha256": "f96f46ea27fe78dba7e64023407944a545123c9be530002c2cecc80c55ecee0d",
+      "label": "P10 eng-f2aa0ef0164acb4f project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/project-source.zip",
+      "sha256": "511531d5d6739e4906676e92229c529e661146ae1f0fd079c517a43c51633f54",
+      "label": "P10 eng-d66dedfbb6e7c03d project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/result.json",
+      "sha256": "657d3f7b06b6f41a9189330a7aeb97df3bf8b4eac917d14fb2eb7bd76b7740f2",
+      "label": "P10 eng-d66dedfbb6e7c03d result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/input.json",
+      "sha256": "d854e873563418f4e3e43ebe0677f42cc6b9329da8a49e5c9581fc13d8260a4c",
+      "label": "P10 eng-d66dedfbb6e7c03d input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/project-assembly.step",
+      "sha256": "4255b46d78dbac2e543d6776d6fe715c385d641f1dc7c89d14cdc4f213fea9e5",
+      "label": "P10 eng-d66dedfbb6e7c03d project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/project-cad-params.json",
+      "sha256": "7a027c12d229ee67e88bee235e6bb5c47f33c32bbae95d8e8af8073880124236",
+      "label": "P10 eng-d66dedfbb6e7c03d project-cad-params.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/project-readback.json",
+      "sha256": "1c4d924f8e25abc395b7faa6034593aaa692c5a3f8f85c8d82f2703f9fda5b8c",
+      "label": "P10 eng-d66dedfbb6e7c03d project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d66dedfbb6e7c03d/project-preview-mesh.json",
+      "sha256": "7d28e15e6228cd98a6ae32cfd4520e0a1f43cf5e32ee1c18a36591d1fcf15df2",
+      "label": "P10 eng-d66dedfbb6e7c03d project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-40a8f3bf44573c85/input.json",
+      "sha256": "0c5c7570cf7629a2efa847e961feeb610caabb27d8c74e2eda28b94c796da2ea",
+      "label": "P10 eng-40a8f3bf44573c85 input.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "native/cad/main.py",
+        "sha256": "829e6b2d21890bcf8439558ac58e20754b7e2a9b0bd8602d5ab945e903ac6d5b",
+        "bytes": 18231
+      },
+      {
+        "path": "native/cad/project.json",
+        "sha256": "8d13e38c947d6cd18cb8f9b567b76dd8f966f605508451a4714fb01775340b04",
+        "bytes": 1708
+      },
+      {
+        "path": "native/spice/receiver-supply.cir",
+        "sha256": "039fa75b78611f2735243629eed6523833bdcaf09ab5ad2a43ce170a9c7f93e6",
+        "bytes": 2863
+      },
+      {
+        "path": "native/spice/project.json",
+        "sha256": "2ff4450e63be4b2d10f426c323f52b057c4e4c595eef74725d033c2e927c8d45",
+        "bytes": 1634
+      },
+      {
+        "path": "native/spice/model-boundary.md",
+        "sha256": "3f214c3397b07dd76dfa2d9b246ef978509727e9b8d0a3ad770214bcd3b94c5e",
+        "bytes": 2523
+      },
+      {
+        "path": "assembly.json",
+        "sha256": "bd0a0e0350497a717e9d5161a07d1cde27b7597f0f86b06e086b26c4242b15fb",
+        "bytes": 32245
+      },
+      {
+        "path": "native/pcb/BLOCKED-interconnect-intent.md",
+        "sha256": "804fbe6a1e974098dfb0d93514876bc1acbbc5b87c78ff21ae3fec688a050bde",
+        "bytes": 6428
+      },
+      {
+        "path": "机械CAD与装配/clearance-check.py",
+        "sha256": "3c2e73abda0a9457fc951bef30eb77a2f68ebe7160576b8e17bd6e39d168c791",
+        "bytes": 14617
+      },
+      {
+        "path": "机械CAD与装配/clearance-data.json",
+        "sha256": "e7caf3a8617e2e6b9d2d0a7b912f46379c7a82385d67d59fe9a48dbc9a991aa8",
+        "bytes": 5068
+      },
+      {
+        "path": "机械CAD与装配/clearance-front-view.svg",
+        "sha256": "bcf1cc6e69ca92d427b950e39f6de1087bd896049bcb4565753a13a881029cc4",
+        "bytes": 3885
+      },
+      {
+        "path": "机械CAD与装配/coil-outline-check.py",
+        "sha256": "1534029f1603a9f7cfde5fa32aa3d1b15ac4ea1be0462ce2b9ba3bab7d0ba3e0",
+        "bytes": 10197
+      },
+      {
+        "path": "机械CAD与装配/coil-outline-check.json",
+        "sha256": "ccd6d69fcbb330c228181ce3bc320b2b9ea518b2b60d34b9520da304099642a1",
+        "bytes": 4630
+      },
+      {
+        "path": "机械CAD与装配/mesh_to_stl.py",
+        "sha256": "6fa9ccae8c7ba660fb4528acaeca0fe57f7dbed8e12e1288962c2f411ee10f11",
+        "bytes": 2546
+      },
+      {
+        "path": "机械CAD与装配/assembly-mesh.stl",
+        "sha256": "d30bc48670508523fac705f02409fe3d4f557c649ea8b56d997324ad2be6d330",
+        "bytes": 1231454
+      },
+      {
+        "path": "native/spice/verify-spice.py",
+        "sha256": "44fc9a8acc51a506b56a874803ad997741012ff8a96714c7c8058ce6a890ef13",
+        "bytes": 25972
+      },
+      {
+        "path": "native/spice/spice-checks.json",
+        "sha256": "a3b14bc253fec2e72c205a3c5dade0d534a71c3b909069f89f6309ecf35d3cb8",
+        "bytes": 13253
+      },
+      {
+        "path": "delivery/build-delivery.py",
+        "sha256": "52a55fa772ac89e332ea6faa2e79f5875ccadcfdf2a2c26dad39f1031c8fd1b9",
+        "bytes": 43109
+      },
+      {
+        "path": "delivery/render-bom.py",
+        "sha256": "9747805fe8490fb3e7bcafaabb6793aa5379e157d96b624187cb29a3e60b634f",
+        "bytes": 13034
+      },
+      {
+        "path": "delivery/BOM-INTERFACES.md",
+        "sha256": "37f99d6872ecfa42d005fd3549690ddbd16d9aa2c4252ed6d0aa1f4ff59cf3ce",
+        "bytes": 19649
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "b307b2e2f5d8c36550d43a9a84d122e68f8fc5850513b89e0f1721c448bde15b",
+        "bytes": 9637
+      },
+      {
+        "path": "delivery/LDO-ENERGY-ACCOUNTING.md",
+        "sha256": "bc433c6b7705b59c3f6cae59b6e55b7515d1db3704eb8bd86981c2a5a3e3e192",
+        "bytes": 7868
+      },
+      {
+        "path": "delivery/WORK-NOTES.md",
+        "sha256": "2f39df395d85673dd1ab1ea88e90cf86f41745c1bc9c90963c810238a33ff870",
+        "bytes": 7974
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "715777d38d1e2a2e3b7be74a44dd42560d4c78dfb5a4c26aa70d0429400cc856",
+        "bytes": 22845
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/input.json",
+        "sha256": "1f867ec914938db2b38fcc3004f9affc5acd4df8baaf109146c5a50dd1678466",
+        "bytes": 45437
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/process.log",
+        "sha256": "a34159f730a3fa68e2b3552805cf0866feb37f1310fce7f2ab5b46528cc0e1f9",
+        "bytes": 384
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/project-source.zip",
+        "sha256": "7e996d41d0b51b597fd577d65d23e57055694d69224bc890aab7e171b01309e4",
+        "bytes": 6714
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/project-cad-params.json",
+        "sha256": "0ed68a3ef3ac9ea65e5c43ec83078a0fa1b4fafb1ddb5796b2b59858390cbf76",
+        "bytes": 8608
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/project-readback.json",
+        "sha256": "c11759d7914eac8ca291752a10babc2b4691c112e002cf9d3740a372fd4ef323",
+        "bytes": 592
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/project-preview-mesh.json",
+        "sha256": "653a93da45b9ee2ea8f550ba467918c2847ed1b2b834bcecbb7fe16bb4f17d3f",
+        "bytes": 1962516
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/project-assembly.step",
+        "sha256": "2225b2b266c486484ea4bb7762d2b9a1768632c8e64a7e89128cac958c2758a0",
+        "bytes": 15347965
+      },
+      {
+        "path": "engineering-artifacts/eng-cf4e0d6931f29142/result.json",
+        "sha256": "c3b0a01e0bb770f7eaeb2604010f6a62c9ebb3c8ded691e166df82c687633fce",
+        "bytes": 2842
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/input.json",
+        "sha256": "bc255362d6b2b483c62d95a122a1db6a52e6e54eab0c99da0779f336f39336dc",
+        "bytes": 21226
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/process.log",
+        "sha256": "a5802adedf5e1cd43bfa906265306e98e504e38b946efdded96ff433fd24a4e1",
+        "bytes": 882
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/project-source.zip",
+        "sha256": "5882010331e82840de63b3a5b8be2c129a6d41a7f39198766742f24a705afe87",
+        "bytes": 2458
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/project-trace.raw",
+        "sha256": "500bad3878708a0aa3f05bb22ee4a54d8f684048fa8d338ffbd047fe5772e2be",
+        "bytes": 1142457
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/project-numeric-observations.json",
+        "sha256": "8930d24847acc33642e5b49bc3a7c4203e497830080e79bc9bb3407b57d5a5a5",
+        "bytes": 5945
+      },
+      {
+        "path": "engineering-artifacts/eng-b90c3c8d2d227447/result.json",
+        "sha256": "24ae1ae4969335d2058e6d7919b189244c0715b2702984652937210673bd945a",
+        "bytes": 2570
+      },
+      {
+        "path": "campaign/reviews/P10/post-timeout-recovery-001/result.json",
+        "sha256": "c5e3cef57b0b11f9a8ceb2f880b45a5f72ce726852bd66ed8b5efce422e8ce80",
+        "bytes": 3113
+      },
+      {
+        "path": "campaign/reviews/P10/current-coil-readback-001/result.json",
+        "sha256": "3a207ec78385850238cdf1b47ee7f472937e55cf25760407ed9f8915f9c327fa",
+        "bytes": 1321
+      },
+      {
+        "path": "campaign/reviews/P10/version-energy-recheck-002/result.json",
+        "sha256": "d83793c5ad48210b644b82fae44bf09ef7e1650ed32d373b922eabccd344538a",
+        "bytes": 10133
+      },
+      {
+        "path": "campaign/recovery/P10/public-feedback-20261009-v1.json",
+        "sha256": "25d34aad95cccfaeb9f86a4a60e73a4c4c85f8feec91410299d4f0c803910635",
+        "bytes": 5483
+      },
+      {
+        "path": "continuation-feedback.json",
+        "sha256": "a4b595ddb4ba37289e9b0add96aebda64c7ce8dbc4fc7d4bdf8b338518f46e3b",
+        "bytes": 66658
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [
+      "llm-fe182a3b790029610afa",
+      "llm-cfb6e217496e868ec0ce"
+    ],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-cf4e0d6931f29142",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-34eab01239663055",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-87e77d6061ef63fb",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-b90c3c8d2d227447",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-3b0d59b5043f1149",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-987a47501166150a",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9aeb22feb16af68b",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-f2aa0ef0164acb4f",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-d66dedfbb6e7c03d",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-40a8f3bf44573c85",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P10-native-9e5a0078af9e-b07e7bdb/continuations/turn-005/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-5df297583b1cd187/trace.jsonl",
+  "trace_sha256": "99ac48984448a303916b81383d90b07c57cc48a185111af075d6f14604113e6c",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

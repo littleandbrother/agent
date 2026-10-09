@@ -1,0 +1,1515 @@
+{
+  "paper": "P07",
+  "task": "P07-native-0ea647e957a3-b07e7bdb",
+  "stage": "native",
+  "owner": "pi-chat-2d9cbbc98382d1da",
+  "evaluation": {
+    "status": "PASS",
+    "problems": [],
+    "native_checks": [
+      {
+        "job_id": "eng-94961db2140e5818",
+        "kind": "cadquery",
+        "project_sha256": "7a86e5ac4ab52486470ba9123d91d00cf91e3a6218b4eb96d70c3fd493cacd92",
+        "assembly_revision": 5,
+        "assembly_physical_hash": "5f48d4d297401a594fb40df4e19629afbe2697a415889435ae5299ecd03c437e",
+        "native_readback": {
+          "bounds_mm": [
+            100.0,
+            100.0,
+            53.0
+          ],
+          "native_source_sha256": "dba011e57a71de694660d94fb77fd02d4ca299f6329abe15f7ade0dfad4c25ea",
+          "native_valid": true,
+          "preview": {
+            "angular_tolerance_rad": 0.1,
+            "attempts": [
+              {
+                "angular_tolerance_rad": 0.1,
+                "linear_tolerance_mm": 0.15,
+                "triangles": 194880
+              }
+            ],
+            "available": true,
+            "linear_tolerance_mm": 0.15,
+            "scope": "Visualization only; exact STEP geometry remains authoritative.",
+            "source_sha256": "dba011e57a71de694660d94fb77fd02d4ca299f6329abe15f7ade0dfad4c25ea",
+            "triangle_limit": 200000,
+            "triangles": 194880
+          },
+          "solid_count": 61,
+          "volume_mm3": 184618.3373628461
+        },
+        "functional_passed": false,
+        "participant_project_path": "mechanical/rd-teng/project.json",
+        "project_manifest": {
+          "entrypoint": "main.py",
+          "files": [
+            "main.py"
+          ],
+          "interfaces": {
+            "assembly_revision": 5,
+            "frame": "Z = stack axis; stack origin at the top face of the bottom plate; +Z points to the top plate",
+            "interfaces_declared_unverified": true,
+            "outputs": [
+              "assembly.step",
+              "rd-teng-mrp.step",
+              "rd-teng-buoyancy-base.step",
+              "cad-mass-report.json"
+            ],
+            "parts": "RD-TENG device stack (15 sheets + 16 PTFE films + 14 gaskets + PET ring + 3 electrode sheets + packaging + pins/latches/sponges)",
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "mechanical/rd-teng/main.py": "5bc7bba7f00018804b4acee5d9433601a7a637dcafa2c8aa5bd513cb07bb70f7"
+        }
+      },
+      {
+        "job_id": "eng-962b606058c628f8",
+        "kind": "spice",
+        "project_sha256": "b2b8716ed3328d8c8a344cff3af588fc780071e1ff52d7f706f66de5151766dd",
+        "assembly_revision": 4,
+        "assembly_physical_hash": "8ba8032046180b1d0f8cf16bb46ff087dfe5e106dcaf9f3a10472fb53f9bfd26",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 15253,
+              "variables": 13
+            }
+          ],
+          "points": 15253,
+          "raw_sha256": "e70ee9d04fe835e639a0a7e326a1e59a76a3a447a4b30042032738403cf61a2a",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 13
+        },
+        "functional_passed": false,
+        "model_input_reuse": {
+          "schema_version": "bf-native-model-input-reuse-v1",
+          "kind": "spice",
+          "project_sha256": "b2b8716ed3328d8c8a344cff3af588fc780071e1ff52d7f706f66de5151766dd",
+          "original_assembly_revision": 4,
+          "original_assembly_physical_hash": "8ba8032046180b1d0f8cf16bb46ff087dfe5e106dcaf9f3a10472fb53f9bfd26",
+          "delivery_assembly_revision": 5,
+          "delivery_assembly_physical_hash": "5f48d4d297401a594fb40df4e19629afbe2697a415889435ae5299ecd03c437e",
+          "current_project_bytes_verified": true,
+          "declared_energy_unchanged": true,
+          "model_subset_only": true,
+          "assembly_applicability_verified": false,
+          "scope": "Original immutable SPICE model/output only; mechanical/source calibration and joint applicability remain unverified."
+        },
+        "participant_project_path": "circuit/rd-teng-storage/project.json",
+        "project_manifest": {
+          "entrypoint": "main.cir",
+          "files": [
+            "main.cir"
+          ],
+          "interfaces": {
+            "assembly_revision": 4,
+            "event": "periodic mechanical excitation at 2.4 Hz (article's optimal frequency, Supplementary Fig. 41d/e)",
+            "interfaces_declared_unverified": true,
+            "load_source": "RDPAIR: I_pk=272uA, V_lim=1120V, pulse area 10.184ms; P12PAIR: I_pk=183uA, V_lim=1400V, pulse area 7.104ms; 2 pulses per 416.6667ms cycle each",
+            "not_modelled": [
+              "charging/discharging of the device's own internal capacitance network through the load",
+              "power management, regulator and system load (the paper's stated next step)",
+              "capacitor ESR/ESL, dielectric leakage and ageing",
+              "rectifier diode drops, breakdown and the measurement chain"
+            ],
+            "polarity": "storage node is the pair's positive terminal; rectifier taken as ideal and inside the source block",
+            "scope": "circuit/output-stage + storage-capacitor charging study for the rectified electrode pair and the 1-2 electrode pair; 47uF and 220uF storage capacitors with a 1GOhm bleed",
+            "source_calibration_unknown": "the 1-2 pair 2.6uC / 183uA / 1400V assignment is an inferred electrode-pair <-> value mapping (article lists four current and four voltage values without pair labels); the linear charge-constrained collapse is an assumption",
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "circuit/rd-teng-storage/main.cir": "5c132e86118ec54b73e55a16c983b964ffdc031008860fb1ad60de3c860dbdff"
+        }
+      },
+      {
+        "job_id": "eng-6f1245836b114082",
+        "kind": "spice",
+        "project_sha256": "fed4521f2734cda81b8072c9839e97d57eee42e07cb82bb92d487e301f75da98",
+        "assembly_revision": 4,
+        "assembly_physical_hash": "8ba8032046180b1d0f8cf16bb46ff087dfe5e106dcaf9f3a10472fb53f9bfd26",
+        "native_readback": {
+          "finite_values": true,
+          "plots": [
+            {
+              "complex": false,
+              "encoding": "ascii",
+              "finite_values": true,
+              "plot_name": "Transient Analysis",
+              "points": 50735,
+              "variables": 27
+            }
+          ],
+          "points": 50735,
+          "raw_sha256": "1d5d92af192dc0c164bd9b45085ea0d8b88996534626588d6b4da59a124ce321",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 27
+        },
+        "functional_passed": false,
+        "model_input_reuse": {
+          "schema_version": "bf-native-model-input-reuse-v1",
+          "kind": "spice",
+          "project_sha256": "fed4521f2734cda81b8072c9839e97d57eee42e07cb82bb92d487e301f75da98",
+          "original_assembly_revision": 4,
+          "original_assembly_physical_hash": "8ba8032046180b1d0f8cf16bb46ff087dfe5e106dcaf9f3a10472fb53f9bfd26",
+          "delivery_assembly_revision": 5,
+          "delivery_assembly_physical_hash": "5f48d4d297401a594fb40df4e19629afbe2697a415889435ae5299ecd03c437e",
+          "current_project_bytes_verified": true,
+          "declared_energy_unchanged": true,
+          "model_subset_only": true,
+          "assembly_applicability_verified": false,
+          "scope": "Original immutable SPICE model/output only; mechanical/source calibration and joint applicability remain unverified."
+        },
+        "participant_project_path": "circuit/rd-teng-load/project.json",
+        "project_manifest": {
+          "entrypoint": "main.cir",
+          "files": [
+            "main.cir"
+          ],
+          "interfaces": {
+            "assembly_revision": 4,
+            "event": "periodic mechanical excitation at 2.4 Hz (article's optimal frequency, Supplementary Fig. 41d/e)",
+            "interfaces_declared_unverified": true,
+            "load_source": "idealised charge-constrained DC output stage: I = I_pk*(1-V/V_lim)*gate, I_pk=272uA, V_lim=1120V, 2 pulses per 416.6667ms cycle, pulse area 10.184ms, C_in=1.2366nF",
+            "not_modelled": [
+              "triboelectric charge generation and the 14-unit sheet stack electrostatics",
+              "mechanical drive (MRP pendulum, buoyancy base) dynamics",
+              "power management circuit, converter and the measurement chain",
+              "rectifier diode drops, leakage, breakdown and parasitic elements other than C_in"
+            ],
+            "polarity": "positive terminal p (charge delivered into the load); the rectifier is taken as ideal and inside the source block",
+            "scope": "circuit/output-stage + load-matching study for ONE already-rectified RD-TENG electrode pair (article's 'DC electrode pair'); five independent resistive loads 5/10/20/50/100 MOhm",
+            "source_calibration_unknown": "the charge-constrained collapse (1-V/V_lim) is an assumption, not a paper equation; pulse count/width per cycle are not given by the paper; the electrode-pair <-> current/voltage value mapping is inferred (see native-report.json gaps)",
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "circuit/rd-teng-load/main.cir": "d9f22065688a233b7ed67ba367318c8307c0d31c542fa06218af1637263ad7f7"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "COMPLETED",
+  "model_calls": 457,
+  "work_phase": "engineering-review",
+  "phase_task_sha256": "d8050296e8e201d3be8f0e42a9ebca0fa55aa259f13d1b8af68d5603d119b80c",
+  "phase_in_actual_request": true,
+  "execution": {
+    "status": "IDLE",
+    "error": null
+  },
+  "continuation": true,
+  "new_model_calls": 122,
+  "budget": {
+    "owner": "pi-chat-2d9cbbc98382d1da",
+    "cap_usd": null,
+    "liability_usd": 9.033547499999994,
+    "remaining_usd": null,
+    "unbounded": true,
+    "unknown_requests": [],
+    "exhausted": false
+  },
+  "method_identity": "bfe0e2eb1969d88bb03976a0a614c10aaf7d8a28fde09ed3b04c4c2f1feb5edb",
+  "method_in_actual_request": true,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/native-report.json",
+      "sha256": "885e2e00b1e68cbc9a34f3b3559f3fadf211cc0372c8d50f339395580e4fd387",
+      "label": "P07 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/delivery/manifest.json",
+      "sha256": "5c2b5298b7f9dc1828263301f9c378ee4b9df62957afff3aee3bdc56dd13c917",
+      "label": "P07 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/delivery/UNVERIFIED.md",
+      "sha256": "bb45ba8da2190f2d8fa60152fb0592f182e280078fa6b36116630f50e87b817a",
+      "label": "P07 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/TASK.md",
+      "sha256": "53025c6a9045a47ac1aabc1b411a14c93c136c615d0a79f35f8bce089108162d",
+      "label": "P07 TASK.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/contract.json",
+      "sha256": "e5d730b2e73dda316be396835e67aa66f22b10493a03a791021e0a40c3c740e6",
+      "label": "P07 contract.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/continuation-feedback.json",
+      "sha256": "54f0d4a1847e54ed29eefb62d0fc1d330626217c19c6726311403ac7272a9fe6",
+      "label": "P07 continuation-feedback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/readme.md",
+      "sha256": "5bbb52c9f26f9c001aae5ee75bb6b3d46d3f8924f2f62363a1ce27361b9b3e8e",
+      "label": "P07 readme.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/native-report.json",
+      "sha256": "885e2e00b1e68cbc9a34f3b3559f3fadf211cc0372c8d50f339395580e4fd387",
+      "label": "P07 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/delivery/REPRODUCE.md",
+      "sha256": "f098300a2be6fe27d68d3276216ca7f07abeeab16e58696994d08e390cfbb9d7",
+      "label": "P07 delivery/REPRODUCE.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "bb45ba8da2190f2d8fa60152fb0592f182e280078fa6b36116630f50e87b817a",
+      "label": "P07 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/readme.md",
+      "sha256": "75be7641340a3508fabb5501760633f09ca5e940d3df8123c3e6d131e05ba51e",
+      "label": "P07 mechanical/readme.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/main.py",
+      "sha256": "5bc7bba7f00018804b4acee5d9433601a7a637dcafa2c8aa5bd513cb07bb70f7",
+      "label": "P07 mechanical/rd-teng/main.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/project.json",
+      "sha256": "39dbf0b4117642d2ee7d49e4630dec9b549e93a8ec6d6a9e25e92cb67e95dcc5",
+      "label": "P07 mechanical/rd-teng/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/assembly.json",
+      "sha256": "86ef167a07d3522f76d1895828f9b7d850de2ed74db8d6cca799e5b959f60820",
+      "label": "P07 mechanical/rd-teng/assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/make_assembly.py",
+      "sha256": "9afd4140a83337e0ddbe7344fc57bf4e2bb1d410f51c779fe34b608bf3fe055f",
+      "label": "P07 mechanical/rd-teng/make_assembly.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/checks/film_gasket_clearance_check.py",
+      "sha256": "1365e9b987a14281bd0527aa09283422c21cb9d465141d2379fdf0555af02c8d",
+      "label": "P07 mechanical/rd-teng/checks/film_gasket_clearance_check.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/mechanical/rd-teng/checks/film_gasket_clearance.json",
+      "sha256": "d9394d1d28e109a95aaa43c13420496d1dcc4970f6e48ed9a2dc8c33b3a39563",
+      "label": "P07 mechanical/rd-teng/checks/film_gasket_clearance.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/readme.md",
+      "sha256": "658a3adb1df8dc9943d32d0ecd852d685bf696c388e26ec5523b14f5a3339a06",
+      "label": "P07 circuit/readme.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-load/project.json",
+      "sha256": "3938d46bf279c4d4417a4e18b15337b09c7051becd6867d4c8a08a8c5d859fe5",
+      "label": "P07 circuit/rd-teng-load/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-load/main.cir",
+      "sha256": "d9f22065688a233b7ed67ba367318c8307c0d31c542fa06218af1637263ad7f7",
+      "label": "P07 circuit/rd-teng-load/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-storage/project.json",
+      "sha256": "930eaae8a6d6fa982fcdeea8711faf1d948d5069d812e2049188073d6a1b6969",
+      "label": "P07 circuit/rd-teng-storage/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-storage/main.cir",
+      "sha256": "5c132e86118ec54b73e55a16c983b964ffdc031008860fb1ad60de3c860dbdff",
+      "label": "P07 circuit/rd-teng-storage/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-charge/project.json",
+      "sha256": "a583b6a4353a589ec6307285e3f679d7d62baf8c2f92f1408e420f0fb72a71d5",
+      "label": "P07 circuit/rd-teng-charge/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/circuit/rd-teng-charge/main.cir",
+      "sha256": "11d71b9caa715a7fe53831b0c531c9edfb9f6214326a5645a1cacb4fceca503d",
+      "label": "P07 circuit/rd-teng-charge/main.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/campaign/reviews/P07/static-layer-readback-20261009T0635Z/result.json",
+      "sha256": "7fbd004bf5d4bd8a206b20bd40be44f0961fb4da53f9245fa3af2cf73d3f4ec1",
+      "label": "P07 campaign/reviews/P07/static-layer-readback-20261009T0635Z/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/campaign/parallel-20261009/P07/review/result.json",
+      "sha256": "1d9bb63c7d8bb00f0c6cdac1cbbb2c58467249f28355161315c9504ab54f91ab",
+      "label": "P07 campaign/parallel-20261009/P07/review/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/apparatus-reference/b91fc946-a3d63346668c/numeric-eng-6f1245836b114082.json",
+      "sha256": "d95299b3f48b173328e33f7810d0a7f7a5c2708c1a17678b61faf355db8a07e1",
+      "label": "P07 apparatus-reference/b91fc946-a3d63346668c/numeric-eng-6f1245836b114082.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/apparatus-reference/b91fc946-a3d63346668c/numeric-eng-962b606058c628f8.json",
+      "sha256": "64edec5a304ca3a58d6921111aa374e1847adaa01d462f9a76a1b56c719f82c9",
+      "label": "P07 apparatus-reference/b91fc946-a3d63346668c/numeric-eng-962b606058c628f8.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/sources/P07/article-sections.json",
+      "sha256": "2c8479c182b1f87cc2f741da6aa2e88fc7dc1cee3b379d3c26531b1a710719cb",
+      "label": "P07 sources/P07/article-sections.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/sources/P07/article-pages.json",
+      "sha256": "6a34cd6704303d280df1c3a68b7af3bacf0acffb55f1fe877cd991956ad67700",
+      "label": "P07 sources/P07/article-pages.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/sources/P07/supplement-pages.json",
+      "sha256": "dcd459cd1248861ceacab21aa79427fa39a1da26d1df3a9bd15221a48767cdce",
+      "label": "P07 sources/P07/supplement-pages.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/sources/P07/metadata-europepmc.json",
+      "sha256": "91819a4d3543724b70abf981cf1febce932e70460eb283693f3277b0e90d78a4",
+      "label": "P07 sources/P07/metadata-europepmc.json",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/sources/P07/article.xml",
+      "sha256": "c51ed0e66eeb371fe59a992dafd0e160e4381cf656d4ca39b85bab6211e54316",
+      "label": "P07 sources/P07/article.xml",
+      "actor": "source-preparation"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/input.json",
+      "sha256": "ed64a0e51326477b1697dc05c9c0b91eaf92b3e5edfb5c4c9beee9f3a79b1e01",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/input.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/process.log",
+      "sha256": "e484baeb7dd681e3ec0e80a68d72437e2530acc4f6de16b332d066134bf5a12d",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/process.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-assembly.step",
+      "sha256": "dba011e57a71de694660d94fb77fd02d4ca299f6329abe15f7ade0dfad4c25ea",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-cad-mass-report.json",
+      "sha256": "2176d320193d18bf35e9acc3e516a8e452821377f15941accecf6d5d8ed137e2",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-cad-mass-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-preview-mesh.json",
+      "sha256": "3604d7d858494a7f812dc25e90f89732ed0628a504dbee1aa5a140ef91d8f162",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-preview-mesh.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-rd-teng-buoyancy-base.step",
+      "sha256": "05ff2055c0babe9a73f944e127ad13d9cd56bde357729a6d55e4dbed523412e6",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-rd-teng-buoyancy-base.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-rd-teng-mrp.step",
+      "sha256": "8021ebedde4eab31ac5e72bd72f3015d8470c0d4c1fdd9546c6c9d78be4c1240",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-rd-teng-mrp.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-readback.json",
+      "sha256": "773b4bd3876dcc20954d58dfa050bfd62519b48ad3287964708a7133a71578ab",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/project-source.zip",
+      "sha256": "eeefd3511479ad2a3caa678893b563d12f61125dbcca5cae78b30196c3b09803",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/result.json",
+      "sha256": "c74548014dd870a00b25fdc2388087e3cba9ca72fed12798c7fad757e1b23a17",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-94961db2140e5818/trusted_readback.py",
+      "sha256": "ab390587ccbc5890fc4f8a3f511e93eb9b04c81190fe461ceef3a8b42f6003ab",
+      "label": "P07 engineering-artifacts/eng-94961db2140e5818/trusted_readback.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-6f1245836b114082/project-numeric-observations.json",
+      "sha256": "445e86ec0e4bdb52d1a1468b5cd9cebfc0043b1008147ba4a60f88e7351c2ba1",
+      "label": "P07 engineering-artifacts/eng-6f1245836b114082/project-numeric-observations.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-6f1245836b114082/project-source.zip",
+      "sha256": "498997a420340a32f59f75d23170c7cde500d7c86454cb2a84648839602f9b45",
+      "label": "P07 engineering-artifacts/eng-6f1245836b114082/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-6f1245836b114082/result.json",
+      "sha256": "b04de3b100bdf8d1206e95c44525fa2b5790e4b2e11589d88c46c1c507f674c9",
+      "label": "P07 engineering-artifacts/eng-6f1245836b114082/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-962b606058c628f8/project-numeric-observations.json",
+      "sha256": "7aa148f8f36acac3e9e086d075005c85a9f81c00bd21e5add058b2b50fd59348",
+      "label": "P07 engineering-artifacts/eng-962b606058c628f8/project-numeric-observations.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-962b606058c628f8/project-source.zip",
+      "sha256": "e2166c3bc1c8eed112038de766e5b0648b308b347b1d2001f8358ab1526c4b50",
+      "label": "P07 engineering-artifacts/eng-962b606058c628f8/project-source.zip",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/participant-files/engineering-artifacts/eng-962b606058c628f8/result.json",
+      "sha256": "db0cfcb1921d5ed16989f2031f75f84797315c6655df8754aef152ec80a41b21",
+      "label": "P07 engineering-artifacts/eng-962b606058c628f8/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-rd-teng-mrp.step",
+      "sha256": "8021ebedde4eab31ac5e72bd72f3015d8470c0d4c1fdd9546c6c9d78be4c1240",
+      "label": "P07 eng-94961db2140e5818 project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-source.zip",
+      "sha256": "eeefd3511479ad2a3caa678893b563d12f61125dbcca5cae78b30196c3b09803",
+      "label": "P07 eng-94961db2140e5818 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-cad-mass-report.json",
+      "sha256": "2176d320193d18bf35e9acc3e516a8e452821377f15941accecf6d5d8ed137e2",
+      "label": "P07 eng-94961db2140e5818 project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/result.json",
+      "sha256": "c74548014dd870a00b25fdc2388087e3cba9ca72fed12798c7fad757e1b23a17",
+      "label": "P07 eng-94961db2140e5818 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/input.json",
+      "sha256": "ed64a0e51326477b1697dc05c9c0b91eaf92b3e5edfb5c4c9beee9f3a79b1e01",
+      "label": "P07 eng-94961db2140e5818 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-rd-teng-buoyancy-base.step",
+      "sha256": "05ff2055c0babe9a73f944e127ad13d9cd56bde357729a6d55e4dbed523412e6",
+      "label": "P07 eng-94961db2140e5818 project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-assembly.step",
+      "sha256": "dba011e57a71de694660d94fb77fd02d4ca299f6329abe15f7ade0dfad4c25ea",
+      "label": "P07 eng-94961db2140e5818 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-readback.json",
+      "sha256": "773b4bd3876dcc20954d58dfa050bfd62519b48ad3287964708a7133a71578ab",
+      "label": "P07 eng-94961db2140e5818 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-94961db2140e5818/project-preview-mesh.json",
+      "sha256": "3604d7d858494a7f812dc25e90f89732ed0628a504dbee1aa5a140ef91d8f162",
+      "label": "P07 eng-94961db2140e5818 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-962b606058c628f8/project-source.zip",
+      "sha256": "e2166c3bc1c8eed112038de766e5b0648b308b347b1d2001f8358ab1526c4b50",
+      "label": "P07 eng-962b606058c628f8 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-962b606058c628f8/result.json",
+      "sha256": "db0cfcb1921d5ed16989f2031f75f84797315c6655df8754aef152ec80a41b21",
+      "label": "P07 eng-962b606058c628f8 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-962b606058c628f8/input.json",
+      "sha256": "1a0485be5d55630704dc8992e362014b8a7d7b9ace797d848817f8fea8d13709",
+      "label": "P07 eng-962b606058c628f8 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-962b606058c628f8/project-trace.raw",
+      "sha256": "e70ee9d04fe835e639a0a7e326a1e59a76a3a447a4b30042032738403cf61a2a",
+      "label": "P07 eng-962b606058c628f8 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-962b606058c628f8/project-numeric-observations.json",
+      "sha256": "7aa148f8f36acac3e9e086d075005c85a9f81c00bd21e5add058b2b50fd59348",
+      "label": "P07 eng-962b606058c628f8 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-6f1245836b114082/project-source.zip",
+      "sha256": "498997a420340a32f59f75d23170c7cde500d7c86454cb2a84648839602f9b45",
+      "label": "P07 eng-6f1245836b114082 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-6f1245836b114082/result.json",
+      "sha256": "b04de3b100bdf8d1206e95c44525fa2b5790e4b2e11589d88c46c1c507f674c9",
+      "label": "P07 eng-6f1245836b114082 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-6f1245836b114082/input.json",
+      "sha256": "f68782bfc1601ba27671722a65b74c172d31967af40a41953cc25bb42eba608b",
+      "label": "P07 eng-6f1245836b114082 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-6f1245836b114082/project-trace.raw",
+      "sha256": "1d5d92af192dc0c164bd9b45085ea0d8b88996534626588d6b4da59a124ce321",
+      "label": "P07 eng-6f1245836b114082 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-6f1245836b114082/project-numeric-observations.json",
+      "sha256": "445e86ec0e4bdb52d1a1468b5cd9cebfc0043b1008147ba4a60f88e7351c2ba1",
+      "label": "P07 eng-6f1245836b114082 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-rd-teng-mrp.step",
+      "sha256": "998baefc45f3cfb57e36bff610d8b7885f04ee481593a20d009d535d8559ed4f",
+      "label": "P07 eng-b5dfcacd7402a94a project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-source.zip",
+      "sha256": "a1c373a4b92ed856fd7231d51f35e7d25691c7b0da5c3536f7d21de9cb4ce5c0",
+      "label": "P07 eng-b5dfcacd7402a94a project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-cad-mass-report.json",
+      "sha256": "a99e3b7280526c094c4398e3366ec76f1d32257916994d4163350e6506e0b65c",
+      "label": "P07 eng-b5dfcacd7402a94a project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/result.json",
+      "sha256": "f0f3d9f0ffb96c72e6e664acc8c3276f1b24ce8c7a3cd708c2c2599f07c575d1",
+      "label": "P07 eng-b5dfcacd7402a94a result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/input.json",
+      "sha256": "8c100d9e5d977b9ba5c1efa60519dd1985b6db6bff0103d8f9d15b47b7ed877a",
+      "label": "P07 eng-b5dfcacd7402a94a input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-rd-teng-buoyancy-base.step",
+      "sha256": "179b3bbef98daaec77ac909affcd5a1f3b426b219e58f204da7dda8fdd4cba22",
+      "label": "P07 eng-b5dfcacd7402a94a project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-assembly.step",
+      "sha256": "26d327ecb7ce25dbe296fb501ea9cf67304deed98dcc97a7c25b7a66ca69acd5",
+      "label": "P07 eng-b5dfcacd7402a94a project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-readback.json",
+      "sha256": "1df75f5ebccdd2ed2966af78d73dffd089dec3020d79db20c5428af382d75e5a",
+      "label": "P07 eng-b5dfcacd7402a94a project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b5dfcacd7402a94a/project-preview-mesh.json",
+      "sha256": "c54cc134f89973dbda7d1a801bb62210c0db1f8001f0a064fe1d42082fb0d63d",
+      "label": "P07 eng-b5dfcacd7402a94a project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bcc259bff3a1b735/project-source.zip",
+      "sha256": "efa8a8319cd7f068da480ec943fa6efb1494fcca48c2afd37bfb3be739c10e0d",
+      "label": "P07 eng-bcc259bff3a1b735 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bcc259bff3a1b735/result.json",
+      "sha256": "ce09b3a89715a5eb7739fda76e800f8327f8496b4131b380c8ba68037a335bc5",
+      "label": "P07 eng-bcc259bff3a1b735 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bcc259bff3a1b735/input.json",
+      "sha256": "eb2852f2e2f34073e8456a11b48818e339e3f37c92beed582e711f9b621cbd8b",
+      "label": "P07 eng-bcc259bff3a1b735 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bcc259bff3a1b735/project-trace.raw",
+      "sha256": "9f39a634e6d003fc29f7320cba8d55e111cba8dc4bba01e4ad9c31fe7dcb88d1",
+      "label": "P07 eng-bcc259bff3a1b735 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bcc259bff3a1b735/project-numeric-observations.json",
+      "sha256": "9ad07f0d3516fc45c63ae544ddb63cf3605f6f0f5e0fbd49d5850a4393e19c0d",
+      "label": "P07 eng-bcc259bff3a1b735 project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9d957843dc513c7b/project-source.zip",
+      "sha256": "39c1d9e9bfc6d3336f224f8db2a143bdeaf9fb6b5b4a56eb1096be0c6059dbef",
+      "label": "P07 eng-9d957843dc513c7b project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9d957843dc513c7b/result.json",
+      "sha256": "b96b203e72f3503d29f1466fe16c3875617488df9adf5dc79e15807da5b5b4c1",
+      "label": "P07 eng-9d957843dc513c7b result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9d957843dc513c7b/input.json",
+      "sha256": "aa8c1497c167ea367aaa47d083e5bdcd236e616b6ebac8dc209665c52783117e",
+      "label": "P07 eng-9d957843dc513c7b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9d957843dc513c7b/project-trace.raw",
+      "sha256": "90de5ab5e622305e12cd8d76184e6c713286c9b84900dceb422e81dbf8ec70de",
+      "label": "P07 eng-9d957843dc513c7b project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9d957843dc513c7b/project-numeric-observations.json",
+      "sha256": "4dfa63908e58292cc5a572686747284347a995e606f375255fe91f2cd43f8204",
+      "label": "P07 eng-9d957843dc513c7b project-numeric-observations.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-rd-teng-mrp.step",
+      "sha256": "9adc1db1e159ef42e388bf9f6940d874da2b4c299a9e7f84e01a5cc3ecf04038",
+      "label": "P07 eng-bfd5db0b9fc22244 project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-source.zip",
+      "sha256": "9a8f57d07a133d102522ae62214e9be1a817414ad00701c2e6b069cc67a1172c",
+      "label": "P07 eng-bfd5db0b9fc22244 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-cad-mass-report.json",
+      "sha256": "7f8136a909032d9c53596dc4328ed8697be2ff53ffd2f07c57cb69a1d55f5cc3",
+      "label": "P07 eng-bfd5db0b9fc22244 project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/result.json",
+      "sha256": "56e3d7932b78c3c9acdacf3083672f8aa5a483add8bc8ccb63b9ae84169c1c98",
+      "label": "P07 eng-bfd5db0b9fc22244 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/input.json",
+      "sha256": "acbd45026bfb7799d6e95a7376564aa09654c6c47e315d6a5ccf31ac7fce20f4",
+      "label": "P07 eng-bfd5db0b9fc22244 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-rd-teng-buoyancy-base.step",
+      "sha256": "935ddced2b48779fb3bf543070d462c323fe50862b6771d2e064a4bf8ac42f5e",
+      "label": "P07 eng-bfd5db0b9fc22244 project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-assembly.step",
+      "sha256": "4283a36d68c2fe242a2a3c28546ef1d2892fac5671e6da977fbe6efdc39513b7",
+      "label": "P07 eng-bfd5db0b9fc22244 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-readback.json",
+      "sha256": "b09ec73d9fdbb040669075d62d57a57ffba57fe208d19a0a7c9e6a849f9707bb",
+      "label": "P07 eng-bfd5db0b9fc22244 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-bfd5db0b9fc22244/project-preview-mesh.json",
+      "sha256": "e84f8cc8f24403b6a58b175b72c106d03856e196bddf822c783c7560ac3a5725",
+      "label": "P07 eng-bfd5db0b9fc22244 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-rd-teng-mrp.step",
+      "sha256": "0a2bce8dfa4475485957819ab06b7c26766e3141f4d10fd8e9f70ed0037720f7",
+      "label": "P07 eng-06f486ff5839b0f3 project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-source.zip",
+      "sha256": "79ad76daec7af03cc90e8791c9aa591da9649928be9214bd9ab8226fc0fa5c7a",
+      "label": "P07 eng-06f486ff5839b0f3 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-cad-mass-report.json",
+      "sha256": "9d9b086b128777018de980919454aad4b3426f9a6262c64621273f53853d13a5",
+      "label": "P07 eng-06f486ff5839b0f3 project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/result.json",
+      "sha256": "1878af025857dc9fba1afe1bdcc618a89ad4803bd4bbb338e19c43a60cfbbec4",
+      "label": "P07 eng-06f486ff5839b0f3 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/input.json",
+      "sha256": "6738c030fa110c6d2db25ea683e32845c5241b51ded78c5fcbe77413bb359584",
+      "label": "P07 eng-06f486ff5839b0f3 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-rd-teng-buoyancy-base.step",
+      "sha256": "a374285c866bfb0a80d57f1c4eebabc83a5c03c56afc6ef4a3e1d854f7a21c60",
+      "label": "P07 eng-06f486ff5839b0f3 project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-assembly.step",
+      "sha256": "5a21c860eec29b36b21178eff61a68369d1f8f53360f9237617334e4eaff8e89",
+      "label": "P07 eng-06f486ff5839b0f3 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-readback.json",
+      "sha256": "f153c1d27f023ff98d6bc451528e92888a5be10bc40159d4654452a6b85543ae",
+      "label": "P07 eng-06f486ff5839b0f3 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-06f486ff5839b0f3/project-preview-mesh.json",
+      "sha256": "af1ad174351cc001529ff7b3a09b117afa7e1fb70785769f4409b5d9a65a78f1",
+      "label": "P07 eng-06f486ff5839b0f3 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/project-source.zip",
+      "sha256": "a21119a01b88550c31841c84057811eaaa4ecf20c9a52aed5d4ddab52cf992bd",
+      "label": "P07 eng-e95682cfb8dc05ef project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/result.json",
+      "sha256": "a3aa67cb178e6c1a51ba37fbf48b93612926b1f8cd54738d9437b02775fe3342",
+      "label": "P07 eng-e95682cfb8dc05ef result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/input.json",
+      "sha256": "15decbde3c1c09e820950eab20d5fc8e6a7253183a067287642928796430a7fe",
+      "label": "P07 eng-e95682cfb8dc05ef input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/project-assembly.step",
+      "sha256": "0fbd1659e3d01aa7837afc6517e239d1584de343b77fde96d6714a38db63a179",
+      "label": "P07 eng-e95682cfb8dc05ef project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/project-readback.json",
+      "sha256": "88c55b5827145ce75ff9987c0fa312fa2bea53ed2a78400e875bbb38f85d7db4",
+      "label": "P07 eng-e95682cfb8dc05ef project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/project-preview-mesh.json",
+      "sha256": "051848b13c6b0e7bef32907e8f37c1e0ec6e0b1920190f3bbb76e6f143e1bba5",
+      "label": "P07 eng-e95682cfb8dc05ef project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e95682cfb8dc05ef/project-diag-report.json",
+      "sha256": "48a2760d35836f83a161919410f9580114a289a1c43d19ca6cd1fb778613b0d6",
+      "label": "P07 eng-e95682cfb8dc05ef project-diag-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/project-source.zip",
+      "sha256": "2b7e473a6a1cddf8ff5af90440aac6c5e04686c7e3e941c315029895498e454b",
+      "label": "P07 eng-89f31e2e881f8abc project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/result.json",
+      "sha256": "e29afb0998d55cbca85a79f5fe447d4875d85a26bdda3f10feaf190d0e7250e3",
+      "label": "P07 eng-89f31e2e881f8abc result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/input.json",
+      "sha256": "e75dd3c141d38aa71f6bbbfeab3905a189f6f74537e82d2f9f9bed60dd41ad63",
+      "label": "P07 eng-89f31e2e881f8abc input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/project-assembly.step",
+      "sha256": "7d25b3f7dee00e48e87e3210ce67ad3e267f9b30066304bb4a884a5a1bd43ebd",
+      "label": "P07 eng-89f31e2e881f8abc project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/project-readback.json",
+      "sha256": "a6811c0c2b5e54922d665053dd5e26b618a7bbf9853d652e5f4f9d8fc603c275",
+      "label": "P07 eng-89f31e2e881f8abc project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/project-preview-mesh.json",
+      "sha256": "e0742e5af6c940a12af4b3685f0cd0a25365225de851c17a35c576269083a6ca",
+      "label": "P07 eng-89f31e2e881f8abc project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-89f31e2e881f8abc/project-diag-report.json",
+      "sha256": "e0c8e6e5c8738fb374e78b62ffd369777e3b2a5d906e4b93609c3f8b29da20f8",
+      "label": "P07 eng-89f31e2e881f8abc project-diag-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9822abb6dab6f45b/input.json",
+      "sha256": "ab59377250ddb76b22182d03e0d7a9320f046d197c89bbfbcd50bbc1f4c35bba",
+      "label": "P07 eng-9822abb6dab6f45b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-rd-teng-mrp.step",
+      "sha256": "0ce53a35b5d5a106cfe1cc40f9f8e12f380794446710cfa081239ee0aa76d20f",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-source.zip",
+      "sha256": "6f2bf4f57ab3bf47d07231b667315614052ee7b2ba3d527c4dd46947d85679dc",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-cad-mass-report.json",
+      "sha256": "13f42bcb2fa6fcf6c905adefbdfa60e6fdd03e8d328160a9e5d665563da0b29d",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/result.json",
+      "sha256": "0dace63ccaf712e6059d43210237c5405e03e453df2b3f50bb6c53d37d67252c",
+      "label": "P07 eng-92ae5c8ac06e58b3 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/input.json",
+      "sha256": "3d18a5569479dbc5ba3af889580fdbf07aa90a0c969dd54f9be81fcb70d1fe5e",
+      "label": "P07 eng-92ae5c8ac06e58b3 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-rd-teng-buoyancy-base.step",
+      "sha256": "7277d1fea90aee66326045b7d38e4dc476e3bad21b1c9c426fce6c16520a15a3",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-assembly.step",
+      "sha256": "d06642e62c29e703495ade099abf6dc9f7416297f623ccf4085623d719e24924",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-readback.json",
+      "sha256": "293a6792eaf14e83caa8a5e74d497e1c1596ce2f03d21f869396ab612337ac7d",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-92ae5c8ac06e58b3/project-preview-mesh.json",
+      "sha256": "5d60ec26d4977f660c60285401a2bc9a648a3202efd85b280303efa4c19fc93e",
+      "label": "P07 eng-92ae5c8ac06e58b3 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-83068d9f644f90fa/input.json",
+      "sha256": "17ede790de8e63aa5f11d53ff30f42a4c0a39351025d793128d8bc6d512b6d55",
+      "label": "P07 eng-83068d9f644f90fa input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-23ff59b904364b22/input.json",
+      "sha256": "2ae9f2d2466f8f5e136abe39e69e3bda2187e06e5cb653296cbca5f67dafa2ca",
+      "label": "P07 eng-23ff59b904364b22 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-rd-teng-mrp.step",
+      "sha256": "ff8b100c386a0cc97bb574a0602fec91b694ad5150fc2bb96427172c105dafa3",
+      "label": "P07 eng-e668cef0a297072f project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-source.zip",
+      "sha256": "365da025684a514280f5190a0cdd3400c41bde69618fb581eaa1a90233efca5a",
+      "label": "P07 eng-e668cef0a297072f project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-cad-mass-report.json",
+      "sha256": "f5a6e11a22bc3d1ae6c6680d5a7b5adcc4eadb7fdc165d2d9e42947cb905f130",
+      "label": "P07 eng-e668cef0a297072f project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/result.json",
+      "sha256": "0d6a0b33ab563ce491e596d25eaa85400d950d879c8a7c10aff69de7b278296d",
+      "label": "P07 eng-e668cef0a297072f result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/input.json",
+      "sha256": "fae4a5a203023e6578e4d2b66bc8cad6d9f7deb57854940db155d76753fec467",
+      "label": "P07 eng-e668cef0a297072f input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-rd-teng-buoyancy-base.step",
+      "sha256": "a8d05ea684da23fab9b3b8dc94295164d84c16b1f1ef6d3ad7cbfb3d5d2625c0",
+      "label": "P07 eng-e668cef0a297072f project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-assembly.step",
+      "sha256": "be3358861b7e10ccdd763073bfe245aac7be2ba8d440b854c9e5257144beece3",
+      "label": "P07 eng-e668cef0a297072f project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-readback.json",
+      "sha256": "aacccff8e66acb7bfeaa89515da579c29cc92021504df84d4eecee5968ca8b90",
+      "label": "P07 eng-e668cef0a297072f project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e668cef0a297072f/project-preview-mesh.json",
+      "sha256": "e2ea515cdc93c8d8490233075a34ab76f237bf20a6e6f2ae36761a7001341c36",
+      "label": "P07 eng-e668cef0a297072f project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-cd1f7a6b8243647f/input.json",
+      "sha256": "18165245c9c443dd449c83cb842ad36ba56eb167ef4bc22b29a667ca4085713e",
+      "label": "P07 eng-cd1f7a6b8243647f input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-rd-teng-mrp.step",
+      "sha256": "99b71624f9d020d7f2ef215cc384bc997ce0992db7f1b179a4ff9c9ce81d44ee",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-rd-teng-mrp.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-source.zip",
+      "sha256": "6d4e53c4cf2fcbe52979c13b1e4351c8503bd0e06ad5162a50bc6f2cc2852ed8",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-cad-mass-report.json",
+      "sha256": "d98c58e28e7ca2012192eb568362b15779a496c8445f21d4aac402874b69d0b2",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-cad-mass-report.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/result.json",
+      "sha256": "848cd4fd3b577c5b39fbd7b861ab94aab3d8af0a0adc49d1c3d859d96ab701fe",
+      "label": "P07 eng-e70dfaee7caf0cb3 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/input.json",
+      "sha256": "21cd4e3780d85c058872a31bf10210b48a90c44f8432418a592f3e2c6d25e402",
+      "label": "P07 eng-e70dfaee7caf0cb3 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-rd-teng-buoyancy-base.step",
+      "sha256": "9b0e3a309ac0ad12e9f161b2334391e66c7abbd5f6d5b5fc6f5298821996ceee",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-rd-teng-buoyancy-base.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-assembly.step",
+      "sha256": "29cfbdec460e5ce64e67c1d815153709d2be18a30e271dc9035bed2836460298",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-readback.json",
+      "sha256": "438dc82cba5129c9a2a32f703e8227e498641095f16e0ccd0d17541b1d80cb38",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-e70dfaee7caf0cb3/project-preview-mesh.json",
+      "sha256": "18c5dc7bb32b192debb661ac552724ac47f4a1b83c619ce82f267feeedfb7ace",
+      "label": "P07 eng-e70dfaee7caf0cb3 project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-c3c27aff792bae11/input.json",
+      "sha256": "a6eb300464029cf5eaed0fdf6f80e16f676d2566f8448dd9d7793e8d0b101a8e",
+      "label": "P07 eng-c3c27aff792bae11 input.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "TASK.md",
+        "sha256": "53025c6a9045a47ac1aabc1b411a14c93c136c615d0a79f35f8bce089108162d",
+        "bytes": 4141
+      },
+      {
+        "path": "contract.json",
+        "sha256": "e5d730b2e73dda316be396835e67aa66f22b10493a03a791021e0a40c3c740e6",
+        "bytes": 3480
+      },
+      {
+        "path": "continuation-feedback.json",
+        "sha256": "54f0d4a1847e54ed29eefb62d0fc1d330626217c19c6726311403ac7272a9fe6",
+        "bytes": 73645
+      },
+      {
+        "path": "readme.md",
+        "sha256": "5bbb52c9f26f9c001aae5ee75bb6b3d46d3f8924f2f62363a1ce27361b9b3e8e",
+        "bytes": 2875
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "885e2e00b1e68cbc9a34f3b3559f3fadf211cc0372c8d50f339395580e4fd387",
+        "bytes": 16353
+      },
+      {
+        "path": "delivery/REPRODUCE.md",
+        "sha256": "f098300a2be6fe27d68d3276216ca7f07abeeab16e58696994d08e390cfbb9d7",
+        "bytes": 4133
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "bb45ba8da2190f2d8fa60152fb0592f182e280078fa6b36116630f50e87b817a",
+        "bytes": 5490
+      },
+      {
+        "path": "mechanical/readme.md",
+        "sha256": "75be7641340a3508fabb5501760633f09ca5e940d3df8123c3e6d131e05ba51e",
+        "bytes": 13900
+      },
+      {
+        "path": "mechanical/rd-teng/main.py",
+        "sha256": "5bc7bba7f00018804b4acee5d9433601a7a637dcafa2c8aa5bd513cb07bb70f7",
+        "bytes": 28294
+      },
+      {
+        "path": "mechanical/rd-teng/project.json",
+        "sha256": "39dbf0b4117642d2ee7d49e4630dec9b549e93a8ec6d6a9e25e92cb67e95dcc5",
+        "bytes": 536
+      },
+      {
+        "path": "mechanical/rd-teng/assembly.json",
+        "sha256": "86ef167a07d3522f76d1895828f9b7d850de2ed74db8d6cca799e5b959f60820",
+        "bytes": 60167
+      },
+      {
+        "path": "mechanical/rd-teng/make_assembly.py",
+        "sha256": "9afd4140a83337e0ddbe7344fc57bf4e2bb1d410f51c779fe34b608bf3fe055f",
+        "bytes": 18833
+      },
+      {
+        "path": "mechanical/rd-teng/checks/film_gasket_clearance_check.py",
+        "sha256": "1365e9b987a14281bd0527aa09283422c21cb9d465141d2379fdf0555af02c8d",
+        "bytes": 10350
+      },
+      {
+        "path": "mechanical/rd-teng/checks/film_gasket_clearance.json",
+        "sha256": "d9394d1d28e109a95aaa43c13420496d1dcc4970f6e48ed9a2dc8c33b3a39563",
+        "bytes": 5639
+      },
+      {
+        "path": "circuit/readme.md",
+        "sha256": "658a3adb1df8dc9943d32d0ecd852d685bf696c388e26ec5523b14f5a3339a06",
+        "bytes": 5977
+      },
+      {
+        "path": "circuit/rd-teng-load/project.json",
+        "sha256": "3938d46bf279c4d4417a4e18b15337b09c7051becd6867d4c8a08a8c5d859fe5",
+        "bytes": 1361
+      },
+      {
+        "path": "circuit/rd-teng-load/main.cir",
+        "sha256": "d9f22065688a233b7ed67ba367318c8307c0d31c542fa06218af1637263ad7f7",
+        "bytes": 4839
+      },
+      {
+        "path": "circuit/rd-teng-storage/project.json",
+        "sha256": "930eaae8a6d6fa982fcdeea8711faf1d948d5069d812e2049188073d6a1b6969",
+        "bytes": 1422
+      },
+      {
+        "path": "circuit/rd-teng-storage/main.cir",
+        "sha256": "5c132e86118ec54b73e55a16c983b964ffdc031008860fb1ad60de3c860dbdff",
+        "bytes": 3415
+      },
+      {
+        "path": "circuit/rd-teng-charge/project.json",
+        "sha256": "a583b6a4353a589ec6307285e3f679d7d62baf8c2f92f1408e420f0fb72a71d5",
+        "bytes": 1302
+      },
+      {
+        "path": "circuit/rd-teng-charge/main.cir",
+        "sha256": "11d71b9caa715a7fe53831b0c531c9edfb9f6214326a5645a1cacb4fceca503d",
+        "bytes": 3141
+      },
+      {
+        "path": "campaign/reviews/P07/static-layer-readback-20261009T0635Z/result.json",
+        "sha256": "7fbd004bf5d4bd8a206b20bd40be44f0961fb4da53f9245fa3af2cf73d3f4ec1",
+        "bytes": 9459
+      },
+      {
+        "path": "campaign/parallel-20261009/P07/review/result.json",
+        "sha256": "1d9bb63c7d8bb00f0c6cdac1cbbb2c58467249f28355161315c9504ab54f91ab",
+        "bytes": 4498
+      },
+      {
+        "path": "apparatus-reference/b91fc946-a3d63346668c/numeric-eng-6f1245836b114082.json",
+        "sha256": "d95299b3f48b173328e33f7810d0a7f7a5c2708c1a17678b61faf355db8a07e1",
+        "bytes": 4350
+      },
+      {
+        "path": "apparatus-reference/b91fc946-a3d63346668c/numeric-eng-962b606058c628f8.json",
+        "sha256": "64edec5a304ca3a58d6921111aa374e1847adaa01d462f9a76a1b56c719f82c9",
+        "bytes": 2291
+      },
+      {
+        "path": "sources/P07/article-sections.json",
+        "sha256": "2c8479c182b1f87cc2f741da6aa2e88fc7dc1cee3b379d3c26531b1a710719cb",
+        "bytes": 77004
+      },
+      {
+        "path": "sources/P07/article-pages.json",
+        "sha256": "6a34cd6704303d280df1c3a68b7af3bacf0acffb55f1fe877cd991956ad67700",
+        "bytes": 82704
+      },
+      {
+        "path": "sources/P07/supplement-pages.json",
+        "sha256": "dcd459cd1248861ceacab21aa79427fa39a1da26d1df3a9bd15221a48767cdce",
+        "bytes": 107287
+      },
+      {
+        "path": "sources/P07/metadata-europepmc.json",
+        "sha256": "91819a4d3543724b70abf981cf1febce932e70460eb283693f3277b0e90d78a4",
+        "bytes": 8789
+      },
+      {
+        "path": "sources/P07/article.xml",
+        "sha256": "c51ed0e66eeb371fe59a992dafd0e160e4381cf656d4ca39b85bab6211e54316",
+        "bytes": 152251
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/input.json",
+        "sha256": "ed64a0e51326477b1697dc05c9c0b91eaf92b3e5edfb5c4c9beee9f3a79b1e01",
+        "bytes": 72247
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/process.log",
+        "sha256": "e484baeb7dd681e3ec0e80a68d72437e2530acc4f6de16b332d066134bf5a12d",
+        "bytes": 1509
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-assembly.step",
+        "sha256": "dba011e57a71de694660d94fb77fd02d4ca299f6329abe15f7ade0dfad4c25ea",
+        "bytes": 5397881
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-cad-mass-report.json",
+        "sha256": "2176d320193d18bf35e9acc3e516a8e452821377f15941accecf6d5d8ed137e2",
+        "bytes": 11360
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-preview-mesh.json",
+        "sha256": "3604d7d858494a7f812dc25e90f89732ed0628a504dbee1aa5a140ef91d8f162",
+        "bytes": 14346818
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-rd-teng-buoyancy-base.step",
+        "sha256": "05ff2055c0babe9a73f944e127ad13d9cd56bde357729a6d55e4dbed523412e6",
+        "bytes": 103817
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-rd-teng-mrp.step",
+        "sha256": "8021ebedde4eab31ac5e72bd72f3015d8470c0d4c1fdd9546c6c9d78be4c1240",
+        "bytes": 145395
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-readback.json",
+        "sha256": "773b4bd3876dcc20954d58dfa050bfd62519b48ad3287964708a7133a71578ab",
+        "bytes": 595
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/project-source.zip",
+        "sha256": "eeefd3511479ad2a3caa678893b563d12f61125dbcca5cae78b30196c3b09803",
+        "bytes": 9385
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/result.json",
+        "sha256": "c74548014dd870a00b25fdc2388087e3cba9ca72fed12798c7fad757e1b23a17",
+        "bytes": 2099
+      },
+      {
+        "path": "engineering-artifacts/eng-94961db2140e5818/trusted_readback.py",
+        "sha256": "ab390587ccbc5890fc4f8a3f511e93eb9b04c81190fe461ceef3a8b42f6003ab",
+        "bytes": 2064
+      },
+      {
+        "path": "engineering-artifacts/eng-6f1245836b114082/project-numeric-observations.json",
+        "sha256": "445e86ec0e4bdb52d1a1468b5cd9cebfc0043b1008147ba4a60f88e7351c2ba1",
+        "bytes": 4199
+      },
+      {
+        "path": "engineering-artifacts/eng-6f1245836b114082/project-source.zip",
+        "sha256": "498997a420340a32f59f75d23170c7cde500d7c86454cb2a84648839602f9b45",
+        "bytes": 3281
+      },
+      {
+        "path": "engineering-artifacts/eng-6f1245836b114082/result.json",
+        "sha256": "b04de3b100bdf8d1206e95c44525fa2b5790e4b2e11589d88c46c1c507f674c9",
+        "bytes": 2246
+      },
+      {
+        "path": "engineering-artifacts/eng-962b606058c628f8/project-numeric-observations.json",
+        "sha256": "7aa148f8f36acac3e9e086d075005c85a9f81c00bd21e5add058b2b50fd59348",
+        "bytes": 2140
+      },
+      {
+        "path": "engineering-artifacts/eng-962b606058c628f8/project-source.zip",
+        "sha256": "e2166c3bc1c8eed112038de766e5b0648b308b347b1d2001f8358ab1526c4b50",
+        "bytes": 2582
+      },
+      {
+        "path": "engineering-artifacts/eng-962b606058c628f8/result.json",
+        "sha256": "db0cfcb1921d5ed16989f2031f75f84797315c6655df8754aef152ec80a41b21",
+        "bytes": 2187
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-94961db2140e5818",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-962b606058c628f8",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-6f1245836b114082",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-b5dfcacd7402a94a",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-bcc259bff3a1b735",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9d957843dc513c7b",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-bfd5db0b9fc22244",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-06f486ff5839b0f3",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-e95682cfb8dc05ef",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-89f31e2e881f8abc",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9822abb6dab6f45b",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_FILE_MISSING"
+    },
+    {
+      "id": "eng-92ae5c8ac06e58b3",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-83068d9f644f90fa",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-23ff59b904364b22",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-e668cef0a297072f",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-cd1f7a6b8243647f",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-e70dfaee7caf0cb3",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-c3c27aff792bae11",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P07-native-0ea647e957a3-b07e7bdb/continuations/turn-003/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-2d9cbbc98382d1da/trace.jsonl",
+  "trace_sha256": "6c77cd5818a907266bd26bb15359104e89089039ca9249927dbc511232b0a3ad",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

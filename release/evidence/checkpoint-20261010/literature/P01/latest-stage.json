@@ -1,0 +1,1341 @@
+{
+  "paper": "P01",
+  "task": "P01-native-d23fb910ad86-281ef8a5",
+  "stage": "native",
+  "owner": "pi-chat-b47a35e335bc68d4",
+  "evaluation": {
+    "status": "FAIL",
+    "problems": [
+      "RECOVERY_PHASE_NOT_IN_ACTUAL_REQUEST",
+      "EXECUTION_OR_USAGE_UNVERIFIED"
+    ],
+    "native_checks": [
+      {
+        "job_id": "eng-b8233814eba75080",
+        "kind": "firmware-nrf52832-s132",
+        "project_sha256": "e27c66566f441944a19f8275928dd8a50e68db9fab75c29b07b7c2fbd10fb142",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "4fe0be4e7b32b9e9326d9fa2feec0249f6cdbf8f29622a5b78f4f7955c8e3500",
+        "native_readback": {
+          "allocated_sections": [
+            {
+              "address": 155648,
+              "bytes": 31380,
+              "name": ".text"
+            },
+            {
+              "address": 187028,
+              "bytes": 8,
+              "name": ".sdh_soc_observers"
+            },
+            {
+              "address": 187036,
+              "bytes": 64,
+              "name": ".sdh_ble_observers"
+            },
+            {
+              "address": 187100,
+              "bytes": 8,
+              "name": ".sdh_state_observers"
+            },
+            {
+              "address": 187108,
+              "bytes": 16,
+              "name": ".sdh_stack_observers"
+            },
+            {
+              "address": 187124,
+              "bytes": 20,
+              "name": ".nrf_balloc"
+            },
+            {
+              "address": 187144,
+              "bytes": 136,
+              "name": ".log_const_data"
+            },
+            {
+              "address": 187280,
+              "bytes": 16,
+              "name": ".log_backends"
+            },
+            {
+              "address": 187296,
+              "bytes": 8,
+              "name": ".ARM.exidx"
+            },
+            {
+              "address": 536881880,
+              "bytes": 352,
+              "name": ".data"
+            },
+            {
+              "address": 536882232,
+              "bytes": 4976,
+              "name": ".bss"
+            }
+          ],
+          "application_flash_origin": 155648,
+          "application_ram_origin": 536881880,
+          "boot_tested": false,
+          "flash_bytes": 32008,
+          "flashed": false,
+          "initial_sp": 536936448,
+          "load_format": "Intel HEX only; ELF PT_LOAD header-alignment prefix is not qualified for direct flashing",
+          "memory_fit": true,
+          "pin_binding_verified": false,
+          "power_model_equivalence_verified": false,
+          "radio_verified": false,
+          "ram_static_bytes": 5328,
+          "reserved_heap_bytes": 8192,
+          "reserved_stack_bytes": 8192,
+          "reset_vector": 156349,
+          "scope": "Native SDK target build/map only",
+          "sdk": "17.1.0_ddde560",
+          "softdevice": "S132-7.2.0",
+          "target": "nRF52832-QFAA"
+        },
+        "functional_passed": false,
+        "participant_project_path": "project-fw-s132/project.json",
+        "project_manifest": {
+          "entrypoint": "main.c",
+          "files": [
+            "main.c",
+            "app_policy.c",
+            "app_policy.h",
+            "ad7156_nrf.c",
+            "ad7156_nrf.h",
+            "sdk_config.h"
+          ],
+          "interfaces": {
+            "board": "PCA10040",
+            "clock_hz": 64000000,
+            "events": [
+              "adv_5s",
+              "conn_bound_epoch",
+              "sample_5s",
+              "notify_2byte_le"
+            ],
+            "note": "Adapted from the official Nordic ble_app_uart example (SDK 17.1.0 / S132 7.2.0). Real I2C via the official nrf_drv_twi master; real NUS notifications; async epoch/request-id binding in app_policy.c. MCU identity conflict (paper Fig.3 STM32WB15CC vs Methods nrf52832) is NOT resolved: this is a declared nRF52832 reconstruction. BLE UUID/frame protocol not published -> declared reconstruction. Target build success is NOT evidence of radio, I2C device/bus, GPIO or power.",
+            "pins": {
+              "twi_scl": 27,
+              "twi_scl_note": "NEW dev-board assumption (PCA10040 Arduino header). The original pin mapping was NOT published; this is NOT the original mapping.",
+              "twi_sda": 26,
+              "uart_cts": 7,
+              "uart_rts": 5,
+              "uart_rx": 8,
+              "uart_tx": 6
+            },
+            "sdk": "17.1.0_ddde560",
+            "softdevice": "S132-7.2.0",
+            "target": "nRF52832-QFAA",
+            "units": "SI"
+          },
+          "kind": "firmware-nrf52832-s132",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project-fw-s132/ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+          "project-fw-s132/ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+          "project-fw-s132/app_policy.c": "a942c8301d1eb95126987721ee7777748f43cc2e474c509d6f668dc6c64119e3",
+          "project-fw-s132/app_policy.h": "c05c98beb8c42d60f48470bf628c9cc1c589e112fc2d1ce8d9cd9b08d37c3188",
+          "project-fw-s132/main.c": "c421f94e687a6b0a1ba4e4f50d08a129f4109a8b519653b4881ea187d4aa12c0",
+          "project-fw-s132/sdk_config.h": "e41cdb36dbb8c5a1bc8b9bc7684a6af583ce8577fdd5aa2ce1b237fa5a6c2f79"
+        }
+      },
+      {
+        "job_id": "eng-40c03b2d6cda1aa9",
+        "kind": "spice",
+        "project_sha256": "8c8b97662bd895a669188c73e3575339ebfe660450d3715d7c6c336c7641a215",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "4fe0be4e7b32b9e9326d9fa2feec0249f6cdbf8f29622a5b78f4f7955c8e3500",
+        "native_readback": {
+          "finite_values": true,
+          "points": 91508,
+          "raw_sha256": "54b10c3883170f7912dbdcfc937413301a27f3e9b3cca44048d78a12ed373b35",
+          "scope": "Solver output integrity only; no circuit acceptance or calibration.",
+          "variables": 3
+        },
+        "functional_passed": false,
+        "participant_project_path": "project-spice/project.json",
+        "project_manifest": {
+          "entrypoint": "sece_storage.cir",
+          "files": [
+            "sece_storage.cir"
+          ],
+          "interfaces": {
+            "units": "SI"
+          },
+          "kind": "spice",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project-spice/sece_storage.cir": "fb3748aba97ed4c6c9ff869d703bb8fdacf4567fff9b279f65a4856bdefa199b"
+        }
+      },
+      {
+        "job_id": "eng-d6b2ca501db8e7fa",
+        "kind": "cadquery",
+        "project_sha256": "cf4da368ef658448a0d2d575a459398a1055860ba3485f8bbb21d808e107ec9e",
+        "assembly_revision": 1,
+        "assembly_physical_hash": "4fe0be4e7b32b9e9326d9fa2feec0249f6cdbf8f29622a5b78f4f7955c8e3500",
+        "native_readback": {
+          "bounds_mm": [
+            168.0,
+            187.5,
+            20.0
+          ],
+          "native_valid": true,
+          "solid_count": 38,
+          "volume_mm3": 73516.11127889347
+        },
+        "functional_passed": false,
+        "participant_project_path": "project-cad/project.json",
+        "project_manifest": {
+          "entrypoint": "teng_assembly.py",
+          "files": [
+            "teng_assembly.py"
+          ],
+          "interfaces": {
+            "units": "mm"
+          },
+          "kind": "cadquery",
+          "schema_version": "bf-engineering-project-v1"
+        },
+        "project_source_sha256": {
+          "project-cad/teng_assembly.py": "a8aed3bb26235802be261088a015228117e9a06b441ceb81911b9496a212c46b"
+        }
+      }
+    ],
+    "scope": "Exact native file/build readback only; source semantics, functional checks and complete product acceptance remain separate.",
+    "full_product_passed": false,
+    "physical_verified": false
+  },
+  "process_status": "FAILED",
+  "model_calls": 480,
+  "work_phase": "eda",
+  "phase_task_sha256": "7edddbae3d3d41a1b1cb6715216b17bea8b54670286d66b56c9d232581f7c779",
+  "phase_in_actual_request": false,
+  "execution": {
+    "status": "FAILED",
+    "error": "PI_PROCESS_FAILED"
+  },
+  "continuation": true,
+  "new_model_calls": 0,
+  "budget": {
+    "owner": "pi-chat-b47a35e335bc68d4",
+    "cap_usd": 30,
+    "liability_usd": 9.042382200000008,
+    "remaining_usd": 20.957617799999994,
+    "unknown_requests": [],
+    "exhausted": false
+  },
+  "method_identity": "44f8fdf6dc4fdde94324ba4f2ea820b4acb98cf20020d785930592a514a99576",
+  "method_in_actual_request": false,
+  "artifacts": [
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/native-report.json",
+      "sha256": "bba733a3c0c381645b9626f076a7c5c6d0103ccbdb5daedcc2a7ed5d4266f6c2",
+      "label": "P01 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/delivery/manifest.json",
+      "sha256": "424064933c764d9680ac8d555b3d91d7b3231c6592b7c849a41e372877c01b5a",
+      "label": "P01 delivery/manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/delivery/UNVERIFIED.md",
+      "sha256": "1f31b73ac8c5d3fe9274611c659ebef5802fe416ab7234b99d1990795176cb11",
+      "label": "P01 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/assembly.json",
+      "sha256": "5ec53e96fb4be72b7b6b4c5c76f77325845332381ec2051a51fc246024c5c61d",
+      "label": "P01 assembly.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/docs/BOM-interfaces.md",
+      "sha256": "4604cda89eea70789c72284e1de9892a875510d19b5e62c6e80153110e047ae2",
+      "label": "P01 docs/BOM-interfaces.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/docs/references.md",
+      "sha256": "8e3ea5ede2b2ecf4c566d1f345ff90eae6cc445bf185cb699a012c408e411ad3",
+      "label": "P01 docs/references.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/docs/source-map.json",
+      "sha256": "8d6440ff5bf0c8659b47688f1340d4153316eacf219c27105297639ee3522113",
+      "label": "P01 docs/source-map.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/delivery/UNVERIFIED.md",
+      "sha256": "1f31b73ac8c5d3fe9274611c659ebef5802fe416ab7234b99d1990795176cb11",
+      "label": "P01 delivery/UNVERIFIED.md",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/delivery/firmware-evidence.json",
+      "sha256": "8bd43c5d73e38e329dc01e683426336213ca17b533d87e553921ccc42d083e9e",
+      "label": "P01 delivery/firmware-evidence.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/delivery/fault-check-003-closure.json",
+      "sha256": "7fcb276bceb05199757b9038dd08e8b5eb9bf6afb91c8d311f45bc6ae39f3e4d",
+      "label": "P01 delivery/fault-check-003-closure.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native-report.json",
+      "sha256": "bba733a3c0c381645b9626f076a7c5c6d0103ccbdb5daedcc2a7ed5d4266f6c2",
+      "label": "P01 native-report.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-cad/params.json",
+      "sha256": "5a4b05e219dfbf84b155dd7f41ff6652b863ac2dfbadb9dbd07f66dd99f13c81",
+      "label": "P01 project-cad/params.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-cad/project.json",
+      "sha256": "fbaf09c4c07ed8cf0f5955f114f89d4fe7a936a69e15c583107677271d101f29",
+      "label": "P01 project-cad/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-cad/teng_assembly.py",
+      "sha256": "a8aed3bb26235802be261088a015228117e9a06b441ceb81911b9496a212c46b",
+      "label": "P01 project-cad/teng_assembly.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/assembly.step",
+      "sha256": "2092e13a1a9a63d6642903081e57b6b877f2d36041456849b44b7387c3f99cbc",
+      "label": "P01 native/cad/assembly.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/assembly.stl",
+      "sha256": "ab64bd80ab608c6dc49455cd2efbaf66529deaffc7aae57ed604218c6d122c62",
+      "label": "P01 native/cad/assembly.stl",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/cad_summary.json",
+      "sha256": "4bf41d8e16d3cb5630ef6dd7ab0c73e3f718178974b5de1f1ce879e5e4eb90b8",
+      "label": "P01 native/cad/cad_summary.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/moving_plate.step",
+      "sha256": "fb9439db24e02ff64a33e7a19467f2f10de0f14181cca2ab6ea1b2c232a02b46",
+      "label": "P01 native/cad/moving_plate.step",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/readback.json",
+      "sha256": "3ed6642c8facdb77500cb46b6a317130f97f2d3ecb0facc7a6971ea7462ded7e",
+      "label": "P01 native/cad/readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/cad/result.json",
+      "sha256": "080c5c362d8c0a4af02c071c2dc18e4dc6dc15b495485fe541c998652791e685",
+      "label": "P01 native/cad/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-spice/model-manifest.json",
+      "sha256": "5bac9ab740be7f683f83bc36be02bfdb5390e2badd916441dca8477e22f99740",
+      "label": "P01 project-spice/model-manifest.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-spice/project.json",
+      "sha256": "902f675120b6e48f9aeaf1a20b4fd5c5c0aeb33dd22fca18804edf20cd964c59",
+      "label": "P01 project-spice/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-spice/sece_storage.cir",
+      "sha256": "fb3748aba97ed4c6c9ff869d703bb8fdacf4567fff9b279f65a4856bdefa199b",
+      "label": "P01 project-spice/sece_storage.cir",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/spice/read_values.json",
+      "sha256": "0764e2b73c2fd44bdb8133c186eec7bb2e81e7f8ff786b58af5c10e1e2769215",
+      "label": "P01 native/spice/read_values.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/spice/result.json",
+      "sha256": "eda998bb2a6fa7423415710134eb208e3cfa261d182b391d7086cc2ed962b11e",
+      "label": "P01 native/spice/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/spice/trace.raw",
+      "sha256": "54b10c3883170f7912dbdcfc937413301a27f3e9b3cca44048d78a12ed373b35",
+      "label": "P01 native/spice/trace.raw",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/spice/values.csv",
+      "sha256": "0407d7ee22ad112b58e64f9b0e4ad9f7c76a5832366fc1836184c941b892bb73",
+      "label": "P01 native/spice/values.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/ad7156_nrf.c",
+      "sha256": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+      "label": "P01 project-fw-s132/ad7156_nrf.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/ad7156_nrf.h",
+      "sha256": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+      "label": "P01 project-fw-s132/ad7156_nrf.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/app_policy.c",
+      "sha256": "a942c8301d1eb95126987721ee7777748f43cc2e474c509d6f668dc6c64119e3",
+      "label": "P01 project-fw-s132/app_policy.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/app_policy.h",
+      "sha256": "c05c98beb8c42d60f48470bf628c9cc1c589e112fc2d1ce8d9cd9b08d37c3188",
+      "label": "P01 project-fw-s132/app_policy.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/main.c",
+      "sha256": "c421f94e687a6b0a1ba4e4f50d08a129f4109a8b519653b4881ea187d4aa12c0",
+      "label": "P01 project-fw-s132/main.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/project.json",
+      "sha256": "33742a093e6bdb4087bc0f16b8b026b49db2a03e997b1281df0b7c72472132f0",
+      "label": "P01 project-fw-s132/project.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/project-fw-s132/sdk_config.h",
+      "sha256": "e41cdb36dbb8c5a1bc8b9bc7684a6af583ce8577fdd5aa2ce1b237fa5a6c2f79",
+      "label": "P01 project-fw-s132/sdk_config.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-firmware.elf",
+      "sha256": "fdb445fa53878cfb738fb81f704b209d371405ea748c4e05b1c7dcfd029f2c6c",
+      "label": "P01 native/firmware-s132/project-firmware.elf",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-firmware.hex",
+      "sha256": "83bddcec8332d69f285113a6be982503912acdafc6171c4a68121cf7408eb930",
+      "label": "P01 native/firmware-s132/project-firmware.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-firmware.bin",
+      "sha256": "89206e738bc64b2a11682b2b45da22ec32cb8bc1faa2979c3543b9d843837f6d",
+      "label": "P01 native/firmware-s132/project-firmware.bin",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-firmware.map",
+      "sha256": "51bbc6219e53096b3390f1355bbddcfd8710cbc7855b52d464a4f0aa5e5a7fdc",
+      "label": "P01 native/firmware-s132/project-firmware.map",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-combined.hex",
+      "sha256": "d2691c6c1f69c061227a69b03e44f56ca4fecfe11fb9993ecdb8bfe84fa359a3",
+      "label": "P01 native/firmware-s132/project-combined.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-softdevice.hex",
+      "sha256": "b5b345052d160ddbc5dcf7aacfe0da6ecba52902cceaf91bae0b7a23955356fa",
+      "label": "P01 native/firmware-s132/project-softdevice.hex",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/project-readback.json",
+      "sha256": "16cfef2671eb540e13ceabcb5b062c276ecb948f9696bdcbf254181a0bd69e2a",
+      "label": "P01 native/firmware-s132/project-readback.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/native/firmware-s132/result.json",
+      "sha256": "4439e15a8605feaa1c586c2b84d02c8e7705ba85e10f124488202398829f3ae6",
+      "label": "P01 native/firmware-s132/result.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/host_test.c",
+      "sha256": "c50454d3e610b263d6af7c2459a93ceb7cdf95a58f1d90020c1ca97bc19cc917",
+      "label": "P01 host-test-s132/host_test.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/build.sh",
+      "sha256": "40e2c69e87c22094e5a252ed95c976bf469d0308b54a991527fe85c72747842b",
+      "label": "P01 host-test-s132/build.sh",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/run.sh",
+      "sha256": "91598aaa0f17973e3b3bddc8f53b3a59397c33d4373cf7bf5c7fb3debe8f5f8e",
+      "label": "P01 host-test-s132/run.sh",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/out/build.log",
+      "sha256": "8db7fcf73adc83f6c5317dedcd95aca96f78e08d44d67379d948789cf0734551",
+      "label": "P01 host-test-s132/out/build.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/out/run.log",
+      "sha256": "0629d7060a69150d19d7cfcc16b912513cdcf3abefa1f98d86844dc752ddd4a4",
+      "label": "P01 host-test-s132/out/run.log",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/out/host-matrix.json",
+      "sha256": "84b6b496262d2b0c406cce21d6885dc5c4208b3ed41bbf64e688fa1d39cfe0ab",
+      "label": "P01 host-test-s132/out/host-matrix.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/shim/app_error.h",
+      "sha256": "77d861076994f41a2eb550049fbdeba917fb6b6792e70297c2d28050ab2c8ff9",
+      "label": "P01 host-test-s132/shim/app_error.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/shim/app_util_platform.h",
+      "sha256": "64e079e8ef94bd5c032423521c761b39fd06cb43b8edccfb02523f17a20c6b1e",
+      "label": "P01 host-test-s132/shim/app_util_platform.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/shim/nrf_delay.h",
+      "sha256": "f319086af47f1738d0abf7579632a4d0507aec26c9a79301f4cbb960e7c9fd54",
+      "label": "P01 host-test-s132/shim/nrf_delay.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/shim/nrf_drv_twi.h",
+      "sha256": "b8224d2193ef0b1b76bcf4969afb15a614976fb943ef3ab1eb8515eacd19162b",
+      "label": "P01 host-test-s132/shim/nrf_drv_twi.h",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/host-test-s132/shim/twi_model.c",
+      "sha256": "533479c40c5a70f5a08b382a2ee2e932bcdd27420a2dbfcdbbbdd10f845cfa02",
+      "label": "P01 host-test-s132/shim/twi_model.c",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/frame.py",
+      "sha256": "ed8d27ceda967cd2af6b919ee54911380bc21abdeafb2ac925c188b669fa471e",
+      "label": "P01 receiver/frame.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/pipeline.py",
+      "sha256": "d23571dcbd646a2e38f32687fd1eca9ac9bd1adcb6f65fc7908b61a6497897da",
+      "label": "P01 receiver/pipeline.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/receiver_gui.py",
+      "sha256": "2c267a10cd06341816ca9b1600abe9b7bd37755dac5313223b4048310e607358",
+      "label": "P01 receiver/receiver_gui.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/test_frame.py",
+      "sha256": "f0ff803835f7ec0bee69284a60cf1285e95db90e7c5e93353af01e1a0b7ef9a7",
+      "label": "P01 receiver/test_frame.py",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/out/frame-tests.json",
+      "sha256": "3738334455daff5fccc8422b39333ada8536c6911029c84c30dddaf8a1beee10",
+      "label": "P01 receiver/out/frame-tests.json",
+      "actor": "Pi"
+    },
+    {
+      "path": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/participant-files/receiver/out/replay-samples.csv",
+      "sha256": "c471212771db9c3c5e0444fca447f66ce4565908ea0f8994387bdbcfab5650fb",
+      "label": "P01 receiver/out/replay-samples.csv",
+      "actor": "Pi"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-source.zip",
+      "sha256": "7f2c1ae305fd6ff5ea5734fc2ad2fff364c3a2d9a9b3590b82c55fdf238e57d4",
+      "label": "P01 eng-b8233814eba75080 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/result.json",
+      "sha256": "4439e15a8605feaa1c586c2b84d02c8e7705ba85e10f124488202398829f3ae6",
+      "label": "P01 eng-b8233814eba75080 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/input.json",
+      "sha256": "79ad62dc7050431904e4306c670f12acb144aa06b87e4f89eaf4bb20dee88ce7",
+      "label": "P01 eng-b8233814eba75080 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-firmware.bin",
+      "sha256": "89206e738bc64b2a11682b2b45da22ec32cb8bc1faa2979c3543b9d843837f6d",
+      "label": "P01 eng-b8233814eba75080 project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-firmware.hex",
+      "sha256": "83bddcec8332d69f285113a6be982503912acdafc6171c4a68121cf7408eb930",
+      "label": "P01 eng-b8233814eba75080 project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-firmware.elf",
+      "sha256": "fdb445fa53878cfb738fb81f704b209d371405ea748c4e05b1c7dcfd029f2c6c",
+      "label": "P01 eng-b8233814eba75080 project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-vendor-license.txt",
+      "sha256": "83c33cf1ff4ebfecea51eceb887c31151b8affdd322e22d369628d6cc7ffcb0d",
+      "label": "P01 eng-b8233814eba75080 project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-softdevice.hex",
+      "sha256": "b5b345052d160ddbc5dcf7aacfe0da6ecba52902cceaf91bae0b7a23955356fa",
+      "label": "P01 eng-b8233814eba75080 project-softdevice.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-combined.hex",
+      "sha256": "d2691c6c1f69c061227a69b03e44f56ca4fecfe11fb9993ecdb8bfe84fa359a3",
+      "label": "P01 eng-b8233814eba75080 project-combined.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-readback.json",
+      "sha256": "16cfef2671eb540e13ceabcb5b062c276ecb948f9696bdcbf254181a0bd69e2a",
+      "label": "P01 eng-b8233814eba75080 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-b8233814eba75080/project-firmware.map",
+      "sha256": "51bbc6219e53096b3390f1355bbddcfd8710cbc7855b52d464a4f0aa5e5a7fdc",
+      "label": "P01 eng-b8233814eba75080 project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-9af7c6232b5b01b4/input.json",
+      "sha256": "b8cdf9a9598c01b2058aa41796c18fe9cc0116a66e0668c94a5ef3a150cb0901",
+      "label": "P01 eng-9af7c6232b5b01b4 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-source.zip",
+      "sha256": "adca08446f56681ac277131d7c375f9b1ab8667f4bdfc08d6e86b8093ede6b6d",
+      "label": "P01 eng-103f29abad308d3b project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/result.json",
+      "sha256": "394d36eed54070cea381dc3ed4081825057a0b9f765889d11627232ff4fb88b6",
+      "label": "P01 eng-103f29abad308d3b result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/input.json",
+      "sha256": "87f8d8dac5f26b50df9f3db4ef1732fc5f0bd8745f9180a8bf40ee5430d3b9d4",
+      "label": "P01 eng-103f29abad308d3b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-firmware.bin",
+      "sha256": "57728f1068718d06a56159b8cbf051736d18bbdf0afcae5604e96ff2012a2cbe",
+      "label": "P01 eng-103f29abad308d3b project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-firmware.hex",
+      "sha256": "0d6737996d0bf6b27472a745e1ef7995f6aeb667fe114bc5d856bb31e29cd28e",
+      "label": "P01 eng-103f29abad308d3b project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-firmware.elf",
+      "sha256": "a383a9f059f73a94b8282b6e0d5e492bbc2fd458e203357865f02878d8e0f0a4",
+      "label": "P01 eng-103f29abad308d3b project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-vendor-license.txt",
+      "sha256": "83c33cf1ff4ebfecea51eceb887c31151b8affdd322e22d369628d6cc7ffcb0d",
+      "label": "P01 eng-103f29abad308d3b project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-softdevice.hex",
+      "sha256": "b5b345052d160ddbc5dcf7aacfe0da6ecba52902cceaf91bae0b7a23955356fa",
+      "label": "P01 eng-103f29abad308d3b project-softdevice.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-combined.hex",
+      "sha256": "49cce4a3ff8d1972b92945bd0360737b5a40d23f4807b90c79ba8c6488588e17",
+      "label": "P01 eng-103f29abad308d3b project-combined.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-readback.json",
+      "sha256": "39ab640f64aadb02d5312b9c950e255659de946014d79ae63e00f31fd55e9948",
+      "label": "P01 eng-103f29abad308d3b project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-103f29abad308d3b/project-firmware.map",
+      "sha256": "ff9adf1bbf756d3948e29a0b3e420ff096712eaa625b5719c7a5c96ea07d4b4f",
+      "label": "P01 eng-103f29abad308d3b project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-source.zip",
+      "sha256": "60a2b6b28066564e835d127754196109ba343e86651641a283ddeacef3e7680f",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/result.json",
+      "sha256": "ed3c251f1d293335a8ed550f6a1250b1098497e11cc7dacfd78192372fcb41a4",
+      "label": "P01 eng-16cb4ad39a4f7f51 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/input.json",
+      "sha256": "1c0d0c3ab6db42f38b482f39005fa20e6128d28f03e0dab96e152dad690d9c1f",
+      "label": "P01 eng-16cb4ad39a4f7f51 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-firmware.bin",
+      "sha256": "db448330fd65d1f08d30d85c0f1b9f9e1af4f0dd96075fffcab33e1c7a01cd67",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-firmware.hex",
+      "sha256": "5764d5568f7a9afa719e70abba7dca0c8826a3a9cb674aa2d3f9a29e0465e872",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-firmware.elf",
+      "sha256": "c7b7944214ba251f07bf83b7f2155c6f94fac960fb7d2dfb12c075e639e04590",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-vendor-license.txt",
+      "sha256": "83c33cf1ff4ebfecea51eceb887c31151b8affdd322e22d369628d6cc7ffcb0d",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-vendor-license.txt",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-softdevice.hex",
+      "sha256": "b5b345052d160ddbc5dcf7aacfe0da6ecba52902cceaf91bae0b7a23955356fa",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-softdevice.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-combined.hex",
+      "sha256": "01eb09eef6a3de3ccb76fb594f0ba2d7a9998301eb3a0254c035b0753bde38b3",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-combined.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-readback.json",
+      "sha256": "a91c917633d2621d84f421a2bef333f086faff54d5539feae0bbee7bd67db738",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-16cb4ad39a4f7f51/project-firmware.map",
+      "sha256": "721566af1ec4c7b7d43602715a21c73cd13887ac67dea843ad2d4984c64b3cc0",
+      "label": "P01 eng-16cb4ad39a4f7f51 project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-ff9305b6e662228a/input.json",
+      "sha256": "e4364c71874602e8084453ecbd1e2531d574829383c06bc948c474c45e1e176e",
+      "label": "P01 eng-ff9305b6e662228a input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-53a313ef0c4ec58b/input.json",
+      "sha256": "77c3b419ddc7d3af2fffe6bb77820031ebcd883db77632a421e296c29d78c75e",
+      "label": "P01 eng-53a313ef0c4ec58b input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-source.zip",
+      "sha256": "2caf240b6ed35786469dfdb529cf8ea3ca908f0787f0772eb112f4d45e8e2055",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/result.json",
+      "sha256": "1c05fea8766a1f304bbd69e80c920168d81ffd41a7a75dde1d0a4458b3b8ddc7",
+      "label": "P01 eng-dcbd2b0cbcc1140f result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/input.json",
+      "sha256": "15cf577ee1c75b147773f5fc5257c0e7a535c05f3d8e989d53d223bd257bf14a",
+      "label": "P01 eng-dcbd2b0cbcc1140f input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-firmware.bin",
+      "sha256": "fbd91ef63b3306a272cb84aab3aabc9959fbf2f7c12c90b1b5af9374b326f0f3",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-firmware.bin",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-firmware.hex",
+      "sha256": "e41416d0d87af777c217baf01c948832a7094a2d2026fdd84deb70e8415fca72",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-firmware.hex",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-firmware.elf",
+      "sha256": "d51786196448130cd9fd7c7153b44b41c4a3a23506761da0e9e2be9b57faae18",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-firmware.elf",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-readback.json",
+      "sha256": "27be4fff1d21deda1fb6d0d8c2a2923a8d6e496bf9d27161b02f5dc61fbd6896",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-dcbd2b0cbcc1140f/project-firmware.map",
+      "sha256": "ff6a97250828b934d8fa3e323574643892afee7931614cf7402cffdd1dba5d01",
+      "label": "P01 eng-dcbd2b0cbcc1140f project-firmware.map",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-40c03b2d6cda1aa9/project-source.zip",
+      "sha256": "8412dc91229b8f530920d8afc654a933e1076b4c5caee626501dfd332a44efc7",
+      "label": "P01 eng-40c03b2d6cda1aa9 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-40c03b2d6cda1aa9/result.json",
+      "sha256": "eda998bb2a6fa7423415710134eb208e3cfa261d182b391d7086cc2ed962b11e",
+      "label": "P01 eng-40c03b2d6cda1aa9 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-40c03b2d6cda1aa9/input.json",
+      "sha256": "a833080ca5dc8beb9e75fddc62c28d12713f9e2cd47763e28176aa4b5c96ce9e",
+      "label": "P01 eng-40c03b2d6cda1aa9 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-40c03b2d6cda1aa9/project-trace.raw",
+      "sha256": "54b10c3883170f7912dbdcfc937413301a27f3e9b3cca44048d78a12ed373b35",
+      "label": "P01 eng-40c03b2d6cda1aa9 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-000b67d80fa2dd02/project-source.zip",
+      "sha256": "9e125e5c0304b67bdf822c1a6e67b97b36f1a974b2144394e80c9a90c0d94831",
+      "label": "P01 eng-000b67d80fa2dd02 project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-000b67d80fa2dd02/result.json",
+      "sha256": "a3ee1e8b3e6a414b2e3d8b1e44090c4a6df8e21fc0a72d979bd83a9d567184e4",
+      "label": "P01 eng-000b67d80fa2dd02 result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-000b67d80fa2dd02/input.json",
+      "sha256": "7c03e46ef18842be3fc023abcc8e6f3de8f3529dad592da36106480d9afcc780",
+      "label": "P01 eng-000b67d80fa2dd02 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-000b67d80fa2dd02/project-trace.raw",
+      "sha256": "5ae62cf1b788eb0efac482ef71005a4daba3b666c5bd04b17b2da23619853b50",
+      "label": "P01 eng-000b67d80fa2dd02 project-trace.raw",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d84d9f23fb1c0b34/input.json",
+      "sha256": "00950885f2d62752f3f93cc6d416baea091ce774f4c31e3a1678feff5e671029",
+      "label": "P01 eng-d84d9f23fb1c0b34 input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-source.zip",
+      "sha256": "108f77c87d75461cd063ee2e0b8efa4bda4edf04312330a7458293a1c5514aa2",
+      "label": "P01 eng-d6b2ca501db8e7fa project-source.zip",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-cad_summary.json",
+      "sha256": "4bf41d8e16d3cb5630ef6dd7ab0c73e3f718178974b5de1f1ce879e5e4eb90b8",
+      "label": "P01 eng-d6b2ca501db8e7fa project-cad_summary.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-moving_plate.step",
+      "sha256": "fb9439db24e02ff64a33e7a19467f2f10de0f14181cca2ab6ea1b2c232a02b46",
+      "label": "P01 eng-d6b2ca501db8e7fa project-moving_plate.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/result.json",
+      "sha256": "080c5c362d8c0a4af02c071c2dc18e4dc6dc15b495485fe541c998652791e685",
+      "label": "P01 eng-d6b2ca501db8e7fa result.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/input.json",
+      "sha256": "676f05552255f4406c59ca09821591d8c0c1bcdb70cbdc30c064c769470ef546",
+      "label": "P01 eng-d6b2ca501db8e7fa input.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-assembly.step",
+      "sha256": "2092e13a1a9a63d6642903081e57b6b877f2d36041456849b44b7387c3f99cbc",
+      "label": "P01 eng-d6b2ca501db8e7fa project-assembly.step",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-readback.json",
+      "sha256": "3ed6642c8facdb77500cb46b6a317130f97f2d3ecb0facc7a6971ea7462ded7e",
+      "label": "P01 eng-d6b2ca501db8e7fa project-readback.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-d6b2ca501db8e7fa/project-preview-mesh.json",
+      "sha256": "f8a560d512130f1b78a8310a8ad75edd1b538961e3148e959f845024d6709ef0",
+      "label": "P01 eng-d6b2ca501db8e7fa project-preview-mesh.json",
+      "actor": "trusted-native-worker"
+    },
+    {
+      "path": "runtime/engineering/eng-4af5202e8537155a/input.json",
+      "sha256": "9f16a13a9f797fb197947d4913ce74b9c2d4d37c062e58a9c106e580ee668d95",
+      "label": "P01 eng-4af5202e8537155a input.json",
+      "actor": "trusted-native-worker"
+    }
+  ],
+  "delivery_integrity": {
+    "schema_version": "bf-paper-native-delivery-integrity-v2",
+    "status": "PASS",
+    "problems": [],
+    "verified_files": [
+      {
+        "path": "assembly.json",
+        "sha256": "5ec53e96fb4be72b7b6b4c5c76f77325845332381ec2051a51fc246024c5c61d",
+        "bytes": 11869
+      },
+      {
+        "path": "docs/BOM-interfaces.md",
+        "sha256": "4604cda89eea70789c72284e1de9892a875510d19b5e62c6e80153110e047ae2",
+        "bytes": 8283
+      },
+      {
+        "path": "docs/references.md",
+        "sha256": "8e3ea5ede2b2ecf4c566d1f345ff90eae6cc445bf185cb699a012c408e411ad3",
+        "bytes": 2280
+      },
+      {
+        "path": "docs/source-map.json",
+        "sha256": "8d6440ff5bf0c8659b47688f1340d4153316eacf219c27105297639ee3522113",
+        "bytes": 9657
+      },
+      {
+        "path": "delivery/UNVERIFIED.md",
+        "sha256": "1f31b73ac8c5d3fe9274611c659ebef5802fe416ab7234b99d1990795176cb11",
+        "bytes": 5822
+      },
+      {
+        "path": "delivery/firmware-evidence.json",
+        "sha256": "8bd43c5d73e38e329dc01e683426336213ca17b533d87e553921ccc42d083e9e",
+        "bytes": 10330
+      },
+      {
+        "path": "delivery/fault-check-003-closure.json",
+        "sha256": "7fcb276bceb05199757b9038dd08e8b5eb9bf6afb91c8d311f45bc6ae39f3e4d",
+        "bytes": 5251
+      },
+      {
+        "path": "native-report.json",
+        "sha256": "bba733a3c0c381645b9626f076a7c5c6d0103ccbdb5daedcc2a7ed5d4266f6c2",
+        "bytes": 7006
+      },
+      {
+        "path": "project-cad/params.json",
+        "sha256": "5a4b05e219dfbf84b155dd7f41ff6652b863ac2dfbadb9dbd07f66dd99f13c81",
+        "bytes": 3249
+      },
+      {
+        "path": "project-cad/project.json",
+        "sha256": "fbaf09c4c07ed8cf0f5955f114f89d4fe7a936a69e15c583107677271d101f29",
+        "bytes": 176
+      },
+      {
+        "path": "project-cad/teng_assembly.py",
+        "sha256": "a8aed3bb26235802be261088a015228117e9a06b441ceb81911b9496a212c46b",
+        "bytes": 6641
+      },
+      {
+        "path": "native/cad/assembly.step",
+        "sha256": "2092e13a1a9a63d6642903081e57b6b877f2d36041456849b44b7387c3f99cbc",
+        "bytes": 651341
+      },
+      {
+        "path": "native/cad/assembly.stl",
+        "sha256": "ab64bd80ab608c6dc49455cd2efbaf66529deaffc7aae57ed604218c6d122c62",
+        "bytes": 1187284
+      },
+      {
+        "path": "native/cad/cad_summary.json",
+        "sha256": "4bf41d8e16d3cb5630ef6dd7ab0c73e3f718178974b5de1f1ce879e5e4eb90b8",
+        "bytes": 258
+      },
+      {
+        "path": "native/cad/moving_plate.step",
+        "sha256": "fb9439db24e02ff64a33e7a19467f2f10de0f14181cca2ab6ea1b2c232a02b46",
+        "bytes": 96398
+      },
+      {
+        "path": "native/cad/readback.json",
+        "sha256": "3ed6642c8facdb77500cb46b6a317130f97f2d3ecb0facc7a6971ea7462ded7e",
+        "bytes": 109
+      },
+      {
+        "path": "native/cad/result.json",
+        "sha256": "080c5c362d8c0a4af02c071c2dc18e4dc6dc15b495485fe541c998652791e685",
+        "bytes": 1111
+      },
+      {
+        "path": "project-spice/model-manifest.json",
+        "sha256": "5bac9ab740be7f683f83bc36be02bfdb5390e2badd916441dca8477e22f99740",
+        "bytes": 1841
+      },
+      {
+        "path": "project-spice/project.json",
+        "sha256": "902f675120b6e48f9aeaf1a20b4fd5c5c0aeb33dd22fca18804edf20cd964c59",
+        "bytes": 173
+      },
+      {
+        "path": "project-spice/sece_storage.cir",
+        "sha256": "fb3748aba97ed4c6c9ff869d703bb8fdacf4567fff9b279f65a4856bdefa199b",
+        "bytes": 1732
+      },
+      {
+        "path": "native/spice/read_values.json",
+        "sha256": "0764e2b73c2fd44bdb8133c186eec7bb2e81e7f8ff786b58af5c10e1e2769215",
+        "bytes": 168
+      },
+      {
+        "path": "native/spice/result.json",
+        "sha256": "eda998bb2a6fa7423415710134eb208e3cfa261d182b391d7086cc2ed962b11e",
+        "bytes": 766
+      },
+      {
+        "path": "native/spice/trace.raw",
+        "sha256": "54b10c3883170f7912dbdcfc937413301a27f3e9b3cca44048d78a12ed373b35",
+        "bytes": 6852242
+      },
+      {
+        "path": "native/spice/values.csv",
+        "sha256": "0407d7ee22ad112b58e64f9b0e4ad9f7c76a5832366fc1836184c941b892bb73",
+        "bytes": 9943
+      },
+      {
+        "path": "project-fw-s132/ad7156_nrf.c",
+        "sha256": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+        "bytes": 4050
+      },
+      {
+        "path": "project-fw-s132/ad7156_nrf.h",
+        "sha256": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+        "bytes": 2205
+      },
+      {
+        "path": "project-fw-s132/app_policy.c",
+        "sha256": "a942c8301d1eb95126987721ee7777748f43cc2e474c509d6f668dc6c64119e3",
+        "bytes": 13052
+      },
+      {
+        "path": "project-fw-s132/app_policy.h",
+        "sha256": "c05c98beb8c42d60f48470bf628c9cc1c589e112fc2d1ce8d9cd9b08d37c3188",
+        "bytes": 7996
+      },
+      {
+        "path": "project-fw-s132/main.c",
+        "sha256": "c421f94e687a6b0a1ba4e4f50d08a129f4109a8b519653b4881ea187d4aa12c0",
+        "bytes": 20420
+      },
+      {
+        "path": "project-fw-s132/project.json",
+        "sha256": "33742a093e6bdb4087bc0f16b8b026b49db2a03e997b1281df0b7c72472132f0",
+        "bytes": 1117
+      },
+      {
+        "path": "project-fw-s132/sdk_config.h",
+        "sha256": "e41cdb36dbb8c5a1bc8b9bc7684a6af583ce8577fdd5aa2ce1b237fa5a6c2f79",
+        "bytes": 287063
+      },
+      {
+        "path": "native/firmware-s132/project-firmware.elf",
+        "sha256": "fdb445fa53878cfb738fb81f704b209d371405ea748c4e05b1c7dcfd029f2c6c",
+        "bytes": 1009540
+      },
+      {
+        "path": "native/firmware-s132/project-firmware.hex",
+        "sha256": "83bddcec8332d69f285113a6be982503912acdafc6171c4a68121cf7408eb930",
+        "bytes": 90119
+      },
+      {
+        "path": "native/firmware-s132/project-firmware.bin",
+        "sha256": "89206e738bc64b2a11682b2b45da22ec32cb8bc1faa2979c3543b9d843837f6d",
+        "bytes": 32008
+      },
+      {
+        "path": "native/firmware-s132/project-firmware.map",
+        "sha256": "51bbc6219e53096b3390f1355bbddcfd8710cbc7855b52d464a4f0aa5e5a7fdc",
+        "bytes": 432161
+      },
+      {
+        "path": "native/firmware-s132/project-combined.hex",
+        "sha256": "d2691c6c1f69c061227a69b03e44f56ca4fecfe11fb9993ecdb8bfe84fa359a3",
+        "bytes": 507972
+      },
+      {
+        "path": "native/firmware-s132/project-softdevice.hex",
+        "sha256": "b5b345052d160ddbc5dcf7aacfe0da6ecba52902cceaf91bae0b7a23955356fa",
+        "bytes": 429491
+      },
+      {
+        "path": "native/firmware-s132/project-readback.json",
+        "sha256": "16cfef2671eb540e13ceabcb5b062c276ecb948f9696bdcbf254181a0bd69e2a",
+        "bytes": 1195
+      },
+      {
+        "path": "native/firmware-s132/result.json",
+        "sha256": "4439e15a8605feaa1c586c2b84d02c8e7705ba85e10f124488202398829f3ae6",
+        "bytes": 3432
+      },
+      {
+        "path": "host-test-s132/host_test.c",
+        "sha256": "c50454d3e610b263d6af7c2459a93ceb7cdf95a58f1d90020c1ca97bc19cc917",
+        "bytes": 17932
+      },
+      {
+        "path": "host-test-s132/build.sh",
+        "sha256": "40e2c69e87c22094e5a252ed95c976bf469d0308b54a991527fe85c72747842b",
+        "bytes": 537
+      },
+      {
+        "path": "host-test-s132/run.sh",
+        "sha256": "91598aaa0f17973e3b3bddc8f53b3a59397c33d4373cf7bf5c7fb3debe8f5f8e",
+        "bytes": 105
+      },
+      {
+        "path": "host-test-s132/out/build.log",
+        "sha256": "8db7fcf73adc83f6c5317dedcd95aca96f78e08d44d67379d948789cf0734551",
+        "bytes": 462
+      },
+      {
+        "path": "host-test-s132/out/run.log",
+        "sha256": "0629d7060a69150d19d7cfcc16b912513cdcf3abefa1f98d86844dc752ddd4a4",
+        "bytes": 2313
+      },
+      {
+        "path": "host-test-s132/out/host-matrix.json",
+        "sha256": "84b6b496262d2b0c406cce21d6885dc5c4208b3ed41bbf64e688fa1d39cfe0ab",
+        "bytes": 3616
+      },
+      {
+        "path": "host-test-s132/shim/app_error.h",
+        "sha256": "77d861076994f41a2eb550049fbdeba917fb6b6792e70297c2d28050ab2c8ff9",
+        "bytes": 169
+      },
+      {
+        "path": "host-test-s132/shim/app_util_platform.h",
+        "sha256": "64e079e8ef94bd5c032423521c761b39fd06cb43b8edccfb02523f17a20c6b1e",
+        "bytes": 107
+      },
+      {
+        "path": "host-test-s132/shim/nrf_delay.h",
+        "sha256": "f319086af47f1738d0abf7579632a4d0507aec26c9a79301f4cbb960e7c9fd54",
+        "bytes": 215
+      },
+      {
+        "path": "host-test-s132/shim/nrf_drv_twi.h",
+        "sha256": "b8224d2193ef0b1b76bcf4969afb15a614976fb943ef3ab1eb8515eacd19162b",
+        "bytes": 2306
+      },
+      {
+        "path": "host-test-s132/shim/twi_model.c",
+        "sha256": "533479c40c5a70f5a08b382a2ee2e932bcdd27420a2dbfcdbbbdd10f845cfa02",
+        "bytes": 2580
+      },
+      {
+        "path": "receiver/frame.py",
+        "sha256": "ed8d27ceda967cd2af6b919ee54911380bc21abdeafb2ac925c188b669fa471e",
+        "bytes": 2566
+      },
+      {
+        "path": "receiver/pipeline.py",
+        "sha256": "d23571dcbd646a2e38f32687fd1eca9ac9bd1adcb6f65fc7908b61a6497897da",
+        "bytes": 2313
+      },
+      {
+        "path": "receiver/receiver_gui.py",
+        "sha256": "2c267a10cd06341816ca9b1600abe9b7bd37755dac5313223b4048310e607358",
+        "bytes": 5457
+      },
+      {
+        "path": "receiver/test_frame.py",
+        "sha256": "f0ff803835f7ec0bee69284a60cf1285e95db90e7c5e93353af01e1a0b7ef9a7",
+        "bytes": 4370
+      },
+      {
+        "path": "receiver/out/frame-tests.json",
+        "sha256": "3738334455daff5fccc8422b39333ada8536c6911029c84c30dddaf8a1beee10",
+        "bytes": 1896
+      },
+      {
+        "path": "receiver/out/replay-samples.csv",
+        "sha256": "c471212771db9c3c5e0444fca447f66ce4565908ea0f8994387bdbcfab5650fb",
+        "bytes": 1352
+      }
+    ],
+    "scope": "Actual listed file hashes and native input/assembly version; functional and product acceptance remain separate."
+  },
+  "usage_reconciliation": {
+    "deferred_by_user": true,
+    "unknown_requests": [],
+    "reservations_retained": true
+  },
+  "jobs": [
+    {
+      "id": "eng-b8233814eba75080",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-9af7c6232b5b01b4",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-103f29abad308d3b",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-16cb4ad39a4f7f51",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-ff9305b6e662228a",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-53a313ef0c4ec58b",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    },
+    {
+      "id": "eng-dcbd2b0cbcc1140f",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-40c03b2d6cda1aa9",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-000b67d80fa2dd02",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-d84d9f23fb1c0b34",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "could not convert string to float: 'stage'"
+    },
+    {
+      "id": "eng-d6b2ca501db8e7fa",
+      "engine": "engineering-project",
+      "status": "SUCCEEDED",
+      "error": null
+    },
+    {
+      "id": "eng-4af5202e8537155a",
+      "engine": "engineering-project",
+      "status": "FAILED",
+      "error": "PROJECT_PROCESS_EXIT_1"
+    }
+  ],
+  "contribution": {
+    "preparation": "Codex",
+    "native_sources": "Pi",
+    "participant_files_edited_by_Codex": 0
+  },
+  "full_product_passed": false,
+  "physical_verified": false,
+  "raw_trace": "campaign/native-runs/P01-native-d23fb910ad86-281ef8a5/continuations/turn-006/trace.jsonl",
+  "live_trace": "runtime/sessions/pi-chat-b47a35e335bc68d4/trace.jsonl",
+  "trace_sha256": "bac67a64c15a2b45009b7c2054170d345d0bfdf91990a72c6e0005703177adca",
+  "method_overlay": null,
+  "method_overlay_in_actual_request": false
+}

@@ -1,0 +1,284 @@
+{
+  "schema_version": "bf-source-publication-verification-v1",
+  "created_utc": "2026-10-09T17:42:34.746517+00:00",
+  "scope": "Source and software checkpoint; no product, physical, autonomy or RSI promotion",
+  "pi_full_check_passed": true,
+  "pi_offline_build_passed": true,
+  "pi_fixture_tests_passed": 8,
+  "frontend_syntax_files": 17,
+  "corrected_python_tests_passed": 89,
+  "application_full_init_passed": false,
+  "initial_application_init": {
+    "unit_tests": 873,
+    "failures": 15,
+    "errors": 26,
+    "wrapper_timeout_seconds": 600,
+    "preserved_log": "logs/application-init.log"
+  },
+  "corrected_recheck": {
+    "tests": 89,
+    "failures": 0,
+    "errors": 0,
+    "scope": "Every test module implicated in initial failures; full init not rerun"
+  },
+  "publication_repairs": [
+    "Parseable feature.yaml retaining historical fields",
+    "Font build generator moved to scripts with unchanged output path",
+    "Package-qualified test fixture imports",
+    "send fixture accepts/asserts dispatch",
+    "Trace fixture uses a registered deferred conversation",
+    "Frozen skill activation preserves caller initiator in engineering receipts; source-only repair, no runtime deployment"
+  ],
+  "verification_setup_repairs": [
+    "Protected source directory",
+    "Existing public dummy provider key",
+    "Existing isolated BF_HOME so write-denial probe is evaluable",
+    "Restored OpenAI SDK runs directories accidentally excluded by verification-copy filter"
+  ],
+  "optional_environment_warning": "Gondolin example requires Node >=23.6; BF source/build checked on 22.22.0",
+  "live_ui_retested": false,
+  "paid_calls_during_publication": 0,
+  "original_ten_owner_request_counts": {
+    "SETTLED": 5950,
+    "UNKNOWN": 7
+  },
+  "production_ledger_modified": false,
+  "participant_native_jobs_reexecuted": false,
+  "production_runtime_redeployed": false,
+  "next_runtime_publication_requires_fresh_qualification": true,
+  "full_products_accepted": 0,
+  "physical_validation": "NOT_TESTED",
+  "RSI_proven": false,
+  "results": [
+    {
+      "name": "pi-clean-install",
+      "command": [
+        "npm",
+        "ci",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:04:57.511389+00:00",
+      "ended_utc": "2026-10-09T17:05:03.206597+00:00"
+    },
+    {
+      "name": "pi-full-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:06:35.670446+00:00",
+      "ended_utc": "2026-10-09T17:07:10.889947+00:00"
+    },
+    {
+      "name": "pi-agent-build",
+      "command": [
+        "verification://initial/source/pi-bf-aiot/node_modules/.bin/tsgo",
+        "-p",
+        "packages/bf-agent/tsconfig.json"
+      ],
+      "exit_code": 1,
+      "started_utc": "2026-10-09T17:07:40.805642+00:00",
+      "ended_utc": "2026-10-09T17:07:41.297574+00:00"
+    },
+    {
+      "name": "pi-harness-build",
+      "command": [
+        "verification://initial/source/pi-bf-aiot/node_modules/.bin/tsgo",
+        "-p",
+        "packages/bf-harness/tsconfig.json"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:07:41.298797+00:00",
+      "ended_utc": "2026-10-09T17:07:41.682852+00:00"
+    },
+    {
+      "name": "pi-offline-build",
+      "command": [
+        "npm",
+        "run",
+        "bf:build"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:08:12.281787+00:00",
+      "ended_utc": "2026-10-09T17:08:33.669928+00:00"
+    },
+    {
+      "name": "pi-bf-tests",
+      "command": [
+        "node",
+        "--test",
+        "packages/bf-agent/test/eda-outcome.test.mjs",
+        "packages/bf-agent/test/engineering-wait.test.mjs"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:09:41.685999+00:00",
+      "ended_utc": "2026-10-09T17:09:42.056021+00:00"
+    },
+    {
+      "name": "frontend",
+      "exit_code": 0,
+      "syntax_files": 17,
+      "test_files": [
+        "battery-world/tests/agentlab/test_result_catalog.cjs",
+        "battery-world/tests/agentlab/test_runtime_studio.cjs"
+      ],
+      "scope": "Software syntax/projection; no new live UI or product acceptance"
+    },
+    {
+      "name": "application-init-initial",
+      "exit_code": 1,
+      "wrapper_timeout_seconds": 600,
+      "unit_tests_completed": 873,
+      "failures": 15,
+      "errors": 26,
+      "scope": "Initial incorrect isolation setup and publication/test-layout findings; not a product or paid-model run",
+      "initial_environment_errors": [
+        "Repository under system TMP allowed source writes in sandbox preflight",
+        "Nonexistent provider fixture key caused missing-file and secret-denial checks to fail"
+      ],
+      "source_findings": [
+        "Two test imports lacked package prefix",
+        "send mock missing dispatch keyword",
+        "Legacy trace test owner was not a conversation",
+        "Font build script placed under apps/"
+      ],
+      "original_log": "application-init.log",
+      "preserved": true
+    },
+    {
+      "name": "python-corrected-discovery",
+      "command": [
+        "verification://corrected/source/battery-world/.venv/bin/python",
+        "-m",
+        "unittest",
+        "tests.agentlab.test_artifact_workspace",
+        "tests.agentlab.test_spice_observation",
+        "tests.agentlab.test_trace_engineering",
+        "tests.agentlab.test_simulation_tasks",
+        "tests.agentlab.test_chat",
+        "tests.agentlab.test_provider",
+        "tests.agentlab.test_organization",
+        "tests.agentlab.test_parallel_chat",
+        "tests.agentlab.test_developer",
+        "tests.dependency.test_boundaries"
+      ],
+      "exit_code": 1,
+      "started_utc": "2026-10-09T17:23:54.414097+00:00",
+      "ended_utc": "2026-10-09T17:26:22.707206+00:00"
+    },
+    {
+      "name": "python-corrected-fixtures-v2",
+      "command": [
+        "verification://corrected/source/battery-world/.venv/bin/python",
+        "-m",
+        "unittest",
+        "tests.agentlab.test_artifact_workspace",
+        "tests.agentlab.test_spice_observation",
+        "tests.agentlab.test_trace_engineering",
+        "tests.agentlab.test_simulation_tasks",
+        "tests.agentlab.test_chat",
+        "tests.agentlab.test_provider",
+        "tests.agentlab.test_organization",
+        "tests.agentlab.test_parallel_chat",
+        "tests.agentlab.test_developer",
+        "tests.dependency.test_boundaries"
+      ],
+      "exit_code": 1,
+      "started_utc": "2026-10-09T17:27:54.740197+00:00",
+      "ended_utc": "2026-10-09T17:30:25.343080+00:00"
+    },
+    {
+      "name": "python-corrected-fixtures-v3",
+      "command": [
+        "verification://corrected/source/battery-world/.venv/bin/python",
+        "-m",
+        "unittest",
+        "tests.agentlab.test_artifact_workspace",
+        "tests.agentlab.test_spice_observation",
+        "tests.agentlab.test_trace_engineering",
+        "tests.agentlab.test_simulation_tasks",
+        "tests.agentlab.test_chat",
+        "tests.agentlab.test_provider",
+        "tests.agentlab.test_organization",
+        "tests.agentlab.test_parallel_chat",
+        "tests.agentlab.test_developer",
+        "tests.dependency.test_boundaries"
+      ],
+      "exit_code": 1,
+      "started_utc": "2026-10-09T17:32:38.217964+00:00",
+      "ended_utc": "2026-10-09T17:34:52.676081+00:00"
+    },
+    {
+      "name": "python-corrected-fixtures-v4",
+      "command": [
+        "verification://corrected/source/battery-world/.venv/bin/python",
+        "-m",
+        "unittest",
+        "tests.agentlab.test_artifact_workspace",
+        "tests.agentlab.test_spice_observation",
+        "tests.agentlab.test_trace_engineering",
+        "tests.agentlab.test_simulation_tasks",
+        "tests.agentlab.test_chat",
+        "tests.agentlab.test_provider",
+        "tests.agentlab.test_organization",
+        "tests.agentlab.test_parallel_chat",
+        "tests.agentlab.test_developer",
+        "tests.dependency.test_boundaries"
+      ],
+      "exit_code": 1,
+      "started_utc": "2026-10-09T17:37:10.893509+00:00",
+      "ended_utc": "2026-10-09T17:39:04.534920+00:00"
+    },
+    {
+      "name": "python-corrected-fixtures-v5",
+      "command": [
+        "verification://corrected/source/battery-world/.venv/bin/python",
+        "-m",
+        "unittest",
+        "tests.agentlab.test_artifact_workspace",
+        "tests.agentlab.test_spice_observation",
+        "tests.agentlab.test_trace_engineering",
+        "tests.agentlab.test_simulation_tasks",
+        "tests.agentlab.test_chat",
+        "tests.agentlab.test_provider",
+        "tests.agentlab.test_organization",
+        "tests.agentlab.test_parallel_chat",
+        "tests.agentlab.test_developer",
+        "tests.dependency.test_boundaries"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-10-09T17:40:16.542614+00:00",
+      "ended_utc": "2026-10-09T17:42:07.620609+00:00"
+    },
+    {
+      "files_scanned": 4317,
+      "findings": [],
+      "scope": "Credential patterns, paths only; no credential values printed",
+      "name": "credential-scan"
+    }
+  ],
+  "staged_source_credential_scan": {
+    "files": 4330,
+    "hits": 0,
+    "scope": "Git index source snapshot"
+  },
+  "staged_source_whitespace_check": {
+    "passed": true,
+    "excluded": [
+      "battery-world/apps/agent-studio/runtime-scene/studio.js",
+      "release/evidence/checkpoint-20261010/logs/*"
+    ],
+    "reason": "Generated Three.js shader strings and verbatim test output preserve upstream whitespace; unscoped check reports those formatting exceptions"
+  },
+  "runtime_scene_provenance_check": {
+    "source_hashes": 7,
+    "bundle_files": 10,
+    "passed": true,
+    "build_script_syntax_passed": true
+  }
+}

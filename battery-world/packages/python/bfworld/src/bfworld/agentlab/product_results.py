@@ -30,6 +30,7 @@ def job_kind(j):
 
 
 def domain(kind):
+    if kind.startswith('firmware-'):return 'firmware'
     return {'cadquery':'mechanical','product-model':'mechanical','blender':'mechanical','comsol':'mechanical',
             'spice':'circuit','jlceda':'circuit','event-transient':'circuit','beam-event':'circuit',
             'firmware-stm32l031':'firmware','mcu-firmware':'firmware','tinyml-nas':'firmware'}.get(kind,'system')
@@ -39,10 +40,20 @@ def role(name):
     suffix=Path(name).suffix.lower()
     if suffix in ('.png','.svg','.glb','.mp4') or name.endswith('preview-mesh.json'): return 'preview'
     if suffix in ('.py','.c','.h','.ld','.cir','.java','.tex') or name=='project-source.zip': return 'source'
-    if suffix in ('.step','.stl','.brep','.blend','.mph','.epro2','.elf','.hex','.bin','.dsn','.ses','.net'): return 'native'
+    if suffix in ('.step','.stl','.brep','.blend','.mph','.epro2','.epru','.enet','.elf','.hex','.bin','.dsn','.ses','.net'): return 'native'
     if suffix in ('.raw','.csv','.tsv'): return 'data'
     if suffix in ('.log','.map') or name=='input.json': return 'log'
     return 'report'
+
+
+def file_domain(kind,name):
+    area=domain(kind)
+    if area!='system':return area
+    ext=Path(name).suffix.lower()
+    if ext in ('.step','.stp','.stl','.brep','.glb','.blend'):return 'mechanical'
+    if ext in ('.c','.h','.ld','.elf','.hex','.bin','.map'):return 'firmware'
+    if ext in ('.cir','.enet','.epru','.epro2','.dsn','.ses','.net'):return 'circuit'
+    return area
 
 
 def input_keys(kind, name):
@@ -52,7 +63,7 @@ def input_keys(kind, name):
         if role(name)=='preview':return ['geometry_hash','presentation']
         return ['definition_hash']
     if kind=='cadquery':return ['geometry_hash','interfaces']
-    if kind in ('firmware-stm32l031','mcu-firmware'):return ['interfaces','energy_hash']
+    if kind.startswith('firmware-') or kind=='mcu-firmware':return ['interfaces','energy_hash']
     return ['physical_hash']
 
 
@@ -88,6 +99,8 @@ class ProductResults:
         self.sources=ResultSources(self)
         from .engineering_cases import EngineeringCases
         self.cases=EngineeringCases(self)
+        from .eda_results import EdaResults
+        self.eda=EdaResults(self)
         with self.store.connect() as db:
             db.execute('''CREATE TABLE IF NOT EXISTS product_result_index (
                 owner TEXT NOT NULL, result_id TEXT NOT NULL, source_sha256 TEXT NOT NULL,
@@ -109,6 +122,30 @@ class ProductResults:
             return self._checked[key],'' if self._checked[key] else '文件哈希不一致'
         except OSError:return False,'文件不可读取'
 
+    def version(self,owner):
+        """Cheap owner-scoped change token, excluding Trace and projection writes.
+
+        This only signals a refresh. File integrity and export still use inspect().
+        The client periodically inspects even when this token is unchanged.
+        """
+        self.sources.require(owner)
+        columns={
+            'engineering_jobs':'id,status,created,ended', 'eda_cli_jobs':'id,status,created,ended',
+            'jobs':'id,status,updated', 'assembly_revisions':'revision,created',
+            'assembly_files':'id,digest,created', 'assembly_verifications':'id,report,artifacts',
+            'assembly_goals':'payload', 'delivery_bindings':'operation,created',
+            'product_stage_contracts':'revision,created', 'product_records':'revision,created',
+            'product_attachments':'id,digest,created',
+            'engineering_case_releases':'id,version,created',
+            'engineering_case_retirements':'id,version,created',
+        }
+        with self.store.connect() as db:
+            tables={r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            data={table:[tuple(r) for r in db.execute('SELECT '+fields+' FROM '+table+' WHERE owner=? ORDER BY 1',(owner,))]
+                  for table,fields in columns.items() if table in tables}
+            data['conversation']=[tuple(r) for r in db.execute('SELECT title,status FROM conversations WHERE id=?',(owner,))]
+        return dict(schema_version='bf-result-version-v1',owner=owner,version=identity(data))
+
     def inspect(self,owner,revision=None):
         self.sources.require(owner)
         product_enabled=self.app.products.exists(owner)
@@ -123,10 +160,16 @@ class ProductResults:
                 # Index immutable record bytes; projection freshness is evaluated below.
                 payload={k:j.get(k) for k in ('id','engine','status','created','ended','assembly','result','error','project','parameters','event_spec')}
                 sha=identity(payload)
-                db.execute('''INSERT INTO product_result_index VALUES(?,?,?,?) ON CONFLICT(owner,result_id)
-                    DO UPDATE SET source_sha256=excluded.source_sha256,payload=excluded.payload
-                    WHERE source_sha256!=excluded.source_sha256''',(owner,j['id'],sha,canonical(payload)))
-            indexed=db.execute('SELECT payload FROM product_result_index WHERE owner=? ORDER BY result_id',(owner,)).fetchall()
+                if not getattr(self.store,'readonly',False):
+                    db.execute('''INSERT INTO product_result_index VALUES(?,?,?,?) ON CONFLICT(owner,result_id)
+                        DO UPDATE SET source_sha256=excluded.source_sha256,payload=excluded.payload
+                        WHERE source_sha256!=excluded.source_sha256''',(owner,j['id'],sha,canonical(payload)))
+            if getattr(self.store,'readonly',False):
+                # The live paper runtime owns its journal. Project its current
+                # records without opening a second writer or restoring jobs.
+                indexed=[{'payload':canonical({k:j.get(k) for k in ('id','engine','status','created','ended','assembly','result','error','project','parameters','event_spec')})} for j in sorted(jobs,key=lambda j:j['id'])]
+            else:
+                indexed=db.execute('SELECT payload FROM product_result_index WHERE owner=? ORDER BY result_id',(owner,)).fetchall()
         live_ids={j['id'] for j in jobs}
         for record in indexed:
             j=json.loads(record['payload'])
@@ -139,7 +182,7 @@ class ProductResults:
                 if Path(name).name!=name:continue
                 valid,error=self._integrity(self.app.engineering.root/j['id']/name,a['sha256'])
                 apply=applicability(old,selected,input_keys(k,name))
-                f=dict(id=j['id']+'/'+name,result_id=j['id'],name=name,sha256=a['sha256'],bytes=a['bytes'],domain=d,
+                f=dict(id=j['id']+'/'+name,result_id=j['id'],name=name,sha256=a['sha256'],bytes=a['bytes'],domain=file_domain(k,name),
                        created_revision=(old or {}).get('revision'),applies_to_revision=(selected or {}).get('revision'),
                        applicability=apply,integrity=valid,error=error,role=role(name),status=j['status'],job_id=j['id'],
                        url='/api/results/file?'+urlencode({'session':owner,'id':j['id']+'/'+name}))
@@ -185,15 +228,17 @@ class ProductResults:
             tasks=[t for t,b in bindings.items() if any(x['id']==f['id'] for x in b.get('files',[]))]
             keys=sorted({k for t in tasks for k in dimensions(t)}) if tasks else ['physical_hash']
             valid,error=self._integrity(self.app.assemblies.root/owner/'files'/f['id'],f['digest'])
-            d=TASK_DOMAIN.get(tasks[0],'system') if tasks else 'system'
+            d=TASK_DOMAIN.get(tasks[0],'system') if tasks else file_domain('published',f['name'])
             files.append(dict(id='file/'+f['id'],result_id='published',name=f['name'],sha256=f['digest'],bytes=f['bytes'],domain=d,
                 role=role(f['name']),created_revision=f['revision'],applies_to_revision=(selected or {}).get('revision'),
-                applicability=applicability(old,selected,keys),integrity=valid,error=error,status='PUBLISHED',tasks=tasks,
+                applicability=applicability(old,selected,keys),integrity=valid,error=error,status='PUBLISHED',tasks=tasks,created=f['created'],
                 url='/api/results/file?'+urlencode({'session':owner,'id':'file/'+f['id']})))
         extra,extra_files,_=self.sources.collect(owner)
         results+=extra;files+=extra_files
         case_results,case_files,_=self.cases.collect(owner)
         results+=case_results;files+=case_files
+        native,native_files=self.eda.collect(owner)
+        results+=native;files+=native_files
         results.sort(key=lambda r:r['created'],reverse=True)
         for f in files:
             group='current' if f['applicability']['state'] in ('current','reused') else 'history'
@@ -209,6 +254,9 @@ class ProductResults:
             title=(selected or {}).get('payload',{}).get('title') or self.session_title(owner),versions=[dict(revision=r['revision'],source_valid=r['source_valid']) for r in revisions],
             verdict=inventory['verdict'] if selected==current else None,verdict_revision=(current or {}).get('revision'),results=results,files=files,blockers=blockers if selected==current else [],domains=DOMAINS,
             scope='真实执行与已发布文件的只读索引；相关输入未变化仅表示可复用，不证明产品已验收。')
+        with self.store.connect() as db:
+            run=db.execute('SELECT status,error,updated FROM conversations WHERE id=?',(owner,)).fetchone()
+        value['run_state']=dict(run) if run else None
         value['product_enabled']=product_enabled
         value['phase']='assembly' if current else 'engineering' if jobs else 'benchmark' if any(r['kind']=='benchmark' for r in results) else 'proposal' if results else 'empty'
         value['engineering_cases']=sorted({r['case_version'] for r in case_results})
@@ -218,6 +266,10 @@ class ProductResults:
         for r in results:
             r.setdefault('source_type','engineering')
             r['presentations']=self.presentations(owner,r)
+        from .result_selection import latest_ids,choices
+        latest_results,latest_files=latest_ids(results,files)
+        value['latest_result_ids']=sorted(latest_results);value['latest_file_ids']=sorted(latest_files)
+        value['scope_options']=choices(value)
         from .design_pilot_view import projection
         pilot=projection(self.store,owner)
         if pilot['trials']:value['design_pilot']=pilot
@@ -291,6 +343,7 @@ class ProductResults:
 
     def file(self,owner,key):
         self.sources.require(owner)
+        if key.startswith('eda/'):return self.eda.file(owner,key)
         if key.startswith('case/'):return self.cases.file(owner,key)
         if key.startswith(('record/','input/')):return self.sources.file(owner,key)
         if key.startswith('file/'):

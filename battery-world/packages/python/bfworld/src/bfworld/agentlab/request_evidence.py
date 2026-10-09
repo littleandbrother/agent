@@ -8,6 +8,7 @@ import json
 
 from .store import canonical, identity
 from .tool_responses import delivery_canonical
+from .skill_resources import frozen_for, safe_file
 
 
 def text_content(value):
@@ -61,7 +62,19 @@ def describe(db, owner, body, raw):
                     binding=json.loads(snapshot['binding']), offset=value.get('offset'),
                     next_offset=value.get('next_offset'), full_response_inline=value.get('full_response_inline', 'text' not in value))
         feedback.append(item)
+    skills=[]
+    if 'skill_activations' in tables and 'conversations' in tables:
+        frozen=frozen_for(db,owner)
+        if frozen:
+            root, manifest=frozen
+            active={r['skill_id'] for r in db.execute('SELECT skill_id FROM skill_activations WHERE owner=? AND manifest=? AND active=1',(owner,manifest['sha256']))}
+            for entry in manifest['skills']:
+                if entry['id'] not in active: continue
+                content=safe_file(root,entry['path']).read_text()
+                skills.append({k:entry[k] for k in ('id','version','sha256')} | {
+                    'manifest_sha256':manifest['sha256'],
+                    'status':'present_in_wire' if any(content in s for s in systems) else 'absent_from_wire'})
     return {'schema': 'bf-request-evidence-v1', 'owner': owner,
         'wire_sha256': hashlib.sha256(raw).hexdigest(), 'wire_bytes': len(raw),
-        'method': method, 'feedback': feedback, 'phase': 'prepared_for_dispatch',
+        'method': method, 'skills': skills, 'feedback': feedback, 'phase': 'prepared_for_dispatch',
         'scope': 'Exact post-projection request presence only; not provider acknowledgement, model attention, use or causal benefit.'}

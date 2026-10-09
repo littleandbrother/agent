@@ -2,7 +2,13 @@
 (() => {
   const {api,esc}=window.BF, M=window.EngineeringWorkspaceModel, S=window.StudioModel;
   const root=document.querySelector('#section-content'), pane=document.querySelector('#section-inspector');
-  let owner='',catalog=null,snapshot=null,scope='',section='overview',selection='',run='',generation=0,viewGeneration=0,zoom=1,error='',loading=false,fetched=0;
+  let owner='',catalog=null,snapshot=null,scope='',surface='engineering',section='overview',selection='',run='',generation=0,viewGeneration=0,zoom=1,error='',loading=false,fetched=0;
+  const surfaceTabs=document.createElement('nav');surfaceTabs.className='ew-surface-tabs';surfaceTabs.setAttribute('role','tablist');surfaceTabs.setAttribute('aria-label','工程面板页面');
+  surfaceTabs.innerHTML='<button id="ew-surface-engineering" role="tab" data-ew-surface="engineering" aria-controls="section-content" aria-selected="true">工程工作区</button><button id="ew-surface-runtime" role="tab" data-ew-surface="runtime" aria-controls="section-content" aria-selected="false">运行动画</button>';
+  pane.querySelector('.inspector-heading').insertBefore(surfaceTabs,pane.querySelector('#close-sections'));
+  function chooseSurface(next){surface=next;if(owner)sessionStorage.setItem('bf-ew-surface-'+owner,next);root.scrollTop=0;paint();if(next==='engineering')load()}
+  surfaceTabs.addEventListener('click',event=>{const button=event.target.closest('[data-ew-surface]');if(button)chooseSurface(button.dataset.ewSurface)});
+  surfaceTabs.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();chooseSurface(event.key==='Home'?'engineering':event.key==='End'?'runtime':surface==='runtime'?'engineering':'runtime');surfaceTabs.querySelector('[aria-selected=true]').focus()});
   const active=()=>document.body.dataset.studioMode==='task' && document.body.dataset.workspace==='studio';
   const icon=id=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${{overview:'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z',schematic:'M4 6h5v5h6V6h5 M4 18h5v-7 M15 11v7h5 M2 4h4v4H2z M18 4h4v4h-4z M2 16h4v4H2z M18 16h4v4h-4z',pcb:'M6 6h12v12H6z M9 2v4 M15 2v4 M9 18v4 M15 18v4 M2 9h4 M18 9h4 M2 15h4 M18 15h4 M10 10h4v4h-4z',mechanical:'m12 3 9 5v8l-9 5-9-5V8z M3 8l9 5 9-5 M12 13v8',simulation:'M2 12h4l3-8 5 16 3-8h5',bom:'M8 5h13 M8 12h13 M8 19h13 M3 5h1 M3 12h1 M3 19h1',documents:'M6 3h8l4 4v14H6z M14 3v5h4 M9 12h6 M9 16h6',expand:'M8 3H3v5 M16 3h5v5 M3 16v5h5 M21 16v5h-5',refresh:'M20 8a8 8 0 1 0 0 8 M20 3v5h-5',arrow:'m9 5 7 7-7 7',download:'M12 3v12m-4-4 4 4 4-4 M5 17v4h14v-4',close:'m6 6 12 12 M18 6 6 18'}[id]||'M12 5v14 M5 12h14'}"/></svg>`;
   const format=v=>typeof v==='number'?(v!==0 && Math.abs(v)<.0001?v.toExponential(4):v.toLocaleString('zh-CN',{maximumSignificantDigits:5})):typeof v==='object'?JSON.stringify(v):String(v??'未记录');
@@ -42,7 +48,7 @@
   function overview(){
     if(window.ProductEvidence?.groups(snapshot).length)return window.ProductEvidence.render(snapshot,{compact:true});
     const hero=S.hero(snapshot),readable=snapshot.files.filter(f=>f.integrity).length,findings=S.findings(snapshot);
-    const areas=M.sections.filter(x=>x.id!=='overview');
+    const areas=M.sections.filter(x=>!['overview','runtime'].includes(x.id));
     const recent=[...snapshot.results].sort((a,b)=>b.created-a.created).slice(0,4);
     return `<div class="ew-overview-grid"><section class="ew-card"><div class="ew-section-heading"><h3>项目内容</h3><span>${readable} 件可读取</span></div><p class="ew-note">${esc(S.scopeLabel(snapshot))} · ${snapshot.files.length-readable?`${snapshot.files.length-readable} 件文件待恢复`:'文件可读取性已核对'}</p><div class="ew-content-grid">${areas.slice(0,4).map(x=>{const fs=M.files(snapshot,x.id);return `<button data-ew-section="${x.id}" class="ew-content-item">${icon(x.id)}<b>${x.label}</b><small>${fs.filter(f=>f.integrity).length} 件可读取${fs.length?` / ${fs.length} 件`:' · 尚未归档'}</small>${icon('arrow')}</button>`}).join('')}</div></section><section class="ew-card ew-summary"><div class="ew-section-heading"><h3>当前成果与边界</h3></div>${hero?`<button class="ew-summary-image" data-ew-file="${esc(hero.f.id)}">${hero.v.kind==='image'?`<img src="${esc(hero.f.url)}" alt="${esc(S.fileLabel(hero.f))}">`:icon('mechanical')}<span>打开产品展示 ${icon('arrow')}</span></button>`:''}<b>${findings.length?'已记录的检查仍有未通过项':snapshot.verdict?.passed?'当前目标阶段已完成':'已有成果，等待逐项验证'}</b><p>${esc(findings[0]?.text||snapshot.verdict?.scope||'原生文件、计算结果和整机验收分别记录。尚无实物验收时不会显示为产品通过。')}</p><button data-ew-section="simulation">查看计算与检查 ${icon('arrow')}</button></section></div><section class="ew-section"><div class="ew-section-heading"><h3>工程部分</h3><span>选择一部分，查看图纸、数据与文件</span></div><div class="ew-capabilities">${areas.map(x=>`<button data-ew-section="${x.id}">${icon(x.id)}<span><b>${x.label}</b><small>${x.description}</small></span>${icon('arrow')}</button>`).join('')}</div></section><section class="ew-section"><div class="ew-section-heading"><h3>最近结果</h3><span>所选范围的真实归档记录</span></div><div class="ew-recent">${recent.map(r=>`<button data-ew-run="${esc(r.id)}"><span>${record(r)}</span><b>${esc(r.label||r.kind)}</b><small>${date(r.created)} · ${(r.files||[]).length} 件文件</small></button>`).join('')||note('尚未归档工程运行。')}</div></section>`;
   }
@@ -53,31 +59,32 @@
     if(!views.some(x=>x.f.id===selection))selection=views[0]?.f.id||'';
     r=views.find(x=>x.f.id===selection)?.r||r;
     const native=(run?(r?.files||[]):all).filter(f=>M.belongs(f,section)&&!['log','receipt'].includes(f.role));
-    return `${rows.length>1?`<label class="ew-run-picker">运行记录 <select id="ew-run-select" aria-label="选择工程运行"><option value="">全部记录的视图</option>${rows.map(x=>`<option value="${esc(x.id)}" ${run===x.id?'selected':''}>${esc(x.label||x.kind)} · ${date(x.created)}</option>`).join('')}</select></label>`:''}${r?.reference_only?`<aside class="ew-reference-notice" role="note"><b>${esc(r.source_revision)} · 历史工程参考</b><p>${esc(r.scope)}</p></aside>`:''}${metrics(r)}<div class="ew-detail-grid"><div><section class="ew-card ew-viewer">${toolbar(views)}<div id="ew-visual" class="ew-visual" role="region" aria-label="${esc(M.sections.find(x=>x.id===section).label)}预览">${empty('没有可读取的预览',all.length?'文件已登记，但未生成可读取的图形；下方保留原始记录。':'此范围尚未归档对应图纸或数据。')}</div><div id="ew-visual-caption" class="ew-visual-caption"></div></section>${checks(r)}<details class="ew-card ew-deliverables" open><summary>这部分的工程文件 · ${native.length}</summary>${fileRows(native)}</details></div><aside class="ew-detail-inspector">${evidence(r)}<section class="ew-card"><h3>文件与版本</h3><p class="ew-note">${esc(S.scopeLabel(snapshot))}</p>${r?.files?.length?fileRows(r.files.filter(f=>M.belongs(f,section)).slice(0,4)):note('当前记录尚无对应文件。')}<button data-ew-discuss>在对话中讨论这部分 ${icon('arrow')}</button></section></aside></div>`;
+    return `${rows.length>1?`<label class="ew-run-picker">运行记录 <select id="ew-run-select" aria-label="选择工程运行"><option value="">全部记录的视图</option>${rows.map(x=>`<option value="${esc(x.id)}" ${run===x.id?'selected':''}>${esc(x.label||x.kind)} · ${date(x.created)}</option>`).join('')}</select></label>`:''}${r?.reference_only?`<aside class="ew-reference-notice" role="note"><b>${esc(r.source_revision)} · 历史工程参考</b><p>${esc(r.scope)}</p></aside>`:''}${metrics(r)}<div class="ew-detail-grid"><div><section class="ew-card ew-viewer ${views.length?'':'ew-no-preview'}">${toolbar(views)}<div id="ew-visual" class="ew-visual" role="region" aria-label="${esc(M.sections.find(x=>x.id===section).label)}预览">${empty('没有可读取的预览',all.length?'文件已登记，但未生成可读取的图形；下方保留原始记录。':'此范围尚未归档对应图纸或数据。')}</div><div id="ew-visual-caption" class="ew-visual-caption"></div></section>${checks(r)}<details class="ew-card ew-deliverables" open><summary>这部分的工程文件 · ${native.length}</summary>${fileRows(native)}</details></div><aside class="ew-detail-inspector">${evidence(r)}<section class="ew-card"><h3>文件与版本</h3><p class="ew-note">${esc(S.scopeLabel(snapshot))}</p>${r?.files?.length?fileRows(r.files.filter(f=>M.belongs(f,section)).slice(0,4)):note('当前记录尚无对应文件。')}<button data-ew-discuss>在对话中讨论这部分 ${icon('arrow')}</button></section></aside></div>`;
   }
   function paint(){
     if(!active())return;
-    const scroll=root.scrollTop,gen=++viewGeneration;
-    root.classList.add('ew-root');
+    const scroll=root.scrollTop,gen=++viewGeneration;window.BFRuntimeStudio?.mount(null);
+    root.classList.add('ew-root');root.classList.toggle('ew-runtime-page',surface==='runtime'&&!!owner);pane.classList.toggle('ew-runtime-active',surface==='runtime'&&!!owner);root.setAttribute('role','tabpanel');root.setAttribute('aria-labelledby','ew-surface-'+surface);surfaceTabs.querySelectorAll('button').forEach(b=>{const selected=b.dataset.ewSurface===surface;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1});
     if(!owner){root.innerHTML=`<div class="ew-intro">${icon('overview')}<h2>工程工作区</h2><p>选择一个项目，或在对话中描述需求。每一部分的图纸、计算与文件将在这里汇集。</p><div class="ew-intro-sections">${M.sections.slice(1).map(x=>`<span>${icon(x.id)}${x.label}</span>`).join('')}</div></div>`;return;}
+    if(surface==='runtime'){root.innerHTML='<div id="ew-runtime-host"></div>';window.BFRuntimeStudio?.mount(root.querySelector('#ew-runtime-host'));root.scrollTop=scroll;return;}
     if(!snapshot){root.innerHTML=error?`<div class="ew-intro"><h2>暂时无法读取工程记录</h2><p>${esc(error)}</p><button data-ew-refresh>重新读取</button></div>`:`<div class="ew-loading" role="status">正在整理这个项目的工程记录…</div>`;return;}
-    root.innerHTML=`<div class="ew-header"><div><span class="ew-eyebrow">ENGINEERING WORKSPACE</span><h2>${esc(snapshot.title||window.BF.getTitle())}</h2><p>${esc(S.scopeLabel(snapshot))}</p></div><div class="ew-header-actions"><select id="ew-scope" aria-label="右侧工程成果范围">${S.choices(catalog).map(x=>`<option value="${esc(x.id)}" ${scope===x.id?'selected':''}>${esc(x.label)}</option>`).join('')}</select><button data-ew-refresh aria-label="刷新右侧工程记录" title="刷新工程记录">${icon('refresh')}</button></div></div><nav class="ew-tabs" role="tablist" aria-label="工程部分">${M.sections.map(x=>`<button role="tab" id="ew-tab-${x.id}" data-ew-section="${x.id}" aria-controls="ew-tabpanel" aria-selected="${section===x.id}" tabindex="${section===x.id?0:-1}">${x.label}</button>`).join('')}</nav><div id="ew-tabpanel" role="tabpanel" aria-labelledby="ew-tab-${section}" tabindex="0">${section==='overview'?overview():detail()}</div>`;
+    root.innerHTML=`<div class="ew-header"><div><span class="ew-eyebrow">ENGINEERING WORKSPACE</span><h2 title="${esc(snapshot?.title||window.BF.getTitle())}">${esc(snapshot?.title||window.BF.getTitle())}</h2><p>${snapshot?esc(S.scopeLabel(snapshot)):'正在同步产物'}</p></div><div class="ew-header-actions"><select id="ew-scope" aria-label="右侧工程成果范围">${(catalog?S.choices(catalog):[]).map(x=>`<option value="${esc(x.id)}" ${scope===x.id?'selected':''}>${esc(x.label)}</option>`).join('')}</select><button data-ew-refresh aria-label="刷新右侧工程记录" title="刷新工程记录">${icon('refresh')}</button></div></div><nav class="ew-tabs" role="tablist" aria-label="工程部分">${M.sections.map(x=>`<button role="tab" id="ew-tab-${x.id}" data-ew-section="${x.id}" aria-controls="ew-tabpanel" aria-selected="${section===x.id}" tabindex="${section===x.id?0:-1}">${x.label}</button>`).join('')}</nav><div id="ew-tabpanel" role="tabpanel" aria-labelledby="ew-tab-${section}" tabindex="0">${section==='overview'?overview():detail()}</div>`;
     root.scrollTop=scroll;
     if(section!=='overview')loadVisual(gen);else window.ProductEvidence?.bind(root,snapshot,{compact:true});
   }
   async function load(force=false){
     const selected=window.BF.getSelection()||'';
-    if(selected!==owner){owner=selected;catalog=snapshot=null;scope='';selection=run='';section=sessionStorage.getItem('bf-ew-section-'+owner)||'overview';if(!M.sections.some(x=>x.id===section))section='overview';error='';fetched=0;generation++;loading=false;}
+    if(selected!==owner){owner=selected;catalog=snapshot=null;scope='';selection=run='';section=sessionStorage.getItem('bf-ew-section-'+owner)||'overview';surface=sessionStorage.getItem('bf-ew-surface-'+owner)||(section==='runtime'?'runtime':'engineering');if(!M.sections.some(x=>x.id===section))section='overview';error='';fetched=0;generation++;loading=false;}
     if(!active()||pane.hidden){return;}
     if(!owner){paint();return;}
     if(loading)return;
     if(!force&&catalog&&Date.now()-fetched<10000){if(!root.querySelector('.ew-header'))paint();return;}
     const gen=++generation,cid=owner;loading=true;if(!snapshot)paint();
     try{
-      const value=await api('/api/results?'+new URLSearchParams({session:cid}),undefined,{signal:AbortSignal.timeout(45000)});
+      const value=await window.ResultCatalog.get(cid,'',force);
       if(gen!==generation||cid!==window.BF.getSelection())return;
       catalog=value;
-      const saved=scope||sessionStorage.getItem('bf-ew-scope-v2-'+cid),choices=S.choices(value);
+      const saved=scope||sessionStorage.getItem('bf-ew-scope-v3-'+cid),choices=S.choices(value);
       scope=choices.some(x=>x.id===saved)?saved:S.preferredScope(value);
       snapshot=S.scoped(value,scope);error='';fetched=Date.now();paint();
     }catch(e){if(gen===generation){error=e.name==='TimeoutError'?'工程清单读取超时。请稍后重试，已有记录会保留。':e.message;if(!snapshot)paint();}}
@@ -124,27 +131,28 @@
     if(b.dataset.ewTrace){const r=snapshot.results.find(r=>r.id===b.dataset.ewTrace);if(!r)return;if(r.source_type==='engineering')window.BFDeveloper.openTrace({job:r.id});else preview(r.files?.find(f=>f.integrity&&/result\.json$|receipt\.json$|report\.md$/.test(f.name))||r.files?.find(f=>f.integrity)||r.files?.[0]);return;}
     if(b.hasAttribute('data-ew-discuss')){window.BF.setDraft('关于「'+snapshot.title+'」的'+M.sections.find(x=>x.id===section).label+'，请根据 '+S.scopeLabel(snapshot)+' 的真实工程记录分析：');}
   });
-  root.addEventListener('change',e=>{if(!active())return;if(e.target.id==='ew-scope'){scope=e.target.value;snapshot=S.scoped(catalog,scope);sessionStorage.setItem('bf-ew-scope-v2-'+owner,scope);selection=run='';paint();}if(e.target.id==='ew-run-select'){run=e.target.value;selection='';paint();}});
+  root.addEventListener('change',e=>{if(!active())return;if(e.target.id==='ew-scope'){scope=e.target.value;snapshot=S.scoped(catalog,scope);sessionStorage.setItem('bf-ew-scope-v3-'+owner,scope);selection=run='';paint();}if(e.target.id==='ew-run-select'){run=e.target.value;selection='';paint();}});
   root.addEventListener('keydown',e=>{const tab=e.target.closest('[role=tab]');if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const i=M.sections.findIndex(x=>x.id===section),next=e.key==='Home'?0:e.key==='End'?M.sections.length-1:(i+(e.key==='ArrowRight'?1:-1)+M.sections.length)%M.sections.length;choose(M.sections[next].id);});
   function sync(){
     document.body.classList.toggle('engineering-workspace-active',active());root.classList.toggle('ew-root',active());
     document.querySelector('#sections-toggle').textContent=active()?'工程工作区':'方案与文件';
     pane.setAttribute('aria-label',active()?'工程工作区':'方案与文件');
     document.querySelector('#close-sections').setAttribute('aria-label',active()?'收起工程工作区':'收起方案与文件');
-    const heading=pane.querySelector('.inspector-heading');heading.firstChild.textContent=active()?'工程工作区':'方案与文件';
-    if(active()){if(snapshot)paint();load();}else {viewGeneration++;window.BF.refreshSections();}
+    const heading=pane.querySelector('.inspector-heading');heading.firstChild.textContent=active()?'':'方案与文件';surfaceTabs.hidden=!active();
+    if(active()){if(snapshot)paint();load();}else {viewGeneration++;pane.classList.remove('ew-runtime-active');window.BFRuntimeStudio?.mount(null);window.BF.refreshSections();}
     window.BFPanelSizing?.refresh();
   }
   new ResizeObserver(entries=>{pane.classList.toggle('ew-compact',entries[0].contentRect.width<720);pane.classList.toggle('ew-narrow',entries[0].contentRect.width<480);}).observe(pane);
-  new MutationObserver(()=>{if(!pane.hidden&&active())load();}).observe(pane,{attributes:true,attributeFilter:['hidden']});
+  new MutationObserver(()=>{window.BFRuntimeStudio?.display();if(!pane.hidden&&active())load();}).observe(pane,{attributes:true,attributeFilter:['hidden']});
+  window.addEventListener('bf-results-updated',event=>{if(event.detail.owner!==owner||event.detail.revision)return;catalog=event.detail.catalog;if(!scope)scope=S.preferredScope(catalog);snapshot=S.scoped(catalog,scope);fetched=Date.now();if(active()&&!pane.hidden)paint()});
   window.addEventListener('bf-selection',()=>load());window.addEventListener('bf-mode',sync);
   window.EngineeringWorkspace={active,render:()=>load(),open:(id='overview',requestedScope=null)=>{
     const selected=window.BF.getSelection();
     if(requestedScope&&selected){
-      sessionStorage.setItem('bf-ew-scope-v2-'+selected,requestedScope);
+      sessionStorage.setItem('bf-ew-scope-v3-'+selected,requestedScope);
       if(owner===selected){scope=requestedScope;snapshot=catalog?S.scoped(catalog,scope):null;selection=run='';fetched=0;}
     }
-    section=id;if(!active())window.BFDeveloper.setMode('task');window.BF.sectionVisible(true);if(snapshot)paint();load(!!requestedScope);
-  },getState:()=>({owner,section,scope})};
+    surface=id==='runtime'?'runtime':'engineering';if(selected){sessionStorage.setItem('bf-ew-surface-'+selected,surface);sessionStorage.setItem('bf-ew-section-'+selected,id==='runtime'?'overview':id)}section=id==='runtime'?'overview':id;if(!active())window.BFDeveloper.setMode('task');window.BF.sectionVisible(true);paint();load(!!requestedScope);
+  },getState:()=>({owner,surface,section,scope})};
   sync();
 })();

@@ -1,0 +1,38 @@
+{
+  "actor": "independent-checker",
+  "bindings": [
+    {
+      "job_id": "eng-dd1c9063402dbf8e",
+      "project_sha256": "726e463dd985b6e5a3808b4fc325b65a0aee66482b73bee381eb8f877121607c"
+    }
+  ],
+  "created": 1791550736.867293,
+  "gate_id": "firmware_timing_faults",
+  "owner": "pi-chat-c5766cc7b28004ae",
+  "paper": "P05",
+  "preparation_actor": "Codex source-bound adapter",
+  "resolves": [
+    "forward_eq5_eq6",
+    "reverse_eq5_eq6",
+    "wrap_equivalent_fields",
+    "native_debounce",
+    "missing_sensor_invalid",
+    "low_rail_tx_blocked",
+    "failed_send_not_success",
+    "admitted_successful_send",
+    "unavailable_weight_preserved",
+    "crc_independent_known_vector",
+    "queued_complete_passes_not_lost",
+    "streamed_complete_passes",
+    "rail_interruption_invalidates_inflight_sample",
+    "backward_clock_not_promoted_as_valid_direction"
+  ],
+  "schema_version": "bf-paper-digital-gate-review-v1",
+  "scope_note": "Actual portable C core and inspected main event-drain relationship; declared millisecond/default-config stimuli. The 27 public ABI cases are NOT executed because current firmware has no ABI adapter and uses different configurable assumptions. No target peripheral timing, ADC, USART, RF, energy measurement or full-product result.",
+  "source_review": {
+    "label": "实际固件独立故障反例",
+    "path": "campaign/reviews/P05/fault-check-project-003/result.json",
+    "sha256": "21d76573bf242ebed986464e495eb32e69393e6fa0dc1011253bbc4083f0a431"
+  },
+  "status": "PASS"
+}

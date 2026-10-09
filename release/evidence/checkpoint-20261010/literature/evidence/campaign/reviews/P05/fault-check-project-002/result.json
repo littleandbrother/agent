@@ -1,0 +1,258 @@
+{
+  "schema_version": "bf-paper-independent-functional-review-v1",
+  "paper": "P05",
+  "source_owner": "pi-chat-c5766cc7b28004ae",
+  "actor": "Codex public independent reviewer",
+  "created": 1791534273.27328,
+  "job_id": "eng-392adbdfb67ce47c",
+  "project_sha256": "9b215853abecac720dde9df69865ad2a559a9398505108c36518d5866a45fff3",
+  "immutable_source_sha256": {
+    "main.c": "3727c64fc9348c2ecd2fc66753749b016a948a8016f32520bdfebfaf39e281e4",
+    "mini_libc.c": "2408e51228e60ccf6434eee52edd944c8b0d735c281262fc0c362e576106bcf1",
+    "tc_config.h": "769924b2b51c93d25fc87cf7eb1af3e22ba7cec7f6dbcad41424bb353961a892",
+    "traffic_core.c": "eff3d03ecb7b06d5d56a57af625ab18ac0d9cd0c7370e204efbf07fb8d2dde8b",
+    "traffic_core.h": "a054d5ee76be5d0f8827f888578034950cbaef3f3e8c62d811c2289b23c6cb89"
+  },
+  "input_sha256": "aef5edd6b7b947738d397f20d2a7dfe1458b6ff24ee6165b6b3b65b903d9d778",
+  "status": "FAIL",
+  "checks": {
+    "forward_eq5_eq6": {
+      "passed": true
+    },
+    "reverse_eq5_eq6": {
+      "passed": true
+    },
+    "wrap_equivalent_fields": {
+      "passed": true
+    },
+    "native_debounce": {
+      "passed": true
+    },
+    "missing_sensor_invalid": {
+      "passed": true
+    },
+    "low_rail_tx_blocked": {
+      "passed": true
+    },
+    "failed_send_not_success": {
+      "passed": true
+    },
+    "admitted_successful_send": {
+      "passed": true
+    },
+    "unavailable_weight_preserved": {
+      "passed": true
+    },
+    "crc_independent_known_vector": {
+      "passed": true
+    },
+    "queued_complete_passes_not_lost": {
+      "passed": false
+    },
+    "streamed_complete_passes": {
+      "passed": true
+    },
+    "rail_interruption_invalidates_inflight_sample": {
+      "passed": false
+    },
+    "backward_clock_not_promoted_as_valid_direction": {
+      "passed": false
+    }
+  },
+  "negative_controls": [
+    {
+      "id": "forward_eq5_eq6",
+      "rejected": true
+    },
+    {
+      "id": "failed_send_not_success",
+      "rejected": true
+    },
+    {
+      "id": "queued_complete_passes_not_lost",
+      "rejected": true
+    },
+    {
+      "id": "unavailable_weight_preserved",
+      "rejected": true
+    }
+  ],
+  "observations": {
+    "forward": {
+      "case": "forward",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "reverse": {
+      "case": "reverse",
+      "available": 1,
+      "direction": 2,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "wrap": {
+      "case": "wrap",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "bounce": {
+      "case": "bounce",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 4,
+      "seq": 1
+    },
+    "missing_sensor": {
+      "case": "missing_sensor",
+      "available": 1,
+      "direction": 0,
+      "speed_valid": 0,
+      "speed": 0,
+      "wheelbase_valid": 0,
+      "wheelbase": 0,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 16,
+      "seq": 1
+    },
+    "low_rail": {
+      "case": "low_rail",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 0,
+      "tx_sent": 0,
+      "flags": 2,
+      "seq": 1
+    },
+    "send_failed": {
+      "case": "send_failed",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "send_success": {
+      "case": "send_success",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 1,
+      "flags": 0,
+      "seq": 1
+    },
+    "rail_interruption": {
+      "case": "rail_interruption",
+      "available": 1,
+      "direction": 1,
+      "speed_valid": 1,
+      "speed": 5000,
+      "wheelbase_valid": 1,
+      "wheelbase": 2500,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "backward_clock": {
+      "case": "backward_clock",
+      "available": 1,
+      "direction": 2,
+      "speed_valid": 1,
+      "speed": 10000,
+      "wheelbase_valid": 1,
+      "wheelbase": 5000,
+      "weight_valid": 0,
+      "weight": 65535,
+      "tx_attempts": 1,
+      "tx_sent": 0,
+      "flags": 0,
+      "seq": 1
+    },
+    "queued_batch": {
+      "case": "queued_batch",
+      "reports": 1,
+      "last_seq": 2
+    },
+    "streamed_batch": {
+      "case": "streamed_batch",
+      "reports": 2,
+      "last_seq": 2
+    },
+    "crc": {
+      "case": "crc",
+      "crc8": 244
+    }
+  },
+  "scope": "Actual portable C core and inspected main event-drain relationship; declared millisecond/default-config stimuli. The 27 public ABI cases are NOT executed because current firmware has no ABI adapter and uses different configurable assumptions. No target peripheral timing, ADC, USART, RF, energy measurement or full-product result.",
+  "host_compiles": 1,
+  "new_target_builds": 0,
+  "provider_calls": 0,
+  "solver_calls": 0,
+  "participant_source_edits": 0,
+  "provider_ledger_unchanged": true,
+  "wall_seconds": 1.2293018749915063,
+  "public_27_abi_cases_executed": false,
+  "full_product_passed": false,
+  "physical_verified": false,
+  "attribution_boundary": "Eq.5/6 and native declared config positives; rail/time safety negatives are task-defined fault requirements, not author-firmware claims."
+}

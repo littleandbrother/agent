@@ -11,6 +11,8 @@ from .recovery import Recovery, ObservedHTTPSHandler, is_not_sent, open_before_s
 from .context import ContextArchive, REQUEST_BYTES, project_interactive
 from .request_evidence import describe as describe_request
 from .model_profile import for_owner as model_profile
+from .skill_resources import active_records
+from . import budget_policy
 
 MODEL='deepseek-flash'
 RATE={'input_usd_per_million':.30,'output_usd_per_million':1.20,'cache_hit_usd_per_million':.006}
@@ -21,6 +23,25 @@ STREAM_BYTES=2000000
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,*args,**kwargs):raise ValueError('PROVIDER_REDIRECT_DENIED')
+
+
+def validate_tool_schemas(payload):
+    """Reject unsupported function roots before transmission or reservation.
+
+    A TypeBox union can serialize to only anyOf, which the provider rejects.
+    This is a local interface check, not a provider usage resolution.
+    """
+    tools=payload.get('tools',[])
+    if not isinstance(tools,list):raise ValueError('MODEL_TOOL_SCHEMA_INVALID')
+    for tool in tools:
+        if not isinstance(tool,dict) or tool.get('type')!='function':
+            raise ValueError('MODEL_TOOL_SCHEMA_INVALID')
+        function=tool.get('function')
+        if not isinstance(function,dict) or not isinstance(function.get('name'),str):
+            raise ValueError('MODEL_TOOL_SCHEMA_INVALID')
+        parameters=function.get('parameters')
+        if not isinstance(parameters,dict) or parameters.get('type')!='object':
+            raise ValueError('MODEL_TOOL_PARAMETERS_OBJECT_REQUIRED:'+function['name'])
 
 
 class Provider:
@@ -45,6 +66,7 @@ class Provider:
 
     @staticmethod
     def owner_cap(db, owner):
+        if budget_policy.for_owner(db, owner):return None
         explicit=db.execute('SELECT max_usd FROM owner_model_caps WHERE owner=?',(owner,)).fetchone()
         if explicit:return explicit['max_usd']
         if not owner.startswith('pi-chat-'):return None
@@ -54,27 +76,50 @@ class Provider:
         if type(cap) not in (int,float) or not math.isfinite(cap) or cap<=0:raise ValueError('MODEL_CAP_INVALID')
         return cap
 
-    def status(self):
+    @staticmethod
+    def budget_scope(db):
+        configured=db.execute("SELECT value FROM settings WHERE key='model_budget_scope'").fetchone()
+        scope=json.loads(configured['value']) if configured else 'aggregate'
+        if scope not in ('aggregate','per-owner'):raise ValueError('MODEL_BUDGET_SCOPE_INVALID')
+        return scope
+
+    def status(self, owner=None):
         with self.store.connect() as db:
             limits=dict(db.execute('SELECT * FROM model_limits WHERE id=1').fetchone())
+            configured_limits=dict(limits)
+            policy=budget_policy.configured(db)
+            if budget_policy.for_owner(db,owner):
+                limits.update(total_usd=None,request_usd=None,max_tokens=None)
+            scope=self.budget_scope(db)
             resolved=self.recovery.resolved(db)
             rows=[dict(r) for r in db.execute('SELECT id,owner,created,reserved,charged,status,usage,error FROM model_requests ORDER BY created')]
             for row in rows:
                 if row['id'] in resolved:row.update(source_status=row['status'],status='NOT_SENT',resolution='verified_pre_send_failure_reservation_retained')
+            owner_limits=[]
+            for request_owner in sorted({r['owner'] for r in rows}):
+                cap=self.owner_cap(db,request_owner)
+                held=sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows if r['owner']==request_owner)
+                owner_limits.append({'owner':request_owner,'cap_usd':cap,'liability_usd':held,
+                                     'unbounded':bool(budget_policy.for_owner(db,request_owner)),
+                                     'remaining_usd':max(0,cap-held) if cap is not None else None})
         return {'provider':'deepseek','model_id':MODEL,'version':'DeepSeek-V4.1-Flash','status':'CONFIGURED' if KEY_PATH.exists() else 'NOT_CONFIGURED',
-                'limits':limits,'upper_bound_usd':sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows),
+                'limits':limits,'configured_limits':configured_limits,'unbounded_policy':policy,
+                'upper_bound_usd':sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows),
+                'budget_scope':scope,'owner_limits':owner_limits,
                 'calls':len(rows),'rates':RATE,'pricing_source':PRICING_SOURCE,'requests':rows}
 
     def complete(self,owner,payload,on_chunk=None):
         if (self.store.root.parent/"paid-window-closed.json").exists():raise ValueError("PAID_WINDOW_CLOSED")
         if payload.get('model')!=MODEL:raise ValueError('MODEL_ID_MISMATCH')
+        validate_tool_schemas(payload)
         with self.store.connect() as db:
             interactive=db.execute('SELECT 1 FROM interactive_leases WHERE owner=?',(owner,)).fetchone()
             profile=model_profile(db,owner)
         projection=None
         if interactive:
             payload,projection=project_interactive(payload, ContextArchive(self.store.root.parent, owner),
-                request_bytes=profile['request_bytes'],target_bytes=profile['target_bytes'])
+                request_bytes=profile['request_bytes'],target_bytes=profile['target_bytes'],
+                active_skills=active_records(self.store,owner),compact_state=profile.get('compact_state',False))
         if len(canonical(payload).encode())>profile['request_bytes']:
             self.store.event(owner, owner, 'model_context_rejected', projection or {
                 'projected_bytes':len(canonical(payload).encode()), 'limit_bytes':profile['request_bytes']})
@@ -95,6 +140,7 @@ class Provider:
         with self.store.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             limit=db.execute('SELECT * FROM model_limits WHERE id=1').fetchone()
+            unbounded=bool(budget_policy.for_owner(db,owner))
             grant=db.execute('SELECT * FROM grants WHERE owner=?',(owner,)).fetchone()
             self.recovery.check_window(db,owner,grant,limit)
             rows=list(db.execute('SELECT * FROM model_requests'))
@@ -110,9 +156,13 @@ class Provider:
                 bindings={r['request_id']:r['message_id'] for r in db.execute('SELECT request_id,message_id FROM model_request_context WHERE owner=?',(owner,))}
                 count=sum(r['owner']==owner and (bindings.get(r['id'])==lease['message_id'] or
                           r['id'] not in bindings and r['created']>=lease['created']) for r in rows)
-                if count>=128:raise ValueError('CHAT_TURN_REQUEST_CAP')
-            elif sum(r['owner']==owner for r in rows)>=24:raise ValueError('SESSION_REQUEST_CAP')
+                if not unbounded and count>=128:raise ValueError('CHAT_TURN_REQUEST_CAP')
+            elif not unbounded and sum(r['owner']==owner for r in rows)>=24:raise ValueError('SESSION_REQUEST_CAP')
             owner_cap=self.owner_cap(db,owner)
+            # Interactive engineering sessions have independent grants. Keep
+            # the legacy aggregate semantics for scientific/batch apparatus.
+            per_owner=self.budget_scope(db)=='per-owner' and owner.startswith('pi-chat-')
+            if per_owner and owner_cap is None and not unbounded:raise ValueError('MODEL_OWNER_CAP_REQUIRED')
             owner_held=sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows if r['owner']==owner)
             if owner_cap is not None and owner_held+reservation>=owner_cap:raise ValueError('MODEL_OWNER_USD_BUDGET')
             study=db.execute('SELECT s.* FROM research_model_studies s JOIN research_model_owners o ON o.protocol=s.protocol WHERE o.owner=?',(owner,)).fetchone()
@@ -120,10 +170,14 @@ class Provider:
                 if study['model'] != MODEL:raise ValueError('RESEARCH_MODEL_ID_MISMATCH')
                 study_owners={r['owner'] for r in db.execute('SELECT owner FROM research_model_owners WHERE protocol=?',(study['protocol'],))}
                 study_held=sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows if r['owner'] in study_owners)
-                if study_held+reservation>=study['max_usd']:raise ValueError('RESEARCH_MODEL_USD_BUDGET')
-            if reservation>=limit['request_usd'] or held+reservation>=limit['total_usd']:
+                if not unbounded and study_held+reservation>=study['max_usd']:raise ValueError('RESEARCH_MODEL_USD_BUDGET')
+            if not unbounded and (reservation>=limit['request_usd'] or not per_owner and held+reservation>=limit['total_usd']):
                 raise ValueError('MODEL_USD_BUDGET')
-            if used_tokens+pending_tokens+input_bound+output>limit['max_tokens']:raise ValueError('MODEL_TOKEN_BUDGET')
+            if per_owner:
+                used_tokens=sum(json.loads(r['usage'])['total_tokens'] if r['usage'] else 0 for r in rows if r['owner']==owner)
+                pending_tokens=sum(model_profile(db,owner)['request_bytes']+4096+model_profile(db,owner)['max_output_tokens']
+                                   for r in rows if r['owner']==owner and r['status']=='DISPATCHED')
+            if not unbounded and used_tokens+pending_tokens+input_bound+output>limit['max_tokens']:raise ValueError('MODEL_TOKEN_BUDGET')
             db.execute('INSERT INTO model_requests VALUES (?,?,?,?,?,?,?,NULL,NULL,NULL)',
                        (request_id,owner,time.time(),hashlib.sha256(raw).hexdigest(),reservation,0.,'DISPATCHED'))
             evidence=describe_request(db,owner,body,raw)

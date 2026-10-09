@@ -17,6 +17,7 @@ import { Type } from "typebox";
 import { assertEdaExecution } from "./eda-outcome.ts";
 import { waitForEngineeringJob } from "./engineering-wait.ts";
 import { digest as methodDigest, methodInstructions, profile as methodProfile } from "./research-method.ts";
+import { loadFrozenSkills } from "./skill-resources.ts";
 
 const input = readline.createInterface({ input: process.stdin });
 const commands: any[] = [];
@@ -223,6 +224,33 @@ const engineeringEnabled = !config.sharedContext?.tools || config.sharedContext.
 const simulationTask = engineeringEnabled ? (await api("/api/engineering/task")).binding : null;
 if (productContext.binding) config.taskId = productContext.binding.task_id;
 const tools: any[] = [
+	defineTool({
+		name: "bf_skill",
+		label: "Frozen product skills",
+		description:
+			"Discover, activate or deactivate versioned professional methods. Activation preserves the exact method during context compaction. Resource paths are explicit frozen files. Loading is not execution or acceptance.",
+		executionMode: "sequential",
+		// DeepSeek requires a function's parameter schema to have an object root.
+		// The backend still validates required and permitted fields per action.
+		parameters: Type.Object(
+			{
+				action: Type.Union([
+					Type.Literal("catalog"),
+					Type.Literal("activate"),
+					Type.Literal("deactivate"),
+					Type.Literal("resource"),
+				]),
+				skill_id: Type.Optional(Type.String()),
+				path: Type.Optional(Type.String()),
+				offset: Type.Optional(Type.Integer({ minimum: 0 })),
+				limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 400 })),
+			},
+			{ additionalProperties: false },
+		),
+		async execute(_id, args) {
+			return reply(await api("/api/skills", args));
+		},
+	}),
 	defineTool({
 		name: "bf_experiment",
 		label: "Experiment",
@@ -432,6 +460,7 @@ tools.push(
 				Type.Literal("ask"),
 				Type.Literal("bind"),
 				Type.Literal("assembly_inspect"),
+				Type.Literal("assembly_schema"),
 				Type.Literal("assembly_write"),
 				Type.Literal("publish_file"),
 				Type.Literal("delivery_inspect"),
@@ -522,6 +551,7 @@ tools.push(
 					),
 				);
 			}
+			if (args.action === "assembly_schema") return reply(await api("/api/assembly/schema"));
 			if (args.action === "assembly_inspect") return reply(await api("/api/assembly"));
 			if (args.action === "assembly_write") {
 				if (!args.assembly_path) throw Error("ASSEMBLY_PATH_REQUIRED");
@@ -853,7 +883,14 @@ const availableTools = simulationTask
 	? simulationTask.task?.engine === "door-system"
 		? ["bf_engineering", "bf_reference"]
 		: ["bf_engineering"]
-	: [...new Set([...selectedTools, "bf_product", "bf_eda"])];
+	: [
+			...new Set([
+				...selectedTools,
+				"bf_product",
+				"bf_eda",
+				...(config.resourceRoot && selectedTools.includes("bf_engineering") ? ["bf_skill"] : []),
+			]),
+		];
 if (shared?.folder_id)
 	tools.push(
 		defineTool({
@@ -894,9 +931,23 @@ const sessionManager = fs.existsSync(pointer)
 	? SessionManager.open(fs.readFileSync(pointer, "utf8"))
 	: SessionManager.create(cwd, path.join(cwd, ".pi/chat-sessions"));
 fs.writeFileSync(pointer, sessionManager.getSessionFile()!);
+const frozenSkills =
+	!simulationTask && config.resourceRoot
+		? loadFrozenSkills(config.resourceRoot, config.sourceManifest.resource_manifest.sha256)
+		: [];
+if (frozenSkills.length && availableTools.includes("bf_skill")) {
+	await api("/api/skills", { action: "activate", skill_id: "bf-task-recovery" });
+	console.log(
+		JSON.stringify({
+			type: "skill_catalog_loaded",
+			manifest_sha256: config.sourceManifest.resource_manifest.sha256,
+			ids: frozenSkills.map((skill) => skill.name),
+		}),
+	);
+}
 const resources: ResourceLoader = {
 	getExtensions: () => ({ extensions: [], errors: [], runtime: createExtensionRuntime() }),
-	getSkills: () => ({ skills: [], diagnostics: [] }),
+	getSkills: () => ({ skills: frozenSkills, diagnostics: [] }),
 	getPrompts: () => ({ prompts: [], diagnostics: [] }),
 	getThemes: () => ({ themes: [], diagnostics: [] }),
 	getAgentsFiles: () => ({ agentsFiles: [] }),

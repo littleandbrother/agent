@@ -21,7 +21,8 @@ from bfworld.agentlab.provider import MODEL
 class TraceEngineering(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.home=Path(self.tmp.name);self.app=Workbench(self.home/'state')
-        self.owner='pi-trace-engineering';self.directory=self.home/'sessions'/self.owner;self.directory.mkdir(parents=True)
+        self.owner=self.app.conversations.create('Trace engineering fixture',None,'trace-engineering-fixture',defer_dispatch=True)['id']
+        self.directory=self.home/'sessions'/self.owner;self.directory.mkdir(parents=True)
         (self.directory/'receipt.json').write_text(json.dumps({'owner':self.owner,'harness':{'identity':'test','model':'fixture'},'started':1,'ended':9}))
         self.server=ThreadingHTTPServer(('127.0.0.1',0),handler(self.app));self.app.conversations.port=self.server.server_port
         threading.Thread(target=self.server.serve_forever,daemon=True).start()

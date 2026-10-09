@@ -1,0 +1,95 @@
+{
+  "schema_version": "bf-independent-stage-review-v1",
+  "paper": "P02",
+  "owner": "pi-chat-103e79405f0e0c6d",
+  "actor": "Codex independent checker",
+  "created": 1791492621.860585,
+  "status": "FAIL",
+  "job_id": "eng-a49f13fff77f248e",
+  "project_sha256": "aa8c2c148c5ae1bb8de69b9f01501d0cf005b84ed75ef71749caf329401a37e9",
+  "raw_sha256": "adcc2d8f1703beb6e63f90b919d2c5c056ce0c5bca53be1174087922eaa0c967",
+  "source_sha256": {
+    "project/spice/opms_stage.cir": "e0eb6dabcbda6c669fab1d12df326af19761b2956022803f6edce8da10fb5b1d"
+  },
+  "report_sha256": "4b2f39a0439908a2f403a3bda5ca95eb624f67f91c03ddd884ccd75df531ba99",
+  "checks": [
+    {
+      "id": "declared_hysteresis_thresholds",
+      "status": "FAIL",
+      "declared_v": [
+        3.6,
+        5.11
+      ],
+      "implemented_v": [
+        2.8450000000000006,
+        5.865
+      ],
+      "basis": {
+        "url": "https://raw.githubusercontent.com/ngspice/ngspice/master/src/spicelib/devices/sw/swload.c",
+        "sha256": "2911a39d948949f90de1d0e92e2f8901d9f9b81a3b1a470d31e93e701f13e84e",
+        "lines": [
+          66,
+          70
+        ]
+      },
+      "scope": "Positive VH is a half-width about VT, directly shown by official implementation."
+    },
+    {
+      "id": "store_floor_12_18",
+      "status": "FAIL",
+      "declared_floor_v": 3.6,
+      "actual_minimum": {
+        "start_s": 12.0,
+        "end_s": 18.0,
+        "voltage_v": 2.847700409463812,
+        "time_s": 12.03560716471724
+      },
+      "scope": "Requirement check on the declared surrogate source, not a physical TENG validation."
+    },
+    {
+      "id": "store_floor_22_27",
+      "status": "FAIL",
+      "declared_floor_v": 3.6,
+      "actual_minimum": {
+        "start_s": 22.0,
+        "end_s": 27.0,
+        "voltage_v": 2.833381999641893,
+        "time_s": 25.4882243854956
+      },
+      "scope": "Requirement check on the declared surrogate source, not a physical TENG validation."
+    },
+    {
+      "id": "report_event_band_supported",
+      "status": "FAIL",
+      "claim": "with a declared source whose charging rate is of the paper's order, the gated store reaches 5.11 V, the 40 mA x 6 s event is served by two gate cycles without leaving [3.6 V, 5.87 V], and the same event drags the ungated control below 0 V",
+      "contradiction": "Both exact event windows contain samples below the stated 3.6 V floor."
+    }
+  ],
+  "observations": [
+    {
+      "plot": "Transient Analysis",
+      "points": 500335,
+      "global_min_v": 7.371482017841111e-19,
+      "window_minima": [
+        {
+          "start_s": 12.0,
+          "end_s": 18.0,
+          "voltage_v": 2.847700409463812,
+          "time_s": 12.03560716471724
+        },
+        {
+          "start_s": 22.0,
+          "end_s": 27.0,
+          "voltage_v": 2.833381999641893,
+          "time_s": 25.4882243854956
+        }
+      ]
+    }
+  ],
+  "native_file_integrity": "PASS",
+  "new_solver_runs": 0,
+  "participant_files_modified": 0,
+  "full_product_passed": false,
+  "physical_verified": false,
+  "boundary": "Original native-file verdict retained. This independent declared-requirement review fails; source applicability, real load duration and physical measurements remain unresolved."
+}

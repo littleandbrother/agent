@@ -197,7 +197,8 @@ class TaskService(unittest.TestCase):
                     db.execute('INSERT INTO research_model_studies VALUES(?,?,?,?,?,?)',
                         (json.loads((TASK_ROOT/'protocol.json').read_text())['id'],time.time(),time.time()+60,2,'deepseek-flash','fixture only'))
                 inspected=[]
-                def inspect(cid,text,operation):
+                def inspect(cid,text,operation,dispatch=True):
+                    self.assertTrue(dispatch)
                     self.assertEqual(3,app.engineering.tasks.binding(cid)['max_candidates'])
                     with app.store.connect() as db:
                         self.assertEqual(.5,db.execute('SELECT max_usd FROM owner_model_caps WHERE owner=?',(cid,)).fetchone()[0])

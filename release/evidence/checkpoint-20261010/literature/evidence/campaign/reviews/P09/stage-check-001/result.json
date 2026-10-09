@@ -1,0 +1,60 @@
+{
+  "schema_version": "bf-independent-stage-review-v1",
+  "paper": "P09",
+  "owner": "pi-chat-cb52d6cf20e67841",
+  "actor": "Codex independent public condition reviewer",
+  "created": 1791496024.066782,
+  "status": "UNEVALUABLE",
+  "job_id": "eng-9e03841f05366660",
+  "project_sha256": "788630fbd386a24d5f9434210f5b2c15c53ae06d4a89447d1265d7cf868674d5",
+  "source_sha256": {
+    "project-spice/main.cir": "17214c811d16c4a6c5176a10db5421101c962263c77f977dca9d478526f04f3a"
+  },
+  "raw_sha256": "44472a7bec98ec8ec83375d1919041838bc7652814591a25196bf5a4a75c29db",
+  "report_sha256": "3c8265986d0e9d39aee792d0d85824caa18e61694b8a16bb4b9666a7f91ec44a",
+  "source_basis": {
+    "path": "sources/P09/supplement-pages.json",
+    "sha256": "5dce4a7af406ec17ca8b723ecf310afefc3329eb506d89241947bbe1513b0cf3",
+    "pages": [
+      10,
+      12
+    ]
+  },
+  "checks": [
+    {
+      "id": "ideal_peak_vs_measurement_conditions",
+      "status": "UNRESOLVED",
+      "observation": "The report compares an ideal closed-LC branch peak near 18 A to a measured terminal current. The frozen supplement states the measurement bandwidth, coupling and test input.",
+      "missing": [
+        "Calibration of the actual topology and probe transfer",
+        "Equivalent load and measured current definition",
+        "Matching event conditions"
+      ],
+      "conclusion": "The model result does not establish that the published current is wrong."
+    },
+    {
+      "id": "single_component_energy_vs_cycle_integral",
+      "status": "UNRESOLVED",
+      "component_initial_energy_j": 3.9903092668e-07,
+      "measured_cycle_integral_j": 6.91e-07,
+      "missing": [
+        "Number of discharges per sliding cycle",
+        "Common initial voltage and capacitance conditions",
+        "Measurement load and complete energy integration"
+      ],
+      "conclusion": "A single capacitor initial energy and an integrated sliding cycle have different scopes; their ratio alone does not identify a paper inconsistency."
+    },
+    {
+      "id": "fitted_loss_vs_identified_physics",
+      "status": "UNRESOLVED",
+      "observation": "Changing an effective R to match a decay is parameter fitting. Published conductor resistance need not represent every radiation, discharge and probe loss.",
+      "conclusion": "Keep the fitted model and measured decay separate until the loss mechanisms and applicability are identified."
+    }
+  ],
+  "native_file_integrity": "PASS",
+  "new_solver_runs": 0,
+  "participant_files_modified": 0,
+  "full_product_passed": false,
+  "physical_verified": false,
+  "scope": "Source/measurement applicability only; three comparisons lack shared conditions, not three proven design or paper failures."
+}
