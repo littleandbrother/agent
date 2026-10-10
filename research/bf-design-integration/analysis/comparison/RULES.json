@@ -1,0 +1,35 @@
+{
+  "schema": "bf-rq-comparison-preflight-rules-v1",
+  "protocol_hash": "8b06c8f5234426210350b5fff9aa3470350145e43a7131b426dec506b32e40f2",
+  "protocol_reference": "../../contracts/PROTOCOL.json",
+  "scope": "Prospective equality of sanitized configuration declarations only; no result ingestion, dispatch or scientific admission",
+  "pair_size": 2,
+  "max_candidates": 3,
+  "equal_identity_fields": [
+    "task_hash",
+    "initial_candidate_hash",
+    "initial_information_sha256",
+    "common_instructions_sha256",
+    "observation_policy_sha256",
+    "tool_permissions_sha256",
+    "model_configuration_sha256",
+    "runtime_source_sha256",
+    "harness_source_sha256",
+    "cache_policy_sha256",
+    "termination_policy_sha256",
+    "allocation_policy_sha256"
+  ],
+  "equal_budget_fields": [
+    "model_tokens",
+    "model_requests",
+    "model_cost_microusd",
+    "native_wall_s",
+    "total_wall_s"
+  ],
+  "profile_policy": "Different declared existing R/Q profiles; method text hash separately checked against existing method_prompt",
+  "unknown_policy": "Missing/null declarations yield UNKNOWN; unequal declarations INCOMPARABLE; invalid bindings BLOCKED",
+  "outcomes_accepted": false,
+  "execution_authorized": false,
+  "formal_method_comparison": false,
+  "pre_run_timing": "Prospective rule publication only; no claim that supplied declarations were sealed before their real runs"
+}

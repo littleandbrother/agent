@@ -1,0 +1,22 @@
+Independent review of offline native-rail replay (2026-10-01)
+
+Verdict: Ready for publication within the explicitly bounded saved-CSV replay scope. No numerical or output-safety blocker found. No solver, model, provider, native RAW, or binary execution/verification performed in this review.
+
+Reviewed canonical identities:
+replay_native_rails.py (23153 bytes): be114442180645fc45e4a221a0e78cff5267e3a4cdbfde7b179a38994c8c693b
+results.json (41790 bytes): 4cb10545405af1f1c8e30bb2def8e49866a39e1c3be650812653f89c7d55c3a3
+method-freeze.json (4186 bytes): c6f54200ab56a0d952a2e0806c407b6f9e765aca7fbd7f02d2281bf8c9ae7fd0
+
+Verification:
+- Independent complete rerun reproduced results.json and input-manifest.json byte-for-byte; all 21 built-in tests passed.
+- 61 additional checks passed, including independently selected exact trailing windows and predicate checks, math.fsum trapezoidal charge/work integration, signed residuals, power splitting, immutable input hashes, actual output-overwrite refusal, output traversal refusal, and FIFO/directory/oversize input refusal.
+- Maximum independent integration differences were 1.06e-22 C and 6.62e-24 J, consistent with floating-point summation differences.
+- Separately verified symlinked script-work-directory refusal without path leakage.
+- Initial 11-file delivery ZIP matched canonical payload bytes, CRCs and bundle hashes; names were flat/safe and no absolute workspace/home paths were found.
+
+Interpretation notes:
+- The frozen evaluator field signed_charge_consistency_error_C contains the absolute error of signed-current charge balance. Accounting separately provides the signed residual.
+- Reported time-weighted RMS uses trapezoidal quadrature of squared grid error, not exact analytic integration of the squared linear interpolant.
+- Synthetic source_connected=0/source_off is not evidence of physical source disconnection.
+- Timestep metadata and descriptive waveform differences do not establish convergence; no convergence threshold or verdict exists.
+- Local CAP/VIN2 accounting does not establish total-system energy closure, zero hidden initial energy, or physical/hardware success.

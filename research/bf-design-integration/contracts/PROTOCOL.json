@@ -1,0 +1,176 @@
+{
+  "schema": "bf-design-nominal-method-protocol-v1",
+  "id": "bf-design-main-nominal-rq-3-v1",
+  "status": "prospective-integration-not-execution-authorization",
+  "main_commit": "87e7d75b4c5cd13c96560b8aaa4168a292ddc3c9",
+  "task_id": "door-event-nominal-v1",
+  "normalized_task_hash": "667696fd9f33b4efe7abb7e6bd254904e42b2738addfe2c3110e6e2a702abfac",
+  "source_protocol_id": "door-design-pilot-v1",
+  "source_protocol_sha256": "56d617345069c75229b28bfad0162080f313e14ea445df36aefe73bf876de554",
+  "max_new_candidates_per_owner": 3,
+  "old_prototype_opportunities": 2,
+  "budget_migration": "new identity; never reinterpret old two-opportunity receipts as three",
+  "profiles": [
+    {
+      "id": "strong_generic",
+      "R": false,
+      "Q": false
+    },
+    {
+      "id": "bf_design",
+      "R": true,
+      "Q": true
+    },
+    {
+      "id": "representation_only",
+      "R": true,
+      "Q": false
+    },
+    {
+      "id": "revision_only",
+      "R": false,
+      "Q": true
+    }
+  ],
+  "common_facts_and_freedoms": {
+    "allowed_design_variables": {
+      "mechanical.gap_mm": {
+        "range": [
+          28,
+          70
+        ],
+        "artifact": "assembly.step + source-design.json + force-table"
+      },
+      "circuit.cin_uF": {
+        "values": [
+          10,
+          22,
+          47,
+          100,
+          220
+        ],
+        "artifact": "system.cir Cstorage; ideal nominal capacitance, not a qualified part number"
+      },
+      "circuit.cout_uF": {
+        "values": [
+          10,
+          22,
+          47,
+          100,
+          220,
+          470
+        ],
+        "artifact": "system.cir Cout; fixed declared ESR model"
+      },
+      "firmware.interval_ms": {
+        "values": [
+          50,
+          100,
+          200,
+          500
+        ],
+        "artifact": "policy.h + shared C builds"
+      }
+    },
+    "protected_categories": {
+      "environment": [
+        "mechanical.opening_s",
+        "mechanical.angle_deg",
+        "circuit.initial_vin_V",
+        "link"
+      ],
+      "model_assumptions": [
+        "mechanical.remanence_T",
+        "mechanical.damping_ratio",
+        "firmware timings and currents except interval_ms"
+      ],
+      "diagnostic": [
+        "circuit.diagnostic_input_A"
+      ],
+      "numerical": [
+        "solver",
+        "confirmation=true"
+      ],
+      "presentation": [
+        "presentation"
+      ]
+    },
+    "baseline": {
+      "schema_version": "closed-simulation-spec-v1",
+      "mechanical": {
+        "gap_mm": 48.0,
+        "opening_s": 2.0,
+        "angle_deg": 65.0,
+        "remanence_T": 1.25,
+        "damping_ratio": 0.02
+      },
+      "circuit": {
+        "cin_uF": 47.0,
+        "cout_uF": 100.0,
+        "initial_vin_V": 0.0,
+        "diagnostic_input_A": 0.0
+      },
+      "firmware": {
+        "interval_ms": 100.0,
+        "boot_ms": 53.8,
+        "init_ms": 13.0,
+        "tx_ms": 5.0,
+        "boot_mA": 0.41,
+        "init_mA": 1.596,
+        "tx_mA": 3.659,
+        "sleep_uA": 2.0,
+        "reset_uA": 0.3
+      },
+      "link": {
+        "loss_probability": 0.0,
+        "seed": 17,
+        "scan_duty": 1.0
+      },
+      "solver": {
+        "max_step_s": 5e-05,
+        "firmware_step_s": 0.0001,
+        "reltol": 0.0001,
+        "max_coupling_iterations": 8
+      },
+      "presentation": {
+        "camera_deg": 35.0
+      }
+    },
+    "architecture_changes": false,
+    "artifact_source_changes": false,
+    "component_selection": "ideal numeric values only; no qualified part-number claim",
+    "service": {
+      "event": "motion occurrence, not open/close direction",
+      "deadline_s": 4.0,
+      "minimum_correct_packets": 1,
+      "expected_payload_hex": "424644320102030405060708"
+    }
+  },
+  "source_pilot_limits_not_new_authorization": {
+    "pi_max_wall_s_per_trial": 2700,
+    "candidate_wall_s": 3600,
+    "native_total_wall_s": 21600,
+    "requested_paid_allocation_usd": 2.0,
+    "max_usd_per_trial": 0.5,
+    "max_usd_per_request": 0.19,
+    "model": "deepseek-flash"
+  },
+  "this_task": {
+    "provider_calls": 0,
+    "native_solver_calls": 0,
+    "paid_budget_authorized": 0,
+    "execution_authorized": false
+  },
+  "acceptance_authority": "unchanged SimulationTasks.evaluate/submit; never adapter-computed acceptance",
+  "formal_method_comparison": false,
+  "task_aliases": [],
+  "forbidden_promotions": [
+    "DEV-FEASIBLE-01",
+    "DEV-COUPLING-01",
+    "physical qualification",
+    "architecture synthesis",
+    "RSI"
+  ],
+  "facts_policy": "same inspect/task binding, same public artifacts and histories across R/Q profiles",
+  "protocol_hash": "8b06c8f5234426210350b5fff9aa3470350145e43a7131b426dec506b32e40f2"
+}

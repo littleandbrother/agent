@@ -1,0 +1,27 @@
+已保存 native rail CSV 的有界复算（2026-10-01）
+
+结论
+- 50 µs baseline-observation 与真正 25 µs baseline-fine 的输入大小/SHA-256 均吻合：80,033 / 160,032 点，均覆盖 0–4 s。
+- 精确冻结 evaluator 与独立居中最小二乘实现，在 CAP_gap、VIN2 的末 0.5 s 和 1.0 s 四组合均通过。这里“通过”仅指既定有限轨迹窗判据。
+- 全部窗最大峰峰值 0.127971 mV，最大拟合电压变化 0.127973 mV，均小于 1 mV；最大 |ΔE| 为 0.087542 nJ（门槛 10 nJ），最大电荷残差为 33.409 fC（门槛 10 nC）。末段斜率约 −0.12797 mV/s，不能写成严格零漂移或渐近稳定。
+- 步长减半后，union 时间网格线性插值下 VIN/VIN2 最大绝对差约 23.0521 µV，RMS 约 20.7519 µV；CAP_gap 最大差亦约 23.0521 µV。CAP 节点本身最大差 2.4500 nV，OUT 最大差 0.15784 nV。没有事先声明的波形数值收敛阈值，因此不输出“收敛通过”。
+
+有符号局部电容账目（全程 0–4 s）
+- CAP_gap 的电压为 vin−cap，电流 icap 正向 vin→cap，C=1 µF；VIN2 电压为 vin2−ground，电流 ivin2 正向 vin2→ground，C=4.7 µF。
+- 对两条支路分别计算 ΔQ−∫i dt 与 ΔE−∫v·i dt，E=0.5 C v²；完整原始 CSV 时间点上采用梯形积分。
+- 50 µs：CAP/VIN2 末能量 10.582699 / 49.738688 nJ；有符号能量残差 −3.77280 / −13.36391 fJ；有符号电荷残差 −31.56659 / −112.35763 fC。
+- 25 µs：CAP/VIN2 末能量 10.579352 / 49.722948 nJ；有符号能量残差 +0.26927 / −6.71529 fJ；有符号电荷残差 −2.27928 / −58.93839 fC。
+- 这些量支持已导出轨迹中的两只局部电容储能/电流/功率自洽，不等于系统总能量闭合，也不说明全部能量去向或来源。
+
+证据边界
+- baseline 的 source_connected=0 来自缺失 V(control) 时填零；source_off 是 wrapper 标签，不是测得外源断开。
+- self_powered_success=false 是 wrapper 的诊断性硬编码，不能据此作器件失败判断。输出仅约 1.064 µV 是轨迹事实，不能替代器件或系统验收。
+- UIC 与两只已导出电容的初始电压为零，并不证明全部隐藏初始能量为零。
+- timestep halving 仅由已验 SHA 的 sanitized packet 所载 deck 元数据支持。原先相同步长的 baseline-fine 未作为 refinement。
+- evaluator 的冻结字节被精确匹配；当前 wrapper 是不同文件。历史 wrapper 字节未封存，不能借此补证历史代码身份。
+- 回放未运行求解器、模型或 provider；未验证 native RAW、导出保真性、二进制或加密 vendor 模型。未作 PMIC/model 物理准入、硬件成功、Agent 增益或追溯性重盖章。
+
+复现与安全
+- 预读数据前固定的方法见 method-freeze.json，方法确认见 provenance-confirmation.json。完整机器结果、输入身份与制品SHA索引随附。
+- 21 项内置检查及 4 项真实输出安全检查通过；包括合成充/放电、反号检测、缺失/NaN/非单调数据拒绝、哈希篡改、大小不符、缺文件、symlink拒绝和不覆盖。
+- 安全加固版本再次回放的 results.json SHA 与首轮完全相同：4cb10545405af1f1c8e30bb2def8e49866a39e1c3be650812653f89c7d55c3a3。

@@ -1,0 +1,75 @@
+{
+  "schema_version": "native-rail-method-freeze-v1",
+  "frozen_at_utc": "2026-10-01T20:32:19Z",
+  "before_full_csv_access": true,
+  "not_a_historical_preregistration": "This replay freezes interpretation before local CSV access, not retrospectively before the original experiments.",
+  "packet_sha256": "a4824d3765ca6411871f4b507a64b10e3c0ca46af539ecdcfdb1d1b42d7f8243",
+  "evaluator": {
+    "bytes": 4166,
+    "sha256": "b2ad2549049ddb8de5da3df0d1d5359d84ae257926cbcf73bb1414624f3ec567"
+  },
+  "expected_csvs": {
+    "coarse": {
+      "bytes": 12164148,
+      "sha256": "4bdbbb62543bbd61b20651d678858b8ac618b2ae03dd19410ff2869f268da84a"
+    },
+    "fine": {
+      "bytes": 24303900,
+      "sha256": "7c75a9cf25709dc45bcf745200f5ef023a795d5c974852faf73df266ddb3253b"
+    }
+  },
+  "parameters": {
+    "window_s": 0.5,
+    "voltage_peak_to_peak_tol_V": 0.001,
+    "slope_voltage_change_tol_V": 0.001,
+    "energy_drift_tol_J": 1e-08,
+    "charge_consistency_tol_C": 1e-08,
+    "max_sample_interval_s": 0.001,
+    "cap_F": 1e-06,
+    "vin2_F": 4.7e-06,
+    "phase": "source_off"
+  },
+  "phase_mapping": "Request phase post-source-change is a wrapper-level instruction; exact evaluator accepts only source_on/source_off. Both baseline fixtures report source_off. Their absent V(control) was replaced with synthetic zero. This label is not a measured disconnect.",
+  "settling_method": {
+    "windows": "Both trailing W and 2W must pass after last source_connected transition; require at least 2W since that transition. first=max(last_transition_index, searchsorted(time,last_time-factor*W,side=right)-1). Include sample at/before lower boundary.",
+    "samples": "At least 8 points/window, max adjacent gap <= 1 ms. Strictly increasing finite time; finite columns; binary source_connected.",
+    "rails": "CAP_gap=vin_V-cap_V, current icap_A positive vin -> cap, C=1 uF; VIN2=vin2_V-ground, current ivin2_A positive vin2 -> ground, C=4.7 uF.",
+    "fit": "Unweighted numpy.polyfit(elapsed_time,voltage,1), abs(slope)*actual_window_elapsed <= 1 mV. Independent centered least-squares slope also reported.",
+    "voltage": "Peak-to-peak <= 1 mV.",
+    "energy": "abs(0.5*C*(v_end**2-v_start**2)) <= 10 nJ.",
+    "charge": "abs(C*(v_end-v_start)-numpy.trapezoid(i,t)) <= 10 nC."
+  },
+  "energy_accounting": {
+    "voltage_current_polarity": "Passive sign convention as stated above.",
+    "charge_residual": "C*(v_end-v_start)-integral(i dt), signed and absolute.",
+    "energy_residual": "0.5*C*v_end**2 - 0.5*C*v_start**2 - integral(v*i dt), signed and absolute.",
+    "integration": "Trapezoidal integration on original full-resolution CSV time points; whole trace and the exact trailing predicate windows.",
+    "scope": "Only local CAP and VIN2 element accounting, not total system energy balance or source work."
+  },
+  "waveform_comparison": {
+    "acceptance_threshold": null,
+    "convergence_verdict": null,
+    "reason": "No numerical waveform convergence acceptance threshold was predeclared; only timestep halving was checked.",
+    "alignment": "Linear interpolation without extrapolation on common coarse time grid and union of both native time grids in shared time interval.",
+    "signals": [
+      "vin_V",
+      "cap_V",
+      "vin2_V",
+      "cap_gap_V",
+      "out_V",
+      "pgood_V",
+      "icap_A",
+      "ivin2_A"
+    ],
+    "metrics": "Max absolute error, time-weighted RMS error, mean signed error, terminal fine-minus-coarse, pooled peak absolute signal scale, max error / that scale (null if zero).",
+    "step_evidence": "50 us vs 25 us is packet-reported deck metadata; inspect observed time gaps descriptively, not as independent deck or solver proof."
+  },
+  "limits": [
+    "No new solver, model, provider or native execution.",
+    "No RAW or binary verification.",
+    "Current wrapper bytes are distinct from the frozen evaluator; historical wrapper bytes are not sealed.",
+    "self_powered_success=false is diagnostic writer hardcoding, not a device verdict.",
+    "UIC does not prove every hidden initial energy is zero.",
+    "No PMIC/model physical admission, hardware success, Agent gain, total energy attribution, or retroactive restamping."
+  ]
+}
