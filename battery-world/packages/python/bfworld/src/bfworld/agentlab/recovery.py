@@ -8,6 +8,7 @@ import time
 import urllib.error
 import urllib.request
 from .store import canonical, identity
+from . import budget_policy
 
 INTERACTIVE_WALL_SECONDS = 1800
 
@@ -91,6 +92,9 @@ class Recovery:
         carried = {r['request_id']:r['original_row_hash'] for r in db.execute(
             'SELECT * FROM research_usage_carryforwards WHERE protocol=? AND authorization<>?',
             (policy['protocol'],''))} if policy else {}
+        authority=budget_policy.unbounded_time(db,owner)
+        if authority:
+            carried.update(authority.get('unknown_carryforward',{}))
         resolved = self.resolved(db)
         return [dict(r) for r in db.execute("SELECT * FROM model_requests WHERE status='UNKNOWN'")
                 if r['id'] not in resolved and r['owner'] not in allowed
@@ -117,17 +121,24 @@ class Recovery:
         row = db.execute("""SELECT l.* FROM interactive_leases l JOIN chat_messages m ON m.id=l.message_id
             WHERE l.owner=? AND m.conversation=? AND m.status NOT IN ('WITHDRAWN','RECALLING','CANCELLED')
             ORDER BY l.created DESC, l.message_id DESC LIMIT 1""", (owner, owner)).fetchone()
-        return dict(row) if row else None
+        value=dict(row) if row else None
+        if value and budget_policy.unbounded_time(db,owner):
+            value.update(expires=None,wall_policy='direct-user-unbounded-v2')
+        return value
 
     def refresh_grant(self, owner):
         with self.store.connect() as db:
             lease = self.lease(db, owner)
-            if lease and time.time() < lease['expires']:
+            if lease and lease['expires'] is not None and time.time() < lease['expires']:
                 db.execute('UPDATE grants SET expires=? WHERE owner=?', (lease['expires'], owner))
 
     def check_window(self, db, owner, grant, limits):
         if not grant:
             raise PermissionError('MODEL_OWNER_GRANT_EXPIRED')
+        if budget_policy.unbounded_time(db,owner):
+            # Old grants/studies/leases stay in the ledger. Only the explicit
+            # scoped continuation supersedes their time limit, never identity.
+            return
         lease = self.lease(db, owner)
         interactive = db.execute('SELECT 1 FROM interactive_leases WHERE owner=?', (owner,)).fetchone()
         if interactive and not lease:

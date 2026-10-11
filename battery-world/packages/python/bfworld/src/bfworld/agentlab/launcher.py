@@ -13,6 +13,7 @@ from .store import Store,canonical,identity
 from .experiments import task,BASELINE_DESIGN,BASELINE_POLICY
 from .recovery import Recovery, INTERACTIVE_WALL_SECONDS
 from .model_profile import for_owner as model_profile
+from . import budget_policy
 from .skill_resources import source_bundle, freeze_resources, verify as verify_resources
 
 from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
@@ -168,7 +169,7 @@ def wait_interactive(proc,store,owner,on_expire=None):
     recovery=Recovery(store)
     while proc.poll() is None:
         with store.connect() as db:lease=recovery.lease(db,owner)
-        remaining=lease['expires']-time.time() if lease else 0
+        remaining=lease['expires']-time.time() if lease and lease['expires'] is not None else float('inf') if lease else 0
         if remaining>0:
             try:proc.wait(timeout=min(1,remaining))
             except subprocess.TimeoutExpired:pass
@@ -220,11 +221,12 @@ def previous_attempt_summary(previous):
 
 def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,store_root=None,dry_run=False,resume=False,interrupt_after_job=False,mutable=('solver.ts','improver.ts'),feedback=None,public_history=None,memory_in_prompt=False,process_lock=None,service_port=8768,on_process=None,home_root=None,shared_context=None,chat_upgrade=False,product=False,on_expire=None):
     home_root=Path(home_root or HOME_ROOT)
-    if not dry_run and (home_root/'paid-window-closed.json').exists():raise ValueError('PAID_WINDOW_CLOSED')
     session_lock=process_lock or (home_root/'pi-session.lock').open('a')
     try:
         fcntl.flock(session_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         store=Store(store_root or home_root/'state')
+        with store.connect() as db:time_authority=budget_policy.unbounded_time(db,label)
+        if not dry_run and (home_root/'paid-window-closed.json').exists() and not time_authority:raise ValueError('PAID_WINDOW_CLOSED')
         manifest=json.loads((Path(harness)/'manifest.json').read_text())
         app_entry=manifest.get('app_entry','main.js')
         if identity({k:v for k,v in manifest.items() if k!='identity'})!=manifest['identity']:raise ValueError('HARNESS_MANIFEST_TAMPER')

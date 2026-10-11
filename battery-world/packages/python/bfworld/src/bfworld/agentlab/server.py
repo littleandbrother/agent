@@ -61,6 +61,8 @@ class Workbench:
         self.deliverables=Deliverables(self)
         from .engineering import Engineering
         self.engineering=Engineering(self)
+        from .design_lab.service import DesignLab
+        self.design_lab=DesignLab(self)
         from .eda_cli import EdaCLI
         self.eda_cli=EdaCLI(self)
         from .skill_resources import SkillResources
@@ -329,12 +331,15 @@ def handler(workbench,paper_sessions=None):
                 self.local_host()
                 path = urlparse(self.path).path
                 static = {'/': ('index.html', 'text/html'), '/app.js': ('app.js', 'text/javascript'),
+                          '/design-lab.html': ('design-lab.html','text/html'),
+                          '/design-lab.js': ('design-lab.js','text/javascript'),
+                          '/design-lab.css': ('design-lab.css','text/css'),
                           '/conversation.js': ('conversation.js', 'text/javascript'), '/conversation.css': ('conversation.css', 'text/css'), '/version.js': ('version.js', 'text/javascript'),
                           '/style.css': ('style.css', 'text/css'), '/tokens.css': ('tokens.css', 'text/css'),
                           '/delivery.js': ('delivery.js','text/javascript'), '/trace.js': ('trace.js', 'text/javascript'), '/references.js': ('references.js','text/javascript'), '/engineering.js': ('engineering.js', 'text/javascript'), '/eda.js': ('eda.js', 'text/javascript'), '/trace.css': ('trace.css', 'text/css'), '/developer.js': ('developer.js', 'text/javascript'), '/developer.css': ('developer.css', 'text/css'), '/chat.css':('chat.css','text/css'), '/organization.js':('organization.js','text/javascript'), '/organization.css':('organization.css','text/css'), '/cases.js':('cases.js','text/javascript'), '/product.js':('product.js','text/javascript'), '/product.css':('product.css','text/css')}
                 if path in static:
                     name, kind = static[path]
-                    self.bootstrap_cookie=path=='/'
+                    self.bootstrap_cookie=path in ('/','/design-lab.html')
                     return self.reply(200, ui_index() if path=='/' else (UI / name).read_bytes(), kind + '; charset=utf-8')
                 if path in ('/model-viewer.html','/model-viewer.js','/model-viewer.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/html' if path.endswith('.html') else 'text/css' if path.endswith('.css') else 'text/javascript')+'; charset=utf-8')
@@ -357,6 +362,12 @@ def handler(workbench,paper_sessions=None):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 query=parse_qs(urlparse(self.path).query)
+                if path in ('/api/design-lab','/api/design-lab/package'):
+                    target=query.get('session_id',[owner])[0] if actor['role']=='operator' else owner
+                    if path.endswith('/package'):
+                        package=workbench.design_lab.delivery(target)
+                        return self.reply(200,package,'application/zip')
+                    return self.reply(200,workbench.design_lab.view(target))
                 paper_owner=papers.target(path,query) if actor['role']=='operator' else None
                 view=papers.view() if paper_owner else workbench
                 if path in ('/api/literature-learning','/api/literature-learning/artifact'):
@@ -614,6 +625,9 @@ def handler(workbench,paper_sessions=None):
                     raise ValueError('REQUEST_SIZE')
                 body = json.loads(self.rfile.read(length))
                 query=parse_qs(urlparse(self.path).query)
+                if path=='/api/design-lab':
+                    target=body.get('session_id',owner) if actor['role']=='operator' else owner
+                    return self.reply(200,workbench.design_lab.handle(target,body,actor['role']=='operator'))
                 paper_owner=papers.target(path,query,body) if actor['role']=='operator' else None
                 if paper_owner:
                     parts=path.strip('/').split('/')

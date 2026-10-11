@@ -1,0 +1,10 @@
+#define INTERVAL_MS 100.0
+#define BOOT_MS 53.8
+#define INIT_MS 13.0
+#define TX_MS 5.0
+#define BOOT_MA 0.41
+#define INIT_MA 1.596
+#define TX_MA 3.659
+#define SLEEP_MA 0.002
+#define RESET_MA 0.0003
+#define BEACON_MODE 0

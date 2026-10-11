@@ -153,7 +153,12 @@ class ProductTests(unittest.TestCase):
         self.assertEqual('dev-01',d['product']['binding']['task_id']); self.assertFalse(d['product']['hardware_verified'])
         self.assertTrue(d['execution']['result']['receipt']['submission']); self.assertEqual('SUCCEEDED',d['execution']['status'])
         self.assertTrue(any(e['data']['type']=='text_delta' for e in d['events']))
-        self.assertIn('不要强行追问',json.dumps(requests[0],ensure_ascii=False))
+        # The deployed short core replaced the old phrase; retain both the
+        # reversible-assumption and critical-commitment limits, while the
+        # actual fixture actions above verify the execution/evidence behavior.
+        prompt=requests[0]['messages'][0]['content']
+        self.assertIn('信息不足时采用有依据、可修改的假设推进可逆工作',prompt)
+        self.assertIn('缺失信息影响关键承诺才简短询问',prompt)
         tools={t['function']['name'] for t in requests[0]['tools']}; self.assertIn('bf_product',tools)
         for file in d['product']['files']: self.assertIn('sha256',self.products.file(c['id'],file['id']))
         firstbytes=self.products.file(c['id'],'proposal-v1.json')['content']

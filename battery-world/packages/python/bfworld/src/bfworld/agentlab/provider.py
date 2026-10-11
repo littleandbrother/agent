@@ -90,6 +90,7 @@ class Provider:
             policy=budget_policy.configured(db)
             if budget_policy.for_owner(db,owner):
                 limits.update(total_usd=None,request_usd=None,max_tokens=None)
+            if budget_policy.unbounded_time(db,owner):limits['expires']=None
             scope=self.budget_scope(db)
             resolved=self.recovery.resolved(db)
             rows=[dict(r) for r in db.execute('SELECT id,owner,created,reserved,charged,status,usage,error FROM model_requests ORDER BY created')]
@@ -109,7 +110,8 @@ class Provider:
                 'calls':len(rows),'rates':RATE,'pricing_source':PRICING_SOURCE,'requests':rows}
 
     def complete(self,owner,payload,on_chunk=None):
-        if (self.store.root.parent/"paid-window-closed.json").exists():raise ValueError("PAID_WINDOW_CLOSED")
+        with self.store.connect() as db:unbounded_time=budget_policy.unbounded_time(db,owner)
+        if (self.store.root.parent/"paid-window-closed.json").exists() and not unbounded_time:raise ValueError("PAID_WINDOW_CLOSED")
         if payload.get('model')!=MODEL:raise ValueError('MODEL_ID_MISMATCH')
         validate_tool_schemas(payload)
         with self.store.connect() as db:

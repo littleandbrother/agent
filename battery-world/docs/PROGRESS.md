@@ -1,3 +1,35 @@
+<!-- bf-design-lab-r3-r5-20261012 -->
+## 2026-10-12 · R3 有限 A/B、R4 实际比较、R5 前提及全系统审查
+
+工作树仍为 `workbench/bf-refactor-r0-r2-20261011`。R3 当前精确 v4 资格：20 个控制匹配、16 次新数值账本回放，旧 D5 原生求解 0。真实 Pi A 在原 owner `pi-chat-777548cec6ae6f86` 23 消息恢复，四请求分类与接收通过；原 11 请求失败及费用保留，恢复 4 请求。B `pi-chat-a1943f58b0dd3b11` 5 请求单事件通过。A/B 是 F0 合成源、固定阶段电流、实际主机 C + ARM 对象、虚拟接收；R3 完整源/转换器及 C 改负载耦合仍 NOT_MET。
+
+R4 Pi 条件化 Skill 候选 `H-method-495f8cec8544379ace120d688d38f7554c94b3d1b1ffb5a11b1e9075ea05ea4c`：首轮 5 对均 PASS、正确性收益 0，计获取费约降 36.1%，限定采用历史保留；三个新序列反向顺序仍均 PASS，但计获取费仅降 9.1%，冻结规则 REJECT，不生产发布、不事后混合改判。R5 后代 BLOCKED_NO_CONFIRMED_PARENT，0 新派发；实物 UNCONFIRMED/NOT_TESTED，模板和来源门已就绪，无刷写或假测量。
+
+本轮新推理 97 个 SETTLED、原本地登记 $0.40749（含 A 失败与全部 R4）；前轮 C 17 请求单列。21 个未派发通用 chat 占位经唯一服务 recall 撤回，97 条新费用不变，防止错误入口重试。十原 owner、5957 费用、跨库 21 UNKNOWN 完整行/预留、原工程/索引保持。主 UI HTTP 字节与原版本相同。最新完整应用 init 932 tests、SDK/Studio 构建、2803 样本投影 PASS；根 init 历史 6 FAIL/6 ERROR/4 skip 及 88 科学 features 摘要不变。
+
+只读十论文复核：588 SHA，10/10 阶段交付、0 完整数字产品，68 门为 21 PASS/39 NOT_CHECKED/7 UNEVALUABLE/1 FAIL；不转总体完成率。P05 时序、P10 尺寸/能量、P07 静态问题已关闭，不能重复旧修复。P02 当前 power 门 FAIL，P08/P09 核心模型不可评价，其余核心电子/装配/功能门按逐篇范围补。原论文 runtime 仍 v1 授权格式，主 runtime v2 无限时间；用户已有无限授权，恢复前完成兼容发布，不再询问相同授权、换 owner 或清账。
+
+报告：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/DESIGN-LAB-R3-R5-20261012.md`；全面评价：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/SYSTEM-REVIEW-20261012.md`。下载包 `workbench/review-packages/BF_Agent_R3-R5_System_Review_20261012-v3.zip` 包含源码、协议、实际公开轨迹、拒绝/撤回、十篇复核、物理模板及测试，不含私人凭据/SDK 会话/隐藏思维。A/B 同版 ZIP 位于报告输出 `deliveries/`。
+
+接下来先统一 A/B/方法 CLI 与 C 持久控制器，做恢复故障切点；将源/转换器/目标执行资格做实后沿原十会话补核心门。没有已确认方法父代不启动 RSI 后代；无实物身份/原始测量不授物理通过。R3–R5 slice 和父 BFA-035 保持 in-progress。禁止过时 harness-creator、定时聊天、重复未变成功仿真、无记录代写 Pi 工程和改变冻结科学语义。无 Git 提交/推送。
+<!-- /bf-design-lab-r3-r5-20261012 -->
+
+<!-- bf-design-lab-r0-r2-20261012 -->
+## 2026-10-12 · R0–R2 有限 C 设计链验收，主界面恢复
+
+本轮实施工作树为 `/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011`；原 integration checkout 与十个原论文 owner 保留。R0 保护核对：5957 条原 owner 费用、21 条历史 UNKNOWN 完整行、123 个原 Python 文件、索引和 25 个 D5 冻结小文件保持；根 88 科学 features 摘要保持 `16e3c12f9412dcb6e986bf668e384410e556743e5f024b5414f27fc3aa1302a1`。
+
+新 C owner `pi-chat-3faf3eb798e76401` 在固定 D5 供电与虚拟事件接口内，自行读取、执行、观察失败、修订应用 C/H、采用并提交同版数字包：6/6 独立门 PASS，响应延迟 0.359 s，17 个 SETTLED 请求、约 97.133 s、原本地登记 USD 0.1348554。缓存价目估算 USD 0.06862308 另列，非供应商账单。Codex 提供环境/起点/检查，没有参与者设计或采用动作；0 次新 D5 原生模拟求解。真实 SDK 零模型恢复 44 条消息；采用设计、提交与费用/操作不变。
+
+用户要求保留以前 UI：主 index 已逐字节恢复，新审查样式仅用于独立页，原液态玻璃、对话/产品/交付及工程工作区/运行动画保持。现场截图和真实 HTTP 同版 ZIP SHA/CRC 核对通过。
+
+114 项针对测试、bf-agent 类型、JS 语法与 9 个无 Agent 正负控制通过。旧 x86_64 ARM 工具链在当前 Apple Silicon 失效；另行固定官方 darwin-arm64 GCC，标准头文件依赖仅只读授权，私人同级 include 仍拒绝，六组临时构建/SIL 回归通过。另修 Pi 模块哈希路径中的 `%20`，原有 10 项夹具集成检查恢复通过。最终完整应用 init 通过：915 Python tests、应用 TypeScript SDK/World Studio 类型与构建、2803 样本投影；回执 `verification/native-environment-1791737026653149000/report.json`。根 init 实际 1145 tests、6 FAIL/6 ERROR/4 skipped，冻结父证据/锁/快照问题保留，未授予根科学仓库健康。
+
+有限范围 `C-F0-opening-event-fixed-D5-envelope-v1`：主机真实 C 执行 + ARM 可重定位对象、原固定负载见证、虚拟传感与接收；不等于完整 MCU/S132/ELF/HEX/PCB/RF、物理产品或 RSI。负载改变须 R3 重新耦合，A/B/十论文完整收口及方法配对仍未完成。父 BFA-035 保持 in-progress。用户已取消累计费用/token/请求/时间限制，UNKNOWN 与全部预留保持；不恢复过时 harness-creator 或定时聊天消息。
+
+报告：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/DESIGN-LAB-R0-R2-20261011.md`。具体下一步：先确定下一受支持的负载/目标执行范围并完成无 Agent 资格；沿原论文 owner 按未关闭门恢复。不要为归档重复旧模拟、为绿色改变冻结语义，或将新零模型 H 标成原付费 H307。无 Git 提交/推送。
+<!-- /bf-design-lab-r0-r2-20261012 -->
+
 <!-- artifact-workspace-20261008 -->
 ## 2026-10-08 · 实时产物目录、交付清单与全幅运行动画已接入
 

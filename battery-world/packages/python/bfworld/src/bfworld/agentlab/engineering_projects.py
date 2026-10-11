@@ -106,6 +106,16 @@ def request(app, owner, parameters):
     return value
 
 
+def compiler_read_paths(executable):
+    """Read only the selected compiler's headers, runtime and subprograms.
+
+    A compiler installed below /Users needs these paths explicitly; its bin
+    directory alone is insufficient. Never grant its entire parent home.
+    """
+    root=Path(executable).resolve().parent.parent
+    return [root/'lib',root/'libexec',root/'arm-none-eabi']
+
+
 def sandbox(reads, output):
     if platform.system() != 'Darwin' or not Path('/usr/bin/sandbox-exec').is_file():
         raise ValueError('PROJECT_SANDBOX_UNAVAILABLE')
@@ -220,6 +230,7 @@ def run(engineering, job, root, deadline):
     kind=project['manifest']['kind'];exe=KINDS[kind];entry=src/project['manifest']['entrypoint']
     reads=[root,exe.parent,exe.resolve().parent]
     if kind=='cadquery':reads+=[CAD.parent.parent, Path('/Library/Frameworks/Python.framework')]
+    if kind.startswith('firmware-'):reads+=compiler_read_paths(exe)
     command=lambda args:run_process(engineering,job,args,root,out,reads,deadline)
     if kind=='cadquery':
         command([exe,entry])

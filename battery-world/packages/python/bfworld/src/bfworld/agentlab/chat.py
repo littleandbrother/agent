@@ -137,8 +137,8 @@ class Conversations:
 
     def readiness(self,owner=None):
         model=self.app.provider.status(owner); reasons=[]
-        if (self.home/'paid-window-closed.json').exists():reasons.append('PAID_WINDOW_CLOSED')
         with self.store.connect() as db:
+            if (self.home/'paid-window-closed.json').exists() and not budget_policy.unbounded_time(db,owner):reasons.append('PAID_WINDOW_CLOSED')
             if self.app.provider.recovery.unknown_blockers(db,owner):reasons.append('PROVIDER_USAGE_UNKNOWN_STOP')
             unbounded=bool(budget_policy.for_owner(db,owner or 'pi-chat-new'))
         if any(r['error']=='PROVIDER_RESERVATION_EXCEEDED' for r in model['requests']):reasons.append('PROVIDER_RESERVATION_EXCEEDED')
@@ -158,11 +158,17 @@ class Conversations:
         if status['reasons']:raise ValueError(status['reasons'][0])
 
     def start(self,cid):
+        if hasattr(self.app,'design_lab'):
+            with self.store.connect() as db:design_task=db.execute('SELECT 1 FROM design_tasks WHERE owner=?',(cid,)).fetchone()
+            if design_task:
+                from .design_lab.controller import start
+                start(self.app.design_lab,cid)
+                return
         try:
             self.gate(cid)
             with self.store.connect() as db:
                 lease=self.app.provider.recovery.lease(db,cid)
-                if not lease or time.time()>lease['expires']:raise ValueError('CHAT_TURN_WALL_BUDGET')
+                if not lease or lease['expires'] is not None and time.time()>lease['expires']:raise ValueError('CHAT_TURN_WALL_BUDGET')
         except ValueError as exc:self.state(cid,'BLOCKED',str(exc));return
         self.starting.add(cid);self.state(cid,'STARTING')
         threading.Thread(target=self.run,args=(cid,),daemon=True).start()
@@ -263,7 +269,7 @@ class Conversations:
             def expire(proc):
                 with self.lock:
                     with self.store.connect() as db:lease=self.app.provider.recovery.lease(db,cid)
-                    if lease and time.time()<lease['expires']:return False
+                    if lease and (lease['expires'] is None or time.time()<lease['expires']):return False
                     # New messages after this decision remain QUEUED and are
                     # started after the old process finishes saving its state.
                     self.state(cid,'STOPPING')

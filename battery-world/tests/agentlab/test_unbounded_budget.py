@@ -122,6 +122,43 @@ class UnboundedBudget(unittest.TestCase):
         with self.store.connect() as db:db.execute('UPDATE model_limits SET max_tokens=1')
         with self.assertRaisesRegex(ValueError,'MODEL_TOKEN_BUDGET'):self.call()
 
+    def test_v2_direct_user_time_authority_supersedes_expired_lease_without_editing_it(self):
+        value={**policy([self.owner]),'schema_version':'bf-model-unbounded-policy-v2',
+               'wall_seconds':None,'wall_authorized_by':'direct-user','wall_unbounded':True,
+               'wall_authorization_text':'持续运行 不设置时间限制','unknown_carryforward':{}}
+        self.enable(value)
+        with self.store.connect() as db:
+            db.execute('UPDATE interactive_leases SET expires=0')
+            db.execute('UPDATE grants SET expires=0 WHERE owner=?',(self.owner,))
+            original=tuple(db.execute('SELECT * FROM interactive_leases').fetchone())
+        (self.root/'paid-window-closed.json').write_text('{"historical":true}')
+        self.call()
+        with self.store.connect() as db:
+            self.assertEqual(original,tuple(db.execute('SELECT * FROM interactive_leases').fetchone()))
+            self.assertIsNone(self.provider.recovery.lease(db,self.owner)['expires'])
+        self.assertIsNone(self.provider.status(self.owner)['limits']['expires'])
+        self.assertTrue((self.root/'paid-window-closed.json').exists())
+
+    def test_v2_explicit_historical_unknown_hash_is_preserved_and_new_unknown_still_blocks(self):
+        from bfworld.agentlab.store import identity
+        with self.store.connect() as db:
+            db.execute('INSERT INTO model_requests VALUES(?,?,?,?,?,?,?,?,?,?)',('unknown',self.owner,0,'old',.11,0,'UNKNOWN',None,None,'lost output'))
+            row=dict(db.execute('SELECT * FROM model_requests').fetchone())
+        value={**policy([self.owner]),'schema_version':'bf-model-unbounded-policy-v2',
+               'wall_seconds':None,'wall_authorized_by':'direct-user','wall_unbounded':True,
+               'wall_authorization_text':'持续运行 不设置时间限制','unknown_carryforward':{'unknown':identity(row)}}
+        self.enable(value);self.call()
+        with self.store.connect() as db:
+            self.assertEqual(row,dict(db.execute('SELECT * FROM model_requests WHERE id=?',('unknown',)).fetchone()))
+            db.execute('INSERT INTO model_requests VALUES(?,?,?,?,?,?,?,?,?,?)',('new-unknown',self.owner,0,'new',.22,0,'UNKNOWN',None,None,'new lost output'))
+        with self.assertRaisesRegex(ValueError,'USAGE_UNKNOWN'):self.call()
+
+    def test_v2_time_without_exact_direct_authorization_is_rejected(self):
+        value={**policy([self.owner]),'schema_version':'bf-model-unbounded-policy-v2',
+               'wall_seconds':None,'wall_authorized_by':'direct-user','wall_unbounded':True,
+               'wall_authorization_text':'please continue'}
+        with self.assertRaisesRegex(ValueError,'TIME_AUTH'):self.enable(value)
+
     def test_unbounded_owner_projection_preserves_liability_and_unknowns(self):
         rows=[{'id':'u','owner':self.owner,'charged':0,'reserved':2,'status':'UNKNOWN'}]
         result=owner_budget(rows,self.owner,cap=None)

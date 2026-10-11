@@ -90,7 +90,10 @@ def frozen_for(db, owner):
     # The conversation path is server-owned, never taken from tool parameters.
     value = json.loads((harness / 'manifest.json').read_text())
     if not value.get('resource_manifest'): return None
-    if identity({k:v for k,v in value.items() if k != 'identity'}) != value['identity']:
+    if value.get('schema_version')=='bf-design-controller-v1':
+        if 'H-'+identity({k:v for k,v in value.items() if k!='harness_id'})!=value['harness_id']:
+            raise ValueError('HARNESS_MANIFEST_TAMPER')
+    elif identity({k:v for k,v in value.items() if k != 'identity'}) != value['identity']:
         raise ValueError('HARNESS_MANIFEST_TAMPER')
     root = harness / 'resources'
     return root, verify(root, value['resource_manifest']['sha256'])

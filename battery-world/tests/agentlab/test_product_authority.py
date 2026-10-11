@@ -1,6 +1,7 @@
 import copy
 import json
 from pathlib import Path
+import subprocess
 import tempfile
 import time
 import unittest
@@ -188,6 +189,26 @@ cq.exporters.export(cq.Workplane("XY").box(23,11,7), "assembly.step")
             self.assertIn('nrf52832.ld',archive.namelist())
             self.assertIn('startup_nrf52832.c',archive.namelist())
             self.assertIn('main.c',archive.namelist())
+
+
+class CompilerReadScope(unittest.TestCase):
+    @unittest.skipUnless(projects.GCC.is_file(),'local ARM compiler unavailable')
+    def test_actual_standard_header_build_keeps_sibling_private_header_denied(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);output=root/'output';output.mkdir()
+            secret=root/'private.h';secret.write_text('#define PRIVATE_VALUE 196608\n')
+            source=output/'main.c'
+            reads=[output,projects.GCC.parent,*projects.compiler_read_paths(projects.GCC)]
+            command=['/usr/bin/sandbox-exec','-p',projects.sandbox(reads,output),str(projects.GCC),
+                     '-mcpu=cortex-m4','-mthumb','-ffreestanding','-c',str(source),'-o',str(output/'main.o')]
+            env={'PATH':str(projects.GCC.parent)+':/usr/bin:/bin','LANG':'C'}
+            source.write_text('#include <stdint.h>\nuint32_t value(void){return 1;}\n')
+            allowed=subprocess.run(command,cwd=output,env=env,capture_output=True,text=True,timeout=20)
+            self.assertEqual(0,allowed.returncode,allowed.stderr)
+            source.write_text('#include <stdint.h>\n#include "'+str(secret)+'"\nuint32_t value(void){return PRIVATE_VALUE;}\n')
+            denied=subprocess.run(command,cwd=output,env=env,capture_output=True,text=True,timeout=20)
+            self.assertNotEqual(0,denied.returncode)
+            self.assertIn('Operation not permitted',denied.stderr)
 
 
 if __name__=='__main__':unittest.main()

@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
 import { setTimeout as delay } from "node:timers/promises";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
 	createAgentSession,
 	createExtensionRuntime,
@@ -844,13 +844,13 @@ if (simulationTask)
 			pid: process.pid,
 			profile: methodProfile("strong_generic"),
 			method_source_sha256: config.sourceManifest.research_method?.source_sha256,
-			method_build_sha256: sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js")),
+			method_build_sha256: sha(fileURLToPath(new URL("./research-method.js", import.meta.url))),
 			scientific_success: false,
 		}),
 	);
 const researchPolicy = simulationTask ? methodInstructions(methodProfile("strong_generic")) : "";
 if (simulationTask) {
-	const actualMethodBuild = sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js"));
+	const actualMethodBuild = sha(fileURLToPath(new URL("./research-method.js", import.meta.url)));
 	if (config.sourceManifest.research_method?.build_sha256 !== actualMethodBuild)
 		throw Error("METHOD_BUILD_BINDING_DRIFT");
 	console.log(
@@ -859,7 +859,7 @@ if (simulationTask) {
 			phase: "invoked",
 			pid: process.pid,
 			profile: methodProfile("strong_generic"),
-			method_build_sha256: sha(path.join(path.dirname(new URL(import.meta.url).pathname), "research-method.js")),
+			method_build_sha256: sha(fileURLToPath(new URL("./research-method.js", import.meta.url))),
 			prompt_hash: methodDigest(researchPolicy),
 			instruction_text: researchPolicy,
 			execution_authorized: false,
