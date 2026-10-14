@@ -36,3 +36,29 @@ class ExecutionCase(IntegrationCase):
         power=self.domain('power')
         with self.assertRaisesRegex(ValueError,'NEW_INPUT_EXECUTION_REQUIRED'):
             self.action('pi-chat-a1234567890abcde','contract',operation_id='blocked',domain_commits={'power':power['id'],'firmware':c['id']},rationale='must build')
+
+    def test_failed_build_returns_actual_source_and_bounded_diagnostics_without_dispatch(self):
+        c=self.prepared();project=input_project(self.repo,c,'project-fw-s132/project.json')
+        root=self.repo.root/'failed-worker';root.mkdir()
+        (root/'input.json').write_text(canonical({'project':project,'project_sha256':identity(project)}))
+        (root/'process.log').write_text('build log\n'*2000+'main.c:42: error: missing_symbol\n')
+        artifacts=[{'name':p.name,'sha256':file_hash(p)} for p in root.iterdir()]
+        job={'id':'eng-failed','status':'FAILED','error':'PROJECT_PROCESS_EXIT_1',
+            'project_sha256':identity(project),'repository_binding':{'domain_commit':c['id']},
+            'result':{'artifacts':artifacts}}
+        self.lab.app.engineering=SimpleNamespace(get=lambda owner,jid:job,
+            artifact=lambda owner,jid,name:root/name,
+            dispatch_repository=lambda *a: self.fail('Failed log read dispatched another build'))
+        body={'action':'repository_execution','project_id':self.pid,'domain_commit':c['id'],
+              'path':'project-fw-s132/project.json','job_id':job['id']}
+        result=handle(self.repo,self.fw,body)
+        self.assertEqual('FAILED',result['status'])
+        self.assertEqual(identity(project),result['consumed_input']['project_sha256'])
+        self.assertIn('missing_symbol',result['diagnostics']['process.log']['content'])
+        self.assertEqual(16000,len(result['diagnostics']['process.log']['content']))
+        first=handle(self.repo,self.fw,{**body,'offset':0,'limit':50})
+        self.assertEqual(result['id'],first['id'])
+        self.assertEqual(50,len(first['diagnostics']['process.log']['content']))
+        self.assertEqual(50,first['diagnostics']['process.log']['next_offset'])
+        with self.assertRaisesRegex(ValueError,'DIAGNOSTIC_RANGE_INVALID'):
+            handle(self.repo,self.fw,{**body,'limit':999999})

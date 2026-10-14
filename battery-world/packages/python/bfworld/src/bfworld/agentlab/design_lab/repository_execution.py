@@ -4,6 +4,7 @@ import hashlib
 import zipfile
 from pathlib import PurePosixPath
 from .. import engineering_projects
+from ..store import identity
 from .repository import name,file_hash
 from .repository_actions import task,object_save,scope
 
@@ -64,6 +65,38 @@ def input_project(repo,commit,manifest_path):
     return project
 
 
+def failed_execution(repo, engineering, commit, project, job, body):
+    """Return the real failed worker input and compiler/solver feedback to Pi."""
+    artifacts={}
+    with repo.store.connect() as db:
+        for ref in (job.get('result') or {}).get('artifacts',[]):
+            path=engineering.artifact(commit['owner'],job['id'],ref['name'])
+            artifacts[ref['name']]=repo.asset(db,path,ref['sha256'])
+        consumed=consumed_input(repo,artifacts,project) if 'input.json' in artifacts else None
+        value=object_save(repo,db,'design_domain_executions','EX',{
+            'project_id':commit['project_id'],'domain_commit':commit['id'],
+            'owner':commit['owner'],'job_id':job['id'],'status':job['status'],
+            'error':job.get('error'),'kind':project['manifest']['kind'],
+            'project_sha256':identity(project),
+            'executor_sha256':job.get('template_sha256'),'artifacts':artifacts,
+            'consumed_input':consumed,'reused':False,'source_author':'Pi'},
+            ['project_id','domain_commit','owner'])
+    diagnostics={}
+    for name in ('process.log','solver.log'):
+        ref=artifacts.get(name)
+        if not ref:continue
+        path=repo.root/'blobs'/ref['sha256']
+        if file_hash(path)!=ref['sha256']:raise ValueError('EXECUTION_DIAGNOSTIC_TAMPER')
+        content=path.read_text(errors='replace');offset=body.get('offset',max(0,len(content)-16000))
+        limit=body.get('limit',16000)
+        if type(offset) is not int or offset<0 or type(limit) is not int or not 1<=limit<=20000:
+            raise ValueError('EXECUTION_DIAGNOSTIC_RANGE_INVALID')
+        diagnostics[name]={'sha256':ref['sha256'],'bytes':ref['bytes'],
+            'content':content[offset:offset+limit],'offset':offset,'total_chars':len(content),
+            'next_offset':offset+limit if offset+limit<len(content) else None}
+    return {**value,'diagnostics':diagnostics,'diagnostic_missing':not bool(diagnostics)}
+
+
 def handle(repo,owner,body):
     pid=body['project_id'];repo.project(pid,owner)
     with repo.store.connect() as db:
@@ -100,6 +133,8 @@ def handle(repo,owner,body):
     job=engineering.get(commit['owner'],jid)
     binding=job.get('repository_binding',{})
     if binding.get('domain_commit')!=commit['id'] or job.get('project_sha256')!=signature:raise ValueError('DOMAIN_EXECUTION_IDENTITY_CONFLICT')
+    if job['status'] in ('FAILED','CANCELLED'):
+        return failed_execution(repo,engineering,commit,project,job,body)
     if job['status']!='SUCCEEDED':return {'status':job['status'],'job_id':jid,'error':job.get('error')}
     with repo.store.connect() as db:
         artifacts={}

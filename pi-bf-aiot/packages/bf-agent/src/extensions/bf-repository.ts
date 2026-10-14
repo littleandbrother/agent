@@ -14,6 +14,7 @@ Lead: assign(role power|firmware,base_system,question,completion,contract_ids?);
 rebase(task_owner,base_system,expected_revision branch revision,question,completion) explicitly starts the next task on a new System Commit, retaining old task/workspace/branch/history. Uncommitted files must first be committed. reopen keeps the old base.
 extract(system_id,domain_commits?) returns source-derived facts and legal declaration examples, including peer commits on this base. ${declarationText}
 validate(system_id,scope system|interface default system) appends independent evidence for the eight P01 gates; summary gives current qualification, separate from the timing contract. Specialist: write(path,content,expected_sha256 or null); commit(paths,expected_revision branch revision,rationale); execute(domain_commit,path project manifest) waits for actual fixed target build or SPICE and returns consumed sources; execution(domain_commit,path,job_id) reads existing job; finish(status SUBMITTED|BLOCKED,domain_commit?,conclusion).
+Failed execute/execution returns immutable input references and compiler/solver diagnostics. execution(domain_commit,path,job_id,offset?,limit?) reads more of that existing log without dispatching another job.
 Every mutation requires a stable operation_id. All actions use the bound project. Returned sha256 is the write precondition. No raw shell or external network.`,
 			executionMode: "sequential",
 			parameters: Type.Object({
