@@ -1,3 +1,13 @@
+## 2026-10-15 V2-P01 · 两轮真实设计与连续修订完成
+
+原 V2 Lead / Power / Firmware Pi 在独立 8870 环境完成两轮真实固件及负载修订。主线 SC-f9a05943 → SC-a1974dec → SC-e8f2f2e5；第二轮显式重基到第一轮，原 owner 和 SDK 历史保留。真实目标构建 eng-68513e5516fb0bb8、eng-42f734718d566c30；第二轮新 SPICE eng-2cf474f68315a9d8。声明提交继承完整源树，worker 输入、构建/求解源包、系统清单和89文件交付均读回一致。输入未变的成功仿真未重跑。
+
+四项接口修复及消费者恢复已发布：统一模型可见 interface 声明；完整父树消费；表述/构建/设备检查分开；不可变新八门证据回到同一 System Commit 当前资格。179项 Repository、114项上下文回归通过，Pi离线构建/类型检查通过，./init.sh architecture-v2-lab 和7实际预览通过。代码9ec6c22的push/PR CI通过；Draft PR#3基准精确3dc8a72，保持未合并。
+
+第二版2 PASS、2 FAIL、4 UNEVALUABLE，REPAIR_REQUIRED。供电最低0.133508V、人工接通模型负电压、负载PWL664/672不符；原PCB52间距/50连接错误复用；器件、源与装配资料待核对。BF选择RETAIN_FOR_REVIEW，采用版SC-4c0da605保留。两版新检查记录及资格进入各自同版包。原十会话、12,454费用行、原P01六件原生文件、Baseline及profile摘要保持。原三owner当前IDLE；新增329请求，本地登记$7.074384，缓存费率估算$4.156926。
+
+C–F本次Power/Firmware开发闭环完成。下一步为P01工程修订及独立专业数值产物读取工单。比较实验/RSI为NOT_RUN。报告 docs/agentlab/architecture-v2/v2-p01-20261015/V2-P01-REPORT.md；核心回执 actual-cycle-audit.json、preservation-final.json、delivery-validation-readback.json、cost-final.json。下方为历史。
+
 ## 2026-10-14 Architecture V2 · A/B 完成
 
 已冻结本地标签 bf-p01-demo-20261014（3dc8a72056e85b71998c4160da309474c2cbee1c）及 6,388 文件/5.70GB 私有基线，原两份SQLite一致性备份、十会话/费用/UNKNOWN、P01产物与原未提交修改保持。新工作树 workbench/bf-architecture-v2，分支 codex/bf-architecture-v2，独立运行 /Users/depengsu/.local/share/bf-agent-architecture-v2，8870/PID50755。24项隔离测试、19项实际接口检查PASS，PiSDK/Agent/Harness离线构建和合成消息持久化恢复通过；跨进程原生锁有效。原8768/PID33871及UI摘要不变；0模型调用、0求解、0目标固件构建。报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/AB-REPORT.md；证据 verification-004/result.json；恢复说明 HANDOFF.md。源码修改未提交、未推送。BFA-036 A/B完成，C–F待接续；下一步将冻结的P01已提交候选接入首个System Commit，采用版另存，不伪造专业历史。下方为历史。
