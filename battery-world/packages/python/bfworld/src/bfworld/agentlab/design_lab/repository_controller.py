@@ -29,13 +29,16 @@ def freeze(lab):
     manifest = {'schema_version': 'bf-repository-controller-v2', 'controller': 'pi-sdk-repository',
        'files': {folder+'/'+n+'.'+suffix: sha(source/folder/(n+'.'+suffix)) for folder, suffix in [('src','ts'),('dist','js')] for n in modules},
        'python_bindings': {p.name: sha(p) for p in sorted(Path(__file__).parent.glob('repository*.py'))},
+       'review_fixtures': {p.name:sha(p) for p in sorted(Path(__file__).parent.glob('repository-review-*.json'))},
        'context_bindings': {n: sha(Path(__file__).parent.parent/n) for n in
                            ('provider.py','context.py','model_profile.py','budget_policy.py','recovery.py','skill_resources.py')},
        'pi_lock_sha256': sha(PI/'package-lock.json'), 'tools': ['bf_repository'],
        'resource_manifest': resources[0],
        'engineering_bindings': {n:sha(Path(__file__).parent.parent/n) for n in ('engineering.py','engineering_projects.py','nordic_sdk.py')}, 'development_profile_sha256': DEVELOPMENT_PROFILE['sha256'],
        'baseline': DEVELOPMENT_PROFILE['baseline'], 'device_decision_actor': 'Pi',
-       'source_commit': DEVELOPMENT_PROFILE['base_commit'], 'native_dispatch': DEVELOPMENT_PROFILE['capabilities']['native']}
+       'source_commit': subprocess.check_output(['git','rev-parse','HEAD'],cwd=PI,text=True).strip(),
+       'baseline_source_commit': DEVELOPMENT_PROFILE['base_commit'],
+       'native_dispatch': DEVELOPMENT_PROFILE['capabilities']['native']}
     manifest['harness_id'] = 'H-' + identity(manifest)
     dest = lab.root/'harnesses'/manifest['harness_id']
     for folder, suffix in [('src','ts'),('dist','js')]:

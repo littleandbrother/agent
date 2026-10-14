@@ -94,6 +94,13 @@ def previews(repo, system):
 
 def projection(repo, project, owner):
     view=repo.view(project,owner)
+    for system in view['systems']:
+        # This is a view projection, not a rewrite of the sealed System Commit.
+        system['recorded_validations']=system['validations']
+        system['recorded_digital_status']=system['digital_status']
+        system['validations']=system['current_qualification']['gates']
+        system['digital_status']=system['current_qualification']['status']
+        system['qualification_projection']=True
     owners=[view['project']['owner'],*[t['owner'] for t in view['professional_tasks']]]
     with repo.store.connect() as db:
         events=[dict(r) for r in db.execute('SELECT * FROM design_events WHERE owner IN ('+','.join('?' for _ in owners)+') ORDER BY seq DESC LIMIT 250',owners)]

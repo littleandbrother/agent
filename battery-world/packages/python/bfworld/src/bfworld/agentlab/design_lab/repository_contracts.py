@@ -10,6 +10,30 @@ import re
 from ..store import identity
 
 VERSION = 'power-firmware-source-contract-v2'
+DECLARATION_FIELDS = {
+    'firmware': ('advertising_ms', 'connection_min_ms', 'connection_max_ms',
+                 'sample_ms', 'policy_advertising_ms'),
+    'power': ('rail_v', 'storage_initial_v', 'manual_admission', 'sece_resolved')}
+
+
+def declaration_spec():
+    """One definition consumed by prompt, tool, extraction and validation."""
+    return {'version': VERSION, 'envelope': {'interface': 'all required fields for this domain',
+        'sources': [{'path': 'frozen logical path', 'sha256': 'exact SHA-256', 'locator': 'field/line'}],
+        'assumptions': [], 'issues': []}, 'required_fields': DECLARATION_FIELDS,
+        'description': 'Declaration JSON: {interface:{...},sources:[{path,sha256,locator}],assumptions:[],issues:[]}. '
+        + 'Required interface fields: ' + '; '.join(d + '=' + ','.join(keys) for d, keys in DECLARATION_FIELDS.items())
+        + '. extract returns source-derived values and legal examples. sources must refer to the selected immutable files.'}
+
+
+def declaration_examples(result):
+    facts = result.get('facts')
+    if not facts: return {}
+    refs = [{'path': p, 'sha256': h, 'locator': 'source extraction'}
+            for p, h in result['source_hashes'].items()]
+    return {domain: {'interface': {k: (facts['firmware'] if domain == 'firmware' else facts)[k]
+                                 for k in fields}, 'sources': refs, 'assumptions': [], 'issues': []}
+            for domain, fields in DECLARATION_FIELDS.items()}
 PREFIXES = {'mechanical': ('project-cad/', 'mechanical/'),
             'power': ('project-chain/', 'project-spice/', 'circuit/', 'interfaces/power.json'),
             'firmware': ('project-fw-s132/', 'project-firmware/', 'receiver/', 'interfaces/firmware.json'),
@@ -131,8 +155,9 @@ def check(read, files, declarations=None):
         for domain, declaration in (declarations or {}).items():
             if not isinstance(declaration, dict): raise ValueError('DECLARATION_OBJECT_REQUIRED')
             declared = declaration.get('interface', {})
-            allowed = source if domain == 'firmware' else {k: result['facts'][k] for k in
-                ('rail_v', 'storage_initial_v', 'manual_admission', 'sece_resolved')}
+            if domain not in DECLARATION_FIELDS: raise ValueError('DECLARATION_DOMAIN_UNKNOWN')
+            allowed = {k: (source if domain == 'firmware' else result['facts'])[k]
+                       for k in DECLARATION_FIELDS[domain]}
             for key, expected in allowed.items():
                 if key not in declared: raise ValueError('CONTRACT_INTERFACE_FIELD_REQUIRED: ' + domain + '.' + key)
                 record(domain + '_declaration_' + key, declared[key], expected, declared[key] == expected,

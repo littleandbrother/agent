@@ -65,6 +65,8 @@ class Repository:
                 target TEXT NOT NULL,kind TEXT NOT NULL,value TEXT NOT NULL);
               CREATE TABLE IF NOT EXISTS design_professional_tasks(id TEXT PRIMARY KEY,project TEXT NOT NULL,
                 owner TEXT UNIQUE NOT NULL,role TEXT NOT NULL,status TEXT NOT NULL,value TEXT NOT NULL);
+              CREATE TABLE IF NOT EXISTS design_professional_task_history(id TEXT PRIMARY KEY,project TEXT NOT NULL,
+                owner TEXT NOT NULL,value TEXT NOT NULL);
               CREATE TABLE IF NOT EXISTS design_repository_assets(id TEXT PRIMARY KEY,sha256 TEXT NOT NULL,
                 bytes INTEGER NOT NULL,media_type TEXT NOT NULL);
               CREATE TABLE IF NOT EXISTS design_repository_releases(id TEXT PRIMARY KEY,project TEXT NOT NULL,
@@ -238,12 +240,16 @@ class Repository:
         with self.store.connect() as db:
             p=self.project(project,owner,db)
             systems=[json.loads(r['value']) for r in db.execute('SELECT value FROM design_system_commits WHERE project=? ORDER BY rowid',(project,))]
+            from .repository_validation import qualification
+            for system in systems:
+                system['current_qualification']=qualification(self,system,db)
             def rows(table): return [json.loads(r['value']) for r in db.execute('SELECT value FROM '+table+' WHERE project=? ORDER BY rowid',(project,))]
             return {'schema_version':'bf-design-project-view-v2','project':p,'systems':systems,
                 'domain_commits':rows('design_domain_commits'),'contracts':rows('design_interface_contracts'),
                 'integration_requests':rows('design_integration_requests'),'validations':rows('design_repository_validations'),
                 'professional_tasks':[{**json.loads(r['value']),'status':r['status']} for r in db.execute('SELECT value,status FROM design_professional_tasks WHERE project=? ORDER BY rowid',(project,))],'releases':rows('design_repository_releases'),
                 'executions':rows('design_domain_executions'),'experiments':rows('design_method_experiments'),
+                'professional_task_history':rows('design_professional_task_history'),
                 'branches':[dict(r) for r in db.execute('SELECT * FROM design_branch_heads WHERE project=?',(project,))]}
 
     def artifact(self, project, owner, system_id, logical):
@@ -264,7 +270,16 @@ class Repository:
         if action=='repository_view': return self.view(project,owner)
         if action=='repository_system': return self.system(project,body['system_id'])
         if action=='repository_read':
-            path,ref=self.artifact(project,owner,body['system_id'],body['path'])
+            if body.get('domain_commit'):
+                with self.store.connect() as db:
+                    commit=self._object(db,'design_domain_commits',body['domain_commit'],project)
+                system=self.system(project,commit['base_system'])
+                ref={**system['files'],**commit['files']}.get(name(body['path']))
+                if not ref:raise ValueError('REPOSITORY_ARTIFACT_NOT_IN_COMMIT')
+                path=self.root/'blobs'/ref['sha256']
+                if file_hash(path)!=ref['sha256']:raise ValueError('REPOSITORY_BLOB_CHANGED')
+            else:
+                path,ref=self.artifact(project,owner,body['system_id'],body['path'])
             offset=body.get('offset',0);limit=body.get('limit',12000)
             if type(offset)!=int or offset<0 or type(limit)!=int or not 1<=limit<=24000: raise ValueError('REPOSITORY_READ_RANGE')
             text=path.read_text(errors='replace')

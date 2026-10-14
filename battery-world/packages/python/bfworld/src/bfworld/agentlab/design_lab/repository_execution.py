@@ -1,9 +1,50 @@
 """Domain execution adapter to the existing fixed engineering worker."""
 import json
+import hashlib
+import zipfile
 from pathlib import PurePosixPath
 from .. import engineering_projects
 from .repository import name,file_hash
 from .repository_actions import task,object_save,scope
+
+
+def consumed_input(repo, artifacts, project):
+    """Prove the worker's complete source snapshot is the selected commit input."""
+    ref=artifacts.get('input.json')
+    if not ref:raise ValueError('EXECUTION_INPUT_RECEIPT_REQUIRED')
+    path=repo.root/'blobs'/ref['sha256']
+    if file_hash(path)!=ref['sha256']:raise ValueError('EXECUTION_INPUT_TAMPER')
+    actual=json.loads(path.read_text())
+    from ..store import identity
+    if actual.get('project_sha256')!=identity(project) or actual.get('project')!=project:
+        raise ValueError('EXECUTION_CONSUMED_SOURCE_CONFLICT')
+    source_archive=artifacts.get('project-source.zip')
+    if source_archive:
+        archive=repo.root/'blobs'/source_archive['sha256']
+        if file_hash(archive)!=source_archive['sha256']:raise ValueError('EXECUTION_SOURCE_ARCHIVE_TAMPER')
+        with zipfile.ZipFile(archive) as z:
+            for path,source in project['sources'].items():
+                if z.read(path)!=source.encode():raise ValueError('EXECUTION_SOURCE_ARCHIVE_CONFLICT: '+path)
+    return {'manifest':project['manifest'], 'sources':{p:hashlib.sha256(s.encode()).hexdigest()
+        for p,s in project['sources'].items()},'project_sha256':identity(project),
+        'input_receipt_sha256':ref['sha256']}
+
+
+def reused_execution(repo, db, commit, project, job_id, record, origin):
+    consumed=consumed_input(repo,record['artifacts'],project)
+    result_path=repo.root/'blobs'/record['artifacts']['result.json']['sha256']
+    if file_hash(result_path)!=record['artifacts']['result.json']['sha256']:raise ValueError('EXECUTION_RESULT_TAMPER')
+    result=json.loads(result_path.read_text())
+    if not result.get('readback_passed') or result['project_sha256']!=consumed['project_sha256']:
+        raise ValueError('REUSED_EXECUTION_NOT_VALID')
+    return object_save(repo,db,'design_domain_executions','EX',{'project_id':commit['project_id'],
+        'domain_commit':commit['id'],'owner':commit['owner'],'job_id':job_id,'status':'SUCCEEDED',
+        'kind':project['manifest']['kind'],'project_sha256':consumed['project_sha256'],
+        'artifacts':record['artifacts'],'executor_sha256':record.get('executor_sha256'),
+        'independent_readback':result['independent_readback'],'consumed_input':consumed,
+        'source_author':'Pi','reused':True,'reused_from':origin,
+        'job_origin_owner':record.get('job_origin_owner',record.get('origin_owner',record.get('owner')))},
+        ['project_id','domain_commit','owner'])
 
 
 def input_project(repo,commit,manifest_path):
@@ -40,9 +81,12 @@ def handle(repo,owner,body):
         base=repo.system(pid,commit['base_system'])
         for jid,ref in base['jobs'].items():
             if ref.get('project_sha256')==signature:
-                return {'status':'SUCCEEDED','job_id':jid,'reused':True,'domain_commit':commit['id']}
-        if commit['target_build']=='UNCHANGED_REUSE' and commit['model_execution']=='UNCHANGED_REUSE':
-            return {'status':'SUCCEEDED','reused':True,'domain_commit':commit['id'],'jobs':list(base['jobs'])}
+                return repo.mutate(owner,body,lambda db:reused_execution(repo,db,commit,project,jid,ref,base['id']))
+        with repo.store.connect() as db:
+            previous=[json.loads(r['value']) for r in db.execute('SELECT value FROM design_domain_executions WHERE project=? ORDER BY rowid DESC',(pid,))]
+        for ref in previous:
+            if ref['status']=='SUCCEEDED' and ref['project_sha256']==signature and ref.get('executor_sha256')==file_hash(engineering_projects.__file__):
+                return repo.mutate(owner,body,lambda db:reused_execution(repo,db,commit,project,ref['job_id'],ref,ref['id']))
         def apply(db):
             job=engineering.submit_repository(owner,'repo-exec-'+identity({'commit':commit['id'],'input':signature}),project,
                 {'project_id':pid,'domain_commit':commit['id'],'manifest':body['path']},db=db)
@@ -65,5 +109,6 @@ def handle(repo,owner,body):
         value=object_save(repo,db,'design_domain_executions','EX',{'project_id':pid,'domain_commit':commit['id'],
             'owner':commit['owner'],'job_id':jid,'status':'SUCCEEDED','kind':project['manifest']['kind'],
             'project_sha256':signature,'artifacts':artifacts,'executor_sha256':job['template_sha256'],
-            'independent_readback':job['result']['independent_readback'],'source_author':'Pi'},['project_id','domain_commit','owner'])
+            'independent_readback':job['result']['independent_readback'],'consumed_input':consumed_input(repo,artifacts,project),
+            'reused':False,'job_origin_owner':commit['owner'],'source_author':'Pi'},['project_id','domain_commit','owner'])
     return value

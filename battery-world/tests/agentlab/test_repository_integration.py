@@ -143,7 +143,7 @@ class IntegrationCase(unittest.TestCase):
 
     def test_real_validation_binding_and_product_gate(self):
         r=self.integrated();s=r['system_commit']
-        v=self.action(OWNER,'validate',operation_id='validate',system_id=s)
+        v=self.action(OWNER,'validate',operation_id='validate',system_id=s,scope='interface')
         self.assertEqual('PASS',v['status']);self.assertEqual(s,v['immutable_input'])
         with self.assertRaisesRegex(ValueError,'PRODUCT_GATES_NOT_PASSED'):
             self.action(OWNER,'decide',operation_id='adopt',system_id=s,expected_revision=2,decision='ADOPT_PASSED',rationale='bad')
@@ -167,7 +167,7 @@ class IntegrationCase(unittest.TestCase):
 
     def test_review_release_exact_file_manifest(self):
         r=self.integrated();s=r['system_commit']
-        self.action(OWNER,'validate',operation_id='v',system_id=s)
+        self.action(OWNER,'validate',operation_id='v',system_id=s,scope='interface')
         rel=self.action(OWNER,'release',operation_id='release',system_id=s,rationale='complete review fixture')
         import zipfile,hashlib
         with zipfile.ZipFile(self.repo.root/'releases'/(rel['id']+'.zip')) as z:
@@ -176,7 +176,7 @@ class IntegrationCase(unittest.TestCase):
 
     def test_restore_preserves_history_and_new_commit(self):
         r=self.integrated();s=r['system_commit']
-        self.action(OWNER,'validate',operation_id='v',system_id=s)
+        self.action(OWNER,'validate',operation_id='v',system_id=s,scope='interface')
         d=self.action(OWNER,'decide',operation_id='restore',system_id=s,expected_revision=2,decision='RESTORE',rationale='explicit restore')
         self.assertNotEqual(s,d['to_design'])
         self.assertEqual(s,self.repo.system(self.pid,d['to_design'])['restored_from'])

@@ -6,7 +6,7 @@ import zipfile
 
 from ..store import canonical, identity
 from .contracts import sealed
-from .repository_contracts import PREFIXES, domain_of, reuse_gates, check, VERSION
+from .repository_contracts import PREFIXES, domain_of, reuse_gates, check, VERSION, declaration_spec, declaration_examples
 
 
 def object_save(repo, db, table, prefix, value, columns):
@@ -218,7 +218,8 @@ def integrate(repo, owner, body, operator):
             from .repository_contracts import job_domain
             child['jobs']={j:r for j,r in child['jobs'].items() if job_domain(r)!=domain}
             child['jobs'][execution['job_id']]={'kind':execution['kind'],'artifacts':execution['artifacts'],
-                'project_sha256':execution['project_sha256'],'origin_owner':execution['owner'],'dispatched_in_v2':True}
+                'project_sha256':execution['project_sha256'],'origin_owner':execution.get('job_origin_owner',execution['owner']),
+                'dispatched_in_v2':not execution.get('reused',False),'consumed_input':execution.get('consumed_input')}
         child['validations'] = reuse_gates(base, child)
         child = repo._save_system(db, owner, child)
         ir = object_save(repo, db, 'design_integration_requests', 'IR', {'project_id': p['id'], 'owner': owner,
@@ -247,10 +248,20 @@ def validate(repo, owner, body):
         for domain in ('power', 'firmware'):
             path = 'interfaces/' + domain + '.json'
             if path in system['files']: declarations[domain] = json.loads(read(path))
-        result = check(read, system['files'], declarations)
+        if body.get('scope','system')=='interface':
+            result = check(read, system['files'], declarations)
+        elif body.get('scope','system')=='system':
+            from .repository_validation import evaluate
+            result=evaluate(repo,system)
+            interface=result['interface']
+            object_save(repo,db,'design_repository_validations','RV',{'project_id':p['id'],
+                'target':system['id'],'kind':'power-firmware-interface','result':interface,
+                'status':interface['status'],'scope':interface['scope'],'evaluator':interface['checker'],
+                'immutable_input':system['id'],'physical':'NOT_TESTED'},['project_id','target','kind'])
+        else:raise ValueError('VALIDATION_SCOPE_UNKNOWN')
         return object_save(repo, db, 'design_repository_validations', 'RV', {'project_id': p['id'],
-            'target': system['id'], 'kind': 'power-firmware-interface', 'result': result,
-            'status': result['status'], 'scope': result['scope'], 'evaluator': VERSION,
+            'target': system['id'], 'kind': 'power-firmware-interface' if body.get('scope')=='interface' else 'system-engineering', 'result': result,
+            'status': result['status'], 'scope': result['scope'], 'evaluator': result['checker'],
             'immutable_input': system['id'], 'physical': 'NOT_TESTED'}, ['project_id', 'target', 'kind'])
     return repo.mutate(owner, body, apply)
 
@@ -265,8 +276,8 @@ def decide(repo, owner, body, operator):
         rows = [json.loads(r['value']) for r in db.execute('SELECT value FROM design_repository_validations WHERE project=? AND target=?', (p['id'], system['id']))]
         if not rows: raise ValueError('EXECUTED_VALIDATION_REQUIRED')
         if body['decision'] == 'ADOPT_PASSED':
-            required = p['requirements']['required_gates']
-            if any(system['validations'].get(g, {}).get('status') != 'PASS' for g in required) or any(v['status'] != 'PASS' for v in rows):
+            from .repository_validation import qualification
+            if not qualification(repo,system,db)['product_passed']:
                 raise ValueError('PRODUCT_GATES_NOT_PASSED')
         adopted = p['adopted']
         target = system
@@ -313,9 +324,11 @@ def release(repo, owner, body):
         all_refs=list(system['files'].values())+[ref for job in system['jobs'].values() for ref in job.get('artifacts',{}).values()]
         for ref in all_refs:
             if file_hash(repo.root/'blobs'/ref['sha256']) != ref['sha256']: raise ValueError('RELEASE_INPUT_TAMPER')
+        from .repository_validation import qualification
+        current=qualification(repo,system,db)
         manifest = {'schema_version': 'bf-system-review-release-v2', 'project_id': p['id'], 'target': system['id'],
                     'files': system['files'], 'validations': validations, 'jobs': system['jobs'],
-                    'digital_status': system['digital_status'], 'physical': system['physical'],
+                    'digital_status': current['status'], 'qualification':current, 'physical': system['physical'],
                     'kind': 'REVIEW_PACKAGE', 'rationale': body['rationale'], 'source_author': 'Pi',
                     'original_owner': system['origin_owner'], 'baseline': p['baseline']}
         result = object_save(repo, db, 'design_repository_releases', 'REL', manifest, ['project_id', 'target'])
@@ -335,10 +348,13 @@ def release(repo, owner, body):
 def summary(repo, project, owner):
     view = repo.view(project, owner); p = view['project']
     current = repo.system(project, p['submitted'] or p['adopted'])
+    from .repository_validation import qualification
+    current_qualification=qualification(repo,current)
     return {'project_id': project, 'owner': owner, 'revision': p['revision'], 'adopted': p['adopted'],
             'current_system': current['id'], 'baseline': p['baseline'], 'requirements': p['requirements'],
             'files': [{'path': k, 'sha256': v['sha256'], 'bytes': v['bytes']} for k, v in current['files'].items()],
-            'gates': {k: v['status'] for k, v in current['validations'].items()},
+            'gates': {k: v['status'] for k, v in current_qualification['gates'].items()},
+            'qualification':{k:v for k,v in current_qualification.items() if k!='gates'},
             'domains': [{k: c[k] for k in ('id', 'domain', 'owner', 'rationale', 'target_build', 'model_execution')} for c in view['domain_commits']],
             'contracts': [{k: c[k] for k in ('id', 'domain_commits', 'name', 'revision')} for c in view['contracts']],
             'tasks': view['professional_tasks'], 'branches': view['branches'],
@@ -347,6 +363,7 @@ def summary(repo, project, owner):
 
 def handle(repo, owner, body, operator=False):
     action = body['action']
+    if action == 'repository_schema': return declaration_spec()
     actions = {'repository_assign': lambda: assign(repo, owner, body, operator),
                'repository_write': lambda: write(repo, owner, body),
                'repository_commit': lambda: commit(repo, owner, body, operator),
@@ -371,19 +388,25 @@ def handle(repo, owner, body, operator=False):
         return {'path': body['path'], 'sha256': file_hash(path), 'content': text[offset:offset+limit],
                 'next_offset': offset+limit if offset+limit < len(text) else None}
     if action=='repository_extract':
-        s=repo.system(body['project_id'],body['system_id'])
+        s=repo.system(body['project_id'],body.get('system_id') or body.get('base_system') or repo.project(body['project_id'])['submitted'])
+        files=dict(s['files'])
+        with repo.store.connect() as db:
+            for domain, key in body.get('domain_commits',{}).items():
+                peer=repo._object(db,'design_domain_commits',key,body['project_id'])
+                if peer['base_system']!=s['id'] or peer['domain']!=domain:raise ValueError('EXTRACTION_BASE_CONFLICT')
+                files.update(peer['files'])
         from .repository import file_hash
         def read(path):
-            ref=s['files'][path];p=repo.root/'blobs'/ref['sha256']
+            ref=files[path];p=repo.root/'blobs'/ref['sha256']
             if file_hash(p)!=ref['sha256']:raise ValueError('EXTRACTION_INPUT_TAMPER')
             return p.read_text()
-        result=check(read,s['files'])
+        result=check(read,files)
         return {'system_commit':s['id'],'checker':result['checker'],'status':result['status'],
                 'facts':result.get('facts'),'source_hashes':result['source_hashes'],
-                'declaration_schema':{'interface':{'firmware':['advertising_ms','connection_min_ms','connection_max_ms','sample_ms','policy_advertising_ms'],
-                                                 'power':['rail_v','storage_initial_v','manual_admission','sece_resolved']},
-                    'sources':'list of {path,sha256,locator}; every source must exist in the frozen file table'},
+                'declaration_schema':declaration_spec(), 'examples':declaration_examples(result),
+                'domain_commits':body.get('domain_commits',{}),
                 'issues':result.get('issues',[])}
+    if action=='repository_rebase':return rebase(repo,owner,body)
     if action=='repository_reopen':
         def apply(db):
             p=repo.leader(body['project_id'],owner,db);v=task(repo,body['task_owner'],db)
@@ -395,3 +418,76 @@ def handle(repo, owner, body, operator=False):
         return repo.mutate(owner,body,apply)
     if action in actions: return actions[action]()
     return None
+
+
+def rebase(repo, owner, body):
+    """Explicitly move an idle specialist to a new system; retain old tasks and workspaces."""
+    from .repository import file_hash
+    target_owner=body['task_owner']
+    controller=getattr(repo.lab,'controllers',{}).get(target_owner)
+    if controller and controller.is_alive():raise ValueError('REBASE_SPECIALIST_RUNNING')
+    old=task(repo,target_owner)
+    for key in ('question','completion'):
+        if not isinstance(body.get(key),str) or not 1<=len(body[key])<=4000:raise ValueError('TASK_'+key.upper()+'_REQUIRED')
+    def session_source(task_id):
+        oldroot=repo.root/'workspaces'/task_id
+        prior=oldroot/'.pi/repository-session-path'
+        if not prior.exists():return None
+        if prior.is_symlink():raise ValueError('REBASE_SESSION_SYMLINK')
+        source=Path(prior.read_text().strip())
+        allowed=oldroot/'.pi/repository-sessions'
+        if not source.is_absolute() or not source.is_relative_to(allowed) or source.is_symlink() or not source.is_file():
+            raise ValueError('REBASE_SESSION_PATH_CONFLICT')
+        if any(p.is_symlink() for p in source.parents if p.is_relative_to(oldroot)):
+            raise ValueError('REBASE_SESSION_SYMLINK')
+        return source
+    session_source(old['id'])
+    def apply(db):
+        p=repo.leader(body['project_id'],owner,db)
+        current=task(repo,target_owner,db)
+        if current!=old:raise ValueError('TASK_REBASE_CONFLICT')
+        base=repo.system(p['id'],body['base_system'],db)
+        if current['project_id']!=p['id']:raise PermissionError('TASK_PROJECT_CONFLICT')
+        row=db.execute('SELECT * FROM design_branch_heads WHERE project=? AND domain=? AND branch=?',
+            (p['id'],current['role'],current['branch'])).fetchone()
+        if row['revision']!=body['expected_revision']:raise ValueError('DOMAIN_BRANCH_REVISION_CONFLICT')
+        previous=repo._object(db,'design_domain_commits',row['head'],p['id']) if row['head'] else repo.system(p['id'],current['base_system'],db)
+        root=repo.root/'workspaces'/current['id']
+        dirty=[str(path.relative_to(root)) for path in root.rglob('*') if path.is_file()
+               and scope(current['role'],str(path.relative_to(root)))
+               and previous['files'].get(str(path.relative_to(root)),{}).get('sha256')!=file_hash(path)]
+        if dirty:raise ValueError('REBASE_UNCOMMITTED_FILES: '+','.join(dirty))
+        archived={**current,'branch_head':row['head'],'branch_revision':row['revision']}
+        archive_id='TA-'+identity(archived)
+        db.execute('INSERT OR IGNORE INTO design_professional_task_history VALUES(?,?,?,?)',
+            (archive_id,p['id'],target_owner,canonical(archived)))
+        sealed(repo.root/'task-history'/(archive_id+'.json'),archived)
+        value={**current,'base_system':base['id'],'previous_task':current['id'],
+               'question':body['question'],'completion':body['completion'],'status':'QUEUED',
+               'submission':None,'created':time.time()}
+        value.pop('conclusion',None)
+        value['id']='PT-'+identity({k:v for k,v in value.items() if k not in ('id','created','branch')})
+        value['branch']=current['role']+'/'+target_owner+'/'+value['id'][3:15]
+        db.execute('UPDATE design_professional_tasks SET id=?,status=?,value=? WHERE owner=?',
+                   (value['id'],'QUEUED',canonical(value),target_owner))
+        db.execute('INSERT INTO design_branch_heads VALUES(?,?,?,?,?)',(p['id'],current['role'],value['branch'],None,0))
+        repo.lab.event(owner,'professional_task_rebased',{'old_task':current['id'],'old_base':current['base_system'],
+            'new_task':value['id'],'new_base':base['id'],'owner':target_owner,'archive':archive_id},db)
+        return value
+    value=repo.mutate(owner,body,apply)
+    root=materialize(repo,value)
+    pointer=root/'.pi/repository-session-path'
+    if not pointer.exists():
+        source=session_source(value['previous_task'])
+        if source:
+            # Preserve SDK session identity/history inside the new task sandbox.
+            # The old workspace and its original session remain untouched.
+            destination=root/'.pi/repository-sessions'/source.name
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            if destination.exists() and file_hash(destination)!=file_hash(source):
+                raise ValueError('REBASE_SESSION_COPY_CONFLICT')
+            destination.write_bytes(source.read_bytes());destination.chmod(0o600)
+            pointer.write_text(str(destination));pointer.chmod(0o600)
+            sealed(root/'.pi/rebase-session.json',{'source':str(source),'source_sha256':file_hash(source),
+                'destination':str(destination),'previous_task':value['previous_task'],'owner':target_owner})
+    return value

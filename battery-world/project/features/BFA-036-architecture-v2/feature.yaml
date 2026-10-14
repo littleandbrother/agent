@@ -3,10 +3,10 @@
   "id": "BFA-036-architecture-v2",
   "owner": "bf-agent-coordinator",
   "status": "in-progress",
-  "active_scope": "Architecture V2 C–F; Lab integration published in original Web with Studio preserved",
+  "active_scope": "V2-P01 complete source consumption, contract unification, append-only eight-gate qualification, original Pi continuous revision",
   "authority": "继续推进C–F，先把冻结的P01候选接入首个System Commit，再打通契约依赖、专业Pi协作和回归集成。全部在独立V2环境中完成。",
-  "hypothesis": "The P01 source/runtime baseline can be preserved while a new worktree and empty runtime use the same installed tools without writing production sessions, native projects or accounting.",
-  "falsifier": "Any original owner, ledger row, selected artifact or native project byte changes; development falls back to production paths; two environments acquire the same native resource concurrently.",
+  "hypothesis": "The current V2 Lead and Power/Firmware owners can revise and execute one source-bound system and continue on its successor, with exact job reuse and independent same-version qualification.",
+  "falsifier": "Model-visible declarations fail the fixed checker; a parent file is lost or actual execution consumes different bytes; a stale/forged gate becomes current; a rebase restores old inputs; an unchanged successful job is dispatched again; protected source or ledger changes.",
   "owned_paths": [
     "packages/python/bfworld/src/bfworld/agentlab/",
     "scripts/",
@@ -45,7 +45,10 @@
     "bf-interface-contract-v2",
     "bf-integration-request-v2",
     "bf-professional-task-v2",
-    "bf-method-experiment-v2"
+    "bf-method-experiment-v2",
+    "bf-repository-declaration-spec-v1",
+    "bf-professional-task-history-v1",
+    "bf-system-qualification-v1"
   ],
   "tests": [
     "sealed source and SQLite backup readback",
@@ -59,7 +62,13 @@
     "CAS conflict and rollback history",
     "specialist scope and recovery",
     "same consumer API integration plus failure feedback",
-    "Lab real data and five comparison configurations"
+    "Lab real data and five comparison configurations",
+    "generated model-visible declaration accepted",
+    "complete parent source in actual compiler/solver inputs",
+    "append-only independent eight-gate qualification",
+    "explicit clean rebase and dirty rejection",
+    "exact successful execution reuse across partial commits",
+    "controlled recovery preserves UNKNOWN and completed operations"
   ],
   "negative_controls": [
     "production root substituted for development",
@@ -80,9 +89,9 @@
   "command": "rtk proxy env BFWORLD_VERIFY_PROFILE=architecture-v2 BF_V2_RUNTIME=/Users/depengsu/.local/share/bf-agent-architecture-v2 BF_V2_EVIDENCE=/absolute/new-output ./init.sh",
   "output_artifact": "docs/agentlab/architecture-v2/AB-REPORT.md",
   "cost_cap": "User-authorized cumulative fee/token/time unbounded; new V2 ledger only; retain all reservations and UNKNOWN",
-  "claim_boundary": "A/B baseline preservation and isolated apparatus identity",
-  "stop_condition": "Active original writer, source or historical ledger drift, profile collision, baseline mismatch",
-  "next": "Resume V2 original Lead after parent-source fix; validate complete source inheritance; register controlled comparison protocol. Baseline and original ten sessions remain unchanged.",
+  "claim_boundary": "Actual Power/Firmware development run and continuous design integration; product findings and method comparisons are reported separately.",
+  "stop_condition": "Protected-state drift, ambiguous provider/profile, UNKNOWN model or native write state, source/input audit mismatch, shared native resource conflict",
+  "next": "Fix deterministic contracts and qualification; resume existing V2 Lead for two source-bound candidate revisions; Draft PR against 3dc8a72.",
   "phases": {
     "A": {
       "status": "PASS",

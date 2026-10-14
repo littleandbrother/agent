@@ -3,16 +3,17 @@ import { Type } from "typebox";
 import type { DesignApi, DesignEmit } from "./bf-design.ts";
 
 /** Typed repository transport: one controller, persistent scopes, event-driven waits. */
-export function repositoryExtension(api: DesignApi, emit: DesignEmit): ExtensionFactory {
+export function repositoryExtension(api: DesignApi, emit: DesignEmit, declarationText: string): ExtensionFactory {
 	return (pi) => {
 		pi.registerTool({
 			name: "bf_repository",
 			label: "BF Design Repository",
 			description: `Use action summary/state/task/read/workspace_read/extract, skill_catalog/skill/skill_resource, assign/reopen/run_task/write/commit/execute/execution/finish/contract/integrate/validate/decide/release/close.
-Reads: read(system_id,path,offset?,limit?). workspace_read(path). skill(skill_id), skill_resource(path,offset?,limit?).
+Reads: read(system_id OR domain_commit,path,offset?,limit?). workspace_read(path). skill(skill_id), skill_resource(path,offset?,limit?).
 Lead: assign(role power|firmware,base_system,question,completion,contract_ids?); reopen(task_owner,question,completion); run_task(task_owner) waits for a real specialist; contract(domain_commits:{power:DC,firmware:DC},rationale,parent?); integrate(base_system,domain_commits,contracts:{power-firmware:IC},expected_revision,rationale); validate(system_id); decide(system_id,expected_revision,decision REVISE|REJECT|RETAIN_FOR_REVIEW|ADOPT_PASSED|RESTORE,rationale); release(system_id,rationale); close(conclusion).
-extract(system_id) returns source-derived facts and the declaration schema. Each interfaces/domain.json must include interface with ALL domain schema fields, and sources with exact frozen path/sha256/locator. Narrative facts/issues/assumptions can accompany it.
-Specialist: write(path,content,expected_sha256 or null); commit(paths,expected_revision branch revision,rationale); execute(domain_commit,path project manifest) waits for actual fixed target build or SPICE; execution(domain_commit,path,job_id) reads existing job; finish(status SUBMITTED|BLOCKED,domain_commit?,conclusion).
+rebase(task_owner,base_system,expected_revision branch revision,question,completion) explicitly starts the next task on a new System Commit, retaining old task/workspace/branch/history. Uncommitted files must first be committed. reopen keeps the old base.
+extract(system_id,domain_commits?) returns source-derived facts and legal declaration examples, including peer commits on this base. ${declarationText}
+validate(system_id,scope system|interface default system) appends independent evidence for the eight P01 gates; summary gives current qualification, separate from the timing contract. Specialist: write(path,content,expected_sha256 or null); commit(paths,expected_revision branch revision,rationale); execute(domain_commit,path project manifest) waits for actual fixed target build or SPICE and returns consumed sources; execution(domain_commit,path,job_id) reads existing job; finish(status SUBMITTED|BLOCKED,domain_commit?,conclusion).
 Every mutation requires a stable operation_id. All actions use the bound project. Returned sha256 is the write precondition. No raw shell or external network.`,
 			executionMode: "sequential",
 			parameters: Type.Object({
@@ -26,6 +27,8 @@ Every mutation requires a stable operation_id. All actions use the bound project
 						"extract",
 						"assign",
 						"reopen",
+						"rebase",
+						"schema",
 						"run_task",
 						"write",
 						"commit",
@@ -64,6 +67,7 @@ Every mutation requires a stable operation_id. All actions use the bound project
 				rationale: Type.Optional(Type.String()),
 				decision: Type.Optional(Type.String()),
 				status: Type.Optional(Type.String()),
+				scope: Type.Optional(Type.String()),
 				domain_commit: Type.Optional(Type.String()),
 				conclusion: Type.Optional(Type.String()),
 				job_id: Type.Optional(Type.String()),

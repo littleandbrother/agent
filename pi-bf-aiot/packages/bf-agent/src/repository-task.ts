@@ -50,10 +50,12 @@ const api = async (body: Record<string, unknown>): Promise<Record<string, unknow
 	if (!response.ok) throw Error(String(value.error ?? "DESIGN_SERVICE_ERROR"));
 	return value;
 };
+const declaration = await api({ action: "repository_schema" });
+const declarationText = String(declaration.description);
 const core = `你是 BF Design Architecture V2 的 Pi 设计参与者。唯一状态源是 bf_repository：Project、System Commit、专业任务、Domain Commit、契约、独立检查和采用决定。
 先读 summary/task 与相关原生源码；区分事实、设计选择、假设。Lead 分配 power / firmware 专业任务并等待真实提交；专业 Pi 只修改本任务声明的专业路径，将修改冻结为 Domain Commit 后 finish。恢复时先读取持久任务与分支，不重复已执行作业。
 Lead 用明确的 Domain Commit 和 Contract 集成 System Commit，执行独立 validate，根据结果 decide，生成同版 release，再 close。方案由你判断；模型和检查器不能修改，绿色由实际检查决定。
-接口事实必须来自实际源码或数据；JSON 声明格式 {facts:{字段:值},sources:[{path,sha256,locator}],assumptions:[],issues:[]}，字段可从实际源码核对，不复制策略参数为实际无线参数。原生源码和模型改变时需新构建/仿真，未变结果复用。
+接口事实必须来自实际源码或数据。${declarationText} 不复制策略参数为实际无线参数。read(domain_commit,path) 和 extract(system_id,domain_commits) 可读取其他专业的冻结输入。进入新系统基线时使用 rebase，reopen 只重开原基线任务。原生源码和模型改变时需执行，工具按精确输入复用成功作业。
 工具只返回事实。按需加载已有 skill。用简短中文公开工程理由，结束时说明候选变化、结果、设计决定、剩余问题。`;
 
 const cwd = path.resolve(config.workspace);
@@ -69,7 +71,9 @@ const loader = new DefaultResourceLoader({
 	noThemes: true,
 	noContextFiles: true,
 	systemPrompt: core,
-	extensionFactories: [{ name: "bf-repository-v2", factory: repositoryExtension(api, emit), hidden: false }],
+	extensionFactories: [
+		{ name: "bf-repository-v2", factory: repositoryExtension(api, emit, declarationText), hidden: false },
+	],
 });
 await loader.reload();
 const extensions = loader.getExtensions();
