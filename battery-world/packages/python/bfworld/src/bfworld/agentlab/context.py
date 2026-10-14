@@ -163,6 +163,70 @@ def _project_superseded_phase_states(messages, archive):
     return projected, records
 
 
+def _project_repository_states(payload, messages, archive):
+    """Replace obsolete generated recovery snapshots, keeping real user text exact.
+
+    Repository controllers serialize a task goal and a restored state as SDK
+    user messages. Treating all previous restores as human requirements leaves
+    no room for the source files read in the current revision. This recognizer
+    is limited to the repository-only transport and its exact generated shapes.
+    The latest of each shape remains inline; originals stay in the SDK history
+    and the immutable owner archive.
+    """
+    names = {x.get('function', {}).get('name') for x in payload.get('tools', [])
+             if isinstance(x, dict)}
+    if not archive or names != {'bf_repository'}:
+        return list(messages), []
+    owner = getattr(archive, 'owner', None)
+    shapes = {'goal': [], 'state': []}
+    state_keys = {'adopted', 'branch', 'cost_upper_bound_usd', 'current_system',
+                  'error', 'model_calls', 'owner', 'project_id', 'revision',
+                  'status', 'task', 'unknown_requests'}
+    for index, message in enumerate(messages):
+        if message.get('role') != 'user':
+            continue
+        raw = message.get('content')
+        text = raw
+        if (isinstance(raw, list) and len(raw) == 1 and isinstance(raw[0], dict)
+                and raw[0].get('type') == 'text'):
+            text = raw[0].get('text')
+        if not isinstance(text, str):
+            continue
+        try:
+            value = json.loads(text)
+        except (TypeError, ValueError):
+            continue
+        if not isinstance(value, dict):
+            continue
+        task = value.get('professional_task')
+        if (set(value) == {'goal', 'professional_task'}
+                and value['goal'] == 'Complete the assigned question, submit an actual Domain Commit and finish.'
+                and isinstance(task, dict) and task.get('owner') == owner
+                and isinstance(task.get('id'), str) and task['id'].startswith('PT-')
+                and isinstance(task.get('base_system'), str) and task['base_system'].startswith('SC-')):
+            shapes['goal'].append((index, message, raw, value, task))
+        elif (set(value) == state_keys and value.get('owner') == owner
+                and isinstance(value.get('project_id'), str)
+                and value['project_id'].startswith('PR-')
+                and (value.get('task') is None or isinstance(value['task'], dict))):
+            shapes['state'].append((index, message, raw, value, value.get('task') or {}))
+    projected, records = list(messages), []
+    for kind, snapshots in shapes.items():
+        for index, message, raw, value, task in snapshots[:-1]:
+            record = archive(message)
+            reference = {**record, 'context_projection': 'archived_not_deleted',
+                         'state_authority': 'HISTORICAL_SUPERSEDED',
+                         'kind': 'repository_' + kind, 'owner': owner,
+                         'task_id': task.get('id'), 'base_system': task.get('base_system'),
+                         'current_snapshot_source_index': snapshots[-1][0]}
+            content = canonical(reference)
+            projected[index] = {**message, 'content':
+                [{**raw[0], 'text': content}] if isinstance(raw, list) else content}
+            records.append({'kind': 'superseded_repository_' + kind,
+                            'source_index': index, 'source_message_sha256': identity(message), **record})
+    return projected, records
+
+
 def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, target_bytes=TARGET_BYTES, active_skills=(), compact_state=False, closed_continuations=None, aggregate_closed=False, deduplicate_skills=False):
     if not 8000 <= target_bytes < request_bytes:
         raise ValueError('CONTEXT_LIMITS_INVALID')
@@ -211,9 +275,12 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
     # Registered finished controller stages are history at any request size.
     # Keep the current registered stage and actual human instructions exact.
     source_message_count = len(messages)
-    managed, closed_archives = project_closed_continuations(messages, archive, closed_continuations, aggregate=aggregate_closed)
+    repository_messages, repository_archives = _project_repository_states(payload, messages, archive)
+    repository_only = {x.get('function', {}).get('name') for x in payload.get('tools', [])
+                       if isinstance(x, dict)} == {'bf_repository'}
+    managed, closed_archives = project_closed_continuations(repository_messages, archive, closed_continuations, aggregate=aggregate_closed)
     working, observer_archives = _project_superseded_phase_states(managed, archive)
-    observer_archives = [*closed_archives, *observer_archives]
+    observer_archives = [*repository_archives, *closed_archives, *observer_archives]
     # Aggregation changes positions. Subsequent compaction operates on the new
     # list, retaining current user boundaries and native call/result pairs.
     messages = working
@@ -334,7 +401,11 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
                 if m.get('role')=='assistant' and m.get('tool_calls')]
         complete=[(i,ids) for i,ids in groups if all(k and k in returned for k in ids)]
         if len(complete)<=2:break
-        eligible=[(i,ids) for i,ids in complete
+        # The repository has an authoritative current task and immutable source
+        # tree. Old current-turn reads (and their large provider continuation
+        # fields) must not crowd out newly returned source. Keep the three newest
+        # complete exchanges intact before spilling their source bytes.
+        eligible = complete[:-3] if repository_only else [(i,ids) for i,ids in complete
                   if not archive or source_indices.get(id(projected[i]),0)<boundary]
         if not eligible:break
         source_pos,ids=eligible[0];drop=set(ids);removable.update(ids)

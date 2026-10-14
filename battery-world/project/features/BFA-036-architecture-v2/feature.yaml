@@ -33,7 +33,8 @@
     "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/packages/python/bfworld/src/bfworld/agentlab/lab_bridge.py",
     "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py",
     "/Users/depengsu/.local/share/bf-agent-runtime/workbench/state/lab-bridge.json",
-    "../release/"
+    "../release/",
+    "../.github/workflows/bf-v2-regression.yml"
   ],
   "schema_changes": [
     "bf-baseline-manifest-v1",
@@ -150,7 +151,8 @@
   },
   "verification_commands": {
     "lab": "BFWORLD_VERIFY_PROFILE=architecture-v2-lab BF_V2_EVIDENCE=/absolute/new-output ./init.sh",
-    "ab": "Historical execution-disabled A/B gate; do not run against enabled C–F profile"
+    "ab": "Historical execution-disabled A/B gate; do not run against enabled C–F profile",
+    "ci": "GitHub BF V2 regression on the exact PR head; repository fixtures and Pi offline build/check. macOS native consumption remains local actual-run evidence."
   },
   "publication_authority": "2026-10-15 user: 推送到github",
   "publication": {
