@@ -15,8 +15,8 @@
     if(id==='runtime')return false;
     if (Array.isArray(f.sections) && id !== 'overview') return f.sections.includes(id);
     const p = path(f), ext = (f.name || '').split('.').pop().toLowerCase();
-    if (id === 'schematic') return /schematic|原理图|\.schdoc\b|\.sch\b|\.kicad_sch\b/.test(p);
-    if (id === 'pcb') return f.domain !== 'mechanical' && !belongs(f, 'schematic') && !belongs(f, 'bom') && (/pcb|布线|gerber|drill|pick.?place|routing|\.brd\b|\.kicad_pcb\b/.test(p) || ['gbr','gbl','gtl','gbs','gts','drl','epro2','epru'].includes(ext));
+    if (id === 'schematic') return /schematic|原理图|\.schdoc\b|\.sch\b|\.esch2\b|\.kicad_sch\b/.test(p);
+    if (id === 'pcb') return f.domain !== 'mechanical' && !belongs(f, 'schematic') && !belongs(f, 'bom') && (/pcb|布线|gerber|drill|pick.?place|routing|\.brd\b|\.kicad_pcb\b/.test(p) || ['gbr','gbl','gtl','gbs','gts','drl','epro2','epru','epcb2'].includes(ext));
     if (id === 'mechanical') return f.domain === 'mechanical' || ['step','stp','stl','glb','blend','dxf'].includes(ext);
     if (id === 'simulation') return f.role === 'data' && f.domain !== 'firmware' && !belongs(f, 'bom') || /waveform|transient|simulation|simulat|\.raw\b|\.mph\b|\.cir\b|force.table|energy.balance|仿真|云图/.test(p);
     if (id === 'bom') return /\bbom\b|bill.of.material|元器件清单|材料清单|物料/.test(p);
@@ -48,7 +48,7 @@
     }
     const curated=out.filter(x=>x.f.sections?.includes(id));
     const visible=curated.length && ['mechanical','pcb'].includes(id)?curated:out;
-    const rank = x => (id==='mechanical'&&['model','mesh'].includes(x.v.kind)?-2:({image:0,series:1,model:2,mesh:2,video:3,pdf:4}[x.v.kind] ?? 5)) + (/combined|overview|installation|waveform/.test(path(x.f)) ? -.1 : 0);
+    const rank = x => (id==='mechanical'&&['model','mesh'].includes(x.v.kind)?-2:({image:0,series:1,model:2,mesh:2,video:3,pdf:4,text:5}[x.v.kind] ?? 5)) + (/combined|overview|installation|waveform|first-version-report|\/main\.c/.test(path(x.f)) ? -.1 : 0);
     return visible.sort((a,b) => rank(a)-rank(b));
   }
   function series(data) {

@@ -5,13 +5,15 @@ qualification are deliberately separate results. No participant self-promotion.
 """
 import json
 import hashlib
+import re
 import shutil
+import subprocess
 import threading
 import time
 from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer
 from pathlib import Path, PurePosixPath
-from urllib.parse import urlparse
+from urllib.parse import urlparse,parse_qs
 
 from .literature_campaign import DEFAULT_ROOT, PAPERS, bound_file, digest, inventory, owner_budget, put_once, read
 from .store import canonical, identity
@@ -277,7 +279,7 @@ manifest必须含schema_version="bf-paper-native-delivery-v1",paper_id,source_id
 若本轮仅机械变更而明确复用原SPICE模型子集，jobs中标注reused_unchanged=true并保留原job及原装配身份。只有同owner的当前netlist/项目manifest完全未变、声明energy条件未变且原输出哈希可信，才可登记输入等价复用；报告和manifest仍绑定当前装配。复用只确认原模型输入/数值事实，不能证明旧源模型适用于新机械或联合产品通过。CAD和固件继续要求当前装配身份。禁止通过重写原job、更换owner或重跑未变SPICE来掩盖绑定问题。
 
 工程必须实际提交、查询原job至终态并读回；输入改动用新operation_id，不重复已完成作业。禁止调用door-selfpower、door-system、sealed scientific templates、修改评价器/费用/权限。每项失败保存源码和真实反馈，以能区分原因的最小检查处理；实物/制造/临床均未验证。请用工程catalog判断实际工具能力，产品说明的旧静态not_connected不应掩盖catalog中的工程项目能力。
-工程项目参数恰为{assembly_revision:当前整数,project_path:"相对路径/project.json"}；project.json里含schema_version="bf-engineering-project-v1",kind,entrypoint,files,interfaces。CAD接口units=mm；SPICE接口units=SI；nRF接口units=SI,target="nRF52832-QFAA",softdevice=false。读取对应skill后开始。'''
+工程项目参数恰为{assembly_revision:当前整数,project_path:"相对路径/project.json"}；project.json里含schema_version="bf-engineering-project-v1",kind,entrypoint,files,interfaces。CAD接口units=mm；SPICE接口units=SI。nRF目标为nRF52832-QFAA；裸机kind=firmware-nrf52832才使用softdevice=false，真实BLE/SDK任务读取engineering-project技能中的firmware-nrf52832-s132章节（这是project kind，不是skill_id），使用该kind及其精确SDK/S132接口，不能套用裸机配置。运行bash默认60秒、最多300秒；迭代须有上限和收敛/停滞诊断，超时或信号是失败，禁止原样反复重试。读取对应skill后开始。'''
 
 
 def previous_native_attempt(root,paper_id):
@@ -300,9 +302,29 @@ def continuation_deadline(authorization,now,renewed=None):
             raise ValueError('NATIVE_RENEWAL_CAP_OR_FEES_INVALID')
         if renewed.get('fees_reset') is not False:raise ValueError('NATIVE_RENEWAL_CAP_OR_FEES_INVALID')
     deadline=(renewed or authorization).get('expires')
+    if (renewed and deadline is None and authorization.get('usd_cap') == 30 and
+        unbounded and unbounded['schema_version']=='bf-model-unbounded-policy-v2' and
+        renewed['owner'] in unbounded.get('wall_owners',unbounded['owners'])):
+        return None
     if authorization.get('usd_cap')!=30 or not isinstance(deadline,(int,float)) or now>=deadline:
         raise ValueError('ORIGINAL_NATIVE_BUDGET_EXPIRED_OR_INVALID')
     return deadline
+
+
+def reserve_continuation(target):
+    """Reserve a new turn even when an interrupted launch left only metadata."""
+    base = Path(target) / 'continuations'
+    base.mkdir(parents=True, exist_ok=True)
+    numbers = [int(p.name[5:]) for p in base.iterdir()
+               if re.fullmatch(r'turn-\d+', p.name)]
+    sequence = max(numbers, default=0) + 1
+    while True:
+        destination = base / ('turn-' + str(sequence).zfill(3))
+        try:
+            destination.mkdir()
+            return destination
+        except FileExistsError:
+            sequence += 1
 
 
 def latest_closed_result(target):
@@ -344,11 +366,44 @@ def archive_closed_traces(root,target):
 
 
 def apparatus_identity():
+    from . import interface_facts, result_fields, tool_responses, candidate_results, preview_publication, result_selection, eda_results, studio_delivery
     from . import engineering_projects,firmware_targets,nordic_sdk,stm32_l432,spice_observation,assembly_contract,skill_resources,server,launcher,eda_cli,literature_eda,literature_continuation
-    from . import deployment,paper_sessions,product_results,provider,chat,context,model_profile
+    from . import deployment,paper_sessions,product_results,provider,chat,context,model_profile,runtime_config,literature_acceptance,engineering,execution_progress,recovery,literature_package,references,reference_checks,continuation_context
+    from .design_lab import native_slot, paper_mainline, paper_candidate, paper_delivery, service as design_service
     from .runtime_config import CMSIS
-    modules={m.__name__:digest(m.__file__) for m in [engineering_projects,firmware_targets,nordic_sdk,stm32_l432,spice_observation,assembly_contract,skill_resources,server,launcher,deployment,eda_cli,literature_eda,literature_continuation,paper_sessions,product_results,provider,chat,budget_policy,context,model_profile]}
+    modules={m.__name__:digest(m.__file__) for m in [engineering_projects,firmware_targets,nordic_sdk,stm32_l432,spice_observation,assembly_contract,skill_resources,server,launcher,deployment,eda_cli,literature_eda,literature_continuation,paper_sessions,product_results,provider,chat,budget_policy,context,model_profile,runtime_config,literature_acceptance,engineering,native_slot,paper_mainline,execution_progress,recovery,literature_package,references,reference_checks,continuation_context]}
+    modules.update({m.__name__:digest(m.__file__) for m in (paper_candidate,paper_delivery,design_service,interface_facts,result_fields,tool_responses,candidate_results,preview_publication,result_selection,eda_results,studio_delivery)})
+    modules['operator/frozen-skill-package']=skill_resources.source_bundle()[0]['sha256']
+    for name in ('literature_paper_resume.py', 'literature_pi_queue.py'):
+        modules['controller/'+name]=digest(runtime_config.REPO/'scripts'/name)
+    modules['operator/reconcile-native-unknown']=digest(runtime_config.REPO/'scripts/eda/reconcile_native_unknown.py')
+    modules['operator/p01-mainline-preflight']=digest(runtime_config.REPO/'scripts/design_lab/p01_mainline_preflight.py')
+    modules['operator/candidate-preview-publisher']=digest(runtime_config.REPO/'scripts/design_lab/publish_candidate_previews.py')
+    modules['operator/effective-runtime']=identity({
+        'paths': {name: str(path) for name,path in (
+            ('pi',runtime_config.PI), ('cad',runtime_config.CAD),
+            ('comsol',runtime_config.COMSOL), ('spice',runtime_config.SPICE),
+            ('gcc',runtime_config.GCC), ('cmsis',runtime_config.CMSIS))},
+        'eda':runtime_config.eda_policy()})
+    for name in ('chat-product.ts', 'current-context.ts', 'paper-candidate.ts', 'skill-resources.ts', 'workspace-inspect.ts', 'read-progress.ts', 'tool-reply.ts', 'bounded-bash.ts'):
+        modules['pi/current-context/'+name]=digest(runtime_config.PI/'packages/bf-agent/src'/name)
+    readonly=runtime_config.readonly_runtime()
+    if readonly is not None:modules['operator/participant-readonly-runtime']=identity(readonly)
     modules['tool/easyeda-cli']=digest(eda_cli.CLI)
+    modules['tool/typed-response-protocol']=digest(runtime_config.EDA_PROTOCOL_ROOT/'internal/protocol/envelope.go')
+    modules['tool/typed-codec-go']=digest(runtime_config.GO)
+    if runtime_config.eda_policy()['transport']=='native-cli-v1':
+        native_manifest=runtime_config.configured('EDA_NATIVE_PROVIDER',runtime_config.RUNTIME_ROOT/'deployment/easyeda-native/provider.json')
+        native=read(native_manifest);modules['tool/native-eda-provider']=digest(native_manifest)
+        for key in ('adapter','bundle','actions'):
+            path=Path(native[key])
+            if path.is_symlink() or digest(path)!=native[key+'_sha256']:
+                raise ValueError('NATIVE_EDA_PROVIDER_CHANGED:'+key)
+            modules['tool/native-eda-'+key]=native[key+'_sha256']
+        modules['tool/native-eda-cli']=digest(native['cli'])
+        modules['tool/native-eda-adapter-source']=digest(runtime_config.REPO/'scripts/eda/native_connector.mjs')
+        modules['tool/native-response-protocol']=digest(runtime_config.EDA_PROTOCOL_ROOT/'internal/protocol/envelope.go')
+        modules['tool/native-codec-go']=digest(runtime_config.GO)
     manifest=read(CMSIS/'toolchain-sources.json');modules['vendor/stm32l031-manifest']=digest(CMSIS/'toolchain-sources.json')
     for name,expected in manifest['files'].items():
         source=CMSIS/name
@@ -379,6 +434,14 @@ def stage_apparatus_reference(root,target,workspace,owner,jobs,harness):
         records.append({'path':str(path.relative_to(workspace)),'sha256':digest(path),'origin':origin})
     stage('assembly-schema.json',canonical(schema()).encode(),'existing public validator facts')
     stage('runtime-capabilities.json',canonical({'schema_version':'bf-qualified-runtime-capabilities-v1','apparatus_identity':current_apparatus,'current_project_kinds':sorted(KINDS),'source':'qualified runtime; original paper contract capability list is historical','full_product_passed':False,'physical_verified':False}).encode(),'Current qualified tool capabilities; additive public apparatus snapshot')
+    from . import literature_package
+    stage('prepare-delivery.py',Path(literature_package.__file__).read_bytes(),
+          'Frozen public metadata utility; Pi chooses explicit job and file recipe; no engineering edits or acceptance decisions')
+    from .runtime_config import readonly_runtime
+    receiver=readonly_runtime(workspace)
+    if receiver:
+        stage('receiver-runtime.json',canonical(receiver).encode(),
+              'Operator-pinned readonly receiver runtime; same-seatbelt imports preflighted before original Pi launch; no radio or product acceptance')
     for job in jobs:
         if job.get('status')!='SUCCEEDED' or (job.get('result') or {}).get('kind')!='spice':continue
         raw=Path(root)/'runtime/engineering'/job['id']/'project-trace.raw'
@@ -391,15 +454,95 @@ def stage_apparatus_reference(root,target,workspace,owner,jobs,harness):
         'nrf52.h':nordic_sdk.SDK/'modules/nrfx/mdk/nrf52.h','nrf52_bitfields.h':nordic_sdk.SDK/'modules/nrfx/mdk/nrf52_bitfields.h',
         'nrfx_saadc.h':nordic_sdk.SDK/'modules/nrfx/drivers/include/nrfx_saadc.h','nrfx_timer.h':nordic_sdk.SDK/'modules/nrfx/drivers/include/nrfx_timer.h',
         'nrf_drv_twi.h':nordic_sdk.SDK/'integration/nrfx/legacy/nrf_drv_twi.h',
+        'ble_gap.h':nordic_sdk.SDK/'components/softdevice/s132/headers/ble_gap.h',
+        'app_util.h':nordic_sdk.SDK/'components/libraries/util/app_util.h',
+        'app_timer.h':nordic_sdk.SDK/'components/libraries/timer/app_timer.h',
+        'ble_advertising.h':nordic_sdk.SDK/'components/ble/ble_advertising/ble_advertising.h',
+        'nrfx_config.h':nordic_sdk.SDK/'integration/nrfx/nrfx_config.h',
         'stm32l031xx.h':CMSIS/'stm32l031xx.h','system_stm32l0xx.h':CMSIS/'system_stm32l0xx.h'}
     for name,path in references.items():stage(name,path.read_bytes(),'Official vendor reference, not author/Pi firmware; copy before adapting')
+    index={'schema_version':'bf-local-vendor-doc-index-v1','sdk':'nRF5-17.1.0','softdevice':'S132-7.2.0',
+        'sources':[{'path':str(path.relative_to(nordic_sdk.SDK)), 'workspace_path':prefix+'/'+name,
+                    'bytes':path.stat().st_size,'sha256':digest(path)} for name,path in references.items()
+                   if path.is_relative_to(nordic_sdk.SDK)]}
+    stage('nrf5-sdk-index.json',canonical(index).encode(),'Fixed SDK chapters with directly readable workspace paths')
     for name in ['ad7156.c','ad7156.h']:
         path=nordic_sdk.VENDOR/'ad7156-no-os'/name
         if path.is_file():stage(name,path.read_bytes(),'Analog Devices official no-OS reference; preserve license')
     value={'schema_version':'bf-public-apparatus-reference-v1','actor':'Codex common apparatus maintainer','files':records,
         'bound_environment':apparatus_identity()[0],'instructions':'Read current tool catalog and assembly_schema; reference files are immutable inputs, copy before adapting. Native target build remains separate from functionality and physical acceptance.'}
+    value['current_pointer']=public_context_write(workspace,'apparatus-reference/current.json',
+        (json.dumps({'schema_version':'bf-current-apparatus-reference-v1','folder':prefix,**value},ensure_ascii=False,indent=2)+'\n').encode())
     put_once(target/'apparatus-reference.json',value);return value
 
+
+
+def native_phase_context_packet(workspace, focused, binding, generic, jobs, previous=None, eda_observations=None):
+    """Live paper-phase facts; generic registry state is preserved as history.
+
+    No acceptance is inferred from this projection. User instruction text is
+    untouched; the full generic snapshot and complete job metadata stay readable.
+    """
+    workspace=Path(workspace)
+    owner=focused.get('owner')
+    if (not owner or generic.get('owner')!=owner or workspace.name!=owner or
+        focused.get('schema_version')!='bf-paper-recovery-phase-v1' or
+        not focused.get('task_sha256') or len(focused['task_sha256'])!=64):
+        raise ValueError('NATIVE_CONTEXT_ORIGINAL_OWNER_OR_PHASE')
+    if binding and (binding.get('owner')!=owner or binding.get('paper_id')!=focused['paper_id']):
+        raise ValueError('NATIVE_CONTEXT_EDA_OWNER')
+    if eda_observations is not None and (not binding or eda_observations.get('owner')!=owner or
+            eda_observations.get('project')!=binding.get('project_uuid')):
+        raise ValueError('NATIVE_CONTEXT_EDA_OBSERVATION_SCOPE')
+    # Canonical full observations are archived, not discarded or treated as
+    # current native-file failures merely because the generic registry is empty.
+    raw=canonical(generic).encode()
+    legacy=public_context_write(workspace,'public-context-history/product-registry-'+hashlib.sha256(raw).hexdigest()+'.json',raw)
+    raw_jobs=canonical(jobs).encode()
+    job_reference=public_context_write(workspace,'public-context-history/native-jobs-'+hashlib.sha256(raw_jobs).hexdigest()+'.json',raw_jobs)
+    package_reference=None
+    if generic.get('revision') is not None and generic.get('hashes',{}).get('physical_hash'):
+        from .literature_package import job_index
+        index=job_index(owner,jobs,{'revision':generic['revision'],'hashes':generic['hashes']},
+                        (binding or {}).get('project_uuid'))
+        data=canonical(index).encode()
+        package_reference=public_context_write(workspace,'public-context-history/delivery-jobs-'+hashlib.sha256(data).hexdigest()+'.json',data)
+    summaries=[]
+    for job in jobs[:12]:
+        result=job.get('result') or {}
+        summaries.append({k:v for k,v in {
+            'id':job.get('id'),'status':job.get('status'),'operation':job.get('operation'),
+            'kind':result.get('kind'),'project_sha256':job.get('project_sha256') or result.get('project_sha256'),
+            'native_readback_passed':result.get('readback_passed'),
+            'selection_and_function_accepted':False}.items() if v is not None})
+    eda={'bound':bool(binding),'native_design_accepted':False}
+    if binding:
+        for k in ('project_uuid','created_project_uuid','native_window_id','local_project','runtime_alias_proof','host_policy','connection_status'):
+            if k in binding:eda[k]=binding[k]
+    if eda_observations is not None:eda['observations']=eda_observations
+    packet={'schema_version':'bf-product-context-v1','context_scope':'current-original-paper-native-phase',
+        'owner':owner,'paper_id':focused['paper_id'],'revision':generic.get('revision'),
+        'hashes':generic.get('hashes',{}),'requirements':generic.get('requirements',[]),
+        'assumptions':generic.get('assumptions',[]),
+        'native_phase':{k:focused[k] for k in ('phase','stage_scope','required_project_kind','source_identity','task_file','task_sha256') if k in focused},
+        'current_task':{'path':'TASK.md','phase_path':focused['task_file'],'phase_sha256':focused['task_sha256']},
+        'local_eda':eda,'native_jobs':summaries,'native_jobs_count':len(jobs),'native_jobs_reference':job_reference,
+        'delivery_job_index_reference':package_reference,
+        'previous_frozen_stage':previous,
+        'generic_product_registry_history':{'artifact':legacy,'scope':'Historical product declarations and generic registration verdict only; not the current native phase or local EDA connection.'},
+        'delivery':{'schema_version':'bf-native-phase-pending-v1','status':'CURRENT_STAGE_NOT_EVALUATED','passed':False,
+            'full_engineering_passed':False,'hardware_verified':False,'scope':'Current native phase has its own immutable execution, file, functional and full-product checks.'},
+        'physical_verified':False,'full_product_passed':False,
+        'memory_authority':'Current phase and native job facts are distinct from historical declarations. User requirements and original messages are unchanged.'}
+    packet['sha256']=identity(packet)
+    return packet
+
+
+def native_context_target(actor, requested, owner):
+    """An operator cannot accidentally query a foreign paper through this stage."""
+    target=requested if actor.get('role')=='operator' else actor.get('owner')
+    if target!=owner or requested!=owner:raise PermissionError('NATIVE_CONTEXT_ORIGINAL_OWNER')
+    return target
 
 
 def recovery_phase(root,paper_id,phase,owner,contract):
@@ -416,16 +559,127 @@ def recovery_phase(root,paper_id,phase,owner,contract):
     if 'model_profile' in value:
         from .model_profile import named
         named(value['model_profile'])
+    from .design_lab.paper_mainline import startup_capabilities
+    startup_capabilities(phase,value)
+    if 'required_project_kind' in value:
+        from .engineering_projects import KINDS
+        if value['required_project_kind'] not in KINDS:raise ValueError('NATIVE_PHASE_PROJECT_KIND_INVALID')
     for asset in value.get('assets',[]):bound_file(root,asset['path'],asset['sha256'])
     return {**value,'task_file':str(path.relative_to(root)),'task_sha256':digest(path)}
 
 
-def native_route_allowed(path, phase):
-    if path == '/api/eda-cli':return phase == 'eda'
+def phase_gate_problems(focused, native_checks, execution):
+    """A file/legacy-MCU pass cannot satisfy a more specific recovery goal."""
+    problems=[]
+    if focused is not None and execution.get('status') in {'FAILED','BLOCKED','PAUSED','INTERRUPTED'}:
+        problems.append('RECOVERY_EXECUTION_NOT_COMPLETE')
+    kind=(focused or {}).get('required_project_kind')
+    if kind and kind not in {c['kind'] for c in native_checks}:
+        problems.append('RECOVERY_TARGET_BUILD_MISSING:'+kind)
+    return problems
+
+
+def public_context_write(workspace, relative, content):
+    """Refresh public recovery metadata, preserving every previous byte."""
+    workspace=Path(workspace).resolve();relative=PurePosixPath(relative)
+    if relative.is_absolute() or '..' in relative.parts:
+        raise ValueError('RECOVERY_PUBLIC_PATH_SCOPE')
+    destination=workspace/relative
+    if any(p.is_symlink() for p in [destination,*destination.parents] if p.is_relative_to(workspace)):
+        raise ValueError('RECOVERY_PUBLIC_PATH_SYMLINK')
+    if not destination.resolve().is_relative_to(workspace):raise ValueError('RECOVERY_PUBLIC_PATH_SCOPE')
+    if destination.exists() and destination.read_bytes()!=content:
+        old=destination.read_bytes();history=workspace/'public-context-history'
+        if history.is_symlink():raise ValueError('RECOVERY_PUBLIC_PATH_SYMLINK')
+        history.mkdir(exist_ok=True)
+        archived=history/(hashlib.sha256(old).hexdigest()+'.'+destination.suffix.lstrip('.'))
+        if archived.exists() and archived.read_bytes()!=old:raise ValueError('RECOVERY_PUBLIC_HISTORY_CHANGED')
+        if not archived.exists():archived.write_bytes(old)
+    destination.parent.mkdir(parents=True,exist_ok=True)
+    if not destination.exists() or destination.read_bytes()!=content:destination.write_bytes(content)
+    return {'path':str(relative),'sha256':digest(destination)}
+
+
+def stage_current_task(root,workspace,focused):
+    """Current goal is readable on resume; old TASK and phase files are history."""
+    relative=PurePosixPath(focused['task_file'])
+    expected=PurePosixPath('campaign/recovery')/focused['paper_id']/'phases'/(focused['phase']+'.json')
+    if relative!=expected:raise ValueError('RECOVERY_PUBLIC_PHASE_SCOPE')
+    source=bound_file(root,str(relative),focused['task_sha256'])
+    phase=public_context_write(workspace,str(relative),source.read_bytes())
+    inventory='\n'.join('- '+a['path']+' · SHA-256 '+a['sha256'] for a in focused.get('assets',[]))
+    task=('# 当前原会话任务 · '+focused['paper_id']+'\n\n'+focused['task']+'\n\n'
+          '公开阶段文件：'+str(relative)+'\nSHA-256：'+focused['task_sha256']+'\n'
+          '本轮工具与厂商资料的精确路径见 apparatus-reference/current.json；旧目录保留为历史。\n'
+          '本轮公开资源（只列位置，不把全部正文塞入上下文）：\n'+inventory+'\n'
+          '此前结果只作为历史；本轮须以当前输入的真实执行、独立检查与同版交付收尾。\n')
+    return {'phase':phase,'task':public_context_write(workspace,'TASK.md',task.encode()),
+            'actor':'Codex public context maintainer','participant_engineering_edits':0}
+
+
+def stage_candidate_task(workspace, contract, message):
+    """Publish the registered current work into the original owner's TASK file."""
+    if not isinstance(message,str) or not message.strip() or len(message.encode()) > 64000:
+        raise ValueError('PAPER_CURRENT_WORK_REQUIRED')
+    current={'schema_version':'bf-paper-current-work-v1','control_route':'candidate-lifecycle',
+             'task_id':contract['task_id'],'current_authorized_work':message,
+             'product_goal':contract['goal'],'requirements':contract['requirements'],
+             'scenario':contract['scenario'],'scope':contract['scope']}
+    reference=public_context_write(workspace,'CURRENT-CANDIDATE-WORK.json',
+        (json.dumps(current,ensure_ascii=False,indent=2)+'\n').encode())
+    text=('# 当前授权工作 · P01\n\n'+message+'\n\n'
+          '产品目标：'+contract['goal']+'\n'
+          '本次工作状态：CURRENT-CANDIDATE-WORK.json\n'
+          '产品要求：'+', '.join(contract['requirements'])+'\n'
+          '工具及资料入口：apparatus-reference/current.json\n')
+    return {'current_work':reference,
+            'task':public_context_write(workspace,'TASK.md',text.encode()),
+            'actor':'Codex public context maintainer','participant_engineering_edits':0}
+
+
+def prior_result_reference(workspace,value):
+    """Keep full immutable feedback available without front-loading old files."""
+    raw=(json.dumps(value,ensure_ascii=False,indent=2)+'\n').encode()
+    reference=public_context_write(workspace,'public-context-history/native-result-'+hashlib.sha256(raw).hexdigest()+'.json',raw)
+    return {**reference,'history_only':True,
+            'execution':{k:value.get('execution',{}).get(k) for k in ('status','error')},
+            'evaluation_status':value.get('evaluation',{}).get('status'),
+            'delivery_integrity_status':value.get('delivery_integrity',{}).get('status')}
+
+
+def native_reference_enabled(focused):
+    """Acquisition is explicit phase capability, never automatic evaluation access."""
+    enabled=(focused or {}).get('allow_reference_research',False)
+    if type(enabled) is not bool:raise ValueError('NATIVE_REFERENCE_CAPABILITY_INVALID')
+    return enabled
+
+
+def native_phase_tools(eda_bound=False, reference_research=False):
+    return ['read','write','edit','bash','bf_product','bf_engineering']+(['bf_eda'] if eda_bound else [])+(['bf_reference'] if reference_research else [])
+
+
+def native_route_allowed(path, phase, eda_bound=False, reference_research=False, candidate=False):
+    if path=='/api/design-lab':return candidate
+    if path == '/api/eda-cli':return phase == 'eda' or eda_bound
+    if path == '/api/references':return reference_research
     return path in {'/v1/chat/completions','/api/skills','/api/engineering','/api/assembly','/api/product','/api/deliverables'}
 
 
-def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,operator_message=None):
+def native_reference_preflight(app,owner,enabled):
+    """Authorize an opted-in source capability before paid model dispatch.
+
+    This checks installed original-owner authority only. It does not fetch a
+    source, create a record, renew a grant or claim engineering acceptance.
+    """
+    if type(enabled) is not bool:raise ValueError('NATIVE_REFERENCE_CAPABILITY_INVALID')
+    if enabled:app.references.authorize(owner)
+    return {'schema_version':'bf-native-source-preflight-v1','owner':owner,
+            'enabled':enabled,'status':'AUTHORIZED' if enabled else 'DISABLED',
+            'model_calls':0,'network_calls':0,'grant_mutations':0,
+            'source_acquisition_verified':False,'full_product_passed':False}
+
+
+def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,operator_message=None,control_route=None):
     from . import launcher
     from .model_profile import ENGINEERING,named as profile_named,for_owner as owner_profile
     from .server import Workbench,handler
@@ -433,6 +687,14 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
     from .literature_continuation import load_authority,owner_window,retained_unknowns,prior_requests_allowed,renew_owner,record_carryforwards
     from . import engineering_projects,provider
     root=Path(root);runtime=root/'runtime'
+    from .design_lab import paper_candidate
+    candidate_route=control_route=='candidate-lifecycle'
+    if candidate_route and (paper_ids!=['P01'] or not resume or method_overlay):raise ValueError('PAPER_CANDIDATE_ORIGINAL_SCOPE_REQUIRED')
+    if resume:
+        index=read(root/'campaign/parallel-20261009/pi-session-index.json')
+        for entry in index['sessions']:
+            if entry['paper_id'] in paper_ids and paper_candidate.readonly_bound(root,entry['owner']) and not candidate_route:
+                raise ValueError('PAPER_CANDIDATE_ROUTE_REQUIRED')
     if operator_message is not None and (not isinstance(operator_message,str) or not operator_message.strip() or len(operator_message)>12000):raise ValueError('OPERATOR_MESSAGE_INVALID')
     if phase and not resume:raise ValueError('NATIVE_PHASE_REQUIRES_ORIGINAL_OWNER')
     qualification=read(root/'campaign/native-qualification.json')
@@ -472,12 +734,59 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
             else:validate_billing_liabilities(rows,allowed)
         return original(*args,**kwargs)
     app.provider.complete=guarded
-    base=handler(app)
+    from .design_lab.paper_mainline import DeferredCapability, startup_capabilities, eda_capability_failure
+    base=handler(app);eda_bound=False;native_context={};eda_resolver=None;reference_research=False
     class NativeHandler(base):
+        def do_GET(self):
+            if urlparse(self.path).path=='/api/product-context' and native_context:
+                try:
+                    self.local_host();actor=self.principal()
+                    requested=parse_qs(urlparse(self.path).query).get('session',[native_context['owner']])[0]
+                    target_owner=native_context_target(actor,requested,native_context['owner'])
+                    from .product_authority import context_packet
+                    legacy=context_packet(app,target_owner)
+                    if candidate_route:
+                        view=paper_candidate.frozen_view(app.design_lab,target_owner,compact=True)
+                        value={'schema_version':'bf-product-context-v1','owner':target_owner,'paper_id':'P01',
+                            'context_scope':'single-candidate-lifecycle','current':{'title':view['contract']['goal']},
+                            'requirements':view['contract']['requirements'],'candidate_lifecycle':view,
+                            'current_work':native_context.get('current_work'),
+                            'local_eda':native_context.get('binding'),'legacy_registry_authority':'history only',
+                            'physical_verified':False,'full_product_passed':False}
+                        return self.reply(200,value)
+                    binding=native_context['binding']
+                    observations=app.eda_cli.public_history(target_owner,binding['project_uuid']) if binding else None
+                    value=native_phase_context_packet(native_context['workspace'],native_context['focused'],
+                        binding,legacy,app.engineering.jobs(target_owner),native_context['previous'],observations)
+                    return self.reply(200,value)
+                except PermissionError as exc:return self.reply(403,{'error':str(exc)})
+                except (ValueError,OSError,KeyError) as exc:return self.reply(400,{'error':str(exc)})
+            super().do_GET()
+
         def do_POST(self):
             path=urlparse(self.path).path
-            if not native_route_allowed(path, phase):
+            if not native_route_allowed(path, phase, eda_bound, reference_research,candidate_route):
                 return self.reply(403,{'error':'PAPER_NATIVE_STAGE_ROUTE_DENIED'})
+            if path=='/api/eda-cli' and eda_resolver is not None:
+                try:
+                    self.local_host()
+                    if self.headers.get('Sec-Fetch-Site')=='cross-site':raise PermissionError('ORIGIN_DENIED')
+                    origin=self.headers.get('Origin')
+                    if origin and origin!='http://'+self.headers['Host']:raise PermissionError('ORIGIN_DENIED')
+                    actor=self.principal()
+                    length=int(self.headers.get('Content-Length','0'))
+                    if not 0<length<=128000:raise ValueError('REQUEST_SIZE')
+                    wire=self.rfile.read(length);body=json.loads(wire)
+                    if not isinstance(body,dict):raise ValueError('REQUEST_OBJECT_REQUIRED')
+                    requested=body.get('session_id',native_context['owner'])
+                    native_context_target(actor,requested,native_context['owner'])
+                    binding=eda_resolver.for_eda_request(body)
+                    if binding:native_context['binding']=binding
+                except PermissionError as exc:return self.reply(403,{'error':str(exc)})
+                except (ValueError,OSError,KeyError,subprocess.SubprocessError) as exc:
+                    return self.reply(400,eda_capability_failure(exc))
+                import io
+                self.rfile=io.BytesIO(wire)
             if path=='/api/engineering':
                 try:
                     self.local_host();self.principal()
@@ -515,8 +824,7 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                 original_auth=read(original_target/'authorization.json')
                 renewed=owner_window(root,authority,pid,owner,original_target,start) if authority else None
                 deadline=continuation_deadline(original_auth,start,renewed)
-                run_id=original_attempt['task'];sequence=len(list((original_target/'continuations').glob('turn-*/attempt.json')))+1
-                target=original_target/'continuations'/('turn-'+str(sequence).zfill(3))
+                run_id=original_attempt['task'];target=reserve_continuation(original_target)
                 auth={**original_auth,'scope':'same-owner-native-continuation','continued':start,'original_task':run_id,
                       'owner':owner,'original_authorization_sha256':digest(original_target/'authorization.json'),
                       'previous_fees_and_deadlines_preserved':True}
@@ -537,13 +845,35 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                 run_id=pid+'-native-'+contract['source_identity'][:12]+'-'+digest(__file__)[:8]
                 target=root/'campaign/native-runs'/run_id;deadline=start+contract['budget']['wall_seconds']
                 auth={'source':'direct user all ten papers; USD30 per task/session','scope':'paper-native-reconstruction','usd_cap':30,'started':start,'expires':deadline,'previous_fees_and_deadlines_preserved':True}
-            focused=recovery_phase(root,pid,phase,owner,contract) if continuing else None
+            if candidate_route:
+                if not paper_candidate.bound(app.design_lab,owner):raise ValueError('PAPER_CANDIDATE_NOT_BOUND')
+                paper_candidate.guard_route(app.design_lab,owner,control_route)
+                focused=None
+            else:focused=recovery_phase(root,pid,phase,owner,contract) if continuing else None
+            reference_research=True if candidate_route else native_reference_enabled(focused)
             requested_profile=profile_named(focused.get('model_profile',ENGINEERING['version']) if focused else ENGINEERING['version'])
+            if candidate_route:
+                from .model_profile import qualified_owner
+                with app.store.connect() as db:requested_profile=owner_profile(db,owner)
+                requested_profile=qualified_owner(requested_profile,qualification,owner)
             if phase and not continuing:raise ValueError('NATIVE_PHASE_REQUIRES_ORIGINAL_OWNER')
-            eda_binding=None
-            if phase=='eda':
+            eda_binding=None;eda_bound=False;eda_resolver=None
+            record_path=root/'campaign/eda'/pid/'binding.json'
+            local_bound=record_path.is_file() and bool(read(record_path).get('local_project'))
+            if phase=='eda' or local_bound:
                 from .literature_eda import configure_eda
-                eda_binding=configure_eda(app,root,pid,owner,target)
+                eda_bound=True
+                if 'eda' in startup_capabilities(phase,focused):
+                    eda_binding=configure_eda(app,root,pid,owner,target)
+                eda_resolver=DeferredCapability(
+                    lambda:configure_eda(app,root,pid,owner,target),eda_binding)
+                if eda_binding is None:
+                    bound=app.eda_cli.binding(owner)
+                    eda_binding={'owner':owner,'paper_id':pid,
+                        'project_uuid':bound['project'] if bound else None,
+                        'local_project':read(record_path).get('local_project'),
+                        'host_policy':app.eda_cli.policy,'connection_status':'DEFERRED_UNTIL_EDA_USE',
+                        'native_design_accepted':False,'live_readback':None}
             put_once(target/'authorization.json',auth)
             def stage(cid):
                 workspace=runtime/'participants'/cid;workspace.mkdir(parents=True,exist_ok=True)
@@ -572,15 +902,23 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                     if destination.exists() and digest(destination)!=asset['sha256']:raise ValueError('RECOVERY_PUBLIC_INPUT_CHANGED')
                     if not destination.exists():shutil.copyfile(source,destination)
                 put_once(target/'phase-task.json',focused)
+                task_context=stage_current_task(root,workspace,focused)
+                put_once(target/'current-task-readback.json',task_context)
                 prompt+='\n本轮明确任务（先实现，再交付）：\n'+focused['task']
             reference=stage_apparatus_reference(root,target,workspace,owner,app.engineering.jobs(owner),harness) if continuing else None
             context={'folder_id':'literature-ten-20261009','folder_name':'近期论文工程','revision':0,'memory':'','prompt':prompt,
-                     'tools':['read','write','edit','bash','bf_product','bf_engineering']+(['bf_eda'] if eda_binding else []),'harness_revision':None}
+                     'tools':native_phase_tools(bool(eda_binding),reference_research),'harness_revision':None}
+            if candidate_route:
+                task=app.design_lab.task(owner)
+                prompt=task['contract']['goal']+'\n本任务唯一控制路径为bf_design。先inspect恢复工作候选和待核对操作；任务、八门和人工动作边界以冻结contract为准。旧阶段文件是历史参考，不触发另一个设计控制器。你决定器件、参数、实验和修订。重要原生动作提供decision_use说明要支持的判断；改文件后freeze sources={candidate.json:JSON文本}，列出现有files/projects/eda_receipts/selected_jobs和decision。原作业输入不变就复用。以check取得固定独立验收；不能自授通过。每轮用intent记录CONTINUE、REJECT或BLOCKED及公开rationale；外部写入未知时只读取，不重放。记录BLOCKED或REJECT后可以结束该轮，旧交付观察器不重派。'
+                context.update(prompt=prompt,tools=[*context['tools'],'bf_design'])
             if continuing:
-                feedback={'schema_version':'bf-native-continuation-feedback-v1','actor':'Codex apparatus maintainer',
+                previous_path=latest_closed_result(original_target)
+                feedback={'schema_version':'bf-native-continuation-feedback-v2','actor':'Codex apparatus maintainer',
+                          **({'phase':focused,'required_work':focused['task'],'current_task_readback':task_context} if focused else {}),
                           'common_repair':'SPICE raw reader now accepts multiple valid .op/.tran plots; old failures preserved.',
                           'previous_execution_error':app.conversations.get(owner).get('error'),
-                          'previous_result':read(latest_closed_result(original_target)) if latest_closed_result(original_target) else None,
+                          'previous_result':prior_result_reference(workspace,read(previous_path)) if previous_path else None,
                           'apparatus_reference':reference,'method_overlay':overlay,
                           'execution_budget_policy':renewed.get('budget_policy') if renewed else None,
                           'successful_jobs_to_reuse':[{'job_id':j['id'],'project_sha256':j.get('project_sha256')} for j in app.engineering.jobs(owner) if j['status']=='SUCCEEDED'],
@@ -588,26 +926,62 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                 extra=root/'campaign/recovery'/pid/'feedback.json'
                 if extra.is_file():feedback['independent_public_review']=read(extra)
                 if focused:feedback.update(phase=focused,required_work=focused['task'])
+                if candidate_route:
+                    feedback={'schema_version':'bf-paper-candidate-recovery-v1','control_route':control_route,
+                        'candidate_lifecycle':paper_candidate.frozen_view(app.design_lab,owner,compact=True),
+                        'apparatus_reference':reference,'fees_and_unknowns_preserved':True,
+                        'required_work':prompt,'legacy_stage_control_disabled':True}
                 put_once(target/'feedback.json',feedback)
-                (workspace/'continuation-feedback.json').write_text(json.dumps(feedback,ensure_ascii=False,indent=2)+'\n')
+                public_context_write(workspace,'continuation-feedback.json',(json.dumps(feedback,ensure_ascii=False,indent=2)+'\n').encode())
                 message='按用户已授权的整个任务继续本会话。先读 continuation-feedback.json、已有 contract.json 和实际文件。公共读回器已校准修复。只补未完成工程与同版本交付；复用未变输入的成功作业，保留所有功能缺口。'
                 if focused:message='这是原任务的明确修订阶段，先修实现，再冻结交付。\n'+focused['task']+'\n公开检查文件及当前工具能力见 continuation-feedback.json 与 apparatus-reference。'
+                if candidate_route:message='沿原owner和bf_design中的同一任务继续。先inspect；恢复当前候选、实际输入和待核对操作。由你作设计判断、执行和决定保留/修订/拒绝/受阻；外部未知写入未核对时不可重放。保持冻结人工接通边界和八项独立验收；不重复未变成功作业。'
                 if operator_message:message+='\n本篇会话中用户的补充要求：\n'+operator_message
                 if renewed and renewed.get('budget_policy'):
-                    message+='\n最新用户授权已取消累计费用、累计token和模型调用次数上限；contract中的USD30是历史预算。原账本和未知用量保留，本轮时间截止仍有效。按实际工程缺口继续，不能因此自授验收或重复未变作业。'
+                    time_scope='运行时间也已取消累计上限，单次工具仍受超时与无进展约束。' if deadline is None else '本轮时间截止仍有效。'
+                    message+='\n最新用户授权已取消累计费用、累计token和模型调用次数上限；contract中的USD30是历史预算。原账本和未知用量保留。'+time_scope+'按实际工程缺口继续，不能因此自授验收或重复未变作业。'
+                if candidate_route:
+                    candidate_task_context=stage_candidate_task(workspace,task['contract'],message)
+                    put_once(target/'current-task-readback.json',candidate_task_context)
                 app.conversations.send(owner,message,
                                        'native-cont-'+identity(str(target))[:20],dispatch=False)
+                if candidate_route:
+                    put_once(target/'phase-task.json',{'task':message,'control_route':control_route,
+                        'contract_id':task['task_id'],'source':'Existing candidate contract and registered recovery message; no new design plan'})
                 with app.store.connect() as db:
-                    db.execute('UPDATE interactive_leases SET expires=min(expires,?) WHERE owner=?',(deadline,owner))
-                    db.execute('UPDATE grants SET expires=min(expires,?) WHERE owner=?',(deadline,owner))
+                    if deadline is not None:
+                        db.execute('UPDATE interactive_leases SET expires=min(expires,?) WHERE owner=?',(deadline,owner))
+                        db.execute('UPDATE grants SET expires=min(expires,?) WHERE owner=?',(deadline,owner))
                     db.execute('UPDATE conversations SET harness=? WHERE id=?',(str(harness),owner))
                     db.execute('INSERT OR REPLACE INTO settings VALUES(?,?)',('model_profile:'+owner,canonical(requested_profile['version'])))
             else:
                 c=app.conversations.create('按当前论文和已核对计划完成原生工程重建，先读TASK.md与contract.json。',None,'literature-native-'+run_id,preflight=stage,defer_dispatch=True);owner=c['id']
+            from .continuation_context import enabled as closed_history_enabled, build_manifest, KEY as closed_history_key
+            if candidate_route or closed_history_enabled(focused):
+                with app.store.connect() as db:
+                    closed_history=build_manifest(root,owner,target,db)
+                history_path=target/'closed-continuation-context.json'
+                put_once(history_path,closed_history)
+                context[closed_history_key]={'owner':owner,'path':str(history_path),'sha256':digest(history_path)}
             app.organization.bind(owner,context)
+            try:source_preflight=native_reference_preflight(app,owner,reference_research)
+            except (PermissionError,ValueError) as exc:
+                put_once(target/'source-capability-preflight.json',{
+                    'schema_version':'bf-native-source-preflight-v1','owner':owner,
+                    'enabled':reference_research,'status':'REFUSED','error':str(exc),
+                    'model_calls':0,'network_calls':0,'grant_mutations':0})
+                raise
+            put_once(target/'source-capability-preflight.json',source_preflight)
             with app.store.connect() as db:actual_profile=owner_profile(db,owner)
             if actual_profile!=requested_profile:raise ValueError('NATIVE_MODEL_PROFILE_NOT_INSTALLED')
             put_once(target/'attempt.json',{'owner':owner,'paper':pid,'task':run_id,'started':start,'continuation':continuing,'source_identity':contract['source_identity'],'method_identity':method['identity'],'apparatus_identity':apparatus_identity()[0],'model_profile':actual_profile,'environment_sha256':identity({'harness':method['identity'],'evaluator':digest(__file__),'provider':digest(provider.__file__),'apparatus':apparatus_identity()[0],'guard':'native-project-only-v1','profile':actual_profile}),'actor':'Pi','preparation_actor':'Codex','work_phase':phase,'phase_task_sha256':focused['task_sha256'] if focused else None,'operator_message_sha256':identity(operator_message) if operator_message else None,'eda_binding':eda_binding})
+            if candidate_route:
+                native_context.update(owner=owner,workspace=workspace,focused=None,binding=eda_binding,
+                    current_work=candidate_task_context)
+            elif focused:
+                native_context.update(owner=owner,workspace=workspace,focused=focused,binding=eda_binding,
+                    previous=feedback.get('previous_result'))
+            else:native_context.clear()
             done=threading.Event();watcher=None
             def ready(proc):
                 nonlocal watcher
@@ -628,6 +1002,10 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                 rows=[dict(r) for r in db.execute('SELECT id,owner,status,reserved,charged,usage FROM model_requests WHERE owner=?',(owner,))]
                 wires=[json.loads(r['wire']) for r in db.execute('SELECT wire FROM model_request_evidence WHERE owner=? AND created>=?',(owner,start))]
             actual=any(INSTRUCTION in str(m.get('content','')) for w in wires for m in w.get('messages',[]))
+            if candidate_route:
+                goal=app.design_lab.task(owner)['contract']['goal']
+                actual=any(goal in str(m.get('content','')) and 'bf_design' in str(m.get('content',''))
+                           for w in wires for m in w.get('messages',[]))
             jobs=app.engineering.jobs(owner)
             try:assembly=app.assemblies.get(owner)
             except ValueError:assembly=None
@@ -638,8 +1016,7 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
             evaluation['problems'].extend(delivery['problems'])
             phase_actual=any(focused['task'] in str(m.get('content','')) for w in wires for m in w.get('messages',[])) if focused else False
             if focused and not phase_actual:evaluation['problems'].append('RECOVERY_PHASE_NOT_IN_ACTUAL_REQUEST')
-            if focused and focused.get('required_project_kind') and focused['required_project_kind'] not in {c['kind'] for c in evaluation['native_checks']}:
-                evaluation['problems'].append('RECOVERY_TARGET_BUILD_MISSING')
+            evaluation['problems'].extend(phase_gate_problems(focused,evaluation['native_checks'],app.conversations.get(owner)))
             for a in contract['assets']:
                 if digest(workspace/a['path'])!=a['sha256']:evaluation['problems'].append('PARTICIPANT_INPUT_CHANGED')
             if reference:
@@ -682,6 +1059,12 @@ def run_native_tasks(root,paper_ids,resume=False,method_overlay=None,phase=None,
                     'full_product_passed':False,'physical_verified':False,'raw_trace':str(snapshot.relative_to(root)),'live_trace':str(trace.relative_to(root)),'trace_sha256':digest(snapshot),
                     'method_overlay':{k:v for k,v in overlay.items() if k!='instruction'} if overlay else None,
                     'method_overlay_in_actual_request':any(overlay['instruction'] in str(m.get('content','')) for w in wires for m in w.get('messages',[])) if overlay else False}
+            if candidate_route:
+                result.update(control_route=control_route,candidate_lifecycle=paper_candidate.frozen_view(app.design_lab,owner))
+                with app.store.connect() as db:
+                    decision=db.execute("SELECT seq,data,created FROM design_events WHERE owner=? AND kind='candidate_decision' AND created>=? ORDER BY seq DESC LIMIT 1",(owner,start)).fetchone()
+                result['candidate_decision_current_attempt']=json.loads(decision['data']) if decision else None
+                result['candidate_decision_event']={'seq':decision['seq'],'created':decision['created']} if decision else None
             put_once(target/'result.json',result);results.append(result)
             print(json.dumps({'paper':pid,'native_readback_stage':evaluation['status'],'checks':len(evaluation['native_checks']),'calls':len(rows),'liability_usd':result['budget']['liability_usd']},ensure_ascii=False),flush=True)
             if not rows or not prior_requests_allowed(rows,authority,owner):raise ValueError('MODEL_EXECUTION_OR_USAGE_UNAVAILABLE_STOP')

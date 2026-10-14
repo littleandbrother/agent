@@ -21,6 +21,18 @@ PRICING_SOURCE='https://api-docs.deepseek.com/quick_start/pricing/'
 STREAM_SECONDS=300
 STREAM_BYTES=2000000
 
+
+def usage_costs(usage):
+    """Cache-aware estimate alongside the unchanged conservative ledger charge."""
+    hit, miss = usage.get('prompt_cache_hit_tokens'), usage.get('prompt_cache_miss_tokens')
+    valid = (type(hit) is int and type(miss) is int and hit >= 0 and miss >= 0
+             and hit + miss == usage['prompt_tokens'])
+    return {'rate_snapshot': RATE, 'prompt_cache_hit_tokens': hit,
+            'prompt_cache_miss_tokens': miss, 'completion_tokens': usage['completion_tokens'],
+            'cache_counts_valid': valid,
+            'cache_aware_estimate_usd': ((hit * RATE['cache_hit_usd_per_million'] +
+                miss * RATE['input_usd_per_million'] + usage['completion_tokens'] * RATE['output_usd_per_million']) / 1000000) if valid else None}
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,*args,**kwargs):raise ValueError('PROVIDER_REDIRECT_DENIED')
 
@@ -119,9 +131,14 @@ class Provider:
             profile=model_profile(db,owner)
         projection=None
         if interactive:
+            from .continuation_context import load_manifest
+            closed_continuations=load_manifest(self.store,owner)
             payload,projection=project_interactive(payload, ContextArchive(self.store.root.parent, owner),
                 request_bytes=profile['request_bytes'],target_bytes=profile['target_bytes'],
-                active_skills=active_records(self.store,owner),compact_state=profile.get('compact_state',False))
+                active_skills=active_records(self.store,owner),compact_state=profile.get('compact_state',False),
+                closed_continuations=closed_continuations,
+                aggregate_closed=profile.get('aggregate_closed_continuations',False),
+                deduplicate_skills=profile.get('deduplicate_skills',False))
         if len(canonical(payload).encode())>profile['request_bytes']:
             self.store.event(owner, owner, 'model_context_rejected', projection or {
                 'projected_bytes':len(canonical(payload).encode()), 'limit_bytes':profile['request_bytes']})
@@ -214,7 +231,7 @@ class Provider:
                 db.execute("UPDATE model_requests SET status='SETTLED',charged=?,usage=?,response_hash=?,error=? WHERE id=?",
                            (charge,canonical(usage),hashlib.sha256(data).hexdigest(),violation or output_error,request_id))
             settled=True
-            self.store.event(owner,owner,'model_settled',{'request_id':request_id,'upper_bound_usd':charge,'usage':usage,'output_error':violation or output_error})
+            self.store.event(owner,owner,'model_settled',{'request_id':request_id,'upper_bound_usd':charge,'usage':usage,'output_error':violation or output_error,'cost_breakdown':usage_costs(usage)})
             return violation
         def check_retry_window():
             with self.store.connect() as db:

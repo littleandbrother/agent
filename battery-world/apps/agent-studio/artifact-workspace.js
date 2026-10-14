@@ -3,7 +3,7 @@
   const {api,esc}=window.BF,S=window.StudioModel;
   const names={mechanical:'机械与结构',circuit:'电路与 PCB',firmware:'固件',system:'系统与文档'};
   const time=t=>t?new Date(t*1000).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}):'时间未记录';
-  const state=f=>({current:'本版生成',reused:'输入未变 · 可复用',unbound:'独立记录 · 待绑定',stale:'输入已变 · 需重验',future:'后续版本',case:'案例版本',reference:'历史参考'})[f.applicability?.state]||'归档记录';
+  const state=f=>({candidate:'同版候选',current:'本版生成',reused:'输入未变 · 可复用',unbound:'独立记录 · 待绑定',stale:'输入已变 · 需重验',future:'后续版本',case:'案例版本',reference:'历史参考'})[f.applicability?.state]||'归档记录';
   const size=n=>n<1048576?Math.max(1,Math.round(n/1024))+' KB':(n/1048576).toFixed(1)+' MB';
   function overview(s){
     if(window.ProductEvidence?.groups(s).length)return window.ProductEvidence.render(s);

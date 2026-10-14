@@ -48,6 +48,29 @@ class RuntimeArchitecture(unittest.TestCase):
         self.assertIn('easyeda-pcb-routing',ids);self.assertNotIn('pcb-offline-routing',ids)
         self.assertTrue(all(x['version'] and x['sha256'] for x in catalog['skills']))
 
+    def test_easyeda_short_entry_activates_and_complete_pinned_manual_is_on_demand(self):
+        loaded=self.activate('easyeda-agent')
+        upstream=self.bundle[1]['vendor/easyeda-typed/SKILL.md'].decode()
+        self.assertNotIn(upstream,loaded['content'])
+        manual=self.app.skills.action('owner',{'action':'resource','path':'vendor/easyeda-typed/SKILL.md','limit':16000,'offset_unit':'characters'})
+        self.assertEqual(upstream,manual['content'])
+        self.assertLess(len(loaded['content'].encode()),4000)
+        self.assertEqual(self.bundle[0]['files']['vendor/easyeda-typed/SKILL.md'],loaded['upstream_sha256'])
+        name='vendor/easyeda-typed/references/pcb-layout.md'
+        page=self.app.skills.action('owner',{'action':'resource','path':name,'limit':8})
+        self.assertEqual('\n'.join(self.bundle[1][name].decode().splitlines()[:8]),page['content'])
+        self.assertEqual(8,page['next_offset'])
+        active=active_records(self.store,'owner')
+        self.assertEqual(['easyeda-agent'],[x['id'] for x in active])
+        self.assertNotIn(self.bundle[1][name].decode(),active[0]['content'])
+        self.assertLess(len(active[0]['content'].encode()),60000)
+
+    def test_same_version_activation_returns_identity_without_repeating_body(self):
+        first=self.activate('easyeda-agent');second=self.activate('easyeda-agent')
+        self.assertEqual(first['sha256'],second['sha256'])
+        self.assertTrue(second['already_active']);self.assertIsNone(second['content'])
+        self.assertEqual(1,len(active_records(self.store,'owner')))
+
     def test_wrong_name_and_wrong_fields_never_return_default(self):
         with self.assertRaisesRegex(ValueError,'SKILL_NOT_FOUND.*available='): self.activate('firmware-nrf52')
         with self.assertRaisesRegex(ValueError,'UNEXPECTED_FIELDS'):
@@ -59,6 +82,18 @@ class RuntimeArchitecture(unittest.TestCase):
         self.assertEqual([],active_records(self.store,'other'))
         self.app.skills.action('owner',{'action':'deactivate','skill_id':'easyeda-pcb-routing'})
         self.assertEqual([],active_records(self.store,'owner'))
+
+    def test_restore_respects_later_deactivation_across_resource_versions(self):
+        old='a'*64
+        with self.store.connect() as db:
+            db.execute('INSERT INTO skill_activations VALUES(?,?,?,?,?)',('owner',old,'easyeda-agent',1,1))
+            db.execute('INSERT INTO skill_activations VALUES(?,?,?,?,?)',('other',old,'bf-mcu-firmware',1,2))
+        self.assertEqual(['easyeda-agent'],self.app.skills.catalog('owner')['previous_active'])
+        self.app.skills.action('owner',{'action':'deactivate','skill_id':'easyeda-agent'})
+        self.assertEqual([],self.app.skills.catalog('owner')['previous_active'])
+        self.assertEqual([],active_records(self.store,'owner'))
+        with self.store.connect() as db:
+            self.assertEqual(1,db.execute('SELECT active FROM skill_activations WHERE owner=? AND manifest=?',('owner',old)).fetchone()[0])
 
     def test_eda_compatibility_is_explicit_and_reference_pagination_keeps_units(self):
         from bfworld.agentlab.eda_cli import EdaCLI

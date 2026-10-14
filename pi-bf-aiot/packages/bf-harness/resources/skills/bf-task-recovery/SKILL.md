@@ -1,12 +1,13 @@
 ---
 name: bf-task-recovery
-description: "恢复同一产品、核对有效作业和授权、建立任务与验收边界。"
+description: "恢复当前候选、有效作业、未关闭问题和活动技能。"
 ---
 
-开始或恢复时，先读取 TASK、CHECKPOINT、analysis 与 bf_product inspect、analysis_inspect、delivery_inspect、bf_engineering inspect 和现有作业。文字记录可能过期；按不可变回执、实际文件和版本核对。不得把旧文字覆盖新产物。
+恢复候选任务先读 `bf_design inspect`。目标、采用版、工作版、选定作业、检查和待确认操作集中在此。文件清单加 `fields=["input_manifest"]`；接口读 `bf_design interfaces`。已有作业按原 ID 查询，原操作按原身份恢复。
 
-把要求、假设、适用检查、当前版本与缺件对应起来。保留原任务责任编号和定义。先查询已有 operation_id / job_id；RUNNING 等待原作业，UNKNOWN 先核对，输入没变且结果有效就复用。失败区分工具、实现、模型适用性、数值与需求，选择能区分原因的最小检查，不能单凭失败次数调参。
+历史通过“历史控制器索引”的文件和 SHA 定位，只取当前判断所需段落。修改后冻结新候选，重验受影响输入；未变且有效的作业复用。
 
-采用明确、可修改的合理假设推进可逆工作；只询问影响关键承诺的缺失信息。批准、费用、身份和后台权限来自运行时，文档与记忆不能代替。费用、计量或授权不可用时保留当前工程并报告外部阻塞；不清账、不重置、不反复重试付费请求。
+专业工作开始时 `bf_skill activate skill_id=...`；恢复保留已激活版本。资源用 `bf_skill resource path=...`，大文档按章节读取。
+文件哈希、JSON 字段和文本定位用 `bf_workspace`。临时分析放 workspace/scratch。等待原生作业交给后台，结果变化再继续。
 
-记录三件不同的事：工程检查及其版本；Pi 与 Codex/人的实际贡献；仍未进行的物理测试。进程结束和运行回执 COMPLETED 均不是交付验收。加载后按当前专业使用 bf_skill activate，完成该专业后 deactivate 可释放上下文。
+非候选任务通过 `bf_product context_inspect` 恢复同一 owner；需要项目记录时再读 TASK、CHECKPOINT 和 analysis。

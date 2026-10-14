@@ -106,12 +106,13 @@ window.BF={api,esc,refreshSections:renderSections,sectionVisible,getSelection:()
 (() => {
   const key='bf-panel-widths.v1', root=document.documentElement;
   let preferred={}, frame=0, drag=null, observedMap=null;
-  try{const saved=JSON.parse(localStorage.getItem(key)||'{}');for(const side of ['left','right','engineering'])if(Number.isFinite(saved?.[side]))preferred[side]=saved[side]}catch{}
+  try{const saved=JSON.parse(localStorage.getItem(key)||'{}');for(const side of ['left','right','engineering','progress'])if(Number.isFinite(saved?.[side]))preferred[side]=saved[side]}catch{}
   const clamp=(n,min,max)=>Math.round(Math.max(min,Math.min(max,n)));
   const visible=el=>!!el&&el.getClientRects().length>0;
   const persist=()=>{try{localStorage.setItem(key,JSON.stringify(preferred))}catch{}};
   const panes=[
     {side:'left',id:'session-sidebar',label:'调整左侧栏宽度',sign:1},
+    {side:'progress',id:'execution-progress',label:'调整执行进展宽度',sign:-1},
     {side:'right',id:'section-inspector',label:'调整右侧栏宽度',sign:-1},
     {side:'right',id:'map-inspector',label:'调整全景详情栏宽度',sign:-1},
     {side:'right',id:'product-inspector',label:'调整产品详情栏宽度',sign:-1},
@@ -122,21 +123,29 @@ window.BF={api,esc,refreshSections:renderSections,sectionVisible,getSelection:()
     const width=root.clientWidth, leftVisible=visible(document.getElementById('session-sidebar'));
     const productMode=document.body.classList.contains('product-mode');
     const mapMode=document.body.classList.contains('panorama-mode')||productMode;
-    const taskDocked=width>850&&visible(document.getElementById('section-inspector'));
+    const progressLayout=document.body.classList.contains('execution-progress-layout');
+    const progressOverlay=progressLayout&&width<=1280;
+    const progressVisible=visible(document.getElementById('execution-progress'));
+    const taskDocked=width>(progressLayout?1280:850)&&visible(document.getElementById('section-inspector'));
     const mapDocked=mapMode&&width>760;
-    const leftMax=Math.max(180,Math.min(productMode&&width>900?260:420,width<=620?width-48:width-360-(taskDocked||mapDocked?240:0)));
+    const chatMinimum=progressLayout&&!progressOverlay?420:360;
+    const leftMax=Math.max(180,Math.min(productMode&&width>900?260:420,width<=620?width-48:width-chatMinimum-(taskDocked?(progressLayout?320:240):mapDocked?240:0)-(progressLayout&&progressVisible&&!progressOverlay?280:0)));
     const left=clamp(preferred.left??(width<=620?220:width<=1100?200:224),180,leftMax);
     const taken=leftVisible&&width>620?left:0;
     const engineering=document.body.classList.contains('engineering-workspace-active');
-    const engineeringOverlay=engineering&&(document.body.classList.contains('studio-compact')||width<=850);
+    const engineeringOverlay=engineering&&(progressOverlay||document.body.classList.contains('studio-compact')||width<=850);
     const available=width-taken;
-    const rightMax=Math.max(240,Math.min(engineering?1120:640,engineeringOverlay?available:width>850?width-taken-360:width-48));
+    const progressMax=Math.max(280,Math.min(440,progressOverlay?width:available-chatMinimum-(taskDocked?320:0)));
+    const progress=clamp(preferred.progress??320,280,progressMax);
+    const progressTaken=progressLayout&&progressVisible&&!progressOverlay?progress:0;
+    const rightMinimum=progressLayout&&!progressOverlay?320:240;
+    const rightMax=Math.max(rightMinimum,Math.min(engineering?1120:640,engineeringOverlay?width:width>850?width-taken-progressTaken-chatMinimum:width-16));
     const rightKey=engineering?'engineering':'right';
-    const right=clamp(preferred[rightKey]??(engineering?(engineeringOverlay?available:available*.64):(width>=1550?330:width<=850?280:width<=1100?250:286)),240,rightMax);
+    const right=clamp(preferred[rightKey]??(engineering?(engineeringOverlay?Math.min(620,width):progressVisible&&!progressOverlay?420:available*.64):(width>=1550?330:width<=850?280:width<=1100?250:286)),rightMinimum,rightMax);
     if(engineering)document.getElementById('section-inspector').style.setProperty('--ew-top',(document.querySelector('.studio-nav-shell')||document.querySelector('.topbar')).getBoundingClientRect().height+'px');
     const mapMax=Math.max(240,Math.min(productMode?(width<1400?300:420):640,width-taken-(width<=1150?32:48)-(productMode?500:302)));
     const map=clamp(preferred.right??(width<=1150?260:300),240,mapMax);
-    css('--panel-left-width',left);css('--panel-right-width',right);css('--panel-map-width',map);
+    css('--panel-progress-width',progress);css('--panel-left-width',left);css('--panel-right-width',right);css('--panel-map-width',map);
     const newMap=document.getElementById(document.body.classList.contains('product-mode')?'product-inspector':'map-inspector');
     if(newMap!==observedMap){if(observedMap)observer.unobserve(observedMap);observedMap=newMap;if(newMap)observer.observe(newMap)}
     for(const pane of panes){
@@ -145,8 +154,8 @@ window.BF={api,esc,refreshSections:renderSections,sectionVisible,getSelection:()
       handle.hidden=!visible(el)||(pane.id==='map-inspector'&&width<=760)||(pane.id==='product-inspector'&&width<=900);
       if(handle.hidden)continue;
       const rect=el.getBoundingClientRect();
-      pane.min=pane.side==='left'?180:240;
-      pane.max=pane.side==='left'?leftMax:['map-inspector','product-inspector'].includes(pane.id)?mapMax:rightMax;
+      pane.min=pane.side==='left'?180:pane.side==='progress'?280:pane.id==='section-inspector'?rightMinimum:240;
+      pane.max=pane.side==='left'?leftMax:pane.side==='progress'?progressMax:['map-inspector','product-inspector'].includes(pane.id)?mapMax:rightMax;
       handle.style.left=(pane.sign===1?rect.right-5:rect.left-5)+'px';
       handle.style.top=rect.top+'px';handle.style.height=rect.height+'px';
       handle.setAttribute('aria-valuemin',pane.min);handle.setAttribute('aria-valuemax',pane.max);
@@ -184,10 +193,10 @@ window.BF={api,esc,refreshSections:renderSections,sectionVisible,getSelection:()
     });
   }
   const observer=new ResizeObserver(schedule);
-  for(const el of [document.querySelector('.shell'),document.querySelector('.app-body'),document.getElementById('session-sidebar'),document.getElementById('section-inspector')])if(el)observer.observe(el);
+  for(const el of [document.querySelector('.shell'),document.querySelector('.app-body'),document.getElementById('session-sidebar'),document.getElementById('execution-progress'),document.getElementById('section-inspector')])if(el)observer.observe(el);
   new MutationObserver(()=>{if(drag)finish(true);schedule()}).observe(document.body,{attributes:true,attributeFilter:['data-studio-mode']});
   // Collapse and overlay changes also affect the available pane bounds.
   new MutationObserver(schedule).observe(document.body,{attributes:true,attributeFilter:['class']});
   window.addEventListener('resize',()=>{if(drag)finish(true);schedule()});window.addEventListener('blur',()=>finish(true));
-  window.BFPanelSizing={refresh:schedule};schedule();
+  window.BFPanelSizing={refresh:schedule,reset:()=>{if(drag)finish(true);preferred={};persist();schedule()}};schedule();
 })();

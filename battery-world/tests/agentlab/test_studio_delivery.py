@@ -88,6 +88,22 @@ class StudioDeliveryTest(unittest.TestCase):
         self.assertEqual(4, a['purposes']['engineering']['files'])
         self.assertEqual(0, a['purposes']['summary']['files'])
 
+    def test_markdown_report_exports_without_pdf_or_historical_report(self):
+        m = self.manifest(); m['groups'][0]['files'] = []
+        for name in ['P01-first-version-report.md', 'history/P01-first-version-report-initial.md', 'firmware/main.c']:
+            p = self.base / name; p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text('# current report' if name.endswith('.md') else 'int main(void){}')
+            m['groups'][0]['files'].append(dict(path=name, sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+        self.app.results.cases.publish(self.owner, self.base, m)
+        delivery = StudioDelivery(self.app.results); snap = delivery.inspect(self.owner, 'case:fixture:D2')
+        self.assertTrue(snap['purposes']['report']['available'])
+        self.assertEqual(1, snap['purposes']['report']['files'])
+        result = delivery.package(self.owner, self.request(snap, purpose='report'))
+        with zipfile.ZipFile(delivery.archive(self.owner, result['id'])) as z:
+            self.assertIn('工程/fixture/D2/P01-first-version-report.md', z.namelist())
+            self.assertNotIn('工程/fixture/D2/history/P01-first-version-report-initial.md', z.namelist())
+            self.assertNotIn('工程/fixture/D2/firmware/main.c', z.namelist())
+
     def test_cross_owner_scope_cannot_be_requested(self):
         self.seed();other=self.app.conversations.create('other',None,'scope-other')['id']
         with self.assertRaisesRegex(ValueError,'SELECTION_NOT_FOUND'):self.delivery.inspect(other,'case:fixture:D2')

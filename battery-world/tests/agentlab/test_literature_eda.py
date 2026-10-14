@@ -1,9 +1,33 @@
 import copy
 import unittest
-from bfworld.agentlab.literature_eda import validate_binding
+import json
+import subprocess
+from pathlib import Path
+from unittest.mock import patch
+from bfworld.agentlab.literature_eda import validate_binding, live_project_probe, open_local_destination
 
 
 class PaperEdaBindingTests(unittest.TestCase):
+    def test_existing_local_desktop_connect_requires_no_headless_open(self):
+        policy={'host':'desktop','transport':'easyeda-typed-v1','modes':['half-offline'],'wait_s':30}
+        window={'windowId':'exact-desktop','context':{'projectUuid':'exact-project'}}
+        with patch('bfworld.agentlab.literature_eda.local_destination',return_value=Path('/public/exact.eprj3')), \
+             patch('bfworld.agentlab.eda_cli.ready_window',return_value=window) as ready, \
+             patch('bfworld.agentlab.literature_eda.subprocess.run') as run:
+            self.assertEqual(open_local_destination({}, {}, 'exact-project',policy),(window,None))
+            ready.assert_called_once_with('exact-project',policy,0);run.assert_not_called()
+
+    def test_missing_desktop_and_readonly_native_preflight_never_open_another_backend(self):
+        for transport,expected in [('easyeda-typed-v1','DESKTOP_CONNECT_PROJECT_NOT_OPEN'),('native-cli-v1','LOCAL_PROJECT_NOT_OPEN')]:
+            policy={'host':'desktop','transport':transport,'wait_s':30}
+            with self.subTest(transport=transport), \
+                 patch('bfworld.agentlab.literature_eda.local_destination',return_value=Path('/public/exact.eprj3')), \
+                 patch('bfworld.agentlab.eda_cli.ready_window',side_effect=ValueError('EDA_BOUND_PROJECT_NOT_OPEN')), \
+                 patch('bfworld.agentlab.literature_eda.subprocess.run') as run:
+                with self.assertRaisesRegex(ValueError,expected):
+                    open_local_destination({}, {}, 'exact-project',policy,allow_open_missing=False)
+                run.assert_not_called()
+
     def proofs(self):
         record = {'schema_version': 'bf-paper-eda-binding-v1', 'paper_id': 'P01',
                   'owner': 'pi-one', 'actor': 'Codex environment preparation',
@@ -66,3 +90,27 @@ class PaperEdaBindingTests(unittest.TestCase):
                 r, c, o = self.proofs(); r['project_uuid'] = value
                 with self.assertRaisesRegex(ValueError, 'PROJECT_IDENTITY'):
                     validate_binding(r, c, o, 'P01', 'pi-one')
+
+    def test_transport_error_preserves_cause_without_claiming_foreign_identity(self):
+        for response in [subprocess.CompletedProcess([], 1, json.dumps({'ok': False, 'error': {'code': 'NATIVE_DIAGNOSTIC_TIMEOUT', 'message': 'readonly timeout'}}), ''),
+                         subprocess.TimeoutExpired(['project', 'info'], 20)]:
+            with self.subTest(response=type(response).__name__):
+                options = {'side_effect': response} if isinstance(response, Exception) else {'return_value': response}
+                with patch('bfworld.agentlab.literature_eda.subprocess.run', **options):
+                    with self.assertRaises(ValueError) as caught:
+                        live_project_probe('cli', 'exact-window', 'exact-project', 'exact-name')
+                self.assertIn('ACTION_NOT_SENT', str(caught.exception))
+                self.assertNotIn('MISMATCH', str(caught.exception))
+                self.assertRegex(str(caught.exception), 'TIMEOUT|readonly timeout')
+
+    def test_fresh_correct_read_passes_but_foreign_failed_and_malformed_do_not(self):
+        good = {'ok': True, 'result': {'uuid': 'exact-project', 'friendlyName': 'exact-name'}}
+        with patch('bfworld.agentlab.literature_eda.subprocess.run', return_value=subprocess.CompletedProcess([], 0, json.dumps(good), '')) as run:
+            self.assertEqual(live_project_probe('cli', 'exact-window', 'exact-project', 'exact-name'), good)
+            self.assertEqual(run.call_args.kwargs['timeout'], 20)
+            self.assertEqual(run.call_count, 1)
+        for output, code, expected in [(json.dumps({**good, 'result': {'uuid': 'foreign', 'friendlyName': 'exact-name'}}), 0, 'MISMATCH'),
+                                      (json.dumps(good), 1, 'UNAVAILABLE'), ('unanswered', 0, 'RESPONSE_INVALID'), ('[]', 0, 'UNAVAILABLE')]:
+            with self.subTest(output=output), patch('bfworld.agentlab.literature_eda.subprocess.run', return_value=subprocess.CompletedProcess([], code, output, 'transport failed')):
+                with self.assertRaisesRegex(ValueError, expected):
+                    live_project_probe('cli', 'exact-window', 'exact-project', 'exact-name')

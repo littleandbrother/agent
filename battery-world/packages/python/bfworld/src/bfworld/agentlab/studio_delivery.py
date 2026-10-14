@@ -40,11 +40,14 @@ class StudioDelivery:
         """
         report_pdfs = [f for f in files if f['name'].lower().endswith('.pdf') and
                        re.search(r'report|报告|door-case', (f.get('source_path', '') + f['name']), re.I)]
+        report_markdown = [f for f in files if f['name'].lower().endswith('.md') and
+                           re.search(r'report|报告', f['name'], re.I) and
+                           'history' not in PurePosixPath(f.get('source_path') or f['name']).parts]
         def group(f):
             return (f.get('case_id'), f.get('case_version')) if f.get('case_id') else (f['result_id'],)
         def rel(f):
             return posixpath.normpath(f.get('source_path') or f['name'])
-        selected = {f['id'] for f in report_pdfs}
+        selected = {f['id'] for f in report_pdfs + report_markdown}
         lookup = {(group(f), rel(f)): f for f in files}
         for pdf in report_pdfs:
             parent = posixpath.dirname(rel(pdf))
@@ -82,7 +85,7 @@ class StudioDelivery:
                         bytes=sum(f.get('bytes', 0) for f in items if f['integrity']),
                         missing=[f['id'] for f in items if not f['integrity']],
                         available=available, warnings=sorted(set(notes)))
-        return dict(summary=plan([]), report=plan(report, any(f['integrity'] for f in report_pdfs), warnings), engineering=plan(files))
+        return dict(summary=plan([]), report=plan(report, any(f['integrity'] for f in report_pdfs + report_markdown), warnings), engineering=plan(files))
 
     @staticmethod
     def entry_path(file):

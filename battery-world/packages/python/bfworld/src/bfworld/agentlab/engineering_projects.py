@@ -97,7 +97,7 @@ def request(app, owner, parameters):
         contents[name] = source.read_text()
     if spec['kind']=='spice':
         text=contents[spec['entrypoint']]
-        allowed={'.param','.model','.subckt','.ends','.tran','.ac','.dc','.op','.ic','.nodeset','.options','.save','.print','.end','.temp','.func'}
+        allowed={'.param','.model','.subckt','.ends','.tran','.ac','.dc','.op','.ic','.nodeset','.options','.save','.print','.meas','.measure','.end','.temp','.func'}
         for line in text.splitlines():
             if line.strip().startswith('.') and line.strip().split()[0].lower() not in allowed:
                 raise ValueError('PROJECT_SPICE_DIRECTIVE_DENIED')
@@ -128,7 +128,10 @@ def sandbox(reads, output):
 
 def run_process(engineering, job, args, directory, output, reads, deadline):
     argv=['/usr/bin/sandbox-exec','-p',sandbox(reads,output),*map(str,args)]
-    env={'PATH':str(GCC.parent)+':/usr/bin:/bin', 'HOME':str(output),'TMPDIR':str(output), 'LANG':'C', 'PYTHONDONTWRITEBYTECODE':'1', 'SPICE_ASCIIRAWFILE':'1'}
+    # ngspice's binary raw format retains double precision while avoiding the
+    # ASCII expansion that exhausted the per-file limit on the actual P01 run.
+    # Both formats are validated by the same bounded native reader below.
+    env={'PATH':str(GCC.parent)+':/usr/bin:/bin', 'HOME':str(output),'TMPDIR':str(output), 'LANG':'C', 'PYTHONDONTWRITEBYTECODE':'1'}
     def limits():
         resource.setrlimit(resource.RLIMIT_CORE,(0,0))
         resource.setrlimit(resource.RLIMIT_FSIZE,(64*1024*1024,64*1024*1024))

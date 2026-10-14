@@ -58,6 +58,7 @@ def evaluate(root, scope, current, evidence=(), issues=()):
         live_sources_valid &= job_valid
     valid_current = seal_valid and live_sources_valid and current.get('live_assembly_matches') is True
     accepted, rejected = [], []
+    v2 = False
     for e in evidence:
         reason = None
         if e.get('owner') != owner or e.get('paper') != paper:
@@ -85,13 +86,23 @@ def evaluate(root, scope, current, evidence=(), issues=()):
             except (OSError, ValueError, UnicodeError):
                 body = None
             fields = ('paper', 'owner', 'actor', 'gate_id', 'status', 'created', 'bindings', 'resolves', 'supporting_sources', 'source_review')
-            if not isinstance(body, dict) or body.get('schema_version') != 'bf-paper-digital-gate-review-v1' or any(
+            if not isinstance(body, dict) or body.get('schema_version') not in ('bf-paper-digital-gate-review-v1','bf-paper-digital-gate-review-v2') or any(
                     body.get(k) != e.get(k) for k in fields):
                 reason = 'EVIDENCE_CONTENT_MISMATCH'
+            elif body.get('schema_version') == 'bf-paper-digital-gate-review-v2':
+                resolutions=body.get('resolved_findings',[])
+                if (resolutions!=e.get('resolved_findings',[]) or not isinstance(resolutions,list) or
+                    any(not isinstance(r,dict) or r.get('scope')!='identified-defect-only' or
+                        r.get('status')!='PASS' or r.get('id') not in body.get('resolves',[]) for r in resolutions)):
+                    reason='EVIDENCE_RESOLUTION_SCOPE_INVALID'
+            elif e.get('resolved_findings'):
+                reason='EVIDENCE_RESOLUTION_VERSION_REQUIRED'
         if reason:
             rejected.append({'gate_id': e.get('gate_id'), 'reason': reason, 'artifact': e.get('artifact')})
         else:
-            accepted.append(e)
+            eligible=body.get('resolved_findings',[]) if body['schema_version']=='bf-paper-digital-gate-review-v2' else []
+            accepted.append({**e,'_defect_resolutions':{r['id'] for r in eligible}})
+            v2 |= body['schema_version']=='bf-paper-digital-gate-review-v2'
     results = []
     for gate in gates:
         matching = sorted((e for e in accepted if e['gate_id'] == gate['id']), key=lambda x: x.get('created', 0))
@@ -113,7 +124,8 @@ def evaluate(root, scope, current, evidence=(), issues=()):
         rechecks = sorted((e for e in accepted if e['gate_id'] == issue['gate_id']),
                           key=lambda e: e.get('created', 0))
         latest_recheck = rechecks[-1] if rechecks else None
-        closures = [latest_recheck] if (latest_recheck and latest_recheck['status'] == 'PASS'
+        resolved_defect=bool(latest_recheck and issue['id'] in latest_recheck['_defect_resolutions'])
+        closures = [latest_recheck] if (latest_recheck and (latest_recheck['status'] == 'PASS' or resolved_defect)
                     and issue['id'] in latest_recheck.get('resolves', [])
                     and latest_recheck.get('created', 0) > issue.get('created', 0)
                     and seal_valid and all(live_job_valid.get(b['job_id']) for b in latest_recheck['bindings'])) else []
@@ -130,7 +142,7 @@ def evaluate(root, scope, current, evidence=(), issues=()):
         i['state'] == 'OPEN' and i.get('finding_status') == 'FAIL' for i in unresolved)
         else 'RECHECK_REQUIRED' if not valid_current or any(i['state'] == 'RECHECK_REQUIRED' for i in unresolved)
         else 'CHECKS_PENDING')
-    return {'schema_version': 'bf-paper-digital-acceptance-v1', 'paper': paper, 'owner': owner,
+    return {'schema_version': 'bf-paper-digital-acceptance-v2' if v2 else 'bf-paper-digital-acceptance-v1', 'paper': paper, 'owner': owner,
             'scope': scope['scope'], 'scope_sha256': hashlib.sha256(json.dumps(scope, sort_keys=True).encode()).hexdigest(),
             'source_result': current_seal, 'selected_bindings': selected, 'current_sources_valid': valid_current,
             'execution': current.get('execution', {}), 'file_integrity': file_status,

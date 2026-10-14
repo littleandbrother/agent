@@ -7,6 +7,7 @@ import secrets
 import shutil
 import signal
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 from .store import Store,canonical,identity
@@ -16,11 +17,26 @@ from .model_profile import for_owner as model_profile
 from . import budget_policy
 from .skill_resources import source_bundle, freeze_resources, verify as verify_resources
 
-from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH
+from .runtime_config import PI, HOME_ROOT, NODE as NODE_PATH, readonly_runtime
 NODE = str(NODE_PATH)
 INTERACTIVE_SHUTDOWN_GRACE_SECONDS=10
 
 def filehash(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def write_session_receipt(path, receipt):
+    """Publish the mutable pointer without exposing a half-written receipt."""
+    data=canonical(receipt)
+    path=Path(path)
+    temporary=None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w',encoding='utf-8',dir=path.parent,
+                                         prefix='.'+path.name+'.',delete=False) as stream:
+            temporary=Path(stream.name)
+            stream.write(data);stream.flush();os.fsync(stream.fileno())
+        os.replace(temporary,path)
+    finally:
+        if temporary is not None:temporary.unlink(missing_ok=True)
 
 # Capture the loaded controller revision once. A file edit while a serial batch
 # holds this Python module must not relabel that already-loaded implementation.
@@ -41,6 +57,7 @@ def delivery_binding():
     paths += [base/name for name in ('firmware_targets.py','nordic_sdk.py','stm32_l432.py','spice_observation.py','assembly_contract.py')]
     paths += [base/name for name in ('skill_resources.py','native_outcome.py','context.py','product_dependencies.py')]
     paths += [PI/'packages/bf-agent'/folder/('skill-resources.'+ext) for folder,ext in [('src','ts'),('dist','js')]]
+    paths += [PI/'packages/bf-agent'/folder/('bounded-bash.'+ext) for folder,ext in [('src','ts'),('dist','js')]]
     return {str(p):filehash(p) for p in paths}
 
 def freeze(source=PI/'packages/bf-harness',label='H0',home_root=HOME_ROOT,app_entry='main.js'):
@@ -68,6 +85,9 @@ def _freeze_locked(source,label,home_root,app_entry):
         resources=source_bundle()
         bindings['resources']=resources[0]['sha256']
         bindings['research_method']={kind:filehash(PI/('packages/bf-agent/'+folder+'/research-method.'+suffix)) for kind,folder,suffix in [('source_sha256','src','ts'),('build_sha256','dist','js')]}
+        # Freeze pinned metadata; only an actual qualified caller requires the
+        # full content audit before using it. Unrelated owners receive no grant.
+        bindings['readonly_runtime']=readonly_runtime(verify_contents=False)
     binding=identity(bindings)
     dest=Path(home_root)/'harnesses'/(label+'-'+binding[:12])
     if (dest/'manifest.json').exists():
@@ -107,6 +127,7 @@ def _freeze_locked(source,label,home_root,app_entry):
         manifest['tools'].append('bf_skill')
         manifest['delivery_binding']=delivery_binding()
         manifest['research_method']=bindings['research_method']
+        manifest['readonly_runtime']=bindings['readonly_runtime']
     manifest['identity']=identity(manifest)
     (dest/'manifest.json').write_text(canonical(manifest))
     return dest
@@ -128,7 +149,9 @@ def seatbelt(workspace,harness,port=8768,mutable=None):
                 manifest=target/'package.json'
                 if manifest.is_file() and json.loads(manifest.read_text()).get('name')=='@earendil-works/'+path.name:
                     dependencies.append(target)
-    reads=' '.join(f'(subpath "{p}")' for p in sorted({q(p) for p in [workspace,harness,PI,*dependencies]}))
+    runtime=readonly_runtime(workspace)
+    public_runtime=[Path(p['path']) for p in runtime['roots']] if runtime else []
+    reads=' '.join(f'(subpath "{p}")' for p in sorted({q(p) for p in [workspace,harness,PI,*dependencies,*public_runtime]}))
     source_guards=''
     if mutable is not None:
         source_guards=' '.join(f'(deny file-write* (literal "{q(workspace / "harness" / name)}"))'
@@ -161,6 +184,19 @@ setTimeout(()=>{socket.destroy();if(checks.network===undefined){checks.network=f
     if proc.returncode:raise ValueError('PI_SANDBOX_FAILED: '+proc.stderr[-1200:])
     checks=json.loads(proc.stdout)
     if not all(checks.values()):raise ValueError('PI_SANDBOX_PREFLIGHT_FAILED: '+canonical(checks))
+    runtime=readonly_runtime(workspace)
+    if runtime:
+        # Run the dependency test through the identical caller profile. A host
+        # import cannot prove that the original Pi can execute this runtime.
+        source="import json,tkinter; from bleak import BleakClient; import inspect; print(json.dumps({'tk':bool(tkinter.Tcl().eval('info patchlevel')),'bleak':'disconnected_callback' in inspect.signature(BleakClient).parameters}))"
+        probe=subprocess.run(['/usr/bin/sandbox-exec','-p',seatbelt(workspace,harness),
+            runtime['interpreter'],'-B','-c',source],cwd=workspace,
+            env={'PATH':'/opt/homebrew/bin:/usr/bin:/bin','TMPDIR':str(Path(workspace)/'.tmp'),'LANG':'en_US.UTF-8'},
+            capture_output=True,text=True,timeout=10)
+        try:usable=probe.returncode==0 and all(json.loads(probe.stdout).values())
+        except (ValueError,TypeError):usable=False
+        if not usable:raise ValueError('PI_RECEIVER_RUNTIME_PREFLIGHT_FAILED: '+probe.stderr[-1000:])
+        checks['receiver_runtime']=True
     return checks
 
 
@@ -240,6 +276,7 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
         if filehash(PI/'package-lock.json')!=manifest['pi_lock_hash']:raise ValueError('LOCK_CHANGED_SINCE_FREEZE')
         if manifest.get('world_binding',world_binding())!=world_binding():raise ValueError('WORLD_CHANGED_SINCE_FREEZE')
         if 'delivery_binding' in manifest and manifest['delivery_binding']!=delivery_binding():raise ValueError('DELIVERY_CHANGED_SINCE_FREEZE')
+        if product and manifest.get('readonly_runtime')!=readonly_runtime(verify_contents=False):raise ValueError('READONLY_RUNTIME_CHANGED_SINCE_FREEZE')
         if manifest.get('resource_manifest'):
             verify_resources(Path(harness)/'resources',manifest['resource_manifest']['sha256'])
         owner=label or ('pi-'+mode+'-'+secrets.token_hex(5))
@@ -301,11 +338,11 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
                 receipt['previous_harness_identity']=previous['harness']['identity']
                 receipt['shared_context']=shared_context
             receipt['previous_attempts']=previous.get('previous_attempts',[])+[previous_attempt_summary(previous)]
-        (output/'receipt.json').write_text(canonical(receipt))
+        write_session_receipt(output/'receipt.json',receipt)
         store.event(owner,owner,'session_started',{'mode':mode,'harness_id':manifest['identity'],'task_id':task_id})
         with (output/'trace.jsonl').open('a' if resume else 'w') as stdout,(output/'stderr.log').open('a' if resume else 'w') as stderr:
             proc=subprocess.Popen(command,cwd=workspace,env={'PATH':'/opt/homebrew/bin:/usr/bin:/bin','TMPDIR':str(workspace/'.tmp'),'LANG':'en_US.UTF-8'},stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)
-            receipt['pid']=proc.pid;(output/'receipt.json').write_text(canonical(receipt))
+            receipt['pid']=proc.pid;write_session_receipt(output/'receipt.json',receipt)
             proc.stdin.write((canonical(cfg)+'\n').encode());proc.stdin.flush()
             if on_process:on_process(proc)
             else:proc.stdin.close()
@@ -330,7 +367,7 @@ def launch(harness,task_id='dev-01',mode='solve',experience=None,label=None,stor
         receipt['submission']=dict(submission) if submission else None
         if receipt.get('injected_interruption'):receipt['status']='INTERRUPTED'
         if receipt.get('deadline_shutdown'):receipt['status']='PAUSED'
-        (output/'receipt.json').write_text(canonical(receipt))
+        write_session_receipt(output/'receipt.json',receipt)
         store.event(owner,owner,'session_finished',{'status':receipt['status'],'submitted':bool(submission)})
         return receipt
     finally:

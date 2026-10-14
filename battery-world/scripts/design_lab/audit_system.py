@@ -64,7 +64,14 @@ for paper in sorted(owners):
     started, attempt_path = entries[-1]
     result_path = attempt_path.parent / 'result.json'
     if not result_path.is_file():
-        current_papers.append({'paper': paper, 'owner': owners[paper], 'latest_attempt': str(attempt_path.relative_to(ROOT)), 'receipt_missing': True})
+        execution = status.get(owners[paper], {'status': 'UNAVAILABLE'})
+        active = execution['status'] in ('STARTING', 'RUNNING')
+        current_papers.append({'paper': paper, 'owner': owners[paper],
+                              'latest_attempt': str(attempt_path.relative_to(ROOT)),
+                              'receipt_missing': True, 'execution': execution,
+                              'receipt_state': 'PENDING_ACTIVE_EXECUTION' if active else 'MISSING_AFTER_STOP',
+                              'stage_delivery_passed': False, 'full_product_passed': False,
+                              'historical_stage_delivery_passed': old[paper].get('stage_delivery_passed', False)})
         continue
     current = json.loads(result_path.read_text())
     current.update(result_path=str(result_path.relative_to(ROOT)), result_sha256=sha(result_path))
@@ -122,8 +129,10 @@ report = {'schema_version': 'bf-system-current-readonly-audit-v1', 'created': ti
           'latest_papers': current_papers,
           'stage_delivery_passed': sum(p.get('stage_delivery_passed', False) for p in current_papers),
           'full_digital_products_passed': sum(p.get('full_product_passed', False) for p in current_papers),
+          'pending_active_papers': [p['paper'] for p in current_papers if p.get('receipt_state') == 'PENDING_ACTIVE_EXECUTION'],
+          'missing_receipts_after_stop': [p['paper'] for p in current_papers if p.get('receipt_state') == 'MISSING_AFTER_STOP'],
           'frozen_delivery_sha_records': sum(p.get('delivery_readback', {}).get('sha_records_checked', 0) for p in current_papers),
-          'live_input_or_file_problems': sum(not p.get('current_sources_valid', False) or p.get('delivery_readback', {}).get('mismatches', []) != [] for p in current_papers),
+          'live_input_or_file_problems': sum(not p['current_sources_valid'] or p.get('delivery_readback', {}).get('mismatches', []) != [] for p in current_papers if not p.get('receipt_missing')),
           'registered_charged_usd_original_ten': sum(r['charged'] for r in requests),
           'model_requests_original_ten': len(requests),
           'unknown_rows_original_ten': sum(r['status'] == 'UNKNOWN' for r in requests),

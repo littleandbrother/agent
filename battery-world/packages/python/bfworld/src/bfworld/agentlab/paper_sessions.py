@@ -72,7 +72,18 @@ class PaperSessions:
 
     def requests(self, owner):
         if not self.has(owner):raise PermissionError('PAPER_SESSION_NOT_REGISTERED')
-        return [value for p in sorted(self.queue.glob(owner+'-*.json')) if (value:=read(p)).get('schema_version')=='bf-paper-continuation-queue-v1']
+        # Historical filenames may be snapshots rather than their request id.
+        # Current terminal receipts take precedence over these original bytes.
+        paths=[*sorted((self.queue/'history').glob('*.json')),
+               *sorted(self.queue.glob('*.json'))]
+        live=self.queue/(owner+'.json')
+        if live.is_file():paths.append(live)
+        values={}
+        for path in paths:
+            value=read(path)
+            if (value.get('schema_version')=='bf-paper-continuation-queue-v1'
+                    and value.get('owner')==owner):values[value['id']]=value
+        return list(values.values())
 
     def queue_state(self, owner):
         rows=self.requests(owner)
@@ -120,6 +131,8 @@ class PaperSessions:
                 cases.root=Path(storage['root']).resolve()
             app.results.cases=cases;app.results.eda=EdaResults(app.results)
             app.conversations=reader(Conversations,app,home=home)
+            from .design_lab.service import DesignLab
+            app.design_lab=reader(DesignLab,app,root=home/'design-lab')
             from .skill_resources import SkillResources
             app.skills=reader(SkillResources,app)
             self._view=app;return app
@@ -194,12 +207,20 @@ class PaperSessions:
         if text is not None and (not isinstance(text,str) or not 1<=len(text.strip())<=12000):raise ValueError('MESSAGE_REQUIRED_MAX_12000')
         scope=load_authority(self.root)
         if not scope:raise ValueError('CONTINUATION_USER_AUTHORITY_REQUIRED')
-        key=owner+'-'+identity(operation)[:20];path=self.queue/(key+'.json')
+        key=owner+'-'+identity(operation)[:20]
+        path=self.queue/'requests'/(key+'.json');live=self.queue/(owner+'.json')
         with self.lock:
-            if path.exists():
-                old=read(path)
+            legacy=self.queue/(key+'.json')
+            if path.exists() or legacy.exists():
+                old=read(path if path.exists() else legacy)
                 if old.get('operator_text')!=text:raise ValueError('OPERATION_CONFLICT')
+                if live.exists() and read(live)['id']==key:return read(live)
+                history=self.queue/'history'/(key+'.json')
+                if history.exists():return read(history)
                 return old
+            previous=read(live) if live.exists() else None
+            if previous and previous['status'] in ('QUEUED','RUNNING'):
+                raise ValueError('PAPER_OWNER_ALREADY_QUEUED')
             # Do not launch another Pi process while this original owner is active.
             active=self.view().conversations.get(owner)['status']=='RUNNING'
             ready=read(self.root/'campaign/parallel-20261009/READY.json')
@@ -208,7 +229,13 @@ class PaperSessions:
                 'owner':owner,'operation':operation,'phase':phase,'operator_text':text,
                 'created':time.time(),'status':'OBSERVING_EXISTING_RUN' if active and text is None else 'QUEUED',
                 'authorization_sha256':scope['authority_sha256'],'fees_reset':False}
-            tmp=path.with_suffix('.tmp');tmp.write_text(canonical(value));tmp.replace(path)
+            path.parent.mkdir(exist_ok=True)
+            with path.open('x') as stream:stream.write(canonical(value))
+            if value['status']=='QUEUED':
+                if previous:
+                    from .design_lab.contracts import sealed
+                    sealed(self.queue/'history'/(previous['id']+'.json'),previous)
+                tmp=live.with_suffix('.tmp');tmp.write_text(canonical(value));tmp.replace(live)
             return value
 
     def change_entry(self, owner, body):
@@ -232,7 +259,10 @@ class PaperSessions:
             for item in self.requests(owner):
                 if item['status']=='QUEUED':
                     item.update(status='CANCELLED',ended=time.time())
-                    (self.queue/(item['id']+'.json')).write_text(canonical(item));cancelled.append(item['id'])
+                    live=self.queue/(owner+'.json')
+                    path=live if live.exists() and read(live)['id']==item['id'] else self.queue/(item['id']+'.json')
+                    tmp=path.with_suffix('.tmp');tmp.write_text(canonical(item));tmp.replace(path)
+                    cancelled.append(item['id'])
         active=self.view().conversations.get(owner)['status']=='RUNNING'
         if active:
             stop=self.queue/(owner+'-stop.json')

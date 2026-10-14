@@ -84,6 +84,14 @@ class Recovery:
 
     def unknown_blockers(self, db, owner=None):
         policy = self.usage_continuation(db, owner=owner)
+        authority=budget_policy.unbounded_time(db,owner)
+        protocol=policy['protocol'] if policy else None
+        if authority and not protocol:
+            # Unlimited-time continuation preserves expired finite studies.
+            # Its legitimate original-owner resume records exact liabilities
+            # in the same protocol; expiration must not hide those records.
+            row=db.execute('SELECT protocol FROM research_model_owners WHERE owner=?',(owner,)).fetchone()
+            protocol=row['protocol'] if row else None
         allowed = {r['owner'] for r in db.execute('SELECT owner FROM research_model_owners WHERE protocol=?',
                    (policy['protocol'],))} if policy else set()
         # A new exploratory study may explicitly carry a known historical liability.
@@ -91,8 +99,7 @@ class Recovery:
         # and Provider still counts them against the global monetary ceiling.
         carried = {r['request_id']:r['original_row_hash'] for r in db.execute(
             'SELECT * FROM research_usage_carryforwards WHERE protocol=? AND authorization<>?',
-            (policy['protocol'],''))} if policy else {}
-        authority=budget_policy.unbounded_time(db,owner)
+            (protocol,''))} if protocol else {}
         if authority:
             carried.update(authority.get('unknown_carryforward',{}))
         resolved = self.resolved(db)

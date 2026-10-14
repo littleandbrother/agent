@@ -10,7 +10,7 @@ import time
 
 from .store import canonical, identity
 
-INLINE_BYTES = 22000
+INLINE_BYTES = 8000
 PAGE_BYTES = 20000
 
 
@@ -72,6 +72,15 @@ class ToolResponses:
         ref = {'schema': 'bf-tool-response-v1', 'response_id': key, 'sha256': digest,
                'bytes': len(text.encode()), 'task_hash': task_hash}
         result = {**value, 'full_response_inline': True, '_response': ref}
+        if str(value.get('id', '')).startswith('eda-') and isinstance(value.get('result'), dict):
+            from .native_outcome import documents
+            outcome = value['result']
+            parsed = list(documents(outcome.get('stdout', '')))
+            # Receipt bytes and the response snapshot stay complete; callers get
+            # the typed native object directly instead of nested stdout JSON.
+            result['result'] = {k:v for k,v in outcome.items() if k not in ('stdout', 'stderr', 'project_probe')}
+            result['native'] = parsed[-1] if parsed else {'text': outcome.get('stdout', '')}
+            if outcome.get('stderr'): result['diagnostic'] = outcome['stderr'][:1500]
         if len(canonical(result).encode()) > INLINE_BYTES:
             result = {'_response': ref, 'full_response_inline': False,
                 'instruction': 'Read the exact saved JSON with bf_engineering action=response_view, response_id, response_sha256, offset and limit. Offsets count Unicode characters; continue from next_offset.',
@@ -109,6 +118,10 @@ class ToolResponses:
             # The task/catalog may be large, but the recovery index must fit.
             if len(canonical(result).encode()) > INLINE_BYTES:
                 result.pop('jobs', None)
+            if str(value.get('id', '')).startswith('eda-'):
+                outcome = value.get('result') or {}
+                result['native_summary'] = {'outcome': outcome.get('outcome'), 'host': outcome.get('native_host'),
+                    'receipt_path': outcome.get('receipt_path'), 'receipt_sha256': outcome.get('receipt_sha256')}
         return self.record_delivery(owner, key, result)
 
     def record_delivery(self, owner, key, value):
@@ -134,6 +147,13 @@ class ToolResponses:
             raise ValueError('RESPONSE_HASH_MISMATCH')
         for job in binding['jobs']:
             self.engineering.get(owner, job['job_id'])  # reauthorize, do not replace historical results
+        if 'fields' in body:
+            from .result_fields import select_fields
+            selected = select_fields(json.loads(row['body']), body['fields'])
+            result = {'_response': {'schema': 'bf-tool-response-v1', 'response_id': key,
+                'sha256': expected, 'bytes': len(row['body'].encode()), 'task_hash': row['task_hash']}, 'fields': selected}
+            if len(canonical(result).encode()) > PAGE_BYTES: raise ValueError('RESPONSE_FIELDS_TOO_LARGE: select a narrower field or page it')
+            return self.record_delivery(owner, key, result)
         offset, limit = body.get('offset', 0), body.get('limit', 4000)
         if type(offset) is not int or type(limit) is not int or not 0 <= offset <= len(row['body']) or not 1 <= limit <= 16000:
             raise ValueError('RESPONSE_PAGE_INVALID')

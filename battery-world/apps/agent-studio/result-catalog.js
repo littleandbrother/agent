@@ -46,7 +46,7 @@
   }
   root.addEventListener('bf-runtime-events',event=>{
     const {owner,events}=event.detail;
-    if(!events.some(row=>/tool_execution_end|engineering|eda_cli|assembly|product_record|conversation_status|artifact|job/.test(row.data?.type||row.type||'')))return;
+    if(!events.some(row=>/tool_execution_end|engineering|eda_cli|assembly|product_record|conversation_status|artifact|job|design_|candidate_|task_submitted|preview_/.test(row.data?.type||row.type||'')))return;
     cache.invalidate(owner);clearTimeout(timer);
     timer=setTimeout(()=>{if(owner===root.BF.getSelection())void cache.get(owner,'',true).catch(()=>{})},200);
   });

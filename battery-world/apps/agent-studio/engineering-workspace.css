@@ -1,6 +1,6 @@
-/* A clear material for the conversation's engineering pane. No sidebar/Lab restyling. */
+/* Original engineering card layout. Shared by the docked pane and responsive drawer. */
 body.engineering-workspace-active main{background:#fcfcfc;position:relative;overflow:clip}
-body.engineering-workspace-active:not(.sections-hidden) .app-body{grid-template-columns:minmax(320px,1fr) var(--panel-right-width,680px)}
+body.engineering-workspace-active:not(.execution-progress-layout):not(.sections-hidden) .app-body{grid-template-columns:minmax(320px,1fr) var(--panel-right-width,680px)}
 body.engineering-workspace-active #section-inspector{
  --ew-ink:#242629;--ew-muted:#6c7075;--ew-line:rgba(32,35,38,.10);--ew-fill:rgba(255,255,255,.40);--ew-hover:rgba(255,255,255,.76);
  --ew-sheen:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,0) 48%,rgba(255,255,255,.30));
@@ -148,9 +148,9 @@ body.engineering-workspace-active #section-content.ew-root{padding:24px;flex:1;m
 .ew-narrow .ew-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
 .ew-narrow .ew-section-heading>span{display:none}
 .ew-narrow .ew-capabilities button{padding:14px 10px}
-body.engineering-workspace-active.studio-compact:not(.sections-hidden) .app-body{grid-template-columns:minmax(0,1fr)}
-body.engineering-workspace-active.studio-compact #section-inspector{position:absolute;right:0;top:var(--ew-top,58px);bottom:0;width:min(var(--panel-right-width,720px),100%);z-index:8;box-shadow:-12px 0 40px -20px rgba(0,0,0,.20)}
-@media(max-width:850px){body.engineering-workspace-active:not(.sections-hidden) .app-body{grid-template-columns:minmax(0,1fr)}body.engineering-workspace-active #section-inspector{position:absolute;right:0;top:var(--ew-top,58px);bottom:0;width:min(var(--panel-right-width,720px),100%);z-index:8}}
+body.engineering-workspace-active.studio-compact:not(.execution-progress-layout):not(.sections-hidden) .app-body{grid-template-columns:minmax(0,1fr)}
+body.engineering-workspace-active.studio-compact:not(.execution-progress-layout) #section-inspector{position:absolute;right:0;top:var(--ew-top,58px);bottom:0;width:min(var(--panel-right-width,720px),100%);z-index:8;box-shadow:-12px 0 40px -20px rgba(0,0,0,.20)}
+@media(max-width:850px){body.engineering-workspace-active:not(.execution-progress-layout):not(.sections-hidden) .app-body{grid-template-columns:minmax(0,1fr)}body.engineering-workspace-active:not(.execution-progress-layout) #section-inspector{position:absolute;right:0;top:var(--ew-top,58px);bottom:0;width:min(var(--panel-right-width,720px),100%);z-index:8}}
 @media(max-width:480px){body.engineering-workspace-active #section-content.ew-root{padding:16px}body.engineering-workspace-active #section-inspector{width:100%!important}.ew-root h2{font-size:22px}.ew-graphic{padding:8px}.ew-root .ew-card{padding:15px}.ew-root .ew-viewer{padding:0}.ew-root :is(button,select,a[download]){min-height:40px}.ew-zoom button{width:36px}.ew-summary-image img{height:180px}}
 @media(hover:hover){.ew-root :is(button,select,a[download]):hover:not(:disabled){background-color:var(--ew-hover);border-color:rgba(30,30,30,.22);box-shadow:var(--ew-shadow),0 4px 16px -10px rgba(0,0,0,.18)}.ew-root :is(.ew-capabilities,.ew-recent,.ew-content-grid) button:hover{transform:translateY(-1px)}.ew-root button:active:not(:disabled){transform:scale(.988)}}
 @keyframes ew-enter{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}

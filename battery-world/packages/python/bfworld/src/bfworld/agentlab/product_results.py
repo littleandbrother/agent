@@ -40,7 +40,7 @@ def role(name):
     suffix=Path(name).suffix.lower()
     if suffix in ('.png','.svg','.glb','.mp4') or name.endswith('preview-mesh.json'): return 'preview'
     if suffix in ('.py','.c','.h','.ld','.cir','.java','.tex') or name=='project-source.zip': return 'source'
-    if suffix in ('.step','.stl','.brep','.blend','.mph','.epro2','.epru','.enet','.elf','.hex','.bin','.dsn','.ses','.net'): return 'native'
+    if suffix in ('.step','.stp','.stl','.brep','.blend','.mph','.epro2','.epru','.eprj3','.esch2','.epcb2','.enet','.elf','.hex','.bin','.dsn','.ses','.net'): return 'native'
     if suffix in ('.raw','.csv','.tsv'): return 'data'
     if suffix in ('.log','.map') or name=='input.json': return 'log'
     return 'report'
@@ -52,7 +52,7 @@ def file_domain(kind,name):
     ext=Path(name).suffix.lower()
     if ext in ('.step','.stp','.stl','.brep','.glb','.blend'):return 'mechanical'
     if ext in ('.c','.h','.ld','.elf','.hex','.bin','.map'):return 'firmware'
-    if ext in ('.cir','.enet','.epru','.epro2','.dsn','.ses','.net'):return 'circuit'
+    if ext in ('.cir','.enet','.epru','.epro2','.eprj3','.esch2','.epcb2','.dsn','.ses','.net'):return 'circuit'
     return area
 
 
@@ -138,12 +138,16 @@ class ProductResults:
             'product_attachments':'id,digest,created',
             'engineering_case_releases':'id,version,created',
             'engineering_case_retirements':'id,version,created',
+            'design_tasks':'task_id,revision,current_design,intent,status,submission',
+            'design_events':'seq,kind,created',
         }
         with self.store.connect() as db:
             tables={r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             data={table:[tuple(r) for r in db.execute('SELECT '+fields+' FROM '+table+' WHERE owner=? ORDER BY 1',(owner,))]
                   for table,fields in columns.items() if table in tables}
             data['conversation']=[tuple(r) for r in db.execute('SELECT title,status FROM conversations WHERE id=?',(owner,))]
+        from .candidate_results import CandidateResults
+        data['candidate_publication']=CandidateResults(self).version(owner)
         return dict(schema_version='bf-result-version-v1',owner=owner,version=identity(data))
 
     def inspect(self,owner,revision=None):
@@ -239,6 +243,9 @@ class ProductResults:
         results+=case_results;files+=case_files
         native,native_files=self.eda.collect(owner)
         results+=native;files+=native_files
+        from .candidate_results import CandidateResults
+        candidate_rows,candidate_files,candidate=CandidateResults(self).collect(owner)
+        results+=candidate_rows;files+=candidate_files
         results.sort(key=lambda r:r['created'],reverse=True)
         for f in files:
             group='current' if f['applicability']['state'] in ('current','reused') else 'history'
@@ -258,6 +265,9 @@ class ProductResults:
             run=db.execute('SELECT status,error,updated FROM conversations WHERE id=?',(owner,)).fetchone()
         value['run_state']=dict(run) if run else None
         value['product_enabled']=product_enabled
+        if candidate:
+            value['candidate']=candidate
+            value['preferred_scope']='candidate'
         value['phase']='assembly' if current else 'engineering' if jobs else 'benchmark' if any(r['kind']=='benchmark' for r in results) else 'proposal' if results else 'empty'
         value['engineering_cases']=sorted({r['case_version'] for r in case_results})
         value['coverage']=[dict(id=d,label=label,files=sum(f['domain']==d for f in files),
@@ -294,11 +304,12 @@ class ProductResults:
             elif ext in ('.csv','.tsv','.raw') and not (ext=='.raw' and result.get('source_type')=='engineering-case'):kind='series'
             elif ext=='.pdf':kind='pdf'
             elif ext=='.mp4':kind='video'
+            elif result.get('source_type')=='candidate' and ext in ('.md','.c','.h','.py','.cir','.txt'):kind='text'
             if kind:
                 label={'model.glb':'三维模型','preview.png':'整体外观','inside.png':'内部结构','exploded.png':'爆炸视图','front.png':'正面','back.png':'背面','front.svg':'正视图','side.svg':'侧视图','top.svg':'俯视图','metrics.csv':'求解结果表','channels.csv':'仿真曲线','recorded-channels.csv':'计算波形'}.get(f['name'],f['name'])
                 views.append(dict(kind=kind,file_id=f['id'],label=label))
         if result['kind']=='proposal':views.insert(0,dict(kind='proposal',label='产品方案'))
-        rank={'video':-1,'model':0,'mesh':1,'proposal':0,'image':2,'series':3,'pdf':4}
+        rank={'video':-1,'model':0,'mesh':1,'proposal':0,'image':2,'series':3,'pdf':4,'text':5}
         return sorted(views,key=lambda v:rank[v['kind']])
 
     def package(self,owner,expected_snapshot,revision=None):
@@ -343,6 +354,9 @@ class ProductResults:
 
     def file(self,owner,key):
         self.sources.require(owner)
+        if key.startswith(('candidate/','preview/')):
+            from .candidate_results import CandidateResults
+            return CandidateResults(self).file(owner,key)
         if key.startswith('eda/'):return self.eda.file(owner,key)
         if key.startswith('case/'):return self.cases.file(owner,key)
         if key.startswith(('record/','input/')):return self.sources.file(owner,key)
@@ -381,7 +395,11 @@ class ProductResults:
             rows=[values[i:i+n] for i in range(0,len(values),n)]
             headers=[c[0] for c in cols];units=[{'time':'s','voltage':'V','current':'A','frequency':'Hz'}.get(c[1],c[1]) for c in cols]
         elif path.suffix in ('.csv','.tsv'):
-            reader=csv.reader(io.StringIO(path.read_text()),delimiter='\t' if path.suffix=='.tsv' else ',')
+            data=path.read_bytes()
+            encoding='utf-16' if data.startswith((b'\xff\xfe',b'\xfe\xff')) else 'utf-8-sig'
+            text=data.decode(encoding)
+            delimiter='\t' if '\t' in text.splitlines()[0] else ','
+            reader=csv.reader(io.StringIO(text),delimiter=delimiter)
             headers=next(reader);units=[{'s':'s','v':'V','a':'A','w':'W','j':'J','mm':'mm','m':'m','pa':'Pa'}.get(h.rsplit('_',1)[-1].lower(),'字段单位') for h in headers];rows=[];source_rows=[];textual=False
             for row in reader:
                 if len(row)!=len(headers):raise ValueError('TABLE_PREVIEW_NONNUMERIC')

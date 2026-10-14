@@ -11,12 +11,13 @@ export function designExtension(api: DesignApi, emit: DesignEmit): ExtensionFact
 			name: "bf_design",
 			label: "BF design task",
 			description:
-				"Inspect the frozen task/source, record your plan/intent, freeze changed C/H, run an immutable snapshot, inspect independent checks/time windows, adopt with expected_revision, submit same-version delivery. run waits for the actual job without model polling. An UNKNOWN operation is never automatically repeated.",
+				"Inspect the frozen task, environment/model scope and source; record your plan/intent, freeze contract-supported C/H or device.json, run an immutable snapshot, inspect independent checks/time windows, adopt with expected_revision, submit same-version delivery. run waits for the actual job without model polling. An UNKNOWN operation is never automatically repeated.",
 			executionMode: "sequential",
 			parameters: Type.Object({
 				action: Type.Union(
 					[
 						"inspect",
+						"environment",
 						"source",
 						"freeze",
 						"run",

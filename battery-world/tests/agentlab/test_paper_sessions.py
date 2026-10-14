@@ -86,6 +86,20 @@ class PaperSessionsTests(unittest.TestCase):
         with reader.connect() as db:
             with self.assertRaises(sqlite3.OperationalError):db.execute("UPDATE conversations SET status='IDLE'")
 
+    def test_legacy_cancelled_receipt_overrides_immutable_queued_snapshot(self):
+        router=self.router();owner=self.owners[1]
+        value={'schema_version':'bf-paper-continuation-queue-v1','id':'closure-old-P02',
+               'owner':owner,'paper':'P02','phase':'delivery','status':'QUEUED','created':1}
+        history=router.queue/'history'/(owner+'-snapshot.json');history.parent.mkdir()
+        history.write_text(canonical(value));original=history.read_bytes()
+        foreign=router.queue/'history'/'foreign.json'
+        foreign.write_text(canonical({**value,'id':'foreign','owner':self.owners[2]}))
+        self.assertEqual(router.cancel_pending(owner)['cancelled'],[value['id']])
+        self.assertEqual(router.requests(owner)[0]['status'],'CANCELLED')
+        self.assertEqual(router.cancel_pending(owner)['cancelled'],[])
+        self.assertEqual(history.read_bytes(),original)
+        self.assertEqual(len(router.requests(owner)),1)
+
     def test_registration_cannot_replace_a_paper_owner(self):
         self.registration['papers'][1]['owner']=self.owners[0];self.save_registration()
         with self.assertRaisesRegex(ValueError,'OWNER_SCOPE'):self.router()
@@ -107,6 +121,37 @@ class PaperSessionsTests(unittest.TestCase):
         self.assertEqual(router.detail(owner)['status'],'QUEUED')
         self.assertEqual(before,self.rows_hash())
         with self.assertRaisesRegex(ValueError,'OPERATION_CONFLICT'):router.enqueue(owner,'same operation','Different text')
+
+    def test_http_queue_uses_worker_file_and_retry_reads_actual_completion(self):
+        owner=self.owners[1]
+        status,item=self.http_request('/api/conversations/'+owner+'/messages',
+            {'operation_id':'actual-path','text':'Validate the original task interfaces'})
+        self.assertEqual(202,status)
+        path=self.study/'campaign/parallel-20261009/pi-queue'/(owner+'.json')
+        self.assertTrue(path.is_file())
+        self.assertEqual(item,json.loads(path.read_text()))
+        from scripts.literature_pi_queue import live_queue_item
+        self.assertTrue(live_queue_item(path,item))
+        done={**item,'status':'CANDIDATE_CONTINUE','ended':time.time()}
+        path.write_text(canonical(done))
+        router=self.router()
+        self.assertEqual(done,router.enqueue(owner,'actual-path','Validate the original task interfaces'))
+        self.assertEqual(done,router.queue_state(owner))
+        next_item=router.enqueue(owner,'next-scope','Check the next approved interface')
+        self.assertEqual(next_item,json.loads(path.read_text()))
+        self.assertEqual(done,json.loads((path.parent/'history'/(item['id']+'.json')).read_text()))
+        router.cancel_pending(owner)
+        self.assertEqual('CANCELLED',json.loads(path.read_text())['status'])
+
+    def test_queued_or_running_canonical_request_cannot_be_overwritten(self):
+        router=self.router();owner=self.owners[1]
+        first=router.enqueue(owner,'first','Keep original operation')
+        path=router.queue/(owner+'.json')
+        for state in ('QUEUED','RUNNING'):
+            path.write_text(canonical({**first,'status':state}))
+            with self.assertRaisesRegex(ValueError,'OWNER_ALREADY_QUEUED'):
+                router.enqueue(owner,'other','Must not replace active work')
+            self.assertEqual(state,json.loads(path.read_text())['status'])
 
     def test_existing_active_run_is_observed_without_duplicate_resume(self):
         router=self.router();item=router.enqueue(self.owners[0],'initial continuation')

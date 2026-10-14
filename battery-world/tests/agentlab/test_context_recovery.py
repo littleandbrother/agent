@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from bfworld.agentlab.context import ContextArchive, PRODUCT_STATE_PREFIX, project_interactive
+from bfworld.agentlab.context import _reference, _project_superseded_phase_states
 from bfworld.agentlab.provider import Provider
 from bfworld.agentlab.store import Store
 from bfworld.agentlab.store import canonical, identity
@@ -381,3 +382,100 @@ class TurnBudget(unittest.TestCase):
             self.provider.complete('chat',self.payload)
             self.assertLess(len(transport.call_args.args[0].data),128000)
         self.assertEqual(original,canonical(self.payload))
+
+
+from bfworld.agentlab import context as batch_context
+
+def completed_medium_batch_fixture(count=24):
+    calls=[{'id':'call-'+str(i),'type':'function','function':{'name':'native_modify','arguments':canonical({'doc':'original-pcb','part':i,'x':120+i})}} for i in range(count)]
+    return {'model':'deepseek-flash','max_tokens':32768,'thinking':{'type':'enabled'},'reasoning_effort':'high',
+            'tools':[{'type':'function','function':{'name':'native_modify','parameters':{'type':'object'}}}],
+            'messages':[{'role':'system','content':'Preserve frozen engineering rules.\n'+'s'*4000},
+                        {'role':'user','content':'Keep the original owner, prior costs and versions.\n'+'u'*16000},
+                        {'role':'assistant','tool_calls':calls},
+                        *[{'role':'tool','tool_call_id':c['id'],'content':canonical({'job_id':'eda-'+str(i),'status':'SUCCEEDED','untrusted_observation':'a'*6000,'full_product_passed':False})} for i,c in enumerate(calls)]]}
+
+class CompletedBatchContextTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory();self.archive=batch_context.ContextArchive(self.tmp.name,'original-owner')
+    def tearDown(self):self.tmp.cleanup()
+    def test_reproduces_aggregate_parent_rejection_and_candidate_fits(self):
+        source=completed_medium_batch_fixture();new,audit=batch_context.project_interactive(source,self.archive)
+        self.assertTrue(audit['fits']);self.assertLess(audit['projected_bytes'],104000)
+    def test_original_source_user_rules_and_all_arguments_are_exact(self):
+        source=completed_medium_batch_fixture();before=canonical(source);new,audit=batch_context.project_interactive(source,self.archive)
+        self.assertEqual(before,canonical(source))
+        for m in source['messages'][:3]:self.assertIn(m,new['messages'])
+        self.assertEqual({k:v for k,v in source.items() if k!='messages'},{k:v for k,v in new.items() if k!='messages'})
+    def test_every_call_retains_one_result_and_original_bytes_are_readable(self):
+        source=completed_medium_batch_fixture();new,audit=batch_context.project_interactive(source,self.archive)
+        self.assertEqual([m['tool_call_id'] for m in source['messages'][3:]],[m['tool_call_id'] for m in new['messages'] if m['role']=='tool'])
+        self.assertFalse(audit['omitted_tool_call_ids'])
+        for a in audit['archived_messages']:
+            saved=Path(self.tmp.name)/'participants/original-owner'/a['record_file'];actual=json.loads(saved.read_text())
+            self.assertEqual(actual,source['messages'][a['source_index']]);self.assertEqual(identity(actual),a['sha256']);self.assertTrue(a['bytes']>1600)
+    def test_same_source_projects_deterministically(self):
+        source=completed_medium_batch_fixture();self.assertEqual(batch_context.project_interactive(source,self.archive),batch_context.project_interactive(source,self.archive))
+    def test_without_archive_rejects_and_does_not_trim_completed_batch(self):
+        source=completed_medium_batch_fixture();new,audit=batch_context.project_interactive(source)
+        self.assertFalse(audit['fits']);self.assertEqual(source,new)
+    def test_incomplete_parallel_batch_is_never_spilled(self):
+        source=completed_medium_batch_fixture();source['messages'].pop();new,audit=batch_context.project_interactive(source,self.archive)
+        self.assertFalse(audit['fits']);self.assertEqual(source,new);self.assertFalse(audit['archived_messages'])
+    def test_unmatched_current_call_remains_while_previous_batch_spills(self):
+        source=completed_medium_batch_fixture();pending={'role':'assistant','tool_calls':[{'id':'pending','function':{'name':'wait','arguments':'{}'}}]};source['messages'].append(pending)
+        new,audit=batch_context.project_interactive(source,self.archive);self.assertTrue(audit['fits']);self.assertEqual(new['messages'][-1],pending)
+    def test_oversized_call_arguments_stay_protected_and_reject(self):
+        source=completed_medium_batch_fixture();source['messages'][2]['tool_calls'][0]['function']['arguments']='x'*180000
+        new,audit=batch_context.project_interactive(source,self.archive);self.assertFalse(audit['fits']);self.assertIn(source['messages'][2],new['messages'])
+    def test_protected_only_context_still_rejects(self):
+        for role in ('user','system'):
+            source={'messages':[{'role':role,'content':'x'*160000}]};new,audit=batch_context.project_interactive(source,self.archive);self.assertEqual(source,new);self.assertFalse(audit['fits'])
+    def test_unicode_preview_is_byte_bounded_partial_and_preserves_error_flag(self):
+        source=completed_medium_batch_fixture();source['messages'][3].update(content='错误或观察数据'*350,is_error=True)
+        new,audit=batch_context.project_interactive(source,self.archive)
+        for a in audit['archived_messages']:
+            if a['source_index']==3:
+                m=next(x for x in new['messages'] if x.get('tool_call_id')=='call-0');preview=json.loads(m['content'])['preview']
+                self.assertTrue(m['is_error']);self.assertTrue(preview['partial']);self.assertLessEqual(len(preview['head'].encode()),768);self.assertLessEqual(len(preview['tail'].encode()),256)
+                break
+        else:self.fail('Medium multibyte result was not projected under pressure')
+
+
+class ReadableArchivedTool(unittest.TestCase):
+    def test_wrapped_tool_text_has_exact_readable_companion_and_original_message_is_unchanged(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as home:
+            archive=ContextArchive(home,'owner')
+            text='{"componentCount":107,"D2_present":false}\n原回读，不是新验收'
+            message={'role':'tool','tool_call_id':'actual','content':json.dumps({'content':[{'type':'text','text':text}]})}
+            record=archive(message);directory=Path(home)/'participants/owner'
+            self.assertEqual(message,json.loads((directory/record['record_file']).read_text()))
+            self.assertEqual(text,(directory/record['text_file']).read_text())
+            self.assertEqual(hashlib.sha256(text.encode()).hexdigest(),record['text_sha256'])
+            self.assertIn('text_file',_reference(record)['read_hint'])
+            self.assertEqual(record,archive(message))
+
+    def test_readable_companion_rejects_tamper_and_is_never_created_for_assistant_reasoning(self):
+        with tempfile.TemporaryDirectory() as home:
+            archive=ContextArchive(home,'owner');message={'role':'tool','content':'original error'}
+            record=archive(message);path=Path(home)/'participants/owner'/record['text_file']
+            path.chmod(0o600);path.write_text('changed')
+            with self.assertRaisesRegex(ValueError,'CONFLICT'):archive(message)
+            self.assertNotIn('text_file',archive({'role':'assistant','content':'untrusted assistant statement'}))
+
+    def test_candidate_context_archives_old_generated_facts_but_keeps_distinct_constraints_and_user_suffix(self):
+        with tempfile.TemporaryDirectory() as home:
+            archive=ContextArchive(home,'owner');prefix='当前任务事实快照（覆盖过时上下文；不改变既定要求）：'
+            old={'schema_version':'bf-product-context-v1','owner':'owner','paper_id':'P01',
+                'context_scope':'current-original-paper-native-phase','requirements':['original geometry requirement'],
+                'assumptions':['unverified model'],'bulk':'old machine inventory'*200}
+            current={'schema_version':'bf-product-context-v1','owner':'owner','paper_id':'P01',
+                'context_scope':'single-candidate-lifecycle','requirements':['fixed eight gates']}
+            messages=[{'role':'user','content':prefix+json.dumps(old)+'\n用户消息：keep this original user suffix'},
+                {'role':'user','content':prefix+json.dumps(current)+'\n用户消息：current candidate goal'}]
+            result,records=_project_superseded_phase_states(messages,archive)
+            self.assertEqual(messages[1],result[1]);self.assertTrue(result[0]['content'].endswith('keep this original user suffix'))
+            self.assertIn('original geometry requirement',result[0]['content']);self.assertIn('unverified model',result[0]['content'])
+            self.assertNotIn('old machine inventory',result[0]['content']);self.assertEqual(1,len(records))
+

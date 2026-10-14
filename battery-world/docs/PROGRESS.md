@@ -1,3 +1,145 @@
+## 2026-10-14 P01 第二轮实施完成
+
+用户已批准 A–D 和成熟方案适配。当前状态恢复／历史索引、按需技能／批量查询、精简结果、自动同版交付与来源值核对已接入原 P01。598 项 Python、16 项原生接口、9 项 Node、实际调用包构建和整仓类型检查通过。交付消费测试 41→15→9 请求，登记 $0.825418→$0.295454→$0.188305，最后 0 工具错误。机械／固件技能段 53 请求/$1.096736，效率收益未建立；42 来源值复核，18 绑定为8通过、2时序不一致、8标识待比较。Context7 固定 nRF5 SDK17.1 查询改用本地章节索引；缓存命中率未改善。
+
+四段 Pi 测试合计 $2.405914。原11259模型/费用行、122工程作业、719EDA、32授权、10UNKNOWN保持，P01工程源码未改，未新增求解或目标构建，其他owner未派发。当前候选 D-ad0ad535672cfdc6262a11bef84addff5aea526431e2cac6a01a5d8ee7527a14，51文件SHA一致，自动交付重试回执一致；独立检查仍为REPAIR_REQUIRED，物理未验证。worker已排空。报告：[实施与实测结果](</Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round2-implementation-20261014T201417Z/实施与实测结果.md>)。本地修改保留，未提交。下一轮围绕真实固件—负载参数、PCB和装配形成产品候选；本轮只完成效率实施与消费验证。下方为历史。
+
+## 2026-10-14 P01 第二轮效率审查 · 方案待确认
+
+第一轮原会话两个窗口519请求、612工具调用完成只读统计；17项工程链检查表已填。主要低效在重复恢复旧状态、EDA帮助/结果解析和交付助手调查；39请求调查后明确参数的准备段5请求完成。报告及A–D具体修改位于[第二轮审查](agentlab/p01-mainline-20261013/round2-efficiency-audit-20261014/P01_第二轮低效审查.md)。原登记$10.4383和缓存估算$3.4038分列。所有所查数据库行指纹和源码哈希保持；仅新增审查资料与交接，未改运行实现、未恢复Pi。等待用户确认后依次实施A当前状态/上下文、B工具合同/按需技能、C自动交付、D跨域接口。下方为历史。
+
+## 2026-10-13 P01 唯一主线 · 充值后原会话恢复
+
+充值后已核对官方余额可用，原 P01 turn-026 已出现新的 SETTLED 请求。公共接收环境从共享 Codex Python 改为独立快照，Python/Bleak/Tk版本保持，原Pi沙箱软件6/6通过；旧worker PID被Chrome复用导致误阻塞，现以原worker flock判定，三个锁反例及完整505项公共检查通过（另有16接口、3上下文及真实Pi构建）。已打开原ARM半离线本地工程，Connect自动恢复且项目/文档身份新鲜读回一致。只运行原P01，模型/thinking/完整整链要求保持，旧402/UNKNOWN与全额预留不清；其余九篇、8053费用旧行、110旧工程行及232文件/索引保持。Pi正在自主提出并实施整链候选；八项数字门及同版交付尚未验收，物理NOT_TESTED、方法收益和RSI NOT_ESTABLISHED。Codex未代写参与者工程，未重跑未变成功仿真，无UI改动或定时消息。当前不可变证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/funded-resume-1791872106979043000/current-1791874114162884000.json。下方是历史。
+
+## 2026-10-13 P01 唯一主线 · 新上游402封存
+
+公共v27与整链能力预检证据保留；原Pi turn-025的当前目标完整进入真实请求。21条SETTLED后第22条上游402 Insufficient Balance，UNKNOWN和$0.0998781全额预留保留；官方只读余额为CNY -0.11/is_available=false，串行worker退出且无自动重试。费用/token/请求/时间无累计上限授权不变。此轮无新工程作业或已提交产品候选，完整数字产品NOT_ACCEPTED，物理NOT_TESTED，RSI NOT_ESTABLISHED。独立静态观察只确认当前固件定时/广播参数需与供能条件绑定，不是耗电实测。未重跑输入不变的成功作业；Codex参与者工程代写0。保留复核PASS：8053历史费用行、110工程行、九篇原队列与232文件/索引。充值可用后只恢复原P01，先实际候选再八门独立验收和同版交付，不扩展UI、不使用定时消息。最新不可变证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791856242318178000.json。下方均为历史。
+
+## 2026-10-13 P01唯一主线 · 公共v27实际恢复
+
+公共v27通过502项Python、16项原生接口、3项当前事实入口及实际Pi构建。原Pi turn-024已经真实SETTLED；20条有数据库与结束回执双重证明的控制器旧阶段移到不可变历史。实际用户消息部分从v26的124809字节降至43259字节，空间用于工作证据；总请求上限256000、当前任务完整原文、模型/thinking与原SDK会话保留。未证明实付费用或工程质量收益。仅P01施工，核心电源控制/实际模型/原生PCB仍需其自行修订后独立验收。未变S132、接收软件、CAD及成功仿真复用，8份校准复用而未重跑；另外九篇原会话/232文件/9队列、8053模型/110工程历史全行和索引保持，费用/UNKNOWN未清。Codex参与者工程代写0。完整数字产品NOT_ACCEPTED、物理NOT_TESTED、RSI NOT_ESTABLISHED。当前证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791853802091803000.json。下方为历史。
+
+## 2026-10-13 P01唯一主线 · 公共v26实际资料获取
+
+公共v26已通过473项Python、16项原生接口、3项当前事实入口和实际Pi构建。当前工作证据在丢弃交换前封存，严格重复的机器启动副本去重；原模型、thinking、请求上限与用户历史保留。原Pi turn-023已实际获取TI/Coilcraft器件资料，原始与文本资料SHA逐件核对。只证明资料获取和公共恢复生效，尚不证明费用或设计质量改善。完整数字产品NOT_ACCEPTED；供电范围、真实控制/绕组模型与当前原生PCB验收仍待Pi修订后独立检查。未变S132、接收软件、CAD及已通过仿真复用；另外九篇原会话/232文件/9队列与8053模型、110工程历史保持，费用/UNKNOWN未清。Codex参与者工程代写0；物理NOT_TESTED、RSI NOT_ESTABLISHED。当前证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791851489033316000.json。下方保留历史。
+
+## 2026-10-13 P01唯一主线 · 公共v25实际恢复
+
+公共 v25 已通过460项Python、16项原生接口、3项当前事实入口及实际Pi构建。资料工具按原owner现有明确无限时授权判定，首次付费调用前的权限检查实际通过；旧grant/租约/费用/UNKNOWN保持。原Pi turn-022已实际使用bf_reference skill/inspect，资料网络获取尚待实际调用。仅P01继续；39件原PCB、107条已布线路段保留，原生DRC仍失败。整链复查确认供电窗口与控制/两绕组模型对应未闭合，由Pi决定修订。原S132/PC软件、CAD及未变仿真复用；其余九篇232文件/9队列/原索引、8053模型和110工程历史全行保持。Codex参与者工程代写0。完整数字产品NOT_ACCEPTED、物理NOT_TESTED、方法/RSI NOT_ESTABLISHED。当前证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791850114634869000.json。下方为历史。
+
+## 当前 P01 主线 2026-10-12T23:43:10.775023+00:00
+
+公共 v23 通过437项Python、16项原生接口、3项当前事实入口及实际Pi构建，原turn-020实际加载。聚合中等工具回执逐件封存，固定模型和请求上限下真实请求219188字节；只证明执行恢复，不证明费用、方法或设计收益。39件PCB已保存重载，板内39件、布线0，连通性/DRC和整链未验收。资料获取入口候选11项离线检查通过，未发布。无效ID回执均为FAILED，先前误判为成功的Codex观察错误已修正，未改CLI。原S132/接收软件及未变仿真复用；其余九篇232文件/9队列/原索引、8053模型和110工程全行保持，UNKNOWN/预留/账本未清。参与者工程代写0。完整数字产品NOT_ACCEPTED、物理NOT_TESTED、方法/RSI NOT_ESTABLISHED。当前证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791848590775022000.json。下方记录为历史。
+
+## 当前 P01 主线 2026-10-12T23:06:43.622877+00:00
+
+公共 v22 已资格发布且原 Pi turn-019 实际加载。只有 P01 被派发；整链验收及同版最终交付尚未完成。原 S132/PC 软件与未变成功仿真复用，九篇历史及 UNKNOWN/费用/预留逐项保留。当前证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791846403622844000.json。完整数字工程 NOT_ACCEPTED，物理 NOT_TESTED，方法收益与 RSI NOT_ESTABLISHED。下方旧记录为历史，当前以此快照为准。
+
+# P01 当前主线 · 2026-10-12T22:41:14.657885+00:00
+
+P01唯一产品主线沿原turn-018运行。公共v21已通过415项Python、16项原生接口、3项当前事实入口检查及实际Pi包构建；原Pi已实际调用context_inspect，取得更新后的本owner作业、EDA回执和交付索引。Pi修订后的六项名义器件/定时参考网络/标签条件通过，当前保存原理图与该复查输入相同；这是局部范围，未证明完整电路或供能。原PCB39件已导入，正在调整布局和布线，尚无DRC/机械配合验收。S132软件18/18和PC接收软件6/6复用未变输入；实际源/冷启动/控制时序/电源与任务负载、最终同版交付仍须闭合。其余九篇232件文件、9份队列与原索引保持；8053条原模型和110条原工程记录逐项保留，UNKNOWN、预留和账本未清。Codex只负责公共执行和独立复查，参与者工程代写0；完整数字产品NOT_ACCEPTED，物理NOT_TESTED，费用/方法收益与RSI NOT_ESTABLISHED。
+
+Evidence: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791844874657886000.json
+
+---
+
+# P01 当前主线 · 2026-10-12T22:29:34.662706+00:00
+
+P01 为唯一产品主线，原 turn-018 正在运行。正式公共 v21 通过415项Python、16项原生接口、3项当前事实入口检查及实际Pi包构建；真实请求包含新context_inspect动作和当前主线要求，是否实际调用及费用收益分别记录。整链预检确认原ARM桌面Connect项目可读，未改变成功仿真/构建。Pi已关闭4处双网络标签并导入原PCB；独立复查发现当前直接单稳态定时网络仍需处理，布局布线/DRC、整链供电/负载与最终同版交付尚未验收。S13218/18与接收软件6/6只证明对应软件范围。其余九篇232件工程文件、9份队列及原索引保持；8053条原模型和110条原工程记录未改，UNKNOWN和全部预留保留。Codex只维护公共执行和独立复查，参与者工程代写为0。完整数字产品NOT_ACCEPTED，物理NOT_TESTED，RSI与方法费用收益NOT_ESTABLISHED。
+
+Evidence: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791844174662701000.json
+
+---
+
+# P01 当前主线 · 2026-10-12T22:02:02.593620+00:00
+
+P01 是唯一产品主线，原 turn-017 已恢复。正式公共 v20：415 Python / 16 接口检查通过，真实请求已包含最新原生 EDA 读回/保存/PCB检查指针。冻结元数据工具自动绑定 Pi 明确选择的当前作业、源码与文件，EDA 回执单列，原验收条件保持。原生电路最新仍有4处双网络标签，Pi 自主修复并继续原PCB与供能/固件/接收整链；完整数字产品、原生PCB和最终同版交付尚未验收。S132 18/18、接收软件6/6只是对应软件检查。其他九篇的232件文件、9份队列和原索引保持；8053条原模型记录及110条原工程记录未改。输入未变成功仿真未重复。物理 NOT_TESTED，RSI NOT_ESTABLISHED。
+
+Evidence: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791842522583920000.json
+
+---
+
+# P01 主线最新状态 · 2026-10-12T21:39:00.754233+00:00
+
+P01 为唯一产品主线，原 turn-016 已恢复，其他九篇原会话、工程、队列和费用保持。正式公共 v19：410 Python / 16 接口检查 PASS；冻结交付工具自动绑定 Pi 明确选择的当前作业与源码，并单列 EDA 回执、保留旧元数据，原验收条件不变。turn-015 的三项具体电路条件已修复，新独立回读确认 U5 1.8V 供电低于厂家范围，PCB 仍未完成；Pi 沿原工程继续整链。接收软件 6/6 与 S132 18/18 局部检查已有证据，输入未变构建/仿真复用。完整数字产品与同版交付尚未验收；物理 NOT_TESTED、RSI NOT_ESTABLISHED。
+
+Evidence: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791841140749655000.json
+
+---
+
+历史原文保留：
+
+## P01 主链 · 当前
+
+P01 为唯一产品主线，原 turn-015 已实际恢复；其余九篇原会话、工程、队列、费用保持。当前正式公共 v18：398 Python / 16 native tests PASS。原 Pi 沙箱已可运行固定接收环境，最新接收软件 6/6 PASS。P01 同一本地 ARM 半离线工程使用桌面 Connect；间歇性 CLI 桥接作为未采用候选停用并保留。预检走实际生产目的地入口。五个旧精确作业与四个 turn-014 源输入可复用，没有重复仿真。完整数字产品、板级/供能核心链与同版交付仍未验收；物理 NOT_TESTED、RSI NOT_ESTABLISHED。
+
+Evidence: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791839547264058000.json
+
+## 2026-10-12T20:22:16.593759+00:00 · 当前仅 P01 整链推进（原 Pi turn-014）
+
+原 P01 pi-chat-b47a35e335bc68d4 已沿原串行 worker 69230 恢复；资格 v15、原生本地 ARM 半离线 native.6。公共故障修复通过 384 项 Python 和 16 项原生连接器检查，并实际新鲜读回同一项目、文档和板卡关联。只读诊断限定期限、忙/过期请求在进入 SDK 前拒绝、不累计旁路探测；错误保留实际原因。已进入写操作的 UNKNOWN 隔离及不重放规则保持，历史失败、UNKNOWN、预留与账本没有清除。首个发现启动未注册窗口的失败也保留；同一测试版受管进程重新启动后精确读回，没有关闭/重建工程。
+
+Pi 原接收端修订在同六项独立软件生命周期检查中达到 5/6，通过了四个此前失败场景；当前断连仍未使接收失效。独立检查器线程指针假设崩溃单独封存，修正检查支架后保留六项原断言，不能计作 Pi 设计失败。隔离 Python 3.12/Bleak/Tk 环境和带 hash 固定依赖已作为当前阶段资源暴露，未改全局/CAD/Pi PATH。S132 新 RC 时钟构建 eng-6e2bc184592697d6 与 18 项主机事件/总线检查继续有效，不能等同 RF/硬件通过。
+
+继续出口是完整 TENG—SECE—储能/稳压—CDC—S132/BLE—PC、原生原理图/BOM/PCB及机械接口的同版修订、独立验收和交付。已保存电路的厂商条件问题、空 PCB、源/任务供能适用范围仍未关闭；Pi 的新 operating/cold 局部模型有实际成功执行，但尚未获得整链功能通过。其余九篇原工程/会话/队列/费用保持。精确输入未变的五项成功 CAD/SPICE/固件作业复用，本次公共发布新增校准求解 0。
+
+数字完整产品尚未验收；最终同版交付待完成；物理 NOT_TESTED；方法收益/RSI 未建立。Pi 写参与者设计，Codex 只维护公共执行、环境与独立检查。无 UI 扩展、无定时聊天消息、无 Git 提交或推送。当前封存事实：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791836536611595000.json；原历史记录保留。
+
+以下为历史记录。
+
+<!-- runtime-recovery-20261012-current -->
+## 原会话恢复与本地EDA修复
+
+当前事实：2026-10-12T07:33:10.767700+00:00。真实阶段结果以最新不可变回执与独立回读为准。
+
+P10 的无界循环已由原Pi owner修复；23项独立数值复查、旧helper与错误E负例、同版47件文件及63项版本/原RAW核算通过。原CAD/SPICE未重跑。P10完整耦合/变化容忍、目标固件、PCB及物理仍未验收。观察器锁竞争恢复、有限退出及等待状态分类已修复。P04两轮恢复分别121和129请求无新构建，原失败/费用/轨迹留存；本次沿原owner先落实真实SDK17.1/S1327.2目标文件与构建，再复核同版交付，不接受旧裸机替代。
+
+本地 ARM 立创 typed CLI 已按持久工程文件与原生文档ID绑定；运行UUID变化采用追加别名证明，旧绑定仍保存。十个本地目标不是作者原生工程已经恢复或PCB验收的证明。
+
+当前 TASK/精确phase/current.json 资料入口已恢复，旧TASK、反馈和会话历史逐字节留存。324项发布测试、完整APP init.sh的1002项Python测试及SDK/Studio构建通过；验证期间新增论文工程作业0。完整Pi仓库typing与根科研仓库仍是独立范围，不由此授予健康。
+
+worker PID 43800，状态 RUNNING；单一原串行执行器，十原owner，无定时聊天。费用/token/请求/时间不设累计上限；UNKNOWN、全额预留、原账本和未变成功作业继续保留。
+
+|论文|原Pi owner|队列|实际会话|
+|---|---|---|---|
+|P01|pi-chat-b47a35e335bc68d4|QUEUED|IDLE|
+|P02|pi-chat-103e79405f0e0c6d|QUEUED|IDLE|
+|P03|pi-chat-23f915b7ee4e9fe6|QUEUED|IDLE|
+|P04|pi-chat-41ef51c671ce114a|RUNNING|RUNNING|
+|P05|pi-chat-c5766cc7b28004ae|QUEUED|IDLE|
+|P06|pi-chat-c5fec5f6fc802e72|QUEUED|FAILED|
+|P07|pi-chat-2d9cbbc98382d1da|QUEUED|IDLE|
+|P08|pi-chat-e0028698d50802cb|QUEUED|IDLE|
+|P09|pi-chat-cb52d6cf20e67841|QUEUED|IDLE|
+|P10|pi-chat-5df297583b1cd187|FILE_CHECKS_COMPLETE|IDLE|
+
+完整数字产品仍没有已确认通过者；物理 NOT_TESTED，方法/RSI 收益未授予。当前状态文件：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/current-runtime-repair-state.json；被动观察：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/receipt-observer-1791789866536248000/status.json。
+<!-- /runtime-recovery-20261012-current -->
+
+<!-- executable-lab-v2-current-20261012 -->
+## 2026-10-12T06:55:34.438755+08:00 · 原生 C 配置与原十篇续跑
+
+当前工作树：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011`，Git `5e6e09f96c4fc47ca9dc6ab4c18a8e55ed8ffd6d` 加未提交修改。核心UI保留，未使用harness-creator，也未恢复定时聊天任务。之前段落中的旧时间窗、旧测试数和暂缺C耦合是历史快照，当前状态以本段与版本回执为准。
+
+七类候选输入和机电/电路/程序依赖绑定已实现。当前原生C支持域通过7个装置控制；改变负载的12次粗/细原生计算均属于新输入，旧D5成功作业重复执行0次，资格重新绑定新增求解0次。E=`E-b1d1613792122e13bf92bc31f014c9dadf01e0b1884070c86ed3f0c4805ae905`，V=`Venv-1b0b3dfe1f6383945acf488814088a692ae1aadc40872ec75c27e602d4dc9983`。shared-ngspice实际RC API 5检查、Renode实际启动通过，不能扩张为PMIC、目标SoC、RF或实物资格。
+
+原C owner `pi-chat-3faf3eb798e76401` 自行修改阈值、实际构建/执行、独立六门、采用与同版提交；35条文件摘要与ZIP CRC通过。21请求全部SETTLED，本地登记$0.2509755，新增原生求解0、Codex参与者源码修改0。任务保留BLOCKED的完整产品缺口，执行正常IDLE。本场景未观察到新行为或方法收益，物理未做。控制器操作排队到完成等待976.46秒，其间模型调用0；资源排队时长未独立测量。
+
+完整应用init 979项PASS，论文发布301项/22组PASS且当前源码身份重新核对；根科研仓库1145项为6 FAIL/5 ERROR/4 SKIP，不改科学门。SDK整体仍有既有TS错误，BF入口构建通过。
+
+原十篇v2无限时间授权已发布；费用/token/请求/时间累计上限均为空，旧授权、UNKNOWN、全额预留和所有旧模型/工程行不改。一个原串行worker PID `88328` 当前RUNNING：P04；旁路只读observer PID96656仅写状态文件，不派模型/作业、不改Pi反馈。
+
+P02本轮75请求/$1.6023762：Pi的r17b候选12/20退化，独立固定需求规则确认；拒绝并保留r16的16/20、旧固件与70件交付，四项供能未闭。新研究/成功与失败作业/独立复查封存在独立study ZIP，不促成整机通过。P04仍在原会话构建真实SDK/S132链；其余八篇沿原队列，未重建旧工程。最新只读审计9篇最新阶段封存PASS、1篇活动待复查、531条SHA、0实际文件问题、完整产品0、物理NOT_TESTED。历史10份完整阶段包不删除。
+
+配置报告：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/CONFIGURATION-AND-RECHECK.md`；验证：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/verification-closeout-1791759226061690000.json`；当前论文审计：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/refactor-r3-r5-20261012/system-audit-1791759090321172000/report.json`；原C包：`/Users/depengsu/.local/share/bf-agent-runtime/workbench/design-lab/pi-chat-3faf3eb798e76401/deliveries/S-e244809875adc57ae8a3e14a25e9f9ed0464f364fa1d9f3efd4f27e1b231e1f0/C-digital-design.zip`；P02研究包：`/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/campaign/deliveries/P02/engineering-study-1791758745279256000/P02-engineering-study.zip`；后续实际状态：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/receipt-observer-1791758400061013000/status.json`。
+
+R0–R2已有链继续有效；R3当前原生C出口闭合但A/B真实源/转换模型与目标外设/RF未齐；R4维持REJECT、无生产采用；R5无合格后代链、无实物结果。不得把配置/阶段文件PASS当全功能或RSI。下一步沿原十篇真实缺口收口，原batch排空前不发布公共上下文/控制器变化。保持现有原作业复用和公开/隐藏评价边界。
+
+本轮可下载网页架构审查包（六个分组MD、源码/版本事实、校验清单）：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/BF_Agent_Executable_Lab_Review_20261012.zip；ZIP及15个实际源码摘要已核对，未含密钥或完整Trace。
+
+---
+
 <!-- bf-design-lab-r3-r5-20261012 -->
 ## 2026-10-12 · R3 有限 A/B、R4 实际比较、R5 前提及全系统审查
 
@@ -982,3 +1124,106 @@ P01上一轮Pi误删会话日志，本轮0模型启动失败；Codex从原Trace�
 隔离锁文件安装后 Pi 全仓 check、离线 BF 构建、8 项 Pi 测试、17 JS 语法与前端投影通过。首次完整 init 的 873 项中 15 FAIL/26 ERROR 及 600 秒包装器超时保留；错误隔离配置、验证副本误排除的 SDK 目录、测试导入/夹具及字体生成脚本位置及新技能分支遗漏的调用者元数据修正后，涉及失败的 89 项复查通过。未重新完整跑 init，不能称全仓库健康。feature.yaml 格式修复保留原字段；BFA-035 仍 in-progress。
 
 发布记录：release/evidence/checkpoint-20261010/verification.json。当前任务授权时间已过期，本次源码发布不恢复推理，也未热部署运行服务；恢复前按资格流程重新核对源码。下一步仍是验收/版本收口、P04 S132、P02 供能和 P01 EDA；当前阶段包不替代完整产品。
+
+
+2026-10-12: Desktop/local EDA followup declared before implementation; UI setup only, no engineering writes or model calls so far.
+
+
+### 2026-10-12 本地 ARM EDA / 原生 CLI 验收
+
+独立连接测试已完成：安装的嘉立创专业版 4.1.71 为 arm64、desktop/half-offline；BF 使用 native-cli-v1 固定 typed 提供程序，经原 Go daemon 留痕。原 Pi 测试 owner pi-chat-d0e795fe9050ec43 自行将同一 PCB 板框 20×12 改为 24×12 mm，明确保存、文档重载、读回和原生导出；两个后台重启及整个客户端退出/重启后独立读回通过，无重新登录交互。
+
+Gateway 早期超时保留；完整客户端重启后相同固定 typed 板框只读调用恢复，单样本 CLI 0.546 s、Gateway 0.133 s。Gateway 写入/UNKNOWN/交付未验收，不自动切换生产路径。文档重载仍需约 28–32 s，不声称全部卡顿已修好。
+
+最终局部验证：BF 路由/权限/EDA 37 项、Node JSON 适配 3 项、TS 原生/宿主 6 项及 typecheck 通过；不称新代码全量回归。53 条新模型请求、本地保守登记 $0.5047314 单独归入测试 owner。原 4310 模型请求、760 EDA/107 工程作业、49 会话、2 bindings 均完整保留，十篇索引及根 88 项科学 feature 哈希不变。无新仿真，无论文源码编辑，无提交/推送。
+
+报告：workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/local-desktop-eda-20261012/ARM-NATIVE-ACCEPTANCE.md；总回执：同目录 native-closeout.json。资格仅限本地连接、板框读写/导出及持久化；原十篇、R3/R4/R5、PCB/硬件/RSI 结论均未提升。
+
+
+## 2026-10-12T11:14:24.648401+00:00 · 四栏视觉与完全折叠收口
+
+当前Studio保留原视觉，修复版本点/线/文字不同坐标造成的重合；项目、执行进展与工程工作区折叠后完全隐藏，由右上角单一菜单恢复，默认宽度、键盘调整、草稿保留、大屏/窄屏/手机及产品/交付/动画检查通过。小屏一次只开一个辅助抽屉。57项前端测试通过，当前后台资格350项通过；完整应用1010项是之前快照，根科研健康未提升。
+
+证据：`/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/ui-visual-closure-1791795888835014000/result.json`。本次UI验证0模型/0原生作业/0参与者工程编辑，没有发送测试草稿、生成工程包、重复仿真、清账、实际回滚或Git提交。局部绿色、数字整机、物理、外部介入和方法收益保持分别记录。原十篇的运行与最新阻塞另外读取实际队列，不能把本轮UI通过当原生工程验收。
+
+滚动条追加核对：正常窗口实际6px、透明轨道、淡灰滑块，悬停不变粗；对话、任务树和工程资料通过真实滚动检查，没有禁用滚动或新增侧边占位。
+
+
+## 2026-10-12T15:04:55.378690+00:00 · 工程工作区原版式恢复
+
+用户截图暴露工程区旧样式未生效；上一轮几何/滚动核对遗漏此项。保留旧卡片/分组/标签声明，仅更新样式内容身份并刷新当前页面。旧版实际样式恢复，在1305px、1536px四栏、1024px和390px核对后，普通再次刷新仍保持正常，6px细滚动条保留。57项前端检查通过。原视觉回执不覆盖，另存修订说明。
+
+本次0模型/0原生作业/0参与者工程编辑，不改任务验收、原owner、费用、UNKNOWN或仿真，没有Git提交或推送；不提升根科学健康或整机/物理/RSI结论。精确的先前样式加载失效原因未确认。证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/executable-lab-20261012/engineering-layout-restoration-1791817024908215000/result.json。
+
+## 2026-10-12T18:11:55.955516+00:00 · P01 唯一产品主线（当前）
+
+原 P01 会话 pi-chat-b47a35e335bc68d4 已恢复 turn-011；worker 63349 只选 P01，其余九篇原队列和 232 项工程文件摘要未变。8053 条旧模型记录与 110 条旧工程作业记录摘要不变。费用、token、请求和累计运行时间无上限；UNKNOWN/全额预留与历史失败保留。
+
+公共修复已发布 v13：372 项 Python 发布检查和 10 项 Node 检查通过，当前 apparatus 0024fda07c13bde19d99b7700c1ad84a2a0ec6a9c5b15820e5a11ac967161317。已有完整应用健康回执 1037 项对应此前快照；本轮新增 native 修复由上述发布检查覆盖，未提升根科研或整机结论。原本地 ARM 半离线通道已使用单实例互斥、串行 CLI 和有界闲时查询。原超时 req_379 未重放或改为成功；旧 P01 headless generation 关闭，同一本地源/实际器件网络与新代精确回读一致后形成独立恢复回执。39 器件、42 连接保留。
+
+Pi 正在自主续修原生网络；后续主目标仍为完整源—SECE—储能/稳压—CDC—S132/BLE—PC 接收、PCB/机械对应、独立验收和同版交付。公开复查指出板级时钟、真实 BLE 接收实现与供能模型覆盖三个整链问题，由 Pi 自主设计修复。五项输入未变的已成功 CAD/SPICE/固件作业继续复用。尚未取得本轮完整产品验收，物理 NOT_TESTED，RSI NOT_PROVEN。无 UI 改动、聊天定时任务、Git 提交或推送。
+
+机器快照：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791828716200774000.json
+恢复证据：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/native-unknown-001/resolution/resolution.json
+保护核对：/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/preservation-1791828716199113000.json
+
+## P01 mainline: qualified recovery v14 / native v5
+
+The original P01 Pi is the only dispatched paper; the other nine original owners,
+232 baseline files, canonical queues, 8053 old model rows and 110 old engineering
+rows are unchanged. Runtime recovery now preserves probe failures, distinguishes
+not-sent reads from entered UNKNOWN commands, admits exact read-only identity
+diagnostics, serializes a single P01-only native connector and atomically updates
+current session receipts. 381 Python release tests and 12 Node tests passed.
+The preceding 379-test receipt-read race failure is retained, not waived.
+Fresh native project/document/library reads passed without native design edits.
+Pi completed a changed-clock real S132 target build eng-6e2bc184592697d6;
+18 independent host policy/bus counterexamples passed on its exact source.
+The receiver now has actual BLE code, but an independent source-snapshot review
+found lifecycle/API failures; it remains a draft under active Pi work.
+Four unchanged prior CAD/SPICE/bare-metal jobs and the new S132 job are reusable.
+Full digital product acceptance, physical verification and RSI remain ungranted.
+Current sealed snapshot: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791830935710223000.json
+
+## 2026-10-12T19:18:52.238302+00:00 · P01 full-chain public review continuation
+
+Qualified common recovery v14/native v5 remains unchanged. The original P01 Pi has received the consolidated firmware/receiver/native-electrical/output-resource review; original system scope retained. New S132 exact-source host checks 18/18; full product and final same-version delivery pending, physical NOT_TESTED. Other nine queues and 232 files, 8053 original model rows and 110 original engineering rows preserved. No unchanged successful solve repeated; no UI/scheduled chat/commit. Current sealed state: /Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/current-1791832732240475000.json
+
+
+## 2026-10-14 · P01 接口修复 15 / 4 / 7
+
+原 owner 的任务恢复已验证：已结束原生作业回传，正规续跑入口发布原队列，旧阶段指令归档条件修复。原 Pi 已在原本地工程补回 D2 US1M/C466495，并完成 SCH 保存重载、增量 PCB 同步和保存重载。独立读回 39 器件、172 引脚网络、uniqueId 和供应商编号全部对应。库属性回填触发网表差异已通过真实反例复现；BF v31 固定 schematic-authoritative 导入，最终网表错误 0。540 项发布检查通过；原板框、107 走线、34 过孔、2 铺铜保留。PCB 还需处理 34 间距、60 连接错误和板外 D2。
+
+本轮 253 次模型请求，本地登记 $5.0259915；历史费用、两条 P01 UNKNOWN 和原始模型/工程作业行保留。零新增工程构建或仿真作业，21 份已选输出摘要一致。重复读取帮助/旧回执仍存在。原 Pi 和串行 worker 已停止在报告边界，后续派发等待用户确认。恢复时读取原 owner 的 P01-INTERFACE-VERIFIED-STATE-20261014.json；本轮接口报告不修改产品采用状态。
+
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round1-repair-20261013T142254Z/P01_接口修复报告.md
+机器证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round1-repair-20261013T142254Z/result.json
+
+
+## 2026-10-14 P01 第一轮全链路执行与同版交付
+
+原Pi owner pi-chat-b47a35e335bc68d4已完成新联合模型执行、接口核对、8项独立验收和同版审查提交。候选D-1009f3f12ae78c2c627d3c5425624d3b273d0ee02f38d0e3debbbce650474889；检查check-d04ee4156993de023fc7；87件ZIP已从主8768接口下载并逐文件核对。2门PASS、3门FAIL、3门UNEVALUABLE；完整产品REPAIR_REQUIRED，物理NOT_TESTED，方法NOT_EVALUATED。当前公共回归581 PASS，工作进程已排空。旧模型/费用/UNKNOWN、21个旧成功产物、原EDA和另外9个owner数据库保留审计PASS；没有旧成功仿真重跑。Pi编写和执行模型、冻结/check/submit；Codex修公共执行和检查，并提供交付元数据模板。结果/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round1-fullchain-20261013T161854Z/result.json；简洁报告/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round1-fullchain-20261013T161854Z/P01_全链路执行报告.md；ZIP/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round1-fullchain-20261013T161854Z/P01-digital-review.zip。下一步统一真实源/电路/固件负载，再修PCB与装配；当前报告交用户审阅，其他9篇继续保持。下方保留历史。
+
+
+
+## 2026-10-14 · P01 第三轮首版完整工程交付
+
+原 Pi 已提交 S-cfde75002f91b91db8205f13f64cf6621f460a1026ef44bfa04e62027a30d6af，工作候选 D-c7890e74e32b4a43508e4accf3e68f0c3e0cb0e270f67bc2d9ac2262e66613fd。官方 Pi ZIP 125 件，用户包 157 件，CRC／SHA／三项原生作业／当前立创原生文件绑定通过。原生 SCH/PCB、STEP、实际 S132 ELF/HEX/BIN/MAP、SPICE/RAW、14 件制造出口、PC 接收程序和独立八门已同版封存。firmware_event_logic 与 delivery_version PASS；PCB 52 间距+50连通 FAIL；供能 FAIL（16 秒后 0.353 V）；另外四门 UNEVALUABLE。物理未验证。
+
+CAD 和 S132 原输入未变复用；本轮新 SPICE 两次均对应变更输入。公共帮助调用登记和中断续跑目录修复通过 605 项资格检查；元数据超长字段循环由既有公开参数合同恢复。Codex 参与者工程源码改写 0，公开检查／范围收口／参数反馈保留介入记录。原 12,218 模型/工程/EDA 行和 10 条 UNKNOWN 全行保持；新 UNKNOWN 全预留保留。本轮 247 请求，本地登记 $5.115434，新 UNKNOWN 预留 $0.146059。
+
+首版下载：/Users/depengsu/Downloads/P01_第三轮_首版完整工程_20261014.zip
+报告：/Users/depengsu/Downloads/P01_第三轮_首版交付报告_20261014.md
+证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round3-fullflow-20261014023256Z/result.json
+
+原 Pi 和单串行 worker 已排空。其余九篇原会话／工程／费用保留；旧门磁不恢复。下一轮按用户确认推进源—SECE—降压—负载对应、PCB DRC 和完整板级／装配接口。
+
+## 2026-10-14 · P01 预览与版本绑定修复
+原 owner pi-chat-b47a35e335bc68d4，当前已提交候选 D-c7890e74。原理图矢量图、三层 PCB 视图、CAD 三维／三张尺寸图、RAW 波形、S132 源码、39 行 BOM、首版报告均已在原版式中实际读取。工作区、产品和交付统一选择当前候选及三个原作业；公共候选读取、源摘要绑定与不可变预览发布已接入系统。新增 7 个派生预览，108 件下载与真实导出 ZIP 全部 SHA/CRC 对应。技术报告支持已有 Markdown，历史报告排除。
+366 项 Python 回归与 6 组前端检查 PASS；7 个实际页面预览 PASS。原 8 张数据库表逐行摘要、101 件源文件、5 件原生 EDA 文件、原会话／费用／UNKNOWN／首版 ZIP 保留。0 模型调用、0 求解、0 目标构建、0 参与者工程改写；完整工程检查及物理状态保留。主服务单实例已发布，未恢复 Pi。其余九篇保持。报告和结果：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/preview-binding-20261014/REPORT.md；/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/preview-binding-20261014/result.json。
+含预览同版工程包：/Users/depengsu/Downloads/P01_同版工程与预览_20261014.zip。
+下一步由用户指定 P01 设计修订；P02/P03 迁移使用各自冻结候选和原作业。下方为历史。
+
+## 2026-10-14 P01 GitHub 源码发布
+
+P01 同版预览、公共候选读取和所依赖的恢复／EDA／技能实现已整理为发布提交。366 项 Python、6 组前端、7 个实际预览和 108 件文件摘要检查保留；Pi 完整代码检查通过。发布清单与 110 项 ZIP 位于 release/P01-PREVIEW-BINDING-20261014.md。数据库、模型账本、工程和已有仿真未修改。

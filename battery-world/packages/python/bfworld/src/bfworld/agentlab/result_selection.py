@@ -27,6 +27,8 @@ def latest_ids(results, files):
 def choices(catalog):
     options=[{'id':'latest','label':'最近产物 · 各类最新记录'},
              {'id':'session','label':'全部记录 · 含历史与独立运行'}]
+    if catalog.get('candidate'):
+        options.insert(0,{'id':'candidate','label':catalog['candidate']['label']+' · 同版工程'})
     if catalog['revision'] is not None:
         options.append({'id':'assembly','label':'装配 v'+str(catalog['revision'])+' · 已绑定适用成果'})
     seen=set()
@@ -40,7 +42,12 @@ def choices(catalog):
 def select(catalog, selection):
     if selection not in {x['id'] for x in choices(catalog)}:raise ValueError('STUDIO_SELECTION_NOT_FOUND')
     rows=catalog['results'];files=catalog['files'];verdict=None
-    if selection=='latest':
+    if selection=='candidate':
+        design_id=catalog['candidate']['design_id']
+        rows=[r for r in rows if r.get('candidate_id')==design_id]
+        files=[f for f in files if f.get('candidate_id')==design_id]
+        verdict=catalog['candidate'].get('verdict')
+    elif selection=='latest':
         ids,file_ids=latest_ids(rows,files)
         rows=[r for r in rows if r['id'] in ids];files=[f for f in files if f['id'] in file_ids]
     elif selection=='assembly':

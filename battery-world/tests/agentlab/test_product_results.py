@@ -30,7 +30,7 @@ class ProductResultsTest(unittest.TestCase):
         key='eng-'+str(time.time_ns());root=self.app.engineering.root/key;root.mkdir(parents=True)
         artifacts=[]
         for name,content in (outputs or {'project-assembly.step':'fixture bytes, not native evidence','project-source.zip':'fixture'}).items():
-            b=content.encode();(root/name).write_bytes(b);artifacts.append(dict(name=name,sha256=hashlib.sha256(b).hexdigest(),bytes=len(b)))
+            b=content if isinstance(content,bytes) else content.encode();(root/name).write_bytes(b);artifacts.append(dict(name=name,sha256=hashlib.sha256(b).hexdigest(),bytes=len(b)))
         request=dict(engine='engineering-project',project={'manifest':{'kind':kind,'interfaces':{'units':'mm'}},'sources':{'src/main.py':'# immutable fixture'}},parameters={},scope='fixture',design_revision=None)
         if bound:request['assembly']=self.app.assemblies.get(self.owner)
         result=dict(kind=kind,artifacts=artifacts,readback_passed=True,independent_readback={'bounds_mm':[10,20,30]},scope='fixture, not hardware')
@@ -109,6 +109,13 @@ class ProductResultsTest(unittest.TestCase):
         result=self.app.results.series(self.owner,key+'/bom.csv')
         self.assertTrue(result['table'])
         self.assertEqual([['C1','0603','6232168'],['C2','1206','58100732']],result['rows'])
+
+    def test_native_utf16_tab_bom_is_readable(self):
+        content='位号\t封装\t数量\nC1\t0603\t2\n'.encode('utf-16')
+        key=self.job('spice',{'BOM.csv':content})
+        result=self.app.results.series(self.owner,key+'/BOM.csv')
+        self.assertEqual(['位号','封装','数量'],result['headers'])
+        self.assertEqual([['C1','0603','2']],result['rows'])
 
     def test_cached_zip_tamper_is_detected(self):
         self.job();catalog=self.app.results.inspect(self.owner);self.app.deliverables.package(self.owner)

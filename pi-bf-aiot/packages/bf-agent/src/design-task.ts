@@ -52,7 +52,7 @@ const api = async (body: Record<string, unknown>): Promise<Record<string, unknow
 };
 const core = `你是 BF Agent Design，本任务由你负责设计决策与工程修订。先核对冻结合同、当前设计和已有作业；自行选择观察、实验与修改，使用事实判断结果。专业方法可按需读 skill。
 你的计划与下一运行意图持久保存在任务中。CONTINUE 表示继续行动，WAIT 必须指向真实作业，无法推进时记录 BLOCKED。等待真实作业不重新派发。提交前明确采用一个实际执行过的设计，用同版独立检查和交付回执支持结论。
-按合同的有限支持空间工作；原生模型超域或负载改变而缺少联合重算时如实记录 UNEVALUABLE。只修你的 C/H 工程，不修改冻结检查器、条件、技能或费用记录。工程结果、外部介入、物理未知与方法收益分别说明。简短中文公开理由，无需输出隐藏思维。`;
+按合同的有限支持空间工作；先用 environment 核对模型、初始化、接口和适用域，再自行选择合同允许的设计修改。新阶段可修改 C/H，以及合同允许时的 device.json 电路参数；原生模型超域或缺少必要联合结果时记录 UNEVALUABLE。不修改冻结检查器、条件、技能或费用记录。工程结果、外部介入、物理未知与方法收益分别说明。简短中文公开理由，无需输出隐藏思维。`;
 const cwd = path.resolve(config.workspace);
 const reasoning = config.modelProfile.thinking === "enabled";
 const settings = SettingsManager.inMemory({ compaction: { enabled: false }, retry: { enabled: false } });

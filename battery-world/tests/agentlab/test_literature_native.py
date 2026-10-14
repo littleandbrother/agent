@@ -1,10 +1,33 @@
 import copy,hashlib,json,tempfile,unittest
 from pathlib import Path
-from bfworld.agentlab.literature_native import validate_plan,evaluate_native,evaluate_manifest,previous_native_attempt,continuation_deadline,latest_closed_result,archive_closed_traces
+from bfworld.agentlab.literature_native import validate_plan,evaluate_native,evaluate_manifest,previous_native_attempt,continuation_deadline,latest_closed_result,archive_closed_traces,reserve_continuation
 from bfworld.agentlab.literature_campaign import digest
 from bfworld.agentlab.store import identity
 
 class NativePaperTests(unittest.TestCase):
+    def test_authorization_only_interruption_does_not_reuse_turn(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);orphan=root/'continuations/turn-053';orphan.mkdir(parents=True)
+            authorization=orphan/'authorization.json';authorization.write_bytes(b'{"owner":"original","preserved":true}')
+            before=authorization.read_bytes()
+            following=reserve_continuation(root)
+            self.assertEqual('turn-054',following.name)
+            self.assertEqual(before,authorization.read_bytes())
+            self.assertFalse((orphan/'attempt.json').exists())
+    def test_gapped_and_empty_turns_remain_reserved(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            for name in ['turn-001','turn-009','turn-013']:(root/'continuations'/name).mkdir(parents=True)
+            (root/'continuations/turn-001/attempt.json').write_text('{}')
+            self.assertEqual('turn-014',reserve_continuation(root).name)
+            self.assertTrue((root/'continuations/turn-013').is_dir())
+    def test_distinct_atomic_reservations(self):
+        from concurrent.futures import ThreadPoolExecutor
+        with tempfile.TemporaryDirectory() as folder:
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                turns=list(pool.map(lambda _:reserve_continuation(Path(folder)),range(4)))
+            self.assertEqual(4,len(set(turns)))
+            self.assertTrue(all(p.is_dir() for p in turns))
     def test_continuation_keeps_original_deadline(self):
         self.assertEqual(150,continuation_deadline({'usd_cap':30,'expires':150},100))
     def test_continuation_cannot_renew_expired_original_budget(self):

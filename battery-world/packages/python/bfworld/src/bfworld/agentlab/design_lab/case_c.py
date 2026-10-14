@@ -85,10 +85,7 @@ def build(design, directory):
     (directory/'trusted-runner.c').write_text(RUNNER)
     inputs = [directory/name for name in sorted(design['sources']) if name.endswith('.c')]
     if not CLANG.is_file():raise ValueError('C_NATIVE_CLANG_MISSING')
-    command([CLANG, '-isysroot',SDK,'-std=c11', '-O2', '-Wall', '-Werror', *inputs,
-             directory/'trusted-runner.c', '-o', directory/'application'], directory,
-            [Path('/Library/Developer/CommandLineTools'), Path('/Applications/Xcode.app')])
-    objects=[]
+    objects=[];host_objects=[]
     for i, source in enumerate(inputs):
         command([CLANG, '--target=arm-none-eabi', '-mcpu=cortex-m4', '-mthumb', '-mfloat-abi=soft', '-O2',
                  '-std=c11', '-ffreestanding', '-Wall', '-Werror', '-I'+str(directory),
@@ -97,21 +94,57 @@ def build(design, directory):
         # The finite F0 ABI admits pure C logic plus compiler arithmetic helpers,
         # not participant file/process/network operations in the runner process.
         objects.append(object_symbols(directory/f'application-{i}.o'))
+        host=directory/f'host-core-{i}.o'
+        command([CLANG,'-isysroot',SDK,'-std=c11','-O2','-Wall','-Werror',
+                 '-c',source,'-o',host],directory,
+                [Path('/Library/Developer/CommandLineTools'),Path('/Applications/Xcode.app')])
+        host_objects.append(host_object_symbols(host))
         if any(token in source.read_text() for token in ('__asm','asm(','asm (','__attribute__((constructor')):
             raise ValueError('C_UNSUPPORTED_NATIVE_ESCAPE')
     defined=set().union(*(o['defined'] for o in objects))
     for name in set().union(*(o['undefined'] for o in objects)):
         if name not in defined and not name.startswith('__aeabi_'):raise ValueError('C_UNSUPPORTED_EXTERNAL:'+name)
+    # ARM-only inspection misses a host-conditional file/process call. The
+    # actual executable's participant objects must obey the same pure ABI.
+    host_defined=set().union(*(o['defined'] for o in host_objects))
+    pure_helpers={'memcpy','memset','memmove','bzero','__stack_chk_fail','__stack_chk_guard','__chkstk_darwin'}
+    for name in set().union(*(o['undefined'] for o in host_objects)):
+        if name not in host_defined and name not in pure_helpers:
+            raise ValueError('C_UNSUPPORTED_HOST_EXTERNAL:'+name)
+    # Link the exact inspected objects, not a second compilation that could
+    # differ through host macros or time-dependent preprocessing.
+    command([CLANG,'-isysroot',SDK,'-std=c11','-O2','-Wall','-Werror',
+             *[directory/f'host-core-{i}.o' for i in range(len(inputs))],
+             directory/'trusted-runner.c','-o',directory/'application'],directory,
+            [Path('/Library/Developer/CommandLineTools'),Path('/Applications/Xcode.app')])
     files = {p.name: sha(p) for p in directory.iterdir() if p.suffix in ('.c', '.h', '.o') or p.name == 'application'}
     value = {'schema_version': 'bf-c-build-v1', 'design_id': design['design_id'],
              'environment_id': design['environment_id'], 'source_hash': identity(design['sources']),
              'runner_sha256': sha(directory/'trusted-runner.c'), 'files': files,
              'compiler': {'host': str(CLANG), 'arm': str(CLANG), 'compiler_sha256': sha(CLANG),
                           'host_sdk':str(SDK.resolve()),'host_sdk_settings_sha256':sha(SDK/'SDKSettings.json'),
+                          'host_symbol_reader':'/usr/bin/nm','host_symbol_reader_sha256':sha('/usr/bin/nm'),
                           'target':'arm-none-eabi/cortex-m4/soft-float','object_machine':'ARM ELF32 checked independently'},
+             'host_core_abi':'Each actual host participant object independently checked; host-conditional external calls rejected',
              'levels': {'F0': 'compiled-host-core', 'F1': 'Cortex-M4-object-only',
                         'F2': 'NOT_CHECKED', 'F3': 'NOT_CHECKED', 'F4': 'NOT_CHECKED'}}
     return {**value, 'build_id': 'B-'+identity(value)}
+
+
+def host_object_symbols(path):
+    result=subprocess.run(['/usr/bin/nm','-g',str(path)],capture_output=True,text=True,timeout=10)
+    if result.returncode:raise ValueError('C_HOST_OBJECT_SYMBOL_READ_FAILED')
+    defined=set();undefined=set()
+    for line in result.stdout.splitlines():
+        fields=line.split()
+        if len(fields)<2:continue
+        kind_index=next((i for i,v in enumerate(fields[:-1]) if v in ('U','T','D','B','S','C','A')),None)
+        if kind_index is None:continue
+        kind,name=fields[kind_index:kind_index+2]
+        if name.startswith('_'):name=name[1:]
+        (undefined if kind=='U' else defined).add(name)
+    if not defined:raise ValueError('C_HOST_OBJECT_SYMBOLS_REQUIRED')
+    return {'defined':defined,'undefined':undefined}
 
 
 def object_symbols(path):

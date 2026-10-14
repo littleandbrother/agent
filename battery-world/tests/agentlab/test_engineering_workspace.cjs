@@ -44,3 +44,11 @@ assert.equal(M.belongs(curated[2],'mechanical'),false,'PCB GLB stays in PCB when
 assert.equal(M.views({files:curated,results:[]},'pcb')[0].f.id,'historical-board');
 assert.equal(S.fileLabel(curated[0]),'Native assembly');
 assert.equal(S.verdict({reference_only:true,design_status:'PASS'}),'历史参考 · 待适配','reference badge cannot turn into current acceptance');
+
+const current={id:'native-current',name:'PCB1.epcb2',candidate_id:'D-current',domain:'circuit',sections:['pcb'],integrity:true};
+const candidate={...snapshot,preferred_scope:'candidate',candidate:{design_id:'D-current',label:'已提交候选',verdict:{passed:false,stages:[]}},files:[...files,current],results:[...snapshot.results,{id:'candidate-row',candidate_id:'D-current',files:[current],domain:'circuit'}]};
+assert.equal(S.preferredScope(candidate),'candidate','frozen candidate is the default scope');
+assert.deepEqual(S.scoped(candidate,'candidate').files.map(f=>f.id),['native-current'],'current candidate never mixes old per-kind files');
+assert.equal(S.scoped(candidate,'candidate').verdict.passed,false,'preview publication retains engineering failure');
+assert.equal(M.belongs({name:'P1.esch2'},'schematic'),true);
+assert.equal(M.belongs({name:'PCB1.epcb2'},'pcb'),true);

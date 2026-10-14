@@ -3,7 +3,7 @@
   "plugins": [
     {
       "id": "bf-product",
-      "version": "1.0.0",
+      "version": "1.1.1",
       "adapter": "bf-product-v1",
       "tools": [
         "bf_product",
@@ -30,7 +30,7 @@
     },
     {
       "id": "bf-easyeda",
-      "version": "1.0.0",
+      "version": "1.3.0",
       "adapter": "easyeda-typed-v1",
       "tools": [
         "bf_eda"
@@ -40,18 +40,20 @@
         {
           "id": "easyeda-agent",
           "description": "用当前 bf_eda typed CLI 制作与回读原理图、器件、BOM 和引脚网络。",
-          "path": "skills/easyeda-agent/SKILL.md"
+          "path": "skills/easyeda-agent/SKILL.md",
+          "upstream_skill": "vendor/easyeda-typed/SKILL.md"
         },
         {
           "id": "easyeda-pcb-routing",
           "description": "用 typed EasyEDA 完成板框、布局、布线与保存回读后的原生 DRC。",
           "path": "skills/easyeda-pcb-routing/SKILL.md"
         }
-      ]
+      ],
+      "runtime_policy": "desktop-local-v1"
     },
     {
       "id": "bf-multiphysics",
-      "version": "1.0.0",
+      "version": "1.1.2",
       "adapter": "bf-engineering-v1",
       "tools": [
         "bf_engineering"

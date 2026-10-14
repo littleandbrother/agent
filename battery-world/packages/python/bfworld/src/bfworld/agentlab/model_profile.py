@@ -7,12 +7,28 @@ ENGINEERING = {'version': 'engineering-reasoning-v1', 'thinking': 'enabled', 're
                'max_output_tokens': 32768, 'request_bytes': 256000, 'target_bytes': 220000}
 COMPACT = {**ENGINEERING, 'version': 'engineering-reasoning-compact-v2',
            'request_bytes': 160000, 'target_bytes': 120000, 'compact_state': True}
+OUTPUT64 = {**ENGINEERING, 'version': 'engineering-reasoning-output64-v3',
+            'max_output_tokens': 65536}
+ACTIVE = {**OUTPUT64, 'version': 'engineering-reasoning-active-context-v4',
+          'request_bytes': 1048576}
+EFFICIENT = {**ACTIVE, 'version': 'engineering-reasoning-efficient-v5',
+             'aggregate_closed_continuations': True, 'deduplicate_skills': True}
 
 
 def named(name):
-    if not isinstance(name, str) or name not in (ENGINEERING['version'], COMPACT['version']):
+    profiles = {p['version']: p for p in (ENGINEERING, COMPACT, OUTPUT64, ACTIVE, EFFICIENT)}
+    if not isinstance(name, str) or name not in profiles:
         raise ValueError('MODEL_PROFILE_INVALID')
-    return dict(COMPACT if name == COMPACT['version'] else ENGINEERING)
+    return dict(profiles[name])
+
+
+def qualified_owner(current, qualification, owner):
+    """Only an operator-published qualification can opt an original owner in."""
+    overrides = qualification.get('original_owner_output_profiles', {})
+    if not isinstance(overrides, dict):
+        raise ValueError('MODEL_PROFILE_OVERRIDE_INVALID')
+    version = overrides.get(owner)
+    return named(version) if version is not None else dict(current)
 
 
 def for_owner(db, owner):

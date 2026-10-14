@@ -191,7 +191,12 @@ class References:
         with self.store.connect() as db:
             context = db.execute('SELECT config FROM chat_contexts WHERE owner=?', (owner,)).fetchone()
             grant = db.execute('SELECT expires FROM grants WHERE owner=?', (owner,)).fetchone()
-        if not context or 'bf_reference' not in json.loads(context['config'])['tools'] or not grant or grant['expires'] < time.time():
+            from .budget_policy import unbounded_time
+            wall_authorized = unbounded_time(db, owner)
+        # A current explicit wall-time authority supplements an existing grant;
+        # it never creates or extends historical grants, leases or accounting.
+        if (not context or 'bf_reference' not in json.loads(context['config'])['tools'] or
+                not grant or (not wall_authorized and grant['expires'] < time.time())):
             raise PermissionError('REFERENCE_TOOL_NOT_ENABLED')
 
     def put(self, owner, kind, payload):

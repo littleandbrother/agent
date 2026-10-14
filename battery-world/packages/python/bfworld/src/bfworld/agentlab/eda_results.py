@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 from .store import identity
 from .native_outcome import summarize,documents
 
-COMMANDS={'sch':{'check','bridge-check','module-check','netlist','export','save'},
+COMMANDS={'sch':{'check','bridge-check','module-check','netlist','export','export-image','save'},
           'pcb':{'drc','layout-lint','export','save','autoroute','outline-get'},
           'bom':{'export','list','get'}}
 
@@ -39,12 +39,15 @@ class EdaResults:
         root=(workspace/'.easyeda/artifacts').resolve()
         if workspace.is_symlink() or not root.is_relative_to(workspace.resolve()):return {}
         found={}
+        paths=[]
         for document in documents(receipt.get('stdout','')):
             result=document.get('result')
-            if not isinstance(result,dict) or not isinstance(result.get('artifactPath'),str):continue
-            path=Path(result['artifactPath']);resolved=path.resolve()
+            if isinstance(result,dict) and isinstance(result.get('artifactPath'),str):paths.append(result['artifactPath'])
+            paths.extend(a['path'] for a in document.get('artifacts',[]) if isinstance(a,dict) and isinstance(a.get('path'),str))
+        for name in paths:
+            path=Path(name);resolved=path.resolve()
             if not resolved.is_relative_to(root) or path.is_symlink() or not path.is_file():continue
-            if path.suffix.lower() not in {'.enet','.epro2','.epru','.zip','.json','.svg','.pdf','.png','.dsn','.ses','.csv','.glb'}:continue
+            if path.suffix.lower() not in {'.enet','.epro2','.epru','.eprj3','.esch2','.epcb2','.zip','.json','.svg','.pdf','.png','.dsn','.ses','.csv','.glb'}:continue
             stat=path.stat()
             if stat.st_size>128*1024*1024:continue
             key=(str(path),stat.st_ino,stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)

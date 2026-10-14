@@ -16,6 +16,7 @@ class Conversations:
     def __init__(self, app):
         self.app=app;self.store=app.store;self.home=self.store.root.parent
         self.lock=threading.RLock();self.processes={};self.starting=set();self.port=8768
+        self._trace_cursors={};self._trace_locks={}
         with self.store.connect() as db:
             db.executescript("""
             CREATE TABLE IF NOT EXISTS conversations(id TEXT PRIMARY KEY, operation TEXT UNIQUE, title TEXT, task_id TEXT, created REAL, updated REAL, status TEXT, harness TEXT, error TEXT);
@@ -161,6 +162,9 @@ class Conversations:
         if hasattr(self.app,'design_lab'):
             with self.store.connect() as db:design_task=db.execute('SELECT 1 FROM design_tasks WHERE owner=?',(cid,)).fetchone()
             if design_task:
+                from .design_lab.paper_candidate import bound
+                if bound(self.app.design_lab,cid):
+                    raise ValueError('PAPER_CANDIDATE_USE_ORIGINAL_QUEUE')
                 from .design_lab.controller import start
                 start(self.app.design_lab,cid)
                 return
@@ -203,21 +207,46 @@ class Conversations:
                 self.state(cid,'INTERRUPTED','消息发送中断，请检查对话后再补充消息');break
 
     def ingest(self,cid,execution_state=True):
+        # A native watcher and a final drain may overlap. Serialize each owner,
+        # without holding the shared conversation lock while reading its trace.
+        with self.lock:guard=self._trace_locks.setdefault(cid,threading.RLock())
+        with guard:self._ingest_append(cid,execution_state)
+
+    def _ingest_append(self,cid,execution_state):
         path=self.home/'sessions'/cid/'trace.jsonl'
         if not path.exists():return
-        content=path.read_text()
-        lines=content.splitlines()
-        if content and not content.endswith('\n'):lines=lines[:-1]
-        for i,line in enumerate(lines):
+        signature,offset,index,witness=self._trace_cursors.get(cid,(None,0,0,b''))
+        with path.open('rb') as stream:
+            stat=path.stat();current=(stat.st_dev,stat.st_ino)
+            if signature is not None and (signature!=current or stat.st_size<offset):
+                raise ValueError('TRACE_HISTORY_CHANGED')
+            stream.seek(max(0,offset-len(witness)))
+            if stream.read(len(witness))!=witness:raise ValueError('TRACE_HISTORY_CHANGED')
+            stream.seek(offset)
+            suffix=stream.read()
+        boundary=suffix.rfind(b'\n')+1
+        if not boundary:return
+        lines=suffix[:boundary].splitlines(keepends=True)
+        for i,raw in enumerate(lines,index):
+            line=raw.decode('utf-8')
             try:data=json.loads(line)
-            except json.JSONDecodeError:continue
+            except json.JSONDecodeError:data=None
+            if data is not None:self._ingest_event(cid,i,data,execution_state)
+            # Commit only after the event and its state effects complete. A
+            # partial UTF8/JSON line stays unread until its terminating newline.
+            offset+=len(raw)
+            with path.open('rb') as stream:
+                stream.seek(max(0,offset-64));witness=stream.read(min(offset,64))
+            self._trace_cursors[cid]=(current,offset,i+1,witness)
+
+    def _ingest_event(self,cid,i,data,execution_state):
             # Exact context is in developer mode, not the conversation feed.
-            if not self.event(cid,'trace-'+str(i),data):continue
+            if not self.event(cid,'trace-'+str(i),data):return
             if data.get('type')=='input_accepted':
                 with self.store.connect() as db:db.execute("UPDATE chat_messages SET status='ACCEPTED' WHERE id=? AND conversation=? AND status='SENT'",(data['message_id'],cid))
             # Recovery must first archive unseen historical events. A previous
             # process's error/idle must never terminate the newly launched one.
-            if not execution_state:continue
+            if not execution_state:return
             # A queued follow-up can start inside the same Pi process after a
             # failed turn. The previous turn's error is historical, not the
             # state of this new response. Keep the error event in the trace.

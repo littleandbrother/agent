@@ -14,10 +14,16 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
+import { createBoundedBashTool } from "./bounded-bash.ts";
+import { inspectCurrentContext } from "./current-context.ts";
 import { assertEdaExecution } from "./eda-outcome.ts";
 import { waitForEngineeringJob } from "./engineering-wait.ts";
+import { bindPaperAction, finishPaperRound, paperCandidateTool } from "./paper-candidate.ts";
+import { ReadProgress } from "./read-progress.ts";
 import { digest as methodDigest, methodInstructions, profile as methodProfile } from "./research-method.ts";
-import { loadFrozenSkills } from "./skill-resources.ts";
+import { loadFrozenSkills, startupSkillIds } from "./skill-resources.ts";
+import { boundedToolReply } from "./tool-reply.ts";
+import { workspaceTool } from "./workspace-inspect.ts";
 
 const input = readline.createInterface({ input: process.stdin });
 const commands: any[] = [];
@@ -68,7 +74,8 @@ let state = fs.existsSync(path.join(cwd, "state.json"))
 	? JSON.parse(fs.readFileSync(path.join(cwd, "state.json"), "utf8"))
 	: solver.initialState();
 const save = () => fs.writeFileSync(path.join(cwd, "state.json"), JSON.stringify(state, null, 2));
-const api = async (route: string, body?: unknown, bounded = false) => {
+let candidateLifecycle = false;
+const rawApi = async (route: string, body?: unknown, bounded = false) => {
 	const response = await fetch(config.service + route, {
 		method: body === undefined ? "GET" : "POST",
 		headers: {
@@ -83,6 +90,8 @@ const api = async (route: string, body?: unknown, bounded = false) => {
 	if (!response.ok) throw new Error(value.error ?? "SERVICE_ERROR");
 	return value;
 };
+const api = async (route: string, body?: unknown, bounded = false) =>
+	rawApi(route, candidateLifecycle ? await bindPaperAction(rawApi, route, body) : body, bounded);
 const engineeringApi = (route: string, body?: unknown) => api(route, body, true);
 const briefJob = (j: any) => ({
 	...j,
@@ -152,39 +161,7 @@ const promptState = {
 			}
 		: undefined,
 };
-const reply = (value: any) => {
-	const text = JSON.stringify(value);
-	if (Buffer.byteLength(text) <= 24000) return { content: [{ type: "text" as const, text }], details: {} };
-	const digest = crypto.createHash("sha256").update(text).digest("hex");
-	const folder = path.join(cwd, "tool-records");
-	if (
-		fs.existsSync(folder) &&
-		(fs.lstatSync(folder).isSymbolicLink() || !fs.realpathSync(folder).startsWith(fs.realpathSync(cwd) + path.sep))
-	)
-		throw Error("TOOL_RECORD_PATH_DENIED");
-	fs.mkdirSync(folder, { recursive: true });
-	const target = path.join(folder, `${digest}.json`);
-	if (fs.existsSync(target) && (fs.lstatSync(target).isSymbolicLink() || sha(target) !== digest))
-		throw Error("TOOL_RECORD_CONFLICT");
-	if (!fs.existsSync(target)) fs.writeFileSync(target, text, { flag: "wx" });
-	const summary = {
-		record_file: path.relative(cwd, target),
-		sha256: digest,
-		bytes: Buffer.byteLength(text),
-		instruction: "Full response saved locally; read selected fields with Python/read, do not print the entire file.",
-		id: value.id,
-		status: value.status,
-		error: value.error,
-		revision: value.revision,
-		hashes: value.hashes,
-		current_revision: value.current?.revision,
-		source_messages: value.messages?.map((m: any) => ({ id: m.id, text: m.text })),
-		checks: value.checks,
-		artifacts: value.result?.artifacts,
-		digital_checks_passed: value.result?.digital_checks_passed,
-	};
-	return { content: [{ type: "text" as const, text: JSON.stringify(summary) }], details: {} };
-};
+const reply = (value: unknown) => boundedToolReply(cwd, value);
 const files = () =>
 	Object.fromEntries(
 		["design.json", "policy.py"].map((name) => [name, fs.readFileSync(path.join(cwd, name), "utf8")]),
@@ -220,10 +197,14 @@ if (config.mode === "solve") {
 	save();
 }
 const productContext = await api("/api/product");
+const initialCandidate = (await api("/api/product-context")).candidate_lifecycle;
+candidateLifecycle = Boolean(initialCandidate);
 const engineeringEnabled = !config.sharedContext?.tools || config.sharedContext.tools.includes("bf_engineering");
 const simulationTask = engineeringEnabled ? (await api("/api/engineering/task")).binding : null;
 if (productContext.binding) config.taskId = productContext.binding.task_id;
 const tools: any[] = [
+	createBoundedBashTool(cwd),
+	workspaceTool(cwd, reply),
 	defineTool({
 		name: "bf_skill",
 		label: "Frozen product skills",
@@ -403,7 +384,7 @@ tools.push(
 		name: "bf_eda",
 		label: "EasyEDA native engineering",
 		description:
-			"Operate the bound independent EasyEDA project through typed CLI. Read skill; offset and limit are CHARACTER counts (default 12000), not lines; use next_offset for remaining text. command argv omit easyeda, use stable operation_id. Server pins project; all file paths workspace-relative. Commands run serially; job waits for the original job without model polling, unless wait_for_completion=false. No arbitrary JS or GUI fallback. Native receipts copied into eda-receipts for full readback.",
+			"Typed local EasyEDA CLI for the bound project. inspect gives exact binding, command reference and saved receipts. Activate easyeda-agent via bf_skill; load its named reference for the operation. command needs argv (omit easyeda) and stable operation_id; paths workspace-relative. job waits without model calls. Parsed native result and complete receipt are returned; UNKNOWN requires readback.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -419,6 +400,9 @@ tools.push(
 			offset: Type.Optional(Type.Integer()),
 			limit: Type.Optional(Type.Integer()),
 			wait_for_completion: Type.Optional(Type.Boolean()),
+			decision_use: Type.Optional(
+				Type.String({ description: "For a meaningful native write, what judgment will this action support?" }),
+			),
 		}),
 		async execute(_id, args, signal) {
 			if (args.action === "job") {
@@ -451,11 +435,12 @@ tools.push(
 		name: "bf_product",
 		label: "Product proposal",
 		description:
-			"Inspect product source IDs, publish provisional proposals, edit assembly, publish files, or inspect/bind/package the engineering delivery contract. delivery_bind uses delivery_task_id, current assembly revision, published file_ids and completed job_ids; it cannot submit PASS. Unknown users receive explicit assumptions and continued exploration, not mandatory questions.",
+			"Inspect product source IDs, publish provisional proposals, edit assembly, publish files, or inspect/bind/package the engineering delivery contract. context_inspect (only action; no other fields) reads current owner-bound task, job and native receipt references during a long turn or after compaction; receipt paths/hashes are facts, not a new native read or acceptance. delivery_bind uses delivery_task_id, current assembly revision, published file_ids and completed job_ids; it cannot submit PASS. Unknown users receive explicit assumptions and continued exploration, not mandatory questions.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
 				Type.Literal("inspect"),
+				Type.Literal("context_inspect"),
 				Type.Literal("propose"),
 				Type.Literal("ask"),
 				Type.Literal("bind"),
@@ -517,8 +502,10 @@ tools.push(
 			),
 			task_id: Type.Optional(Type.String()),
 			rationale: Type.Optional(Type.String()),
+			decision_use: Type.Optional(Type.String()),
 		}),
 		async execute(_id, args) {
+			if (args.action === "context_inspect") return reply(await inspectCurrentContext(args, api));
 			if (args.action === "analysis_submit") {
 				const result = await engineeringApi("/api/responsibility-review", {
 					action: "submit",
@@ -564,6 +551,7 @@ tools.push(
 						source_message_id: args.source_message_id,
 						operation_id: args.operation_id,
 						expected_revision: args.expected_revision,
+						decision_use: args.decision_use,
 						payload: JSON.parse(fs.readFileSync(value, "utf8")),
 					}),
 				);
@@ -583,6 +571,10 @@ tools.push(
 						revision: args.revision,
 						path: args.file_path,
 						kind: args.file_kind,
+						operation_id:
+							args.operation_id ??
+							`publish-${sha(path.resolve(cwd, args.file_path)).slice(0, 32)}-${args.revision}`,
+						decision_use: args.decision_use,
 					}),
 				);
 			}
@@ -625,7 +617,7 @@ tools.push(
 		name: "bf_engineering",
 		label: "Engineering tools",
 		description:
-			"Inspect capabilities and the bound task, read a skill, run native engineering, poll a job, download a verified artifact, or submit a final evaluated job with job_id and rationale. door-selfpower is the versioned D5 extractor/reserve-gate engine, requires a qualified no-Agent reference, primary-source checks and its own skill; D4 boards remain stale. door-system accepts frozen D4 full-cycle bracket/polarity/storage revisions; read its skill, reference primary papers with bf_reference, and inspect its design identity and drive ledger. closed-simulation accepts parameters.candidate and confirmation; a bound task overrides the generic parameter list. Read its skill and distinguish run_status, nominal prediction, ranking eligibility and product acceptance. For product-model use parameters.assembly_revision and OMIT design_revision. Large responses contain _response: use action=response_view with response_id and response_sha256, then next_offset to read all pages. Native files require action=artifact before local reading. scientific-figures accepts parameters.plan_path, snapshots source hashes and units, and preserves missing panels; read its skill before building a plan. Use individual or per-group artifacts for inspection. Figure availability is not replication or product acceptance. Digital checks do not imply hardware qualification.",
+			"inspect lists current engines and input contracts. Load relevant methods via bf_skill. run(engine=engineering-project, parameters={project_path}, operation_id, decision_use) executes frozen CAD/SPICE/target firmware. job waits for the original eng-* job without model polling. artifact downloads hashed native files. artifact_view selects waveform channels/time/rows. response_view reads exact _response by response_id/response_sha256, fields or pages. submit records an evaluated job and rationale. Other engine contracts are available through inspect and their skills.",
 		executionMode: "sequential",
 		parameters: Type.Object({
 			action: Type.Union([
@@ -668,6 +660,7 @@ tools.push(
 			artifact_name: Type.Optional(Type.String()),
 			response_id: Type.Optional(Type.String()),
 			response_sha256: Type.Optional(Type.String()),
+			fields: Type.Optional(Type.Array(Type.String())),
 			offset: Type.Optional(Type.Integer({ minimum: 0 })),
 			limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 16000 })),
 			channels: Type.Optional(Type.Array(Type.String())),
@@ -675,6 +668,7 @@ tools.push(
 			time_to: Type.Optional(Type.Number()),
 			operation_id: Type.Optional(Type.String()),
 			rationale: Type.Optional(Type.String()),
+			decision_use: Type.Optional(Type.String()),
 			before_job_id: Type.Optional(Type.String()),
 			requested_kind: Type.Optional(
 				Type.Union([Type.Literal("parameter_refinement"), Type.Literal("architecture_recomposition")]),
@@ -832,9 +826,12 @@ const executionInstructions = productContext.binding
 用户要求执行时，简短说明动作后立即调用工具；不要把“准备修改”“接下来检查”作为最终交付。复用自己已有文件，对实际失败结果做修改、重新运行和读回，直到要求完成或明确的外部阻塞。
 每次原生工程任务等待终态后核对检查，不把进程成功当成设计通过。交付说明和源码须发布到当前产品版本。禁止修改检查器或放宽既定要求来制造通过。
 模型费用、请求数、token 和时间以上游服务账本与实际返回为准；不得绕过或重置。当前状态摘要：${JSON.stringify(promptState)}`;
-const basePrompt = simulationTask
-	? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n${simulationTask.task?.engine === "door-system" ? "先用 bf_reference 搜索并获取原论文/数据表，核对电容节点、单位和模型假设，形成依据表；检索失败如实记录，不自动改变冻结条件。" : ""}先读取原生失败依据，自主提出实际设计修改并执行。使用 bf_engineering 的 inspect/skill/run/job/artifact_view/response_view/record_revision/submit。大响应的 _response 可用 response_view 分页读回，提供 response_id 和 response_sha256，沿 next_offset 继续。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
-	: productHarness.productPrompt(executionInstructions, startupProduct(productContext));
+if (candidateLifecycle) tools.push(paperCandidateTool(api, reply));
+const basePrompt = candidateLifecycle
+	? `你是原P01的BF设计者。${initialCandidate.contract.goal}\n任务和独立验收范围以bf_design的冻结contract为准。先inspect恢复候选，原生操作通过现有工具执行，写入须说明decision_use，输入变化后freeze新候选。UNKNOWN先查询，禁止重试或绕过；旧阶段文档保留为历史。由你选择器件、策略、实验和修订。每轮依据真实结果用intent记录CONTINUE、BLOCKED或REJECT及依据/计划；adopt不等于验收。原输入未变的成功作业复用。不要将代理模型、文件门或构建通过称为整机/物理通过。`
+	: simulationTask
+		? `你正在进行固定器件家族的设计先导实验。以下任务与评价条件由后端冻结：${JSON.stringify(simulationTask)}\n${simulationTask.task?.engine === "door-system" ? "先用 bf_reference 搜索并获取原论文/数据表，核对电容节点、单位和模型假设，形成依据表；检索失败如实记录，不自动改变冻结条件。" : ""}先读取原生失败依据，自主提出实际设计修改并执行。使用 bf_engineering 的 inspect/skill/run/job/artifact_view/response_view/record_revision/submit。大响应的 _response 可用 response_view 分页读回，提供 response_id 和 response_sha256，沿 next_offset 继续。artifact_view 返回 JSON/源码的文本分页；CSV 支持 channels、time_from、time_to 和行 offset。省略候选字段采用冻结基线。每个候选使用唯一 operation_id；等待原 job 完成，不因等待重复派发。保持简短中文公开说明。候选预算用尽或得到可辩护结论时，用 submit、job_id、rationale 封存一个已运行候选；可以如实提交失败，不允许制造成功。模型内预测不代表物理合格。`
+		: productHarness.productPrompt(executionInstructions, startupProduct(productContext));
 
 if (simulationTask)
 	console.log(
@@ -888,6 +885,7 @@ const availableTools = simulationTask
 				...selectedTools,
 				"bf_product",
 				"bf_eda",
+				...(candidateLifecycle ? ["bf_workspace"] : []),
 				...(config.resourceRoot && selectedTools.includes("bf_engineering") ? ["bf_skill"] : []),
 			]),
 		];
@@ -936,12 +934,18 @@ const frozenSkills =
 		? loadFrozenSkills(config.resourceRoot, config.sourceManifest.resource_manifest.sha256)
 		: [];
 if (frozenSkills.length && availableTools.includes("bf_skill")) {
-	await api("/api/skills", { action: "activate", skill_id: "bf-task-recovery" });
+	const catalog = await api("/api/skills", { action: "catalog" });
+	const activated = startupSkillIds(frozenSkills, availableTools, [
+		...catalog.active.map((x: { id: string }) => x.id),
+		...(catalog.previous_active ?? []),
+	]);
+	for (const skill_id of activated) await api("/api/skills", { action: "activate", skill_id });
 	console.log(
 		JSON.stringify({
 			type: "skill_catalog_loaded",
 			manifest_sha256: config.sourceManifest.resource_manifest.sha256,
 			ids: frozenSkills.map((skill) => skill.name),
+			activated,
 		}),
 	);
 }
@@ -983,9 +987,26 @@ const instance = crypto.randomUUID();
 let requireOneDeliveryAction = false;
 let requireAnalysisActions = false;
 let analysisSubmitted = false;
+const readProgress = new ReadProgress();
+const startedReads = new Map<string, { name: string; args: Record<string, unknown> }>();
+let currentFactState = JSON.stringify(
+	initialCandidate
+		? [
+				initialCandidate.working_design,
+				initialCandidate.revision,
+				initialCandidate.checks,
+				initialCandidate.pending_operations,
+			]
+		: [],
+);
 const originalPayload = session.agent.onPayload;
 session.agent.onPayload = async (payload, model) => {
-	const value = (await originalPayload?.(payload, model)) ?? payload;
+	let value = (await originalPayload?.(payload, model)) ?? payload;
+	const notice = readProgress.takeNotice();
+	if (notice) {
+		const body = value as { messages: unknown[] };
+		value = { ...body, messages: [...body.messages, { role: "system", content: notice }] };
+	}
 	if (requireOneDeliveryAction || requireAnalysisActions) {
 		requireOneDeliveryAction = false;
 		// DeepSeek thinking supports tool calls but rejects required/named choices.
@@ -1018,6 +1039,26 @@ process.on("SIGINT", () => {
 	void stop();
 });
 session.subscribe((event) => {
+	if (event.type === "tool_execution_start")
+		startedReads.set(event.toolCallId, { name: event.toolName, args: event.args as Record<string, unknown> });
+	if (event.type === "tool_execution_end") {
+		const started = startedReads.get(event.toolCallId);
+		if (started) {
+			if (started.name === "bf_design" && started.args.action === "inspect") {
+				try {
+					const block = event.result.content.find((x: { type: string; text?: string }) => x.type === "text");
+					if (block?.type === "text") {
+						const v = JSON.parse(block.text);
+						currentFactState = JSON.stringify([v.working_design, v.revision, v.checks, v.pending_operations]);
+					}
+				} catch {
+					/* Failed reads do not create a new fact state. */
+				}
+			}
+			if (!event.isError) readProgress.observe(started.name, started.args, event.result, currentFactState);
+			startedReads.delete(event.toolCallId);
+		}
+	}
 	if (event.type === "message_start" && (event.message as any).role === "assistant") {
 		assistantId++;
 		emit({ type: "assistant_start", id: `${instance}-${assistantId}` });
@@ -1072,9 +1113,17 @@ const execute = async () => {
 				await session.prompt(`${productHarness.contextPrompt(packet)}\n用户消息：${cmd.text}`, {
 					expandPromptTemplates: false,
 				});
+				if (candidateLifecycle && !closing && !userStopped && !responseError && !responseTruncated) {
+					const round = await finishPaperRound(api, packet.candidate_lifecycle);
+					emit({ type: "candidate_round_finished", message_id: cmd.id, ...round });
+				}
 				// Explicit operator delivery goals only. Same message/lease/cost
 				// accounting: this cannot reset a paid or wall-clock budget.
-				for (let n = 0; n < 12 && !closing && !userStopped && !responseError && !responseTruncated; n++) {
+				for (
+					let n = 0;
+					!candidateLifecycle && n < 12 && !closing && !userStopped && !responseError && !responseTruncated;
+					n++
+				) {
 					const observation = (await api("/api/deliverables")).verdict;
 					if (!observation || analysisSubmitted) break;
 					emit({ type: "delivery_observation", message_id: cmd.id, observation });
@@ -1103,7 +1152,7 @@ const execute = async () => {
 						{ expandPromptTemplates: false },
 					);
 				}
-				if (!closing && !userStopped && !responseError && !responseTruncated) {
+				if (!candidateLifecycle && !closing && !userStopped && !responseError && !responseTruncated) {
 					const finalObservation = (await api("/api/deliverables")).verdict;
 					if (!analysisSubmitted && finalObservation?.auto_continue && !finalObservation.passed) {
 						emit({ type: "delivery_observation", message_id: cmd.id, observation: finalObservation });

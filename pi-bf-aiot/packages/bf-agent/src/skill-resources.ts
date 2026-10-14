@@ -30,6 +30,18 @@ function canonical(value: unknown): string {
 	return JSON.stringify(value);
 }
 
+export function startupSkillIds(
+	skills: readonly Pick<Skill, "name">[],
+	tools: readonly string[],
+	restored: readonly string[] = [],
+): string[] {
+	if (!tools.includes("bf_skill")) return [];
+	const ids = new Set(skills.map((skill) => skill.name));
+	const required = [...new Set(["bf-task-recovery", ...restored])];
+	if (required.some((id) => !ids.has(id))) throw Error("REQUIRED_TOOL_SKILL_MISSING");
+	return required;
+}
+
 export function loadFrozenSkills(root: string, expected: string): Skill[] {
 	const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.json"), "utf8")) as Manifest;
 	const { sha256, ...body } = manifest;

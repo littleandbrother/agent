@@ -15,10 +15,10 @@ from ..store import canonical, identity
 from .contracts import sha, sealed
 
 
-def freeze(lab):
+def freeze(lab,native=False):
     from .resources import bundle
     from ..skill_resources import freeze_resources
-    resources=bundle()
+    resources=bundle(native=native)
     source=PI/'packages/bf-agent'
     result=subprocess.run([str(PI/'node_modules/.bin/tsgo'),'-p',str(source/'tsconfig.json')],
                           capture_output=True,text=True,timeout=60)
@@ -31,7 +31,7 @@ def freeze(lab):
               'files':code,'pi_lock_sha256':sha(PI/'package-lock.json'),
               'python_bindings':{p.name:sha(p) for p in sorted(apparatus.glob('*.py'))},
               'context_bindings':{n:sha(apparatus.parent/n) for n in
-                    ('provider.py','context.py','model_profile.py','budget_policy.py','recovery.py','skill_resources.py')},
+                    ('provider.py','context.py','model_profile.py','budget_policy.py','recovery.py','skill_resources.py','engineering.py','runtime_config.py')},
               'tools':['bf_design'],'skills':'versioned-on-demand-design-lab-resources',
               'resource_manifest':resources[0],
               'outer_controller':'durable-intent-and-fact-events-only',
@@ -63,7 +63,9 @@ def start(lab,owner,dry_run=False):
         if lab.app.provider.recovery.unknown_blockers(db,owner):raise ValueError('PROVIDER_USAGE_UNKNOWN_STOP')
     if not dry_run:
         from .qualification import validation_id
-        if validation_id()!=task['contract']['validation_id']:raise ValueError('EXECUTOR_VALIDATION_CHANGED_RECHECK_REQUIRED')
+        from .coupled_c import validation_id as native_validation_id
+        actual_validation=native_validation_id() if task['environment'].get('mode')=='native-coupled-C' else validation_id()
+        if actual_validation!=task['contract']['validation_id']:raise ValueError('EXECUTOR_VALIDATION_CHANGED_RECHECK_REQUIRED')
         path=lab.root/'qualifications'/task['contract']['validation_id']/'qualification.json'
         qualification=json.loads(path.read_text())
         if (qualification['environment_id']!=task['environment']['environment_id'] or not qualification['passed']
@@ -87,7 +89,7 @@ def run(lab,owner,dry_run):
                  'error':type(exc).__name__+': '+str(exc)[:2000],
                  'failure_scope':'controller-startup','fee_ledger_preserved':True}
         sealed(attempt/'receipt.json',receipt)
-        (output/'receipt.json').write_text(canonical(receipt))
+        launcher.write_session_receipt(output/'receipt.json',receipt)
         lab.app.conversations.state(owner,'FAILED',receipt['error'])
         lab.event(owner,'controller_finished',{'status':'FAILED',
             'receipt_path':str(attempt/'receipt.json'),'receipt_sha256':sha(attempt/'receipt.json'),
@@ -98,7 +100,7 @@ def _run(lab,owner,dry_run):
     app=lab.app;home=lab.store.root.parent
     from ..chat import conversation_slot
     with conversation_slot(home,owner):
-        task=lab.task(owner);harness,manifest=freeze(lab)
+        task=lab.task(owner);harness,manifest=freeze(lab,native=task['environment'].get('mode')=='native-coupled-C')
         workspace=home/'participants'/owner
         workspace.mkdir(parents=True,exist_ok=True);(workspace/'.tmp').mkdir(exist_ok=True)
         output=home/'sessions'/owner;output.mkdir(parents=True,exist_ok=True)
@@ -170,7 +172,7 @@ def _run(lab,owner,dry_run):
                 receipt['trace_sha256']=sha(attempt/'trace-sealed.jsonl')
             receipt['ended']=time.time();sealed(attempt/'receipt.json',receipt)
             # This mutable pointer is deliberately distinguished from sealed attempts.
-            (output/'receipt.json').write_text(canonical(receipt))
+            launcher.write_session_receipt(output/'receipt.json',receipt)
             app.conversations.processes.pop(owner,None);app.conversations.starting.discard(owner)
             lab.event(owner,'controller_finished',{'status':receipt['status'],'receipt_path':str(attempt/'receipt.json'),
                       'receipt_sha256':sha(attempt/'receipt.json'),'submitted':bool(receipt.get('submission'))})

@@ -19,6 +19,7 @@ from . import product_build, deployment, tinyml, event_design, references, engin
 
 TEMPLATES = Path(__file__).with_name('engineering_templates')
 from .runtime_config import BLENDER, COMSOL, HOME_ROOT
+from .design_lab.native_slot import native_slot
 SPECS = {
     'blender': {'template': 'enclosure-v1', 'defaults': {'length_mm':80., 'width_mm':50., 'height_mm':25., 'wall_mm':2.},
                 'ranges': {'length_mm':(30,300),'width_mm':(25,300),'height_mm':(15,150),'wall_mm':(1,6)},
@@ -95,7 +96,9 @@ class Engineering:
         with self.store.connect() as db:
             row=db.execute('SELECT config FROM chat_contexts WHERE owner=?',(owner,)).fetchone()
             grant=db.execute('SELECT expires FROM grants WHERE owner=?',(owner,)).fetchone()
-        if not row or 'bf_engineering' not in json.loads(row['config'])['tools'] or not grant or grant['expires']<time.time():
+            from .budget_policy import unbounded_time
+            wall_authorized=unbounded_time(db,owner)
+        if not row or 'bf_engineering' not in json.loads(row['config'])['tools'] or not grant or (not wall_authorized and grant['expires']<time.time()):
             raise PermissionError('ENGINEERING_TOOL_NOT_ENABLED')
 
     def catalog(self,owner=None):
@@ -259,7 +262,7 @@ class Engineering:
         if code:raise RuntimeError('ENGINEERING_PROCESS_EXIT_'+str(code))
 
     def run(self,key,owner):
-        with self.lock:
+        with self.lock,native_slot():
             try:
                 directory=self.root/key;directory.mkdir()
                 job=self.get(owner,key);p=job['parameters'];deadline=time.monotonic()+(12000 if job['engine']=='door-selfpower' else 3600 if job['engine'] in ('closed-simulation','door-system') else 600 if job['engine']=='scientific-figures' else 900 if job['engine']=='product-model' else 120 if job['engine']=='tinyml-nas' else 180)

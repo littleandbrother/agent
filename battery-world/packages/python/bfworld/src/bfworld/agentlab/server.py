@@ -362,12 +362,22 @@ def handler(workbench,paper_sessions=None):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 query=parse_qs(urlparse(self.path).query)
+                if path in ('/api/execution-progress','/api/execution-progress/artifact'):
+                    if actor['role'] != 'operator':
+                        raise PermissionError('OPERATOR_ONLY_PROGRESS_VIEW')
+                    from .execution_progress import snapshot, public_artifact
+                    target = query.get('session', [owner])[0]
+                    if path.endswith('/artifact'):
+                        file = public_artifact(workbench, papers, target, query.get('path', [''])[0])
+                        return self.reply(200, file, 'application/json; charset=utf-8')
+                    return self.reply(200, snapshot(workbench, papers, target))
                 if path in ('/api/design-lab','/api/design-lab/package'):
                     target=query.get('session_id',[owner])[0] if actor['role']=='operator' else owner
+                    source=papers.view() if actor['role']=='operator' and papers.has(target) else workbench
                     if path.endswith('/package'):
-                        package=workbench.design_lab.delivery(target)
+                        package=source.design_lab.delivery(target)
                         return self.reply(200,package,'application/zip')
-                    return self.reply(200,workbench.design_lab.view(target))
+                    return self.reply(200,source.design_lab.view(target))
                 paper_owner=papers.target(path,query) if actor['role']=='operator' else None
                 view=papers.view() if paper_owner else workbench
                 if path in ('/api/literature-learning','/api/literature-learning/artifact'):
@@ -434,7 +444,13 @@ def handler(workbench,paper_sessions=None):
                     if path=='/api/engineering/task':return self.reply(200,{'binding':view.engineering.tasks.binding(target)})
                     if path=='/api/engineering':return self.engineering_reply(target,200,{**view.engineering.catalog(target),'jobs':view.engineering.jobs(target if target!='operator' else None)})
                     parts=path.strip('/').split('/')
-                    if len(parts)==4 and parts[2]=='jobs':return self.engineering_reply(target,200,view.engineering.get(owner,parts[3],operator))
+                    if len(parts)==4 and parts[2]=='jobs':
+                        value=view.engineering.get(owner,parts[3],operator)
+                        from .design_lab import paper_candidate
+                        native_owner=value['owner']
+                        if view is workbench and paper_candidate.bound(workbench.design_lab,native_owner):
+                            value=paper_candidate.observe_native(view.design_lab,native_owner,'engineering',value)
+                        return self.engineering_reply(native_owner,200,value)
                     if len(parts)==5 and parts[2]=='jobs' and parts[4]=='artifact':
                         file=view.engineering.artifact(owner,parts[3],query.get('name',[''])[0],operator)
                         kind={'.png':'image/png','.json':'application/json','.glb':'model/gltf-binary','.csv':'text/csv','.log':'text/plain'}.get(file.suffix,'application/octet-stream')
@@ -669,7 +685,16 @@ def handler(workbench,paper_sessions=None):
                 if path=='/api/eda-cli':
                     operator=actor['role']=='operator'
                     target=body.get('session_id',owner) if operator else owner
-                    return self.engineering_reply(target,200,workbench.eda_cli.action(target,body,operator))
+                    from .design_lab import paper_candidate
+                    if paper_candidate.bound(workbench.design_lab,target) and body.get('action')=='command':
+                        if operator and not paper_candidate.readonly_eda(body):raise PermissionError('PAPER_DESIGN_MUTATION_PI_REQUIRED')
+                        value=paper_candidate.invoke(workbench.design_lab,target,'eda',body,
+                            lambda clean:workbench.eda_cli.action(target,clean,operator))
+                    else:
+                        value=workbench.eda_cli.action(target,body,operator)
+                        if body.get('action')=='job' and paper_candidate.bound(workbench.design_lab,target):
+                            value=paper_candidate.observe_native(workbench.design_lab,target,'eda',value)
+                    return self.engineering_reply(target,200,value)
                 if path=='/api/responsibility-review':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner
                     if actor['role']!='operator':workbench.engineering.authorize(owner)
@@ -708,13 +733,26 @@ def handler(workbench,paper_sessions=None):
                         if action=='eda_context':return self.reply(200,workbench.engineering.eda.context(body.get('window_id')))
                         return self.reply(200,workbench.engineering.eda.bind(target,body.get('window_id'),body.get('project_uuid'),body.get('board_uuid')))
                     if action=='skill':return self.engineering_reply(target,200,workbench.engineering.skill(target,body.get('skill_id'),actor['role']))
-                    if action=='run':return self.engineering_reply(target,202,workbench.engineering.submit(target,body,actor['role']))
+                    if action=='run':
+                        from .design_lab import paper_candidate
+                        if paper_candidate.bound(workbench.design_lab,target):
+                            if operator:raise PermissionError('PAPER_DESIGN_MUTATION_PI_REQUIRED')
+                            value=paper_candidate.invoke(workbench.design_lab,target,'engineering',body,
+                                lambda clean:workbench.engineering.submit(target,clean,actor['role']))
+                        else:value=workbench.engineering.submit(target,body,actor['role'])
+                        return self.engineering_reply(target,202,value)
                     raise ValueError('ENGINEERING_ACTION_INVALID')
                 if path=='/api/assembly':
                     target=body.get('session_id',owner) if actor['role']=='operator' else owner
                     action=body.get('action','write')
-                    if action=='write':return self.reply(201,workbench.assemblies.write(target,body))
-                    if action=='register':return self.reply(201,workbench.assemblies.register(target,body))
+                    if action in ('write','register'):
+                        from .design_lab import paper_candidate
+                        apply=workbench.assemblies.write if action=='write' else workbench.assemblies.register
+                        if paper_candidate.bound(workbench.design_lab,target):
+                            if actor['role']=='operator':raise PermissionError('PAPER_DESIGN_MUTATION_PI_REQUIRED')
+                            value=paper_candidate.invoke(workbench.design_lab,target,'assembly',body,lambda clean:apply(target,clean))
+                        else:value=apply(target,body)
+                        return self.reply(201,value)
                     if action=='verify':
                         if actor['role']!='operator':raise PermissionError('OPERATOR_REQUIRED')
                         from .product_evidence import verify

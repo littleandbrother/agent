@@ -35,9 +35,17 @@ def source_bundle():
     entries = []
     for plugin in plugins:
         for item in plugin['skills']:
+            upstream = item.get('upstream_skill')
+            if upstream:
+                if upstream not in files: raise ValueError('SKILL_UPSTREAM_MISSING: '+upstream)
+                # One pinned source package supplies the professional manual.
+                # Only its entry document is activated; references stay paged.
+                # The complete upstream package stays frozen and readable.
+                # Its manual is loaded for the actual operation, not every request.
             content = files[item['path']]
             entries.append({**item, 'plugin_id': plugin['id'], 'version': plugin['version'],
-                            'sha256': digest(content), 'adapter': plugin['adapter']})
+                            'sha256': digest(content), 'adapter': plugin['adapter'],
+                            **({'upstream_sha256':digest(files[upstream])} if upstream else {})})
     # Existing engine manuals remain the implementation's single source. The
     # frozen copy replaces runtime reads of mutable global skill installations.
     for key, content in sorted(SKILLS.items()):
@@ -125,7 +133,15 @@ class SkillResources:
         self.app.conversations.get(owner)
         with self.store.connect() as db: frozen = frozen_for(db, owner)
         manifest = frozen[1] if frozen else source_bundle()[0]
+        with self.store.connect() as db:
+            records = db.execute('SELECT skill_id,manifest,active FROM skill_activations WHERE owner=? ORDER BY updated DESC, manifest=? DESC',
+                                 (owner, manifest['sha256'])).fetchall()
+        latest = {}
+        for row in records:
+            latest.setdefault(row['skill_id'], row)
+        prior = [key for key,row in latest.items() if row['active'] and row['manifest'] != manifest['sha256']]
         return {'schema_version': 'bf-skill-catalog-v1', 'manifest_sha256': manifest['sha256'],
+                'previous_active': [x for x in prior if x in {s['id'] for s in manifest['skills']}],
                 'frozen': bool(frozen), 'skills': manifest['skills'], 'plugins': manifest['plugins'],
                 'active': [{k:v for k,v in x.items() if k != 'content'} for x in active_records(self.store, owner)]}
 
@@ -134,7 +150,8 @@ class SkillResources:
         fields = {'catalog': set(), 'activate': {'skill_id'}, 'deactivate': {'skill_id'},
                   'resource': {'path', 'offset', 'limit', 'offset_unit'}}
         if action not in fields: raise ValueError('SKILL_ACTION_INVALID')
-        if set(body) - (fields[action] | {'action','session_id'}): raise ValueError('SKILL_UNEXPECTED_FIELDS')
+        unexpected = set(body) - (fields[action] | {'action','session_id'})
+        if unexpected: raise ValueError('SKILL_UNEXPECTED_FIELDS: '+','.join(sorted(unexpected))+'; '+action+' accepts '+','.join(sorted(fields[action]))+'; activate example={"action":"activate","skill_id":"easyeda-agent"}')
         catalog = self.catalog(owner)
         if action == 'catalog': return catalog
         if hasattr(self.app,'engineering') and self.app.engineering.tasks.binding(owner):
@@ -159,13 +176,17 @@ class SkillResources:
         if not entry: raise ValueError('SKILL_NOT_FOUND: ' + str(key) + '; available=' + ','.join(x['id'] for x in manifest['skills']))
         content = safe_file(root, entry['path']).read_text()
         active = active_records(self.store, owner)
+        already_active = any(x['id'] == key and x['sha256'] == entry['sha256'] for x in active)
         if action == 'activate' and sum(len(x['content'].encode()) for x in active if x['id'] != key) + len(content.encode()) > MAX_ACTIVE_BYTES:
             raise ValueError('ACTIVE_SKILL_CONTEXT_LIMIT: deactivate finished methods before loading more')
-        with self.store.connect() as db:
-            db.execute('INSERT OR REPLACE INTO skill_activations VALUES(?,?,?,?,?)',
-                       (owner, manifest['sha256'], key, int(action == 'activate'), time.time()))
+        if not (action == 'activate' and already_active):
+            with self.store.connect() as db:
+                db.execute('INSERT OR REPLACE INTO skill_activations VALUES(?,?,?,?,?)',
+                           (owner, manifest['sha256'], key, int(action == 'activate'), time.time()))
         value = {**entry, 'schema_version': 'bf-skill-activation-v1', 'active': action == 'activate',
-                 'manifest_sha256': manifest['sha256'], 'content': content if action == 'activate' else None,
+                 'manifest_sha256': manifest['sha256'], 'content': content if action == 'activate' and not already_active else None,
+                 'already_active': already_active, 'body_in_protected_skill_context': action == 'activate',
+                 'resources': [p for p in manifest['files'] if p.startswith(str(Path(entry['path']).parent)+'/') and p != entry['path']] + ([entry['upstream_skill']] if entry.get('upstream_skill') else []),
                  'status': 'loaded_not_execution', 'engineering_passed': False}
         self.store.event(owner, owner, 'skill_' + action, {k:v for k,v in value.items() if k != 'content'})
         return value

@@ -38,7 +38,7 @@ class DigitalAcceptanceTests(unittest.TestCase):
         for i, row in enumerate(self.evidence):
             name = f'campaign/reviews/P01/gate-{i}.json'
             body = {k: v for k, v in row.items() if k != 'artifact'}
-            body['schema_version'] = 'bf-paper-digital-gate-review-v1'
+            body['schema_version'] = 'bf-paper-digital-gate-review-v2' if 'resolved_findings' in body else 'bf-paper-digital-gate-review-v1'
             (self.root / name).write_text(json.dumps(body))
             row['artifact'] = {'path': name, 'sha256': self.hash(name)}
 
@@ -168,6 +168,34 @@ class DigitalAcceptanceTests(unittest.TestCase):
         self.current['evaluation']['native_checks'][0]['project_source_sha256'] = {'source.c': hashlib.sha256(b'old').hexdigest()}
         p.write_text('new')
         self.assertFalse(self.run_gate()['full_product_passed'])
+
+    def test_corrected_analysis_defect_does_not_grant_unknown_core_function(self):
+        self.evidence[0].update(status='UNEVALUABLE',resolves=['wrong-pin'],
+            resolved_findings=[{'id':'wrong-pin','status':'PASS','scope':'identified-defect-only'}])
+        self.write_evidence();result=self.run_gate(issues=[self.issue])
+        self.assertEqual('CLOSED',result['issues'][0]['state'])
+        self.assertEqual('UNEVALUABLE',result['functional_gates'][0]['status'])
+        self.assertFalse(result['full_product_passed'])
+
+    def test_resolution_without_versioned_independent_proof_is_rejected(self):
+        self.evidence[0].update(status='UNEVALUABLE',resolves=['wrong-pin'])
+        self.write_evidence()
+        self.evidence[0]['resolved_findings']=[{'id':'wrong-pin','status':'PASS','scope':'identified-defect-only'}]
+        self.assertEqual('OPEN',self.run_gate(issues=[self.issue])['issues'][0]['state'])
+
+    def test_modified_supporting_source_reopens_scoped_correction(self):
+        p=self.root/'runtime/participants/pi-original/analysis.py';p.parent.mkdir(parents=True);p.write_text('checked')
+        self.evidence[0].update(status='UNEVALUABLE',resolves=['wrong-pin'],
+            supporting_sources=[{'path':'analysis.py','sha256':self.hash(str(p.relative_to(self.root)))}],
+            resolved_findings=[{'id':'wrong-pin','status':'PASS','scope':'identified-defect-only'}])
+        self.write_evidence();p.write_text('changed')
+        self.assertEqual('OPEN',self.run_gate(issues=[self.issue])['issues'][0]['state'])
+
+    def test_resolution_cannot_claim_product_scope(self):
+        self.evidence[0].update(status='UNEVALUABLE',resolves=['wrong-pin'],
+            resolved_findings=[{'id':'wrong-pin','status':'PASS','scope':'full-product'}])
+        self.write_evidence()
+        self.assertEqual('OPEN',self.run_gate(issues=[self.issue])['issues'][0]['state'])
 
 
 if __name__ == '__main__':

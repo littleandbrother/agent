@@ -44,7 +44,7 @@
     return `<section class="ew-card ew-checks"><div class="ew-section-heading"><h3>已记录的检查</h3>${r?record(r):''}</div>${rows.length?rows.map(([k,v])=>`<div><span class="ew-check-symbol">${v===true?'✓':v===false?'!':'○'}</span><span>${esc(k)}</span><b>${v===true?'该项通过':v===false?'未通过':v==null?'未检查':esc(format(v))}</b></div>`).join(''):note('该记录没有独立检查结果；已有文件不代表设计通过验收。')}${r?.scope?note(r.scope):''}</section>`;
   }
   function metrics(r){const list=(r?.metrics||[]).filter(m=>['number','boolean'].includes(typeof m.value)).slice(0,4);return list.length?`<div class="ew-metrics">${list.map(m=>`<div class="ew-card"><small>${esc(M.metricLabel(m.name))}</small><strong>${esc(format(m.value))}</strong><span>来自所选运行</span></div>`).join('')}</div>`:'';}
-  function evidence(r){return r?`<section class="ew-card"><div class="ew-section-heading"><h3>运行与依据</h3>${record(r)}</div><p>${esc(r.label||r.kind)}</p><dl class="ew-facts"><div><dt>记录时间</dt><dd>${date(r.created)}</dd></div><div><dt>所属版本</dt><dd>${esc(r.case_version|| (r.created_revision?'装配 v'+r.created_revision:'独立运行'))}</dd></div><div><dt>适用范围</dt><dd>${esc(r.applicability?.reason||'请核对运行条件')}</dd></div></dl><details><summary>输入条件与完整检查</summary><pre>${esc(JSON.stringify({inputs:r.inputs,conditions:r.conditions,checks:r.checks,scope:r.scope},null,2))}</pre></details><button data-ew-trace="${esc(r.id)}">查看执行依据 ${icon('arrow')}</button></section>`:'';}
+  function evidence(r){return r?`<section class="ew-card"><div class="ew-section-heading"><h3>运行与依据</h3>${record(r)}</div><p>${esc(r.label||r.kind)}</p><dl class="ew-facts"><div><dt>记录时间</dt><dd>${date(r.created)}</dd></div><div><dt>所属版本</dt><dd>${esc(r.candidate_id?.slice(0,14)||r.case_version|| (r.created_revision?'装配 v'+r.created_revision:'独立运行'))}</dd></div><div><dt>适用范围</dt><dd>${esc(r.applicability?.reason||'请核对运行条件')}</dd></div></dl><details><summary>输入条件与完整检查</summary><pre>${esc(JSON.stringify({inputs:r.inputs,conditions:r.conditions,checks:r.checks,scope:r.scope},null,2))}</pre></details><button data-ew-trace="${esc(r.id)}">查看执行依据 ${icon('arrow')}</button></section>`:'';}
   function overview(){
     if(window.ProductEvidence?.groups(snapshot).length)return window.ProductEvidence.render(snapshot,{compact:true});
     const hero=S.hero(snapshot),readable=snapshot.files.filter(f=>f.integrity).length,findings=S.findings(snapshot);
@@ -84,7 +84,7 @@
       const value=await window.ResultCatalog.get(cid,'',force);
       if(gen!==generation||cid!==window.BF.getSelection())return;
       catalog=value;
-      const saved=scope||sessionStorage.getItem('bf-ew-scope-v3-'+cid),choices=S.choices(value);
+    const saved=scope||sessionStorage.getItem('bf-ew-scope-v4-'+cid),choices=S.choices(value);
       scope=choices.some(x=>x.id===saved)?saved:S.preferredScope(value);
       snapshot=S.scoped(value,scope);error='';fetched=Date.now();paint();
     }catch(e){if(gen===generation){error=e.name==='TimeoutError'?'工程清单读取超时。请稍后重试，已有记录会保留。':e.message;if(!snapshot)paint();}}
@@ -94,11 +94,22 @@
     const host=root.querySelector('#ew-visual');if(!host)return;
     const x=M.views(snapshot,section).find(x=>x.f.id===selection);if(!x)return;
     const cid=owner,f=x.f;
-    root.querySelector('#ew-visual-caption').innerHTML=`<b>${esc(f.name)}</b><span>${esc(x.r?.scope||f.applicability?.reason||'已归档文件')} · ${esc(f.sha256?.slice(0,12)||'哈希未记录')}</span>`;
+    root.querySelector('#ew-visual-caption').innerHTML=`<b>${esc(f.label||f.name)}</b><span>${esc(x.r?.scope||f.applicability?.reason||'已归档文件')} · ${esc(f.sha256?.slice(0,12)||'哈希未记录')}</span>`;
     if(x.v.kind==='image'){host.innerHTML=`<div class="ew-graphic" style="--ew-zoom:${zoom}"><img src="${esc(f.url)}" alt="${esc(f.name)}"></div>`;host.querySelector('img').onerror=()=>{host.innerHTML=empty('预览文件暂不可读取','请刷新并核对原始文件。');};return;}
     if(['model','mesh'].includes(x.v.kind)){host.innerHTML=`<iframe title="${esc(f.name)}三维预览" src="/model-viewer.html?${new URLSearchParams({session:cid,result_file:f.id,...(x.v.kind==='mesh'?{mesh:'1'}:{})})}"></iframe>`;return;}
     if(x.v.kind==='pdf'){host.innerHTML=`<iframe title="${esc(f.name)}" src="${esc(f.url)}" sandbox="allow-same-origin"></iframe>`;return;}
     if(x.v.kind==='video'){host.innerHTML=`<video controls playsinline preload="metadata" src="${esc(f.url)}" aria-label="${esc(f.name)}"></video>`;return;}
+    if(x.v.kind==='text'){
+      host.innerHTML='<p class="ew-loading" role="status">正在读取归档文件…</p>';
+      try{
+        const response=await fetch(f.url,{signal:AbortSignal.timeout(45000)});
+        if(!response.ok)throw Error('文件读取失败 '+response.status);
+        const text=await response.text();
+        if(gen!==viewGeneration||cid!==owner||!host.isConnected)return;
+        host.innerHTML=`<pre>${esc(text.slice(0,200000))}</pre>${text.length>200000?note('预览前 200000 字符；完整文件可下载。'):''}`;
+      }catch(e){if(gen===viewGeneration&&host.isConnected)host.innerHTML=empty('文件暂不可读取',e.message)}
+      return;
+    }
     if(x.v.kind!=='series'){host.innerHTML=empty('可查看原始文件','此格式需要在对应原生软件中打开。');return;}
     host.innerHTML='<p class="ew-loading" role="status">正在读取实际计算数据…</p>';
     try{
@@ -131,11 +142,12 @@
     if(b.dataset.ewTrace){const r=snapshot.results.find(r=>r.id===b.dataset.ewTrace);if(!r)return;if(r.source_type==='engineering')window.BFDeveloper.openTrace({job:r.id});else preview(r.files?.find(f=>f.integrity&&/result\.json$|receipt\.json$|report\.md$/.test(f.name))||r.files?.find(f=>f.integrity)||r.files?.[0]);return;}
     if(b.hasAttribute('data-ew-discuss')){window.BF.setDraft('关于「'+snapshot.title+'」的'+M.sections.find(x=>x.id===section).label+'，请根据 '+S.scopeLabel(snapshot)+' 的真实工程记录分析：');}
   });
-  root.addEventListener('change',e=>{if(!active())return;if(e.target.id==='ew-scope'){scope=e.target.value;snapshot=S.scoped(catalog,scope);sessionStorage.setItem('bf-ew-scope-v3-'+owner,scope);selection=run='';paint();}if(e.target.id==='ew-run-select'){run=e.target.value;selection='';paint();}});
+  root.addEventListener('change',e=>{if(!active())return;if(e.target.id==='ew-scope'){scope=e.target.value;snapshot=S.scoped(catalog,scope);sessionStorage.setItem('bf-ew-scope-v4-'+owner,scope);selection=run='';paint();}if(e.target.id==='ew-run-select'){run=e.target.value;selection='';paint();}});
   root.addEventListener('keydown',e=>{const tab=e.target.closest('[role=tab]');if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const i=M.sections.findIndex(x=>x.id===section),next=e.key==='Home'?0:e.key==='End'?M.sections.length-1:(i+(e.key==='ArrowRight'?1:-1)+M.sections.length)%M.sections.length;choose(M.sections[next].id);});
   function sync(){
     document.body.classList.toggle('engineering-workspace-active',active());root.classList.toggle('ew-root',active());
-    document.querySelector('#sections-toggle').textContent=active()?'工程工作区':'方案与文件';
+    const toggle=document.querySelector('#sections-toggle');
+    (toggle.querySelector('span')||toggle).textContent=active()?'工程工作区':'方案与文件';
     pane.setAttribute('aria-label',active()?'工程工作区':'方案与文件');
     document.querySelector('#close-sections').setAttribute('aria-label',active()?'收起工程工作区':'收起方案与文件');
     const heading=pane.querySelector('.inspector-heading');heading.firstChild.textContent=active()?'':'方案与文件';surfaceTabs.hidden=!active();
@@ -149,7 +161,7 @@
   window.EngineeringWorkspace={active,render:()=>load(),open:(id='overview',requestedScope=null)=>{
     const selected=window.BF.getSelection();
     if(requestedScope&&selected){
-      sessionStorage.setItem('bf-ew-scope-v3-'+selected,requestedScope);
+      sessionStorage.setItem('bf-ew-scope-v4-'+selected,requestedScope);
       if(owner===selected){scope=requestedScope;snapshot=catalog?S.scoped(catalog,scope):null;selection=run='';fetched=0;}
     }
     surface=id==='runtime'?'runtime':'engineering';if(selected){sessionStorage.setItem('bf-ew-surface-'+selected,surface);sessionStorage.setItem('bf-ew-section-'+selected,id==='runtime'?'overview':id)}section=id==='runtime'?'overview':id;if(!active())window.BFDeveloper.setMode('task');window.BF.sectionVisible(true);paint();load(!!requestedScope);
