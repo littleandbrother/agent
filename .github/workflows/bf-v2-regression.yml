@@ -19,6 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install numerical dependency matching the qualified V2 environment
+        run: |
+          python3 -m venv "$RUNNER_TEMP/bf-v2-python"
+          "$RUNNER_TEMP/bf-v2-python/bin/python" -m pip install numpy==2.4.6
+          echo "$RUNNER_TEMP/bf-v2-python/bin" >> "$GITHUB_PATH"
       - name: Repository source, recovery, invalidation and exact reuse
         working-directory: battery-world
         env:
