@@ -9,7 +9,7 @@ import re
 
 from ..store import identity
 
-VERSION = 'power-firmware-source-contract-v2'
+VERSION = 'power-firmware-source-contract-v3'
 DECLARATION_FIELDS = {
     'firmware': ('advertising_ms', 'connection_min_ms', 'connection_max_ms',
                  'sample_ms', 'policy_advertising_ms'),
@@ -106,7 +106,8 @@ def check(read, files, declarations=None):
     import json
     from pathlib import Path
     from .repository import file_hash
-    result = {'checker': VERSION, 'checker_sha256': file_hash(Path(__file__)), 'checks': [],
+    result = {'checker': VERSION, 'checker_sha256': file_hash(Path(__file__)),
+              'load_checker_sha256': file_hash(Path(__file__).with_name('repository_load.py')), 'checks': [],
               'source_hashes': {}, 'scope': 'source timing and declared load/power interface',
               'native_jobs_dispatched': 0, 'physical': 'NOT_TESTED'}
     def load(path, structured=False):
@@ -122,7 +123,8 @@ def check(read, files, declarations=None):
         if any(source[k] is None for k in ('advertising_ms', 'connection_min_ms', 'connection_max_ms', 'sample_ms')):
             raise ValueError('UNSUPPORTED_FIRMWARE_TIMING_EXPRESSION')
         source['advertising_ms'] *= .625
-        model = load('project-chain/load-timeline.json', True)
+        from .repository_load import normalize_timeline
+        model = normalize_timeline(load('project-chain/load-timeline.json', True))
         interface = load('project-chain/interface-params.json', True)
         radio = model['actual_radio_timing']
         comparisons = [('advertising_ms', radio['advertising_period_ms'], 'APP_ADV_INTERVAL'),

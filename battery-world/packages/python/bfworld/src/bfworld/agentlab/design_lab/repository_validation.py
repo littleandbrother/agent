@@ -16,8 +16,9 @@ import zipfile
 from ..store import identity
 from .repository import file_hash
 from .repository_contracts import check, fingerprint
+from .repository_load import normalize_timeline, load_binding
 
-VERSION = 'p01-system-independent-review-v1'
+VERSION = 'p01-system-independent-review-v2'
 FIXTURES = Path(__file__).with_name('repository-review-fixtures.json')
 
 
@@ -106,7 +107,7 @@ def firmware_review(repo, system, job):
 
 def power_review(repo, system, job, interface_result):
     params=json.loads(text(repo,system['files']['project-chain/interface-params.json']))
-    timeline=json.loads(text(repo,system['files']['project-chain/load-timeline.json']))
+    timeline=normalize_timeline(json.loads(text(repo,system['files']['project-chain/load-timeline.json'])))
     circuit=job['request']['project']['sources'][job['request']['project']['manifest']['entrypoint']]
     match=re.search(r'Iload\s+mcu_rail\s+0\s+PWL\((.*?)\)',circuit,re.S|re.I)
     if not match:raise ValueError('UNSUPPORTED_LOAD_EXPRESSION')
@@ -116,11 +117,9 @@ def power_review(repo, system, job, interface_result):
         raise ValueError('LOAD_PWL_TIME_INVALID')
     charge=sum((b-a)*(y+x)/2 for a,b,x,y in zip(times,times[1:],currents,currents[1:]))
     declared=timeline.get('window_charge_storage_rail_c')
-    pwl=timeline.get('pwl_time_value_referred_to_storage_rail_a')
     actual_pairs=list(map(list,zip(times,currents)))
-    pair_match=isinstance(pwl,list) and len(pwl)==len(actual_pairs) and all(
-        len(a)==2 and all(abs(x-y)<=max(1e-11,abs(y)*1e-8) for x,y in zip(a,b))
-        for a,b in zip(pwl,actual_pairs))
+    binding=load_binding(timeline,circuit,actual_pairs)
+    pair_match=binding['pwl_equal']
     raw_ref=job['record']['artifacts'].get('project-trace.raw')
     if not raw_ref:raise ValueError('NATIVE_TRANSIENT_RAW_REQUIRED')
     raw=repo.root/'blobs'/raw_ref['sha256']
@@ -143,14 +142,15 @@ def power_review(repo, system, job, interface_result):
     if len(samples)>1:period_checks['sampling']=all(abs((b-a)*1000-radio['sample_period_ms'])<1e-5 for a,b in zip(samples,samples[1:]))
     if not all(period_checks.values()):findings.append('load event cadence differs from actual firmware timing')
     if interface_result['status']!='PASS':findings.append('firmware activity and power declaration disagree')
-    if not pair_match:findings.append('netlist load PWL differs from the selected timeline')
-    if declared is None or abs(charge-declared)>max(1e-10,abs(charge)*1e-6):findings.append('load charge differs from timeline')
+    if binding['status']=='FAIL':findings.append('netlist load differs from the declared load witness')
+    if declared is not None and abs(charge-declared)>max(1e-10,abs(charge)*1e-6):findings.append('load charge differs from timeline')
     if min(supply)<required-1e-6:findings.append('supply falls below the declared operating voltage')
     if min(mcu)<-1e-3:findings.append('manual admission produces a negative MCU rail')
     applicability={'status':'UNEVALUABLE','pending':params.get('unresolved_device_parameters',[])+params.get('sece',{}).get('unresolved',[])}
     status='FAIL' if findings else 'UNEVALUABLE'
     return {'status':status,'findings':findings,'model_applicability':applicability,'job_id':job['job_id'],
-            'consumed_sources':job['consumed_sources'],'load_pwl_equal':pair_match,'pwl_points':len(times),
+            'consumed_sources':job['consumed_sources'],'load_pwl_equal':pair_match,'load_binding':binding,'pwl_points':len(times),
+            'evaluation_gaps':([binding['error']] if binding['status']=='UNEVALUABLE' else [])+(['declared Iload charge unavailable'] if declared is None else []),
             'event_cadence_checks':period_checks,
             'load_charge_c':charge,'declared_charge_c':declared,'raw_sha256':raw_ref['sha256'],
             'time_span_s':[clock[0],clock[-1]],'points':count,'storage_v':[storage[0],storage[-1]],
@@ -175,6 +175,52 @@ def qualification(repo, system, db=None):
             'gates':gates,'product_passed':status=='PASS','physical':'NOT_TESTED'}
 
 
+def native_review_reuse(repo, system, gate, original=None):
+    """Reuse sealed native checks only against their unchanged native consumers.
+
+    A load-table change does not alter a saved PCB. The imported review remains
+    authoritative for those native bytes, including its failures and missing data.
+    """
+    if original is None:
+        origin=system.get('validations',{}).get(gate,{}).get('origin_design_id')
+        if not origin:return None
+        with repo.store.connect() as db:
+            candidates=[json.loads(r['value']) for r in db.execute(
+                'SELECT value FROM design_system_commits WHERE project=?',(system['project_id'],))]
+        matches=[s for s in candidates if s.get('origin_design_id')==origin and s.get('parent') is None]
+        if len(matches)!=1:raise ValueError('ORIGINAL_NATIVE_REVIEW_BASE_REQUIRED')
+        original=matches[0]
+    def relevant(path):
+        native=path.startswith('public-round3-facts-20261014/') and (
+            '/native-project/' in path or path.endswith(('PCB1.epcb2','-readback.json','native-parts-readback.csv')))
+        return native or (gate=='schematic_bom_pins' and path=='docs/BOM-interfaces.md') or (
+            gate=='geometry_fit' and (path.startswith('project-cad/') or path=='assembly.json'))
+    before={p:r['sha256'] for p,r in original['files'].items() if relevant(p)}
+    after={p:r['sha256'] for p,r in system['files'].items() if relevant(p)}
+    if not before or before!=after:
+        return {'status':'RECHECK_REQUIRED','changed_native_inputs':sorted(p for p in before.keys()|after.keys() if before.get(p)!=after.get(p))}
+    path='public-round3-facts-20261014/independent-reviews/'+gate+'.json'
+    ref=system['files'].get(path)
+    if not ref or ref!=original['files'].get(path):raise ValueError('ORIGINAL_NATIVE_REVIEW_CHANGED')
+    review=json.loads(text(repo,ref))
+    if review.get('actor')!='independent-checker' or review.get('gate_id')!=gate:
+        raise ValueError('ORIGINAL_NATIVE_REVIEW_IDENTITY_CONFLICT')
+    for support in review.get('supporting_sources',[]):
+        if after.get(support['path'])!=support['sha256']:
+            raise ValueError('NATIVE_REVIEW_SOURCE_BINDING_CONFLICT')
+    for bound in review.get('bindings',[]):
+        record=system['jobs'].get(bound['job_id'],{})
+        if record.get('project_sha256')!=bound['project_sha256']:
+            raise ValueError('NATIVE_REVIEW_JOB_BINDING_CONFLICT')
+        if gate=='geometry_fit':selected_job(repo,system,'cadquery','project-cad/project.json')
+    for path in after:
+        if file_hash(repo.root/'blobs'/after[path])!=after[path]:raise ValueError('NATIVE_REVIEW_INPUT_TAMPER')
+    return {'status':review['status'],'exact_native_evidence_reuse':{
+        'original_system':original['id'],'review_sha256':ref['sha256'],
+        'inputs':after,'bindings':review.get('bindings',[])},'findings':review['findings'],
+        'scope':'original independent native review on identical saved EDA/CAD inputs'}
+
+
 def evaluate(repo, system):
     required=repo.project(system['project_id'])['requirements']['required_gates'];gates={}
     def record(gate,status,findings,scope):
@@ -190,7 +236,12 @@ def evaluate(repo, system):
     for gate in required:
         if gate in ('firmware_event_logic','power_load_chain','source_domain','board_firmware_interfaces','delivery_version'):continue
         prior=current['gates'][gate]
-        record(gate,prior['status'],{'exact_reuse':{k:prior.get(k) for k in ('status','validation_id','evidence','origin_design_id')}} if prior['status']!='RECHECK_REQUIRED' else {'pending':'fresh native check for changed inputs'},'original P01 independent product gate')
+        try: native=native_review_reuse(repo,system,gate)
+        except (ValueError,KeyError) as e:native={'status':'UNEVALUABLE','error':str(e)}
+        if native:
+            record(gate,native['status'],native,native.get('scope','native review input binding'))
+        else:
+            record(gate,prior['status'],{'exact_reuse':{k:prior.get(k) for k in ('status','validation_id','evidence','origin_design_id')}} if prior['status']!='RECHECK_REQUIRED' else {'pending':'fresh native check for changed inputs'},'original P01 independent product gate')
     if 'firmware' in jobs:
         try:
             prior=current['gates'].get('firmware_event_logic',{})
@@ -217,7 +268,8 @@ def evaluate(repo, system):
     for ref in list(system['files'].values())+[r for j in system['jobs'].values() for r in j.get('artifacts',{}).values()]:
         if file_hash(repo.root/'blobs'/ref['sha256'])!=ref['sha256']:raise ValueError('REVIEW_MANIFEST_TAMPER')
     record('delivery_version','PASS' if not errors else 'FAIL',{'execution_bindings':{d:{k:v for k,v in j.items() if k not in ('request','result','record')} for d,j in jobs.items()},'errors':errors,'file_count':len(system['files'])},'current source and selected worker inputs; immutable review manifest')
-    return {'checker':VERSION,'checker_sha256':file_hash(__file__),'fixture_sha256':file_hash(FIXTURES),
+    return {'checker':VERSION,'checker_sha256':file_hash(__file__),
+            'load_checker_sha256':file_hash(Path(__file__).with_name('repository_load.py')),'fixture_sha256':file_hash(FIXTURES),
             'target':system['id'],'scope':'eight original P01 digital gates plus source timing contract',
             'interface':interface,'gates':gates,'status':'PASS' if all(gates[g]['status']=='PASS' for g in required) else 'FAIL',
             'native_jobs_dispatched':0,'physical':'NOT_TESTED'}
