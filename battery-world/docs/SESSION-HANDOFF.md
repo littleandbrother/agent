@@ -1,3 +1,27 @@
+# 当前发布交接 · 2026-10-15
+
+Architecture V2 source is validated for the user-authorized GitHub push to codex/bf-architecture-v2. Baseline remote stays at 3dc8a72. No Pi run or unchanged simulation dispatched. Resume C–F from the existing V2 owners after publication; original ten sessions remain preserved.
+
+# 当前交接 · 2026-10-15 Lab 合并
+
+- 用户最新要求：V2 Lab 替换原 Web Lab，保留 Studio；不用 pixel-perfect-reference-ui 或 harness-creator。
+- 已生效：8768/lab#system；原 Studio 8768；独立 V2 后端 8870。原进程 PID 69997，V2 PID 70430。
+- 最新发布 004 的 JS/CSS 已现场读取；server/bridge 与 002 已加载版本相同，无需再次重启。
+- 六页共享候选/采用版本；原生 SVG、横向四轨历史、专业对象树、源绑定预览/三维 CAD/下载、公共 Pi 对话与真实接口定义已核对。
+- 证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-verification-20261015-003/result.json
+- 报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-ui-20261015/REPORT.md
+- 原十个 Pi 会话、工程、账本、UNKNOWN 保留。未恢复原 Pi；无新模型请求、无仿真重跑；未提交 Git。
+- C–F 后续：在独立 V2 原 Lead 继续完整父源树提交修复的真实消费；固定回归与比较协议。不要把当前开发 pilot 当作方法效果实验。
+- `architecture-v2` init profile 是历史执行关闭 A/B gate；当前 Lab 使用 `architecture-v2-lab` scope。
+
+---
+
+以下为历史交接。
+
+## 2026-10-14 Architecture V2 · A/B 完成
+
+已冻结本地标签 bf-p01-demo-20261014（3dc8a72056e85b71998c4160da309474c2cbee1c）及 6,388 文件/5.70GB 私有基线，原两份SQLite一致性备份、十会话/费用/UNKNOWN、P01产物与原未提交修改保持。新工作树 workbench/bf-architecture-v2，分支 codex/bf-architecture-v2，独立运行 /Users/depengsu/.local/share/bf-agent-architecture-v2，8870/PID50755。24项隔离测试、19项实际接口检查PASS，PiSDK/Agent/Harness离线构建和合成消息持久化恢复通过；跨进程原生锁有效。原8768/PID33871及UI摘要不变；0模型调用、0求解、0目标固件构建。报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/AB-REPORT.md；证据 verification-004/result.json；恢复说明 HANDOFF.md。源码修改未提交、未推送。BFA-036 A/B完成，C–F待接续；下一步将冻结的P01已提交候选接入首个System Commit，采用版另存，不伪造专业历史。下方为历史。
+
 ## 2026-10-14 P01 GitHub 源码发布
 
 当前发布分支 codex/bf-design-lab-r0-r2-20261011；说明与可下载包见 release/P01-PREVIEW-BINDING-20261014.md，文件清单见 release/source-manifest-20261014.json。原 P01 会话不恢复，工程及费用保留。后续产品修订按下一项用户指令继续。下方为历史。

@@ -12,6 +12,7 @@
   function projectLabel(c){const named=projectNames[c.id];return named?.original===c.title?named.title:c.title;}
 
   const positions=new Map();let lastMode='',lastStudio='task',lastLab='console',cachedCard=null,cardOwner=null,cardLoading=false,cardFetchedAt=0,headerSnapshot=null,deliveryGeneration=0;
+  if(['console','panorama'].includes(localStorage.getItem('bf-studio-mode')))localStorage.setItem('bf-studio-mode','task');
   const domains={mechanical:'机械与结构',circuit:'电路与 PCB',firmware:'固件与模型',system:'系统与报告'};
   const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="${{file:'M6 3h8l4 4v14H6z M14 3v5h4 M9 12h6 M9 16h6',export:'M12 16V3m-4 4 4-4 4 4 M5 13v7h14v-7',back:'m10 5-7 7 7 7 M3 12h18',spark:'m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z'}[n]||'M4 5h16v14H4z M9 5v14'}"/></svg>`;
   function beforeMode(next){if(lastMode&&lastMode!==next){const root=q(lastMode==='task'?'#conversation':lastMode==='product'?'#pr-workspace':lastMode==='console'?'#developer-view':'#panorama-view');positions.set(lastMode+':'+window.BF.getSelection(),root?.scrollTop||0)}lastMode=next;}
@@ -95,7 +96,7 @@
   q('#new-chat').innerHTML=icon('spark')+'新建项目';
   q('#new-folder').innerHTML=icon('file');
   q('#studio-space').onclick=()=>window.BFDeveloper.setMode(lastStudio);
-  q('#lab-space').onclick=()=>window.BFDeveloper.setMode(lastLab);
+  q('#lab-space').onclick=()=>{sessionStorage.setItem('bf-lab-studio-return',location.href);location.assign('/lab#system')};
   q('#studio-results').onclick=()=>window.ProductWorkspace.showSession();
   q('#studio-export').innerHTML=icon('export')+'导出';
   q('#studio-export').onclick=()=>{const s=window.ProductResults.getState();if(s.snapshot)delivery(s.owner,s.scopeChoice,s.snapshot.revision)};

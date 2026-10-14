@@ -1,3 +1,7 @@
+## 2026-10-14 Architecture V2 · A/B 完成
+
+已冻结本地标签 bf-p01-demo-20261014（3dc8a72056e85b71998c4160da309474c2cbee1c）及 6,388 文件/5.70GB 私有基线，原两份SQLite一致性备份、十会话/费用/UNKNOWN、P01产物与原未提交修改保持。新工作树 workbench/bf-architecture-v2，分支 codex/bf-architecture-v2，独立运行 /Users/depengsu/.local/share/bf-agent-architecture-v2，8870/PID50755。24项隔离测试、19项实际接口检查PASS，PiSDK/Agent/Harness离线构建和合成消息持久化恢复通过；跨进程原生锁有效。原8768/PID33871及UI摘要不变；0模型调用、0求解、0目标固件构建。报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/AB-REPORT.md；证据 verification-004/result.json；恢复说明 HANDOFF.md。源码修改未提交、未推送。BFA-036 A/B完成，C–F待接续；下一步将冻结的P01已提交候选接入首个System Commit，采用版另存，不伪造专业历史。下方为历史。
+
 ## 2026-10-14 P01 第二轮实施完成
 
 用户已批准 A–D 和成熟方案适配。当前状态恢复／历史索引、按需技能／批量查询、精简结果、自动同版交付与来源值核对已接入原 P01。598 项 Python、16 项原生接口、9 项 Node、实际调用包构建和整仓类型检查通过。交付消费测试 41→15→9 请求，登记 $0.825418→$0.295454→$0.188305，最后 0 工具错误。机械／固件技能段 53 请求/$1.096736，效率收益未建立；42 来源值复核，18 绑定为8通过、2时序不一致、8标识待比较。Context7 固定 nRF5 SDK17.1 查询改用本地章节索引；缓存命中率未改善。
@@ -1227,3 +1231,19 @@ CAD 和 S132 原输入未变复用；本轮新 SPICE 两次均对应变更输入
 ## 2026-10-14 P01 GitHub 源码发布
 
 P01 同版预览、公共候选读取和所依赖的恢复／EDA／技能实现已整理为发布提交。366 项 Python、6 组前端、7 个实际预览和 108 件文件摘要检查保留；Pi 完整代码检查通过。发布清单与 110 项 ZIP 位于 release/P01-PREVIEW-BINDING-20261014.md。数据库、模型账本、工程和已有仿真未修改。
+
+
+## 2026-10-15 · V2 Lab 合并至原 Agent Web
+
+用户要求按文字逻辑合并，禁用 pixel-perfect-reference-ui。原 8768 Studio 保持原版式；Lab 替换为六页真实 Design Repository 视图。截图装饰删除，20 个原生 SVG 图标；System 四轨横向提交历史、固定行名、跨页候选/证据/专业 Pi 关联、公共对话读取、API 定义和同版工程查看已接通。1280/390px 现场页面检查通过。7 项接口测试、30 项只读现场检查、7 件预览摘要、完整 ZIP 下载和 6388 件 Baseline 文件核对 PASS。原两个数据库的受保护历史行、费用/UNKNOWN、原工程文件和十个会话保持；零新模型调用、零仿真重跑。
+
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-ui-20261015/REPORT.md
+证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-verification-20261015-003/result.json
+命令：BFWORLD_VERIFY_PROFILE=architecture-v2-lab BF_V2_EVIDENCE=/absolute/new-output ./init.sh
+
+C–F 仍进行中：无损导入 PASS；真实 Lead/Power/Firmware 运行有开发记录；父提交完整源树继承修复尚待下一次 Pi 消费；方法对照实验未运行。本次无 Git 提交/推送。
+
+
+## 2026-10-15 · Architecture V2 GitHub source checkpoint
+
+User authorized GitHub push. Prepared codex/bf-architecture-v2 from 3dc8a72, retaining the Baseline branch. 109 targeted Python tests, the full Pi check and the 30-check Lab consumer profile passed. Private runtime databases, keys, rollback copies and solver artifacts stay local. The code checkpoint includes V2 repository/contracts/Pi transport plus the integrated Lab; C–F remains in progress. Publication evidence: /Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/github-publication-20261015/prepared.json.

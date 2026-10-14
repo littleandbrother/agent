@@ -85,6 +85,8 @@ class Store:
                        (owner, job, time.time(), kind, canonical(data)))
 
     def enqueue(self, owner, operation, request):
+        from .runtime_config import require_capability
+        require_capability('native')
         if not isinstance(operation, str) or not 1 <= len(operation) <= 100:
             raise ValueError('OPERATION_ID_REQUIRED')
         digest = identity(request)

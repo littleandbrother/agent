@@ -1,0 +1,153 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-036-architecture-v2",
+  "owner": "bf-agent-coordinator",
+  "status": "in-progress",
+  "active_scope": "Architecture V2 C–F; Lab integration published in original Web with Studio preserved",
+  "authority": "继续推进C–F，先把冻结的P01候选接入首个System Commit，再打通契约依赖、专业Pi协作和回归集成。全部在独立V2环境中完成。",
+  "hypothesis": "The P01 source/runtime baseline can be preserved while a new worktree and empty runtime use the same installed tools without writing production sessions, native projects or accounting.",
+  "falsifier": "Any original owner, ledger row, selected artifact or native project byte changes; development falls back to production paths; two environments acquire the same native resource concurrently.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/",
+    "scripts/",
+    "tests/agentlab/",
+    "docs/agentlab/architecture-v2/",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "project/features/BFA-036-architecture-v2/",
+    "init.sh",
+    "../.gitignore",
+    "../pi-bf-aiot/",
+    "/Users/depengsu/.local/share/bf-agent-baselines/",
+    "/Users/depengsu/.local/share/bf-agent-architecture-v2/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "apps/agent-studio/architecture-v2/",
+    "PROJECT.yaml",
+    "apps/agent-studio/model-viewer.js",
+    "apps/agent-studio/studio.js",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/apps/agent-studio/architecture-v2/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/apps/agent-studio/studio.js",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/apps/agent-studio/model-viewer.js",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/packages/python/bfworld/src/bfworld/agentlab/lab_bridge.py",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py",
+    "/Users/depengsu/.local/share/bf-agent-runtime/workbench/state/lab-bridge.json",
+    "../release/"
+  ],
+  "schema_changes": [
+    "bf-baseline-manifest-v1",
+    "bf-development-profile-v1",
+    "bf-development-runtime-identity-v1",
+    "bf-design-project-v2",
+    "bf-system-commit-v2",
+    "bf-domain-commit-v2",
+    "bf-interface-contract-v2",
+    "bf-integration-request-v2",
+    "bf-professional-task-v2",
+    "bf-method-experiment-v2"
+  ],
+  "tests": [
+    "sealed source and SQLite backup readback",
+    "production row and source preservation",
+    "explicit process paths and fresh database",
+    "symlink/production-root rejection",
+    "cross-process native resource exclusion",
+    "isolated live server write/restart recovery",
+    "frozen submitted/adopted lossless import",
+    "source-bound contracts and invalidation",
+    "CAS conflict and rollback history",
+    "specialist scope and recovery",
+    "same consumer API integration plus failure feedback",
+    "Lab real data and five comparison configurations"
+  ],
+  "negative_controls": [
+    "production root substituted for development",
+    "profile or config hash altered",
+    "missing mandatory process path",
+    "copied historical database put in live state",
+    "model/native dispatch before test qualification",
+    "busy host resource",
+    "stale branch head",
+    "wrong-domain artifact",
+    "mutated source",
+    "outdated interface evidence",
+    "cross-specialist write",
+    "Agent forged validation",
+    "incompatible contracts",
+    "unqualified adoption"
+  ],
+  "command": "rtk proxy env BFWORLD_VERIFY_PROFILE=architecture-v2 BF_V2_RUNTIME=/Users/depengsu/.local/share/bf-agent-architecture-v2 BF_V2_EVIDENCE=/absolute/new-output ./init.sh",
+  "output_artifact": "docs/agentlab/architecture-v2/AB-REPORT.md",
+  "cost_cap": "User-authorized cumulative fee/token/time unbounded; new V2 ledger only; retain all reservations and UNKNOWN",
+  "claim_boundary": "A/B baseline preservation and isolated apparatus identity",
+  "stop_condition": "Active original writer, source or historical ledger drift, profile collision, baseline mismatch",
+  "next": "Resume V2 original Lead after parent-source fix; validate complete source inheritance; register controlled comparison protocol. Baseline and original ten sessions remain unchanged.",
+  "phases": {
+    "A": {
+      "status": "PASS",
+      "tag": "bf-p01-demo-20261014",
+      "manifest": "/Users/depengsu/.local/share/bf-agent-baselines/bf-p01-demo-20261014/manifest.json",
+      "manifest_sha256": "75933849122ee4102943777ea810528cc72d327ae3715cfa8ff39869260e0cdb",
+      "files": 6388
+    },
+    "B": {
+      "status": "PASS",
+      "runtime": "/Users/depengsu/.local/share/bf-agent-architecture-v2",
+      "port": 8870,
+      "verification": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/verification-004/result.json",
+      "unit_tests": 24,
+      "live_checks": 19
+    },
+    "C": {
+      "status": "PASS",
+      "scope": "V2-1 lossless frozen adopted/submitted import",
+      "evidence": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/v2-1-import-1791980800479414000/result.json"
+    },
+    "D": {
+      "status": "IN_PROGRESS",
+      "scope": "Domain Commit / contract execution and exact source binding"
+    },
+    "E": {
+      "status": "IN_PROGRESS",
+      "scope": "Real serial Lead / Power / Firmware Pi development pilot"
+    },
+    "F": {
+      "status": "IN_PROGRESS",
+      "scope": "Merged Lab complete; controlled integration and method comparison pending"
+    }
+  },
+  "evidence": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/verification-004/result.json",
+    "sha256": "a3d642e9277261e50c9b019304839350ed6bc4b8ca309d1f4eee300ddbc62498",
+    "new_model_requests": 0,
+    "new_solver_jobs": 0,
+    "original_owners_preserved": 10
+  },
+  "updated_utc": "2026-10-14T17:34:23.299227+00:00",
+  "paper_claim": "Architecture integration and development pilot; comparative method efficacy is separately evaluated",
+  "ui_authority": "2026-10-15 用户要求把 V2 Lab 合并至现有 Agent Web UI，替换旧 Lab，保留 Studio，清除截图 UI 资产，使用清晰 SVG，恢复横向提交时间轴。",
+  "ui_falsifier": "Studio content or original sessions/ledger/native artifacts change; cross-page object binding is lost; screenshot UI assets remain; timeline is not horizontal; bridge writes to V2 or production state.",
+  "ui_increment": {
+    "status": "PASS",
+    "evidence": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-ui-20261015/result.json",
+    "sha256": "5468ea4a048f6fe2e508997eae3db7a70487f81e9eaf9777e1e652cb56670c9e",
+    "verification": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-verification-20261015-003/result.json",
+    "unit_tests": 7,
+    "live_checks": 30,
+    "original_owners_preserved": 10,
+    "model_requests_added": 0,
+    "simulations_rerun": 0
+  },
+  "verification_commands": {
+    "lab": "BFWORLD_VERIFY_PROFILE=architecture-v2-lab BF_V2_EVIDENCE=/absolute/new-output ./init.sh",
+    "ab": "Historical execution-disabled A/B gate; do not run against enabled C–F profile"
+  },
+  "publication_authority": "2026-10-15 user: 推送到github",
+  "publication": {
+    "status": "VALIDATED_FOR_PUSH",
+    "branch": "codex/bf-architecture-v2",
+    "evidence": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/github-publication-20261015/prepared.json",
+    "tests": 109
+  }
+}

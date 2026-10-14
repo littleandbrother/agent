@@ -122,6 +122,8 @@ class Provider:
                 'calls':len(rows),'rates':RATE,'pricing_source':PRICING_SOURCE,'requests':rows}
 
     def complete(self,owner,payload,on_chunk=None):
+        from .runtime_config import require_capability
+        require_capability('model')
         with self.store.connect() as db:unbounded_time=budget_policy.unbounded_time(db,owner)
         if (self.store.root.parent/"paid-window-closed.json").exists() and not unbounded_time:raise ValueError("PAID_WINDOW_CLOSED")
         if payload.get('model')!=MODEL:raise ValueError('MODEL_ID_MISMATCH')

@@ -23,7 +23,9 @@ $('#reset').onclick=()=>{inside=false;exploded=false;update();$('#part').value='
 $('#part').onchange=e=>{const item=meshes.find(m=>m.name===e.target.value);if(!item){reset();return}fit(new THREE.Box3().setFromObject(item))};
 const observer=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;if(w&&h){renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}});observer.observe(stage);
 const parameters=new URL(location.href).searchParams;
-const resultFile=parameters.get('result_file'),resultSession=parameters.get('session'),resultUrl=resultFile&&resultSession?'/api/results/file?'+new URLSearchParams({session:resultSession,id:resultFile}):null;
+const repositoryProject=parameters.get('repository_project'),repositoryOwner=parameters.get('repository_owner'),repositorySystem=parameters.get('repository_system');
+const repositoryUrl=repositoryProject&&repositoryOwner&&repositorySystem?'/api/design-repository/file?'+new URLSearchParams({project:repositoryProject,owner:repositoryOwner,system:repositorySystem,job:parameters.get('repository_job')||'',path:parameters.get('repository_path')||''}):null;
+const resultFile=parameters.get('result_file'),resultSession=parameters.get('session'),resultUrl=repositoryUrl||(resultFile&&resultSession?'/api/results/file?'+new URLSearchParams({session:resultSession,id:resultFile}):null);
 const job=parameters.get('job')||(resultFile?.startsWith('eng-')?resultFile.split('/')[0]:null),reference=parameters.get('case')==='pluck-v1',meshPreview=parameters.get('mesh')==='1';
 if(/^eng-[a-f0-9]+$/.test(job||''))fetch('/api/engineering/jobs/'+job).then(r=>{if(!r.ok)throw Error('MODEL_METADATA');return r.json()}).then(j=>{partNames=new Map((j.assembly?.payload?.parts||[]).map(p=>[p.id,p.name]));for(const o of $('#part').options)if(partNames.has(o.value))o.textContent=partNames.get(o.value)}).catch(()=>{});
 if(!reference&&!resultUrl&&!/^eng-[a-f0-9]+$/.test(job||''))$('#notice').textContent='模型编号无效';
