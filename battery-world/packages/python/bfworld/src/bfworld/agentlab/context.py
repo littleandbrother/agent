@@ -43,6 +43,7 @@ class ContextArchive:
         self.owner = owner
         self.home = Path(home).resolve()
         self.parts = ('participants', owner, 'context-records')
+        self.reader = 'read'
 
     def __call__(self, value):
         directory = self.home
@@ -90,7 +91,70 @@ class ContextArchive:
                     text_path.chmod(0o444)
                 record.update(text_file='context-records/'+text_path.name,
                               text_sha256=hashlib.sha256(raw).hexdigest(),text_bytes=len(raw))
+        if self.reader == 'bf_repository':
+            record['read_action'] = 'bf_repository.archive_read'
         return record
+
+    def read(self, logical, offset=0, limit=8000, pointer=None):
+        """Verified, owner-local public observations; no workspace or source writes."""
+        match = re.fullmatch(r'context-records/([0-9a-f]{64})\.(json|tool\.txt)', logical) if isinstance(logical, str) else None
+        if not match:
+            raise ValueError('CONTEXT_ARCHIVE_PATH_INVALID')
+        if type(offset) is not int or offset < 0 or type(limit) is not int or not 1 <= limit <= 24000:
+            raise ValueError('CONTEXT_ARCHIVE_RANGE_INVALID')
+        directory = self.home
+        for part in self.parts:
+            directory = directory/part
+            if directory.is_symlink():
+                raise ValueError('CONTEXT_ARCHIVE_SYMLINK')
+        original = directory/(match[1]+'.json')
+        path = directory/Path(logical).name
+        if original.is_symlink() or path.is_symlink():
+            raise ValueError('CONTEXT_ARCHIVE_SYMLINK')
+        if not original.is_file() or not path.is_file():
+            raise ValueError('CONTEXT_ARCHIVE_NOT_FOUND')
+        data = original.read_bytes()
+        if hashlib.sha256(data).hexdigest() != match[1]:
+            raise ValueError('CONTEXT_ARCHIVE_CONFLICT')
+        value = json.loads(data)
+        # Model private reasoning is retained in history, not a public tool result.
+        if isinstance(value, dict) and value.get('role') == 'assistant':
+            raise ValueError('CONTEXT_ARCHIVE_PUBLIC_RECORD_REQUIRED')
+        raw = path.read_bytes()
+        if match[2] == 'tool.txt':
+            if not isinstance(value, dict) or value.get('role') != 'tool':
+                raise ValueError('CONTEXT_ARCHIVE_PUBLIC_RECORD_REQUIRED')
+            content = value.get('content')
+            decoded = content
+            if isinstance(content, str):
+                try: decoded = json.loads(content)
+                except ValueError: pass
+            blocks = decoded.get('content') if isinstance(decoded, dict) else decoded
+            if (isinstance(blocks, list) and blocks and
+                    all(isinstance(x, dict) and x.get('type') == 'text' and isinstance(x.get('text'), str) for x in blocks)):
+                content = '\n'.join(x['text'] for x in blocks)
+            if not isinstance(content, str) or raw != content.encode():
+                raise ValueError('CONTEXT_ARCHIVE_CONFLICT')
+        text = raw.decode()
+        if pointer is not None:
+            if not isinstance(pointer, str) or (pointer and not pointer.startswith('/')):
+                raise ValueError('CONTEXT_ARCHIVE_POINTER_INVALID')
+            try:
+                selected = json.loads(text)
+                for token in pointer[1:].split('/') if pointer else ():
+                    if re.search(r'~(?![01])', token): raise ValueError()
+                    token = token.replace('~1', '/').replace('~0', '~')
+                    selected = selected[int(token)] if isinstance(selected, list) and re.fullmatch(r'0|[1-9][0-9]*', token) else selected[token]
+                text = canonical(selected)
+            except (ValueError, KeyError, IndexError, TypeError):
+                raise ValueError('CONTEXT_ARCHIVE_POINTER_INVALID') from None
+        return {'owner': self.owner, 'path': logical, 'record_sha256': match[1],
+                'sha256': hashlib.sha256(raw).hexdigest(), 'pointer': pointer,
+                'content_sha256': hashlib.sha256(text.encode()).hexdigest(),
+                'bytes': len(raw), 'offset': offset, 'total_chars': len(text),
+                'content': text[offset:offset+limit],
+                'next_offset': offset+limit if offset+limit < len(text) else None,
+                'provenance': 'immutable archived public observation'}
 
 
 def _preview(value, *, head_bytes=2400, tail_bytes=800):
@@ -102,7 +166,9 @@ def _preview(value, *, head_bytes=2400, tail_bytes=800):
 
 def _reference(record):
     return {**record, 'context_projection': 'archived_not_deleted',
-            'read_hint': ('用 read 分段读取 text_file，它是已解包的原工具文本；不要猜 preview/content 的嵌套格式。record_file 保留原始消息及身份，二者哈希分别记录；旧文本不是新验证。'
+            'read_hint': ('用 bf_repository(action="archive_read",path=text_file 或 record_file,offset?,limit?,pointer?) 读取本 owner 归档。pointer 可选取 JSON 字段，如 /branches；不要用 workspace_read 或猜路径。'
+                          if record.get('read_action') == 'bf_repository.archive_read' else
+                          '用 read 分段读取 text_file，它是已解包的原工具文本；不要猜 preview/content 的嵌套格式。record_file 保留原始消息及身份，二者哈希分别记录；旧文本不是新验证。'
                           if record.get('text_file') else
                           '完整数据在当前工作区的 record_file。用 bash/Python 读取 JSON 并只提取本次需要的字段或片段，勿重复打印全文件。摘要不是新的验证。')}
 
@@ -234,6 +300,9 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
         raise ValueError('CONTEXT_STRATEGY_INVALID')
     state_prefixes = PRODUCT_STATE_PREFIXES if compact_state else (PRODUCT_STATE_PREFIX,)
     messages = payload.get('messages', [])
+    if isinstance(archive, ContextArchive):
+        names = {t.get('function', {}).get('name') for t in payload.get('tools', [])}
+        archive.reader = 'bf_repository' if names == {'bf_repository'} else 'read'
     if not isinstance(messages, list) or not all(isinstance(m, dict) for m in messages):
         raise ValueError('MODEL_MESSAGES_INVALID')
     # Server-owned frozen methods survive completed tool-pair compaction. They

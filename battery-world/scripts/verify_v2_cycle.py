@@ -15,6 +15,29 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def continuous_chain(proofs, start_system):
+    """A review fork is history, not a completed revision of the requested root."""
+    children = {}
+    for proof in proofs:
+        children.setdefault(proof['parent'], []).append(proof)
+
+    def walk(parent, seen):
+        best = []
+        for proof in children.get(parent, []):
+            sid = proof['system_commit']
+            if sid in seen:
+                raise ValueError('AUDIT_SYSTEM_PARENT_CYCLE')
+            if not (proof['actual_changed_sources'] and proof['releases']
+                    and proof['validation_ids'] and proof['decisions']):
+                continue
+            candidate = [sid, *walk(sid, seen | {sid})]
+            if len(candidate) > len(best):
+                best = candidate
+        return best
+
+    return walk(start_system, {start_system})
+
+
 def audit(runtime, dispatch, output, system=None):
     profile, _ = environment(Path(runtime))
     start = json.loads(Path(dispatch).read_text())
@@ -54,6 +77,8 @@ def audit(runtime, dispatch, output, system=None):
         s = systems[sid]
         source_proof = {p: digest(blob(ref)) for p, ref in s['files'].items()}
         jobs = {}
+        changed_sources = {}
+        parent_files = systems[s['parent']]['files'] if s.get('parent') else {}
         for jid, record in s['jobs'].items():
             refs = record['artifacts']
             if 'input.json' not in refs:
@@ -73,6 +98,11 @@ def audit(runtime, dispatch, output, system=None):
                     if blob(s['files'][prefix+'/'+path]) != encoded or z.read(path) != encoded:
                         raise ValueError('AUDIT_ACTUAL_SOURCE_CONFLICT: '+path)
                     source_hashes[path] = digest(encoded)
+                    logical = prefix+'/'+path
+                    before = parent_files.get(logical, {}).get('sha256')
+                    if before != source_hashes[path]:
+                        changed_sources[logical] = {'before': before, 'after': source_hashes[path],
+                                                    'consumed_by': jid}
             jobs[jid] = {'kind': kind, 'project_sha256': request['project_sha256'], 'sources': source_hashes,
                          'input_sha256': refs['input.json']['sha256'], 'source_zip_sha256': refs['project-source.zip']['sha256']}
         r = [v for v in releases if v['target'] == sid]
@@ -99,6 +129,7 @@ def audit(runtime, dispatch, output, system=None):
         proofs.append({'system_commit': sid, 'parent': s['parent'], 'continues_previous': s['parent'] == previous,
                        'domain_commits': s['domain_commits'], 'contracts': s['contracts'], 'files': source_proof,
                        'changes': s['design_changes'], 'jobs': jobs, 'releases': packages,
+                       'actual_changed_sources': changed_sources,
                        'validation_ids': [v['id'] for v in evidence],
                        'decisions': [v for v in decisions if v['to_design'] == sid]})
         previous = sid
@@ -122,8 +153,10 @@ def audit(runtime, dispatch, output, system=None):
             partial.append({'parent': parent['id'], 'child': child['id'], 'retained_files': retained,
                             'parent_changes': parent.get('cumulative_changes',parent['changes']), 'new_declarations': sorted(changed)})
     session_copies = []
-    for row in db.execute('SELECT value FROM design_professional_tasks WHERE project=?', (pid,)):
-        t = json.loads(row['value'])
+    task_history = [json.loads(row['value']) for table in
+                    ('design_professional_tasks', 'design_professional_task_history')
+                    for row in db.execute('SELECT value FROM '+table+' WHERE project=?', (pid,))]
+    for t in {t['id']: t for t in task_history}.values():
         marker = repo/'workspaces'/t['id']/'.pi/rebase-session.json'
         if marker.exists():
             v = json.loads(marker.read_text())
@@ -132,13 +165,16 @@ def audit(runtime, dispatch, output, system=None):
             if digest(raw) != v['source_sha256'] or not destination.read_bytes().startswith(raw):
                 raise ValueError('AUDIT_REBASE_SESSION_HISTORY_CONFLICT')
             session_copies.append({**v, 'history_prefix_preserved': True, 'source_unchanged': True})
-    value = {'schema_version': 'bf-v2-cycle-consumer-audit-v1', 'time_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    chain = continuous_chain(proofs, start['state_before']['current_system'])
+    value = {'schema_version': 'bf-v2-cycle-consumer-audit-v2', 'time_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
              'mode': 'reference_calibration' if system else 'actual_continuous_cycles',
              'project': project, 'start_system': start['state_before']['current_system'], 'systems': proofs,
              'selected_commits': selected, 'partial_commit_proofs': partial, 'session_copies': session_copies,
              'executions': executions, 'cost': cost, 'queries': 'SQLite mode=ro; no Workbench',
              'model_calls_started': 0, 'native_jobs_started': 0,
-             'two_continuous_cycles': len(proofs) >= 2 and all(p['continues_previous'] and p['releases'] and p['validation_ids'] and p['decisions'] for p in proofs),
+             'continuous_chain': chain,
+             'other_review_history': [p['system_commit'] for p in proofs if p['system_commit'] not in chain],
+             'two_continuous_cycles': len(chain) >= 2,
              'source_consumer_passed': bool(proofs)}
     db.close()
     output = Path(output)

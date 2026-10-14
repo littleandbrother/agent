@@ -267,6 +267,12 @@ class Repository:
         project=body.get('project_id') or self.bound(owner)
         if not project: raise ValueError('DESIGN_PROJECT_NOT_BOUND')
         self.project(project,owner)
+        if (action == 'repository_archive_read' or
+                action in ('repository_read', 'repository_workspace_read') and
+                str(body.get('path', '')).startswith('context-records/')):
+            from ..context import ContextArchive
+            return ContextArchive(self.store.root.parent, owner).read(
+                body['path'], body.get('offset', 0), body.get('limit', 8000), body.get('pointer'))
         if action=='repository_view': return self.view(project,owner)
         if action=='repository_system': return self.system(project,body['system_id'])
         if action=='repository_read':

@@ -9,7 +9,7 @@ export function repositoryExtension(api: DesignApi, emit: DesignEmit, declaratio
 			name: "bf_repository",
 			label: "BF Design Repository",
 			description: `Use action summary/state/task/read/workspace_read/extract, skill_catalog/skill/skill_resource, assign/reopen/run_task/write/commit/execute/execution/finish/contract/integrate/validate/decide/release/close.
-Reads: read(system_id OR domain_commit,path,offset?,limit?). workspace_read(path). skill(skill_id), skill_resource(path,offset?,limit?).
+Reads: read(system_id OR domain_commit,path,offset?,limit?). workspace_read(path). archive_read(path,offset?,limit?,pointer?) reads immutable owner-local context-records references; pointer selects a JSON field (e.g. /branches or /project/submitted). Read limit is at most 24000 characters. Use archive_read for archived observations instead of reissuing the same large summary. skill(skill_id), skill_resource(path,offset?,limit?).
 Lead: assign(role power|firmware,base_system,question,completion,contract_ids?); reopen(task_owner,question,completion); run_task(task_owner) waits for a real specialist; contract(domain_commits:{power:DC,firmware:DC},rationale,parent?); integrate(base_system,domain_commits,contracts:{power-firmware:IC},expected_revision,rationale); validate(system_id); decide(system_id,expected_revision,decision REVISE|REJECT|RETAIN_FOR_REVIEW|ADOPT_PASSED|RESTORE,rationale); release(system_id,rationale); close(conclusion).
 rebase(task_owner,base_system,expected_revision branch revision,question,completion) explicitly starts the next task on a new System Commit, retaining old task/workspace/branch/history. Uncommitted files must first be committed. reopen keeps the old base.
 extract(system_id,domain_commits?) returns source-derived facts and legal declaration examples, including peer commits on this base. ${declarationText}
@@ -25,6 +25,7 @@ Every mutation requires a stable operation_id. All actions use the bound project
 						"task",
 						"read",
 						"workspace_read",
+						"archive_read",
 						"extract",
 						"assign",
 						"reopen",
@@ -51,6 +52,7 @@ Every mutation requires a stable operation_id. All actions use the bound project
 				system_id: Type.Optional(Type.String()),
 				base_system: Type.Optional(Type.String()),
 				path: Type.Optional(Type.String()),
+				pointer: Type.Optional(Type.String()),
 				offset: Type.Optional(Type.Integer()),
 				limit: Type.Optional(Type.Integer()),
 				content: Type.Optional(Type.String()),
