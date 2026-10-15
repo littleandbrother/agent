@@ -50,6 +50,10 @@ def check(output):
         cwd=APP, env=env, capture_output=True, text=True, timeout=60)
     (output/'unit-tests.txt').write_text(test.stdout+test.stderr)
     assertion('bridge and public trace tests', test.returncode == 0, count=7)
+    ui_test = subprocess.run([profile['paths']['NODE'], '--test', 'tests/agentlab/test_lab_ui.mjs'],
+                             cwd=APP, capture_output=True, text=True, timeout=60)
+    (output/'ui-unit-tests.txt').write_text(ui_test.stdout+ui_test.stderr)
+    assertion('Lab current verdict, version, recovery and cost scopes', ui_test.returncode == 0, count=12)
     for name in ['architecture-v2/lab.js', 'studio.js', 'model-viewer.js']:
         result = subprocess.run([profile['paths']['NODE'], '--check', str(APP/'apps/agent-studio'/name)],
                                 capture_output=True, text=True)
@@ -121,7 +125,7 @@ def check(output):
     result = {'schema_version':'bf-lab-publication-verification-v1', 'status':'PASS',
         'completed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'origin':'http://127.0.0.1:8768/lab#system', 'checks':checks,
-        'preview_count':preview_count, 'unit_tests':7, 'baseline':baseline,
+        'preview_count':preview_count, 'unit_tests':19, 'baseline':baseline,
         'current_system':system['id'], 'adopted_system':v['project']['adopted'],
         'model_requests_added':0, 'simulations_rerun':0,
         'original_state_unchanged':True, 'v2_state_unchanged':True}

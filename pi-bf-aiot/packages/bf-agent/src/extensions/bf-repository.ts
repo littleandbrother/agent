@@ -3,12 +3,18 @@ import { Type } from "typebox";
 import type { DesignApi, DesignEmit } from "./bf-design.ts";
 
 /** Typed repository transport: one controller, persistent scopes, event-driven waits. */
-export function repositoryExtension(api: DesignApi, emit: DesignEmit, declarationText: string): ExtensionFactory {
+export function repositoryExtension(
+	api: DesignApi,
+	emit: DesignEmit,
+	declarationText: string,
+	reportOnly = false,
+): ExtensionFactory {
 	return (pi) => {
 		pi.registerTool({
 			name: "bf_repository",
 			label: "BF Design Repository",
-			description: `Use action summary/state/task/read/workspace_read/extract, skill_catalog/skill/skill_resource, assign/reopen/run_task/write/commit/execute/execution/finish/contract/integrate/validate/decide/release/close.
+			description: `Report actions: report_schema(scope power|firmware|lead), report_read(report_id,path? default facts.json,offset?,limit?), report_status(report_id), report_write(report_id,scope,content JSON string,expected_sha256 null or previous,operation_id), report_prepare(system_id,operation_id), report_build(report_id,operation_id). All author JSON uses the exact schema returned by report_schema; report_read input/sources/candidate/<path> reads frozen sources. Report-only runs cannot dispatch engineering or modify designs.
+Use action summary/state/task/read/workspace_read/extract, skill_catalog/skill/skill_resource, assign/reopen/run_task/write/commit/execute/execution/finish/contract/integrate/validate/decide/release/close.
 Reads: read(system_id OR domain_commit,path,offset?,limit?). workspace_read(path). archive_read(path,offset?,limit?,pointer?) reads immutable owner-local context-records references; pointer selects a JSON field (e.g. /branches or /project/submitted). Read limit is at most 24000 characters. Use archive_read for archived observations instead of reissuing the same large summary. skill(skill_id), skill_resource(path,offset?,limit?).
 Lead: assign(role power|firmware,base_system,question,completion,contract_ids?); reopen(task_owner,question,completion); run_task(task_owner) waits for a real specialist; contract(domain_commits:{power:DC,firmware:DC},rationale,parent?); integrate(base_system,domain_commits,contracts:{power-firmware:IC},expected_revision,rationale); validate(system_id); decide(system_id,expected_revision,decision REVISE|REJECT|RETAIN_FOR_REVIEW|ADOPT_PASSED|RESTORE,rationale); release(system_id,rationale); close(conclusion).
 rebase(task_owner,base_system,expected_revision branch revision,question,completion) explicitly starts the next task on a new System Commit, retaining old task/workspace/branch/history. Uncommitted files must first be committed. reopen keeps the old base.
@@ -46,9 +52,36 @@ Every mutation requires a stable operation_id. All actions use the bound project
 						"skill_catalog",
 						"skill",
 						"skill_resource",
-					].map((v) => Type.Literal(v)),
+						"report_schema",
+						"report_read",
+						"report_status",
+						"report_write",
+						"report_prepare",
+						"report_build",
+					]
+						.filter(
+							(v) =>
+								!reportOnly ||
+								[
+									"summary",
+									"state",
+									"read",
+									"archive_read",
+									"skill_catalog",
+									"skill",
+									"skill_resource",
+									"report_schema",
+									"report_read",
+									"report_status",
+									"report_write",
+									"report_build",
+									"release",
+								].includes(v),
+						)
+						.map((v) => Type.Literal(v)),
 				),
 				operation_id: Type.Optional(Type.String()),
+				report_id: Type.Optional(Type.String()),
 				system_id: Type.Optional(Type.String()),
 				base_system: Type.Optional(Type.String()),
 				path: Type.Optional(Type.String()),
@@ -77,6 +110,25 @@ Every mutation requires a stable operation_id. All actions use the bound project
 				skill_id: Type.Optional(Type.String()),
 			}),
 			async execute(_id, args, signal) {
+				if (
+					reportOnly &&
+					![
+						"summary",
+						"state",
+						"read",
+						"archive_read",
+						"skill_catalog",
+						"skill",
+						"skill_resource",
+						"report_schema",
+						"report_read",
+						"report_status",
+						"report_write",
+						"report_build",
+						"release",
+					].includes(args.action)
+				)
+					throw Error("REPORT_ONLY_ACTION_REQUIRED");
 				let value = await api({ ...args, action: `repository_${args.action}` });
 				if (args.action === "execute" && !value.reused) {
 					while (value.status === "RUNNING" || value.status === "QUEUED") {

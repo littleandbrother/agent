@@ -1,243 +1,424 @@
-const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const short = (s) => s ? s.slice(0, 11) : '—';
-const stamp = (n) => n ? new Date(n * 1000).toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}) : '冻结记录';
-const labels = {PASS:'通过',FAIL:'未通过',UNEVALUABLE:'缺少验证条件',NOT_CHECKED:'未检查',RECHECK_REQUIRED:'需复查',QUEUED:'已排队',RUNNING:'执行中',SUBMITTED:'已提交',BLOCKED:'受阻',COMPLETED:'已结束',REVIEW_REQUIRED:'等待复查',REVIEW_PACKAGE:'审查交付',REPAIR_REQUIRED:'待修订',RETAIN_FOR_REVIEW:'保留审查',NOT_TESTED:'未进行',IDLE:'空闲',FAILED:'执行失败',SUCCEEDED:'执行成功',SETTLED:'已登记',UNKNOWN:'待核对',AVAILABLE:'可用',ACTIVE:'已激活',LOADED:'已加载',RECORDED:'已记录',PLANNED:'待运行'};
-const badge = (s) => `<span class="badge ${esc(String(s).toLowerCase())}">${esc(labels[s] || s || 'NOT_CHECKED')}</span>`;
-const id = (s) => `<span class="id" title="${esc(s)}">${esc(short(s))}</span>`;
-const empty = (s) => `<p class="empty">${esc(s)}</p>`;
-const json = (v) => `<pre class="source-box">${esc(JSON.stringify(v, null, 2))}</pre>`;
-const headings = {
- system:['System Design','当前候选、专业提交、接口冲突与整机收口。'],
- runs:['Runs / Trace','谁在解决什么问题，采取了哪些行动，为什么受阻。'],
- validation:['Validation','查看当前版本的局部、接口、联合和独立验证。'],
- environment:['Environment','工具链、接口定义、实际执行与环境版本。'],
- harness:['Harness / Skills','实际加载的方法、专业技能、激活记录与恢复策略。'],
- experiments:['Experiments / RSI','固定条件下的方法比较与独立采用记录。'],
-};
-const domains = {mechanical:['Harvester & Mechanics','采能结构与几何'],power:['Power & Circuit','电源、储能与负载'],firmware:['Sensing & Firmware','采样、无线与接收'],assembly:['Assembly & Packaging','板卡与机械装配']};
-const gateNames = {source_domain:'源模型与工况',schematic_bom_pins:'原理图 / BOM / 引脚',pcb_connectivity_drc:'PCB 连通与 DRC',geometry_fit:'机械与装配',board_firmware_interfaces:'板卡与固件接口',firmware_event_logic:'固件事件行为',power_load_chain:'供能与任务执行',delivery_version:'同版本交付'};
-let data, project, systemId, page, selection, detailMode='details', query='', busy=false;
-let validationFilter='all', selectedSkill, historyFilter='all', related=null;
-const historyOffsets=new Map();
-const actionNames={commit:'专业提交',contract:'接口修订',integrate:'系统集成',validate:'独立检查',execute:'目标构建 / 执行',write:'修改工程',delegate:'分配专业任务',reopen:'恢复专业任务',finish:'提交阶段结论',decide:'设计决定',release:'同版交付',close:'结束本轮'};
-const readable=(s)=>String(s||'').replace(/(?:SC|DC|IC|RV|IR|PT|EX|DA|REL|pi-chat|eng)-[a-f0-9]{12,}/g,v=>short(v));
-const iconPaths={brand:'M2 12h4l2-7 4 14 3-9 2 2h5',search:'M21 21l-5-5 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',refresh:'M20 7V3m0 4h-4 M4 17v4m0-4h4 M4 9a8 8 0 0 1 13-6l3 4 M20 15a8 8 0 0 1-13 6l-3-4',close:'m6 6 12 12 M6 18 18 6',system:'M6 5v14 M18 5v14 M6 9h12 M6 15h12 M3 3h6v4H3z M15 3h6v4h-6z M3 17h6v4H3z M15 17h6v4h-6z',runs:'M8 5v14l11-7z M3 5v14',validation:'m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6z m-4 9 3 3 5-6',environment:'m12 2 9 5v10l-9 5-9-5V7z M3 7l9 5 9-5 M12 12v10',harness:'M14 6a5 5 0 0 0-7 7L3 17v4h4l4-4a5 5 0 0 0 7-7l-4 4-4-4z',experiments:'M9 3h6 M10 3v7l-6 9c-.6 1 .1 2 1.4 2h13.2c1.3 0 2-1 1.4-2l-6-9V3 M7 16h10',power:'m13 2-9 12h7l-1 8 10-12h-7z',firmware:'M6 6h12v12H6z M9 9h6v6H9z M9 2v4 M15 2v4 M9 18v4 M15 18v4 M2 9h4 M2 15h4 M18 9h4 M18 15h4',mechanical:'m12 2 2 3 3-1 3 3-1 3 3 2-3 2 1 3-3 3-3-1-2 3-2-3-3 1-3-3 1-3-3-2 3-2-1-3 3-3 3 1z M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8',assembly:'m12 3 9 5v9l-9 5-9-5V8z M3 8l9 5 9-5 M12 13v9',contract:'M10 7H7a5 5 0 0 0 0 10h3 M14 7h3a5 5 0 0 1 0 10h-3 M8 12h8',release:'M5 5h14v16H5z M8 2h8v6H8z M8 12h8 M8 16h5',arrow:'M5 12h14 m-5-5 5 5-5 5',question:'M9 8a3 3 0 1 1 5 2c-1 1-2 1-2 3 M12 17h.01 M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20'};
-const icon=(kind)=>`<svg class="vector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${iconPaths[kind]||iconPaths.system}"/></svg>`;
-const symbol=(kind)=>`<span class="domain-symbol ${kind}">${icon(kind)}</span>`;
+/* Lab reads immutable engineering records. Display helpers never award a verdict. */
+export const gateNames = {source_domain:'源模型与工况',schematic_bom_pins:'原理图、BOM 与引脚',pcb_connectivity_drc:'PCB 连通与 DRC',geometry_fit:'机械与装配',board_firmware_interfaces:'板卡与固件接口',firmware_event_logic:'固件事件行为',power_load_chain:'供能与任务执行',delivery_version:'同版本交付'};
+export function coreRecords(system) {
+  return Object.entries(gateNames).map(([id,label])=>({...system.validations?.[id],id,label,target:system.id,status:system.validations?.[id]?.status||'NOT_CHECKED',kind:'core'}));
+}
+export function latestInterface(view,system) {
+  return view.validations.filter(v=>v.target===system.id&&v.kind==='power-firmware-interface').at(-1);
+}
+export function contractVerdict(view,system,contract) {
+  if(!Object.values(system.contracts||{}).includes(contract.id))return 'NOT_CHECKED';
+  return latestInterface(view,system)?.status||'NOT_CHECKED';
+}
+export function changedFiles(system,parent) {
+  if(!parent)return [];
+  return [...new Set([...Object.keys(parent.files),...Object.keys(system.files)])].filter(p=>parent.files[p]?.sha256!==system.files[p]?.sha256).map(path=>({path,before:parent.files[path],after:system.files[path]}));
+}
+export function operationOutcome(op) {
+  const r=op.result||{};
+  return {execution:op.status,engineering:r.result?.status||r.current_qualification?.status||r.digital_status||r.status||null};
+}
+export function scopeRequests(requests,{owner,start,end}={}) {
+  return requests.filter(r=>(!owner||r.owner===owner)&&(start==null||r.created>=start)&&(end==null||r.created<end));
+}
+export function usageTotals(requests) {
+  return {requests:requests.length,ledger:requests.reduce((n,r)=>n+Number((r.status==='SETTLED'?r.charged:r.reserved)??0),0),estimate:requests.reduce((n,r)=>n+(r.cost_estimate?.cache_aware_estimate_usd??0),0),estimated:requests.filter(r=>r.cost_estimate?.cache_aware_estimate_usd!=null).length,unknown:requests.filter(r=>r.status==='UNKNOWN').length,tokens:requests.reduce((n,r)=>n+(r.usage?.total_tokens??0),0)};
+}
+export function publicSearchText(record) {
+  return [record.id,record.label,record.name,record.title,record.path,record.description,record.rationale,record.question,record.conclusion,record.scope].filter(v=>typeof v==='string').join(' ').toLowerCase();
+}
+export function sourceOperation(view,key) {
+  const matches=view.operations.filter(o=>o.result?.id===key||o.result?.system_commit===key);
+  return matches.find(o=>o.request?.action==='repository_integrate')||matches.find(o=>o.result?.id===key)||matches.at(-1);
+}
+export function designDecision(view,key) {
+  const record=view.decisions.filter(d=>d.to_design===key||d.snapshot===key||d.system_commit===key).at(-1);
+  if(!record)return null;
+  try{return {...record,...JSON.parse(record.rationale)};}catch{return record;}
+}
+export function roundScope(view,system) {
+  const tasks=[...view.professional_task_history,...view.professional_tasks];
+  const starts=tasks.filter(t=>t.base_system===system.parent&&t.created).map(t=>t.created);
+  const parent=view.systems.find(s=>s.id===system.parent)||system;
+  const start=starts.length?Math.min(...starts):sourceOperation(view,parent.id)?.created||0;
+  const next=tasks.filter(t=>t.base_system===system.id&&t.created>start).map(t=>t.created);
+  return {start,end:next.length?Math.min(...next):null};
+}
+export function jobArtifactSystem(view,preferred,job,path,sha256) {
+  const matches=s=>{const ref=s?.jobs?.[job]?.artifacts?.[path];return ref&&(!sha256||ref.sha256===sha256);};
+  return matches(preferred)?preferred:[...view.systems].reverse().find(matches);
+}
+
+if(typeof document!=='undefined') {
+window.history.scrollRestoration='manual';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const short=s=>s?String(s).slice(0,11):'—';
+const stamp=n=>n?new Date(n*1000).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}):'冻结记录';
+const readable=s=>String(s||'').replace(/(?:SC|DC|IC|RV|IR|PT|EX|DA|REL|pi-chat|eng)-[a-f0-9]{10,}/g,v=>short(v));
+const brief=(s,n=96)=>{s=readable(s).replace(/\s+/g,' ').trim();return s.length>n?s.slice(0,n)+'…':s;};
+const labels={PASS:'通过',FAIL:'未通过',UNEVALUABLE:'缺少验证条件',NOT_CHECKED:'未检查',RECHECK_REQUIRED:'需复查',QUEUED:'未启动',RUNNING:'执行中',SUBMITTED:'已提交',BLOCKED:'受阻',COMPLETED:'已结束',REVIEW_REQUIRED:'等待复查',REVIEW_PACKAGE:'审查交付',REPAIR_REQUIRED:'待修订',RETAIN_FOR_REVIEW:'保留审查',REVISE:'继续修订',REJECT:'拒绝候选',ADOPT_PASSED:'采用通过版',NOT_TESTED:'未进行',IDLE:'空闲',FAILED:'执行失败',SUCCEEDED:'调用完成',SETTLED:'已登记',UNKNOWN:'待核对',AVAILABLE:'可用',ACTIVE:'已激活',LOADED:'配置已加载',RECORDED:'已记录',PLANNED:'待运行',REVIEW_DELIVERED:'审查包已交付',OPEN:'待解决'};
+const badge=s=>`<span class="badge ${esc(String(s).toLowerCase())}">${esc(labels[s]||s||'未检查')}</span>`;
+const id=s=>`<span class="id" title="${esc(s)}">${esc(short(s))}</span>`;
+const empty=s=>`<p class="empty">${esc(s)}</p>`;
+const json=v=>`<pre class="source-box">${esc(JSON.stringify(v,null,2))}</pre>`;
+const domains={mechanical:['机械与采能','结构、尺寸与源输入'],power:['电源与电路','转换、储能与负载'],firmware:['感知与固件','采样、无线与接收'],assembly:['装配与封装','板卡安装与几何接口']};
+const headings={system:['系统设计','当前设计、实际变更与工程结论'],runs:['运行记录','按设计轮次查看任务、执行结果与公开决定'],validation:['验证','当前八项检查与接口检查，历史回执单独查看'],environment:['环境','固定软件、实际执行、权限和接口'],harness:['方法与技能','按 Agent 查看加载配置与技能使用'],experiments:['实验与改进','协议、比较结果与方法采用']};
+const actionNames={commit:'提交专业修订',contract:'修订接口契约',integrate:'形成系统候选',validate:'运行工程检查',review:'独立工程审查',execute:'构建或求解',write:'修改工程文件',delegate:'分配专业任务',assign:'分配专业任务',import:'导入冻结工程',reopen:'恢复专业任务',rebase:'切换任务基准',finish:'提交阶段结论',decide:'作出设计决定',release:'生成同版交付',close:'结束本轮',extract:'提取工程事实',read:'读取工程',state:'读取任务状态',summary:'查看状态摘要',task:'读取任务要求'};
+const icons={brand:'M2 12h4l2-7 4 14 3-9 2 2h5',menu:'M4 6h16 M4 12h16 M4 18h16',search:'M21 21l-5-5 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',refresh:'M20 7V3m0 4h-4 M4 17v4m0-4h4 M4 9a8 8 0 0 1 13-6l3 4 M20 15a8 8 0 0 1-13 6l-3-4',close:'m6 6 12 12 M6 18 18 6',system:'M6 5v14 M18 5v14 M6 9h12 M6 15h12 M3 3h6v4H3z M15 3h6v4h-6z M3 17h6v4H3z M15 17h6v4h-6z',runs:'M8 5v14l11-7z M3 5v14',validation:'m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6z m-4 9 3 3 5-6',environment:'m12 2 9 5v10l-9 5-9-5V7z M3 7l9 5 9-5 M12 12v10',harness:'M14 6a5 5 0 0 0-7 7L3 17v4h4l4-4a5 5 0 0 0 7-7l-4 4-4-4z',experiments:'M9 3h6 M10 3v7l-6 9c-.6 1 .1 2 1.4 2h13.2c1.3 0 2-1 1.4-2l-6-9V3 M7 16h10',power:'m13 2-9 12h7l-1 8 10-12h-7z',firmware:'M6 6h12v12H6z M9 9h6v6H9z M9 2v4 M15 2v4 M9 18v4 M15 18v4 M2 9h4 M2 15h4 M18 9h4 M18 15h4',mechanical:'m12 3 8 4v10l-8 4-8-4V7z M4 7l8 4 8-4 M12 11v10',assembly:'m12 3 9 5v9l-9 5-9-5V8z M3 8l9 5 9-5 M12 13v9',contract:'M10 7H7a5 5 0 0 0 0 10h3 M14 7h3a5 5 0 0 1 0 10h-3 M8 12h8',release:'M5 5h14v16H5z M8 2h8v6H8z M8 12h8 M8 16h5',arrow:'M5 12h14 m-5-5 5 5-5 5'};
+const icon=k=>`<svg class="vector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[k]||icons.system}"/></svg>`;
+const symbol=k=>`<span class="domain-symbol ${k}">${icon(k)}</span>`;
+const item=(kind,key)=>`data-kind="${esc(kind)}" data-key="${esc(key)}"`;
 const jump=(to,key,text)=>`<button data-jump="${to}" data-object="${esc(key||'')}">${esc(text)}</button>`;
+const objectButton=(kind,key,text,extra='')=>`<button class="text-link" ${item(kind,key)} ${extra}>${esc(text)}</button>`;
+const card=(title,subtitle,body,action='')=>`<section class="card"><header><div><h2>${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div>${action}</header>${body}</section>`;
+const fact=(title,value)=>`<div><dt>${esc(title)}</dt><dd>${esc(value??'未记录')}</dd></div>`;
+let data,project,systemId,page='system',selection=null,detailMode='details',query='',busy=false;
+let historyFilter='system',historyAll=false,validationFilter='all',usageScope='round',usageOwner='',selectedMethodOwner='',related=null,traceCursor={},viewerState=null;
+const shell=$('.shell'),viewStates=new Map(),methodFacts=new Map();
 document.querySelectorAll('[data-icon]').forEach(n=>n.innerHTML=icon(n.dataset.icon));
+const current=()=>data.systems.find(s=>s.id===systemId)||data.systems.at(-1);
+const req=async url=>{const r=await fetch(url,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error||r.statusText);return d;};
+const baseQuery=()=>({project:project.id,owner:project.owner,system:current().id});
+const fileURL=(path,extras={})=>'/api/design-repository/file?'+new URLSearchParams({...baseQuery(),path,...extras});
+const archiveURL=r=>'/api/design-repository/archive?'+new URLSearchParams({project:project.id,owner:project.owner,release:r.id});
+const sourcePreview=name=>data.previews.find(p=>p.name===name&&p.system_commit===current().id);
+const previewURL=p=>fileURL(p.name,{preview:1});
+const parentOf=s=>data.systems.find(p=>p.id===s.parent);
+const latestRelease=s=>data.releases.filter(r=>r.target===s.id).at(-1);
+const action=op=>op.request?.action?.replace('repository_','')||op.operation;
+const actionLabel=op=>action(op)==='validate'?(op.result?.kind==='system-engineering'||op.request?.scope==='system'?'独立工程审查':'检查接口'):action(op)==='execute'?(op.result?.kind==='spice'||op.request?.path?.includes('chain')?'电源瞬态求解':'目标固件构建'):actionNames[action(op)]||action(op);
+const opFor=key=>sourceOperation(data,key);
+const timeOf=v=>v.created||opFor(v.id)?.created||data.events.find(e=>e.data?.system_commit===v.id)?.created||0;
+const taskFor=owner=>data.professional_tasks.find(t=>t.owner===owner);
+const roleName=owner=>domains[taskFor(owner)?.role]?.[0]||(owner===project.owner?'BF Lead':'专业会话');
 const methodSkills=()=>[...new Map([...data.skills.skills,...data.methods.flatMap(m=>m.resource_manifest?.skills||[])].map(s=>[s.id,s])).values()];
-const visible = (v) => !query || JSON.stringify(v).toLowerCase().includes(query.toLowerCase());
-const current = () => data.systems.find((s) => s.id === systemId) || data.systems.at(-1);
-const latestInterface = (s=current()) => data.validations.filter(v=>v.target===s.id&&v.kind==='power-firmware-interface').at(-1);
-const currentIssues = (s=current()) => latestInterface(s)?.result?.issues || [];
-const issueNames = {'policy-radio-duty':'策略广播周期与实际无线配置不一致','sece-envelope':'SECE 模型仍缺少开关与器件动态条件'};
-const req = async (url) => {const r=await fetch(url,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error || r.statusText);return d;};
-const baseQuery = () => ({project:project.id,owner:project.owner,system:current().id});
-const fileURL = (path, extras={}) => '/api/design-repository/file?' + new URLSearchParams({...baseQuery(),path,...extras});
-const download = (r) => '/api/design-repository/archive?' + new URLSearchParams({project:project.id,owner:project.owner,release:r.id});
-const item = (kind, key) => `data-kind="${esc(kind)}" data-key="${esc(key)}"`;
-function card(title,subtitle,body,action=''){return `<section class="card"><header><div><h2>${esc(title)}</h2>${subtitle?`<p>${esc(subtitle)}</p>`:''}</div>${action}</header>${body}</section>`;}
-function notify(s){$('#notice').textContent=s;$('#notice').style.display='block';setTimeout(()=>$('#notice').style.display='none',3500);}
-function totals(){const reqs=data.model_requests;return {requests:reqs.length,upper:reqs.reduce((n,r)=>n+(r.status==='SETTLED'?r.charged:r.reserved),0),estimate:reqs.reduce((n,r)=>n+(r.cost_estimate?.cache_aware_estimate_usd||0),0),unknown:reqs.filter(r=>r.status==='UNKNOWN').length,tokens:reqs.reduce((n,r)=>n+(r.usage?.total_tokens||0),0)};}
-function sourcePreview(name){return data.previews.find((p)=>p.name===name&&p.system_commit===current().id);}
-function previewURL(p){return fileURL(p.name,{preview:'1'});}
-function systemPage(){
- const s=current(),checks=data.validations.filter(v=>v.target===s.id&&v.kind==='power-firmware-interface'),latest=checks.at(-1),contractId=s.contracts['power-firmware'];
- const branches=Object.entries(domains).map(([domain,[title,desc]])=>{
-  const dc=data.domain_commits.find(c=>c.id===s.domain_commits[domain]),task=data.professional_tasks.find(t=>t.role===domain);
-  return `<button class="branch clickable" ${item(dc?'domain':'assets',dc?.id||domain)}><header>${symbol(domain)}<span><b>${title}</b><small>${desc}</small></span></header><p>${dc?id(dc.id):'冻结整机资产'} ${badge(dc?(task?.status||'SUBMITTED'):'NOT_CHECKED')}</p><small class="muted">${dc?esc(dc.changes.length+' 项声明 / 工程变化'):task?esc(labels[task.status]||task.status):'继承 Baseline'}</small><small class="owner-label">${task?short(task.owner):'保留整机资产'}</small></button>`;
- }).join('');
- const contract=data.contracts.find(c=>c.id===contractId);
- const contracts=`<button class="contract clickable" ${item(contract?'contract':'system',contract?.id||s.id)}><h3>Power Rail & Firmware Load Contract</h3><small>${contract?id(contract.id):'等待专业提交与接口集成'}</small>${badge(contract?(latest?.status||'NOT_CHECKED'):'NOT_CHECKED')}${latest?`<small>源码核对 ${latest.result.checks.length} 项 · ${latest.result.issues.length} 个开放问题</small>`:''}<small>版本 ${contract?.revision||'—'} · 实际无线、采样、储能初态</small><div class="contract-io"><strong>Provides</strong> ${esc(contract?.provides?.join(' · ')||'—')}<br><strong>Requires</strong> ${esc(contract?.requires?.join(' · ')||'—')}</div></button>`+
-  ['Source Behavior','Board / Package Fit','Native Source Binding'].map((name,i)=>`<button class="contract clickable" ${item('gate',['source_domain','geometry_fit','delivery_version'][i])}><h3>${name}</h3><small>${i===0?'机械输入 → 电源':i===1?'PCB → 结构':'源码 → 构建与交付'}</small>${badge(s.validations[['source_domain','geometry_fit','delivery_version'][i]]?.status||'NOT_CHECKED')}</button>`).join('');
- const preview=sourcePreview('cad-top.png');
- const candidate=`<section class="candidate"><small>Selected System Candidate</small><h2>${short(s.id)}</h2>${preview?`<img src="${previewURL(preview)}" alt="当前候选 CAD 俯视图" data-preview="cad-top.png" class="clickable">`:empty('此版本没有已绑定 CAD 预览')}<p>同版源码、工程作业、接口声明与验收记录</p><div class="preview-actions"><button data-preview="schematic.svg">原理图</button><button data-preview="pcb-combined.svg">PCB</button><button data-cad>3D CAD</button></div><h3 class="section-title">Included Commits</h3>${Object.entries(s.domain_commits).map(([d,c])=>`<p>${esc(domains[d][0])} ${id(c)}</p>`).join('')||'<p>从冻结完整候选导入</p>'}<h3 class="section-title">Source identity</h3><p>${s.origin_design_id?id(s.origin_design_id):'由专业提交集成'}</p><p>${Object.keys(s.files).length} 件文件 · ${Object.keys(s.jobs).length} 个已执行作业</p></section>`;
- const steps=[['Integration Request',s.domain_commits.power?'PASS':'NOT_CHECKED','明确选择专业提交与接口版本','integration'],['Interface Check',latest?.status||'NOT_CHECKED','读取本版源码与负载参数','validation'],['Build & Artifact Binding',s.validations.delivery_version?.status||'NOT_CHECKED','未变原生产物按精确输入复用','assets'],['Coupled System Run',s.validations.power_load_chain?.status||'NOT_CHECKED','供能与任务执行结论','gate'],['Independent Review',s.digital_status,'保留八项核心检查','system'],['Design Decision / Release',data.releases.some(r=>r.target===s.id)?'SUBMITTED':'NOT_CHECKED','采用决定与同版审查交付','release']];
- const workflow=`<section class="step-list">${steps.map(([title,status,desc,kind],i)=>`<button ${item(kind==='validation'&&!latest?'system':kind,kind==='integration'?data.integration_requests.find(r=>r.system_commit===s.id)?.id||s.id:kind==='gate'?'power_load_chain':kind==='validation'?latest?.id||s.id:s.id)}><span class="step-num">${i+1}</span><span><strong>${title}</strong><small>${desc}</small>${badge(status)}</span></button>`).join('')}<div class="issue"><strong>Open System Issues</strong>${currentIssues().map(i=>`<p>${esc(issueNames[i.id]||i.id)}</p>`).join('')||`<p>见当前核心检查</p>`}</div></section>`;
- return `<div class="stepbar">${['Domain Branches','Interface Contracts','System Integration','Verification & Adoption'].map((t,i)=>`<div><span class="step-num">${i+1}</span><span><b>${t}</b><small>${['Independent workspace & commits','Source-bound input / output','Compose one system candidate','Checks, decision and release'][i]}</small></span></div>`).join('')}</div><div class="four flow"><div>${branches}</div><div>${contracts}</div>${candidate}${workflow}</div>${history()}`;
+const systemTitle=s=>{
+ if(s.id===project.adopted)return '稳定参考';if(s.origin_design_id&&!s.parent)return '导入的 P01 工程';
+ const paths=changedFiles(s,parentOf(s)).map(f=>f.path),fw=paths.some(p=>p.startsWith('project-fw')),power=paths.some(p=>p.startsWith('project-chain')||p.startsWith('project-spice'));
+ return `${fw&&power?'固件与供能联合修订':fw?'固件修订':power?'供能修订':paths.length?'接口与集成修订':'系统集成'} · v${Math.max(1,data.systems.indexOf(s))}`;
+};
+const systemPurpose=s=>{
+ const changes=changedFiles(s,parentOf(s)),fw=changes.filter(c=>c.path.startsWith('project-fw')).length,power=changes.filter(c=>c.path.startsWith('project-chain')||c.path.startsWith('project-spice')).length;
+ return fw||power?[fw?`更新 ${fw} 件固件源文件`:'',power?`更新 ${power} 件供能与负载文件`:''].filter(Boolean).join('，')+'；查看下方检查结果与 BF 决定。':changes.length?`更新 ${changes.length} 件接口或集成文件；工程输入与证据绑定本版。`:'P01 无线传感节点 · 冻结工程与已有验证';
+};
+const domainTitle=d=>`${domains[d.domain]?.[0]||d.domain} · 修订 ${d.revision??data.domain_commits.filter(c=>c.domain===d.domain).indexOf(d)+1}`;
+const selectionTitle=(kind,v)=>({system:()=>systemTitle(v),domain:()=>domainTitle(v),contract:()=>`电源与固件活动契约 · 第 ${v.revision} 版`,validation:()=>v.kind==='power-firmware-interface'?'电源与固件接口检查':'独立工程审查',gate:()=>v.label,run:()=>roleName(v.owner),decision:()=>`BF 设计决定 · ${labels[v.decision]||'公开理由'}`,operation:()=>actionLabel(v),method:()=>`${roleName(v.owner)} 执行配置`,execution:()=>v.kind==='spice'?'电源瞬态求解':'固件目标构建',release:()=>`同版工程审查包`,skill:()=>skillTitle(v),tool:()=>toolNames[v.id]||v.id,interface:()=>actionNames[v.id.replace('repository_','')]||v.id,assets:()=>domains[v.id]?.[0]||'工程文件',experiment:()=>v.title,request:()=>`${roleName(v.owner)} 模型请求`}[kind]?.()||v.label||v.title||'记录');
+function notify(text){$('#notice').textContent=text;$('#notice').classList.add('visible');setTimeout(()=>$('#notice').classList.remove('visible'),3500);}
+const translations={
+ 'netlist load differs from the declared load witness':'实际网表负载与声明的时序不一致','load charge differs from timeline':'负载积分电荷与时序表不一致','supply falls below the declared operating voltage':'供电低于声明的工作电压','manual admission produces a negative MCU rail':'人工接通模型出现负电压',
+ 'native PCB peripheral initialization and full pin/interface audit':'待核对原生 PCB、外设初始化及完整引脚接口','native component 3D heights':'缺少原生器件三维高度','PCB-to-CAD placement transform':'缺少 PCB 与 CAD 的装配坐标对应','mounting-hole correspondence':'待核对安装孔对应关系','supplier, footprint and vendor pin full audit':'待核对供应商、封装和厂商引脚','T1 winding parameter identification':'待确认 T1 绕组参数',
+ 'CS-TENG capacitance and its stroke dependence':'待确定 TENG 电容与行程关系','rectifier diode part number / Vf / recovery':'待确定整流二极管与动态参数','SECE switch part number and drive':'待确定 SECE 开关与驱动','storage capacitor ESR and leakage':'待补储能电容 ESR 和漏电','regulator part number, dropout and efficiency curve':'待补稳压器型号、压差与效率曲线','AD7156 conversion current and timing (declared only)':'AD7156 电流与转换时序待校准','nRF52832 radio TX/RX current profile (declared only)':'nRF52832 无线电流波形待校准','fast SECE switching instant and duty':'待补 SECE 开关时刻与占空比','switch on-resistance and gate/drive charge':'待补开关导通电阻与驱动电荷','transformer/inductor values and saturation':'待补变压器、电感与饱和参数','diode vs synchronous rectification in the extraction stage':'待确认提取级整流方式','series resistance of the real extraction path':'待补提取路径串联电阻',
+ 'source timing and declared load/power interface':'实际源码时序与声明的电源、负载接口','exact validated firmware input reuse':'精确复用已验证的固件输入','original independent native review on identical saved EDA/CAD inputs':'复用输入一致的原生 EDA / CAD 独立检查','original source calibration and SECE applicability':'源模型校准与 SECE 适用条件','native board and firmware interfaces':'原生板卡与固件接口','current source and selected worker inputs; immutable review manifest':'当前源码、选定作业输入及同版清单','fixed nominal/manual-admission load and actual native transient; source calibration pending':'名义工况、人工接通与实际瞬态输出；源参数待校准'};
+Object.assign(translations,{'power rail and initial state':'供电电压与初始储能','actual radio and sampling timing':'实际无线与采样时序','source-bound load timing':'与源码对应的负载时序','manual admission boundary':'人工接通条件','current amplitude provenance':'电流幅值依据'});
+const tr=s=>translations[s]||readable(s);
+const publicNote=(text,label='完整公开说明')=>text?`<details class="public-note"><summary>${esc(label)}</summary><p class="public-text">${esc(readable(text))}</p></details>`:'';
+function gateInfo(g) {
+ const f=g.findings||{},n=f.findings&&!Array.isArray(f.findings)?f.findings:f;
+ const notes=[...(Array.isArray(f.findings)?f.findings:[]),...(n.pending||f.pending||[])].map(tr);
+ const metrics=[];
+ if(f.minimum_supply_v!=null)metrics.push(['最低供电',Number(f.minimum_supply_v).toPrecision(6)+' V']);
+ if(f.storage_v)metrics.push(['储能电压',f.storage_v.map(v=>Number(v).toPrecision(4)).join(' → ')+' V']);
+ if(f.load_binding)metrics.push(['负载波形点数',`${f.load_binding.actual_points} 实际 / ${f.load_binding.expected_points} 声明重建`]);
+ if(f.minimum_mcu_v!=null)metrics.push(['模型 MCU 最低电压',Number(f.minimum_mcu_v).toPrecision(5)+' V']);
+ if(n.fresh_drc_counts)for(const [k,v]of Object.entries(n.fresh_drc_counts))metrics.push([k==='Clearance Error'?'间距错误':k==='Connection Error'?'连接错误':k,String(v)]);
+ if(n.outline?.pcb_mm)metrics.push(['PCB / CAD 外形',n.outline.pcb_mm.join(' × ')+' / '+n.outline.cad_mm.join(' × ')+' mm']);
+ if(n.part_pin_net_correspondence)metrics.push(['器件 / 引脚对应',`${n.part_pin_net_correspondence.components} 件 / ${n.part_pin_net_correspondence.pins} 脚`]);
+ if(f.file_count!=null)metrics.push(['同版文件',f.file_count+' 件']);
+ if(f.exact_reuse_validation)notes.push('复用相同源码的事件行为检查');
+ if(!notes.length)notes.push(g.status==='PASS'?'当前输入对应的检查通过':g.status==='RECHECK_REQUIRED'?'受影响的工程输入已改变':g.status==='NOT_CHECKED'?'等待本版检查':'查看本版工程检查结果');
+ return {notes,metrics,scope:tr(g.scope||'当前候选')};
 }
-function history(){
- const when=(key)=>data.operations.find(o=>o.result?.id===key||o.result?.system_commit===key)?.created||data.events.find(e=>e.data?.system_commit===key||e.data?.submitted===key)?.created||0;
- const tracks=[['domain','Domain commits',data.domain_commits],['system','System commits',data.systems],['validation','Validation',data.validations],['release','Releases',data.releases]];
- let nodes=tracks.flatMap(([kind,label,rows])=>rows.map(v=>({kind,label,v,time:when(v.id)}))).filter(n=>visible(n.v)&&(historyFilter==='all'||n.kind===historyFilter)).sort((a,b)=>a.time-b.time);
- const total=nodes.length;nodes=nodes.slice(-24);const rows=tracks.filter(([kind])=>historyFilter==='all'||kind===historyFilter);
- const body=`<div class="history-scroll"><div class="history-grid" data-columns="${nodes.length}"><span class="history-heading">${total>nodes.length?'最近 '+nodes.length+' / '+total+' 项':'提交关系'}</span>${nodes.map(n=>`<span class="history-heading">${n.time?stamp(n.time):'Baseline'}</span>`).join('')}${rows.map(([kind,label])=>`<div class="history-label">${icon(kind==='domain'?'system':kind==='release'?'release':kind)}<span>${label}</span></div>${nodes.map(n=>`<div class="history-cell">${n.kind===kind?`<button class="history-node ${kind} ${esc(n.v.domain||'')} ${String(n.v.status||'').toLowerCase()} ${n.v.id===current().id?'selected':''}" ${item(kind,n.v.id)}><span class="node-mark"></span><strong>${short(n.v.id)}</strong><small>${n.kind==='domain'?esc(domains[n.v.domain]?.[0]):n.kind==='system'?n.v.id===project.adopted?'当前采用':n.v.id===project.submitted?'当前候选':'历史候选':esc(labels[n.v.status]||n.v.scope||'同版交付')}</small>${n.v.parent?`<small>← ${short(n.v.parent)}</small>`:n.v.target?`<small>基于 ${short(n.v.target)}</small>`:''}</button>`:''}</div>`).join('')}`).join('')}</div></div>`;
- return card('Design History & Milestones','专业提交 → 系统集成 → 验证 → 采用与交付',body,`<div class="tabs">${[['all','All events'],['domain','Domain'],['system','System'],['validation','Validation'],['release','Releases']].map(([k,t])=>`<button data-history="${k}" class="${historyFilter===k?'active':''}">${t}</button>`).join('')}</div>`);
+const summaryText=g=>{const x=gateInfo(g);return x.metrics.length?x.metrics.map(([k,v])=>k+' '+v).slice(0,2).join(' · '):x.notes.slice(0,2).join('；');};
+function gateCards(rows,compact=false){return rows.map(g=>`<button class="gate-row ${compact?'compact':''}" ${item('gate',g.id)}><span class="status-dot ${g.status.toLowerCase()}"></span><span><strong>${esc(g.label)}</strong><small>${esc(summaryText(g))}</small></span>${badge(g.status)}<span class="row-arrow">›</span></button>`).join('');}
+function counts(system=current()) {const rows=coreRecords(system);return ['PASS','FAIL','UNEVALUABLE','RECHECK_REQUIRED','NOT_CHECKED'].map(status=>({status,count:rows.filter(g=>g.status===status).length}));}
+function summaryStrip(){return `<div class="summary-strip" aria-label="当前八项检查汇总">${counts().filter(x=>x.count||['PASS','FAIL','UNEVALUABLE'].includes(x.status)).map(x=>`<button data-filter="${x.status}"><b>${x.count}</b><span>${labels[x.status]}</span></button>`).join('')}<div><b>8</b><span>当前核心检查</span></div></div>`;}
+function domainChanges(domain,system=current()) {return changedFiles(system,parentOf(system)).filter(f=>domain==='firmware'?f.path.startsWith('project-fw'):domain==='power'?f.path.startsWith('project-chain')||f.path.startsWith('project-spice'):f.path.includes(domain==='mechanical'?'cad':'assembly'));}
+function systemPage() {
+ const s=current(),release=latestRelease(s),changes=changedFiles(s,parentOf(s)),contract=data.contracts.find(c=>c.id===s.contracts['power-firmware']),ci=latestInterface(data,s),preview=sourcePreview('cad-top.png');
+ const parent=parentOf(s),decision=designDecision(data,s.id);
+ const overview=`<div class="design-overview"><div><div class="eyebrow">${s.id===project.submitted?'当前工作候选':'历史候选'} · ${id(s.id)}</div><h2>${esc(systemTitle(s))}</h2><p class="design-purpose">${esc(systemPurpose(s))}</p><div class="context-links">${badge(s.digital_status)}<span>物理验证：${labels[s.physical]||s.physical}</span>${parent?objectButton('system',parent.id,'来自 '+systemTitle(parent)):''}</div><dl class="facts inline">${fact('本轮工程变更',changes.filter(c=>!c.path.startsWith('interfaces/')).length+' 个文件')}${fact('选定工程作业',Object.keys(s.jobs).length+' 个')}<div><dt>BF 决定</dt><dd>${decision?objectButton('decision',decision.id,labels[decision.decision]||'查看公开理由'):'尚无决定'}</dd></div></dl><div class="preview-actions"><button data-preview="schematic.svg">${icon('contract')}原理图</button><button data-preview="pcb-combined.svg">${icon('firmware')}PCB</button><button data-cad>${icon('assembly')}3D CAD</button>${release?`<a class="button-primary" href="${archiveURL(release)}" download>下载同版审查包</a>`:''}</div></div>${preview?`<button class="design-preview" data-cad><img src="${previewURL(preview)}" alt="本版机械模型预览"><span>查看三维模型 ↗</span></button>`:''}</div>`;
+ const branches=Object.entries(domains).map(([domain,[title,desc]])=>{const dc=data.domain_commits.find(c=>c.id===s.domain_commits[domain]),diff=domainChanges(domain,s);return `<button class="branch" ${item(dc?'domain':'assets',dc?.id||domain)}>${symbol(domain)}<span><b>${title}</b><small>${dc?`${diff.length} 个工程文件相对父版变化`:'沿用冻结工程资产'} · ${desc}</small><small>${dc?esc(diff.map(f=>f.path.split('/').at(-1)).join('、')||'只更新接口声明，工程文件沿用'):'查看已绑定的文件与检查'}</small></span><span class="row-arrow">›</span></button>`;}).join('');
+ const contractBody=contract?`<button class="contract-focus" ${item('contract',contract.id)}><span>${symbol('contract')}<b>电源 ↔ 固件活动</b></span>${badge(contractVerdict(data,s,contract))}<small>第 ${contract.revision} 版 · ${ci?.result?.checks?.length||0} 项源码与声明核对</small></button><p class="muted">${esc(tr(ci?.result?.scope||'等待实际接口检查'))}</p><div class="contract-parts"><div><b>电源提供</b><p>${esc(contract.provides?.map(tr).join('；'))}</p></div><div><b>固件要求</b><p>${esc(contract.requires?.map(tr).join('；'))}</p></div></div>`:empty('尚未建立电源与固件契约');
+ const changeRows=changes.map(c=>`<div class="change-row"><button class="text-link" data-diff="${esc(c.path)}">${esc(c.path)}</button><small>${c.before&&c.after?'已修改':c.after?'新增':'已移除'}</small></div>`).join('');
+ return `${card('本版设计','',overview)}${summaryStrip()}<div class="grid two">${card('当前工程问题','先看未通过项，再补验证条件',gateCards(coreRecords(s).filter(g=>g.status==='FAIL'),true)||empty('本版没有失败项'),jump('validation',s.id,'查看全部检查'))}${card('专业修订','相对于直接父版本的完整文件差异',branches)}</div><div class="grid two">${card('接口与依赖','',contractBody)}${card('这一版改了什么',parent?'与 '+systemTitle(parent)+' 比较':'冻结导入的完整工程',changeRows||empty('本版没有文件变更'),parent?objectButton('system',parent.id,'查看父版本'):'')}</div>${historyView()}`;
 }
-function runPage(){
- const sessions=data.states.map((r)=>{const role=data.professional_tasks.find(t=>t.owner===r.owner)?.role;return `<button class="session clickable ${role?'child':''}" ${item('run',r.owner)}>${role?`${symbol(role)}`:'<span class="step-num">BF</span>'}<span><b>${role?domains[role][0]:'BF System Architect'}</b><small>${short(r.owner)}</small><small>${r.model_calls} 次模型请求</small></span>${badge(r.status)}</button>`;}).join('');
- const operations=data.operations.filter(visible).filter(o=>!related?.owner||o.owner===related.owner).filter(o=>!['repository_state','repository_read','repository_summary','repository_extract','repository_task'].includes(o.request.action)).slice(0,30);
- const episodes=operations.map(e=>{const action=e.request.action?.replace('repository_','')||e.operation;return `<button class="episode clickable" ${item('operation',e.id)}><header><strong>${esc(actionNames[action]||action)}</strong>${badge(e.status)}</header><p>${esc(readable(e.request.rationale||e.request.question||e.request.conclusion||e.request.path||'读取 / 更新持久工程状态').slice(0,210))}</p><footer>${stamp(e.created)} · ${short(e.owner)} · ${short(e.result?.id||e.result?.system_commit)}</footer></button>`;}).join('');
- const t=totals();
- return `<div class="grid run-layout">${card('Agent Execution Tree','Lead → Power / Firmware · 持久专业分支',`<div class="run-tree">${sessions}</div>${data.states.some(s=>s.error)?`<div class="block-panel"><h3>Recovery / Blocks</h3>${data.states.filter(s=>s.error).map(r=>`<button class="file-link" ${item('run',r.owner)}>${short(r.owner)} · ${esc(r.error)}</button>`).join('')}</div>`:''}`)}${card('Decision Episodes','问题、行动、工程结果与关联提交',`${related?.owner?`<p class="scope-summary">会话 ${short(related.owner)} ${jump('runs','', '显示全部')}</p>`:''}<div class="episodes">${episodes||empty('等待首个实际动作')}</div>`)}</div>${card('Model & Tool Timeline','费用使用实际本地账本，缓存估算并列记录',`<div class="metrics"><div><small>Model Requests</small><b>${t.requests}</b></div><div><small>Ledger Upper Bound</small><b>$${t.upper.toFixed(4)}</b></div><div><small>Cache-aware Estimate</small><b>$${t.estimate.toFixed(4)}</b></div><div><small>UNKNOWN</small><b>${t.unknown}</b></div></div><div class="table-wrap"><table><thead><tr><th>时间</th><th>Owner</th><th>请求</th><th>状态</th><th>Token</th><th>本地费用</th></tr></thead><tbody>${data.model_requests.filter(visible).filter(r=>!related?.owner||r.owner===related.owner).slice(-12).reverse().map(r=>`<tr ${item('request',r.id)}><td>${stamp(r.created)}</td><td>${short(r.owner)}</td><td>${id(r.id)}</td><td>${badge(r.status)}</td><td>${r.usage?.total_tokens||'UNKNOWN'}</td><td>$${(r.charged??r.reserved).toFixed(5)}</td></tr>`).join('')}</tbody></table></div>`)}`;
+function historyView() {
+ const tracks=[['system','系统修订',data.systems],['domain','专业提交',data.domain_commits],['validation','独立检查',data.validations],['release','交付',data.releases]];
+ let nodes=tracks.flatMap(([kind,label,rows])=>rows.map(v=>({kind,label,v,time:timeOf(v)}))).filter(n=>historyFilter==='all'||n.kind===historyFilter).sort((a,b)=>a.time-b.time||data.systems.indexOf(a.v)-data.systems.indexOf(b.v));
+ const total=nodes.length;if(!historyAll)nodes=nodes.slice(-8);
+ const rows=tracks.filter(([kind])=>historyFilter==='all'||kind===historyFilter);
+ const title=n=>n.kind==='system'?systemTitle(n.v):n.kind==='domain'?domainTitle(n.v):n.kind==='release'?'同版审查包':n.v.kind==='power-firmware-interface'?'接口核对':'整机工程检查';
+ const body=`<div class="history-scroll" tabindex="0" aria-label="横向设计历史"><div class="history-grid" data-columns="${nodes.length}"><span class="history-heading">${nodes.length} / ${total} 项</span>${nodes.map(n=>`<span class="history-heading">${stamp(n.time)}</span>`).join('')}${rows.map(([kind,label])=>`<div class="history-label">${icon(kind==='domain'?'system':kind)}<span>${label}</span></div>${nodes.map(n=>`<div class="history-cell">${n.kind===kind?`<button class="history-node ${kind} ${esc(n.v.domain||'')} ${n.v.id===current().id?'selected':''}" ${item(kind,n.v.id)}><span class="node-mark"></span><strong>${esc(title(n))}</strong><small>${id(n.v.id)}</small>${n.v.parent?`<small>← ${esc(n.kind==='system'?systemTitle(data.systems.find(s=>s.id===n.v.parent)||n.v):short(n.v.parent))}</small>`:n.v.target?`<small>对应 ${esc(systemTitle(data.systems.find(s=>s.id===n.v.target)||n.v))}</small>`:''}</button>`:''}</div>`).join('')}`).join('')}</div></div>`;
+ return card('设计历史','横向查看版本与父版本；切换节点查看对应工程',body,`<div class="tabs" aria-label="历史类型">${[['system','系统'],['domain','专业'],['validation','检查'],['release','交付'],['all','全部']].map(([k,t])=>`<button data-history="${k}" aria-pressed="${historyFilter===k}">${t}</button>`).join('')}<button data-history-more>${historyAll?'最近记录':'更早记录'}</button></div>`);
 }
-function validationRecords(){return [...Object.entries(current().validations).map(([key,v])=>({id:key,label:gateNames[key],target:current().id,kind:'core',status:v.status,...v})),...data.validations.filter(v=>v.target===current().id).map(v=>({...v,label:v.kind==='power-firmware-interface'?'Power ↔ Firmware':'实验环境校准'}))];}
-function validationPage(){
- const records=validationRecords(),count=(s)=>records.filter(v=>v.status===s).length;
- const cols=[['Local Validation',['schematic_bom_pins','firmware_event_logic','geometry_fit']],['Interface Validation',['board_firmware_interfaces']],['Coupled System Validation',['source_domain','power_load_chain','pcb_connectivity_drc']],['Independent Review',['delivery_version']]];
- const groups=cols.map(([title,keys],i)=>card(`${i+1}  ${title}`,'',keys.map(k=>`<button class="row-card clickable" ${item('gate',k)}><b>${esc(gateNames[k])}</b><p class="spaced">${badge(current().validations[k]?.status||'NOT_CHECKED')}</p></button>`).join('')+(i===1?data.validations.filter(v=>v.target===current().id&&v.kind==='power-firmware-interface').map(v=>`<button class="row-card" ${item('validation',v.id)}><b>Power ↔ Firmware</b><p class="spaced">${badge(v.status)} · ${v.result.checks.length} 项</p></button>`).join(''):''))).join('');
- const filtered=records.filter(v=>(validationFilter==='all'||v.status===validationFilter)&&visible(v));
- return `<div class="card summary-strip">${['PASS','FAIL','UNEVALUABLE','RECHECK_REQUIRED','NOT_CHECKED'].map(s=>`<div><b>${count(s)}</b>${badge(s)}</div>`).join('')}<div><b>${records.length}</b><small>Total Records</small></div></div><div class="four grid">${groups}</div>${card('Validation Records','按当前 System Commit 查看有效状态',`<div class="table-wrap"><table><thead><tr><th>检查</th><th>范围</th><th>绑定</th><th>状态</th><th>复用 / 失效</th></tr></thead><tbody>${filtered.map(v=>`<tr ${item(v.kind==='core'?'gate':'validation',v.id)}><td><strong>${esc(v.label)}</strong></td><td>${esc(v.kind)}</td><td>${id(v.target)}</td><td>${badge(v.status)}</td><td>${v.reused_from?'精确输入复用':v.invalidated_by?esc(v.invalidated_by):'独立检查记录'}</td></tr>`).join('')}</tbody></table></div>`,`<div class="tabs"><button data-filter="all" class="${validationFilter==='all'?'active':''}">All</button><button data-filter="PASS">Passed</button><button data-filter="FAIL">Failed</button><button data-filter="RECHECK_REQUIRED">Recheck</button></div>`)}`;
+const roundBounds=(system=current())=>roundScope(data,system);
+function activeUsageScope() {return {...(usageScope==='round'?roundBounds():{}),...(usageScope==='session'?{owner:usageOwner||project.owner}:{})};}
+function episode(op){
+ const o=operationOutcome(op),engineering=o.engineering&&o.engineering!==o.execution,result=op.result||{};
+ const resultText=action(op)==='execute'?(result.status==='QUEUED'?'已入队':result.status==='SUCCEEDED'?(result.reused?'精确复用完成':'作业执行完成'):''):result.decision?labels[result.decision]:'';
+ return `<button class="episode" ${item('operation',op.id)}><span class="episode-time">${stamp(op.created)}</span><span><strong>${esc(actionLabel(op))}</strong><small>${esc(brief(op.request.rationale||op.request.conclusion||op.request.path||op.request.question,125))}</small></span><span class="outcomes">${resultText?`<span class="outcome-text">${esc(resultText)}</span>`:engineering?badge(o.engineering):''}<small>${labels[o.execution]||o.execution}</small></span></button>`;
 }
-function environmentPage(){
- const tools=Object.entries(data.environment.tool_pins.tools||{});const core=['CAD_PYTHON','EDA_CLI','NGSPICE','ARM_GCC'];
- const toolchain=[['mechanical','CAD / Geometry','CAD_PYTHON'],['power','EDA','EDA_CLI'],['power','SPICE','NGSPICE'],['firmware','Firmware','ARM_GCC']].map(([d,label,k])=>`<button class="toolchain" ${item('tool',k)}>${symbol(d)}<span><b>${label}</b><small>${k}</small></span></button>`).join('');
- const exercised=(name)=>name==='ARM_GCC'&&data.executions.some(e=>e.status==='SUCCEEDED'&&data.domain_commits.find(d=>d.id===e.domain_commit)?.domain==='firmware')?'S132 构建通过':name==='EDA_CLI'&&!data.environment.native_project_count?'未开放项目写入':'复用基线结果';
- const capability=`<table><thead><tr><th>Tool</th><th>Installed</th><th>Registered</th><th>Exercised</th><th>Qualified</th></tr></thead><tbody>${tools.filter(visible).map(([name,t])=>`<tr ${item('tool',name)}><td>${esc(name)}</td><td>${t.exists?'✓':'—'}</td><td>${core.includes(name)?'✓':'只读资产'}</td><td>${core.includes(name)?esc(exercised(name)):'—'}</td><td>${name==='ARM_GCC'&&data.executions.some(e=>e.status==='SUCCEEDED'&&e.kind==='firmware-nrf52832-s132')?'S132 目标构建':'待登记'}</td></tr>`).join('')}</tbody></table>`;
- const definitions=(data.interfaces||[]).map(def=>`<button class="row-card" ${item('interface',def.id)}><b>${esc(def.id)}</b><small class="block-caption">${esc(def.method)} · ${esc(def.side_effects)}</small></button>`).join('');
- return `${card('Environment Snapshot','代码工作区与运行身份独立固定',`<div class="summary-strip"><div><small>Profile</small><b>${esc(data.environment.profile_id)}</b></div><div><small>Installed Pins</small><b>${tools.filter(([,t])=>t.exists).length}</b></div><div><small>Model / Agent</small><b>${data.environment.capabilities.model?'Enabled':'Disabled'}</b></div><div><small>Native Dispatch</small><b>${data.environment.capabilities.native?'Enabled':'Archived reuse'}</b></div></div><p class="muted">V2 :${data.environment.port} · Baseline :${data.original_demo_port} · ${short(data.environment.profile_sha256)}</p>`)}<div class="grid three">${card('Toolchains','按专业组织的固定工具',toolchain)}${card('Capability Status','安装、注册、历史执行与当前资格',`<div class="table-wrap">${capability}</div>`)}${card('MCP & Interface Definitions','实际 Pi 工具的服务端入口',definitions)}</div>${card('Resource Isolation','',`<div class="metrics"><div><small>Database / Owner / Ledger</small><b>V2 独立身份</b></div><div><small>Native Resource Lock</small><b>跨工作区共享锁</b></div><div><small>Frozen Baseline</small><b>${short(data.project.baseline.manifest_sha256)}</b></div></div>`)}`;
+function runPage() {
+ const scope=activeUsageScope(),requests=scopeRequests(data.model_requests,scope),t=usageTotals(requests);
+ const ops=data.operations.filter(o=>(!scope.owner||o.owner===scope.owner)&&(scope.start==null||o.created>=scope.start)&&(scope.end==null||o.created<scope.end)&&(!related?.owner||o.owner===related.owner));
+ const sessions=data.states.filter(r=>r.model_calls>0||r.status==='RUNNING'),unstarted=data.states.filter(r=>!r.model_calls&&r.status!=='RUNNING');
+ const sessionCards=sessions.map(r=>`<button class="session" ${item('run',r.owner)}>${symbol(taskFor(r.owner)?.role||'system')}<span><b>${esc(roleName(r.owner))}</b><small>${r.model_calls} 次累计请求</small></span>${badge(r.status)}</button>`).join('');
+ const major=new Set(['commit','integrate','contract','validate','review','execute','finish','decide','release','close','delegate','rebase']);
+ const groups=sessions.map(r=>{const events=ops.filter(o=>o.owner===r.owner&&major.has(action(o))).sort((a,b)=>a.created-b.created);if(!events.length)return '';const task=taskFor(r.owner);return `<section class="task-group"><header><div><h3>${esc(roleName(r.owner))}</h3><p>${esc(brief(task?.question||'组织本轮集成、检查、设计决定和交付',150))}</p></div><button data-trace="${esc(r.owner)}">公开对话</button></header>${events.slice(-6).map(episode).join('')}${events.length>6?`<details class="earlier-actions"><summary>更早行动 · ${events.length-6} 项</summary>${events.slice(0,-6).map(episode).join('')}</details>`:''}</section>`;}).join('');
+ return `${card('运行范围与费用','任务范围与费用范围共同切换',`<div class="run-controls"><label>查看范围 <select id="usage-scope" aria-label="查看范围"><option value="round" ${usageScope==='round'?'selected':''}>本轮</option><option value="session" ${usageScope==='session'?'selected':''}>本会话累计</option><option value="project" ${usageScope==='project'?'selected':''}>项目累计</option></select></label>${usageScope==='session'?`<label>Agent <select id="usage-owner" aria-label="选择 Agent 会话">${sessions.map(s=>`<option value="${s.owner}" ${s.owner===(usageOwner||project.owner)?'selected':''}>${esc(roleName(s.owner))}</option>`).join('')}</select></label>`:''}<small>${scope.start?stamp(scope.start)+' → '+(scope.end?stamp(scope.end):'最近一次读取'):'完整累计记录'}${related?.owner?' · 聚焦 '+roleName(related.owner):''}</small>${related?.owner?jump('runs','','取消任务聚焦'):''}</div><div class="metrics">${metric('模型请求',t.requests)}${metric('本地保守登记','$'+t.ledger.toFixed(4))}${metric('缓存费率估算',t.estimated?'$'+t.estimate.toFixed(4):'未记录')}${metric('UNKNOWN 预留',t.unknown)}</div>`)}<details class="section-details" open><summary>Agent 会话 · ${sessions.length} 个有运行记录</summary><div class="sessions">${sessionCards}</div>${unstarted.length?`<details><summary>${unstarted.length} 个未启动任务</summary>${unstarted.map(r=>objectButton('run',r.owner,roleName(r.owner)+' · 未启动')).join('')}</details>`:''}</details>${card('任务与工程行动','按 Agent 分组；每项展示实际结果与公开理由',groups||empty('所选范围没有工程行动'))}<details class="section-details"><summary>模型请求明细 · ${requests.length} 条</summary><div class="table-wrap"><table><thead><tr><th>时间</th><th>Agent</th><th>请求</th><th>状态</th><th>Token</th><th>本地费用</th></tr></thead><tbody>${[...requests].reverse().map(r=>`<tr><td>${stamp(r.created)}</td><td>${esc(roleName(r.owner))}</td><td>${objectButton('request',r.id,short(r.id))}</td><td>${badge(r.status)}</td><td>${r.usage?.total_tokens?.toLocaleString()||'待核对'}</td><td>$${Number((r.status==='SETTLED'?r.charged:r.reserved)??0).toFixed(5)}</td></tr>`).join('')}</tbody></table></div></details><details class="section-details"><summary>底层工具操作 · ${ops.length} 条可查</summary>${ops.map(o=>`<div class="log-row">${objectButton('operation',o.id,actionLabel(o)+' · '+stamp(o.created))}${badge(o.status)}</div>`).join('')}</details>`;
 }
-function harnessPage(){
- const methods=data.methods,latest=methods.at(-1),active=new Set(data.skill_activations.filter(x=>x.active).map(x=>x.skill_id));
- const loaded=new Set(methods.flatMap(m=>m.resource_manifest?.skills?.map(s=>s.id)||[]));
- const skills=methodSkills().filter(visible);
- return `${card('', '',`<div class="method-banner">${symbol("harness")}<div><h2>${latest?short(latest.harness_id):'Pi Repository Method'}</h2><p>Pi SDK · deepseek-flash · thinking high · typed repository tools</p></div>${badge(latest?'LOADED':'NOT_CHECKED')}<div><small>Context</small><p>Provider projection</p></div><div><small>Recovery</small><p>原会话 + 持久任务 / 分支</p></div></div>`)}<div class="grid three">${card('Active Runtime Policies','实际配置',[
- ['Task Decomposition','Lead 分配专业工作区','ACTIVE'],['Write Scope','Power / Firmware 路径隔离','PASS'],['Stopping / Recovery','一次 SDK turn；状态与费用保留','ACTIVE'],['Validation','独立源码契约与核心门','ACTIVE'],['Budget','费用 / token / 时间均不设累计上限','ACTIVE']].map(([t,d,s])=>`<div class="policy"><span><b>${t}</b><small>${d}</small></span>${badge(s)}</div>`).join(''))}${card('Skill Library','冻结版本，目录 → 正文 → 参考',skills.map(s=>`<button class="skill-row" ${item('skill',s.id)}><span class="step-num">S</span><strong>${esc(s.name||s.id)}</strong><small>${esc(s.version)}</small>${badge(active.has(s.id)?'ACTIVE':loaded.has(s.id)?'LOADED':'AVAILABLE')}</button>`).join(''))}${card('Loaded Components','当前真实加载身份',methods.map(m=>`<button class="row-card" ${item('method',m.harness_id)}><b>${short(m.harness_id)}</b><small class="block-caption">${short(m.owner)} · ${esc(m.controller)}</small>${id(m.pi_lock_sha256)} ${badge('ACTIVE')}</button>`).join('')||empty('尚无实际加载记录'))}</div><div class="grid two">${card('Skill Usage','实际激活会话数',skills.filter(s=>active.has(s.id)).map(s=>{const n=data.skill_activations.filter(x=>x.skill_id===s.id&&x.active).length;return `<div class="usage-bar"><span>${esc(s.id)}</span><progress max="${data.states.length}" value="${n}"></progress><b>${n}</b></div>`;}).join('')||empty('本轮尚未激活专业 Skill'))}${card('Method Versions','源码、上下文、资源与环境共同固定',`<div class="timeline">${[...new Map(methods.map(m=>[m.harness_id,m])).values()].map(m=>`<div class="event"><small>${short(m.harness_id)}</small><span class="dot"></span><button class="file-link" ${item('method',m.harness_id)}>${esc(m.schema_version)}<p>Pi / Python / Context / Resources</p></button></div>`).join('')}</div>`)}</div>`;
+const metric=(title,value)=>`<div><small>${esc(title)}</small><b>${esc(value)}</b></div>`;
+function validationPage() {
+ const rows=coreRecords(current()),filtered=rows.filter(g=>validationFilter==='all'||g.status===validationFilter),ci=latestInterface(data,current()),history=data.validations.filter(v=>v.target===current().id);
+ const links=`<div class="tabs" aria-label="筛选当前核心检查">${[['all','全部'],['FAIL','未通过'],['UNEVALUABLE','缺少条件'],['PASS','通过'],['RECHECK_REQUIRED','需复查']].map(([k,t])=>`<button data-filter="${k}" aria-pressed="${validationFilter===k}">${t}</button>`).join('')}</div>`;
+ return `${summaryStrip()}${card('当前版本 · 八项核心检查','每项只显示本版当前有效结果',gateCards(filtered)||empty('这个筛选下没有检查'),links)}${card('电源与固件接口','实际源码与负载声明的对应关系',ci?`<div class="result-heading"><strong>${ci.result?.checks?.length||0} 项核对</strong>${badge(ci.status)}${objectButton('validation',ci.id,'查看对照与来源')}</div><p class="muted">${esc(tr(ci.result?.scope))}</p>`:empty('尚无本版接口检查'))}<details class="section-details" ${related?.history?'open':''}><summary>本版检查历史 · ${history.length} 条回执</summary><div class="table-wrap"><table><thead><tr><th>检查范围</th><th>结果</th><th>检查器</th><th>回执</th></tr></thead><tbody>${[...history].reverse().map(v=>`<tr><td>${v.kind==='power-firmware-interface'?'电源与固件接口':'独立工程审查'}</td><td>${badge(v.status)}</td><td>${esc(v.result?.checker||v.evaluator?.version||v.evaluator)}</td><td>${objectButton('validation',v.id,'查看回执 '+short(v.id))}</td></tr>`).join('')}</tbody></table></div></details>`;
 }
-function experimentPage(){
+const toolNames={CAD_PYTHON:'机械 CAD · Python / CadQuery',EDA_CLI:'立创 EDA · Connect',EDA_NATIVE_CLI:'立创桌面版',NGSPICE:'电路仿真 · ngspice',ARM_GCC:'目标固件 · ARM GCC',COMSOL:'多物理场 · COMSOL',BLENDER:'渲染 · Blender',NODE:'Agent 运行 · Node.js',GO:'Go 工具链',RENODE:'MCU 仿真 · Renode'};
+function toolUsage(key) {
+ const kinds=key==='NGSPICE'?['spice']:key==='ARM_GCC'?['firmware-nrf52832-s132']:[];
+ const executions=data.executions.filter(e=>kinds.includes(e.kind)),jobs=Object.entries(current().jobs).filter(([,r])=>kinds.includes(r.kind));
+ if(kinds.length)return {text:jobs.length?`${jobs.length} 个本版选定作业`:'本版未选择作业',executions,jobs};
+ if(key==='CAD_PYTHON'){const cad=Object.entries(current().jobs).filter(([,r])=>Object.keys(r.artifacts).some(p=>p.includes('mesh')||p.endsWith('.step')));return {text:cad.length?`${cad.length} 个已绑定 CAD 作业`:'本版无 CAD 作业',executions:[],jobs:cad};}
+ if(key.startsWith('EDA'))return {text:data.environment.native_project_count?`${data.environment.native_project_count} 个授权工程`:'本环境读取冻结工程',executions:[],jobs:[]};
+ return {text:'本项目未记录调用',executions:[],jobs:[]};
+}
+function environmentPage() {
+ const pins=Object.entries(data.environment.tool_pins.tools||{});
+ return `${card('当前环境','软件资产与执行权限',`<div class="metrics">${metric('已固定软件',pins.filter(([,p])=>p.exists).length+' 项')}${metric('原生执行权限',data.environment.capabilities.native?'已开放':'未开放')}${metric('EDA 工程写入',data.environment.native_project_count?data.environment.native_project_count+' 个授权工程':'当前隔离环境未开放')}${metric('当前选定作业',Object.keys(current().jobs).length+' 个')}</div>`)}${card('工具与实际使用','点击查看固定路径、摘要和对应执行记录',`<div class="tool-list">${pins.map(([key,p])=>{const use=toolUsage(key);return `<button class="tool-row" ${item('tool',key)}>${symbol(key.includes('EDA')?'contract':key==='ARM_GCC'?'firmware':key==='NGSPICE'?'power':'environment')}<span><b>${esc(toolNames[key]||key)}</b><small>${esc(p.resolved?.split('/').slice(-3).join('/')||p.path)}</small></span><span>${p.exists?'已安装':'缺少软件'}<small>${esc(use.text)}</small></span><span class="row-arrow">›</span></button>`;}).join('')}</div>`)}${card('工具接口','Pi 实际工具入口与服务合同',`<div class="interface-list">${data.interfaces.map(i=>`<button class="row-card" ${item('interface',i.id)}><b>${esc(actionNames[i.id.replace('repository_','')]||i.id)}</b><small>${esc(i.pi_tool)} · ${esc(i.method)} ${esc(i.endpoint)}</small></button>`).join('')}</div>`)}<details class="section-details"><summary>环境身份与资源锁</summary><dl class="facts">${fact('环境',data.environment.profile_id)}${fact('运行端口',data.environment.port)}${fact('稳定 Demo',data.original_demo_port)}${fact('共享原生锁',data.environment.shared_native_lock)}${fact('环境摘要',data.environment.profile_sha256)}${fact('基线摘要',data.project.baseline.manifest_sha256)}</dl></details>`;
+}
+const skillNames={'bf-design-task-control-v1':'设计任务控制与恢复','bf-compiled-event-port-v1':'事件与程序接口','bf-native-coupling-v2':'原生联合执行'};
+const skillTitle=s=>skillNames[s.id]||s.name||s.description||s.id;
+function selectedMethod(){return data.methods.find(m=>m.owner===(selectedMethodOwner||project.owner))||data.methods[0];}
+function harnessPage() {
+ const m=selectedMethod();if(!m)return empty('本项目尚无方法加载记录');const owner=m.owner,facts=methodFacts.get(owner),active=new Set(data.skill_activations.filter(a=>a.owner===owner&&a.active).map(a=>a.skill_id)),loaded=new Set(m.resource_manifest?.skills?.map(s=>s.id)||[]),skills=methodSkills();
+ const model=facts?.model?.id||facts?.model?.model||facts?.model||'查看实际请求';
+ const skillRow=s=>`<button class="skill-row" ${item('skill',s.id)}><span><b>${esc(skillTitle(s))}</b><small>版本 ${esc(s.version||'冻结版本')}</small></span>${badge(active.has(s.id)?'ACTIVE':loaded.has(s.id)?'LOADED':'AVAILABLE')}</button>`;
+ const currentSkills=skills.filter(s=>loaded.has(s.id)||active.has(s.id)),catalog=skills.filter(s=>!loaded.has(s.id)&&!active.has(s.id));
+ return `${card(roleName(owner)+' · 执行配置','选定 Agent 的实际加载记录',`<div class="owner-tabs tabs">${data.methods.map(v=>`<button data-method-owner="${v.owner}" aria-pressed="${v.owner===owner}">${esc(roleName(v.owner))}</button>`).join('')}</div><dl class="facts inline">${fact('控制器',m.controller)}${fact('源码版本',short(m.source_commit))}${fact('模型',typeof model==='string'?model:'查看加载回执')}${fact('工具',(m.tools||[]).join('、'))}</dl><div class="context-links">${objectButton('method',m.owner,'配置详情')}<button data-trace="${owner}" data-trace-start="1">实际提示词与请求</button></div>`)}${card('本会话技能','已激活、配置加载和可用目录分别显示',`<div class="skill-list">${currentSkills.map(skillRow).join('')}</div>`)}<details class="section-details"><summary>其他可用技能 · ${catalog.length} 项</summary><div class="skill-list">${catalog.map(skillRow).join('')}</div></details><details class="section-details"><summary>配置身份 · ${new Set(data.methods.map(m=>m.harness_id)).size} 个版本</summary>${data.methods.map(v=>`<div class="config-row">${objectButton('method',v.owner,roleName(v.owner))}${id(v.harness_id)}<small>${esc(v.resource_manifest?.policy||'冻结配置')}</small></div>`).join('')}</details>`;
+}
+function experimentPage() {
  const studies=data.experiments;
- return `${card('Active Studies','每个实验固定方法、环境、评价器和公开输入',studies.length?`<div class="four">${studies.filter(visible).map(s=>`<button class="study" ${item('experiment',s.id)}>${id(s.id)} ${badge(s.status)}<b>${esc(s.title)}</b><p>${esc(s.hypothesis)}</p></button>`).join('')}</div>`:empty('比较协议已规划；尚无已注册实验'))}<div class="grid two">${card('Comparisons','相同模型、输入、权限与独立评价',studies.some(s=>s.results?.length)?`<div class="table-wrap"><table><thead><tr><th>Condition</th><th>Runs</th><th>PASS</th><th>费用</th></tr></thead><tbody>${studies.flatMap(s=>(s.results||[]).map(r=>({...r,study_id:s.id}))).map(r=>`<tr ${item('experiment',r.study_id)}><td>${esc(r.condition)}</td><td>${r.runs}</td><td>${r.passed}</td><td>$${Number(r.cost).toFixed(4)}</td></tr>`).join('')}</tbody></table></div>`:empty('结果为空；首轮架构协作与受控方法比较分别记录。'))}${card('Method Lineage','新方法经过独立评价后采用',`<div class="timeline">${[...new Map(data.methods.map(m=>[m.harness_id,m])).values()].map(m=>`<div class="event"><small>${id(m.harness_id)}</small><span class="dot"></span><div><b>Pi Repository</b><p>固定工具与执行方法</p></div></div>`).join('')}</div>`)}</div>${card('Current Findings','来自本轮真实运行',`<div class="finding"><b>Source-bound integration</b><p>${data.domain_commits.length} 个专业提交 · ${data.integration_requests.length} 次系统集成 · ${data.validations.length} 条接口检查。</p></div><div class="finding"><b>Product issues</b><p>原八项核心门保留；供能、PCB DRC 与装配缺口继续对应实际版本。</p></div><div class="finding"><b>Next comparison</b><p>通用单 Agent、BF 单 Agent、固定专业分工、契约集成、可调整分解使用同一公开任务和独立检查。</p></div>`)}`;
+ if(!studies.length)return card('准备方法比较','当前尚无注册实验',`<div class="experiment-empty">${symbol('experiments')}<h3>先固定比较条件，再记录方法收益</h3><p>在这里查看实验协议、相同条件下的结果与采用决定。</p><dl class="facts inline">${fact('注册实验','0 项')}${fact('已加载方法配置',new Set(data.methods.map(m=>m.harness_id)).size+' 个')}${fact('当前工程候选',systemTitle(current()))}${fact('方法比较结果','尚未执行')}</dl><div class="context-links">${jump('runs','','查看实际运行')}${jump('harness','','查看方法配置')}${jump('environment','','查看实验环境')}</div></div>`);
+ return card('方法实验','固定方法、环境、评价器与输入',studies.map(s=>`<button class="study" ${item('experiment',s.id)}><strong>${esc(s.title)}</strong>${badge(s.status)}<p>${esc(s.hypothesis)}</p><small>${(s.results||[]).length} 条实际结果</small></button>`).join(''));
 }
-function renderContext(){
- const s=current(),record=data.validations.filter(v=>v.target===s.id&&v.kind==='power-firmware-interface').at(-1),issues=record?.result?.issues||[];
- const question=s.validations.power_load_chain?.status==='PASS'?'当前候选的接口、装配和交付是否已全部完成？':'当前电源条件能否支撑实际固件的启动、采样和通信？';
- $('#current-question').innerHTML=`<div class="question-bar">${icon('question')}<div><b>${question}</b><p>${issues.map(i=>issueNames[i.id]||i.id).join(' · ')||Object.entries(s.validations).filter(([,v])=>v.status!=='PASS').slice(0,3).map(([g])=>gateNames[g]).join(' · ')} · 正在查看 ${short(s.id)}</p></div>${jump('validation',s.id,'查看依据')}</div>`;
- $('#design-objects').innerHTML=`<section class="object-group"><h3>Domain branches</h3>${Object.entries(domains).map(([d,[title]])=>`<button ${item(s.domain_commits[d]?'domain':'assets',s.domain_commits[d]||d)}>${title}</button>`).join('')}</section><section class="object-group"><h3>Integration & evidence</h3>${Object.values(s.contracts).map(key=>`<button ${item('contract',key)}>Power ↔ Firmware · ${short(key)}</button>`).join('')}${jump('validation',s.id,'Validation records')}${jump('runs',project.owner,'BF Lead / Trace')}${data.integration_requests.filter(r=>r.system_commit===s.id).map(r=>`<button ${item('integration',r.id)}>Integration · ${short(r.id)}</button>`).join('')}${data.releases.filter(r=>r.target===s.id).map(r=>`<button ${item('release',r.id)}>Release · ${short(r.id)}</button>`).join('')}</section>`;
+function objectNav(title,buttons){return `<section class="object-group"><h3>${esc(title)}</h3>${buttons}</section>`;}
+function renderContext() {
+ const s=current();let nav='',banner='';
+ if(page==='system'){
+  nav=objectNav('系统版本',objectButton('system',s.id,'当前查看 · '+systemTitle(s))+objectButton('system',project.adopted,'稳定参考'))+objectNav('专业工作',Object.entries(domains).map(([k,[t]])=>objectButton(s.domain_commits[k]?'domain':'assets',s.domain_commits[k]||k,t)).join(''))+objectNav('接口与交付',Object.values(s.contracts).map(k=>objectButton('contract',k,'电源 ↔ 固件活动')).join('')+(latestRelease(s)?objectButton('release',latestRelease(s).id,'同版审查包'):''));
+  banner=`${coreRecords(s).filter(g=>g.status==='FAIL').map(g=>g.label).join('、')||'查看本版核心检查'} · ${coreRecords(s).filter(g=>g.status==='UNEVALUABLE').length} 项待补验证条件`;
+ }else if(page==='runs'){
+  nav=objectNav('设计轮次',data.systems.filter(v=>v.id===project.submitted||data.releases.some(r=>r.target===v.id)).slice().reverse().map(v=>`<button data-round="${v.id}" aria-pressed="${v.id===s.id}">${esc(systemTitle(v))}<small>${id(v.id)}</small></button>`).join(''))+objectNav('Agent 任务',data.states.filter(r=>r.model_calls||r.status==='RUNNING').map(r=>`<button data-session="${r.owner}">${esc(roleName(r.owner))}<small>${labels[r.status]||r.status}</small></button>`).join(''));
+  const running=data.states.filter(r=>r.status==='RUNNING');banner=running.length?running.map(r=>roleName(r.owner)).join('、')+' 正在执行':'当前没有正在执行的 Agent 任务';
+ }else if(page==='validation'){
+  nav=objectNav('当前核心检查',coreRecords(s).map(g=>`<button ${item('gate',g.id)}><span class="status-dot ${g.status.toLowerCase()}"></span>${esc(g.label)}</button>`).join(''))+objectNav('其他记录',latestInterface(data,s)?objectButton('validation',latestInterface(data,s).id,'电源 ↔ 固件接口'):'');banner=`当前候选：${counts(s).filter(x=>x.count).map(x=>x.count+' 项'+labels[x.status]).join('，')}`;
+ }else if(page==='environment'){
+  nav=objectNav('软件与工具',Object.keys(data.environment.tool_pins.tools).map(k=>objectButton('tool',k,toolNames[k]||k)).join(''))+objectNav('实际接口',data.interfaces.map(i=>objectButton('interface',i.id,actionNames[i.id.replace('repository_','')]||i.id)).join(''));banner=`V2 环境 :${data.environment.port} · ${Object.keys(s.jobs).length} 个本版选定作业 · EDA ${data.environment.native_project_count?'授权工程可写':'读取冻结工程'}`;
+ }else if(page==='harness'){
+  nav=objectNav('Agent 方法',data.methods.map(m=>`<button data-method-owner="${m.owner}" aria-pressed="${m.owner===(selectedMethodOwner||project.owner)}">${esc(roleName(m.owner))}</button>`).join(''))+objectNav('已激活技能',data.skill_activations.filter(a=>a.owner===(selectedMethodOwner||project.owner)&&a.active).map(a=>objectButton('skill',a.skill_id,skillTitle(methodSkills().find(s=>s.id===a.skill_id)||{id:a.skill_id}))).join('')||'<p class="muted">此会话尚未激活技能</p>');banner=`${roleName(selectedMethodOwner||project.owner)} 的冻结配置与实际技能激活`;
+ }else{nav=objectNav('实验协议',data.experiments.map(e=>objectButton('experiment',e.id,e.title)).join('')||'<p class="muted">尚未注册实验</p>')+objectNav('相关资料',jump('harness','','方法配置')+jump('environment','','环境')+jump('runs','','真实运行'));banner='方法比较与采用记录';}
+ $('#design-objects').innerHTML=nav;$('#current-question').innerHTML=`<div class="page-summary"><span>${esc(banner)}</span><small>最新工程事件 ${stamp(Math.max(0,...data.events.map(e=>e.created)))}</small></div>`;
 }
-function go(pageName,key){
- related=null;
- if(pageName==='runs'&&key)related={owner:data.states.some(s=>s.owner===key)?key:project.owner};
- if(['validation','system'].includes(pageName)&&data.systems.some(s=>s.id===key))systemId=key;
- if(pageName==='experiments'&&key)related={harness:key};
- selection=pageName==='runs'&&related?.owner?{kind:'run',key:related.owner}:null;detailMode='details';window.history.pushState(null,'','#'+pageName);render();
+function searchPage() {
+ const s=current(),objects=[...coreRecords(s).map(v=>({kind:'gate',v})),...data.systems.map(v=>({kind:'system',v,label:systemTitle(v)+' '+systemPurpose(v)})),...data.domain_commits.map(v=>({kind:'domain',v,label:domainTitle(v)})),...data.contracts.map(v=>({kind:'contract',v,label:'电源与固件活动契约'})),...methodSkills().map(v=>({kind:'skill',v}))];
+ const q=query.trim().toLowerCase(),matches=objects.filter(o=>(publicSearchText(o.v)+' '+(o.label||'')+' '+(o.kind==='gate'?summaryText(o.v):'')).toLowerCase().includes(q));
+ const files=Object.keys(s.files).filter(p=>p.toLowerCase().includes(q));const total=matches.length+files.length;
+ return card('搜索结果',`${total} 项 · 本项目设计、问题与当前候选文件`,total?matches.map(o=>`<button class="search-result" ${item(o.kind,o.v.id)}><strong>${esc(selectionTitle(o.kind,o.v))}</strong><small>${esc(brief(o.v.rationale||o.v.description||o.v.scope||o.v.id,160))}</small></button>`).join('')+files.map(p=>`<button class="search-result" data-file="${esc(p)}"><strong>${esc(p)}</strong><small>当前候选工程文件</small></button>`).join(''):empty('没有找到相关设计、问题或文件'),'<button data-clear-search>清空搜索</button>');
 }
-function render(){
- if(!data)return;
- const previousScroll=$('.history-scroll');if(previousScroll)historyOffsets.set(previousScroll.dataset.context,previousScroll.scrollLeft);
- page=location.hash.slice(1).split('?')[0];if(!headings[page])page='system';
- $('#system').value=systemId;
- $('#issue-count').textContent=Object.values(current().validations).filter(v=>v.status!=='PASS').length+' checks open';
- sessionStorage.setItem('bf-lab-context-'+project.id,JSON.stringify({systemId,selection,related}));
- renderContext();
- const [title,desc]=headings[page];$('#title').textContent=title;$('#subtitle').textContent=desc;
- document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
- $('#content').innerHTML=({system:systemPage,runs:runPage,validation:validationPage,environment:environmentPage,harness:harnessPage,experiments:experimentPage}[page])();
- const grid=$('.history-grid');if(grid){grid.style.gridTemplateColumns='135px repeat('+grid.dataset.columns+',150px)';const scroll=$('.history-scroll');scroll.dataset.context=project.id+':'+historyFilter;scroll.scrollLeft=historyOffsets.get(scroll.dataset.context)??scroll.scrollWidth;}
- if(!selection)showDetail('system',current().id,false);else showDetail(selection.kind,selection.key,false);requestAnimationFrame(drawLinks);
-}
-function drawLinks(){
- const flow=$('.flow');if(!flow)return;flow.querySelector('.connections')?.remove();
- if(flow.getBoundingClientRect().width<950)return;
- const box=flow.getBoundingClientRect(),contract=flow.querySelector('[data-kind="contract"]'),candidate=flow.querySelector('.candidate');if(!contract||!candidate)return;
- const point=e=>{const r=e.getBoundingClientRect();return {l:r.left-box.left,r:r.right-box.left,y:r.top-box.top+r.height/2};};
- const edge=(from,to,color)=>{const a=point(from),b=point(to),middle=(a.r+b.l)/2;return `<path d="M ${a.r} ${a.y} H ${middle} V ${b.y} H ${b.l}" stroke="${color}" marker-end="url(#arrow-${color.slice(1)})"/>`;};
- const s=current(),colors={power:'#0066ff',firmware:'#864dff'};let paths='';
- for(const [d,c] of Object.entries(s.domain_commits)){const element=flow.querySelector(`[data-kind="domain"][data-key="${c}"]`);if(element&&colors[d])paths+=edge(element,contract,colors[d]);}
- paths+=edge(contract,candidate,'#0066ff');
- flow.insertAdjacentHTML('afterbegin',`<svg class="connections" viewBox="0 0 ${box.width} ${box.height}" aria-label="专业提交经过契约连接系统候选" role="img"><defs>${Object.values(colors).map(c=>`<marker id="arrow-${c.slice(1)}" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M 0 0 L 5 2.5 L 0 5" fill="none" stroke="${c}"/></marker>`).join('')}</defs><g fill="none" stroke-width="1.2">${paths}</g></svg>`);
-}
-window.addEventListener('resize',drawLinks);
-matchMedia('(max-width:850px)').addEventListener('change',e=>{if(e.matches){document.querySelector('.shell').classList.add('inspector-hidden');$('#inspector-toggle').setAttribute('aria-expanded','false');}});
-function getSelection(kind,key){
- const table={integration:data.integration_requests,system:data.systems,domain:data.domain_commits,contract:data.contracts,validation:data.validations,release:data.releases,method:data.methods,skill:methodSkills(),experiment:data.experiments,operation:data.operations,event:data.events,run:data.states,request:data.model_requests,execution:data.executions};
- if(kind==='gate')return {id:key,label:gateNames[key],...current().validations[key]};
+function getSelection(kind,key) {
+ const table={system:data.systems,domain:data.domain_commits,contract:data.contracts,validation:data.validations,integration:data.integration_requests,release:data.releases,method:data.methods,skill:methodSkills(),experiment:data.experiments,operation:data.operations,run:data.states,request:data.model_requests,execution:data.executions};
+ if(kind==='gate')return coreRecords(current()).find(g=>g.id===key);
+ if(kind==='decision'){const record=data.decisions.find(d=>d.id===key);return record?designDecision({decisions:[record]},record.to_design):null;}
  if(kind==='tool')return {id:key,...data.environment.tool_pins.tools[key]};
-  if(kind==='interface')return data.interfaces?.find(v=>v.id===key);
- if(kind==='assets')return {id:key,files:Object.entries(current().files).filter(([p])=>key==='mechanical'?p.includes('cad'):key==='assembly'?p.includes('assembly'):true).map(([p,r])=>({path:p,...r}))};
- if(kind==='release'&&!table.release.some(r=>r.id===key))return table.release.find(r=>r.target===key)||{id:key,status:'NOT_CHECKED'};
- return table[kind]?.find(v=>(v.id||v.harness_id||v.owner||v.seq)===key);
+ if(kind==='interface')return data.interfaces.find(v=>v.id===key);
+ if(kind==='assets')return {id:key,files:Object.entries(current().files).filter(([p])=>key==='mechanical'?p.includes('cad'):key==='assembly'?p.includes('assembly'):true).map(([path,r])=>({path,...r}))};
+ return table[kind]?.find(v=>(kind==='method'?v.owner:v.id||v.owner)===key);
 }
-function selectObject(kind,key){
- const value=getSelection(kind,key);if(!value)return;
+const valueText=v=>v==null?'—':typeof v==='boolean'?v?'是':'否':typeof v==='object'?Array.isArray(v)?v.map(valueText).join(' – '):JSON.stringify(v):String(v);
+const fieldValue=(c,value)=>valueText(value)+(value!=null?(c.id.endsWith('_ms')||['connection_bound','model_interface_advertising'].includes(c.id)?' ms':c.id.endsWith('_v')?' V':''):'');
+const fieldNames={advertising_ms:'实际广播间隔',connection_min_ms:'最小连接间隔',connection_max_ms:'最大连接间隔',sample_ms:'采样周期',connection_bound:'负载连接间隔',model_interface_advertising:'模型广播间隔',manual_admission_energy:'人工接通注入能量',power_declaration_rail_v:'工作电压',power_declaration_storage_initial_v:'初始储能电压',power_declaration_manual_admission:'人工接通',power_declaration_sece_resolved:'SECE 条件已确认',firmware_declaration_advertising_ms:'固件声明广播间隔',firmware_declaration_connection_min_ms:'固件声明最小连接间隔',firmware_declaration_connection_max_ms:'固件声明最大连接间隔',firmware_declaration_sample_ms:'固件声明采样周期',firmware_declaration_policy_advertising_ms:'策略广播周期'};
+function checksTable(checks=[]) {
+ const fields=checks.filter(c=>!String(c.id).includes('_source_'));
+ return `<div class="table-wrap"><table class="comparison"><thead><tr><th>参数</th><th>实际值</th><th>声明 / 要求</th><th>结果</th></tr></thead><tbody>${fields.map(c=>`<tr><td>${esc(fieldNames[c.id]||c.id)}<small>${esc(brief(c.source,150))}</small></td><td>${esc(fieldValue(c,c.actual))}</td><td>${esc(fieldValue(c,c.expected))}</td><td>${badge(c.status)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function metricsList(metrics){return metrics.length?`<dl class="facts">${metrics.map(([k,v])=>fact(k,v)).join('')}</dl>`:'';}
+function notesList(notes){return `<ul class="findings">${notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`;}
+function filesList(files,extra=''){return Object.entries(files||{}).map(([p,r])=>`<button class="file-link" data-file="${esc(p)}" ${extra}><span>${esc(p)}</span><small>${Math.ceil((r.bytes||0)/1024)} KB</small></button>`).join('');}
+function provenance(v,kind) {
+ const key=v.id||v.harness_id||v.owner;
+ return `<details class="provenance"><summary>版本与来源</summary><dl class="facts">${fact('记录身份',key)}${fact('系统候选',v.target||v.evidence_target||v.system_commit||v.base_system||(kind==='system'?v.id:current().id))}${v.parent?fact('父版本',v.parent):''}${v.owner?fact('原会话',v.owner):''}${v.input_fingerprint?fact('输入摘要',v.input_fingerprint):''}${v.evidence?.sha256?fact('证据摘要',v.evidence.sha256):''}${v.reused_from?fact('复用来源',v.reused_from):''}${v.scope?fact('检查范围',tr(v.scope)):''}</dl><button data-copy="${esc(key)}">复制完整身份</button></details>`;
+}
+function showDetail(kind,key) {
+ const v=getSelection(kind,key);if(!v){$('#detail').innerHTML=empty('请选择要查看的对象');return;}
+ $('#inspector-title').textContent=selectionTitle(kind,v);
+ let status=kind==='contract'?contractVerdict(data,current(),v):kind==='system'?v.digital_status:kind==='operation'?operationOutcome(v).engineering||v.status:v.status;
+ let html=`<div class="detail-heading"><small>${esc(kind==='gate'?'当前核心检查':kind==='contract'?'接口版本':'工程记录')}</small><h2>${esc(selectionTitle(kind,v))}</h2>${status?badge(status):''}</div><div class="tabs detail-tabs" aria-label="详情内容"><button data-detail="details" aria-pressed="${detailMode==='details'}">说明</button><button data-detail="evidence" aria-pressed="${detailMode==='evidence'}">证据与文件</button><button data-detail="raw" aria-pressed="${detailMode==='raw'}">原始记录</button></div>`;
+ if(detailMode==='raw'){html+=json(v);$('#detail').innerHTML=html;return;}
+ if(kind==='gate'){
+  const g=gateInfo(v);html+=`<h3>检查结论</h3>${notesList(g.notes)}${metricsList(g.metrics)}<h3>条件与范围</h3><p>${esc(g.scope)}</p><div class="context-links"><button data-gate-report="${esc(key)}">打开检查报告</button>${v.validation_id?objectButton('validation',v.validation_id,'完整复查回执'):''}</div>`;
+  if(key==='power_load_chain')html+=`<div class="context-links"><button data-file="project-chain/load-timeline.json">本版负载时序</button>${Object.entries(current().jobs).filter(([,j])=>j.kind==='spice').map(([job,j])=>j.artifacts['project-trace.raw']?`<a href="${fileURL('project-trace.raw',{job})}" download>下载本版 RAW</a>`:'').join('')}</div>`;
+  if(key==='pcb_connectivity_drc')html+='<button data-preview="pcb-combined.svg">查看本版 PCB</button>';
+ }else if(kind==='contract'){
+  const check=latestInterface(data,current());html+=`<h3>本候选下的接口结果</h3><p>${esc(tr(check?.result?.scope||'本候选尚无检查'))}</p>${checksTable(check?.result?.checks)}<h3>保持开放的问题</h3>${notesList((check?.result?.issues||[]).map(i=>i.id==='sece-envelope'?'SECE 开关、器件动态和模型适用条件待补充':i.id==='policy-radio-duty'?'实际无线活动与策略周期需共同核对':i.id))}<h3>关联专业</h3>${Object.entries(v.domain_commits).map(([d,c])=>objectButton('domain',c,domains[d]?.[0]||d)).join('')}`;
+ }else if(kind==='validation'){
+  html+=`<p>${esc(tr(v.result?.scope||v.scope||v.kind))}</p>`;
+  if(v.result?.gates)html+=Object.entries(v.result.gates).map(([g,r])=>`<div class="report-gate"><h3>${esc(gateNames[g])} ${badge(r.status)}</h3>${notesList(gateInfo(r).notes)}${metricsList(gateInfo(r).metrics)}</div>`).join('');
+  else html+=checksTable(v.result?.checks||v.controls||[]);
+  html+=`<h3>检查器</h3><p>${esc(v.result?.checker||v.evaluator?.version||v.evaluator)}</p><div class="context-links">${jump('system',v.target,'查看对应系统')}<button data-record-download="validation" data-record-key="${esc(key)}">下载检查回执</button></div>`;
+ }else if(kind==='system'){
+  html+=`<p>${esc(systemPurpose(v))}</p>${publicNote(opFor(v.id)?.request?.rationale,'BF 集成理由')}<h3>当前资格</h3>${gateCards(coreRecords(v),true)}<h3>专业提交</h3>${Object.entries(v.domain_commits).map(([d,c])=>objectButton('domain',c,domains[d]?.[0]||d)).join('')}<h3>本版文件</h3>${filesList(Object.fromEntries(Object.entries(v.files).slice(0,detailMode==='evidence'?undefined:6)),`data-system="${v.id}"`)}${latestRelease(v)?`<a class="button-primary" href="${archiveURL(latestRelease(v))}" download>下载同版审查包</a>`:''}`;
+ }else if(kind==='domain'){
+  const system=data.systems.find(s=>s.id===v.base_system),diff=changedFiles(v,system);html+=`<h3>本次提交</h3><p>${esc(brief(v.rationale,220))}</p>${publicNote(v.rationale)}<h3>完整源树与累计修改</h3><p>${Object.keys(v.files).length} 件冻结文件 · 相对系统基准 ${diff.length} 件变化</p>${diff.map(c=>`<button class="file-link" data-file="${esc(c.path)}" data-domain="${v.id}">${esc(c.path)}</button>`).join('')}<h3>实际执行</h3>${data.executions.filter(e=>e.domain_commit===v.id).map(e=>objectButton('execution',e.id,(e.kind==='spice'?'电源求解':'目标构建')+' · '+(e.reused?'精确复用':'新执行')+' · '+(labels[e.status]||e.status))).join('')||'<p>此提交没有单独执行记录</p>'}${detailMode==='evidence'?`<h3>完整文件清单</h3>${filesList(v.files,`data-domain="${v.id}"`)}`:''}`;
+ }else if(kind==='operation'){
+  const o=operationOutcome(v);html+=`<dl class="facts">${fact('调用执行',labels[o.execution]||o.execution)}${fact('工程结果',labels[o.engineering]||o.engineering||'此操作未产生工程判定')}${fact('执行者',roleName(v.owner))}${fact('时间',stamp(v.created))}</dl><h3>公开理由与结论</h3><p class="public-text">${esc(readable(v.request.rationale||v.request.conclusion||v.request.question||v.request.path||''))}</p>`;
+  const resultKey=v.result?.id,kindMap={SC:'system',DC:'domain',RV:'validation',IC:'contract',EX:'execution',REL:'release'};if(resultKey&&kindMap[resultKey.split('-')[0]])html+=objectButton(kindMap[resultKey.split('-')[0]],resultKey,'查看实际产物与结果');
+  html+=`<div class="context-links"><button data-trace="${v.owner}">公开会话与工具</button></div>`;
+ }else if(kind==='decision'){
+  html+=`<h3>BF 的选择</h3>${badge(v.decision)}<h3>对应候选的工程结论</h3>${gateCards(coreRecords(data.systems.find(s=>s.id===v.to_design)||current()).filter(g=>g.status==='FAIL'),true)}${publicNote(v.rationale,'BF 的完整公开理由')}<div class="context-links">${objectButton('system',v.to_design,'查看该候选')}<button data-trace="${v.owner}">查看对应公开对话</button></div>`;
+ }else if(kind==='run'){
+  html+=`<h3>任务</h3><p class="public-text">${esc(readable(v.task?.question||'系统候选集成、检查、设计决定和交付'))}</p><h3>完成条件</h3><p>${esc(readable(v.task?.completion||'形成同版工程审查交付与设计决定'))}</p><div class="metrics">${metric('会话累计请求',v.model_calls)}${metric('本地保守登记','$'+Number(v.cost_upper_bound_usd).toFixed(4))}</div>${v.error?`<h3>执行卡点</h3><p>${esc(v.error)}</p>`:''}<div class="context-links"><button data-trace="${v.owner}">公开对话</button><button data-session="${v.owner}">查看会话执行与费用</button></div>`;
+ }else if(kind==='execution'){
+  html+=`<dl class="facts">${fact('类型',v.kind)}${fact('作业',v.job_id)}${fact('结果',labels[v.status]||v.status)}${fact('本次操作',v.reused?'复用相同输入的成功作业':'新执行')}${fact('输入源文件',Object.keys(v.consumed_input?.sources||{}).join('、'))}</dl>${objectButton('domain',v.domain_commit,'查看冻结源树')}<h3>结果产物</h3>${Object.entries(v.artifacts||{}).map(([p,ref])=>{const bound=jobArtifactSystem(data,current(),v.job_id,p,ref.sha256);return bound?`<button class="file-link" data-job-file="${esc(p)}" data-job="${esc(v.job_id)}" data-system="${bound.id}">${esc(p)}</button>`:`<p class="file-link">${esc(p)} <small>尚未纳入系统候选</small></p>`;}).join('')}`;
+ }else if(kind==='method'){
+  html+=`<dl class="facts">${fact('Agent',roleName(v.owner))}${fact('控制器',v.controller)}${fact('工具',(v.tools||[]).join('、'))}${fact('源码版本',v.source_commit)}${fact('方法身份',v.harness_id)}</dl><h3>冻结的上下文组件</h3><p>${esc(Object.keys(v.context_bindings||{}).join('、'))}</p><h3>技能资源</h3>${(v.resource_manifest?.skills||[]).map(s=>objectButton('skill',s.id,s.description||s.id)).join('')}<button data-trace="${v.owner}" data-trace-start="1">实际提示词、模型与加载记录</button>`;
+ }else if(kind==='skill'){
+  const owner=selectedMethodOwner||project.owner,activations=data.skill_activations.filter(a=>a.skill_id===v.id);html+=`<h3>用途</h3><p>${esc(v.description||v.name)}</p><dl class="facts">${fact('版本',v.version)}${fact('来源',v.plugin_id||v.path)}${fact('当前 Agent',roleName(owner))}${fact('当前激活',activations.some(a=>a.owner===owner&&a.active)?'已激活':'未激活')}</dl><h3>实际使用记录</h3>${activations.map(a=>`<p>${esc(roleName(a.owner))} · ${stamp(a.updated)} · ${a.active?'激活':'已停用'}</p><button data-trace="${a.owner}">查看对应公开请求</button>`).join('')||'<p>本项目尚无激活记录</p>'}`;
+ }else if(kind==='tool'){
+  const use=toolUsage(v.id);html+=`<dl class="facts">${fact('安装记录',v.exists?'已安装并固定摘要':'未安装')}${fact('实际路径',v.resolved||v.path)}${fact('本版使用',use.text)}${fact('工具能力资格','当前投影未登记独立能力资格')}</dl><h3>真实执行记录</h3>${use.executions.map(e=>objectButton('execution',e.id,(e.kind==='spice'?'SPICE 求解':'S132 构建')+' · '+(labels[e.status]||e.status))).join('')||'<p>本环境没有此工具的新增执行回执</p>'}<h3>本版绑定产物</h3>${use.jobs.map(([j,r])=>`<p>${id(j)} · ${Object.keys(r.artifacts).length} 个产物</p>`).join('')||'<p>本版未选择对应作业</p>'}`;
+ }else if(kind==='interface'){
+  html+=`<dl class="facts">${fact('工具',v.pi_tool)}${fact('服务入口',v.method+' '+v.endpoint)}${fact('输入动作',v.input?.action)}${fact('参数',(v.input?.fields||[]).join('、'))}${fact('输出',v.output)}${fact('写入影响',v.side_effects)}${fact('恢复与校验',v.contract)}</dl><details><summary>实现位置与认证</summary><p>${esc(v.implementation)}</p><p>${esc(v.authentication)}</p></details>`;
+ }else if(kind==='release'){
+  html+=`<p class="public-text">${esc(readable(v.rationale))}</p><dl class="facts">${fact('文件',Object.keys(v.files||{}).length+' 件')}${fact('绑定检查记录',(v.validations||[]).length+' 条')}</dl>${objectButton('system',v.target,'查看对应系统候选')}<a class="button-primary" href="${archiveURL(v)}" download>下载同版审查包</a>`;
+ }else if(kind==='assets')html+=v.files.map(f=>`<button class="file-link" data-file="${esc(f.path)}">${esc(f.path)}</button>`).join('')||empty('当前候选没有对应文件');
+ else if(kind==='request')html+=`<dl class="facts">${fact('Agent',roleName(v.owner))}${fact('时间',stamp(v.created))}${fact('状态',labels[v.status])}${fact('输入 token',v.usage?.prompt_tokens)}${fact('缓存命中',v.usage?.prompt_cache_hit_tokens)}${fact('输出 token',v.usage?.completion_tokens)}${fact('本地保守登记',v.charged)}${fact('全额预留',v.reserved)}${fact('缓存费率估算',v.cost_estimate?.cache_aware_estimate_usd)}</dl>`;
+ else if(kind==='experiment')html+=`<h3>假设</h3><p>${esc(v.hypothesis)}</p><h3>可推翻条件</h3><p>${esc(v.falsifier)}</p><h3>比较条件</h3>${(v.conditions||[]).map(c=>`<p>${esc(c.id)} · ${esc(c.method)}</p>`).join('')}<h3>结果</h3>${v.results?.length?json(v.results):empty('尚无实际结果')}`;
+ else if(kind==='integration')html+=`<h3>集成目的</h3><p>${esc(readable(v.rationale))}</p>${Object.entries(v.domain_commits||{}).map(([d,c])=>objectButton('domain',c,domains[d]?.[0]||d)).join('')}${v.system_commit?objectButton('system',v.system_commit,'查看系统候选'):''}`;
+ html+=provenance(v,kind);$('#detail').innerHTML=html;
+}
+function inspector(open,focus=false) {
+ shell.classList.toggle('inspector-hidden',!open);$('#inspector').hidden=!open;$('#inspector-toggle').setAttribute('aria-expanded',String(open));
+ sessionStorage.setItem('bf-lab-inspector-'+page,String(open));if(focus&&open)$('#inspector-close').focus();
+}
+function saveView(){viewStates.set(location.hash,{y:scrollY,nav:$('#navigation').scrollTop,history:$('.history-scroll')?.scrollLeft});window.history.replaceState({...window.history.state,labScroll:scrollY},'');}
+function route(to=page,object=selection,push=true) {
+ saveView();const params=new URLSearchParams({candidate:systemId});if(object){params.set('kind',object.kind);params.set('object',object.key);}const hash='#'+to+'?'+params;
+ window.history[push?'pushState':'replaceState']({labScroll:push?0:scrollY},'',hash);render(!push);
+}
+function go(to,key) {
+ related=null;if(['system','validation'].includes(to)&&data.systems.some(s=>s.id===key))systemId=key;
+ if(to==='runs'&&key&&data.states.some(s=>s.owner===key)){usageScope='session';usageOwner=key;related={owner:key};}
+ selection=null;route(to,null);
+}
+function selectObject(kind,key) {
+ const v=getSelection(kind,key);if(!v)return;
  if(kind==='system')systemId=key;
- if(kind==='validation'&&data.systems.some(s=>s.id===value.target))systemId=value.target;
- if(kind==='domain'&&!Object.values(current().domain_commits).includes(key)){
-  systemId=[...data.systems].reverse().find(s=>Object.values(s.domain_commits).includes(key))?.id||value.base_system;
- }
- if(kind==='contract'&&!Object.values(current().contracts).includes(key))systemId=[...data.systems].reverse().find(s=>Object.values(s.contracts).includes(key))?.id||value.base_system;
- if(kind==='release'&&value.target)systemId=value.target;
- if(kind==='integration'&&value.system_commit)systemId=value.system_commit;
- selection={kind,key};document.querySelector('.shell').classList.remove('inspector-hidden');render();
+ if(['validation','release'].includes(kind)&&data.systems.some(s=>s.id===v.target))systemId=v.target;
+ if(kind==='domain'&&!Object.values(current().domain_commits).includes(key))systemId=[...data.systems].reverse().find(s=>Object.values(s.domain_commits).includes(key))?.id||v.base_system;
+ if(kind==='contract'&&!Object.values(current().contracts).includes(key))systemId=[...data.systems].reverse().find(s=>Object.values(s.contracts).includes(key))?.id||v.base_system;
+ selection={kind,key};detailMode='details';route(page,selection);inspector(true);showDetail(kind,key);persist();
 }
-async function showTrace(owner,fromStart=false){
- const value=await req('/api/design-repository/trace?'+new URLSearchParams({project:project.id,owner:project.owner,session:owner,limit:100,...(fromStart?{after:0}:{})}));
- $('#viewer-title').textContent='Pi 会话与工具 · '+short(owner);
- $('#viewer-body').innerHTML=`<div class="trace-view"><div class="tabs"><button data-trace="${esc(owner)}" data-trace-start="1" class="${fromStart?'active':''}">会话开头 / 加载配置</button><button data-trace="${esc(owner)}" class="${fromStart?'':'active'}">最近记录</button></div><p class="trace-note">${fromStart?'开头':'最近'} ${value.records.length} 条公开指令、回答和工具结果</p>${value.records.map(r=>`<details class="trace-record" ${r.type==='message'&&r.role==='assistant'?'open':''}><summary>${stamp(r.time)} · ${esc(r.role||r.type)} ${r.tool?esc(r.tool):''} ${r.is_error?'· 执行错误':''}</summary>${r.text?`<pre>${esc(r.text)}</pre>`:''}${r.prompt?`<pre>${esc(r.prompt)}</pre>`:''}${r.tool_calls?.length?json(r.tool_calls):''}${r.result?json(r.result):''}${r.error?json(r.error):''}${r.harness_id?json({harness:r.harness_id,model:r.model,profile:r.model_profile,prompt_sha256:r.prompt_sha256}):''}</details>`).join('')||empty('暂无公开会话记录')}</div>`;
- if(!$('#viewer').open)$('#viewer').showModal();
+function persist(){sessionStorage.setItem('bf-lab-context-'+project.id,JSON.stringify({systemId,selection,usageScope,usageOwner,selectedMethodOwner,historyFilter,historyAll,validationFilter}));}
+function render(preserve=true) {
+ if(!data)return;const prior=preserve?{y:scrollY,history:$('.history-scroll')?.scrollLeft,nav:$('#navigation').scrollTop}:null;
+ const [mode,search]=location.hash.slice(1).split('?'),params=new URLSearchParams(search||'');page=headings[mode]?mode:'system';
+ const candidate=params.get('candidate');if(candidate&&data.systems.some(s=>s.id===candidate))systemId=candidate;
+ if(params.has('kind'))selection={kind:params.get('kind'),key:params.get('object')};
+ $('#candidate-select').innerHTML=data.systems.slice().reverse().map(s=>`<option value="${s.id}" ${s.id===systemId?'selected':''}>${esc(systemTitle(s))}${s.id===project.submitted?' · 当前':''}</option>`).join('');
+ $('#adopted').textContent='稳定参考';$('#adopted').title='查看采用版 '+project.adopted;
+ $('#title').textContent=headings[page][0];$('#subtitle').textContent=headings[page][1];
+ document.querySelectorAll('[data-page]').forEach(a=>{a.classList.toggle('active',a.dataset.page===page);if(a.dataset.page===page)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+ $('#search').value=query;$('#search-clear').hidden=!query;renderContext();
+ $('#content').innerHTML=query?searchPage():({system:systemPage,runs:runPage,validation:validationPage,environment:environmentPage,harness:harnessPage,experiments:experimentPage}[page])();
+ const timeline=$('.history-grid');if(timeline)timeline.style.gridTemplateColumns=`112px repeat(${Number(timeline.dataset.columns)},178px)`;
+ showDetail(selection?.kind||'system',selection?.key||current().id);
+ inspector(sessionStorage.getItem('bf-lab-inspector-'+page)==='true');persist();
+ requestAnimationFrame(()=>{const stored=viewStates.get(location.hash);if($('.history-scroll'))$('.history-scroll').scrollLeft=prior?.history??stored?.history??$('.history-scroll').scrollWidth;$('#navigation').scrollTop=prior?.nav??stored?.nav??0;window.scrollTo({top:prior?.y??stored?.y??window.history.state?.labScroll??0,behavior:'instant'});});
+ if(page==='harness')loadMethodFacts(selectedMethodOwner||project.owner);
 }
-function showDetail(kind,key,open=true){
- const value=getSelection(kind,key);if(!value){selection=null;return;}
- selection={kind,key};if(open)document.querySelector('.shell').classList.remove('inspector-hidden');
- $('#inspector-toggle').setAttribute('aria-expanded',!document.querySelector('.shell').classList.contains('inspector-hidden'));
- $('#inspector-title').textContent=({integration:'Integration Request',system:'System Commit',domain:'Domain Commit',contract:'Interface Contract',validation:'Validation Record',release:'Release',skill:'Skill Details',run:'Pi Session',operation:'Decision Episode',method:'Method Release',event:'Design Event',assets:'Engineering Assets',experiment:'Study Detail',gate:'Core Validation'}[kind]||'Tool / Interface');
- let html=`<h2>${esc(kind==='skill'?value.name||value.id:short(value.id||value.owner||String(value.seq)))}</h2>${badge(value.status||value.digital_status||'RECORDED')}<p class="id">${esc(value.id||value.harness_id||value.owner||key)}</p><div class="detail-tabs"><button data-detail="details" class="${detailMode==='details'?'active':''}">Details</button><button data-detail="evidence" class="${detailMode==='evidence'?'active':''}">Evidence</button><button data-detail="raw" class="${detailMode==='raw'?'active':''}">Source</button></div>`;
-  const target=value.target||value.system_commit||value.base_system;
-  const links=[];
-  if(target&&data.systems.some(s=>s.id===target))links.push(jump('system',target,'系统候选'),jump('validation',target,'验证记录'));
-  if(value.owner)links.push(jump('runs',value.owner,'相关执行'),`<button data-trace="${esc(value.owner)}">会话与工具</button>`);
-  if(kind==='method')links.push(jump('experiments',value.harness_id,'相关实验'));
-  if(kind==='experiment')links.push(jump('harness','', '方法配置'),jump('environment','', '环境'));
-  if(links.length)html+=`<div class="context-links">${links.join('')}</div>`;
-  if(detailMode==='raw')html+=json(value);
- else if(kind==='system'){
-  html+=`<h3>Included Domain Commits</h3>${Object.entries(value.domain_commits).map(([d,c])=>`<button class="file-link" ${item('domain',c)}>${esc(domains[d][0])} ${id(c)}</button>`).join('')||'<p>冻结完整候选，无补造专业历史</p>'}<h3>Parent / Source</h3><p class="id">${esc(value.parent||value.origin_design_id)}</p><h3>Checks</h3>${Object.entries(value.validations).map(([g,v])=>`<button class="file-link" ${item('gate',g)}>${esc(gateNames[g])} ${badge(v.status)}</button>`).join('')}<h3>Engineering</h3><button class="file-link" data-preview="schematic.svg">查看原理图 ↗</button><button class="file-link" data-preview="pcb-combined.svg">查看 PCB ↗</button><button class="file-link" data-cad>查看 3D CAD ↗</button><h3>Files</h3>${Object.entries(value.files).slice(0,detailMode==='evidence'?100:4).map(([p,r])=>`<button class="file-link" data-file="${esc(p)}" data-system="${esc(value.id)}">${esc(p)}<small> · ${Math.ceil(r.bytes/1024)} KB</small></button>`).join('')}<h3>Physical Validation</h3>${badge(value.physical)}`;
- }else if(kind==='validation')html+=`<h3>Target System</h3><p class="id">${esc(value.target)}</p><h3>Validation Scope</h3><p>${esc(value.scope)}</p><h3>Input Fingerprint</h3><p class="id">${esc(value.result?.input_fingerprint||value.input_sha256)}</p><h3>Checks</h3>${(value.result?.checks||value.controls||[]).map(c=>`<p>${esc(c.id)} ${badge(c.status)}</p>`).join('')}<h3>Open Issues</h3>${json(value.result?.issues||[])}`;
- else if(kind==='gate')html+=`<h3>${esc(value.label)}</h3>${value.evidence?`<p class="id">${esc(value.evidence.sha256)}</p>`:''}<h3>Version Binding</h3><p>${esc(value.dependency_binding)}</p>${value.reused_from?`<p>复用 ${id(value.reused_from)}</p>`:''}${value.invalidated_by?`<p>${esc(value.invalidated_by)}</p>`:''}<p>${esc(value.prior_status?'上版 '+labels[value.prior_status]:'')}</p>`;
- else if(kind==='domain')html+=`<h3>Decision</h3><p>${esc(value.rationale)}</p><h3>Workspace / Base</h3><p>${esc(value.domain)} · ${esc(value.branch)}</p><p class="id">${esc(value.base_system)}</p><h3>Actual Changes</h3>${value.changes.map(c=>`<button class="file-link" data-file="${esc(c.path)}" data-domain="${esc(value.id)}">${esc(c.path)}</button>`).join('')}<h3>Execution Binding</h3><p>Target build · ${esc(value.target_build)}</p><p>Model · ${esc(value.model_execution)}</p><h3>Author</h3><p>${esc(value.source_author)} · ${esc(value.owner)}</p>`;
- else if(kind==='integration')html+=`<h3>集成目的</h3><p>${esc(value.rationale)}</p><h3>基于候选</h3><button class="file-link" ${item('system',value.base)}>${id(value.base)}</button><h3>纳入专业提交</h3>${Object.entries(value.domain_commits).map(([d,c])=>`<button class="file-link" ${item('domain',c)}>${esc(domains[d]?.[0]||d)} ${id(c)}</button>`).join('')}<h3>接口契约</h3>${Object.values(value.contracts).map(c=>`<button class="file-link" ${item('contract',c)}>${id(c)}</button>`).join('')}`;
- else if(kind==='contract')html+=`<h3>Provides</h3><ul>${value.provides.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><h3>Requires</h3><ul>${value.requires.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><h3>Commit Binding</h3>${json(value.domain_commits)}<h3>Decision</h3><p>${esc(value.rationale)}</p><h3>Schema</h3><p>${esc(value.schema_version)}</p>`;
- else if(kind==='skill')html+=`<h3>Purpose</h3><p>${esc(value.description||value.name||value.id)}</p><h3>Version / Hash</h3><p>${esc(value.version)}</p><p class="id">${esc(value.sha256)}</p><h3>Source</h3><p class="id">${esc(value.path)}</p><h3>Actual Activation</h3>${json(data.skill_activations.filter(x=>x.skill_id===value.id))}`;
- else if(kind==='release')html+=`<h3>Target System</h3><p class="id">${esc(value.target||value.id)}</p><h3>Delivery</h3>${value.target?`<a class="file-link button-primary" href="${download(value)}" download="${short(value.id)}-review.zip">下载同版工程审查包 ↓</a><p>${Object.keys(value.files).length} 件文件 · ${value.validations.length} 条接口检查</p>`:empty('所选版本尚未交付')}<h3>Conclusion</h3><p>${esc(value.rationale)}</p>`;
- else if(kind==='experiment')html+=`<h3>Fixed Apparatus</h3><p>${esc(value.apparatus?.model?.model||'deepseek-flash')}</p><p class="id">${esc(value.apparatus?.input)}</p><h3>Conditions</h3>${value.conditions.map(c=>`<div class="row-card"><b>${esc(c.id)}</b><p>${esc(c.method)}</p></div>`).join('')}<h3>Falsifier</h3><p>${esc(value.falsifier)}</p><h3>Results</h3>${value.results.length?json(value.results):empty('等待固定版本上的真实对比运行')}`;
-  else if(kind==='operation')html+=`<h3>Action</h3><p>${esc(value.request.action)}</p><h3>Public Reason / Result</h3><p>${esc(value.request.rationale||value.request.question||value.request.conclusion||'')}</p>${json(value.result)}<h3>Input</h3>${json(value.request)}`;
- else if(kind==='run')html+=`<h3>Professional Task</h3><p>${esc(value.task?.question||'System Architect')}</p><h3>Completion</h3><p>${esc(value.task?.completion||'同版集成、检查、决定和交付')}</p><h3>Workspace Scope</h3>${json(value.task?.writable_prefixes||['Lead: integration and adoption'])}<div class="metrics"><div><small>Requests</small><b>${value.model_calls}</b></div><div><small>Ledger</small><b>$${value.cost_upper_bound_usd.toFixed(4)}</b></div></div>${value.error?json(value.error):''}`;
- else if(kind==='interface')html+=`<h3>Endpoint / Tool</h3><p>${esc(value.method)} ${esc(value.endpoint)}</p><p>${esc(value.pi_tool)}</p><h3>Input Schema</h3>${json(value.input)}<h3>Output</h3><p>${esc(value.output)}</p><h3>Session / Authentication</h3><p>${esc(value.authentication)}</p><h3>Side Effects</h3><p>${esc(value.side_effects)}</p><h3>Recovery / Contract</h3><p>${esc(value.contract)}</p><h3>Implementation</h3><p class="id">${esc(value.implementation)}</p><p class="id">${esc(value.tool_schema)}</p>`;
- else if(kind==='assets')html+=value.files.map(f=>`<button class="file-link" data-file="${esc(f.path)}">${esc(f.path)}</button>`).join('');
- else html+=json(value);
- if(detailMode!=='raw'){
-  if(kind==='system'){
-   const parent=data.systems.find(s=>s.id===value.parent),changed=Object.entries(value.contracts).filter(([k,v])=>!parent||parent.contracts[k]!==v),stale=Object.entries(value.validations).filter(([,v])=>v.status==='RECHECK_REQUIRED');
-   html+=`<h3>Changed Interfaces</h3>${changed.map(([k,c])=>`<button class="file-link" ${item('contract',c)}>${esc(k)} ${id(c)}</button>`).join('')||'<p>接口未变</p>'}<h3>Stale Evidence</h3>${stale.map(([g])=>`<button class="file-link" ${item('gate',g)}>${esc(gateNames[g])}</button>`).join('')||'<p>无过期记录</p>'}<h3>Open System Question</h3>${currentIssues(value).map(i=>`<p>${esc(issueNames[i.id]||i.id)}</p>`).join('')||'<p>查看本版核心检查</p>'}<h3>Responsible Agents</h3><div class="context-links">${jump('runs',project.owner,'BF Lead')}${data.professional_tasks.map(t=>jump('runs',t.owner,domains[t.role][0])).join('')}</div><h3>Linked Evidence</h3>${data.validations.filter(v=>v.target===value.id).map(v=>`<button class="file-link" ${item('validation',v.id)}>${id(v.id)} ${badge(v.status)}</button>`).join('')}${parent?`<button class="file-link" ${item('system',parent.id)}>父候选 ${id(parent.id)}</button>`:''}`;
-  }
-  if(kind==='domain')html+=`<h3>Parent / Execution</h3>${value.parent?`<button class="file-link" ${item('domain',value.parent)}>父提交 ${id(value.parent)}</button>`:''}${data.executions.filter(e=>e.domain_commit===value.id).map(e=>`<button class="file-link" ${item('execution',e.id)}>${id(e.job_id)} ${badge(e.status)}</button>`).join('')}${detailMode==='evidence'?`<h3>Complete Source · ${Object.keys(value.files).length}</h3>${Object.keys(value.files).map(p=>`<button class="file-link" data-file="${esc(p)}" data-domain="${esc(value.id)}">${esc(p)}</button>`).join('')}`:''}`;
-  if(kind==='contract')html+=`<h3>Version / Changed From</h3><p>v${value.revision}</p>${value.parent?`<button class="file-link" ${item('contract',value.parent)}>父契约 ${id(value.parent)}</button>`:'<p>首版契约</p>'}<h3>Domain Evidence</h3>${Object.entries(value.domain_commits).map(([d,c])=>`<button class="file-link" ${item('domain',c)}>${esc(d)} ${id(c)}</button>`).join('')}<h3>Execution</h3>${json(value.executions||{})}`;
-  if(kind==='validation'){
-   const s=data.systems.find(s=>s.id===value.target);
-   html+=`<h3>Evaluator</h3><p>${esc(typeof value.evaluator==='string'?value.evaluator:value.evaluator?.version)}</p><h3>Bound Contracts</h3>${Object.values(s?.contracts||{}).map(c=>`<button class="file-link" ${item('contract',c)}>${id(c)}</button>`).join('')}<div class="context-links">${jump('environment','','运行环境')}</div>`;
-  }
-  if(kind==='skill')html+=`<h3>Usage Sessions</h3>${data.skill_activations.filter(x=>x.skill_id===value.id).map(x=>`<div class="context-links">${jump('runs',x.owner,short(x.owner))}</div>`).join('')||'<p>本项目尚未激活</p>'}`;
-  if(kind==='method')html+=`<button class="file-link" data-trace="${esc(value.owner)}">实际提示词、模型与加载回执</button>`;
- }
- $('#detail').innerHTML=html;
+async function loadMethodFacts(owner){if(methodFacts.has(owner))return;methodFacts.set(owner,null);try{const v=await req('/api/design-repository/trace?'+new URLSearchParams({project:project.id,owner:project.owner,session:owner,limit:100}));const manifest=data.methods.find(m=>m.owner===owner);methodFacts.set(owner,v.records.filter(r=>r.type==='repository_controller_loaded'&&r.harness_id===manifest?.harness_id).at(-1)||{});if(page==='harness'&&(selectedMethodOwner||project.owner)===owner)render();}catch{methodFacts.set(owner,{});}}
+function modal(title,html){$('#viewer-title').textContent=title;$('#viewer-body').innerHTML=html;if(!$('#viewer').open)$('#viewer').showModal();}
+async function showTrace(owner,after=null) {
+ const args={project:project.id,owner:project.owner,session:owner,limit:100};if(after!=null)args.after=after;
+ const v=await req('/api/design-repository/trace?'+new URLSearchParams(args));traceCursor[owner]=v.cursor;
+ const text=kind=>({repository_controller_loaded:'实际加载配置',user_message:'用户要求',tool_execution_end:'工具结果',message:'公开对话',conversation_status:'会话状态',repository_turn_finished:'运行结束'}[kind]||kind);
+ modal(roleName(owner)+' · 公开对话',`<div class="trace-view"><div class="tabs"><button data-trace="${owner}" data-trace-start="1">从会话开头</button><button data-trace="${owner}">最近记录</button><button data-trace="${owner}" data-trace-after="${v.cursor}" ${v.records.length?'':'disabled'}>下一段</button></div><p class="muted">${v.records.length} 条公开记录</p>${v.records.map(r=>`<details class="trace-record" ${r.text&&r.role==='assistant'?'open':''}><summary>${stamp(r.time)} · ${esc(r.role||text(r.type))}${r.tool?' · '+esc(r.tool):''}${r.is_error?' · 执行错误':''}</summary>${r.text?`<p class="public-text">${esc(readable(r.text))}</p>`:''}${r.prompt?`<details><summary>实际系统提示词</summary><pre>${esc(r.prompt)}</pre></details>`:''}${r.harness_id?`<dl class="facts">${fact('方法',r.harness_id)}${fact('模型',typeof r.model==='string'?r.model:JSON.stringify(r.model))}</dl>`:''}${r.tool_calls?.length?`<details><summary>工具调用参数 · ${r.tool_calls.length} 项</summary>${json(r.tool_calls)}</details>`:''}${r.result?`<details><summary>工具返回</summary>${json(r.result)}</details>`:''}${r.error?`<p>${esc(valueText(r.error))}</p>`:''}</details>`).join('')||empty('这段没有更多公开记录')}</div>`);
 }
-async function showPreview(path){const p=sourcePreview(path);if(!p){notify('此版本没有匹配来源的预览');return;}$('#viewer-title').textContent=p.label;$('#viewer-body').innerHTML=`<img src="${previewURL(p)}" alt="${esc(p.label)}">`;$('#viewer').showModal();}
-async function showFile(path,options={}){const selected=options.domain?data.domain_commits.find(d=>d.id===options.domain):options.system?data.systems.find(s=>s.id===options.system):current();const r=selected?.files[path];if(!r){notify('文件不在所选系统版本中');return;}$('#viewer-title').textContent=path;const url=fileURL(path,options.domain?{domain_commit:options.domain}:options.system?{system:options.system}:{});if(/\.(png|svg|jpg|webp)$/.test(path))$('#viewer-body').innerHTML=`<img src="${url}" alt="${esc(path)}">`;else if(/\.(zip|hex|bin|elf|step|stl|raw)$/.test(path))$('#viewer-body').innerHTML=`<pre>${esc(path)}\nSHA-256: ${esc(r.sha256)}</pre><a class="file-link" href="${url}" download>下载原生文件 ↓</a>`;else{const resp=await fetch(url);if(!resp.ok)throw Error('文件完整性读取失败');const text=await resp.text();$('#viewer-body').innerHTML=`<pre>${esc(text)}</pre>`;}$('#viewer').showModal();}
-function showCAD(){const job=Object.entries(current().jobs).find(([,j])=>j.artifacts?.['project-preview-mesh.json']);if(!job){notify('当前版本没有匹配的 STEP 派生网格');return;}const url='/model-viewer.html?'+new URLSearchParams({repository_project:project.id,repository_owner:project.owner,repository_system:current().id,repository_job:job[0],repository_path:'project-preview-mesh.json',mesh:'1'});$('#viewer-title').textContent='CAD · 原生 STEP 派生预览';$('#viewer-body').innerHTML=`<iframe title="原生 CAD 3D 预览" src="${url}"></iframe>`;$('#viewer').showModal();}
-async function refresh(){if(busy)return;busy=true;try{data=await req('/api/design-repository?'+new URLSearchParams({project:project.id,owner:project.owner}));project=data.project;const studio=location.port===String(data.environment.port)?'http://127.0.0.1:'+data.original_demo_port+'/':'/';$('#studio-link').href=studio;$('#studio-home').href=studio;$('#workspace-note').textContent='运行环境 :'+data.environment.port+' · '+short(data.environment.profile_sha256);if(!systemId||!data.systems.some(s=>s.id===systemId))systemId=project.submitted;$('#system').innerHTML=data.systems.map(s=>`<option value="${s.id}" ${s.id===systemId?'selected':''}>${short(s.id)} ${s.id===project.adopted?'· Adopted':s.id===project.submitted?'· Current':'· History'}</option>`).join('');$('#adopted').textContent=short(project.adopted);$('#adopted').title=project.adopted;$('#sync').textContent='Synced '+new Date(data.updated*1000).toLocaleTimeString('zh-CN',{hour12:false});const s=current();$('#issue-count').textContent=Object.values(s.validations).filter(v=>v.status!=='PASS').length+' checks open';$('#agent-count').textContent=data.states.filter(s=>s.status==='RUNNING').length+' agents active';render();}catch(e){$('#sync').textContent='连接中断';$('#content').innerHTML=empty(e.message);}finally{busy=false;}}
-document.addEventListener('click',async e=>{const n=e.target.closest('button,[data-preview],[data-cad]');if(!n)return;try{
- if(n.dataset.jump){go(n.dataset.jump,n.dataset.object);return;}
- if(n.dataset.history){historyFilter=n.dataset.history;render();return;}
- if(n.dataset.trace){await showTrace(n.dataset.trace,n.dataset.traceStart==='1');return;}
-  if(n.dataset.kind)selectObject(n.dataset.kind,n.dataset.kind==='event'?Number(n.dataset.key):n.dataset.key);
- if(n.dataset.preview)await showPreview(n.dataset.preview);
- if('cad' in n.dataset)showCAD();
- if(n.dataset.file)await showFile(n.dataset.file,{domain:n.dataset.domain,system:n.dataset.system});
- if(n.dataset.filter){validationFilter=n.dataset.filter;render();}
- if(n.dataset.detail){detailMode=n.dataset.detail;showDetail(selection.kind,selection.key,false);}
-}catch(e){notify(e.message);}});
-$('#refresh').onclick=refresh;
-$('#adopted').onclick=()=>selectObject('system',project.adopted);
-$('#inspector-close').onclick=()=>{document.querySelector('.shell').classList.add('inspector-hidden');$('#inspector-toggle').setAttribute('aria-expanded','false');localStorage.setItem('bf-v2-inspector','hidden');};
-$('#inspector-toggle').onclick=()=>{document.querySelector('.shell').classList.toggle('inspector-hidden');$('#inspector-toggle').setAttribute('aria-expanded',!document.querySelector('.shell').classList.contains('inspector-hidden'));localStorage.setItem('bf-v2-inspector',document.querySelector('.shell').classList.contains('inspector-hidden')?'hidden':'visible');};
-$('#viewer-close').onclick=()=>{$('#viewer').close();$('#viewer-body').replaceChildren();};
-$('#viewer').addEventListener('close',()=>$('#viewer-body').replaceChildren());
-$('#system').onchange=e=>{systemId=e.target.value;selection=null;detailMode='details';render();};
-$('#search').oninput=e=>{query=e.target.value;render();};
-$('#project').onchange=async e=>{const index=await req('/api/design-repository/projects');project=index.projects.find(p=>p.id===e.target.value);systemId=null;selection=null;await refresh();};
-window.addEventListener('hashchange',()=>{render();});
-document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#search').focus();}});
-if(localStorage.getItem('bf-v2-inspector')==='hidden'||innerWidth<850)document.querySelector('.shell').classList.add('inspector-hidden');
-const index=await req('/api/design-repository/projects');project=index.projects[0];if(project){try{const saved=JSON.parse(sessionStorage.getItem('bf-lab-context-'+project.id)||'{}');systemId=saved.systemId;selection=saved.selection;related=saved.related;}catch{}}
-if(!project){$('#content').innerHTML=empty('尚未导入任何 Project');}else{$('#project').innerHTML=index.projects.map(p=>`<option value="${p.id}">${esc(p.title)}</option>`).join('');await refresh();}
+function imageViewer(url,label){
+ viewerState={scale:1,fit:1,x:0,y:0,url,label};modal(label,`<div class="image-controls"><button data-image="fit">适屏</button><button data-image="one">100%</button><button data-image="out" aria-label="缩小图纸">−</button><output id="image-scale">适屏</output><button data-image="in" aria-label="放大图纸">＋</button><label>定位 <input id="image-find" placeholder="器件或网络，如 U1、GND" aria-label="在图纸中定位器件或网络"></label><button data-image="find">查找</button><span id="image-location" role="status"></span><a href="${url}" target="_blank" rel="noopener">原图 ↗</a></div><div class="image-stage" tabindex="0" aria-label="图纸，可拖动和平移，方向键移动"><img id="engineering-image" src="${url}" alt="${esc(label)}" draggable="false"></div>`);
+ const img=$('#engineering-image'),stage=$('.image-stage');const loaded=()=>{if(!viewerState||!img.naturalWidth)return;viewerState.width=img.naturalWidth;viewerState.height=img.naturalHeight;fitImage();};img.onload=loaded;if(img.complete)loaded();img.onerror=()=>{if($('#image-location'))$('#image-location').textContent='图纸读取失败，请重试';};
+ let drag=null;stage.onpointerdown=e=>{if(e.button!==0)return;drag={x:e.clientX,y:e.clientY,px:viewerState.x,py:viewerState.y};stage.setPointerCapture(e.pointerId);stage.classList.add('dragging');};stage.onpointermove=e=>{if(drag&&viewerState){viewerState.x=drag.px+e.clientX-drag.x;viewerState.y=drag.py+e.clientY-drag.y;updateImage();}};stage.onpointerup=()=>{drag=null;stage.classList.remove('dragging');};
+ stage.onwheel=e=>{e.preventDefault();zoomImage(e.deltaY>0?.85:1.18,e.clientX-stage.getBoundingClientRect().left,e.clientY-stage.getBoundingClientRect().top);};
+ stage.onkeydown=e=>{const moves={ArrowLeft:[32,0],ArrowRight:[-32,0],ArrowUp:[0,32],ArrowDown:[0,-32]};if(moves[e.key]){e.preventDefault();viewerState.x+=moves[e.key][0];viewerState.y+=moves[e.key][1];updateImage();}if(e.key==='+'||e.key==='=')zoomImage(1.25);if(e.key==='-')zoomImage(.8);};
+}
+function updateImage(){const s=viewerState;if(!s||!$('#engineering-image'))return;const img=$('#engineering-image');img.style.width=s.width+'px';img.style.height=s.height+'px';img.style.transform=`translate(${s.x}px,${s.y}px) scale(${s.scale})`;$('#image-scale').textContent=Math.round(s.scale*100)+'%';}
+function fitImage(){const s=viewerState,stage=$('.image-stage');if(!s?.width||!stage)return;s.fit=Math.min((stage.clientWidth-32)/s.width,(stage.clientHeight-32)/s.height);s.scale=s.fit;s.x=(stage.clientWidth-s.width*s.scale)/2;s.y=(stage.clientHeight-s.height*s.scale)/2;updateImage();}
+function zoomImage(factor,cx,cy){const s=viewerState,stage=$('.image-stage');if(!s?.width||!stage)return;cx??=stage.clientWidth/2;cy??=stage.clientHeight/2;const next=Math.max(.02,Math.min(12,s.scale*factor));s.x=cx-(cx-s.x)*next/s.scale;s.y=cy-(cy-s.y)*next/s.scale;s.scale=next;updateImage();}
+async function locateInImage(){const s=viewerState,q=$('#image-find')?.value.trim();if(!s||!q)return;const status=$('#image-location');if(!/\.svg(?:\?|$)/.test(s.url)&&!s.url.includes('svg')){status.textContent='此预览没有文字索引';return;}if(!s.svg){const r=await fetch(s.url);if(!r.ok)throw Error('图纸读取失败');s.svg=new DOMParser().parseFromString(await r.text(),'image/svg+xml');}const match=[...s.svg.querySelectorAll('text')].find(n=>n.textContent.trim().toLowerCase()===q.toLowerCase());if(!match){status.textContent='图中未找到 '+q;return;}const x=parseFloat(match.getAttribute('x')),y=parseFloat(match.getAttribute('y'));if(!Number.isFinite(x)||!Number.isFinite(y)){status.textContent='已找到文字，当前图元没有定位坐标';return;}const vb=s.svg.documentElement.getAttribute('viewBox')?.split(/[ ,]+/).map(Number)||[0,0,s.width,s.height];const px=(x-vb[0])*s.width/vb[2],py=(y-vb[1])*s.height/vb[3];const stage=$('.image-stage');s.scale=Math.max(s.fit,1);s.x=stage.clientWidth/2-px*s.scale;s.y=stage.clientHeight/2-py*s.scale;updateImage();status.textContent='已定位 '+q;}
+async function showPreview(name){const p=sourcePreview(name);if(!p){notify('此候选没有来源一致的预览');return;}imageViewer(previewURL(p),p.label||name);}
+async function showFile(path,options={}) {
+ const selected=options.domain?data.domain_commits.find(d=>d.id===options.domain):options.system?data.systems.find(s=>s.id===options.system):current(),ref=options.job?selected.jobs?.[options.job]?.artifacts?.[path]:selected?.files?.[path];
+ if(!ref){notify('文件不在所选版本中');return;}const url=fileURL(path,{...(options.domain?{domain_commit:options.domain}:{}),...(options.system?{system:options.system}:{}),...(options.job?{job:options.job}:{})});
+ if(/\.(png|svg|jpg|webp)$/i.test(path)){imageViewer(url,path);return;}
+ if(/\.(zip|hex|bin|elf|step|stl|raw)$/i.test(path)){modal(path,`<div class="file-view"><h3>${esc(path)}</h3><p>${Number(ref.bytes).toLocaleString()} 字节</p><a class="button-primary" href="${url}" download>下载原生文件</a><details><summary>来源摘要</summary><p class="id">${esc(ref.sha256)}</p></details></div>`);return;}
+ const response=await fetch(url);if(!response.ok)throw Error('文件完整性读取失败');modal(path,`<pre>${esc(await response.text())}</pre>`);
+}
+async function showDiff(path) {
+ const s=current(),parent=parentOf(s);const read=async version=>{if(!version?.files[path])return '此版本没有该文件';const r=await fetch(fileURL(path,{system:version.id}));if(!r.ok)throw Error('版本文件读取失败');return r.text();};
+ if(!/\.(c|h|json|py|cir|md|txt|csv)$/i.test(path)){await showFile(path);return;}
+ const [before,after]=await Promise.all([read(parent),read(s)]);modal(path+' · 版本比较',`<div class="diff-view"><section><h3>${esc(parent?systemTitle(parent):'父版')}</h3><pre>${esc(before)}</pre></section><section><h3>${esc(systemTitle(s))}</h3><pre>${esc(after)}</pre></section></div>`);
+}
+function showCAD(){const job=Object.entries(current().jobs).find(([,j])=>j.artifacts?.['project-preview-mesh.json']);if(!job){notify('本版没有匹配的 STEP 派生网格');return;}const url='/model-viewer.html?'+new URLSearchParams({repository_project:project.id,repository_owner:project.owner,repository_system:current().id,repository_job:job[0],repository_path:'project-preview-mesh.json',mesh:'1'});modal('CAD · 本版三维模型',`<iframe title="原生 CAD 三维预览" src="${url}"></iframe>`);}
+function downloadRecord(kind,key){const v=getSelection(kind,key);if(!v)return;const url=URL.createObjectURL(new Blob([JSON.stringify({system_commit:current().id,...v},null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=(v.id||key)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function showGateReport(key){const g=getSelection('gate',key),info=gateInfo(g);modal(g.label+' · 当前版本检查报告',`<article class="gate-report"><div class="result-heading"><h2>${esc(g.label)}</h2>${badge(g.status)}</div><p>${esc(info.scope)}</p>${notesList(info.notes)}${metricsList(info.metrics)}<dl class="facts">${fact('系统候选',current().id)}${fact('检查回执',g.validation_id||g.reused_from||'冻结基线')}${fact('输入摘要',g.input_fingerprint)}</dl><button data-record-download="gate" data-record-key="${key}">下载这项检查记录</button><details><summary>完整检查数据</summary>${json(g.findings||g)}</details></article>`);}
+async function refresh() {
+ if(busy||!project)return;busy=true;$('#refresh').disabled=true;
+ try{const next=await req('/api/design-repository?'+new URLSearchParams({project:project.id,owner:project.owner}));data=next;project=data.project;if(!systemId||!data.systems.some(s=>s.id===systemId))systemId=project.submitted;
+  const studio=location.port===String(data.environment.port)?'http://127.0.0.1:'+data.original_demo_port+'/':'/';$('#studio-home').href=studio;$('#studio-link').href=studio;
+  $('#workspace-note').textContent='V2 :'+data.environment.port+' · 稳定 Demo :'+data.original_demo_port;$('#sync').textContent='读取于 '+new Date(data.updated*1000).toLocaleTimeString('zh-CN',{hour12:false});$('#sync').classList.remove('offline');$('#agent-count').textContent=data.states.filter(s=>s.status==='RUNNING').length+' 个 Agent 执行中';render();
+ }catch(e){$('#sync').textContent='连接中断 · 保留上次视图';$('#sync').classList.add('offline');notify(e.message);if(!data)$('#content').innerHTML=empty('暂时无法读取项目，请刷新重试。');}finally{busy=false;$('#refresh').disabled=false;}
+}
+document.addEventListener('click',async event=>{
+ const a=event.target.closest('[data-page]');if(a){event.preventDefault();go(a.dataset.page);return;}
+ const n=event.target.closest('button,[data-cad]');if(!n)return;
+ try{
+  if(n.dataset.jump){go(n.dataset.jump,n.dataset.object);return;}
+  if(n.dataset.kind){selectObject(n.dataset.kind,n.dataset.key);return;}
+  if(n.dataset.preview){await showPreview(n.dataset.preview);return;}
+  if('cad' in n.dataset){showCAD();return;}
+  if(n.dataset.file){await showFile(n.dataset.file,{domain:n.dataset.domain,system:n.dataset.system});return;}
+  if(n.dataset.jobFile){await showFile(n.dataset.jobFile,{job:n.dataset.job,system:n.dataset.system});return;}
+  if(n.dataset.diff){await showDiff(n.dataset.diff);return;}
+  if(n.dataset.gateReport){showGateReport(n.dataset.gateReport);return;}
+  if(n.dataset.recordDownload){downloadRecord(n.dataset.recordDownload,n.dataset.recordKey);return;}
+  if(n.dataset.copy){await navigator.clipboard.writeText(n.dataset.copy);notify('已复制完整身份');return;}
+  if(n.dataset.trace){await showTrace(n.dataset.trace,n.dataset.traceStart==='1'?0:n.dataset.traceAfter!=null?Number(n.dataset.traceAfter):null);return;}
+  if(n.dataset.detail){detailMode=n.dataset.detail;showDetail(selection?.kind||'system',selection?.key||current().id);return;}
+  if(n.dataset.history){historyFilter=n.dataset.history;historyAll=false;render();return;}
+  if('historyMore' in n.dataset){historyAll=!historyAll;render();return;}
+  if(n.dataset.filter){validationFilter=n.dataset.filter;if(page!=='validation')go('validation',current().id);else render();return;}
+  if(n.dataset.round){systemId=n.dataset.round;usageScope='round';related=null;route('runs',null);return;}
+  if(n.dataset.session){usageScope='session';usageOwner=n.dataset.session;related=null;go('runs');return;}
+  if(n.dataset.methodOwner){selectedMethodOwner=n.dataset.methodOwner;selection=null;render();return;}
+  if('clearSearch' in n.dataset){query='';render();$('#search').focus();return;}
+  if(n.dataset.image){if(n.dataset.image==='fit')fitImage();else if(n.dataset.image==='in')zoomImage(1.25);else if(n.dataset.image==='out')zoomImage(.8);else if(n.dataset.image==='one')zoomImage(1/viewerState.scale);else await locateInImage();}
+ }catch(e){notify(e.message);}
+});
+document.addEventListener('change',event=>{const n=event.target;if(n.id==='usage-scope'){usageScope=n.value;related=null;render();}if(n.id==='usage-owner'){usageOwner=n.value;render();}});
+$('#refresh').onclick=refresh;$('#adopted').onclick=()=>selectObject('system',project.adopted);
+$('#inspector-close').onclick=()=>{inspector(false);$('#inspector-toggle').focus();};
+$('#inspector-toggle').onclick=()=>inspector($('#inspector').hidden);
+$('#viewer-close').onclick=()=>$('#viewer').close();$('#viewer').addEventListener('close',()=>{viewerState=null;$('#viewer-body').replaceChildren();});
+$('#candidate-select').onchange=e=>{systemId=e.target.value;selection=null;query='';route(page,null);};
+$('#search').oninput=e=>{query=e.target.value;render();};$('#search-clear').onclick=()=>{query='';render();$('#search').focus();};
+$('#project').onchange=async e=>{const index=await req('/api/design-repository/projects');project=index.projects.find(p=>p.id===e.target.value);systemId=null;selection=null;query='';window.history.replaceState(null,'','#system');await refresh();};
+function navigation(open){shell.classList.toggle('navigation-hidden',!open);$('#navigation').hidden=!open;$('#navigation-toggle').setAttribute('aria-expanded',String(open));$('#navigation-toggle').setAttribute('aria-label',open?'收起对象栏':'展开对象栏');localStorage.setItem('bf-lab-navigation',open?'open':'closed');}
+$('#navigation-toggle').onclick=()=>navigation($('#navigation').hidden);
+const resize=$('#navigation-resize');let resizing=false;
+function navWidth(width){width=Math.max(184,Math.min(280,width));document.documentElement.style.setProperty('--nav',width+'px');resize.setAttribute('aria-valuenow',String(width));localStorage.setItem('bf-lab-nav-width',String(width));}
+resize.onpointerdown=e=>{resizing=true;resize.setPointerCapture(e.pointerId);};resize.onpointermove=e=>{if(resizing)navWidth(e.clientX-12);};resize.onpointerup=()=>{resizing=false;};resize.onkeydown=e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();navWidth(Number(resize.getAttribute('aria-valuenow'))+(e.key==='ArrowRight'?8:-8));}};
+navWidth(Number(localStorage.getItem('bf-lab-nav-width'))||216);navigation(localStorage.getItem('bf-lab-navigation')!=='closed');
+window.addEventListener('popstate',()=>{selection=null;render(false);});window.addEventListener('hashchange',()=>render(false));
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#search').focus();}if(e.key==='Escape'&&!$('#viewer').open&&!$('#inspector').hidden)inspector(false);if(e.key==='Enter'&&e.target.id==='image-find')locateInImage();});
+try{const index=await req('/api/design-repository/projects');project=index.projects[0];if(project){try{const saved=JSON.parse(sessionStorage.getItem('bf-lab-context-'+project.id)||'{}');({systemId,selection,usageScope='round',usageOwner='',selectedMethodOwner='',historyFilter='system',historyAll=false,validationFilter='all'}=saved);}catch{}$('#project').innerHTML=index.projects.map(p=>`<option value="${p.id}">${esc(p.title)}</option>`).join('');await refresh();}else $('#content').innerHTML=empty('尚未导入项目');}catch(e){$('#content').innerHTML=empty(e.message);$('#sync').textContent='连接中断';}
+}

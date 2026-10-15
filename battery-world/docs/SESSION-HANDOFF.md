@@ -1,3 +1,13 @@
+## 2026-10-16 · P01 双 PDF 报告与必要交付检查完成
+
+原 Power/Firmware/Lead Pi 已补齐报告并发布 REL-817a555ffd29e711bc65f94d8689fe0f20aebdb662b117db1b6bbf46ebac7d4f。原理图按39器件/172引脚原生网表重排连线，提供完整跨组总图和六张回路附图；固件为5参与者/19条当前源码交互时序，覆盖错误与恢复。简版8页、详版29页；CAD、PCB功能标注、RAW波形/能量核算、专业解释、验收和交接内容齐备。共享 bf-engineering-report Skill、报告工具和 release/close 必检已接入 V2。
+
+211项Repository回归、23项报告检查、37页视觉复核、Skill格式和 ./init.sh architecture-v2-lab 通过。原十会话/工程/费用/UNKNOWN、Demo、Baseline、当前候选/采用及成功作业保留；0新工程作业、0次输入未变的成功仿真重跑。44新模型请求全部SETTLED，本地登记$0.9127182，原三owner现IDLE。工程状态继续2PASS/2FAIL/4UNEVALUABLE，物理未测试。
+
+下载：/Users/depengsu/Downloads/BF_P01_Engineering_Reports_20261016.zip。实施报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/IMPLEMENTATION.md。核对：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/implementation/result.json。本轮未提交Git；后续按用户指定的工程修订继续。以下保留历史。
+
+---
+
 # 当前交接 · V2-P01 两轮完成 · 2026-10-15
 
 - 本次 C–F 的 Power/Firmware 真实消费、连续修订、回归集成与审查交付已完成；三原 owner 均 IDLE，原生队列排空。
@@ -1005,3 +1015,28 @@ CAD 和 S132 原输入未变复用；本轮新 SPICE 两次均对应变更输入
 证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round3-fullflow-20261014023256Z/result.json
 
 原 Pi 和单串行 worker 已排空。其余九篇原会话／工程／费用保留；旧门磁不恢复。下一轮按用户确认推进源—SECE—降压—负载对应、PCB DRC 和完整板级／装配接口。
+
+
+## 2026-10-16 · Lab UI A–D 完成
+
+Lab 已在原 8768 页面发布：顶部六页导航、当前页对象栏、可完全收起的详情、语义化版本与任务、当前八门和历史回执分开、指标单位、按范围一致的费用和请求明细、同版原理图/PCB/CAD 预览、横向历史、实际方法/技能与环境记录。当前候选 SC-e8f2f2e5 与采用版 SC-4c0da605 保持区分。
+
+19 项单测、29 项发布检查通过；浏览器完成六页及四种宽度检查。7 份预览与审查包核对通过，6388 件 Baseline 文件保持。原十会话、工程、账本与 V2 设计状态未变；模型请求和工程作业均新增 0，无仿真重跑。未提交或推送。
+
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-improvements-20261015/REPORT.md
+证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-improvements-20261015/result.json
+回归：BFWORLD_VERIFY_PROFILE=architecture-v2-lab BF_V2_EVIDENCE=<new-absolute-directory> ./init.sh
+
+后续恢复工程任务时沿已有 V2 候选与 owner 继续；当前 PCB/供能为 FAIL，其他四门缺少条件。此次 UI 发布不改变工程检查或采用记录。
+
+
+## 2026-10-16 · 工程报告第一阶段样稿完成
+
+已从最新 P01 SC-e8f2f2e5 固定快照生成简版 8 页、详版模板 12 页、共用 Skill 草稿、逐页内容映射及 9 项报告 / 2 项工程数据补齐任务。108 件来源 SHA、25 项报告核对、20 页视觉检查及 Skill 格式校验通过；原生 SVG 转换已修正，旧固件事件文件 3 个源码摘要变化纳入 R07。Lab 只读 init profile 19 单测、31 项检查和 6,388 件 Baseline 核对通过。
+
+当前只完成模板阶段。等待用户审定版式，再注册共享 Skill / 导出工具，并由现有 V2 Lead、Power、Firmware Pi 补图、分析及正文。工程候选、采用版、十原会话、账本 / UNKNOWN 与 Demo 保留；0 新模型请求、0 工程作业、0 次已通过且输入未变的仿真重跑。未提交或推送。
+
+样稿包：/Users/depengsu/Downloads/BF_P01_Report_Templates_20261016.zip
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPORT.md
+核对：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/verification/result.json
+复现：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPRODUCE.md

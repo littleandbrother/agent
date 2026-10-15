@@ -168,11 +168,26 @@ class IntegrationCase(unittest.TestCase):
     def test_review_release_exact_file_manifest(self):
         r=self.integrated();s=r['system_commit']
         self.action(OWNER,'validate',operation_id='v',system_id=s,scope='interface')
-        rel=self.action(OWNER,'release',operation_id='release',system_id=s,rationale='complete review fixture')
+        from unittest.mock import patch
+        report=self.root/'report-unit';report.mkdir();(report/'quality.json').write_text('{}')
+        (report/'summary.pdf').write_bytes(b'fixed report dependency')
+        from bfworld.agentlab.design_lab.repository import file_hash
+        quality={'system_commit':s,'status':'PASS','outputs':{'summary.pdf':{'sha256':file_hash(report/'summary.pdf')}}}
+        # This unit isolates ZIP/version binding. Full report creation and
+        # required-report rejection are exercised in test_repository_reports.
+        with patch('bfworld.agentlab.design_lab.repository_reports.required_report',return_value=(report,quality)):
+            rel=self.action(OWNER,'release',operation_id='release',system_id=s,rationale='complete review fixture')
         import zipfile,hashlib
         with zipfile.ZipFile(self.repo.root/'releases'/(rel['id']+'.zip')) as z:
             for path,ref in rel['files'].items():self.assertEqual(ref['sha256'],hashlib.sha256(z.read('engineering/'+path)).hexdigest())
         self.assertEqual('NOT_TESTED',rel['physical'])
+        self.assertEqual(quality,rel['required_engineering_report'])
+
+    def test_release_without_required_report_is_rejected(self):
+        r=self.integrated();s=r['system_commit']
+        self.action(OWNER,'validate',operation_id='v',system_id=s,scope='interface')
+        with self.assertRaisesRegex(ValueError,'REQUIRED_ENGINEERING_REPORT_MISSING'):
+            self.action(OWNER,'release',operation_id='missing-report',system_id=s,rationale='missing')
 
     def test_restore_preserves_history_and_new_commit(self):
         r=self.integrated();s=r['system_commit']

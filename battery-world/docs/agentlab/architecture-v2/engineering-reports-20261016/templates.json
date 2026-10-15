@@ -1,0 +1,31 @@
+{
+  "schema_version": "bf-report-template-v1",
+  "version": "0.1.0-proof",
+  "style": {
+    "page_simple": "A4-landscape",
+    "page_detailed": "A4-portrait",
+    "language": "zh-primary-en-section-titles",
+    "navy": "102C4B",
+    "blue": "0077CF",
+    "paper": "FFFFFF",
+    "panel": "F3F8FD",
+    "body_font_pt": 9.5,
+    "title_font_pt": 23
+  },
+  "simple_pages": [
+    {"page":1,"title":"整机方案与交付结论","english":"System Overview & Delivery Conclusion","slots":["system_overview","task","design_summary","current_verdict","delivery_scope"]},
+    {"page":2,"title":"CAD 外形、尺寸与安装接口","english":"CAD Dimensions & Mounting Interface","slots":["cad_views","dimension_table","mounting_interface","mechanical_verdict"]},
+    {"page":3,"title":"机械结构、装配与工作原理","english":"Mechanical Structure, Assembly & Working Principle","slots":["exploded_view","parts_table","assembly_sequence","motion_constraints"]},
+    {"page":4,"title":"电气架构与 PCB 实现","english":"Electrical Architecture & PCB Implementation","slots":["electrical_blocks","pcb_top","pcb_bottom","board_parameters","drc_summary"]},
+    {"page":5,"title":"电路原理图与关键回路","english":"Circuit Schematic & Key Subcircuits","slots":["native_schematic","subcircuit_details","devices_interfaces","schematic_verdict"]},
+    {"page":6,"title":"固件状态与任务时序","english":"Firmware States & Task Timeline","slots":["firmware_states","task_timeline","source_config","event_notes"]},
+    {"page":7,"title":"供能、功耗与储能仿真","english":"Energy Harvesting, Power Consumption & Storage","slots":["scenario","storage_voltage","supply_voltage","load_events","energy_ledger","power_verdict"]},
+    {"page":8,"title":"需求验收与交付目录","english":"Requirements Review & Delivery Contents","slots":["requirements_matrix","delivery_contents","current_conclusion","handoff"]}
+  ],
+  "detailed_chapters": [
+    "设计摘要与交付结论","需求、场景与运行边界","来源、参数与设计假设",
+    "机械设计与装配","电路拓扑、器件与接口","PCB、制造与 DRC",
+    "目标固件、通信与接收","供能与负载模型","仿真结果与能量核算",
+    "独立验收与未关闭问题","版本、实际作业与介入","交付目录、复现与报告补齐"
+  ]
+}

@@ -26,6 +26,7 @@ interface Config {
 		version: string;
 	};
 	dryRun?: boolean;
+	purpose?: "design" | "report";
 }
 
 const input = readline.createInterface({ input: process.stdin });
@@ -52,7 +53,11 @@ const api = async (body: Record<string, unknown>): Promise<Record<string, unknow
 };
 const declaration = await api({ action: "repository_schema" });
 const declarationText = String(declaration.description);
-const core = `你是 BF Design Architecture V2 的 Pi 设计参与者。唯一状态源是 bf_repository：Project、System Commit、专业任务、Domain Commit、契约、独立检查和采用决定。
+const core =
+	config.purpose === "report"
+		? `你是 BF 的工程交付报告作者。本轮只编写绑定 System Commit 的报告，不进行工程设计、提交、仿真或采用。
+先激活 bf-engineering-report 技能，读取 report_schema 和 report_read。所有事实和源码从指定 report_id 读取。Power 按 EasyEDA 方法组织实际网表和 PCB 标注，Firmware 用实际源码编写跨参与者时序，Lead 填写八页结论和交付说明。使用 report_write 提交自己的 JSON，完成后直接结束。模型不得编造尺寸、执行结果或物理测试。`
+		: `你是 BF Design Architecture V2 的 Pi 设计参与者。唯一状态源是 bf_repository：Project、System Commit、专业任务、Domain Commit、契约、独立检查和采用决定。
 先读 summary/task 与相关原生源码；区分事实、设计选择、假设。Lead 分配 power / firmware 专业任务并等待真实提交；专业 Pi 只修改本任务声明的专业路径，将修改冻结为 Domain Commit 后 finish。恢复时先读取持久任务与分支，不重复已执行作业。
 Lead 用明确的 Domain Commit 和 Contract 集成 System Commit，执行独立 validate，根据结果 decide，生成同版 release，再 close。方案由你判断；模型和检查器不能修改，绿色由实际检查决定。
 接口事实必须来自实际源码或数据。${declarationText} 不复制策略参数为实际无线参数。read(domain_commit,path) 和 extract(system_id,domain_commits) 可读取其他专业的冻结输入。进入新系统基线时使用 rebase，reopen 只重开原基线任务。原生源码和模型改变时需执行，工具按精确输入复用成功作业。
@@ -72,7 +77,11 @@ const loader = new DefaultResourceLoader({
 	noContextFiles: true,
 	systemPrompt: core,
 	extensionFactories: [
-		{ name: "bf-repository-v2", factory: repositoryExtension(api, emit, declarationText), hidden: false },
+		{
+			name: "bf-repository-v2",
+			factory: repositoryExtension(api, emit, declarationText, config.purpose === "report"),
+			hidden: false,
+		},
 	],
 });
 await loader.reload();

@@ -71,7 +71,7 @@ def server_patch(text):
 
 
 def publish(output):
-    output=Path(output);output.mkdir(parents=True,exist_ok=False)
+    output=Path(output).absolute();output.mkdir(parents=True,exist_ok=False)
     before=protected_state()
     if any(before[k]['busy'] or before[k].get('busy_jobs') for k in ('papers','demo')):raise ValueError('ORIGINAL_WRITER_ACTIVE')
     profile,env=environment(V2)
@@ -106,11 +106,17 @@ def publish(output):
     if configuration.exists():shutil.copy2(configuration,output/'before-bridge.json')
     (output/'before-state.json').write_text(json.dumps(before,ensure_ascii=False,indent=2)+'\n')
     for name in replacements:
-        target=ORIGINAL/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(output/'staged'/name,target)
+        target=ORIGINAL/name;target.parent.mkdir(parents=True,exist_ok=True)
+        if receipts[name]['before'] != receipts[name]['after']:
+            shutil.copyfile(output/'staged'/name,target)
     configuration.write_text(json.dumps(config,ensure_ascii=False,indent=2)+'\n');configuration.chmod(0o600)
     after=protected_state()
     if before!=after:raise ValueError('PROTECTED_STATE_CHANGED')
-    result={'schema_version':'bf-lab-publication-v1','status':'PUBLISHED_PENDING_RESTART',
+    requires_restart=any(receipts[str(PREFIX/name)]['before'] != receipts[str(PREFIX/name)]['after']
+                         for name in ('server.py','lab_bridge.py'))
+    result={'schema_version':'bf-lab-publication-v1',
+        'status':'PUBLISHED_PENDING_RESTART' if requires_restart else 'PUBLISHED_STATIC',
+        'requires_restart':requires_restart,
         'files':receipts,'source_runtime':str(V2),'public_origin':'http://127.0.0.1:8768/lab',
         'protected_state_unchanged':True,'baseline':str(BASELINE),'model_requests_added':0,'simulations_rerun':0}
     (output/'publication.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')

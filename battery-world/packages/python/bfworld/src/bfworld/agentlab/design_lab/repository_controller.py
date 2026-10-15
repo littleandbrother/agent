@@ -19,16 +19,26 @@ from .repository_actions import task, materialize
 
 def freeze(lab):
     from .resources import bundle
-    from ..skill_resources import freeze_resources
+    from ..skill_resources import freeze_resources, source_bundle
     source = PI/'packages/bf-agent'
     proc = subprocess.run([str(PI/'node_modules/.bin/tsgo'), '-p', str(source/'tsconfig.json')],
                           capture_output=True, text=True, timeout=60)
     if proc.returncode: raise ValueError('REPOSITORY_PI_BUILD_FAILED:' + proc.stdout[-2000:] + proc.stderr[-1000:])
     modules = ('repository-task', 'extensions/bf-repository', 'extensions/bf-design')
-    resources = bundle(native=True)
+    professional, professional_files = source_bundle()
+    design, design_files = bundle(native=True)
+    if set(professional_files) & set(design_files): raise ValueError('RESOURCE_PATH_COLLISION')
+    merged = {**professional, 'skills': professional['skills'] + design['skills'],
+              'plugins': professional['plugins'] + design['plugins'],
+              'files': {**professional['files'], **design['files']}}
+    merged.pop('sha256', None)
+    if len({x['id'] for x in merged['skills']}) != len(merged['skills']): raise ValueError('RESOURCE_SKILL_COLLISION')
+    merged['sha256'] = identity(merged)
+    resources = merged, {**professional_files, **design_files}
     manifest = {'schema_version': 'bf-repository-controller-v2', 'controller': 'pi-sdk-repository',
        'files': {folder+'/'+n+'.'+suffix: sha(source/folder/(n+'.'+suffix)) for folder, suffix in [('src','ts'),('dist','js')] for n in modules},
-       'python_bindings': {p.name: sha(p) for p in sorted(Path(__file__).parent.glob('repository*.py'))},
+       'python_bindings': {p.name: sha(p) for p in sorted(Path(__file__).parent.glob('*.py'))
+                           if p.name.startswith(('repository', 'report_'))},
        'review_fixtures': {p.name:sha(p) for p in sorted(Path(__file__).parent.glob('repository-review-*.json'))},
        'context_bindings': {n: sha(Path(__file__).parent.parent/n) for n in
                            ('provider.py','context.py','model_profile.py','budget_policy.py','recovery.py','skill_resources.py')},
@@ -74,7 +84,7 @@ def state(repo, owner, target=None):
             'cost_upper_bound_usd':sum(r['charged'] if r['status']=='SETTLED' else r['reserved'] for r in rows)}
 
 
-def start(repo, owner, goal=None, dry_run=False):
+def start(repo, owner, goal=None, dry_run=False, purpose='design'):
     require_capability('agent')
     require_capability('model')
     repo.project(repo.bound(owner),owner)
@@ -82,17 +92,18 @@ def start(repo, owner, goal=None, dry_run=False):
     with repo.store.connect() as db:
         if not budget_policy.unbounded_time(db,owner): raise ValueError('EXPLICIT_CONTINUATION_AUTHORITY_REQUIRED')
         if repo.lab.app.provider.recovery.unknown_blockers(db,owner): raise ValueError('PROVIDER_USAGE_UNKNOWN_STOP')
-    thread=threading.Thread(target=run,args=(repo,owner,goal,dry_run),daemon=True)
+    if purpose not in ('design','report'): raise ValueError('REPOSITORY_RUN_PURPOSE')
+    thread=threading.Thread(target=run,args=(repo,owner,goal,dry_run,purpose),daemon=True)
     repo.lab.controllers[owner]=thread;thread.start()
     return {'owner':owner,'project_id':repo.bound(owner),'status':'STARTING','controller':'pi-sdk-repository'}
 
 
-def run(repo,owner,goal,dry_run):
+def run(repo,owner,goal,dry_run,purpose='design'):
     lab=repo.lab; app=lab.app; home=lab.store.root.parent
     output=home/'sessions'/owner;output.mkdir(parents=True,exist_ok=True)
     attempt=output/'repository-attempts'/('attempt-'+str(time.time_ns()));attempt.mkdir(parents=True)
     receipt={'schema_version':'bf-repository-pi-run-v2','owner':owner,'project_id':repo.bound(owner),
-             'started':time.time(),'status':'STARTING','dry_run':dry_run,'fee_ledger_preserved':True}
+             'started':time.time(),'status':'STARTING','dry_run':dry_run,'purpose':purpose,'fee_ledger_preserved':True}
     proc=None
     try:
         harness,manifest=freeze(lab);receipt['harness']=manifest
@@ -101,7 +112,8 @@ def run(repo,owner,goal,dry_run):
         if professional:
             t=task(repo,owner); workspace=materialize(repo,t)
             if goal is None: goal=canonical({'professional_task':t,'goal':'Complete the assigned question, submit an actual Domain Commit and finish.'})
-            with repo.store.connect() as db: db.execute("UPDATE design_professional_tasks SET status='RUNNING' WHERE owner=?",(owner,))
+            if purpose == 'design':
+                with repo.store.connect() as db: db.execute("UPDATE design_professional_tasks SET status='RUNNING' WHERE owner=?",(owner,))
         else:
             workspace=repo.root/'lead'/owner;workspace.mkdir(parents=True,exist_ok=True)
             if goal is None:
@@ -117,7 +129,7 @@ def run(repo,owner,goal,dry_run):
         token=lab.store.issue(owner)
         config={'workspace':str(workspace),'service':f'http://127.0.0.1:{app.conversations.port}',
                 'token':token,'owner':owner,'goal':goal,'messageId':attempt.name,
-                'harnessIdentity':manifest['harness_id'],'modelProfile':profile,'dryRun':dry_run}
+                'harnessIdentity':manifest['harness_id'],'modelProfile':profile,'dryRun':dry_run,'purpose':purpose}
         receipt.update(model_profile=profile,harness_id=manifest['harness_id'])
         app.conversations.state(owner,'RUNNING')
         with (output/'trace.jsonl').open('a') as stdout, (attempt/'stderr.log').open('w') as stderr:
@@ -136,7 +148,7 @@ def run(repo,owner,goal,dry_run):
                 app.conversations.ingest(owner,execution_state=False)
             proc.stdin.close()
         receipt.update(exit_code=proc.returncode,status='COMPLETED' if proc.returncode==0 else 'FAILED')
-        if professional:
+        if professional and purpose == 'design':
             current=task(repo,owner)
             if current['status']=='RUNNING':
                 with lab.store.connect() as db:db.execute("UPDATE design_professional_tasks SET status='REVIEW_REQUIRED' WHERE owner=?",(owner,))
@@ -145,7 +157,8 @@ def run(repo,owner,goal,dry_run):
     except Exception as error:
         receipt.update(status='FAILED',error=type(error).__name__+': '+str(error)[:1600])
         app.conversations.state(owner,'FAILED',receipt['error'])
-        with lab.store.connect() as db:db.execute("UPDATE design_professional_tasks SET status='BLOCKED' WHERE owner=? AND status IN ('QUEUED','RUNNING')",(owner,))
+        if purpose == 'design':
+            with lab.store.connect() as db:db.execute("UPDATE design_professional_tasks SET status='BLOCKED' WHERE owner=? AND status IN ('QUEUED','RUNNING')",(owner,))
     finally:
         if proc and proc.poll() is None:os.killpg(proc.pid,signal.SIGTERM);proc.wait(timeout=5)
         app.conversations.ingest(owner,execution_state=False)
@@ -163,7 +176,7 @@ def handle(repo,owner,body,operator):
     if action=='repository_state':return state(repo,owner,body.get('task_owner'))
     if action=='repository_start':
         if not operator:raise PermissionError('OPERATOR_REQUIRED')
-        return start(repo,owner,body.get('goal'),body.get('dry_run',False))
+        return start(repo,owner,body.get('goal'),body.get('dry_run',False),body.get('purpose','design'))
     if action=='repository_run_task':
         p=repo.leader(body['project_id'],owner); target=body['task_owner']; t=task(repo,target)
         if t['project_id']!=p['id']:raise PermissionError('SPECIALIST_PROJECT_CONFLICT')
@@ -176,6 +189,8 @@ def handle(repo,owner,body,operator):
     if action=='repository_close':
         def apply(db):
             p=repo.leader(body['project_id'],owner,db)
+            from .repository_reports import required_report
+            required_report(repo, owner, repo.system(p['id'],p['submitted'],db))
             if not db.execute('SELECT 1 FROM design_repository_releases WHERE project=? AND target=?',(p['id'],p['submitted'])).fetchone():
                 raise ValueError('SAME_VERSION_RELEASE_REQUIRED')
             value={'project_id':p['id'],'status':'REVIEW_DELIVERED','conclusion':body['conclusion'],'system_commit':p['submitted']}

@@ -1,17 +1,35 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BF Agent · Lab</title><link rel="stylesheet" href="/lab/v2/lab.css"></head>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BF Agent · Lab</title><link rel="stylesheet" href="/lab/v2/lab.css"></head>
 <body>
- <header class="topbar"><a class="brand" id="studio-home" href="/"><span data-icon="brand"></span><strong>BF Agent</strong></a><div class="workspace-switch" aria-label="工作空间"><a id="studio-link" href="/">Studio</a><a class="active" href="/lab#system" aria-current="page">Lab</a></div><select id="project" aria-label="选择项目"></select><label class="search"><span data-icon="search"></span><input id="search" placeholder="搜索候选、提交、检查…" aria-label="搜索当前页面"><kbd>⌘ K</kbd></label><span class="chip synced" id="sync">读取中</span><span class="chip" id="issue-count"></span><span class="chip" id="agent-count"></span><button id="refresh" aria-label="刷新状态"><span data-icon="refresh"></span></button></header>
- <div class="shell"><aside class="navigation" id="navigation"><nav aria-label="Lab 页面">
-  <a href="#system" data-page="system"><span data-icon="system"></span>System Design</a>
-  <a href="#runs" data-page="runs"><span data-icon="runs"></span>Runs / Trace</a>
-  <a href="#validation" data-page="validation"><span data-icon="validation"></span>Validation</a>
-  <a href="#environment" data-page="environment"><span data-icon="environment"></span>Environment</a>
-  <a href="#harness" data-page="harness"><span data-icon="harness"></span>Harness / Skills</a>
-  <a href="#experiments" data-page="experiments"><span data-icon="experiments"></span>Experiments / RSI</a>
- </nav><div id="design-objects" aria-label="设计对象"></div><footer><span class="env-tag">BF DESIGN REPOSITORY</span><p id="workspace-note">候选 · 接口 · 验证 · 交付</p></footer></aside>
- <main id="main"><div class="page-heading"><div><h1 id="title">System Design</h1><p id="subtitle"></p></div><div class="version-selector"><div><small>当前采用</small><button id="adopted" aria-label="查看当前采用版本"></button></div><div><label for="system">查看候选</label><select id="system"></select></div><button id="inspector-toggle" aria-expanded="true">详情</button></div></div><section id="current-question" aria-label="当前工程问题"></section><div id="content" aria-live="polite"></div></main>
- <aside class="inspector" id="inspector"><header><strong id="inspector-title">当前候选</strong><button id="inspector-close" aria-label="关闭详情"><span data-icon="close"></span></button></header><div id="detail"></div></aside></div>
- <dialog id="viewer"><header><strong id="viewer-title"></strong><button id="viewer-close" aria-label="关闭预览"><span data-icon="close"></span></button></header><div id="viewer-body"></div></dialog>
- <div id="notice" role="status"></div><script type="module" src="/lab/v2/lab.js"></script>
-</body></html>
+  <header class="topbar">
+    <button id="navigation-toggle" class="icon-button" aria-label="收起对象栏" aria-controls="navigation" aria-expanded="true"><span data-icon="menu"></span></button>
+    <a class="brand" id="studio-home" href="/"><span data-icon="brand"></span><strong>BF Agent</strong></a>
+    <div class="workspace-switch" aria-label="工作空间"><a id="studio-link" href="/">Studio</a><a class="active" href="/lab#system" aria-current="page">Lab</a></div>
+    <select id="project" aria-label="选择项目"></select>
+    <label class="search"><span data-icon="search"></span><input id="search" placeholder="搜索设计、问题、文件" aria-label="搜索本项目"><button id="search-clear" aria-label="清空搜索" hidden>×</button><kbd>⌘ K</kbd></label>
+    <span id="sync" class="sync-label" role="status">读取中</span>
+    <button id="refresh" class="icon-button" aria-label="刷新状态"><span data-icon="refresh"></span></button>
+  </header>
+  <nav class="mode-nav" aria-label="Lab 页面">
+    <a href="#system" data-page="system"><span data-icon="system"></span>系统设计</a>
+    <a href="#runs" data-page="runs"><span data-icon="runs"></span>运行记录</a>
+    <a href="#validation" data-page="validation"><span data-icon="validation"></span>验证</a>
+    <a href="#environment" data-page="environment"><span data-icon="environment"></span>环境</a>
+    <a href="#harness" data-page="harness"><span data-icon="harness"></span>方法与技能</a>
+    <a href="#experiments" data-page="experiments"><span data-icon="experiments"></span>实验与改进</a>
+    <span id="agent-count" class="nav-summary"></span>
+  </nav>
+  <div class="shell inspector-hidden">
+    <aside class="navigation" id="navigation" aria-label="当前页面对象"><div id="design-objects"></div><footer id="workspace-note"></footer><div id="navigation-resize" role="separator" aria-label="调整对象栏宽度" aria-orientation="vertical" tabindex="0" aria-valuemin="184" aria-valuemax="280" aria-valuenow="216"></div></aside>
+    <main id="main" tabindex="-1">
+      <div class="page-heading"><div><h1 id="title">系统设计</h1><p id="subtitle"></p></div><div class="version-selector"><button id="adopted" title="查看稳定参考版本">稳定参考</button><label for="candidate-select" class="sr-only">查看系统候选</label><select id="candidate-select" aria-label="查看系统候选"></select><button id="inspector-toggle" aria-controls="inspector" aria-expanded="false">详情</button></div></div>
+      <section id="current-question" aria-label="页面摘要"></section><div id="content"></div>
+    </main>
+    <aside class="inspector" id="inspector" aria-label="对象详情" hidden><header><strong id="inspector-title">对象详情</strong><button id="inspector-close" class="icon-button" aria-label="关闭详情"><span data-icon="close"></span></button></header><div id="detail"></div></aside>
+  </div>
+  <dialog id="viewer" aria-labelledby="viewer-title"><header><strong id="viewer-title"></strong><button id="viewer-close" class="icon-button" aria-label="关闭预览"><span data-icon="close"></span></button></header><div id="viewer-body"></div></dialog>
+  <div id="notice" role="status"></div>
+  <script type="module" src="/lab/v2/lab.js"></script>
+</body>
+</html>

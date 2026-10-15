@@ -320,6 +320,8 @@ def release(repo, owner, body):
         system = repo.system(p['id'], body['system_id'], db)
         validations = [json.loads(r['value']) for r in db.execute('SELECT value FROM design_repository_validations WHERE project=? AND target=?', (p['id'], system['id']))]
         if not validations: raise ValueError('RELEASE_REQUIRES_INDEPENDENT_VALIDATION')
+        from .repository_reports import required_report
+        report_folder, report_quality = required_report(repo, owner, system, body.get('report_id'))
         from .repository import file_hash
         all_refs=list(system['files'].values())+[ref for job in system['jobs'].values() for ref in job.get('artifacts',{}).values()]
         for ref in all_refs:
@@ -330,12 +332,16 @@ def release(repo, owner, body):
                     'files': system['files'], 'validations': validations, 'jobs': system['jobs'],
                     'digital_status': current['status'], 'qualification':current, 'physical': system['physical'],
                     'kind': 'REVIEW_PACKAGE', 'rationale': body['rationale'], 'source_author': 'Pi',
-                    'original_owner': system['origin_owner'], 'baseline': p['baseline']}
+                    'original_owner': system['origin_owner'], 'baseline': p['baseline'],
+                    'required_engineering_report': report_quality}
         result = object_save(repo, db, 'design_repository_releases', 'REL', manifest, ['project_id', 'target'])
         archive = repo.root/'releases'/(result['id']+'.zip'); archive.parent.mkdir(exist_ok=True)
         if not archive.exists():
             with zipfile.ZipFile(archive, 'x', compression=zipfile.ZIP_DEFLATED) as z:
                 z.writestr('manifest.json', canonical(result))
+                for path in report_quality['outputs']:
+                    z.write(report_folder/path, 'reports/'+path)
+                z.write(report_folder/'quality.json','reports/quality.json')
                 for path, ref in system['files'].items(): z.write(repo.root/'blobs'/ref['sha256'], 'engineering/'+path)
                 for job, record in system['jobs'].items():
                     for path, ref in record.get('artifacts', {}).items(): z.write(repo.root/'blobs'/ref['sha256'], 'jobs/'+job+'/'+path)
@@ -363,6 +369,9 @@ def summary(repo, project, owner):
 
 def handle(repo, owner, body, operator=False):
     action = body['action']
+    if action.startswith('repository_report_'):
+        from .repository_reports import handle as reports
+        return reports(repo, owner, body)
     if action == 'repository_schema': return declaration_spec()
     actions = {'repository_assign': lambda: assign(repo, owner, body, operator),
                'repository_write': lambda: write(repo, owner, body),
