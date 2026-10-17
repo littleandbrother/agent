@@ -1,3 +1,56 @@
+## 2026-10-17 · BFA-038 / BFA-039 GitHub 发布批次
+
+用户已授权发布到 `codex/bf-architecture-v2`。本批次包含任务定义与评估接口、Pi 技能、默认压电与 P08 审查、实验数据、PDF 和复现脚本。20 项保存结果离线复核通过；既有 56 项相关测试、Pi 检查与 Lab init 结果随批次保存。发布不启动模型或原生仿真。下方保留实施时的历史状态。
+
+## 当前交接 · BFA-039 有限先导交付 · 2026-10-17
+
+本轮48任务评估、默认参考/器件探测、P08审查迁移、契约/重放机制及有限方法提案已完成。代码仍在9bcdbad基点的V2未提交工作树；此前BFA-038修改保留。PROJECT.active_feature=null。不要把先导完成写成默认硬件冷启动或RSI已成功。
+
+- 全文：docs/agentlab/architecture-v2/task-evaluation-20261017/01_REPORT.md；48题02_TASKS.md；研究03_EXPERIMENTS.md；案例04_DEFAULT_AND_P08.md；05_REPRODUCE.md。
+- 下载包 /Users/depengsu/Downloads/BF_Task_Study_20261017.zip；在解压目录 python3 scripts/verify_results.py . 做零派发核对。
+- 原默认owner pi-chat-f6463f6b0b663ebc，当前 SC-f922e8e8b0b9da6909a8268623bedfa5ecbb51a46b218fd8412fd984aef14f4d，采用 SC-88d963b80011ebe47dc1f99a2ff88e7fbb65b0464587f118c57314a09734aeb6，release REL-8992233d7155be2a518c3b214dd97d91c21ffe23b9f32d28e8719d2f1cfd710f。名义4帧结果复用；新原生厂商探测0帧。精确原因是启动晚于固定调度。当前IDLE，不要新建Lead。
+- 新P08审查owner pi-chat-468e6062c32232b5，SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f，release REL-ece97f4c4257b540434ab9fa6b54a82acf28fb06a3faa9e16ca8c9efe24528fd。原P08owner pi-chat-e0028698d50802cb未改。
+- 研究owner pi-chat-8a186c7850923a1a，121请求；默认新增33、P08新增13；合计167/$1.3682169全部SETTLED。原有UNKNOWN保留。付费/时间无累计上限授权仍来自用户，不重复询问。
+- Runtime /Users/depengsu/.local/share/bf-agent-architecture-v2/task-evaluation。原始回执不可变。provider.token为私有凭据，禁止输出/入包。public-model-answers仅含最终回答和usage，不含推理正文。
+- 下一工程增量：先统一审查动作权限与设计变量边界；默认案例需要电压驱动固件与PMIC相互响应的执行入口，再让原Pi作新候选。不要用旧VOUT固定回放评价新程序。
+- 下一研究增量：未知特征/新机制、错误拒绝、真实成本、等信息强基线，以及父子改进器独立比较。当前特征由开发者预置，方法只做配置选择；强基线打平。
+- 56相关回归、Pi npm check、architecture-v2-lab ./init.sh通过。原Demo/十会话/工程/费用/UNKNOWN保护核对PASS。禁止重跑原成功且输入未变的仿真；数值校准已按网表摘要缓存。
+- 不使用harness-creator、pixel-perfect-reference-ui或定时消息。没有Git提交/推送授权；本轮保持未提交。
+
+---
+以下为历史交接。
+
+## 2026-10-17 · BFA-038 任务标准定义与连续设计完成
+
+V2 已接入 task-definition-v2 / task-semantics-v1：任务意图与阶段、来源/角色分离、可执行硬约束与设计范围、功能/物理对象/工作关系、七组接口及实际消费者、执行与验收身份、恢复状态及同版报告。标准规范：docs/agentlab/architecture-v2/task-design-20261017/STANDARD-DEFINITIONS.md。
+
+独立压电参考 owner pi-chat-f6463f6b0b663ebc 完成两轮真实 Pi 设计和报告修订，53 请求全部 SETTLED，本地登记 $1.1036151。R6 为 47 µF，R7 为 68 µF，正式调度 2/6/10/14 秒，4 帧有效接收；R7 发送窗口最低 3.15309 V。9 个设计候选/9 次执行，8 次储能+1 次源求解，复用一次完整参考执行和七次源结果，无重复未变求解。Codex 负责平台与独立检查，并反馈报告数值/解释；Pi 作设计和采用决定。
+
+标准化实际回放复用同一 R7 波形：2.2 V PASS，3.2 V 供电 FAIL，接口来源一致性 PASS；59 个内容对象验证，0 新模型调用/原生求解，失败候选可同版交付。R8 接入标准定义并保留 R7 采用身份，工程和账本未改变。260 Repository 检查（其中32标准专项、17任务入口专项）、Pi完整检查、Skill格式、四项固定参考、19 Lab回归、7个预览和6388件Baseline文件核对通过。
+
+原十个会话、工程、费用及 UNKNOWN、P01 Demo 保持。原8768与V2 8870按原配置恢复，当前控制器排空。代码在 codex/bf-architecture-v2 工作树，基点9bcdbad，未提交/推送。标准定义和接口是系统能力；当前新设计验证范围为名义机电源—储能—主机程序—数字接收，后续接目标MCU、具体电源、原生CAD/PCB和装配。
+
+结果：docs/agentlab/architecture-v2/task-design-20261017/standardization-result.json；首批Pi结果result.json；说明RESULTS.md；命令IMPLEMENTATION.md。
+
+### 精确运行身份与下一步
+
+- 新参考项目 PR-8f0bebe6c7a175855fc3641fff6c7632f4549fd1f70cfa0a7b8bc597811b7b94。
+- 采用 R7：SC-5719b733541cdb0e3d275015c423100bf965cbe6584c8265940ea7c5b25ad1eb。
+- 当前 R8：SC-6735f14b84c2d9550c5f3e237fe191cd06bf8e59a4cb5b5964db3bdf246a2661。
+- 标准定义：TD-6af0e8eb4096d678db7322b25f65d60fcec44e735e3f6e9d823238d1ff7aefde；R8 来源为 operator 迁移，设计与报告文字来源为 Pi R7。
+- R8 审查包：REL-68e52215bafd317c9444191b54b16ebca16cecff8c14159648acd69b12ac03a1；task_passed=true，physical=NOT_TESTED，名义参考范围。
+- 新 bf-task-design Skill / bf-product 1.3.1 已加载到运行配置；最新版规则经过确定性验证。下一次付费 Pi 运行与方法配对尚未执行。
+- 原 P01 V2 Lead pi-chat-050766187db5de0d、当前 SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9、采用 SC-4c0da605a4238a3c9d5b5fca8162b7a24e560c8a6a84ef43bcd40339ef771292 均保留，2PASS/2FAIL/4UNEVALUABLE。
+- 状态核对只读数据库；不要为查询创建 Workbench。服务恢复只启动了原服务，未恢复原十篇 Pi。PID可能变化，以active-runtime.json及端口实际监听为准。
+- 继续使用既有项目/owner；不要重复运行 task_design_ops create/start 或 publish_standards.py。后者的不可变发布回执已经存在。
+- 复现标准化回放使用 standards_consumer.py --source-system SC-5719b733541cdb0e3d275015c423100bf965cbe6584c8265940ea7c5b25ad1eb --output <fresh-dir>。只在隔离副本选择检查点；现有003已验证发布后可复现。
+- 原生结果按实际输入/环境复用。改要求只重评；UNKNOWN先对账；已完成未登记只补登记。新能力先固定参考及负例，再由BF真实修订，连续第二轮检验恢复。
+- 下一适配器增量为目标MCU/电源具体器件。服务目标和重要取舍仍由用户确认，设备策略由BF选择。新方法研究固定模型/任务/环境/评价器，另设比较条件。
+- 本批 feature BFA-038 complete，PROJECT.active_feature=null。下一项新增适配器要声明自己的范围和反例。不要使用 harness-creator、pixel-perfect-reference-ui 或定时消息。
+
+---
+以下为历史交接。
+
 ## 2026-10-16 · P01 双 PDF 报告与必要交付检查完成
 
 原 Power/Firmware/Lead Pi 已补齐报告并发布 REL-817a555ffd29e711bc65f94d8689fe0f20aebdb662b117db1b6bbf46ebac7d4f。原理图按39器件/172引脚原生网表重排连线，提供完整跨组总图和六张回路附图；固件为5参与者/19条当前源码交互时序，覆盖错误与恢复。简版8页、详版29页；CAD、PCB功能标注、RAW波形/能量核算、专业解释、验收和交接内容齐备。共享 bf-engineering-report Skill、报告工具和 release/close 必检已接入 V2。

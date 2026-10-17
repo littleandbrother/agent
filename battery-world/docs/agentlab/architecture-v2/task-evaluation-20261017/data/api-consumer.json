@@ -1,0 +1,87 @@
+{
+  "schema_version": "bf-task-assessment-v2",
+  "prompt_matches": true,
+  "assessment": {
+    "acceptance": [
+      "给出明确的可行性结论并说明依据",
+      "结论基于已提供的资料与用户约束，不引入自定数值门限",
+      "本次未对现有工程做任何修改",
+      "所有影响结论的未知条件均已列出"
+    ],
+    "assumptions": [],
+    "deliverables": [
+      "可行性判断说明（只读审查结论，不含工程改动）"
+    ],
+    "design_variables": [],
+    "domains": [],
+    "feasibility": "unknown",
+    "goal": "在只读、不改动工程的前提下，判断用户所述想法的可行性",
+    "intent": "audit",
+    "missing_inputs": [
+      {
+        "blocks_execution": true,
+        "question": "这个想法的具体内容是什么（要解决的问题、期望达到的效果）？"
+      },
+      {
+        "blocks_execution": true,
+        "question": "涉及的工程对象是什么（整机、某模块，还是某个具体电路或代码）？"
+      },
+      {
+        "blocks_execution": true,
+        "question": "当前已有的方案、实物、代码或测试数据在哪里，可否提供？"
+      },
+      {
+        "blocks_execution": false,
+        "question": "有哪些不可更改的边界条件（供电、尺寸、接口、成本、审批要求）？"
+      }
+    ],
+    "plan": [
+      {
+        "action": "收集用户对付费想法的完整描述与现有资料清单",
+        "check": "用户确认对象与边界无误",
+        "output": "范围界定说明",
+        "purpose": "确定审查对象与边界"
+      },
+      {
+        "action": "判断该想法涉及的专业范围，读取对应资料",
+        "check": "所读资料与对象直接相关",
+        "output": "资料清单与关键参数摘录",
+        "purpose": "为可行性判断提供依据"
+      },
+      {
+        "action": "将用户给出的约束条件逐条列出并两两比对",
+        "check": "每条约束均有出处，矛盾项被标出",
+        "output": "约束对照表",
+        "purpose": "识别是否存在相互矛盾的条件"
+      },
+      {
+        "action": "基于资料与约束给出可行性结论及依据",
+        "check": "结论有资料支撑，未引入未经确认的门限",
+        "output": "可行性结论（未知/可行/冲突）与理由",
+        "purpose": "回答可不可行"
+      },
+      {
+        "action": "列明决定结论的未知工况与若推进时的待决事项",
+        "check": "未在本次启动任何修改或制作动作",
+        "output": "待确认清单与后续可选路径",
+        "purpose": "说明结论的适用边界"
+      }
+    ],
+    "request_sha256": "7513d2287fe5b1170ae933bac90684bbb15f01f51045f2169664977f866693b8",
+    "requirements": [
+      {
+        "source_quote": "先帮我判断可不可行",
+        "text": "先判断该想法是否可行"
+      },
+      {
+        "source_quote": "暂时别改工程",
+        "text": "本次不修改现有工程"
+      }
+    ],
+    "requirements_frozen": false,
+    "schema_version": "bf-task-assessment-v2",
+    "scope": "unspecified",
+    "state": "INPUT_REQUIRED"
+  },
+  "project_created": false
+}

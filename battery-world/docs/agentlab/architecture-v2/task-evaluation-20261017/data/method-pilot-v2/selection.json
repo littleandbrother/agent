@@ -1,0 +1,30 @@
+{
+  "chain": 0,
+  "generation": 0,
+  "configuration": {
+    "features": [
+      "prefix",
+      "information",
+      "feedback"
+    ],
+    "replay": "causal",
+    "reason": "Each feature uniquely distinguishes pass/fail for one mechanism: prefix for energy_timing, information for information_window, feedback for load_feedback; omitting any causes misclassification. Causal replay includes source response only when load changes, preserving accuracy while reducing cost versus full recomputation."
+  },
+  "validation": {
+    "contract": {
+      "n": 36,
+      "true_accept": 18,
+      "true_reject": 18,
+      "false_accept": 0,
+      "false_reject": 0,
+      "unknown": 0,
+      "coverage": 1.0,
+      "accuracy_all": 1.0
+    },
+    "feature_cost": 7,
+    "replay_rank_errors": 0,
+    "replay_n": 6,
+    "work_units": 18000,
+    "response_max_energy_error_uJ": 0.0
+  }
+}

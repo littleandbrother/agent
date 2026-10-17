@@ -58,7 +58,9 @@ def input_project(repo,commit,manifest_path):
         if file_hash(path)!=ref['sha256']:raise ValueError('DOMAIN_EXECUTION_INPUT_TAMPER')
         return path
     spec=json.loads(source(manifest_path).read_text())
-    permitted={'firmware':('firmware-nrf52832-s132',),'power':('spice',)}
+    from .repository_profiles import system_profile
+    cfg=system_profile(repo.system(commit['project_id'],commit['base_system']))
+    permitted={k:(v,) for k,v in cfg['executors'].items()}
     if spec.get('kind') not in permitted.get(commit['domain'],()):raise PermissionError('DOMAIN_EXECUTOR_NOT_QUALIFIED')
     prefix=str(PurePosixPath(manifest_path).parent)
     project=engineering_projects.snapshot(spec,lambda p:source(name(prefix+'/'+p)))
@@ -104,7 +106,9 @@ def handle(repo,owner,body):
     if owner!=commit['owner']:
         repo.leader(pid,owner)
         if body['action']=='repository_execute':raise PermissionError('SPECIALIST_EXECUTION_REQUIRED')
-    project=input_project(repo,commit,body.get('path') or ('project-fw-s132/project.json' if commit['domain']=='firmware' else 'project-chain/project.json'))
+    from .repository_profiles import system_profile
+    manifest = body.get('path') or system_profile(repo.system(pid,commit['base_system']))['manifests'][commit['domain']]
+    project=input_project(repo,commit,manifest)
     from ..store import identity
     signature=identity(project)
     engineering=repo.lab.app.engineering
@@ -122,7 +126,7 @@ def handle(repo,owner,body):
                 return repo.mutate(owner,body,lambda db:reused_execution(repo,db,commit,project,ref['job_id'],ref,ref['id']))
         def apply(db):
             job=engineering.submit_repository(owner,'repo-exec-'+identity({'commit':commit['id'],'input':signature}),project,
-                {'project_id':pid,'domain_commit':commit['id'],'manifest':body['path']},db=db)
+                {'project_id':pid,'domain_commit':commit['id'],'manifest':manifest},db=db)
             return {'project_id':pid,'domain_commit':commit['id'],'job_id':job['id'],'status':job['status'],'reused':False}
         result=repo.mutate(owner,body,apply)
         engineering.dispatch_repository(owner,result['job_id'])

@@ -1,0 +1,20 @@
+{
+  "version": "generated-contract-replay-config-v1",
+  "rounds": 2,
+  "independent_chains": 3,
+  "revision": "v2",
+  "per_call_output_budget": 8192,
+  "reason": "5/6 original requests exhausted the 2200 token budget entirely in reasoning; rerun with a budget that allows an answer",
+  "allowed_changes": [
+    "interface feature set",
+    "replay boundary rule"
+  ],
+  "fixed": [
+    "case inputs",
+    "truth evaluator",
+    "feature implementations"
+  ],
+  "selection": "validation errors, then response error, then feature and operation cost; final test evaluated after selection",
+  "test_exposure": "proposal model never receives test or validation outcomes; operator has seen controlled pilot aggregates",
+  "scope": "three known mechanism families with new parameter seeds; not new-task or recursive-improver evidence"
+}

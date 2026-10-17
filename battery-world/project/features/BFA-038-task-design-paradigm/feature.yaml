@@ -1,0 +1,95 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-038-task-design-paradigm",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "authority": "2026-10-17 user approves implementation of the task and design paradigm",
+  "hypothesis": "One existing Design Repository can execute scoped curve, PCB and node tasks using explicit task contracts, case adapters and independently versioned validation without imposing P01 requirements on all tasks.",
+  "paper_claim": "Engineering implementation and controlled reference qualification; no method efficacy claim",
+  "falsifier": "An entry inherits unrelated P01 gates, a requirement edit reruns unchanged execution, stale evidence passes a changed acceptance rule, an interface has no registered consumer, or old P01 evidence changes.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/design_lab/",
+    "packages/python/bfworld/src/bfworld/agentlab/server.py",
+    "configs/reference_cases/task-design/",
+    "scripts/verify_task_design.py",
+    "scripts/run_reference_node.py",
+    "scripts/task_design_ops.py",
+    "tests/agentlab/test_repository*.py",
+    "project/features/BFA-038-task-design-paradigm/",
+    "docs/agentlab/architecture-v2/task-design-20261017/",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "../pi-bf-aiot/packages/bf-agent/src/repository-task.ts",
+    "../pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts",
+    "../pi-bf-aiot/packages/bf-harness/resources/skills/bf-task-design/",
+    "../pi-bf-aiot/packages/bf-harness/resources/plugins.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/.local/share/bf-agent-architecture-v2/task-design/"
+  ],
+  "schema_changes": [
+    "bf-design-task-definition-v2",
+    "bf-task-semantics-v1",
+    "bf-task-profile-v1",
+    "bf-execution-identity-v1",
+    "bf-acceptance-identity-v1"
+  ],
+  "targeted_tests": [
+    "three actual Repository entry paths",
+    "frozen P01 regression",
+    "explicit contract consumers",
+    "requirements-only reevaluation reuses raw execution",
+    "continuous partial commits and recovery",
+    "no-Agent reference and negative controls before BF"
+  ],
+  "negative_controls": [
+    "unknown profile",
+    "unbound artifact",
+    "changed criterion",
+    "foreign candidate result",
+    "missing consumer",
+    "low energy",
+    "invalid receiver frame"
+  ],
+  "reproducible_command": "See docs/agentlab/architecture-v2/task-design-20261017/IMPLEMENTATION.md",
+  "output_artifact": "docs/agentlab/architecture-v2/task-design-20261017/",
+  "cost_cap": "Existing user authorization has no cumulative model cost/token/request/time ceiling. First two increments are offline. Preserve all old ledger and UNKNOWN records.",
+  "claim_boundary": "Declared simulation and engineering task scope; no physical or RSI result",
+  "stop_condition": "Protected state drift, unknown native write, unavailable provider identity/usage, or reference qualification failure prevents Agent dispatch",
+  "increments": {
+    "task_profiles": "complete",
+    "case_adapters": "complete within four declared scopes",
+    "reference_node": "complete for nominal reference chain",
+    "bf_continuous_design": "complete, two Pi cycles",
+    "task_semantics": "complete, 32 targeted tests and actual candidate replay"
+  },
+  "completed_utc": "2026-10-16T20:51:51.464203+00:00",
+  "evidence": [
+    "docs/agentlab/architecture-v2/task-design-20261017/standardization-result.json",
+    "docs/agentlab/architecture-v2/task-design-20261017/result.json",
+    "docs/agentlab/architecture-v2/task-design-20261017/STANDARD-DEFINITIONS.md",
+    "docs/agentlab/architecture-v2/task-design-20261017/RESULTS.md",
+    "docs/agentlab/architecture-v2/task-design-20261017/IMPLEMENTATION.md"
+  ],
+  "verification": {
+    "repository_tests": 260,
+    "pi_check": "PASS",
+    "scoped_init": "architecture-v2-lab PASS",
+    "reference": "four controls PASS",
+    "real_replay": "same waveform 2.2 V PASS / 3.2 V FAIL, zero new native dispatch"
+  },
+  "limitations": [
+    "Reference task uses nominal mechanics, average power conversion, host C events and digital receiver",
+    "Target MCU, concrete PMIC, native CAD/PCB and assembly remain the next adapter increments",
+    "PCB task profile currently reviews existing native checks",
+    "New standardized skill has deterministic qualification; paid method-effect comparison not run"
+  ],
+  "next_handoff": "Use STANDARD-DEFINITIONS.md and existing R7/R8 identities. Add target MCU and physical electrical consumers through qualified adapters. Keep original P01 and ten owners preserved; no duplicate native work.",
+  "git": {
+    "base": "9bcdbad0c275e2af019f3c9645bf5c40ebf38411",
+    "branch": "codex/bf-architecture-v2",
+    "publication_scope": "BFA-038 implementation and BFA-039 evaluation; exact published source is this Git commit"
+  }
+}

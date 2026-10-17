@@ -1,3 +1,19 @@
+## 2026-10-17 · BFA-038 / BFA-039 GitHub 发布批次
+
+用户已授权发布到 `codex/bf-architecture-v2`。本批次包含任务定义与评估接口、Pi 技能、默认压电与 P08 审查、实验数据、PDF 和复现脚本。20 项保存结果离线复核通过；既有 56 项相关测试、Pi 检查与 Lab init 结果随批次保存。发布不启动模型或原生仿真。下方保留实施时的历史状态。
+
+## 2026-10-17 · BFA-039 任务评估与契约/重放先导完成
+
+48 个日常问题覆盖单模块、联合和整链；两轮结构有效 10/48→44/48，13 个边界回归全部有效。已发布统一 task-assessment-v2 schema/示例/只读 API。逐题计划发现固定板卡被误读为安装、审查加入修改、范围与领域粒度不一致，原始评分与复核并存。
+
+默认压电原 Pi 延续到 SC-f922e8e8，仍复用名义 TX-84f4ff52 的 4 帧结果；新增 LTC3588-1 厂商模型零初态探测，VOUT 18.2096 s 建立，旧调度 0 有效帧，Pi RETAIN_FOR_REVIEW。P08 六点原波形迁移到独立复核任务，最大偏差0.5265%，3门通过、PDF与release完整，0新原生仿真。
+
+机制180场景/90反例对，静态测试误放行36/72；固定事件契约和精化均0错误。30个旧轨迹重放均误排序；范围执行与完整一致，运算单元少25%。3链×2代模型配置提案与固定丰富因果范围基线打平；未建立RSI收益。200个后续压力场景另列。六次数值校准中误重复一次相同电气输入，已补哈希缓存及零派发复用检查。
+
+56相关测试、Pi完整检查、Lab init/19检查/7预览、保护审计通过。167新模型请求全SETTLED，费用上界$1.3682169。原十会话/工程/费用/UNKNOWN、P01 Demo与Baseline保持。报告 docs/agentlab/architecture-v2/task-evaluation-20261017/01_REPORT.md；PDF、48题定义/方案、原始数据和脚本一起交付。代码未提交或推送。BFA-039有限先导完成；冷启动实际设计、任务语义约束和跨新机制方法收益继续列为后续工作。
+
+---
+
 ## 2026-10-16 · P01 双 PDF 报告与必要交付检查完成
 
 原 Power/Firmware/Lead Pi 已补齐报告并发布 REL-817a555ffd29e711bc65f94d8689fe0f20aebdb662b117db1b6bbf46ebac7d4f。原理图按39器件/172引脚原生网表重排连线，提供完整跨组总图和六张回路附图；固件为5参与者/19条当前源码交互时序，覆盖错误与恢复。简版8页、详版29页；CAD、PCB功能标注、RAW波形/能量核算、专业解释、验收和交接内容齐备。共享 bf-engineering-report Skill、报告工具和 release/close 必检已接入 V2。
@@ -1292,3 +1308,15 @@ Lab 已在原 8768 页面发布：顶部六页导航、当前页对象栏、可�
 报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPORT.md
 核对：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/verification/result.json
 复现：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPRODUCE.md
+
+## 2026-10-17 · BFA-038 任务标准定义与连续设计完成
+
+V2 已接入 task-definition-v2 / task-semantics-v1：任务意图与阶段、来源/角色分离、可执行硬约束与设计范围、功能/物理对象/工作关系、七组接口及实际消费者、执行与验收身份、恢复状态及同版报告。标准规范：docs/agentlab/architecture-v2/task-design-20261017/STANDARD-DEFINITIONS.md。
+
+独立压电参考 owner pi-chat-f6463f6b0b663ebc 完成两轮真实 Pi 设计和报告修订，53 请求全部 SETTLED，本地登记 $1.1036151。R6 为 47 µF，R7 为 68 µF，正式调度 2/6/10/14 秒，4 帧有效接收；R7 发送窗口最低 3.15309 V。9 个设计候选/9 次执行，8 次储能+1 次源求解，复用一次完整参考执行和七次源结果，无重复未变求解。Codex 负责平台与独立检查，并反馈报告数值/解释；Pi 作设计和采用决定。
+
+标准化实际回放复用同一 R7 波形：2.2 V PASS，3.2 V 供电 FAIL，接口来源一致性 PASS；59 个内容对象验证，0 新模型调用/原生求解，失败候选可同版交付。R8 接入标准定义并保留 R7 采用身份，工程和账本未改变。260 Repository 检查（其中32标准专项、17任务入口专项）、Pi完整检查、Skill格式、四项固定参考、19 Lab回归、7个预览和6388件Baseline文件核对通过。
+
+原十个会话、工程、费用及 UNKNOWN、P01 Demo 保持。原8768与V2 8870按原配置恢复，当前控制器排空。代码在 codex/bf-architecture-v2 工作树，基点9bcdbad，未提交/推送。标准定义和接口是系统能力；当前新设计验证范围为名义机电源—储能—主机程序—数字接收，后续接目标MCU、具体电源、原生CAD/PCB和装配。
+
+结果：docs/agentlab/architecture-v2/task-design-20261017/standardization-result.json；首批Pi结果result.json；说明RESULTS.md；命令IMPLEMENTATION.md。

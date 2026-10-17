@@ -1,0 +1,414 @@
+{
+  "design_fields": {
+    "length_m": {
+      "max": 0.1,
+      "min": 0.02,
+      "unit": "m"
+    },
+    "piezo_m": {
+      "max": 0.001,
+      "min": 5e-05,
+      "unit": "m"
+    },
+    "storage_f": {
+      "max": 0.02,
+      "min": 1e-06,
+      "unit": "F"
+    },
+    "substrate_m": {
+      "max": 0.001,
+      "min": 5e-05,
+      "unit": "m"
+    },
+    "tip_mass_kg": {
+      "max": 0.02,
+      "min": 0,
+      "unit": "kg"
+    },
+    "width_m": {
+      "max": 0.03,
+      "min": 0.002,
+      "unit": "m"
+    }
+  },
+  "fixed_parameters": [
+    {
+      "binding": {
+        "path": "frequency_hz",
+        "target": "scenario"
+      },
+      "parameter": "frequency_hz",
+      "role": "constraint",
+      "unit": "Hz",
+      "value": 30
+    },
+    {
+      "binding": {
+        "path": "initial_storage_v",
+        "target": "scenario"
+      },
+      "parameter": "initial_storage_v",
+      "role": "constraint",
+      "unit": "V",
+      "value": 2.5
+    }
+  ],
+  "intent": "new_design",
+  "profile": {
+    "adapter": "piezo-reference-v1",
+    "executors": {},
+    "gates": [
+      "source_model",
+      "load_binding",
+      "power_service",
+      "receiver_service",
+      "delivery_version"
+    ],
+    "id": "node-reference-v1",
+    "manifests": {},
+    "report": "reference-five-section-v1",
+    "roles": [],
+    "scope": "nominal-reference-chain"
+  },
+  "program": {
+    "checksum": "(seq ^ value ^ 0xA5) & 255",
+    "duration_s": [
+      0,
+      1
+    ],
+    "execution": "sandboxed compile and host execution; events drive fixed state-current waveform and storage solver",
+    "language": "C11 host executable; stdio available",
+    "output_columns": [
+      "t_s",
+      "duration_s",
+      "state",
+      "seq",
+      "value",
+      "crc"
+    ],
+    "receiver": "matching sample before tx, sensor_value and minimum durations from scenario",
+    "states": [
+      "sample",
+      "tx",
+      "idle"
+    ],
+    "supply": "actual sample and tx windows must meet scenario.minimum_storage_v",
+    "time": "strictly ordered nonoverlapping events with >1e-7 s gaps, inside scenario.duration_s"
+  },
+  "qualified_operations": [
+    "task_definition",
+    "task_schema",
+    "task_state",
+    "summary",
+    "read",
+    "validate",
+    "decide",
+    "release",
+    "close",
+    "task_report",
+    "task_execute",
+    "task_result",
+    "task_commit"
+  ],
+  "report_content": {
+    "conclusion": "string",
+    "sections": {
+      "conclusion_and_files": {
+        "sources": [
+          "candidate path or gate ID"
+        ],
+        "text": "string"
+      },
+      "energy_and_service": {
+        "sources": [
+          "candidate path or gate ID"
+        ],
+        "text": "string"
+      },
+      "firmware_and_receiver": {
+        "sources": [
+          "candidate path or gate ID"
+        ],
+        "text": "string"
+      },
+      "mechanics_and_source": {
+        "sources": [
+          "candidate path or gate ID"
+        ],
+        "text": "string"
+      },
+      "task_and_model": {
+        "sources": [
+          "candidate path or gate ID"
+        ],
+        "text": "string"
+      }
+    }
+  },
+  "report_sections": [
+    "task_and_model",
+    "mechanics_and_source",
+    "firmware_and_receiver",
+    "energy_and_service",
+    "conclusion_and_files"
+  ],
+  "requirements_owner": "operator",
+  "standards": {
+    "acceptance_predicates": {
+      "delivery_version": {
+        "checker": "repository_task_checks.evaluate",
+        "parameters": {}
+      },
+      "load_binding": {
+        "checker": "repository_reference_node.independent_check",
+        "parameters": {
+          "charge_absolute_tolerance_c": 1e-10,
+          "charge_relative_tolerance": 1e-05
+        }
+      },
+      "power_service": {
+        "checker": "repository_reference_node.independent_check",
+        "parameters": {
+          "all_transmissions_supplied": true,
+          "energy_absolute_tolerance_j": 1e-06,
+          "energy_relative_tolerance": 0.01,
+          "minimum_sample_and_tx_storage_v": 2.2,
+          "negative_voltage_tolerance_v": 1e-06
+        }
+      },
+      "receiver_service": {
+        "checker": "repository_reference_node.independent_check",
+        "parameters": {
+          "checksum": "(seq ^ value ^ 0xA5) & 255",
+          "deadline_s": 20,
+          "minimum_packets": 3,
+          "minimum_sample_and_tx_storage_v": 2.2,
+          "minimum_sample_s": 0.01,
+          "minimum_tx_s": 0.004,
+          "sample_before_tx": true,
+          "sensor_value": 2500,
+          "unique_sequence": true
+        }
+      },
+      "source_model": {
+        "checker": "repository_reference_node.independent_check",
+        "parameters": {
+          "relative_error_lt": 0.01,
+          "tip_displacement_length_ratio_max": 0.05
+        }
+      }
+    },
+    "bindings": [
+      {
+        "binding": {
+          "path": "frequency_hz",
+          "target": "scenario"
+        },
+        "parameter": "frequency_hz",
+        "role": "constraint",
+        "unit": "Hz",
+        "value": 30
+      },
+      {
+        "binding": {
+          "path": "initial_storage_v",
+          "target": "scenario"
+        },
+        "parameter": "initial_storage_v",
+        "role": "constraint",
+        "unit": "V",
+        "value": 2.5
+      },
+      {
+        "binding": null,
+        "parameter": "material",
+        "status": "DESCRIPTIVE"
+      },
+      {
+        "binding": null,
+        "parameter": "beam_and_storage",
+        "status": "DESCRIPTIVE"
+      },
+      {
+        "binding": null,
+        "parameter": "schedule",
+        "status": "DESCRIPTIVE"
+      }
+    ],
+    "design_space": {
+      "editable_files": [
+        "design.json",
+        "firmware/main.c",
+        "notes/"
+      ],
+      "fields": {
+        "length_m": {
+          "max": 0.1,
+          "min": 0.02,
+          "unit": "m"
+        },
+        "piezo_m": {
+          "max": 0.001,
+          "min": 5e-05,
+          "unit": "m"
+        },
+        "storage_f": {
+          "max": 0.02,
+          "min": 1e-06,
+          "unit": "F"
+        },
+        "substrate_m": {
+          "max": 0.001,
+          "min": 5e-05,
+          "unit": "m"
+        },
+        "tip_mass_kg": {
+          "max": 0.02,
+          "min": 0,
+          "unit": "kg"
+        },
+        "width_m": {
+          "max": 0.03,
+          "min": 0.002,
+          "unit": "m"
+        }
+      }
+    },
+    "execution_policy": {
+      "coupling": "average source power to storage; host events drive fixed-current load; supply checked afterward",
+      "event_edges_s": 1e-07,
+      "event_order": "ordered and non-overlapping",
+      "feedback_iteration": "not implemented; automatic startup and voltage-driven firmware require another adapter",
+      "source_cycles": 120,
+      "source_evaluation_last_cycles": 20,
+      "source_step_s": 0.00020833333333333332,
+      "storage_max_step_s": 0.01
+    },
+    "fixed_parameters": [
+      {
+        "binding": {
+          "path": "frequency_hz",
+          "target": "scenario"
+        },
+        "parameter": "frequency_hz",
+        "role": "constraint",
+        "unit": "Hz",
+        "value": 30
+      },
+      {
+        "binding": {
+          "path": "initial_storage_v",
+          "target": "scenario"
+        },
+        "parameter": "initial_storage_v",
+        "role": "constraint",
+        "unit": "V",
+        "value": 2.5
+      }
+    ],
+    "interface_consumers": {
+      "board-firmware": {
+        "status": "NOT_IMPLEMENTED"
+      },
+      "board-package": {
+        "status": "NOT_IMPLEMENTED"
+      },
+      "mechanics-source": {
+        "affected_gates": [
+          "source_model"
+        ],
+        "checker": "repository_reference_node.independent_check",
+        "consumer": "modal → source.cir → ngspice",
+        "engineering_gates": [
+          "source_model"
+        ],
+        "producer": "design.json + scenario.material",
+        "scope": "nominal-reference-chain",
+        "source_gates": [
+          "source_model"
+        ],
+        "status": "IMPLEMENTED"
+      },
+      "power-runtime": {
+        "affected_gates": [
+          "load_binding",
+          "power_service"
+        ],
+        "checker": "repository_reference_node.independent_check",
+        "consumer": "load.json → storage.cir → service windows",
+        "engineering_gates": [
+          "power_service"
+        ],
+        "producer": "compiled events.csv + state_currents_a",
+        "scope": "nominal-reference-chain",
+        "source_gates": [
+          "load_binding"
+        ],
+        "status": "IMPLEMENTED"
+      },
+      "radio-service": {
+        "affected_gates": [
+          "load_binding",
+          "receiver_service"
+        ],
+        "checker": "repository_reference_node.independent_check",
+        "consumer": "independent_check digital receiver",
+        "engineering_gates": [
+          "receiver_service"
+        ],
+        "producer": "sample/tx events.csv",
+        "scope": "nominal-reference-chain",
+        "source_gates": [
+          "load_binding"
+        ],
+        "status": "IMPLEMENTED"
+      },
+      "sensing-data": {
+        "status": "NOT_IMPLEMENTED"
+      },
+      "source-power": {
+        "affected_gates": [
+          "power_service",
+          "source_model"
+        ],
+        "checker": "repository_reference_node.independent_check",
+        "consumer": "available_power → storage.cir",
+        "engineering_gates": [
+          "power_service"
+        ],
+        "producer": "source.dat + conversion_efficiency",
+        "scope": "nominal-reference-chain",
+        "source_gates": [
+          "source_model"
+        ],
+        "status": "IMPLEMENTED"
+      }
+    },
+    "interface_levels": [
+      "format",
+      "source_consistency",
+      "engineering_compatibility"
+    ],
+    "reference_rules": {
+      "charge_absolute_tolerance_c": 1e-10,
+      "charge_relative_tolerance": 1e-05,
+      "energy_absolute_tolerance_j": 1e-06,
+      "energy_relative_tolerance": 0.01,
+      "negative_voltage_tolerance_v": 1e-06,
+      "source_relative_error_lt": 0.01,
+      "tip_displacement_length_ratio_max": 0.05
+    },
+    "service": {
+      "deadline_s": 20,
+      "minimum_results": 3,
+      "observable": "valid-digital-frames",
+      "startup": "declared-initial-storage"
+    },
+    "version": "bf-task-semantics-v1"
+  },
+  "write_paths": [
+    "design.json",
+    "firmware/main.c",
+    "notes/"
+  ]
+}

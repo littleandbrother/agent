@@ -1,0 +1,91 @@
+{
+  "artifact": "vendor-review",
+  "version": "pi-vendor-review-1",
+  "author": "Pi（选型与设计判断）；探测与连接事实由 Codex 的能力执行提供",
+  "question": "新执行能力的器件级原生探测（零初态 + 双储能节点）给出了什么结果，默认方案当前的交付结论是什么，下一项工程问题是什么？",
+  "inputs_read": [
+    {
+      "path": "notes/vendor-probe-result.json",
+      "sha256": "6b27f7d6fdb01ba9fbc8d83cb69314d604e40956a52f8a15ca6f69565575f5d9"
+    },
+    {
+      "path": "notes/vendor-probe-protocol.json",
+      "sha256": "3b5cddda45a9601ea3736504bc0309a2c27abc74f1aea371875e12f6a30dfb5b"
+    },
+    {
+      "path": "notes/vendor-probe.cir",
+      "sha256": "c4b05ee2a6002a386edb0405781972d73784e273076304e03433cfb98e1bcea1"
+    },
+    {
+      "path": "notes/vendor-connection-facts.json",
+      "sha256": "781d941c9ce5dffa9b87313f32b9709ac8e1fee19b9a94473f03e059f77fde2a"
+    }
+  ],
+  "connection_facts_verified": {
+    "inductor": "SW 与 VOUT 之间（netlist: L1 sw out 10u Rser=0.4），不是 SW 与 VIN 之间",
+    "rectifier": "器件集成全波桥；压电接 PZ1/PZ2，无需外部整流器件",
+    "output_select": "D0 -> VIN2（逻辑高）、D1 -> GND（逻辑低）=> 2.5 V 档",
+    "effect": "已修正 notes/default-design.json 中仍写「电感在开关节点与 VIN 之间」与「整流排列待核」的两处错误"
+  },
+  "probe_condition": {
+    "kind": "器件级宏模型探测（LTC3588-1，model sha256 53775f934b1b1c7929282b753a7fba947dc9d249314e0c39a06eb8aa06899a62），独立能力执行，不是本候选的执行指纹、也不是任务验收门",
+    "initial_vin_v": 0,
+    "initial_vout_v": 0,
+    "cin_uF": 150,
+    "cout_uF": 68,
+    "inductor_uH": 10,
+    "changed_physics": "reciprocal beam loaded by vendor bridge/buck with separate VIN/VOUT; no constant-efficiency stage",
+    "load": "同一编译事件表；负载电流带低电压衰减 I=V(schedule)*limit(V(out)/1.8,0,1)"
+  },
+  "probe_result": {
+    "solver": "SUCCEEDED（293282 点）",
+    "vin_peak_v": 4.057499885559082,
+    "vout_peak_v": 2.553384780883789,
+    "startup_vout_2p3v_s": 18.209585174510323,
+    "powered_windows": 0,
+    "windows": 8,
+    "minimum_vout_v_range": [
+      9.647143315305584e-07,
+      3.972895865445025e-05
+    ],
+    "valid_sequences": [],
+    "service_passed": false,
+    "physical": "NOT_TESTED"
+  },
+  "reading": [
+    "四个采样窗口与四个发送窗口全部发生在 VOUT 上电之前：VOUT 首达 2.3 V 在 18.2096 s，而最后一个计划事件在 14.015 s 结束（早于启动 4.1946 s），启动后 20 s 窗口只剩 1.7904 s；因此 0 有效帧、service_passed=false。",
+    "数字契约不是失败原因：探测里序号与载荷/校验仍为 96/99/98/101，失败完全在能量与时序。",
+    "VIN 峰值 4.0575 V 落在 UVLO 上升区间 3.77…4.3 V 之内（高于 typ 4.04 V、低于最坏 4.3 V）：名义器件可启动，最坏器件在 20 s 内可能根本不启动，该风险尚未量化。",
+    "启动后剩余 1.7904 s 足以容纳 3 帧（各约 15 ms），说明当前失败至少部分是可调度性问题，不一定只是收获能量不足。"
+  ],
+  "delivery_conclusion": {
+    "nominal_reference_chain": "继续成立且未变：固定场景 + 声明式初始储能 2.5 V 下，TX-84f4ff52 四门 PASS；本轮未改 design.json / firmware/main.c，也未重跑。",
+    "device_level_default_design": "不可宣称可交付：零初态下固定时刻调度探测为 service_passed=false。本版说明与报告保留（RETAIN_FOR_REVIEW），不作为器件级通过。",
+    "decision": "RETAIN_FOR_REVIEW",
+    "scope_limit": "两条证据都不能外推：名义结果只针对声明式预充；探测只针对一个厂商宏模型、一个 C_IN 取值、零初态。均非硅片结论（physical=NOT_TESTED）。"
+  },
+  "next_engineering_question": {
+    "question": "在零初态、固定 20 s 窗口下，把帧调度改为启动/PGOOD 门控（启动后仍余 1.7904 s）是否足以完成至少 3 帧服务，还是必须依赖声明式预充？",
+    "candidate_levers": [
+      "固件调度改为 PGOOD/电压门控或把首帧移到启动之后（firmware/main.c 在设计空间内）",
+      "缩短启动：降低 C_IN（探测用 150 µF）或提高耦合功率（梁参在设计空间内）",
+      "维持固定时刻调度则必须保留声明式初始储能（任务场景即如此）"
+    ],
+    "requires": "电压/PGOOD 门控固件需要新适配器（execution_policy.feedback_iteration: not implemented）。",
+    "measurement_plan": "下一轮在同一厂商宏模型路径比较固定调度 vs 启动后门控调度，并扫描 C_IN（150/100/68 µF）对启动时间的支配关系；均零初态、同一 2.2 V 判据。"
+  },
+  "not_done_this_round": [
+    "未修改 design.json、firmware/main.c（字节不变，复用 TX-84f4ff52）。",
+    "未修改任务验收定义、场景、下限或检查器（不因失败调低门槛）。",
+    "未启动新仿真（本轮无 task_execute）。",
+    "未把宏模型结果写成实测（physical=NOT_TESTED）。"
+  ],
+  "sources": [
+    "notes/vendor-probe-result.json",
+    "notes/vendor-probe-protocol.json",
+    "notes/vendor-probe.cir",
+    "notes/vendor-connection-facts.json",
+    "notes/adi-source-facts.json",
+    "notes/default-design.json"
+  ]
+}

@@ -61,7 +61,10 @@ def assign(repo, owner, body, operator):
     p = repo.leader(body['project_id'], owner)
     domain = body['role']
     if domain not in ('power', 'firmware'): raise ValueError('PROFESSIONAL_ROLE_NOT_QUALIFIED')
-    repo.system(p['id'], body['base_system'])
+    base = repo.system(p['id'], body['base_system'])
+    from .repository_profiles import system_profile
+    if domain not in system_profile(base)['roles']: raise ValueError('TASK_PROFILE_ROLE_NOT_SUPPORTED')
+    if base.get('task_definition', {}).get('intent') == 'audit': raise PermissionError('AUDIT_TASK_READ_ONLY_DESIGN')
     for key in ('question', 'completion'):
         if not isinstance(body.get(key), str) or not 1 <= len(body[key]) <= 4000: raise ValueError('TASK_' + key.upper() + '_REQUIRED')
     contract_ids = body.get('contract_ids', [])
@@ -69,7 +72,7 @@ def assign(repo, owner, body, operator):
         for cid in contract_ids: repo._object(db, 'design_interface_contracts', cid, p['id'])
     # Create a real deferred Pi conversation before the repository transaction.
     # A retry uses the same creation identity; no generic chat worker is dispatched.
-    conversation = repo.lab.app.conversations.create('P01 V2 · ' + domain + '\n' + body['question'],
+    conversation = repo.lab.app.conversations.create(p['title'] + ' · ' + domain + '\n' + body['question'],
         None, 'repo-task-' + identity({'lead': owner, 'operation': body['operation_id']}), defer_dispatch=True)
     professional = conversation['id']
     def apply(db):
@@ -94,6 +97,7 @@ def assign(repo, owner, body, operator):
 def write(repo, owner, body):
     from .repository import name, file_hash
     root, value = workspace(repo, owner)
+    professional_guard(repo, value)
     logical = name(body['path'])
     if not scope(value['role'], logical): raise PermissionError('DOMAIN_WRITE_SCOPE')
     content = body['content']
@@ -102,6 +106,11 @@ def write(repo, owner, body):
     if any(p.is_symlink() for p in [path, *path.parents] if p.is_relative_to(root)): raise PermissionError('WORKSPACE_SYMLINK')
     expected = body.get('expected_sha256')
     def apply(db):
+        professional_guard(repo, value, db)
+        definition = repo.system(value['project_id'], value['base_system'], db).get('task_definition', {})
+        if definition.get('standards'):
+            from .repository_task_standards import path_allowed
+            if not path_allowed(logical, definition['standards']['design_space']['editable_files']): raise PermissionError('TASK_DESIGN_SCOPE')
         if (file_hash(path) if path.exists() else None) != expected: raise ValueError('WORKSPACE_REVISION_CONFLICT')
         # Material edits are exclusively Pi actions and recorded even before commit.
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -113,6 +122,7 @@ def write(repo, owner, body):
 def commit(repo, owner, body, operator):
     from .repository import name, file_hash
     root, value = workspace(repo, owner)
+    professional_guard(repo, value)
     if value['status'] not in ('QUEUED', 'RUNNING', 'REVIEW_REQUIRED'): raise ValueError('PROFESSIONAL_TASK_CLOSED')
     paths = body.get('paths')
     if not isinstance(paths, list) or not paths: raise ValueError('DOMAIN_COMMIT_FILES_REQUIRED')
@@ -121,6 +131,7 @@ def commit(repo, owner, body, operator):
         if not scope(value['role'], logical): raise PermissionError('DOMAIN_COMMIT_SCOPE')
     if not isinstance(body.get('rationale'), str) or not body['rationale'].strip(): raise ValueError('DECISION_REASON_REQUIRED')
     def apply(db):
+        professional_guard(repo, value, db)
         row = db.execute('SELECT * FROM design_branch_heads WHERE project=? AND domain=? AND branch=?',
             (value['project_id'], value['role'], value['branch'])).fetchone()
         if row['revision'] != body['expected_revision']: raise ValueError('DOMAIN_BRANCH_REVISION_CONFLICT')
@@ -137,6 +148,10 @@ def commit(repo, owner, body, operator):
             if files.get(logical) != ref:
                 changes.append({'path': logical, 'before': files.get(logical, {}).get('sha256'), 'after': ref['sha256']})
             files[logical] = ref
+        if base.get('task_definition'):
+            from .repository_task_standards import check_files
+            full = {**base['files'], **files}
+            check_files(base['task_definition'], full, lambda path: (repo.root/'blobs'/full[path]['sha256']).read_text(), changed=paths)
         # Changed build/model inputs cannot retain a prior job as qualified output.
         cumulative = [{'path': path, 'before': base['files'].get(path,{}).get('sha256'), 'after': ref['sha256']}
                       for path,ref in files.items() if base['files'].get(path,{}).get('sha256') != ref['sha256']]
@@ -156,6 +171,15 @@ def commit(repo, owner, body, operator):
     return repo.mutate(owner, body, apply)
 
 
+def professional_guard(repo, value, db=None):
+    p = repo.project(value['project_id'], db=db)
+    current = repo.system(p['id'], p['submitted'], db)
+    base = repo.system(p['id'], value['base_system'], db)
+    current_task, base_task = current.get('task_definition', {}), base.get('task_definition', {})
+    if current_task.get('id') != base_task.get('id'): raise ValueError('TASK_PHASE_REBASE_REQUIRED')
+    if base_task.get('intent') == 'audit': raise PermissionError('AUDIT_TASK_READ_ONLY_DESIGN')
+
+
 def contract(repo, owner, body, operator):
     def apply(db):
         p = repo.leader(body['project_id'], owner, db)
@@ -172,7 +196,8 @@ def contract(repo, owner, body, operator):
                 execution=json.loads(row['value'])
                 if execution['status']!='SUCCEEDED':raise ValueError('DOMAIN_EXECUTION_NOT_SUCCEEDED')
                 from .repository_execution import input_project
-                manifest='project-fw-s132/project.json' if domain=='firmware' else 'project-chain/project.json'
+                from .repository_profiles import system_profile
+                manifest=system_profile(repo.system(p['id'], c['base_system'], db))['manifests'][domain]
                 if identity(input_project(repo,c,manifest))!=execution['project_sha256']:
                     raise ValueError('DOMAIN_EXECUTION_SOURCE_BINDING')
                 executions[domain]=execution['id']
@@ -239,6 +264,14 @@ def validate(repo, owner, body):
     def apply(db):
         p = repo.leader(body['project_id'], owner, db)
         system = repo.system(p['id'], body['system_id'], db)
+        if system.get('task_definition'):
+            from .repository_task_checks import evaluate as evaluate_task
+            if body.get('scope', 'system') != 'system': raise ValueError('TASK_PROFILE_SYSTEM_SCOPE_REQUIRED')
+            result = evaluate_task(repo, system)
+            return object_save(repo, db, 'design_repository_validations', 'RV', {
+                'project_id': p['id'], 'target': system['id'], 'kind': 'task-acceptance', 'result': result,
+                'status': result['status'], 'scope': result['scope'], 'evaluator': result['checker'],
+                'immutable_input': system['id'], 'physical': 'NOT_TESTED'}, ['project_id', 'target', 'kind'])
         from .repository import file_hash
         def read(path):
             ref = system['files'][path]; source = repo.root/'blobs'/ref['sha256']
@@ -277,7 +310,8 @@ def decide(repo, owner, body, operator):
         if not rows: raise ValueError('EXECUTED_VALIDATION_REQUIRED')
         if body['decision'] == 'ADOPT_PASSED':
             from .repository_validation import qualification
-            if not qualification(repo,system,db)['product_passed']:
+            q = qualification(repo,system,db)
+            if not q.get('task_passed', q['product_passed']):
                 raise ValueError('PRODUCT_GATES_NOT_PASSED')
         adopted = p['adopted']
         target = system
@@ -289,7 +323,9 @@ def decide(repo, owner, body, operator):
         decision = {'id': 'DA-' + identity({'body': body, 'owner': owner}), 'owner': owner,
                     'from_design': p['adopted'], 'to_design': target['id'], 'revision': p['revision']+1,
                     'decision': body['decision'], 'rationale': body['rationale'],
-                    'source_author': 'operator' if operator else 'Pi', 'product_passed': body['decision'] == 'ADOPT_PASSED'}
+                    'source_author': 'operator' if operator else 'Pi',
+                    'product_passed': body['decision'] == 'ADOPT_PASSED' and system.get('task_definition', {}).get('scope', 'digital-product') == 'digital-product',
+                    'accepted_scope': system.get('task_definition', {}).get('scope', 'digital-product')}
         db.execute('INSERT INTO design_adoptions VALUES(?,?,?,?,?,?,?)', (decision['id'], owner, decision['from_design'],
             decision['to_design'], decision['revision'], canonical(decision), time.time()))
         db.execute('UPDATE design_projects SET adopted=?,revision=revision+1 WHERE id=?', (adopted, p['id']))
@@ -314,7 +350,7 @@ def finish(repo, owner, body):
     return repo.mutate(owner, body, apply)
 
 
-def release(repo, owner, body):
+def release(repo, owner, body, operator=False):
     def apply(db):
         p = repo.leader(body['project_id'], owner, db)
         system = repo.system(p['id'], body['system_id'], db)
@@ -328,12 +364,19 @@ def release(repo, owner, body):
             if file_hash(repo.root/'blobs'/ref['sha256']) != ref['sha256']: raise ValueError('RELEASE_INPUT_TAMPER')
         from .repository_validation import qualification
         current=qualification(repo,system,db)
+        task_execution = None
+        if system.get('task_definition', {}).get('case_adapter') in ('tabulated-curve-v1','piezo-reference-v1'):
+            from .repository_task_execution import current_execution
+            task_execution = current_execution(repo,system,db)
+            if not task_execution: raise ValueError('RELEASE_CURRENT_EXECUTION_REQUIRED')
         manifest = {'schema_version': 'bf-system-review-release-v2', 'project_id': p['id'], 'target': system['id'],
                     'files': system['files'], 'validations': validations, 'jobs': system['jobs'],
                     'digital_status': current['status'], 'qualification':current, 'physical': system['physical'],
-                    'kind': 'REVIEW_PACKAGE', 'rationale': body['rationale'], 'source_author': 'Pi',
+                    'kind': 'REVIEW_PACKAGE', 'rationale': body['rationale'], 'source_author': 'operator' if operator else 'Pi',
                     'original_owner': system['origin_owner'], 'baseline': p['baseline'],
                     'required_engineering_report': report_quality}
+        if system.get('task_definition'):
+            manifest.update(task_definition=system['task_definition'], task_execution=task_execution)
         result = object_save(repo, db, 'design_repository_releases', 'REL', manifest, ['project_id', 'target'])
         archive = repo.root/'releases'/(result['id']+'.zip'); archive.parent.mkdir(exist_ok=True)
         if not archive.exists():
@@ -342,6 +385,9 @@ def release(repo, owner, body):
                 for path in report_quality['outputs']:
                     z.write(report_folder/path, 'reports/'+path)
                 z.write(report_folder/'quality.json','reports/quality.json')
+                if task_execution:
+                    for path, ref in task_execution['artifacts'].items():
+                        z.write(repo.root/'blobs'/ref['sha256'], 'execution/'+path)
                 for path, ref in system['files'].items(): z.write(repo.root/'blobs'/ref['sha256'], 'engineering/'+path)
                 for job, record in system['jobs'].items():
                     for path, ref in record.get('artifacts', {}).items(): z.write(repo.root/'blobs'/ref['sha256'], 'jobs/'+job+'/'+path)
@@ -381,7 +427,7 @@ def handle(repo, owner, body, operator=False):
                'repository_validate': lambda: validate(repo, owner, body),
                'repository_decide': lambda: decide(repo, owner, body, operator),
                'repository_finish': lambda: finish(repo, owner, body),
-               'repository_release': lambda: release(repo, owner, body),
+               'repository_release': lambda: release(repo, owner, body, operator),
                'repository_summary': lambda: summary(repo, body['project_id'], owner),
                'repository_task': lambda: task(repo, owner)}
     if action in ('repository_execute','repository_execution'):

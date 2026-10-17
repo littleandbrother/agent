@@ -75,6 +75,8 @@ class Repository:
                 domain_commit TEXT NOT NULL,owner TEXT NOT NULL,value TEXT NOT NULL);
               CREATE TABLE IF NOT EXISTS design_method_experiments(id TEXT PRIMARY KEY,project TEXT NOT NULL,
                 status TEXT NOT NULL,value TEXT NOT NULL);
+              CREATE TABLE IF NOT EXISTS design_task_executions(id TEXT PRIMARY KEY,project TEXT NOT NULL,
+                target TEXT NOT NULL,value TEXT NOT NULL);
             ''')
 
     def bound(self, owner):
@@ -166,6 +168,10 @@ class Repository:
         return self._object(db,'design_system_commits',key,project)
 
     def _save_system(self, db, owner, value):
+        if value.get('task_definition'):
+            from .repository_task_standards import check_files
+            check_files(value['task_definition'], value['files'],
+                        lambda path: (self.root/'blobs'/value['files'][path]['sha256']).read_text())
         value={**value,'id':'SC-'+identity(value)}
         db.execute('INSERT OR IGNORE INTO design_system_commits VALUES(?,?,?,?)',
                    (value['id'],value['project_id'],value.get('parent'),canonical(value)))
@@ -249,6 +255,7 @@ class Repository:
                 'integration_requests':rows('design_integration_requests'),'validations':rows('design_repository_validations'),
                 'professional_tasks':[{**json.loads(r['value']),'status':r['status']} for r in db.execute('SELECT value,status FROM design_professional_tasks WHERE project=? ORDER BY rowid',(project,))],'releases':rows('design_repository_releases'),
                 'executions':rows('design_domain_executions'),'experiments':rows('design_method_experiments'),
+                'task_executions': rows('design_task_executions'),
                 'professional_task_history':rows('design_professional_task_history'),
                 'branches':[dict(r) for r in db.execute('SELECT * FROM design_branch_heads WHERE project=?',(project,))]}
 
@@ -263,10 +270,21 @@ class Repository:
 
     def handle(self, owner, body, operator=False):
         action=body.get('action')
+        if action in ('repository_task_assessment_schema', 'repository_task_assess'):
+            from .repository_task_intake import schema, validate
+            if action == 'repository_task_assessment_schema': return schema()
+            value = body.get('assessment')
+            if isinstance(value, str): value = json.loads(value)
+            return validate(body.get('request'), value)
         if action=='repository_import': return self.import_baseline(owner,body,operator)
+        from .repository_task_actions import handle as task_actions
+        if action in ('repository_task_schema', 'repository_task_create'):
+            return task_actions(self, owner, body, operator)
         project=body.get('project_id') or self.bound(owner)
         if not project: raise ValueError('DESIGN_PROJECT_NOT_BOUND')
         self.project(project,owner)
+        task_value = task_actions(self, owner, {**body, 'project_id': project}, operator)
+        if task_value is not None: return task_value
         if (action == 'repository_archive_read' or
                 action in ('repository_read', 'repository_workspace_read') and
                 str(body.get('path', '')).startswith('context-records/')):

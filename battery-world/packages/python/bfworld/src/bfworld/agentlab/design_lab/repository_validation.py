@@ -161,6 +161,9 @@ def power_review(repo, system, job, interface_result):
 def qualification(repo, system, db=None):
     if db is None:
         with repo.store.connect() as connection:return qualification(repo,system,connection)
+    if system.get('task_definition'):
+        from .repository_task_checks import qualification as task_qualification
+        return task_qualification(repo, system, db)
     gates={k:{**v,'input_fingerprint':fingerprint(system,k)} for k,v in system.get('validations',{}).items()}
     # Newest evidence for the same source/contract/job fingerprint wins; history is retained.
     rows=[json.loads(r['value']) for r in db.execute('SELECT value FROM design_repository_validations WHERE project=? ORDER BY rowid',(system['project_id'],))]
@@ -222,13 +225,16 @@ def native_review_reuse(repo, system, gate, original=None):
 
 
 def evaluate(repo, system):
-    required=repo.project(system['project_id'])['requirements']['required_gates'];gates={}
+    from .repository_profiles import task_requirements, system_profile
+    required=task_requirements(repo,system)['required_gates'];gates={}
     def record(gate,status,findings,scope):
         gates[gate]={'status':status,'findings':findings,'scope':scope,'input_fingerprint':fingerprint(system,gate)}
     interface=check(lambda p:text(repo,system['files'][p]),system['files'],
         {d:json.loads(text(repo,system['files']['interfaces/'+d+'.json'])) for d in ('power','firmware') if 'interfaces/'+d+'.json' in system['files']})
     jobs={};errors={}
-    for domain,kind,manifest in [('firmware','firmware-nrf52832-s132','project-fw-s132/project.json'),('power','spice','project-chain/project.json')]:
+    cfg=system_profile(system)
+    for domain in ('firmware','power'):
+        kind,manifest=cfg['executors'][domain],cfg['manifests'][domain]
         try:jobs[domain]=selected_job(repo,system,kind,manifest)
         except (ValueError,KeyError) as e:errors[domain]=str(e)
     # Carry exact unaffected original product checks; changed gates need fresh evidence.

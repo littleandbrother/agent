@@ -160,6 +160,9 @@ def check_build(root, value):
 
 
 def required_report(repo, owner, system, report_id=None):
+    if system.get('task_definition', {}).get('profile') not in (None, 'p01-digital-v1'):
+        from .repository_task_reports import required
+        return required(repo, owner, system)
     if report_id is None:
         pointer = repo.root/'reports/by-system'/(system['id']+'.json')
         if not pointer.exists(): raise ValueError('REQUIRED_ENGINEERING_REPORT_MISSING')

@@ -8,6 +8,7 @@ import math
 import re
 
 from ..store import identity
+from .repository_profiles import PREFIXES, P01_GATES as GATES, acceptance_identity
 
 VERSION = 'power-firmware-source-contract-v3'
 DECLARATION_FIELDS = {
@@ -34,15 +35,6 @@ def declaration_examples(result):
     return {domain: {'interface': {k: (facts['firmware'] if domain == 'firmware' else facts)[k]
                                  for k in fields}, 'sources': refs, 'assumptions': [], 'issues': []}
             for domain, fields in DECLARATION_FIELDS.items()}
-PREFIXES = {'mechanical': ('project-cad/', 'mechanical/'),
-            'power': ('project-chain/', 'project-spice/', 'circuit/', 'interfaces/power.json'),
-            'firmware': ('project-fw-s132/', 'project-firmware/', 'receiver/', 'interfaces/firmware.json'),
-            'assembly': ('assembly/', 'interfaces/assembly.json')}
-GATES = {'source_domain': ('mechanical', 'power'), 'schematic_bom_pins': ('power',),
-         'pcb_connectivity_drc': ('power', 'assembly'), 'geometry_fit': ('mechanical', 'assembly'),
-         'board_firmware_interfaces': ('power', 'firmware', 'assembly'),
-         'firmware_event_logic': ('firmware',), 'power_load_chain': ('mechanical', 'power', 'firmware'),
-         'delivery_version': ('mechanical', 'power', 'firmware', 'assembly')}
 CONTRACT_GATES = ('board_firmware_interfaces', 'power_load_chain', 'delivery_version')
 
 
@@ -63,6 +55,15 @@ def fingerprint(system, gate):
     # Interface declarations do not change the bytes compiled by a firmware job.
     if gate not in CONTRACT_GATES:
         value['files'] = {p: s for p, s in value['files'].items() if not p.startswith('interfaces/')}
+    if system.get('task_definition'):
+        from .repository_task_checks import evaluator_identity
+        adapter = system['task_definition']['case_adapter']
+        if gate != 'delivery_version' and adapter in ('tabulated-curve-v1', 'piezo-reference-v1'):
+            paths = ('reference.csv', 'observation.csv') if adapter == 'tabulated-curve-v1' else ('design.json', 'firmware/main.c')
+            value['files'] = {p: h for p, h in value['files'].items() if p in paths}
+        from .repository_task_standards import acceptance_scenario
+        value['scenario'] = acceptance_scenario(system['task_definition'])
+        return acceptance_identity(system, gate, identity(value), evaluator_identity(system))
     return identity(value)
 
 
@@ -119,13 +120,15 @@ def check(read, files, declarations=None):
         result['checks'].append({'id': key, 'status': 'PASS' if compatible else 'FAIL',
                                  'actual': actual, 'expected': expected, 'source': locator})
     try:
-        source = timing(load('project-fw-s132/main.c'))
+        from .repository_profiles import P01
+        paths = P01['source_paths']
+        source = timing(load(paths['firmware']))
         if any(source[k] is None for k in ('advertising_ms', 'connection_min_ms', 'connection_max_ms', 'sample_ms')):
             raise ValueError('UNSUPPORTED_FIRMWARE_TIMING_EXPRESSION')
         source['advertising_ms'] *= .625
         from .repository_load import normalize_timeline
-        model = normalize_timeline(load('project-chain/load-timeline.json', True))
-        interface = load('project-chain/interface-params.json', True)
+        model = normalize_timeline(load(paths['load'], True))
+        interface = load(paths['power'], True)
         radio = model['actual_radio_timing']
         comparisons = [('advertising_ms', radio['advertising_period_ms'], 'APP_ADV_INTERVAL'),
                        ('connection_min_ms', radio['connection_period_range_ms'][0], 'MIN_CONN_INTERVAL'),

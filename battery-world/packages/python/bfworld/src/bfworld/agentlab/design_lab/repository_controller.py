@@ -87,7 +87,9 @@ def state(repo, owner, target=None):
 def start(repo, owner, goal=None, dry_run=False, purpose='design'):
     require_capability('agent')
     require_capability('model')
-    repo.project(repo.bound(owner),owner)
+    project = repo.project(repo.bound(owner),owner)
+    from .repository_reference_qualification import require as require_reference
+    require_reference(repo, repo.system(project['id'],project['submitted']))
     if owner in repo.lab.controllers and repo.lab.controllers[owner].is_alive(): raise ValueError('REPOSITORY_CONTROLLER_ALREADY_RUNNING')
     with repo.store.connect() as db:
         if not budget_policy.unbounded_time(db,owner): raise ValueError('EXPLICIT_CONTINUATION_AUTHORITY_REQUIRED')
