@@ -281,6 +281,8 @@ class EdaCLI:
         return self.binding(owner)
 
     def bind(self,owner,project,authorization,writable=False):
+        from .runtime_config import validate_native_project
+        validate_native_project(project)
         if not re.fullmatch(r'[a-zA-Z0-9_-]{10,80}',project or ''): raise ValueError('EDA_PROJECT_UUID_REQUIRED')
         old=self.binding(owner)
         if old and old['writable']: raise ValueError('EDA_OWNER_ALREADY_BOUND')
@@ -335,6 +337,9 @@ class EdaCLI:
                 'new_native_calls':0,'full_product_passed':False,'physical_verified':False}
 
     def action(self,owner,body,operator=False):
+        if body.get('action') in ('command', 'bind'):
+            from .runtime_config import require_capability
+            require_capability('native')
         if not operator:self.app.engineering.authorize(owner)
         root=self.workspace(owner);action=body.get('action','inspect')
         fields = {'inspect': set(), 'bind': {'project_uuid','authorization','writable'},

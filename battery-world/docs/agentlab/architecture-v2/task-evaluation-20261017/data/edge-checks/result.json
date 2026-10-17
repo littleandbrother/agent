@@ -1,0 +1,2377 @@
+{
+  "count": 13,
+  "valid": 13,
+  "results": [
+    {
+      "id": "Q38",
+      "request": "参考这篇论文做一个能用的产品，结构和器件都可以调整。",
+      "kind": "known-regression",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "new_design",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "以用户提供的论文为参考，做出一个结构和器件可调整的可用产品",
+        "requirements": [
+          {
+            "text": "以用户所指论文为参考依据，产出可实际使用的产品",
+            "source_quote": "参考这篇论文做一个能用的产品"
+          },
+          {
+            "text": "产品的结构设计允许调整",
+            "source_quote": "结构和器件都可以调整"
+          },
+          {
+            "text": "产品的器件选型允许调整",
+            "source_quote": "结构和器件都可以调整"
+          }
+        ],
+        "design_variables": [
+          "产品的整体结构形式与布局",
+          "关键器件与部件的具体选型",
+          "实现所用的技术平台与实现路径",
+          "产品的功能范围与性能档位"
+        ],
+        "missing_inputs": [
+          {
+            "question": "这篇论文的原文、图表或链接具体是什么？未获取前无法确定参考内容",
+            "blocks_execution": true
+          },
+          {
+            "question": "“能用”的判定标准是什么，即在什么使用场景、什么工况下算可用？",
+            "blocks_execution": true
+          },
+          {
+            "question": "期望的交付形态是可用实物、可复现的完整方案，还是先要可行性结论？",
+            "blocks_execution": true
+          },
+          {
+            "question": "规模、成本、体积、时间方面的限制条件是什么？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "在读到论文前，不预设所属专业领域，也不预设电子、固件或无线部分的存在"
+        ],
+        "plan": [
+          {
+            "action": "获取并通读论文，提取核心原理、关键结构、性能指标与器件构成",
+            "purpose": "确定参考对象到底要求什么",
+            "output": "论文要点与原始指标摘录",
+            "check": "逐条与论文原文、图表数据核对"
+          },
+          {
+            "action": "区分论文中原理必需的部分与可自由替换的结构、器件部分",
+            "purpose": "为结构和器件可调整这一授权划定边界",
+            "output": "必守约束与可调项清单",
+            "check": "每一项可调项均能说明理由且不与原理论证冲突"
+          },
+          {
+            "action": "与用户确认使用场景和“能用”的判定口径，形成需求规格草案",
+            "purpose": "把模糊的可用性转化为可检查条件",
+            "output": "需求规格草案",
+            "check": "由用户逐条确认，未确认项标为待定"
+          },
+          {
+            "action": "针对核心原理或最关键环节做低成本可行性检查",
+            "purpose": "在投入产品化前排除原理性不可行",
+            "output": "可行性检查结论与风险清单",
+            "check": "以计算、仿真或最小验证结果支撑结论"
+          },
+          {
+            "action": "基于可行性结论给出结构与器件可调整的产品化方案及取舍说明",
+            "purpose": "形成可执行的实现路径",
+            "output": "产品化方案草案",
+            "check": "对照需求规格逐项核查覆盖与成本合理性"
+          }
+        ],
+        "acceptance": [
+          "论文要点与关键指标摘录完成，且可回溯到原文",
+          "必守约束与可调项清单完成并经用户确认",
+          "“能用”的判定口径形成可检查的条件并获确认",
+          "核心环节的可行性结论有计算、仿真或验证证据支撑",
+          "产品化方案对结构与器件替换给出明确取舍理由"
+        ],
+        "deliverables": [
+          "论文要点与约束摘录",
+          "需求规格草案",
+          "低成本可行性检查结论",
+          "结构与器件可调整的产品化方案草案"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "new_design",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "以用户提供的论文为参考，做出一个结构和器件可调整的可用产品",
+        "requirements": [
+          {
+            "text": "以用户所指论文为参考依据，产出可实际使用的产品",
+            "source_quote": "参考这篇论文做一个能用的产品"
+          },
+          {
+            "text": "产品的结构设计允许调整",
+            "source_quote": "结构和器件都可以调整"
+          },
+          {
+            "text": "产品的器件选型允许调整",
+            "source_quote": "结构和器件都可以调整"
+          }
+        ],
+        "design_variables": [
+          "产品的整体结构形式与布局",
+          "关键器件与部件的具体选型",
+          "实现所用的技术平台与实现路径",
+          "产品的功能范围与性能档位"
+        ],
+        "missing_inputs": [
+          {
+            "question": "这篇论文的原文、图表或链接具体是什么？未获取前无法确定参考内容",
+            "blocks_execution": true
+          },
+          {
+            "question": "“能用”的判定标准是什么，即在什么使用场景、什么工况下算可用？",
+            "blocks_execution": true
+          },
+          {
+            "question": "期望的交付形态是可用实物、可复现的完整方案，还是先要可行性结论？",
+            "blocks_execution": true
+          },
+          {
+            "question": "规模、成本、体积、时间方面的限制条件是什么？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "在读到论文前，不预设所属专业领域，也不预设电子、固件或无线部分的存在"
+        ],
+        "plan": [
+          {
+            "action": "获取并通读论文，提取核心原理、关键结构、性能指标与器件构成",
+            "purpose": "确定参考对象到底要求什么",
+            "output": "论文要点与原始指标摘录",
+            "check": "逐条与论文原文、图表数据核对"
+          },
+          {
+            "action": "区分论文中原理必需的部分与可自由替换的结构、器件部分",
+            "purpose": "为结构和器件可调整这一授权划定边界",
+            "output": "必守约束与可调项清单",
+            "check": "每一项可调项均能说明理由且不与原理论证冲突"
+          },
+          {
+            "action": "与用户确认使用场景和“能用”的判定口径，形成需求规格草案",
+            "purpose": "把模糊的可用性转化为可检查条件",
+            "output": "需求规格草案",
+            "check": "由用户逐条确认，未确认项标为待定"
+          },
+          {
+            "action": "针对核心原理或最关键环节做低成本可行性检查",
+            "purpose": "在投入产品化前排除原理性不可行",
+            "output": "可行性检查结论与风险清单",
+            "check": "以计算、仿真或最小验证结果支撑结论"
+          },
+          {
+            "action": "基于可行性结论给出结构与器件可调整的产品化方案及取舍说明",
+            "purpose": "形成可执行的实现路径",
+            "output": "产品化方案草案",
+            "check": "对照需求规格逐项核查覆盖与成本合理性"
+          }
+        ],
+        "acceptance": [
+          "论文要点与关键指标摘录完成，且可回溯到原文",
+          "必守约束与可调项清单完成并经用户确认",
+          "“能用”的判定口径形成可检查的条件并获确认",
+          "核心环节的可行性结论有计算、仿真或验证证据支撑",
+          "产品化方案对结构与器件替换给出明确取舍理由"
+        ],
+        "deliverables": [
+          "论文要点与约束摘录",
+          "需求规格草案",
+          "低成本可行性检查结论",
+          "结构与器件可调整的产品化方案草案"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "4ab6222bdc9a4a57ee447f32d5d2baad66b3ff58f57372b5af0637832a2b964a",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "Q43",
+      "request": "节点从零储能开始，不能人工操作，要求它上电马上发包；环境也完全不提供能量。",
+      "kind": "known-regression",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "single_module",
+        "domains": [
+          "power",
+          "firmware",
+          "radio"
+        ],
+        "goal": "审查零储能、环境无供能、不可人工操作时节点上电立即发包是否可行",
+        "requirements": [
+          {
+            "text": "节点初始储能必须为零",
+            "source_quote": "节点从零储能开始"
+          },
+          {
+            "text": "不允许人工操作",
+            "source_quote": "不能人工操作"
+          },
+          {
+            "text": "上电后必须马上发包",
+            "source_quote": "要求它上电马上发包"
+          },
+          {
+            "text": "环境完全不提供能量",
+            "source_quote": "环境也完全不提供能量"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "“上电”的能量来自哪里，是否允许非人工的外部瞬时供电、插接或换电？",
+            "blocks_execution": true
+          },
+          {
+            "question": "一次发包所需的最小能量、启动时间、射频制式、发射功率和协议开销是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否允许预充电、储能元件初始已有能量或更换储能？",
+            "blocks_execution": true
+          },
+          {
+            "question": "节点是否已有外部有线供电或无线供能接口？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "在无其他能量来源时，从零储能意味着可用能量为零，环境完全不提供能量排除环境取能。",
+          "若“上电”必须发生，则存在用户未说明的外部能量输入，否则四条硬条件相互矛盾。"
+        ],
+        "plan": [
+          {
+            "action": "读取节点现有供能、储能、启动和发包时序资料",
+            "purpose": "核对是否已有能量来源、预充电或启动机制",
+            "output": "资料清单与关键参数对照表",
+            "check": "逐条对照用户四条硬条件，确认有无遗漏能量路径"
+          },
+          {
+            "action": "核算发包一次的最小能量需求与从零储能可提供的能量",
+            "purpose": "判断零储能状态下是否存在可发包的能量预算",
+            "output": "启动、通信与射频能量预算表",
+            "check": "可用能量是否大于等于发包需求；若为零则结论为不可行"
+          },
+          {
+            "action": "检查所有可能的非人工能量路径，包括外部瞬时供电、无线供能和环境取能",
+            "purpose": "确认上电事件是否符合“环境完全不提供能量”和“不能人工操作”",
+            "output": "能量路径与约束冲突判定",
+            "check": "任何环境取能或人工触发均判为违反硬条件"
+          },
+          {
+            "action": "汇总可行性结论与必须澄清的条件，不进入样机修改",
+            "purpose": "给出审查结论而非实现方案",
+            "output": "可行性审查报告与待确认问题列表",
+            "check": "结论与零储能、环境无供能两条约束一致"
+          }
+        ],
+        "acceptance": [
+          "明确回答零储能且环境无供能时能否上电并发包",
+          "列出使任务可行的必要外部能量接口或澄清项",
+          "给出能量预算与约束矛盾点，不新增未要求数值门限"
+        ],
+        "deliverables": [
+          "可行性审查结论",
+          "能量预算与条件清单",
+          "待确认问题列表"
+        ],
+        "feasibility": "conflict"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "single_module",
+        "domains": [
+          "power",
+          "firmware",
+          "radio"
+        ],
+        "goal": "审查零储能、环境无供能、不可人工操作时节点上电立即发包是否可行",
+        "requirements": [
+          {
+            "text": "节点初始储能必须为零",
+            "source_quote": "节点从零储能开始"
+          },
+          {
+            "text": "不允许人工操作",
+            "source_quote": "不能人工操作"
+          },
+          {
+            "text": "上电后必须马上发包",
+            "source_quote": "要求它上电马上发包"
+          },
+          {
+            "text": "环境完全不提供能量",
+            "source_quote": "环境也完全不提供能量"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "“上电”的能量来自哪里，是否允许非人工的外部瞬时供电、插接或换电？",
+            "blocks_execution": true
+          },
+          {
+            "question": "一次发包所需的最小能量、启动时间、射频制式、发射功率和协议开销是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否允许预充电、储能元件初始已有能量或更换储能？",
+            "blocks_execution": true
+          },
+          {
+            "question": "节点是否已有外部有线供电或无线供能接口？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "在无其他能量来源时，从零储能意味着可用能量为零，环境完全不提供能量排除环境取能。",
+          "若“上电”必须发生，则存在用户未说明的外部能量输入，否则四条硬条件相互矛盾。"
+        ],
+        "plan": [
+          {
+            "action": "读取节点现有供能、储能、启动和发包时序资料",
+            "purpose": "核对是否已有能量来源、预充电或启动机制",
+            "output": "资料清单与关键参数对照表",
+            "check": "逐条对照用户四条硬条件，确认有无遗漏能量路径"
+          },
+          {
+            "action": "核算发包一次的最小能量需求与从零储能可提供的能量",
+            "purpose": "判断零储能状态下是否存在可发包的能量预算",
+            "output": "启动、通信与射频能量预算表",
+            "check": "可用能量是否大于等于发包需求；若为零则结论为不可行"
+          },
+          {
+            "action": "检查所有可能的非人工能量路径，包括外部瞬时供电、无线供能和环境取能",
+            "purpose": "确认上电事件是否符合“环境完全不提供能量”和“不能人工操作”",
+            "output": "能量路径与约束冲突判定",
+            "check": "任何环境取能或人工触发均判为违反硬条件"
+          },
+          {
+            "action": "汇总可行性结论与必须澄清的条件，不进入样机修改",
+            "purpose": "给出审查结论而非实现方案",
+            "output": "可行性审查报告与待确认问题列表",
+            "check": "结论与零储能、环境无供能两条约束一致"
+          }
+        ],
+        "acceptance": [
+          "明确回答零储能且环境无供能时能否上电并发包",
+          "列出使任务可行的必要外部能量接口或澄清项",
+          "给出能量预算与约束矛盾点，不新增未要求数值门限"
+        ],
+        "deliverables": [
+          "可行性审查结论",
+          "能量预算与条件清单",
+          "待确认问题列表"
+        ],
+        "feasibility": "conflict",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "3d62d15b47234075c2ae93ed2aed3c9cfccb11f50dcc4080b771e303b1c47d1d",
+        "state": "REQUIREMENTS_CONFLICT",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "Q44",
+      "request": "先只分析这个方案值不值得做，不要开始设计。",
+      "kind": "known-regression",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "在未提供方案内容时，判断能否评估其是否值得做，并明确所需输入。",
+        "requirements": [
+          {
+            "text": "只分析方案是否值得做",
+            "source_quote": "先只分析这个方案值不值得做"
+          },
+          {
+            "text": "本次不开始设计",
+            "source_quote": "不要开始设计"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "待评估方案的具体内容、目标与背景是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "方案期望达成的指标、交付物和时间成本约束是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否已有替代方案或基准用于比较？",
+            "blocks_execution": false
+          },
+          {
+            "question": "相关实物、数据或已有验证证据是否可提供？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "用户所指方案尚未随本消息提供，评估需以后续材料为准。"
+        ],
+        "plan": [
+          {
+            "action": "读取用户后续提供的方案文本、指标和约束",
+            "purpose": "建立待评估对象",
+            "output": "方案要点清单",
+            "check": "确认目标、范围、指标、约束均有出处"
+          },
+          {
+            "action": "区分硬约束、可调项、未知条件和预期收益",
+            "purpose": "判断方案是否具备评估基础",
+            "output": "约束与收益对照表",
+            "check": "每项均标注来源或未知"
+          },
+          {
+            "action": "检查方案是否存在明显矛盾、不可验证指标或关键缺口",
+            "purpose": "完成低成本的可行性初筛",
+            "output": "风险与缺口清单",
+            "check": "仅依据已给资料，不自行补设门限"
+          },
+          {
+            "action": "与已有基准或替代路径做定性比较",
+            "purpose": "判断投入与收益是否匹配",
+            "output": "价值比较说明",
+            "check": "说明继续、停止或补资料的依据"
+          },
+          {
+            "action": "汇总值不值得做的结论与待确认问题",
+            "purpose": "回答是否值得推进且不进入设计",
+            "output": "评估结论和问题清单",
+            "check": "结论明确且未产生设计或修改动作"
+          }
+        ],
+        "acceptance": [
+          "方案目标和约束被完整列出",
+          "给出明确的继续、停止或补资料结论",
+          "未产生设计、修改或制作动作"
+        ],
+        "deliverables": [
+          "可行性价值评估结论",
+          "待确认问题清单"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "在未提供方案内容时，判断能否评估其是否值得做，并明确所需输入。",
+        "requirements": [
+          {
+            "text": "只分析方案是否值得做",
+            "source_quote": "先只分析这个方案值不值得做"
+          },
+          {
+            "text": "本次不开始设计",
+            "source_quote": "不要开始设计"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "待评估方案的具体内容、目标与背景是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "方案期望达成的指标、交付物和时间成本约束是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否已有替代方案或基准用于比较？",
+            "blocks_execution": false
+          },
+          {
+            "question": "相关实物、数据或已有验证证据是否可提供？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "用户所指方案尚未随本消息提供，评估需以后续材料为准。"
+        ],
+        "plan": [
+          {
+            "action": "读取用户后续提供的方案文本、指标和约束",
+            "purpose": "建立待评估对象",
+            "output": "方案要点清单",
+            "check": "确认目标、范围、指标、约束均有出处"
+          },
+          {
+            "action": "区分硬约束、可调项、未知条件和预期收益",
+            "purpose": "判断方案是否具备评估基础",
+            "output": "约束与收益对照表",
+            "check": "每项均标注来源或未知"
+          },
+          {
+            "action": "检查方案是否存在明显矛盾、不可验证指标或关键缺口",
+            "purpose": "完成低成本的可行性初筛",
+            "output": "风险与缺口清单",
+            "check": "仅依据已给资料，不自行补设门限"
+          },
+          {
+            "action": "与已有基准或替代路径做定性比较",
+            "purpose": "判断投入与收益是否匹配",
+            "output": "价值比较说明",
+            "check": "说明继续、停止或补资料的依据"
+          },
+          {
+            "action": "汇总值不值得做的结论与待确认问题",
+            "purpose": "回答是否值得推进且不进入设计",
+            "output": "评估结论和问题清单",
+            "check": "结论明确且未产生设计或修改动作"
+          }
+        ],
+        "acceptance": [
+          "方案目标和约束被完整列出",
+          "给出明确的继续、停止或补资料结论",
+          "未产生设计、修改或制作动作"
+        ],
+        "deliverables": [
+          "可行性价值评估结论",
+          "待确认问题清单"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "ee401a70a3247cdd211620244dfb49ab25defb6d14ffd584cfed8e6f7f7b7ea0",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "Q46",
+      "request": "无电池装置只要记录一次按压事件，不需要单片机和无线。",
+      "kind": "known-regression",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "new_design",
+        "scope": "single_module",
+        "domains": [
+          "mechanical"
+        ],
+        "goal": "设计一个无电池、无单片机、无无线的单次按压事件记录装置。",
+        "requirements": [
+          {
+            "text": "装置不使用电池",
+            "source_quote": "无电池装置"
+          },
+          {
+            "text": "记录一次按压事件",
+            "source_quote": "只要记录一次按压事件"
+          },
+          {
+            "text": "不使用单片机和无线",
+            "source_quote": "不需要单片机和无线"
+          }
+        ],
+        "design_variables": [
+          "记录方式（机械锁存、磁保持、形状记忆等）",
+          "按压触发力与行程",
+          "指示形式与复位方式",
+          "封装尺寸与材料"
+        ],
+        "missing_inputs": [
+          {
+            "question": "按压事件的典型力、行程和持续时间是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "记录后是否需要人工复位或可重复使用？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否需要外部读取记录结果，还是仅本地指示？",
+            "blocks_execution": true
+          },
+          {
+            "question": "装置的工作环境、尺寸和成本约束是什么？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "可采用纯机械或磁保持结构实现单次锁存记录。",
+          "无需电气输出、通信或数据处理。"
+        ],
+        "plan": [
+          {
+            "action": "梳理按压事件定义和使用边界",
+            "purpose": "明确设计输入",
+            "output": "需求与边界清单",
+            "check": "与用户确认力、行程、复位等参数"
+          },
+          {
+            "action": "调研无电池单次事件记录原理",
+            "purpose": "找到不依赖MCU和无线的方式",
+            "output": "候选原理列表",
+            "check": "逐项核对无电池、无MCU、无无线"
+          },
+          {
+            "action": "评估候选方案的机械可行性与成本",
+            "purpose": "筛选可行概念",
+            "output": "方案对比表",
+            "check": "是否满足单次记录和尺寸、成本约束"
+          },
+          {
+            "action": "细化首选概念设计",
+            "purpose": "形成可制造的设计方向",
+            "output": "概念设计说明",
+            "check": "确认锁存可靠性、复位方式和指示可读性"
+          },
+          {
+            "action": "决定是否制作验证样机",
+            "purpose": "后续验证",
+            "output": "样机决策与验证计划",
+            "check": "用户确认后再进入制作"
+          }
+        ],
+        "acceptance": [
+          "给出至少一种不依赖电池、MCU和无线的单次按压记录方案。",
+          "方案明确记录一次按压并保持可识别状态。",
+          "方案满足用户确认的力、行程、尺寸和复位要求。"
+        ],
+        "deliverables": [
+          "需求与边界清单",
+          "候选原理对比表",
+          "概念设计说明",
+          "样机决策建议"
+        ],
+        "feasibility": "plausible"
+      },
+      "validated": {
+        "intent": "new_design",
+        "scope": "single_module",
+        "domains": [
+          "mechanical"
+        ],
+        "goal": "设计一个无电池、无单片机、无无线的单次按压事件记录装置。",
+        "requirements": [
+          {
+            "text": "装置不使用电池",
+            "source_quote": "无电池装置"
+          },
+          {
+            "text": "记录一次按压事件",
+            "source_quote": "只要记录一次按压事件"
+          },
+          {
+            "text": "不使用单片机和无线",
+            "source_quote": "不需要单片机和无线"
+          }
+        ],
+        "design_variables": [
+          "记录方式（机械锁存、磁保持、形状记忆等）",
+          "按压触发力与行程",
+          "指示形式与复位方式",
+          "封装尺寸与材料"
+        ],
+        "missing_inputs": [
+          {
+            "question": "按压事件的典型力、行程和持续时间是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "记录后是否需要人工复位或可重复使用？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否需要外部读取记录结果，还是仅本地指示？",
+            "blocks_execution": true
+          },
+          {
+            "question": "装置的工作环境、尺寸和成本约束是什么？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "可采用纯机械或磁保持结构实现单次锁存记录。",
+          "无需电气输出、通信或数据处理。"
+        ],
+        "plan": [
+          {
+            "action": "梳理按压事件定义和使用边界",
+            "purpose": "明确设计输入",
+            "output": "需求与边界清单",
+            "check": "与用户确认力、行程、复位等参数"
+          },
+          {
+            "action": "调研无电池单次事件记录原理",
+            "purpose": "找到不依赖MCU和无线的方式",
+            "output": "候选原理列表",
+            "check": "逐项核对无电池、无MCU、无无线"
+          },
+          {
+            "action": "评估候选方案的机械可行性与成本",
+            "purpose": "筛选可行概念",
+            "output": "方案对比表",
+            "check": "是否满足单次记录和尺寸、成本约束"
+          },
+          {
+            "action": "细化首选概念设计",
+            "purpose": "形成可制造的设计方向",
+            "output": "概念设计说明",
+            "check": "确认锁存可靠性、复位方式和指示可读性"
+          },
+          {
+            "action": "决定是否制作验证样机",
+            "purpose": "后续验证",
+            "output": "样机决策与验证计划",
+            "check": "用户确认后再进入制作"
+          }
+        ],
+        "acceptance": [
+          "给出至少一种不依赖电池、MCU和无线的单次按压记录方案。",
+          "方案明确记录一次按压并保持可识别状态。",
+          "方案满足用户确认的力、行程、尺寸和复位要求。"
+        ],
+        "deliverables": [
+          "需求与边界清单",
+          "候选原理对比表",
+          "概念设计说明",
+          "样机决策建议"
+        ],
+        "feasibility": "plausible",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "80646fb2f0d4b10e30ca5ae16d29e57762906552c93154b410f8490a64f0b039",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "Q47",
+      "request": "我想把接收端的识别算法挪到节点上，看看是否划算。",
+      "kind": "known-regression",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "coupled",
+        "domains": [
+          "firmware",
+          "sensing",
+          "receiver",
+          "power"
+        ],
+        "goal": "评估把接收端识别算法迁移到节点端的可行性与成本收益，暂不实施迁移。",
+        "requirements": [
+          {
+            "text": "将接收端的识别算法迁移到节点端",
+            "source_quote": "把接收端的识别算法挪到节点上"
+          },
+          {
+            "text": "评估该迁移是否划算",
+            "source_quote": "看看是否划算"
+          }
+        ],
+        "design_variables": [
+          "算法部署位置与拆分边界：全部迁移、部分迁移或保持原状",
+          "节点侧计算、存储和功耗预算分配",
+          "节点到接收端的数据上传频率与压缩方式",
+          "识别精度、延迟与资源占用的权衡"
+        ],
+        "missing_inputs": [
+          {
+            "question": "节点处理器型号、可用算力、内存、功耗与实时负载是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "识别算法的模型大小、计算量、依赖库、输入数据率及可移植性如何？",
+            "blocks_execution": true
+          },
+          {
+            "question": "当前接收端算力/负载、通信链路带宽与占空比、现有部署成本是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "“划算”按什么口径衡量：硬件成本、功耗、时延、维护、接收端减负还是综合？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "迁移评估基于现有算法和现有节点/接收端资料，不先假定可完整移植",
+          "若资料不足，允许先做定性对比和待测数据清单",
+          "识别算法在接收端和节点端使用同一输入数据或可等价获取",
+          "迁移可只做部分模块，不必全量搬到节点"
+        ],
+        "plan": [
+          {
+            "action": "读取现有接收端识别算法说明、节点固件与通信协议资料，确认迁移边界。",
+            "purpose": "明确哪些算法环节可迁移、哪些必须留在接收端。",
+            "output": "迁移边界说明和资料清单。",
+            "check": "与用户目标逐条对照，确认节点、接收端、通信和算法范围无遗漏。"
+          },
+          {
+            "action": "收集节点与接收端的算力、内存、功耗、实时负载和通信量数据。",
+            "purpose": "建立迁移前资源与负载基线。",
+            "output": "节点/接收端资源负载基线表。",
+            "check": "数据来源可追溯，单位一致，缺失项标记为待测。"
+          },
+          {
+            "action": "按候选迁移方案估算算法移植后节点资源占用、端到端时延、带宽/功耗变化与接收端减负。",
+            "purpose": "量化或定性对比迁移前后代价。",
+            "output": "迁移前后对比表。",
+            "check": "计算假设显式，关键参数有来源，不自行添加验收门限。"
+          },
+          {
+            "action": "读取识别性能要求与验收口径，核对迁移是否影响精度、召回率、响应时间。",
+            "purpose": "识别性能与实时性风险。",
+            "output": "性能风险清单。",
+            "check": "与当前接收端结果比对，差距可解释，不可解释项列入待验证。"
+          },
+          {
+            "action": "综合成本、功耗、维护、扩展性给出“划算”判定及不迁移/部分迁移条件。",
+            "purpose": "回答是否值得做。",
+            "output": "决策建议和后续待决定项。",
+            "check": "结论直接回答是否划算，并列明依据与待确认项。"
+          }
+        ],
+        "acceptance": [
+          "明确迁移涉及节点、接收端、通信与算法的边界",
+          "给出迁移前后资源、时延、功耗、成本的对比或定性判断",
+          "给出识别性能影响风险与不可迁移条件",
+          "给出是否划算的结论及依据"
+        ],
+        "deliverables": [
+          "可行性与划算性评估报告",
+          "迁移前后对比表",
+          "风险与待确认数据清单",
+          "决策建议"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "coupled",
+        "domains": [
+          "firmware",
+          "sensing",
+          "receiver",
+          "power"
+        ],
+        "goal": "评估把接收端识别算法迁移到节点端的可行性与成本收益，暂不实施迁移。",
+        "requirements": [
+          {
+            "text": "将接收端的识别算法迁移到节点端",
+            "source_quote": "把接收端的识别算法挪到节点上"
+          },
+          {
+            "text": "评估该迁移是否划算",
+            "source_quote": "看看是否划算"
+          }
+        ],
+        "design_variables": [
+          "算法部署位置与拆分边界：全部迁移、部分迁移或保持原状",
+          "节点侧计算、存储和功耗预算分配",
+          "节点到接收端的数据上传频率与压缩方式",
+          "识别精度、延迟与资源占用的权衡"
+        ],
+        "missing_inputs": [
+          {
+            "question": "节点处理器型号、可用算力、内存、功耗与实时负载是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "识别算法的模型大小、计算量、依赖库、输入数据率及可移植性如何？",
+            "blocks_execution": true
+          },
+          {
+            "question": "当前接收端算力/负载、通信链路带宽与占空比、现有部署成本是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "“划算”按什么口径衡量：硬件成本、功耗、时延、维护、接收端减负还是综合？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "迁移评估基于现有算法和现有节点/接收端资料，不先假定可完整移植",
+          "若资料不足，允许先做定性对比和待测数据清单",
+          "识别算法在接收端和节点端使用同一输入数据或可等价获取",
+          "迁移可只做部分模块，不必全量搬到节点"
+        ],
+        "plan": [
+          {
+            "action": "读取现有接收端识别算法说明、节点固件与通信协议资料，确认迁移边界。",
+            "purpose": "明确哪些算法环节可迁移、哪些必须留在接收端。",
+            "output": "迁移边界说明和资料清单。",
+            "check": "与用户目标逐条对照，确认节点、接收端、通信和算法范围无遗漏。"
+          },
+          {
+            "action": "收集节点与接收端的算力、内存、功耗、实时负载和通信量数据。",
+            "purpose": "建立迁移前资源与负载基线。",
+            "output": "节点/接收端资源负载基线表。",
+            "check": "数据来源可追溯，单位一致，缺失项标记为待测。"
+          },
+          {
+            "action": "按候选迁移方案估算算法移植后节点资源占用、端到端时延、带宽/功耗变化与接收端减负。",
+            "purpose": "量化或定性对比迁移前后代价。",
+            "output": "迁移前后对比表。",
+            "check": "计算假设显式，关键参数有来源，不自行添加验收门限。"
+          },
+          {
+            "action": "读取识别性能要求与验收口径，核对迁移是否影响精度、召回率、响应时间。",
+            "purpose": "识别性能与实时性风险。",
+            "output": "性能风险清单。",
+            "check": "与当前接收端结果比对，差距可解释，不可解释项列入待验证。"
+          },
+          {
+            "action": "综合成本、功耗、维护、扩展性给出“划算”判定及不迁移/部分迁移条件。",
+            "purpose": "回答是否值得做。",
+            "output": "决策建议和后续待决定项。",
+            "check": "结论直接回答是否划算，并列明依据与待确认项。"
+          }
+        ],
+        "acceptance": [
+          "明确迁移涉及节点、接收端、通信与算法的边界",
+          "给出迁移前后资源、时延、功耗、成本的对比或定性判断",
+          "给出识别性能影响风险与不可迁移条件",
+          "给出是否划算的结论及依据"
+        ],
+        "deliverables": [
+          "可行性与划算性评估报告",
+          "迁移前后对比表",
+          "风险与待确认数据清单",
+          "决策建议"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "55d772d5cbeffc82d3e93511ebaaa21c2e5467170ff7a312e7d119b6eea39478",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N01",
+      "request": "这个想法先帮我判断可不可行，暂时别改工程。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "在只读、不改动工程的前提下，判断用户所述想法的可行性",
+        "requirements": [
+          {
+            "text": "先判断该想法是否可行",
+            "source_quote": "先帮我判断可不可行"
+          },
+          {
+            "text": "本次不修改现有工程",
+            "source_quote": "暂时别改工程"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "这个想法的具体内容是什么（要解决的问题、期望达到的效果）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "涉及的工程对象是什么（整机、某模块，还是某个具体电路或代码）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "当前已有的方案、实物、代码或测试数据在哪里，可否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "有哪些不可更改的边界条件（供电、尺寸、接口、成本、审批要求）？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "收集用户对付费想法的完整描述与现有资料清单",
+            "purpose": "确定审查对象与边界",
+            "output": "范围界定说明",
+            "check": "用户确认对象与边界无误"
+          },
+          {
+            "action": "判断该想法涉及的专业范围，读取对应资料",
+            "purpose": "为可行性判断提供依据",
+            "output": "资料清单与关键参数摘录",
+            "check": "所读资料与对象直接相关"
+          },
+          {
+            "action": "将用户给出的约束条件逐条列出并两两比对",
+            "purpose": "识别是否存在相互矛盾的条件",
+            "output": "约束对照表",
+            "check": "每条约束均有出处，矛盾项被标出"
+          },
+          {
+            "action": "基于资料与约束给出可行性结论及依据",
+            "purpose": "回答可不可行",
+            "output": "可行性结论（未知/可行/冲突）与理由",
+            "check": "结论有资料支撑，未引入未经确认的门限"
+          },
+          {
+            "action": "列明决定结论的未知工况与若推进时的待决事项",
+            "purpose": "说明结论的适用边界",
+            "output": "待确认清单与后续可选路径",
+            "check": "未在本次启动任何修改或制作动作"
+          }
+        ],
+        "acceptance": [
+          "给出明确的可行性结论并说明依据",
+          "结论基于已提供的资料与用户约束，不引入自定数值门限",
+          "本次未对现有工程做任何修改",
+          "所有影响结论的未知条件均已列出"
+        ],
+        "deliverables": [
+          "可行性判断说明（只读审查结论，不含工程改动）"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "在只读、不改动工程的前提下，判断用户所述想法的可行性",
+        "requirements": [
+          {
+            "text": "先判断该想法是否可行",
+            "source_quote": "先帮我判断可不可行"
+          },
+          {
+            "text": "本次不修改现有工程",
+            "source_quote": "暂时别改工程"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "这个想法的具体内容是什么（要解决的问题、期望达到的效果）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "涉及的工程对象是什么（整机、某模块，还是某个具体电路或代码）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "当前已有的方案、实物、代码或测试数据在哪里，可否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "有哪些不可更改的边界条件（供电、尺寸、接口、成本、审批要求）？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "收集用户对付费想法的完整描述与现有资料清单",
+            "purpose": "确定审查对象与边界",
+            "output": "范围界定说明",
+            "check": "用户确认对象与边界无误"
+          },
+          {
+            "action": "判断该想法涉及的专业范围，读取对应资料",
+            "purpose": "为可行性判断提供依据",
+            "output": "资料清单与关键参数摘录",
+            "check": "所读资料与对象直接相关"
+          },
+          {
+            "action": "将用户给出的约束条件逐条列出并两两比对",
+            "purpose": "识别是否存在相互矛盾的条件",
+            "output": "约束对照表",
+            "check": "每条约束均有出处，矛盾项被标出"
+          },
+          {
+            "action": "基于资料与约束给出可行性结论及依据",
+            "purpose": "回答可不可行",
+            "output": "可行性结论（未知/可行/冲突）与理由",
+            "check": "结论有资料支撑，未引入未经确认的门限"
+          },
+          {
+            "action": "列明决定结论的未知工况与若推进时的待决事项",
+            "purpose": "说明结论的适用边界",
+            "output": "待确认清单与后续可选路径",
+            "check": "未在本次启动任何修改或制作动作"
+          }
+        ],
+        "acceptance": [
+          "给出明确的可行性结论并说明依据",
+          "结论基于已提供的资料与用户约束，不引入自定数值门限",
+          "本次未对现有工程做任何修改",
+          "所有影响结论的未知条件均已列出"
+        ],
+        "deliverables": [
+          "可行性判断说明（只读审查结论，不含工程改动）"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "7513d2287fe5b1170ae933bac90684bbb15f01f51045f2169664977f866693b8",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N02",
+      "request": "看一下附件里的方案有没有明显漏洞。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "对用户提供的方案做只读审查，识别其中的明显漏洞与逻辑缺口",
+        "requirements": [
+          {
+            "text": "用户要求审查附件方案是否存在明显漏洞",
+            "source_quote": "看一下附件里的方案有没有明显漏洞"
+          }
+        ],
+        "design_variables": [
+          "审查深度与覆盖范围",
+          "漏洞分级方式（阻断性/风险性/待确认）"
+        ],
+        "missing_inputs": [
+          {
+            "question": "方案附件尚未提供，请给出文件或全文内容",
+            "blocks_execution": true
+          },
+          {
+            "question": "方案的目标用途、使用工况与验收判据是什么",
+            "blocks_execution": false
+          },
+          {
+            "question": "方案处于哪个阶段（概念、设计、已验证），以便判断漏洞严重度",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "用户所指方案为一份可完整通读的工程文档或说明，而非零散截图"
+        ],
+        "plan": [
+          {
+            "action": "读取附件方案全文，逐节梳理其目标、约束与声称的结论",
+            "purpose": "建立审查基线，明确方案自己在主张什么",
+            "output": "方案要点摘录与结构清单",
+            "check": "是否覆盖方案全部章节，无遗漏段落"
+          },
+          {
+            "action": "提取方案中的关键假设、依赖前提与隐含默认条件",
+            "purpose": "找出未经说明却被当作前提使用的内容",
+            "output": "假设与前提清单",
+            "check": "每条假设能对应到原文位置"
+          },
+          {
+            "action": "逐条核对方案内部各环节之间的数据、接口与逻辑是否自洽",
+            "purpose": "发现前后矛盾、量纲或单位错配、结论超出依据",
+            "output": "内部一致性核对表",
+            "check": "对每个疑点标注原文出处与冲突对象"
+          },
+          {
+            "action": "检查方案中需要外部依据的部分是否给出可追溯来源",
+            "purpose": "区分真实依据与凭经验断言",
+            "output": "依据缺失或不可追溯项列表",
+            "check": "每项能否定位到可核查的出处"
+          },
+          {
+            "action": "汇总并按阻断性、风险性、待确认分级输出漏洞清单",
+            "purpose": "给出可直接用于修改的审查结论",
+            "output": "漏洞分级清单与建议核实方向",
+            "check": "每条漏洞说明位置、原因与影响，无凭空新增要求"
+          }
+        ],
+        "acceptance": [
+          "附件内容被完整通读并留有要点记录",
+          "每条指出的漏洞均标注在方案中的具体位置与理由",
+          "明确区分确认的漏洞与仅需进一步核实的事项",
+          "未在用户未要求时增加新的数值门限或交付条件"
+        ],
+        "deliverables": [
+          "方案审查要点摘录",
+          "假设与前提清单",
+          "漏洞分级清单（含位置、原因、影响）"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "unspecified",
+        "domains": [],
+        "goal": "对用户提供的方案做只读审查，识别其中的明显漏洞与逻辑缺口",
+        "requirements": [
+          {
+            "text": "用户要求审查附件方案是否存在明显漏洞",
+            "source_quote": "看一下附件里的方案有没有明显漏洞"
+          }
+        ],
+        "design_variables": [
+          "审查深度与覆盖范围",
+          "漏洞分级方式（阻断性/风险性/待确认）"
+        ],
+        "missing_inputs": [
+          {
+            "question": "方案附件尚未提供，请给出文件或全文内容",
+            "blocks_execution": true
+          },
+          {
+            "question": "方案的目标用途、使用工况与验收判据是什么",
+            "blocks_execution": false
+          },
+          {
+            "question": "方案处于哪个阶段（概念、设计、已验证），以便判断漏洞严重度",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "用户所指方案为一份可完整通读的工程文档或说明，而非零散截图"
+        ],
+        "plan": [
+          {
+            "action": "读取附件方案全文，逐节梳理其目标、约束与声称的结论",
+            "purpose": "建立审查基线，明确方案自己在主张什么",
+            "output": "方案要点摘录与结构清单",
+            "check": "是否覆盖方案全部章节，无遗漏段落"
+          },
+          {
+            "action": "提取方案中的关键假设、依赖前提与隐含默认条件",
+            "purpose": "找出未经说明却被当作前提使用的内容",
+            "output": "假设与前提清单",
+            "check": "每条假设能对应到原文位置"
+          },
+          {
+            "action": "逐条核对方案内部各环节之间的数据、接口与逻辑是否自洽",
+            "purpose": "发现前后矛盾、量纲或单位错配、结论超出依据",
+            "output": "内部一致性核对表",
+            "check": "对每个疑点标注原文出处与冲突对象"
+          },
+          {
+            "action": "检查方案中需要外部依据的部分是否给出可追溯来源",
+            "purpose": "区分真实依据与凭经验断言",
+            "output": "依据缺失或不可追溯项列表",
+            "check": "每项能否定位到可核查的出处"
+          },
+          {
+            "action": "汇总并按阻断性、风险性、待确认分级输出漏洞清单",
+            "purpose": "给出可直接用于修改的审查结论",
+            "output": "漏洞分级清单与建议核实方向",
+            "check": "每条漏洞说明位置、原因与影响，无凭空新增要求"
+          }
+        ],
+        "acceptance": [
+          "附件内容被完整通读并留有要点记录",
+          "每条指出的漏洞均标注在方案中的具体位置与理由",
+          "明确区分确认的漏洞与仅需进一步核实的事项",
+          "未在用户未要求时增加新的数值门限或交付条件"
+        ],
+        "deliverables": [
+          "方案审查要点摘录",
+          "假设与前提清单",
+          "漏洞分级清单（含位置、原因、影响）"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "913f9871c7f30282c8cb3e3c2b5f23444f10c4eda0cc6312364bb011a91051ed",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N03",
+      "request": "我只想把桥式整流的损耗降下来。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "optimize",
+        "scope": "single_module",
+        "domains": [
+          "power"
+        ],
+        "goal": "降低桥式整流的损耗",
+        "requirements": [
+          {
+            "text": "降低桥式整流的损耗",
+            "source_quote": "我只想把桥式整流的损耗降下来。"
+          }
+        ],
+        "design_variables": [
+          "在用户允许时可调整的整流器件类型（如低正向压降二极管、同步整流开关管）",
+          "在用户允许时可调整的整流拓扑、并联/均流方式",
+          "在用户允许时可调整的散热与布局",
+          "若采用同步整流，可调整驱动/控制策略"
+        ],
+        "missing_inputs": [
+          {
+            "question": "当前桥式整流的拓扑、器件型号和工作点（输入/输出电压、电流、频率）是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有损耗构成、测量数据（输入输出功率差、器件温升、波形）是否可得？",
+            "blocks_execution": true
+          },
+          {
+            "question": "允许改动哪些内容：器件、拓扑、散热、PCB布局或控制策略，以及成本、体积约束是什么？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "读取现有桥式整流原理图、器件手册和工作条件资料，记录拓扑与工作点。",
+            "purpose": "建立可比较的损耗基线。",
+            "output": "基线参数与损耗记录表。",
+            "check": "与原理图、实物标识和器件数据手册交叉核对。"
+          },
+          {
+            "action": "计算或整理导通、开关/反向恢复、驱动及散热相关损耗分解。",
+            "purpose": "定位主要损耗来源。",
+            "output": "损耗占比表与主因排序。",
+            "check": "用输入输出功率差、温升和关键波形相互验证。"
+          },
+          {
+            "action": "针对主要损耗来源列出候选降损路径，如低正向压降器件、同步整流、并联均流、散热或布局优化。",
+            "purpose": "形成可选技术路线。",
+            "output": "候选方案对比表。",
+            "check": "评估电压电流应力、成本、体积、驱动复杂度与可靠性。"
+          },
+          {
+            "action": "在允许改动范围内选取低成本路径，制定小样或台架对比验证方案。",
+            "purpose": "用有限代价验证降损效果。",
+            "output": "验证步骤、测量点与判定方法。",
+            "check": "对比改造前后效率、器件温升和波形应力。"
+          },
+          {
+            "action": "根据验证结果给出推荐实施路线或否决理由。",
+            "purpose": "形成后续修改决策。",
+            "output": "推荐方案与实施注意事项。",
+            "check": "逐条对照用户允许的改动范围与目标。"
+          }
+        ],
+        "acceptance": [
+          "能明确指出当前桥式整流的主要损耗来源",
+          "能给出至少一条可验证的降损候选方案及其代价",
+          "若实施改动，有改造前后效率与温升的对比测量方法"
+        ],
+        "deliverables": [
+          "桥式整流损耗基线与分解报告",
+          "主要损耗来源分析",
+          "降损候选方案对比表",
+          "后续验证或实施建议"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "optimize",
+        "scope": "single_module",
+        "domains": [
+          "power"
+        ],
+        "goal": "降低桥式整流的损耗",
+        "requirements": [
+          {
+            "text": "降低桥式整流的损耗",
+            "source_quote": "我只想把桥式整流的损耗降下来。"
+          }
+        ],
+        "design_variables": [
+          "在用户允许时可调整的整流器件类型（如低正向压降二极管、同步整流开关管）",
+          "在用户允许时可调整的整流拓扑、并联/均流方式",
+          "在用户允许时可调整的散热与布局",
+          "若采用同步整流，可调整驱动/控制策略"
+        ],
+        "missing_inputs": [
+          {
+            "question": "当前桥式整流的拓扑、器件型号和工作点（输入/输出电压、电流、频率）是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有损耗构成、测量数据（输入输出功率差、器件温升、波形）是否可得？",
+            "blocks_execution": true
+          },
+          {
+            "question": "允许改动哪些内容：器件、拓扑、散热、PCB布局或控制策略，以及成本、体积约束是什么？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "读取现有桥式整流原理图、器件手册和工作条件资料，记录拓扑与工作点。",
+            "purpose": "建立可比较的损耗基线。",
+            "output": "基线参数与损耗记录表。",
+            "check": "与原理图、实物标识和器件数据手册交叉核对。"
+          },
+          {
+            "action": "计算或整理导通、开关/反向恢复、驱动及散热相关损耗分解。",
+            "purpose": "定位主要损耗来源。",
+            "output": "损耗占比表与主因排序。",
+            "check": "用输入输出功率差、温升和关键波形相互验证。"
+          },
+          {
+            "action": "针对主要损耗来源列出候选降损路径，如低正向压降器件、同步整流、并联均流、散热或布局优化。",
+            "purpose": "形成可选技术路线。",
+            "output": "候选方案对比表。",
+            "check": "评估电压电流应力、成本、体积、驱动复杂度与可靠性。"
+          },
+          {
+            "action": "在允许改动范围内选取低成本路径，制定小样或台架对比验证方案。",
+            "purpose": "用有限代价验证降损效果。",
+            "output": "验证步骤、测量点与判定方法。",
+            "check": "对比改造前后效率、器件温升和波形应力。"
+          },
+          {
+            "action": "根据验证结果给出推荐实施路线或否决理由。",
+            "purpose": "形成后续修改决策。",
+            "output": "推荐方案与实施注意事项。",
+            "check": "逐条对照用户允许的改动范围与目标。"
+          }
+        ],
+        "acceptance": [
+          "能明确指出当前桥式整流的主要损耗来源",
+          "能给出至少一条可验证的降损候选方案及其代价",
+          "若实施改动，有改造前后效率与温升的对比测量方法"
+        ],
+        "deliverables": [
+          "桥式整流损耗基线与分解报告",
+          "主要损耗来源分析",
+          "降损候选方案对比表",
+          "后续验证或实施建议"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "22321b82d99ddcf63e79d2e2eda8cb975812e015c8088054f71b1dd1a0b9e8cc",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N04",
+      "request": "改变采样频率和储能容量，尽量减少漏采。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "optimize",
+        "scope": "coupled",
+        "domains": [
+          "sensing",
+          "power"
+        ],
+        "goal": "调整采样频率与储能容量，在能量约束下尽量减少漏采。",
+        "requirements": [
+          {
+            "text": "需要改变采样频率",
+            "source_quote": "改变采样频率"
+          },
+          {
+            "text": "需要改变储能容量",
+            "source_quote": "储能容量"
+          },
+          {
+            "text": "目标为尽量减少漏采",
+            "source_quote": "尽量减少漏采"
+          }
+        ],
+        "design_variables": [
+          "采样频率的具体取值",
+          "储能容量的具体取值"
+        ],
+        "missing_inputs": [
+          {
+            "question": "漏采的判定口径是什么，例如按计划采样缺失还是事件未捕获统计？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有采样频率、储能容量以及每次采样、休眠和供电/收集的能耗基线是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "储能介质类型、可用容量范围及体积、成本、寿命限制是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "工作周期、事件率或采样触发条件是什么？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "假定已有采样系统可调整采样频率和储能容量。",
+          "假定漏采主要受能量供给与采样调度影响。"
+        ],
+        "plan": [
+          {
+            "action": "读取并整理现有采样系统资料，记录采样频率、储能容量、每次采样/休眠/供电能耗及漏采记录。",
+            "purpose": "建立优化基线。",
+            "output": "参数与能耗基线表。",
+            "check": "是否覆盖采样频率、储能容量和漏采统计。"
+          },
+          {
+            "action": "核对漏采判定口径，区分能量不足漏采与调度漏采。",
+            "purpose": "避免优化目标错位。",
+            "output": "漏采分类与统计口径说明。",
+            "check": "是否与用户定义或原始记录一致。"
+          },
+          {
+            "action": "建立能量-采样-漏采关系，计算不同采样频率和储能容量下的能量余量与漏采风险。",
+            "purpose": "分析两者耦合关系。",
+            "output": "计算模型或参数扫描表。",
+            "check": "能量守恒和边界条件是否成立。"
+          },
+          {
+            "action": "在储能体积、成本、供电等已知约束下筛选候选组合，优先低成本可行解。",
+            "purpose": "形成候选参数。",
+            "output": "采样频率与储能容量候选集。",
+            "check": "是否满足约束并降低漏采风险。"
+          },
+          {
+            "action": "输出调整建议与验证方法，后续实施修改另列。",
+            "purpose": "将优化落到可执行方案。",
+            "output": "推荐参数、验证计划与风险项。",
+            "check": "建议是否可追溯到能量计算和漏采数据。"
+          }
+        ],
+        "acceptance": [
+          "给出采样频率和储能容量的调整建议，并说明对漏采的影响。",
+          "给出能量与漏采的计算依据或扫描结果。",
+          "明确列出缺失工况与待确认输入。"
+        ],
+        "deliverables": [
+          "采样频率与储能容量调整建议",
+          "能量-漏采计算或扫描表",
+          "待确认输入清单",
+          "验证与数据记录方法"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "optimize",
+        "scope": "coupled",
+        "domains": [
+          "sensing",
+          "power"
+        ],
+        "goal": "调整采样频率与储能容量，在能量约束下尽量减少漏采。",
+        "requirements": [
+          {
+            "text": "需要改变采样频率",
+            "source_quote": "改变采样频率"
+          },
+          {
+            "text": "需要改变储能容量",
+            "source_quote": "储能容量"
+          },
+          {
+            "text": "目标为尽量减少漏采",
+            "source_quote": "尽量减少漏采"
+          }
+        ],
+        "design_variables": [
+          "采样频率的具体取值",
+          "储能容量的具体取值"
+        ],
+        "missing_inputs": [
+          {
+            "question": "漏采的判定口径是什么，例如按计划采样缺失还是事件未捕获统计？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有采样频率、储能容量以及每次采样、休眠和供电/收集的能耗基线是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "储能介质类型、可用容量范围及体积、成本、寿命限制是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "工作周期、事件率或采样触发条件是什么？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "假定已有采样系统可调整采样频率和储能容量。",
+          "假定漏采主要受能量供给与采样调度影响。"
+        ],
+        "plan": [
+          {
+            "action": "读取并整理现有采样系统资料，记录采样频率、储能容量、每次采样/休眠/供电能耗及漏采记录。",
+            "purpose": "建立优化基线。",
+            "output": "参数与能耗基线表。",
+            "check": "是否覆盖采样频率、储能容量和漏采统计。"
+          },
+          {
+            "action": "核对漏采判定口径，区分能量不足漏采与调度漏采。",
+            "purpose": "避免优化目标错位。",
+            "output": "漏采分类与统计口径说明。",
+            "check": "是否与用户定义或原始记录一致。"
+          },
+          {
+            "action": "建立能量-采样-漏采关系，计算不同采样频率和储能容量下的能量余量与漏采风险。",
+            "purpose": "分析两者耦合关系。",
+            "output": "计算模型或参数扫描表。",
+            "check": "能量守恒和边界条件是否成立。"
+          },
+          {
+            "action": "在储能体积、成本、供电等已知约束下筛选候选组合，优先低成本可行解。",
+            "purpose": "形成候选参数。",
+            "output": "采样频率与储能容量候选集。",
+            "check": "是否满足约束并降低漏采风险。"
+          },
+          {
+            "action": "输出调整建议与验证方法，后续实施修改另列。",
+            "purpose": "将优化落到可执行方案。",
+            "output": "推荐参数、验证计划与风险项。",
+            "check": "建议是否可追溯到能量计算和漏采数据。"
+          }
+        ],
+        "acceptance": [
+          "给出采样频率和储能容量的调整建议，并说明对漏采的影响。",
+          "给出能量与漏采的计算依据或扫描结果。",
+          "明确列出缺失工况与待确认输入。"
+        ],
+        "deliverables": [
+          "采样频率与储能容量调整建议",
+          "能量-漏采计算或扫描表",
+          "待确认输入清单",
+          "验证与数据记录方法"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "f054372197576bc844a86232dbc6b69b06f8ae53a9f4142c059863d87f4d47c5",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N05",
+      "request": "设备不能用电池，也没有外部能量，要求持续发信号。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "single_module",
+        "domains": [
+          "power"
+        ],
+        "goal": "评估无电池、无外部能量下持续发信号的可行性",
+        "requirements": [
+          {
+            "text": "设备不能使用电池",
+            "source_quote": "设备不能用电池"
+          },
+          {
+            "text": "没有外部能量供给",
+            "source_quote": "也没有外部能量"
+          },
+          {
+            "text": "要求持续发送信号",
+            "source_quote": "要求持续发信号"
+          }
+        ],
+        "design_variables": [
+          "无：用户未授权调整电池、外部能量或持续发射要求"
+        ],
+        "missing_inputs": [
+          {
+            "question": "“没有外部能量”是否排除光、振动、热、射频等环境能量收集？",
+            "blocks_execution": true
+          },
+          {
+            "question": "“持续发信号”是否要求全天候不间断，允许的占空比、间隔与中断时长是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "信号类型、发射功率、距离和接收方条件是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否允许外部读取器或询问器提供能量，例如无源标签工作方式？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "当前按“没有外部能量”包含所有环境能量来源理解。"
+        ],
+        "plan": [
+          {
+            "action": "核对能量守恒与“无电池+无外部能量+持续主动发射”的物理约束",
+            "purpose": "判断原条件组合是否自相矛盾",
+            "output": "冲突判定说明",
+            "check": "依据能量守恒与持续发射功耗需求"
+          },
+          {
+            "action": "明确“持续”“发信号”的可测定义，包括占空比、间隔、距离和中断容忍",
+            "purpose": "避免把不同持续等级混为一谈",
+            "output": "需求澄清问题清单",
+            "check": "与用户原句及后续确认对照"
+          },
+          {
+            "action": "检查无源或被动方案是否可行，以及是否依赖外部询问能量",
+            "purpose": "识别是否存在不违反原条件的信号方式",
+            "output": "备选条件分支说明",
+            "check": "确认是否引入外部能量或电池"
+          },
+          {
+            "action": "给出可行性结论及需放宽的条件",
+            "purpose": "形成可审计的最终判断",
+            "output": "可行性结论与条件影响列表",
+            "check": "用户确认条件是否可调整"
+          }
+        ],
+        "acceptance": [
+          "明确判定原条件组合是否可行",
+          "给出与用户原句对应的条件冲突点",
+          "列出会改变结论的缺失条件",
+          "不把未授权的供能或通信方案当作已定方案"
+        ],
+        "deliverables": [
+          "可行性结论",
+          "条件冲突清单",
+          "若放宽条件后的评估入口"
+        ],
+        "feasibility": "conflict"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "single_module",
+        "domains": [
+          "power"
+        ],
+        "goal": "评估无电池、无外部能量下持续发信号的可行性",
+        "requirements": [
+          {
+            "text": "设备不能使用电池",
+            "source_quote": "设备不能用电池"
+          },
+          {
+            "text": "没有外部能量供给",
+            "source_quote": "也没有外部能量"
+          },
+          {
+            "text": "要求持续发送信号",
+            "source_quote": "要求持续发信号"
+          }
+        ],
+        "design_variables": [
+          "无：用户未授权调整电池、外部能量或持续发射要求"
+        ],
+        "missing_inputs": [
+          {
+            "question": "“没有外部能量”是否排除光、振动、热、射频等环境能量收集？",
+            "blocks_execution": true
+          },
+          {
+            "question": "“持续发信号”是否要求全天候不间断，允许的占空比、间隔与中断时长是多少？",
+            "blocks_execution": true
+          },
+          {
+            "question": "信号类型、发射功率、距离和接收方条件是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "是否允许外部读取器或询问器提供能量，例如无源标签工作方式？",
+            "blocks_execution": true
+          }
+        ],
+        "assumptions": [
+          "当前按“没有外部能量”包含所有环境能量来源理解。"
+        ],
+        "plan": [
+          {
+            "action": "核对能量守恒与“无电池+无外部能量+持续主动发射”的物理约束",
+            "purpose": "判断原条件组合是否自相矛盾",
+            "output": "冲突判定说明",
+            "check": "依据能量守恒与持续发射功耗需求"
+          },
+          {
+            "action": "明确“持续”“发信号”的可测定义，包括占空比、间隔、距离和中断容忍",
+            "purpose": "避免把不同持续等级混为一谈",
+            "output": "需求澄清问题清单",
+            "check": "与用户原句及后续确认对照"
+          },
+          {
+            "action": "检查无源或被动方案是否可行，以及是否依赖外部询问能量",
+            "purpose": "识别是否存在不违反原条件的信号方式",
+            "output": "备选条件分支说明",
+            "check": "确认是否引入外部能量或电池"
+          },
+          {
+            "action": "给出可行性结论及需放宽的条件",
+            "purpose": "形成可审计的最终判断",
+            "output": "可行性结论与条件影响列表",
+            "check": "用户确认条件是否可调整"
+          }
+        ],
+        "acceptance": [
+          "明确判定原条件组合是否可行",
+          "给出与用户原句对应的条件冲突点",
+          "列出会改变结论的缺失条件",
+          "不把未授权的供能或通信方案当作已定方案"
+        ],
+        "deliverables": [
+          "可行性结论",
+          "条件冲突清单",
+          "若放宽条件后的评估入口"
+        ],
+        "feasibility": "conflict",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "b6297212045da1670797bbcfef9004cf512356a83e26248b73ab5d739c843365",
+        "state": "REQUIREMENTS_CONFLICT",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N06",
+      "request": "先把这篇论文的曲线复现出来，再讨论产品怎么做。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "reproduce",
+        "scope": "single_module",
+        "domains": [],
+        "goal": "复现指定论文中的曲线，并整理出可用于后续产品讨论的结论",
+        "requirements": [
+          {
+            "text": "先复现论文中的曲线",
+            "source_quote": "先把这篇论文的曲线复现出来"
+          },
+          {
+            "text": "复现之后再讨论产品实现方式",
+            "source_quote": "再讨论产品怎么做"
+          }
+        ],
+        "design_variables": [
+          "曲线数字化取点方式",
+          "复现所用的模型与计算方法",
+          "绘图与拟合参数"
+        ],
+        "missing_inputs": [
+          {
+            "question": "具体是哪篇论文（标题、DOI 或文件），请提供全文与图表",
+            "blocks_execution": true
+          },
+          {
+            "question": "论文是否附带原始数据、代码或补充材料，还是只能从图片读点",
+            "blocks_execution": true
+          },
+          {
+            "question": "每条曲线的坐标轴定义、单位及对应实验或仿真条件是否需全部复现",
+            "blocks_execution": false
+          },
+          {
+            "question": "判断复现成功的依据是什么（趋势一致、量级一致或允许的偏差范围）",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "暂按论文图表本身作为唯一数据来源，无原始数据时采用数字化读点"
+        ],
+        "plan": [
+          {
+            "action": "通读论文，逐条列出所有待复现曲线及其坐标轴、单位、工况与模型参数",
+            "purpose": "明确复现范围与每条曲线的前置条件",
+            "output": "曲线清单与工况参数表",
+            "check": "与原文图表逐条对照，标注无法确定的项"
+          },
+          {
+            "action": "确认数据可得性，判断使用原始数据、补充材料还是图片数字化取点",
+            "purpose": "确定可行的数据来源与复现精度上限",
+            "output": "数据来源说明与取点方案",
+            "check": "将取点结果回绘并与原图重叠比对"
+          },
+          {
+            "action": "按论文描述的方法重建计算流程，生成对应曲线",
+            "purpose": "得到可复现的计算结果",
+            "output": "复现曲线与可重跑脚本",
+            "check": "与论文图逐条对照趋势与量级"
+          },
+          {
+            "action": "逐条对比复现结果与论文曲线，记录差异及可能原因",
+            "purpose": "区分复现成功、条件缺失与真实偏差",
+            "output": "对比图与差异说明",
+            "check": "交叉核对参数取值、边界条件与单位换算"
+          },
+          {
+            "action": "汇总复现结论、不确定项与待决定项，形成产品化讨论输入",
+            "purpose": "为下一阶段产品方案讨论提供依据",
+            "output": "复现报告与待决定项清单",
+            "check": "确认每条曲线均有明确结论或缺失原因"
+          }
+        ],
+        "acceptance": [
+          "每条曲线都有复现结果或明确不可复现的原因",
+          "差异项能对应到具体参数、条件或数据来源",
+          "复现脚本可在给定输入下重跑得到相同结果"
+        ],
+        "deliverables": [
+          "曲线清单与工况参数表",
+          "复现脚本与相关数据文件",
+          "复现曲线与论文曲线的对比图",
+          "复现结论与待决定项清单"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "reproduce",
+        "scope": "single_module",
+        "domains": [],
+        "goal": "复现指定论文中的曲线，并整理出可用于后续产品讨论的结论",
+        "requirements": [
+          {
+            "text": "先复现论文中的曲线",
+            "source_quote": "先把这篇论文的曲线复现出来"
+          },
+          {
+            "text": "复现之后再讨论产品实现方式",
+            "source_quote": "再讨论产品怎么做"
+          }
+        ],
+        "design_variables": [
+          "曲线数字化取点方式",
+          "复现所用的模型与计算方法",
+          "绘图与拟合参数"
+        ],
+        "missing_inputs": [
+          {
+            "question": "具体是哪篇论文（标题、DOI 或文件），请提供全文与图表",
+            "blocks_execution": true
+          },
+          {
+            "question": "论文是否附带原始数据、代码或补充材料，还是只能从图片读点",
+            "blocks_execution": true
+          },
+          {
+            "question": "每条曲线的坐标轴定义、单位及对应实验或仿真条件是否需全部复现",
+            "blocks_execution": false
+          },
+          {
+            "question": "判断复现成功的依据是什么（趋势一致、量级一致或允许的偏差范围）",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "暂按论文图表本身作为唯一数据来源，无原始数据时采用数字化读点"
+        ],
+        "plan": [
+          {
+            "action": "通读论文，逐条列出所有待复现曲线及其坐标轴、单位、工况与模型参数",
+            "purpose": "明确复现范围与每条曲线的前置条件",
+            "output": "曲线清单与工况参数表",
+            "check": "与原文图表逐条对照，标注无法确定的项"
+          },
+          {
+            "action": "确认数据可得性，判断使用原始数据、补充材料还是图片数字化取点",
+            "purpose": "确定可行的数据来源与复现精度上限",
+            "output": "数据来源说明与取点方案",
+            "check": "将取点结果回绘并与原图重叠比对"
+          },
+          {
+            "action": "按论文描述的方法重建计算流程，生成对应曲线",
+            "purpose": "得到可复现的计算结果",
+            "output": "复现曲线与可重跑脚本",
+            "check": "与论文图逐条对照趋势与量级"
+          },
+          {
+            "action": "逐条对比复现结果与论文曲线，记录差异及可能原因",
+            "purpose": "区分复现成功、条件缺失与真实偏差",
+            "output": "对比图与差异说明",
+            "check": "交叉核对参数取值、边界条件与单位换算"
+          },
+          {
+            "action": "汇总复现结论、不确定项与待决定项，形成产品化讨论输入",
+            "purpose": "为下一阶段产品方案讨论提供依据",
+            "output": "复现报告与待决定项清单",
+            "check": "确认每条曲线均有明确结论或缺失原因"
+          }
+        ],
+        "acceptance": [
+          "每条曲线都有复现结果或明确不可复现的原因",
+          "差异项能对应到具体参数、条件或数据来源",
+          "复现脚本可在给定输入下重跑得到相同结果"
+        ],
+        "deliverables": [
+          "曲线清单与工况参数表",
+          "复现脚本与相关数据文件",
+          "复现曲线与论文曲线的对比图",
+          "复现结论与待决定项清单"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "9d5a1f7e56322da827376cc8935a65b09caddb0f3292305a2bbcfe6e780060f4",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N07",
+      "request": "做一个按下就留下标记的机械装置，不要电路。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "new_design",
+        "scope": "single_module",
+        "domains": [
+          "mechanical",
+          "assembly"
+        ],
+        "goal": "设计一个纯机械、按下后留下标记的装置",
+        "requirements": [
+          {
+            "text": "按下后留下标记",
+            "source_quote": "按下就留下标记"
+          },
+          {
+            "text": "装置为机械式，不使用电路",
+            "source_quote": "机械装置，不要电路"
+          }
+        ],
+        "design_variables": [
+          "标记方式可选墨水印章、压痕、蜡/粉末转移或机械打点",
+          "触发机构可选弹簧、连杆、凸轮、棘轮等纯机械结构",
+          "复位方式可选自动复位、手动复位、一次性或更换耗材",
+          "外形、材料和安装方式可在确认工况后调整"
+        ],
+        "missing_inputs": [
+          {
+            "question": "标记对象是什么表面（纸、木材、金属、塑料等）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "痕迹要求是什么（颜色、形状、深度、耐久、可擦除）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "需要单次使用、可复位多次，还是每次更换耗材？",
+            "blocks_execution": true
+          },
+          {
+            "question": "可按压力、行程、外形尺寸和成本限制是多少？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "整理并确认使用场景、标记表面、复位方式、按压力和尺寸限制",
+            "purpose": "确定设计边界",
+            "output": "需求规格清单",
+            "check": "逐条对照用户原话，保留无电路要求"
+          },
+          {
+            "action": "生成纯机械标记方案，如弹簧印章、凸轮压痕、棘轮打点、蜡或粉末转移",
+            "purpose": "比较可行原理",
+            "output": "2-3个候选方案草图",
+            "check": "检查均不含电气元件且能由按压直接驱动"
+          },
+          {
+            "action": "对选定方案进行机构设计，确定弹簧、连杆、凸轮、复位和防误触结构",
+            "purpose": "形成可制造结构",
+            "output": "运动简图、装配图、零件表",
+            "check": "校核行程、干涉、按压力与复位可靠性"
+          },
+          {
+            "action": "制作功能样机并在目标表面测试留痕",
+            "purpose": "验证按下即留痕",
+            "output": "样机与测试记录",
+            "check": "重复按压测试标记一致性、复位或耗材更换和误触发"
+          }
+        ],
+        "acceptance": [
+          "装置不含电池、导线、电路板、传感器或电机等电气元件。",
+          "手动按压一次后，目标表面出现符合确认要求的可见标记。",
+          "所选复位或耗材方案按设计工作，不依赖电路。",
+          "机构无干涉，操作力在确认范围内。"
+        ],
+        "deliverables": [
+          "需求规格清单",
+          "候选方案草图",
+          "装配图与零件表",
+          "纯机械功能样机与测试记录"
+        ],
+        "feasibility": "plausible"
+      },
+      "validated": {
+        "intent": "new_design",
+        "scope": "single_module",
+        "domains": [
+          "mechanical",
+          "assembly"
+        ],
+        "goal": "设计一个纯机械、按下后留下标记的装置",
+        "requirements": [
+          {
+            "text": "按下后留下标记",
+            "source_quote": "按下就留下标记"
+          },
+          {
+            "text": "装置为机械式，不使用电路",
+            "source_quote": "机械装置，不要电路"
+          }
+        ],
+        "design_variables": [
+          "标记方式可选墨水印章、压痕、蜡/粉末转移或机械打点",
+          "触发机构可选弹簧、连杆、凸轮、棘轮等纯机械结构",
+          "复位方式可选自动复位、手动复位、一次性或更换耗材",
+          "外形、材料和安装方式可在确认工况后调整"
+        ],
+        "missing_inputs": [
+          {
+            "question": "标记对象是什么表面（纸、木材、金属、塑料等）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "痕迹要求是什么（颜色、形状、深度、耐久、可擦除）？",
+            "blocks_execution": true
+          },
+          {
+            "question": "需要单次使用、可复位多次，还是每次更换耗材？",
+            "blocks_execution": true
+          },
+          {
+            "question": "可按压力、行程、外形尺寸和成本限制是多少？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [],
+        "plan": [
+          {
+            "action": "整理并确认使用场景、标记表面、复位方式、按压力和尺寸限制",
+            "purpose": "确定设计边界",
+            "output": "需求规格清单",
+            "check": "逐条对照用户原话，保留无电路要求"
+          },
+          {
+            "action": "生成纯机械标记方案，如弹簧印章、凸轮压痕、棘轮打点、蜡或粉末转移",
+            "purpose": "比较可行原理",
+            "output": "2-3个候选方案草图",
+            "check": "检查均不含电气元件且能由按压直接驱动"
+          },
+          {
+            "action": "对选定方案进行机构设计，确定弹簧、连杆、凸轮、复位和防误触结构",
+            "purpose": "形成可制造结构",
+            "output": "运动简图、装配图、零件表",
+            "check": "校核行程、干涉、按压力与复位可靠性"
+          },
+          {
+            "action": "制作功能样机并在目标表面测试留痕",
+            "purpose": "验证按下即留痕",
+            "output": "样机与测试记录",
+            "check": "重复按压测试标记一致性、复位或耗材更换和误触发"
+          }
+        ],
+        "acceptance": [
+          "装置不含电池、导线、电路板、传感器或电机等电气元件。",
+          "手动按压一次后，目标表面出现符合确认要求的可见标记。",
+          "所选复位或耗材方案按设计工作，不依赖电路。",
+          "机构无干涉，操作力在确认范围内。"
+        ],
+        "deliverables": [
+          "需求规格清单",
+          "候选方案草图",
+          "装配图与零件表",
+          "纯机械功能样机与测试记录"
+        ],
+        "feasibility": "plausible",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "a6b5e5e2c1ea4e1f26711e509fa1673d4783abdaab392fdb76c1b793425ad25e",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    },
+    {
+      "id": "N08",
+      "request": "只检查板子的连接器能不能和现有外壳对上。",
+      "kind": "new-paraphrase",
+      "finish_reason": "stop",
+      "assessment": {
+        "intent": "audit",
+        "scope": "coupled",
+        "domains": [
+          "pcb",
+          "mechanical",
+          "assembly"
+        ],
+        "goal": "核对板载连接器与现有外壳的开口位置和空间关系，判断能否直接装配对上。",
+        "requirements": [
+          {
+            "text": "仅做检查核对，不进行任何修改或重做",
+            "source_quote": "只检查"
+          },
+          {
+            "text": "确认板子上的连接器能否与现有外壳对应配合",
+            "source_quote": "板子的连接器能不能和现有外壳对上"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "板子的 PCB 版图文件（含连接器封装坐标、朝向、板边基准）能否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有外壳的 3D 模型或机械图（开孔位置、孔径、内部净空高度）能否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "装配时板子在外壳内的固定方式与定位基准（螺柱、卡槽、导轨）是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "对接连接器的公母方向、插拔方向和所需操作空间是多少？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "若外壳无 3D 数据，可用卡尺实测开孔中心与内腔尺寸作为替代输入，属读取测量而非修改。"
+        ],
+        "plan": [
+          {
+            "action": "读取 PCB 版图，提取每个连接器的封装尺寸、中心坐标、朝向及相对板边基准",
+            "purpose": "建立板侧连接器的位置与外形基准数据",
+            "output": "连接器位置尺寸表",
+            "check": "与版图标注逐一核对，确认基准统一"
+          },
+          {
+            "action": "读取外壳模型或图纸，提取各开孔中心、孔径、内腔净空和板子定位特征",
+            "purpose": "建立壳侧配合基准数据",
+            "output": "外壳配合尺寸表",
+            "check": "确认开孔与定位特征的基准与板侧可对齐"
+          },
+          {
+            "action": "在同一坐标系下计算连接器与对应开孔的中心偏差、高度偏差和周边间隙",
+            "purpose": "量化配合是否在可装配范围内",
+            "output": "偏差与间隙计算表",
+            "check": "复算一次，确认坐标变换方向无误"
+          },
+          {
+            "action": "核对插拔方向与操作空间，检查是否存在干涉路径",
+            "purpose": "排除位置对齐但无法插拔的情况",
+            "output": "干涉判定记录",
+            "check": "按装配顺序逐步推演，标注干涉部位"
+          },
+          {
+            "action": "汇总结论，列出能对上、存在干涉、以及数据不足三类情况",
+            "purpose": "给出可复核的检查结论",
+            "output": "配合性检查报告",
+            "check": "逐项回溯到原始尺寸来源"
+          }
+        ],
+        "acceptance": [
+          "每个连接器都给出与外壳开孔的中心偏差和是否干涉的明确结论",
+          "所有结论均能追溯到具体尺寸来源或实测数据",
+          "未获取的数据在报告中明确标为待确认，不臆测补齐"
+        ],
+        "deliverables": [
+          "连接器与外壳配合性检查报告，含偏差数值、干涉判定和数据缺口清单；不包含任何修改或加工件"
+        ],
+        "feasibility": "unknown"
+      },
+      "validated": {
+        "intent": "audit",
+        "scope": "coupled",
+        "domains": [
+          "pcb",
+          "mechanical",
+          "assembly"
+        ],
+        "goal": "核对板载连接器与现有外壳的开口位置和空间关系，判断能否直接装配对上。",
+        "requirements": [
+          {
+            "text": "仅做检查核对，不进行任何修改或重做",
+            "source_quote": "只检查"
+          },
+          {
+            "text": "确认板子上的连接器能否与现有外壳对应配合",
+            "source_quote": "板子的连接器能不能和现有外壳对上"
+          }
+        ],
+        "design_variables": [],
+        "missing_inputs": [
+          {
+            "question": "板子的 PCB 版图文件（含连接器封装坐标、朝向、板边基准）能否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "现有外壳的 3D 模型或机械图（开孔位置、孔径、内部净空高度）能否提供？",
+            "blocks_execution": true
+          },
+          {
+            "question": "装配时板子在外壳内的固定方式与定位基准（螺柱、卡槽、导轨）是什么？",
+            "blocks_execution": true
+          },
+          {
+            "question": "对接连接器的公母方向、插拔方向和所需操作空间是多少？",
+            "blocks_execution": false
+          }
+        ],
+        "assumptions": [
+          "若外壳无 3D 数据，可用卡尺实测开孔中心与内腔尺寸作为替代输入，属读取测量而非修改。"
+        ],
+        "plan": [
+          {
+            "action": "读取 PCB 版图，提取每个连接器的封装尺寸、中心坐标、朝向及相对板边基准",
+            "purpose": "建立板侧连接器的位置与外形基准数据",
+            "output": "连接器位置尺寸表",
+            "check": "与版图标注逐一核对，确认基准统一"
+          },
+          {
+            "action": "读取外壳模型或图纸，提取各开孔中心、孔径、内腔净空和板子定位特征",
+            "purpose": "建立壳侧配合基准数据",
+            "output": "外壳配合尺寸表",
+            "check": "确认开孔与定位特征的基准与板侧可对齐"
+          },
+          {
+            "action": "在同一坐标系下计算连接器与对应开孔的中心偏差、高度偏差和周边间隙",
+            "purpose": "量化配合是否在可装配范围内",
+            "output": "偏差与间隙计算表",
+            "check": "复算一次，确认坐标变换方向无误"
+          },
+          {
+            "action": "核对插拔方向与操作空间，检查是否存在干涉路径",
+            "purpose": "排除位置对齐但无法插拔的情况",
+            "output": "干涉判定记录",
+            "check": "按装配顺序逐步推演，标注干涉部位"
+          },
+          {
+            "action": "汇总结论，列出能对上、存在干涉、以及数据不足三类情况",
+            "purpose": "给出可复核的检查结论",
+            "output": "配合性检查报告",
+            "check": "逐项回溯到原始尺寸来源"
+          }
+        ],
+        "acceptance": [
+          "每个连接器都给出与外壳开孔的中心偏差和是否干涉的明确结论",
+          "所有结论均能追溯到具体尺寸来源或实测数据",
+          "未获取的数据在报告中明确标为待确认，不臆测补齐"
+        ],
+        "deliverables": [
+          "连接器与外壳配合性检查报告，含偏差数值、干涉判定和数据缺口清单；不包含任何修改或加工件"
+        ],
+        "feasibility": "unknown",
+        "schema_version": "bf-task-assessment-v2",
+        "request_sha256": "23e03965ee3cd3014df4aa1d566a60877a817096c407aa9583eee9f2bb73b6ce",
+        "state": "INPUT_REQUIRED",
+        "requirements_frozen": false
+      },
+      "valid": true
+    }
+  ]
+}

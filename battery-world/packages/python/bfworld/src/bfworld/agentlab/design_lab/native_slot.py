@@ -9,7 +9,7 @@ import fcntl
 import os
 from pathlib import Path
 import threading
-from ..runtime_config import RUNTIME_ROOT
+from ..runtime_config import RUNTIME_ROOT, configured
 
 _guard = threading.Lock()
 _leases = {}
@@ -28,7 +28,7 @@ os.register_at_fork(after_in_child=_fork_child)
 
 @contextmanager
 def native_slot(path=None, *, blocking=True):
-    path = Path(path) if path is not None else RUNTIME_ROOT / 'design-native.lock'
+    path = Path(path) if path is not None else configured('NATIVE_LOCK', RUNTIME_ROOT / 'design-native.lock')
     key = str(path.resolve())
     with _guard:
         value = _leases.get(key)

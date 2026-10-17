@@ -1,0 +1,357 @@
+{
+  "adopted": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f",
+  "baseline": {
+    "manifest_sha256": "75933849122ee4102943777ea810528cc72d327ae3715cfa8ff39869260e0cdb",
+    "path": "/Users/depengsu/.local/share/bf-agent-baselines/bf-p01-demo-20261014"
+  },
+  "branches": [],
+  "contracts": [],
+  "current_system": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f",
+  "domains": [],
+  "files": [
+    {
+      "bytes": 2856,
+      "path": "notes/interfaces.json",
+      "sha256": "f38734d15075a0cb4af685eab95d839c5ee56dc585ad2f229706201cbc21386c"
+    },
+    {
+      "bytes": 22000,
+      "path": "notes/original-scope.md",
+      "sha256": "acbd675576848befed591046e5ca1d1162d1d4312023b8f800a33ddf46f57f8a"
+    },
+    {
+      "bytes": 5957,
+      "path": "notes/requirements.json",
+      "sha256": "d5a4dcb70ed615bc899a5c3d29d067d1e87738dbd67d81b9d0ad3ab9bf455d2b"
+    },
+    {
+      "bytes": 1496,
+      "path": "notes/source-readback.json",
+      "sha256": "683881e811ef8db727e633f23f5f9d285c822b1bfa5d8b0753575fd6c3367421"
+    },
+    {
+      "bytes": 130,
+      "path": "observation.csv",
+      "sha256": "02412f27a71132aa97aeef88232a1fe1e058489d274ef10eff28d20fdb45d8ed"
+    },
+    {
+      "bytes": 53,
+      "path": "reference.csv",
+      "sha256": "13d25b542dbff0a3ea2daf885beee9b187063830161b38f84c09104319d2bc01"
+    }
+  ],
+  "gates": {
+    "curve_accuracy": "PASS",
+    "curve_binding": "PASS",
+    "delivery_version": "PASS"
+  },
+  "owner": "pi-chat-468e6062c32232b5",
+  "project_id": "PR-f62f18a891fd1e860fecbae2b7646729aa736b41632d60ce3c4162021bdf6efb",
+  "qualification": {
+    "physical": "NOT_TESTED",
+    "product_passed": false,
+    "schema_version": "bf-system-qualification-v1",
+    "scope": "curve-reproduction",
+    "status": "PASS",
+    "system_commit": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f",
+    "task_definition": "TD-de48fa14faa97d51c19d302046e19dfa5098bbcd793087a21050a751fe4ad447",
+    "task_passed": true
+  },
+  "releases": [
+    {
+      "id": "REL-ece97f4c4257b540434ab9fa6b54a82acf28fb06a3faa9e16ca8c9efe24528fd",
+      "kind": "REVIEW_PACKAGE",
+      "target": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f"
+    }
+  ],
+  "requirements": {
+    "acceptance": {
+      "curve_accuracy": {
+        "condition": "六个衰减时长相对论文的最大偏差不超过 1%",
+        "max_abs_error": 1.0
+      },
+      "curve_binding": {
+        "condition": "六个相同电压点，原始波形来源哈希一致"
+      },
+      "delivery_version": {
+        "condition": "原始来源、提取结果、检查和报告绑定本候选"
+      }
+    },
+    "assignments": [],
+    "case_adapter": "tabulated-curve-v1",
+    "components": [],
+    "functions": [],
+    "goal": "复核 P08 原生一级降压模型在六个初始输出电压下的电流衰减时长，与论文 Note S13 对照；从任务定义完成到同版审查交付。",
+    "id": "TD-de48fa14faa97d51c19d302046e19dfa5098bbcd793087a21050a751fe4ad447",
+    "intent": "audit",
+    "interfaces": [
+      {
+        "affected_gates": [
+          "curve_binding",
+          "curve_accuracy"
+        ],
+        "checker": "curve-comparison-v1",
+        "consumer": "curve-comparison-v1",
+        "executor": "tabulated-data-readback",
+        "id": "reference-observation",
+        "initial_state": "task scenario",
+        "input_paths": [
+          "reference.csv",
+          "observation.csv"
+        ],
+        "model_scope": "matching sampled abscissae",
+        "producer": "reference",
+        "units": "task scenario axis_units"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "current_cutoff",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "A",
+        "value": 0.001
+      },
+      {
+        "locator": "P08 Note S13 pp27-28",
+        "name": "paper_durations",
+        "role": "constraint",
+        "source": "literature",
+        "unit": "us",
+        "value": [
+          473,
+          379,
+          272,
+          175,
+          103,
+          56
+        ]
+      }
+    ],
+    "phase": "audit",
+    "profile": "curve-reproduction-v1",
+    "report": "curve-three-section-v1",
+    "required_gates": [
+      "curve_binding",
+      "curve_accuracy",
+      "delivery_version"
+    ],
+    "scenario": {
+      "axis_units": {
+        "x": "V",
+        "y": "percent of paper duration"
+      },
+      "current_cutoff": 0.001,
+      "paper_durations": [
+        473,
+        379,
+        272,
+        175,
+        103,
+        56
+      ],
+      "raw_sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+      "raw_source_job": "eng-19eb09030ae354a8"
+    },
+    "schema_version": "bf-design-task-definition-v2",
+    "scope": "curve-reproduction",
+    "standards": {
+      "acceptance_predicates": {
+        "curve_accuracy": {
+          "checker": "repository_task_checks.evaluate",
+          "parameters": {
+            "max_abs_error": 1.0
+          }
+        },
+        "curve_binding": {
+          "checker": "repository_task_checks.evaluate",
+          "parameters": {}
+        },
+        "delivery_version": {
+          "checker": "repository_task_checks.evaluate",
+          "parameters": {}
+        }
+      },
+      "bindings": [
+        {
+          "binding": {
+            "path": "current_cutoff",
+            "target": "scenario"
+          },
+          "parameter": "current_cutoff",
+          "role": "constraint",
+          "unit": "A",
+          "value": 0.001
+        },
+        {
+          "binding": {
+            "path": "paper_durations",
+            "target": "scenario"
+          },
+          "parameter": "paper_durations",
+          "role": "constraint",
+          "unit": "us",
+          "value": [
+            473,
+            379,
+            272,
+            175,
+            103,
+            56
+          ]
+        }
+      ],
+      "design_space": {
+        "editable_files": [
+          "observation.csv",
+          "notes/"
+        ],
+        "fields": {}
+      },
+      "execution_policy": {
+        "adapter": "tabulated-curve-v1"
+      },
+      "fixed_parameters": [
+        {
+          "binding": {
+            "path": "current_cutoff",
+            "target": "scenario"
+          },
+          "parameter": "current_cutoff",
+          "role": "constraint",
+          "unit": "A",
+          "value": 0.001
+        },
+        {
+          "binding": {
+            "path": "paper_durations",
+            "target": "scenario"
+          },
+          "parameter": "paper_durations",
+          "role": "constraint",
+          "unit": "us",
+          "value": [
+            473,
+            379,
+            272,
+            175,
+            103,
+            56
+          ]
+        }
+      ],
+      "interface_consumers": {
+        "board-firmware": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "board-package": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "mechanics-source": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "power-runtime": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "radio-service": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "sensing-data": {
+          "status": "NOT_IMPLEMENTED"
+        },
+        "source-power": {
+          "status": "NOT_IMPLEMENTED"
+        }
+      },
+      "interface_levels": [
+        "format",
+        "source_consistency",
+        "engineering_compatibility"
+      ],
+      "reference_rules": {},
+      "service": {
+        "observable": "paired-sample-error"
+      },
+      "version": "bf-task-semantics-v1"
+    }
+  },
+  "revision": 2,
+  "tasks": [],
+  "validations": [
+    {
+      "evaluator": {
+        "adapter": "tabulated-curve-v1",
+        "sources": {
+          "repository_profiles.py": "186314c94aee0a7cced8f9d137627ac05ae6cab93f9b38cd498de23da2a23ebe",
+          "repository_task_checks.py": "3a05093d2aac661654541e39cf0323edebda401288c38a1fd478157bd37a7c6f",
+          "repository_task_standards.py": "12db2a56d67c82f8a868dd1bb3829a977ae4d2512f1e1b4390daabb868a99e96"
+        },
+        "version": "task-profile-review-v1"
+      },
+      "id": "RV-5f883ee8bd214b0a8244e503bb96e665e7e361c90d571f74c8f21f3a3bd8d062",
+      "immutable_input": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f",
+      "kind": "task-acceptance",
+      "physical": "NOT_TESTED",
+      "project_id": "PR-f62f18a891fd1e860fecbae2b7646729aa736b41632d60ce3c4162021bdf6efb",
+      "result": {
+        "checker": {
+          "adapter": "tabulated-curve-v1",
+          "sources": {
+            "repository_profiles.py": "186314c94aee0a7cced8f9d137627ac05ae6cab93f9b38cd498de23da2a23ebe",
+            "repository_task_checks.py": "3a05093d2aac661654541e39cf0323edebda401288c38a1fd478157bd37a7c6f",
+            "repository_task_standards.py": "12db2a56d67c82f8a868dd1bb3829a977ae4d2512f1e1b4390daabb868a99e96"
+          },
+          "version": "task-profile-review-v1"
+        },
+        "gates": {
+          "curve_accuracy": {
+            "execution_id": "TX-75d0527b0f316bb7188cddf8cb1e0de802278f52dd1e3951bcef298edd1ae1c8",
+            "findings": {
+              "execution": "TX-75d0527b0f316bb7188cddf8cb1e0de802278f52dd1e3951bcef298edd1ae1c8",
+              "limit": 1.0,
+              "max_abs_error": 0.5264707728290006
+            },
+            "input_fingerprint": "e2113bba217b88a6c0527616f92750c6c1109f095afdff0eac46427a3c7df5ae",
+            "scope": "curve-reproduction",
+            "status": "PASS"
+          },
+          "curve_binding": {
+            "execution_id": "TX-75d0527b0f316bb7188cddf8cb1e0de802278f52dd1e3951bcef298edd1ae1c8",
+            "findings": {
+              "axis_units": {
+                "x": "V",
+                "y": "percent of paper duration"
+              },
+              "execution": "TX-75d0527b0f316bb7188cddf8cb1e0de802278f52dd1e3951bcef298edd1ae1c8",
+              "samples": [
+                6,
+                6
+              ]
+            },
+            "input_fingerprint": "8af31b3b089f064c5acdd649c46c28ed047edc6079d14eeac14f7052ea94d055",
+            "scope": "curve-reproduction",
+            "status": "PASS"
+          },
+          "delivery_version": {
+            "execution_id": "TX-75d0527b0f316bb7188cddf8cb1e0de802278f52dd1e3951bcef298edd1ae1c8",
+            "findings": {
+              "files": 6,
+              "task_definition": "TD-de48fa14faa97d51c19d302046e19dfa5098bbcd793087a21050a751fe4ad447"
+            },
+            "input_fingerprint": "7c380e4a8bf65688a189b9aa2c59433e96cce230c4c54826b7ee5a2fc84f5536",
+            "scope": "curve-reproduction",
+            "status": "PASS"
+          }
+        },
+        "native_jobs_dispatched": 0,
+        "physical": "NOT_TESTED",
+        "scope": "curve-reproduction",
+        "status": "PASS",
+        "target": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f"
+      },
+      "scope": "curve-reproduction",
+      "status": "PASS",
+      "target": "SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f"
+    }
+  ]
+}

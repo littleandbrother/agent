@@ -1,0 +1,33 @@
+{
+  "schema_version": "bf-report-energy-ledger-v1",
+  "raw_sha256": "0f9c0c95fc39d287a55841c686370e8710f2182233a9a35da543a327a84740bd",
+  "netlist_sha256": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c",
+  "units": {
+    "time": "s",
+    "voltage": "V",
+    "current": "A",
+    "energy": "J"
+  },
+  "span_s": [
+    1.0000000000000001e-11,
+    16.001
+  ],
+  "initial_storage_J": 0.0019403999999446865,
+  "final_storage_J": 9.682416847376723e-06,
+  "storage_delta_J": -0.0019307175830973098,
+  "sece_received_J": 0.00014643279238121237,
+  "leakage_J": 2.4107440010394336e-05,
+  "source_delivered_J": 0.003784627033286736,
+  "load_port_absorbed_J": 0.002051298471156494,
+  "actual_load_charge_C": 0.0009120850588136574,
+  "negative_mcu_samples": 6,
+  "minimum_mcu_V": -1315962.1900000018,
+  "minimum_supply_V": 0.13350823643621074,
+  "actual_pwl_points": 672,
+  "load_nodes": [
+    "mcu_rail",
+    "0"
+  ],
+  "integration": "signed trapezoidal integration of every original RAW sample; load current interpolated from actual solver PWL; no anomaly samples removed",
+  "conclusion": "Manual switch output has negative voltage samples. Signed load-port energy is diagnostic. Efficiency is unavailable until the switch/load model is repaired."
+}

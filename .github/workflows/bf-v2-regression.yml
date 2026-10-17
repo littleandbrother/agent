@@ -1,0 +1,54 @@
+name: BF V2 regression
+
+on:
+  pull_request:
+    branches: [codex/bf-design-lab-r0-r2-20261011]
+  push:
+    branches: [codex/bf-architecture-v2]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bf-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install numerical dependency matching the qualified V2 environment
+        run: |
+          python3 -m venv "$RUNNER_TEMP/bf-v2-python"
+          "$RUNNER_TEMP/bf-v2-python/bin/python" -m pip install numpy==2.4.6 scipy==1.17.1
+          echo "$RUNNER_TEMP/bf-v2-python/bin" >> "$GITHUB_PATH"
+      - name: Repository source, recovery, invalidation and exact reuse
+        working-directory: battery-world
+        env:
+          BF_RUNTIME_ROOT: ${{ runner.temp }}/bf-v2-unit
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONPATH: packages/python/bfworld/src:tests/agentlab
+        run: python3 -m unittest discover -s tests/agentlab -p 'test_repository*.py' -v
+
+  pi-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: pi-bf-aiot/package-lock.json
+      - name: Install pinned dependencies
+        working-directory: pi-bf-aiot
+        run: npm ci --ignore-scripts
+      - name: Offline SDK and BF transport build
+        working-directory: pi-bf-aiot
+        run: npm run bf:build
+      - name: Types, transport, dependency and browser checks
+        working-directory: pi-bf-aiot
+        run: npm run check
+      - name: Reject check-generated source changes
+        run: git diff --exit-code

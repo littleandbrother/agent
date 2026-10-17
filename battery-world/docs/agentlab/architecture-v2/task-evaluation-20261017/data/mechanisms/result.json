@@ -1,0 +1,882 @@
+{
+  "freeze": {
+    "version": "energy-information-feedback-pilot-v1",
+    "code_sha256": "c3d3bebf89a33915bceb5fafddc52333e03868cd260533c13f460987432aa341",
+    "cases_sha256": "6138222678569c37454253ea9025b06989a77e809d5bd7e85798785c4ebad9e7",
+    "costs": {
+      "prefix": 2,
+      "information": 1,
+      "feedback": 3
+    },
+    "partitions": {
+      "development": 72,
+      "validation": 36,
+      "test": 72
+    },
+    "study_unit": "parameterized scenario; sides are paired counterexamples",
+    "methods": [
+      "static-budget",
+      "static-rich",
+      "fixed-event-contract",
+      "counterexample-refinement",
+      "abstain-on-ambiguity"
+    ],
+    "controls": [
+      "zero energy",
+      "ample energy",
+      "zero feedback",
+      "same policy replay",
+      "fine step invariance"
+    ],
+    "interpretation": "Controlled constructed counterexamples; test scenarios use independent seeds, same three mechanism families."
+  },
+  "tables": {
+    "development": {
+      "static-budget": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 0,
+        "false_accept": 36,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "static-rich": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 0,
+        "false_accept": 36,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "fixed-event-contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "counterexample-refinement": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "abstain-on-ambiguity": {
+        "n": 72,
+        "true_accept": 0,
+        "true_reject": 0,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 72,
+        "coverage": 0.0,
+        "accuracy_all": 0.0,
+        "feature_cost": 1
+      }
+    },
+    "validation": {
+      "static-budget": {
+        "n": 36,
+        "true_accept": 18,
+        "true_reject": 0,
+        "false_accept": 18,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "static-rich": {
+        "n": 36,
+        "true_accept": 18,
+        "true_reject": 0,
+        "false_accept": 18,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "fixed-event-contract": {
+        "n": 36,
+        "true_accept": 18,
+        "true_reject": 18,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "counterexample-refinement": {
+        "n": 36,
+        "true_accept": 18,
+        "true_reject": 18,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "abstain-on-ambiguity": {
+        "n": 36,
+        "true_accept": 0,
+        "true_reject": 0,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 36,
+        "coverage": 0.0,
+        "accuracy_all": 0.0,
+        "feature_cost": 1
+      }
+    },
+    "test": {
+      "static-budget": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 0,
+        "false_accept": 36,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "static-rich": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 0,
+        "false_accept": 36,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5,
+        "feature_cost": 1
+      },
+      "fixed-event-contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "counterexample-refinement": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0,
+        "feature_cost": 7
+      },
+      "abstain-on-ambiguity": {
+        "n": 72,
+        "true_accept": 0,
+        "true_reject": 0,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 72,
+        "coverage": 0.0,
+        "accuracy_all": 0.0,
+        "feature_cost": 1
+      }
+    }
+  },
+  "refinement": [
+    {
+      "feature": "information",
+      "cost": 1,
+      "pairs_separated": 12,
+      "remaining": 24
+    },
+    {
+      "feature": "prefix",
+      "cost": 2,
+      "pairs_separated": 12,
+      "remaining": 12
+    },
+    {
+      "feature": "feedback",
+      "cost": 3,
+      "pairs_separated": 12,
+      "remaining": 0
+    }
+  ],
+  "replay": [
+    {
+      "id": "replay-0",
+      "seed": 0,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-1",
+      "seed": 1,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-2",
+      "seed": 2,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-3",
+      "seed": 3,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-4",
+      "seed": 4,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-5",
+      "seed": 5,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-6",
+      "seed": 6,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-7",
+      "seed": 7,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-8",
+      "seed": 8,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-9",
+      "seed": 9,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-10",
+      "seed": 10,
+      "split": "development",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-11",
+      "seed": 11,
+      "split": "development",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-12",
+      "seed": 12,
+      "split": "validation",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-13",
+      "seed": 13,
+      "split": "validation",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-14",
+      "seed": 14,
+      "split": "validation",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-15",
+      "seed": 15,
+      "split": "validation",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-16",
+      "seed": 16,
+      "split": "validation",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-17",
+      "seed": 17,
+      "split": "validation",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-18",
+      "seed": 18,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-19",
+      "seed": 19,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-20",
+      "seed": 20,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-21",
+      "seed": 21,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-22",
+      "seed": 22,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-23",
+      "seed": 23,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-24",
+      "seed": 24,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-25",
+      "seed": 25,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-26",
+      "seed": 26,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-27",
+      "seed": 27,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-28",
+      "seed": 28,
+      "split": "test",
+      "feedback": false,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver"
+      ],
+      "full_work": 4000,
+      "scoped_work": 2000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    },
+    {
+      "id": "replay-29",
+      "seed": 29,
+      "split": "test",
+      "feedback": true,
+      "parent_packets": 2,
+      "child_full": 1,
+      "child_frozen": 9,
+      "child_scoped": 1,
+      "safe_child": 3,
+      "scope": [
+        "power",
+        "firmware",
+        "receiver",
+        "source"
+      ],
+      "full_work": 4000,
+      "scoped_work": 4000,
+      "same_policy_equal": true,
+      "fine_step_equal": true,
+      "scoped_energy_error": 0.0
+    }
+  ],
+  "controls": {
+    "same_policy": true,
+    "time_step": true,
+    "scoped_equals_full": true
+  },
+  "aliasing_pairs": 90,
+  "native_simulations": 0,
+  "apparatus": "deterministic energy-buffer simulation",
+  "physical_measurements": 0
+}

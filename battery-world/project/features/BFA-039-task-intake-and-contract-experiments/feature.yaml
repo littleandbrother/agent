@@ -1,0 +1,108 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-039-task-intake-and-contract-experiments",
+  "owner": "bf-agent-coordinator",
+  "status": "complete",
+  "authority": "2026-10-17 user requests natural-language task assessment, default piezo node, one original-case transfer and contract/replay experiments",
+  "hypothesis": "Task assessment can distinguish intent, scope and missing inputs without imposing P01; counterexamples reveal missing interface information, and response-preserving replay avoids decisions corrupted by fixed old trajectories.",
+  "paper_claim": "Pre-registered engineering and mechanism pilot; method gains measured only on the frozen test partition.",
+  "falsifier": "Unrequested requirements become hard constraints; different true outcomes remain indistinguishable after refinement; scoped replay mis-ranks changes against full execution; transferred task loses original identities.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/design_lab/",
+    "tests/agentlab/test_repository_task*.py",
+    "configs/reference_cases/task-evaluation/",
+    "scripts/task_evaluation/",
+    "project/features/BFA-039-task-intake-and-contract-experiments/",
+    "docs/agentlab/architecture-v2/task-evaluation-20261017/",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "../pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts",
+    "../pi-bf-aiot/packages/bf-agent/src/repository-task.ts",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/.local/share/bf-agent-architecture-v2/task-evaluation/"
+  ],
+  "schema_changes": [
+    "bf-task-assessment-v2",
+    "bf-contract-counterexample-study-v1"
+  ],
+  "targeted_tests": [
+    "48 natural-language requests",
+    "task definition and plan validation",
+    "no-Agent mechanism controls",
+    "original-case source-bound transfer",
+    "immutable execution reuse",
+    "frozen held-out contract and replay comparison"
+  ],
+  "negative_controls": [
+    "underspecified service",
+    "contradictory energy request",
+    "same static interface opposite outcome",
+    "fixed old supply trace",
+    "no-change reuse",
+    "unavailable adapter",
+    "wrong receiver data"
+  ],
+  "reproducible_command": "python3 scripts/task_evaluation/verify_results.py docs/agentlab/architecture-v2/task-evaluation-20261017",
+  "output_artifact": "docs/agentlab/architecture-v2/task-evaluation-20261017",
+  "cost_cap": "User explicitly authorized no cumulative fee, token, request or wall-clock limit; execute finite pre-registered pilot stages and retain usage/UNKNOWN.",
+  "claim_boundary": "Simulated mechanisms, actual model assessment and scoped engineering transfer. Physical measurements and broad recursive improvement require separate evidence.",
+  "stop_condition": "Protected-state drift, unknown write/model usage, reference failure or ambiguous model identity stops dependent dispatch.",
+  "increments": {
+    "task_intake": "48-task audit + 13-edge regression delivered; semantic findings recorded",
+    "default_piezo": "nominal reference and native cold-start failure review delivered",
+    "original_case_transfer": "P08 source-bound audit completed",
+    "contract_replay_study": "constructed mechanism + limited model-configuration pilot completed"
+  },
+  "started_utc": "2026-10-16T21:00:37.972788+00:00",
+  "completed_utc": "2026-10-16T22:25:50.308114+00:00",
+  "results": {
+    "intake_valid": [
+      10,
+      44,
+      48
+    ],
+    "edge_valid": [
+      13,
+      13
+    ],
+    "intent_label_agreement": [
+      45,
+      48
+    ],
+    "aliasing_pairs": [
+      90,
+      90
+    ],
+    "frozen_replay_wrong_ranking": [
+      30,
+      30
+    ],
+    "method_gain_over_rich_causal": false,
+    "recursive_improver_tested": false,
+    "requests": 167,
+    "cost_upper_bound_usd": 1.3682169,
+    "protected_state_unchanged": true
+  },
+  "remaining_work": [
+    "default native cold-start service: voltage-driven firmware/PMIC feedback adapter and device-current validation",
+    "semantic assessment: fixed means design constraint, audit action scope, intent separate from feasibility",
+    "novel mechanism and conservative-rejection test set; strong optimizer comparison; actual recursive improver comparison"
+  ],
+  "verification": [
+    "56 task profile/standard/intake tests",
+    "Pi npm run check",
+    "BFWORLD_VERIFY_PROFILE=architecture-v2-lab ./init.sh",
+    "live pre-project task assessment API",
+    "PDF geometry and representative visual checks"
+  ],
+  "limitation": "Completed scope is the finite assessment/research pilot and reference-case review. Device-level cold-start is failing; physical hardware and improved recursive improver are not completed.",
+  "report": "docs/agentlab/architecture-v2/task-evaluation-20261017/01_REPORT.md",
+  "git": {
+    "base": "9bcdbad0c275e2af019f3c9645bf5c40ebf38411",
+    "branch": "codex/bf-architecture-v2",
+    "publication_scope": "task contracts, source, skill, tests, reports, sanitized final answers and saved experiment evidence"
+  }
+}

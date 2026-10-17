@@ -1,0 +1,45 @@
+{
+  "profile": "node-reference-v1",
+  "intent": "new_design",
+  "goal": "在声明的振动、初始储能和 20 秒窗口内完成至少 3 次有效采样与接收；比较机械参数、储能或固件调度的修订。",
+  "scenario": {
+    "frequency_hz": 30,
+    "acceleration_peak_m_s2": 4.905,
+    "electrical_load_ohm": 100000,
+    "damping_ratio": 0.02,
+    "conversion_efficiency": 0.5,
+    "duration_s": 20,
+    "rail_v": 2.5,
+    "storage_max_v": 3.6,
+    "minimum_storage_v": 2.2,
+    "initial_storage_v": 2.5,
+    "minimum_sample_s": 0.01,
+    "minimum_tx_s": 0.004,
+    "sensor_value": 2500,
+    "state_currents_a": {"idle": 0.000008, "sample": 0.001, "tx": 0.008},
+    "material": {"substrate_E_pa": 68000000000, "piezo_E_pa": 66000000000,
+      "substrate_density": 2700, "piezo_density": 7800,
+      "relative_permittivity": 1700, "d31_m_v": -1.9e-10},
+    "boundary": "固定单频底座振动；规定初始储能；平均功率转换；主机编译事件程序；数字接收端",
+    "parameter_basis": "参考模型的预先声明名义参数；后续器件与物理校准单独版本化"
+  },
+  "parameters": [
+    {"name":"frequency_hz","value":30,"unit":"Hz","source":"reference","role":"constraint"},
+    {"name":"initial_storage_v","value":2.5,"unit":"V","source":"reference","role":"constraint"},
+    {"name":"material","value":"nominal piezo/substrate coefficients","unit":"SI","source":"reference","role":"assumption"},
+    {"name":"beam_and_storage","value":"design.json","unit":"SI","source":"agent","role":"design_choice"},
+    {"name":"schedule","value":"firmware/main.c","unit":"s","source":"agent","role":"design_choice"}
+  ],
+  "acceptance": {
+    "source_model":{"condition":"原生源模型与解析响应误差小于 1%，峰值位移不超过梁长的 5%"},
+    "load_binding":{"condition":"编译程序事件与求解器消费的负载电荷一致"},
+    "power_service":{"condition":"采样和发送期间储能电压不低于 2.2 V，全部发送满足供电条件"},
+    "receiver_service":{"condition":"至少 3 个有效且不重复的数据帧，序号、数据和校验一致","minimum_packets":3},
+    "delivery_version":{"condition":"交付来源、执行输出和检查指向当前冻结候选"}
+  },
+  "components":[{"id":"beam"},{"id":"power"},{"id":"soc"},{"id":"host"}],
+  "functions":[{"id":"H","components":["beam"]},{"id":"M","components":["beam"]},
+    {"id":"P","components":["power"]},{"id":"S","components":["soc"]},
+    {"id":"C","components":["soc"]},{"id":"R","components":["soc"]},{"id":"G","components":["host"]}],
+  "assignments":[{"role":"lead","functions":["H","P","S","C","R","G","M"]}]
+}

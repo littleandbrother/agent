@@ -1,0 +1,167 @@
+{
+  "content": {
+    "assembly_notes": [
+      "PCB 与 CAD 外形均为 40×70 mm，器件中心均在板框内，几何门仅此部分 PASS。",
+      "原生 3D 高度、PCB↔CAD 放置变换与安装孔对应关系缺失，本版不给装配尺寸。",
+      "装配几何为重建包络：38 部件、168×187.5×20 mm，非原始 CAD 数据。",
+      "运动间隙按 10 mm 行程假设，1 cm 为实验驱动条件，非设计指定行程。"
+    ],
+    "handoff": [
+      "打开 SC-e8f2f2e5… 与本报告随附的同版工程包及其 manifest 入口，核对八门回执与 qualification。",
+      "按 R4/R5 空网络补全传感 I2C 支路，重跑原生 DRC 取证。",
+      "收敛储能与负载一致性后重发 SPICE 链输入并复检供能门。",
+      "补 CS-TENG、SECE 与稳压器实测参数，再重做源域检查。"
+    ],
+    "pages": [
+      {
+        "conclusion": "候选未通过：固件事件与时序契约 PASS，供能链与 PCB 连接 FAIL，物理未测。",
+        "notes": [
+          "组成：采能、SECE、储能、AD7156、nRF52832、PC。",
+          "原采用版 SC-4c0da605… 保留，本版为审查包。",
+          "证据来自同版检查与既有作业，未新增实验。"
+        ],
+        "page": 1
+      },
+      {
+        "conclusion": "CAD 外形 168×187.5×20 mm 为重建包络，不是原始 CAD。",
+        "notes": [
+          "PCB 与 CAD 板框均为 40×70 mm。",
+          "安装孔对应与 PCB↔CAD 变换缺失。",
+          "接口：SWD、传感 4P、TENG 输入 4P。"
+        ],
+        "page": 2
+      },
+      {
+        "conclusion": "装配包络含 38 部件，运动间隙按 10 mm 行程假设，缺原生高度。",
+        "notes": [
+          "四角导轨与回位弹簧为占位几何。",
+          "缺 3D 高度与放置变换，无公差数据。"
+        ],
+        "page": 3
+      },
+      {
+        "conclusion": "六组功能回路按真实网表重排，含实际缺件、空脚与断开支路。",
+        "notes": [
+          "PCB 分区用本版 mil→mm 实读坐标。",
+          "R4/R5 另一端为空网络，I2C 支路断开。",
+          "DRC 实读 52 间隙错误、50 连接错误。"
+        ],
+        "page": 4
+      },
+      {
+        "conclusion": "采能-提取-储能-供能链路按冻结网表连线，未新增任何电气连接。",
+        "notes": [
+          "T1 原边无缓冲钳位，Q1 600 V 未降额。",
+          "模型为 2 二极管，未含 U5/U6 驱动链。",
+          "实装 D1/D2 为 US1M 1 kV，非声明 1.2 kV。"
+        ],
+        "page": 5
+      },
+      {
+        "conclusion": "固件 19 条消息覆盖人工接通、广播、采样、通知、错误与断线恢复。",
+        "notes": [
+          "广播 187.5 ms，连接 100–200 ms。",
+          "策略 5000 ms 与实际无线域不可合并。",
+          "队列满与旧纪元回调不结算结果。"
+        ],
+        "page": 6
+      },
+      {
+        "conclusion": "求解读到储能 4.2→0.2967 V、最低供电 0.1335 V，供能门 FAIL。",
+        "notes": [
+          "人工接通处 MCU 轨负值 −1.3e6 V 为伪像。",
+          "负载 672 点 vs 声明 664 点，电荷差 3.6e-7 C。",
+          "全为声明假设，无实测电流与效率。"
+        ],
+        "page": 7
+      },
+      {
+        "conclusion": "八门 2 PASS、2 FAIL、4 未定；决定保留待审，原采用版保留。",
+        "notes": [
+          "同版工程包及 manifest 入口随本报告附于当前 SC。",
+          "物理未测，报告不含实测数据。"
+        ],
+        "page": 8
+      }
+    ],
+    "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+    "requirements": [
+      {
+        "gate": "delivery_version",
+        "requirement": "交付版本与当前源码一致",
+        "result": "PASS：89 文件，固件与供能作业绑定 4506ff91…/db0d16de…"
+      },
+      {
+        "gate": "firmware_event_logic",
+        "requirement": "固件事件行为与已通过输入一致",
+        "result": "PASS：精确复用已通过固件输入 RV-26974610…"
+      },
+      {
+        "gate": "board_firmware_interfaces",
+        "requirement": "板级与固件接口时序",
+        "result": "UNEVALUABLE：时序契约 v3 全 19 项 PASS，缺原生外设初始化审计"
+      },
+      {
+        "gate": "geometry_fit",
+        "requirement": "结构与几何配合",
+        "result": "UNEVALUABLE：40×70 mm 与中心在框内 PASS，缺 3D 高度与放置变换"
+      },
+      {
+        "gate": "pcb_connectivity_drc",
+        "requirement": "PCB 连通性与 DRC",
+        "result": "FAIL：间隙 52、连接 50；R4/R5 半装断线"
+      },
+      {
+        "gate": "power_load_chain",
+        "requirement": "供能、负载与储能链",
+        "result": "FAIL：最低供电 0.1335 V<1.8 V，负载 672/664 点，储能 4.2→0.2967 V"
+      },
+      {
+        "gate": "schematic_bom_pins",
+        "requirement": "原理图器件与引脚网络",
+        "result": "UNEVALUABLE：39 器件 172 引脚对应 PASS，供应商与 T1 参数待审"
+      },
+      {
+        "gate": "source_domain",
+        "requirement": "源域标定与 SECE 适用性",
+        "result": "UNEVALUABLE：13 项参数未定，SECE 仅平均包络且未解析"
+      }
+    ],
+    "schema_version": "bf-report-author-content-v1",
+    "scope": "lead",
+    "summary": "P01 摩擦纳米发电无线传感节点候选：固件事件与交付版本 PASS，源绑定时序契约 v3 全项 PASS；供能链与 PCB 连接 FAIL，板级、结构、原理图与源域 UNEVALUABLE；物理未测，原采用版保留。",
+    "system_commit": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9",
+    "system_modules": [
+      {
+        "description": "1cm/5Hz 行程假设",
+        "label": "TENG 采能"
+      },
+      {
+        "description": "平均包络，参数未定",
+        "label": "SECE 提取"
+      },
+      {
+        "description": "220µF→1.8V，声明假设",
+        "label": "储能与稳压"
+      },
+      {
+        "description": "I2C 采样 5 s 节拍",
+        "label": "AD7156 传感"
+      },
+      {
+        "description": "实际无线时序见第6页",
+        "label": "nRF52/BLE"
+      },
+      {
+        "description": "2 字节小端帧解码",
+        "label": "PC 接收"
+      }
+    ],
+    "task": "设备首版任务：在规定名义机械输入下积能，人工接通 MCU，建立 BLE 连接，周期采样并由 PC 解码；保留原始电容数据与人工操作边界。"
+  },
+  "owner": "pi-chat-050766187db5de0d",
+  "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+  "scope": "lead",
+  "sha256": "3198f87398cc8cfcb8d4bd93e0f49d5f5c2666f87a4d2a4de23f151ae8f5c461",
+  "source_author": "Pi"
+}

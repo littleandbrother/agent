@@ -43,6 +43,7 @@ class ContextArchive:
         self.owner = owner
         self.home = Path(home).resolve()
         self.parts = ('participants', owner, 'context-records')
+        self.reader = 'read'
 
     def __call__(self, value):
         directory = self.home
@@ -90,7 +91,70 @@ class ContextArchive:
                     text_path.chmod(0o444)
                 record.update(text_file='context-records/'+text_path.name,
                               text_sha256=hashlib.sha256(raw).hexdigest(),text_bytes=len(raw))
+        if self.reader == 'bf_repository':
+            record['read_action'] = 'bf_repository.archive_read'
         return record
+
+    def read(self, logical, offset=0, limit=8000, pointer=None):
+        """Verified, owner-local public observations; no workspace or source writes."""
+        match = re.fullmatch(r'context-records/([0-9a-f]{64})\.(json|tool\.txt)', logical) if isinstance(logical, str) else None
+        if not match:
+            raise ValueError('CONTEXT_ARCHIVE_PATH_INVALID')
+        if type(offset) is not int or offset < 0 or type(limit) is not int or not 1 <= limit <= 24000:
+            raise ValueError('CONTEXT_ARCHIVE_RANGE_INVALID')
+        directory = self.home
+        for part in self.parts:
+            directory = directory/part
+            if directory.is_symlink():
+                raise ValueError('CONTEXT_ARCHIVE_SYMLINK')
+        original = directory/(match[1]+'.json')
+        path = directory/Path(logical).name
+        if original.is_symlink() or path.is_symlink():
+            raise ValueError('CONTEXT_ARCHIVE_SYMLINK')
+        if not original.is_file() or not path.is_file():
+            raise ValueError('CONTEXT_ARCHIVE_NOT_FOUND')
+        data = original.read_bytes()
+        if hashlib.sha256(data).hexdigest() != match[1]:
+            raise ValueError('CONTEXT_ARCHIVE_CONFLICT')
+        value = json.loads(data)
+        # Model private reasoning is retained in history, not a public tool result.
+        if isinstance(value, dict) and value.get('role') == 'assistant':
+            raise ValueError('CONTEXT_ARCHIVE_PUBLIC_RECORD_REQUIRED')
+        raw = path.read_bytes()
+        if match[2] == 'tool.txt':
+            if not isinstance(value, dict) or value.get('role') != 'tool':
+                raise ValueError('CONTEXT_ARCHIVE_PUBLIC_RECORD_REQUIRED')
+            content = value.get('content')
+            decoded = content
+            if isinstance(content, str):
+                try: decoded = json.loads(content)
+                except ValueError: pass
+            blocks = decoded.get('content') if isinstance(decoded, dict) else decoded
+            if (isinstance(blocks, list) and blocks and
+                    all(isinstance(x, dict) and x.get('type') == 'text' and isinstance(x.get('text'), str) for x in blocks)):
+                content = '\n'.join(x['text'] for x in blocks)
+            if not isinstance(content, str) or raw != content.encode():
+                raise ValueError('CONTEXT_ARCHIVE_CONFLICT')
+        text = raw.decode()
+        if pointer is not None:
+            if not isinstance(pointer, str) or (pointer and not pointer.startswith('/')):
+                raise ValueError('CONTEXT_ARCHIVE_POINTER_INVALID')
+            try:
+                selected = json.loads(text)
+                for token in pointer[1:].split('/') if pointer else ():
+                    if re.search(r'~(?![01])', token): raise ValueError()
+                    token = token.replace('~1', '/').replace('~0', '~')
+                    selected = selected[int(token)] if isinstance(selected, list) and re.fullmatch(r'0|[1-9][0-9]*', token) else selected[token]
+                text = canonical(selected)
+            except (ValueError, KeyError, IndexError, TypeError):
+                raise ValueError('CONTEXT_ARCHIVE_POINTER_INVALID') from None
+        return {'owner': self.owner, 'path': logical, 'record_sha256': match[1],
+                'sha256': hashlib.sha256(raw).hexdigest(), 'pointer': pointer,
+                'content_sha256': hashlib.sha256(text.encode()).hexdigest(),
+                'bytes': len(raw), 'offset': offset, 'total_chars': len(text),
+                'content': text[offset:offset+limit],
+                'next_offset': offset+limit if offset+limit < len(text) else None,
+                'provenance': 'immutable archived public observation'}
 
 
 def _preview(value, *, head_bytes=2400, tail_bytes=800):
@@ -102,7 +166,9 @@ def _preview(value, *, head_bytes=2400, tail_bytes=800):
 
 def _reference(record):
     return {**record, 'context_projection': 'archived_not_deleted',
-            'read_hint': ('用 read 分段读取 text_file，它是已解包的原工具文本；不要猜 preview/content 的嵌套格式。record_file 保留原始消息及身份，二者哈希分别记录；旧文本不是新验证。'
+            'read_hint': ('用 bf_repository(action="archive_read",path=text_file 或 record_file,offset?,limit?,pointer?) 读取本 owner 归档。pointer 可选取 JSON 字段，如 /branches；不要用 workspace_read 或猜路径。'
+                          if record.get('read_action') == 'bf_repository.archive_read' else
+                          '用 read 分段读取 text_file，它是已解包的原工具文本；不要猜 preview/content 的嵌套格式。record_file 保留原始消息及身份，二者哈希分别记录；旧文本不是新验证。'
                           if record.get('text_file') else
                           '完整数据在当前工作区的 record_file。用 bash/Python 读取 JSON 并只提取本次需要的字段或片段，勿重复打印全文件。摘要不是新的验证。')}
 
@@ -163,6 +229,70 @@ def _project_superseded_phase_states(messages, archive):
     return projected, records
 
 
+def _project_repository_states(payload, messages, archive):
+    """Replace obsolete generated recovery snapshots, keeping real user text exact.
+
+    Repository controllers serialize a task goal and a restored state as SDK
+    user messages. Treating all previous restores as human requirements leaves
+    no room for the source files read in the current revision. This recognizer
+    is limited to the repository-only transport and its exact generated shapes.
+    The latest of each shape remains inline; originals stay in the SDK history
+    and the immutable owner archive.
+    """
+    names = {x.get('function', {}).get('name') for x in payload.get('tools', [])
+             if isinstance(x, dict)}
+    if not archive or names != {'bf_repository'}:
+        return list(messages), []
+    owner = getattr(archive, 'owner', None)
+    shapes = {'goal': [], 'state': []}
+    state_keys = {'adopted', 'branch', 'cost_upper_bound_usd', 'current_system',
+                  'error', 'model_calls', 'owner', 'project_id', 'revision',
+                  'status', 'task', 'unknown_requests'}
+    for index, message in enumerate(messages):
+        if message.get('role') != 'user':
+            continue
+        raw = message.get('content')
+        text = raw
+        if (isinstance(raw, list) and len(raw) == 1 and isinstance(raw[0], dict)
+                and raw[0].get('type') == 'text'):
+            text = raw[0].get('text')
+        if not isinstance(text, str):
+            continue
+        try:
+            value = json.loads(text)
+        except (TypeError, ValueError):
+            continue
+        if not isinstance(value, dict):
+            continue
+        task = value.get('professional_task')
+        if (set(value) == {'goal', 'professional_task'}
+                and value['goal'] == 'Complete the assigned question, submit an actual Domain Commit and finish.'
+                and isinstance(task, dict) and task.get('owner') == owner
+                and isinstance(task.get('id'), str) and task['id'].startswith('PT-')
+                and isinstance(task.get('base_system'), str) and task['base_system'].startswith('SC-')):
+            shapes['goal'].append((index, message, raw, value, task))
+        elif (set(value) == state_keys and value.get('owner') == owner
+                and isinstance(value.get('project_id'), str)
+                and value['project_id'].startswith('PR-')
+                and (value.get('task') is None or isinstance(value['task'], dict))):
+            shapes['state'].append((index, message, raw, value, value.get('task') or {}))
+    projected, records = list(messages), []
+    for kind, snapshots in shapes.items():
+        for index, message, raw, value, task in snapshots[:-1]:
+            record = archive(message)
+            reference = {**record, 'context_projection': 'archived_not_deleted',
+                         'state_authority': 'HISTORICAL_SUPERSEDED',
+                         'kind': 'repository_' + kind, 'owner': owner,
+                         'task_id': task.get('id'), 'base_system': task.get('base_system'),
+                         'current_snapshot_source_index': snapshots[-1][0]}
+            content = canonical(reference)
+            projected[index] = {**message, 'content':
+                [{**raw[0], 'text': content}] if isinstance(raw, list) else content}
+            records.append({'kind': 'superseded_repository_' + kind,
+                            'source_index': index, 'source_message_sha256': identity(message), **record})
+    return projected, records
+
+
 def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, target_bytes=TARGET_BYTES, active_skills=(), compact_state=False, closed_continuations=None, aggregate_closed=False, deduplicate_skills=False):
     if not 8000 <= target_bytes < request_bytes:
         raise ValueError('CONTEXT_LIMITS_INVALID')
@@ -170,6 +300,9 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
         raise ValueError('CONTEXT_STRATEGY_INVALID')
     state_prefixes = PRODUCT_STATE_PREFIXES if compact_state else (PRODUCT_STATE_PREFIX,)
     messages = payload.get('messages', [])
+    if isinstance(archive, ContextArchive):
+        names = {t.get('function', {}).get('name') for t in payload.get('tools', [])}
+        archive.reader = 'bf_repository' if names == {'bf_repository'} else 'read'
     if not isinstance(messages, list) or not all(isinstance(m, dict) for m in messages):
         raise ValueError('MODEL_MESSAGES_INVALID')
     # Server-owned frozen methods survive completed tool-pair compaction. They
@@ -211,9 +344,12 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
     # Registered finished controller stages are history at any request size.
     # Keep the current registered stage and actual human instructions exact.
     source_message_count = len(messages)
-    managed, closed_archives = project_closed_continuations(messages, archive, closed_continuations, aggregate=aggregate_closed)
+    repository_messages, repository_archives = _project_repository_states(payload, messages, archive)
+    repository_only = {x.get('function', {}).get('name') for x in payload.get('tools', [])
+                       if isinstance(x, dict)} == {'bf_repository'}
+    managed, closed_archives = project_closed_continuations(repository_messages, archive, closed_continuations, aggregate=aggregate_closed)
     working, observer_archives = _project_superseded_phase_states(managed, archive)
-    observer_archives = [*closed_archives, *observer_archives]
+    observer_archives = [*repository_archives, *closed_archives, *observer_archives]
     # Aggregation changes positions. Subsequent compaction operates on the new
     # list, retaining current user boundaries and native call/result pairs.
     messages = working
@@ -334,7 +470,11 @@ def project_interactive(payload, archive=None, *, request_bytes=REQUEST_BYTES, t
                 if m.get('role')=='assistant' and m.get('tool_calls')]
         complete=[(i,ids) for i,ids in groups if all(k and k in returned for k in ids)]
         if len(complete)<=2:break
-        eligible=[(i,ids) for i,ids in complete
+        # The repository has an authoritative current task and immutable source
+        # tree. Old current-turn reads (and their large provider continuation
+        # fields) must not crowd out newly returned source. Keep the three newest
+        # complete exchanges intact before spilling their source bytes.
+        eligible = complete[:-3] if repository_only else [(i,ids) for i,ids in complete
                   if not archive or source_indices.get(id(projected[i]),0)<boundary]
         if not eligible:break
         source_pos,ids=eligible[0];drop=set(ids);removable.update(ids)

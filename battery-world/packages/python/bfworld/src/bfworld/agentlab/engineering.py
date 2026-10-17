@@ -79,7 +79,7 @@ def validate(engine, parameters):
 class Engineering:
     def __init__(self,app):
         self.app=app;self.store=app.store;self.root=self.store.root.parent/'engineering'
-        self.root.mkdir(exist_ok=True);self.lock=threading.Lock()
+        self.root.mkdir(exist_ok=True);self.lock=threading.Lock();self.repository_dispatch_lock=threading.Lock();self.repository_workers={}
         with self.store.connect() as db:
             db.executescript('''CREATE TABLE IF NOT EXISTS engineering_jobs(id TEXT PRIMARY KEY,owner TEXT,operation TEXT,request_hash TEXT,request TEXT,status TEXT,created REAL,started REAL,ended REAL,result TEXT,error TEXT,UNIQUE(owner,operation));
             CREATE TABLE IF NOT EXISTS engineering_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,owner TEXT,job_id TEXT,time REAL,kind TEXT,data TEXT);''')
@@ -193,6 +193,8 @@ class Engineering:
         return self.project(r)
 
     def submit(self,owner,body,initiator='unrecorded'):
+        from .runtime_config import require_capability
+        require_capability('native')
         engine=body.get('engine');p=validate_eda(body.get('parameters',{})) if engine=='jlceda' else validate(engine,body.get('parameters',{}));op=body.get('operation_id')
         task_binding=self.tasks.guard(owner,engine,p)
         if engine=='door-selfpower' and initiator!='operator' and not door_selfpower.reference_ready():
@@ -246,6 +248,45 @@ class Engineering:
         self.event(owner,key,'job_queued',scientific_figures.public_response(request) if engine=='scientific-figures' else request)
         threading.Thread(target=self.run,args=(key,owner),daemon=True).start()
         return self.get(owner,key)
+
+    def submit_repository(self,owner,operation,project,binding,db=None):
+        """Repository inputs use the existing engineering job and native lock."""
+        from .runtime_config import require_capability
+        require_capability('native')
+        if not self.app.design_lab.repository.bound(owner):raise PermissionError('REPOSITORY_OWNER_REQUIRED')
+        template=Path(engineering_projects.__file__)
+        request={'engine':'engineering-project','template':'engineering-project-v1',
+                 'template_sha256':hashlib.sha256(template.read_bytes()).hexdigest(),
+                 'parameters':{'repository':binding},'project':project,'project_sha256':identity(project),
+                 'design_revision':None,'scope':engineering_projects.SCOPE,'initiator':'Pi',
+                 'repository_binding':binding}
+        digest=identity(request)
+        from contextlib import nullcontext
+        external=db is not None
+        with (nullcontext(db) if external else self.store.connect()) as db:
+            if not external:db.execute('BEGIN IMMEDIATE')
+            prior=db.execute('SELECT * FROM engineering_jobs WHERE owner=? AND operation=?',(owner,operation)).fetchone()
+            if prior:
+                if prior['request_hash']!=digest:raise ValueError('ENGINEERING_OPERATION_CONFLICT')
+                return self.project(prior)
+            if db.execute("SELECT 1 FROM engineering_jobs WHERE status IN ('QUEUED','RUNNING')").fetchone():raise ValueError('ENGINEERING_BUSY')
+            if not engineering_projects.KINDS[project['manifest']['kind']].is_file():raise ValueError('ENGINE_NOT_INSTALLED')
+            key='eng-'+secrets.token_hex(8);now=time.time()
+            db.execute('INSERT INTO engineering_jobs VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                       (key,owner,operation,digest,canonical(request),'QUEUED',now,None,None,None,None))
+            db.execute('INSERT INTO engineering_events(owner,job_id,time,kind,data) VALUES(?,?,?,?,?)',(owner,key,now,'job_queued',canonical(request)))
+            registered=self.project(db.execute('SELECT * FROM engineering_jobs WHERE id=?',(key,)).fetchone())
+        if not external:self.dispatch_repository(owner,key)
+        return registered
+
+    def dispatch_repository(self,owner,key):
+        # Called only after the repository transaction is committed.
+        with self.repository_dispatch_lock:
+            worker=self.repository_workers.get(key)
+            if worker and worker.is_alive():return
+            if self.get(owner,key)['status']!='QUEUED':return
+            worker=threading.Thread(target=self.run,args=(key,owner),daemon=True)
+            self.repository_workers[key]=worker;worker.start()
 
     def command(self,key,owner,args,directory,deadline):
         self.event(owner,key,'process_start',{'transport':'cli','argv':args,'cwd':str(directory)})

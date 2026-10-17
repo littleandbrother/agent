@@ -1,0 +1,58 @@
+{
+  "profile": "curve-reproduction-v1",
+  "intent": "audit",
+  "goal": "复核 P08 原生一级降压模型在六个初始输出电压下的电流衰减时长，与论文 Note S13 对照；从任务定义完成到同版审查交付。",
+  "scenario": {
+    "axis_units": {
+      "x": "V",
+      "y": "percent of paper duration"
+    },
+    "raw_sha256": "597413343e2f6869bf82a84ea39440bf7be73ba55ab93063eae95499727daab8",
+    "raw_source_job": "eng-19eb09030ae354a8",
+    "current_cutoff": 0.001,
+    "paper_durations": [
+      473,
+      379,
+      272,
+      175,
+      103,
+      56
+    ]
+  },
+  "parameters": [
+    {
+      "name": "current_cutoff",
+      "value": 0.001,
+      "unit": "A",
+      "source": "reference",
+      "role": "constraint"
+    },
+    {
+      "name": "paper_durations",
+      "value": [
+        473,
+        379,
+        272,
+        175,
+        103,
+        56
+      ],
+      "unit": "us",
+      "source": "literature",
+      "role": "constraint",
+      "locator": "P08 Note S13 pp27-28"
+    }
+  ],
+  "acceptance": {
+    "curve_binding": {
+      "condition": "六个相同电压点，原始波形来源哈希一致"
+    },
+    "curve_accuracy": {
+      "condition": "六个衰减时长相对论文的最大偏差不超过 1%",
+      "max_abs_error": 1.0
+    },
+    "delivery_version": {
+      "condition": "原始来源、提取结果、检查和报告绑定本候选"
+    }
+  }
+}

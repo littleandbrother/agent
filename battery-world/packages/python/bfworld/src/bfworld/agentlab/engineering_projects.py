@@ -71,6 +71,13 @@ def request(app, owner, parameters):
     if path.stat().st_size > 65536:
         raise ValueError('PROJECT_MANIFEST_TOO_LARGE')
     spec = json.loads(path.read_text())
+    project = snapshot(spec,lambda name: relative_file(path.parent,name))
+    value.update(project=project, project_sha256=identity(project), input_dimensions={k:value['assembly_hashes'][k] for k in ('physical_hash',)})
+    return value
+
+
+def snapshot(spec,load_source):
+    """One manifest contract for participant and repository source snapshots."""
     if not isinstance(spec, dict) or set(spec) != {'schema_version', 'kind', 'entrypoint', 'files', 'interfaces'} or spec['schema_version'] != 'bf-engineering-project-v1' or spec['kind'] not in KINDS:
         raise ValueError('PROJECT_SCHEMA')
     names = spec['files']
@@ -88,8 +95,8 @@ def request(app, owner, parameters):
         raise ValueError('PROJECT_ENTRYPOINT_TYPE')
     contents = {}; total = 0
     for name in names:
-        source = relative_file(path.parent, name)
-        if source.suffix not in extensions:
+        source = load_source(name)
+        if Path(name).suffix not in extensions:
             raise ValueError('PROJECT_SOURCE_TYPE')
         total += source.stat().st_size
         if total > 2_000_000:
@@ -101,9 +108,7 @@ def request(app, owner, parameters):
         for line in text.splitlines():
             if line.strip().startswith('.') and line.strip().split()[0].lower() not in allowed:
                 raise ValueError('PROJECT_SPICE_DIRECTIVE_DENIED')
-    project = {'manifest':spec, 'sources':contents}
-    value.update(project=project, project_sha256=identity(project), input_dimensions={k:value['assembly_hashes'][k] for k in ('physical_hash',)})
-    return value
+    return {'manifest':spec, 'sources':contents}
 
 
 def compiler_read_paths(executable):

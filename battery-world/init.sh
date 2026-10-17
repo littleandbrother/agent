@@ -16,6 +16,19 @@ fi
 
 export PYTHONPATH="$ROOT_DIR/packages/python/bfworld/src"
 
+if [[ "${BFWORLD_VERIFY_PROFILE:-}" == "architecture-v2-lab" ]]; then
+  "$PYTHON_BIN" scripts/verify_lab_publication.py \
+    --output "${BF_V2_EVIDENCE:?set a new verification output directory}"
+  exit
+fi
+
+if [[ "${BFWORLD_VERIFY_PROFILE:-}" == "architecture-v2" ]]; then
+  "$PYTHON_BIN" scripts/verify_v2_environment.py \
+    --runtime "${BF_V2_RUNTIME:?set the isolated V2 runtime}" \
+    --output "${BF_V2_EVIDENCE:?set a new verification output directory}"
+  exit
+fi
+
 echo "=== Battery World environment ==="
 "$PYTHON_BIN" scripts/check_environment.py
 

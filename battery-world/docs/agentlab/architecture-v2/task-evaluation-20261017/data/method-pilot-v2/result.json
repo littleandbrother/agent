@@ -1,0 +1,367 @@
+{
+  "candidates": [
+    {
+      "chain": 0,
+      "generation": 0,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "causal",
+        "reason": "Each feature uniquely distinguishes pass/fail for one mechanism: prefix for energy_timing, information for information_window, feedback for load_feedback; omitting any causes misclassification. Causal replay includes source response only when load changes, preserving accuracy while reducing cost versus full recomputation."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 36000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 18000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    },
+    {
+      "chain": 0,
+      "generation": 1,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "causal",
+        "reason": "All three features are needed: prefix distinguishes energy_timing, information distinguishes information_window, and feedback distinguishes load_feedback. Causal replay preserves source-response accuracy for changed loads while avoiding full recomputation cost, so it minimizes misclassification and ranking errors before reducing cost."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 36000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 18000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    },
+    {
+      "chain": 1,
+      "generation": 0,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "causal",
+        "reason": "All three margins are needed to distinguish pass/fail across energy-timing, information-window, and load-feedback mechanisms. Causal replay captures source response to changed load without full recomputation, preserving accuracy at lower cost."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 36000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 18000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    },
+    {
+      "chain": 1,
+      "generation": 1,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "causal",
+        "reason": "All three margins are needed to separate energy-timing, information-window, and load-feedback pass/fail cases; causal replay captures load-induced source response without full recomputation, preserving ranking and response accuracy at lower cost than full."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 36000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 18000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    },
+    {
+      "chain": 2,
+      "generation": 0,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "full",
+        "reason": "All three features are necessary to correctly classify pass/fail across energy_timing, information_window, and load_feedback mechanisms; full replay minimizes wrong rankings as shown by training replay examples."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 48000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 24000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    },
+    {
+      "chain": 2,
+      "generation": 1,
+      "configuration": {
+        "features": [
+          "prefix",
+          "information",
+          "feedback"
+        ],
+        "replay": "causal",
+        "reason": "All three features are required to distinguish pass/fail across energy_timing, information_window, and load_feedback mechanisms. Causal replay preserves response accuracy by including source response only when the changed load affects it, reducing unnecessary recomputation compared with full replay."
+      },
+      "development": {
+        "contract": {
+          "n": 72,
+          "true_accept": 36,
+          "true_reject": 36,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 12,
+        "work_units": 36000,
+        "response_max_energy_error_uJ": 0.0
+      },
+      "validation": {
+        "contract": {
+          "n": 36,
+          "true_accept": 18,
+          "true_reject": 18,
+          "false_accept": 0,
+          "false_reject": 0,
+          "unknown": 0,
+          "coverage": 1.0,
+          "accuracy_all": 1.0
+        },
+        "feature_cost": 7,
+        "replay_rank_errors": 0,
+        "replay_n": 6,
+        "work_units": 18000,
+        "response_max_energy_error_uJ": 0.0
+      }
+    }
+  ],
+  "test": {
+    "fixed-static-frozen": {
+      "contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 0,
+        "false_accept": 36,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 0.5
+      },
+      "feature_cost": 1,
+      "replay_rank_errors": 12,
+      "replay_n": 12,
+      "work_units": 24000,
+      "response_max_energy_error_uJ": null
+    },
+    "fixed-rich-full": {
+      "contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0
+      },
+      "feature_cost": 7,
+      "replay_rank_errors": 0,
+      "replay_n": 12,
+      "work_units": 48000,
+      "response_max_energy_error_uJ": 0.0
+    },
+    "fixed-rich-causal": {
+      "contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0
+      },
+      "feature_cost": 7,
+      "replay_rank_errors": 0,
+      "replay_n": 12,
+      "work_units": 36000,
+      "response_max_energy_error_uJ": 0.0
+    },
+    "selected": {
+      "contract": {
+        "n": 72,
+        "true_accept": 36,
+        "true_reject": 36,
+        "false_accept": 0,
+        "false_reject": 0,
+        "unknown": 0,
+        "coverage": 1.0,
+        "accuracy_all": 1.0
+      },
+      "feature_cost": 7,
+      "replay_rank_errors": 0,
+      "replay_n": 12,
+      "work_units": 36000,
+      "response_max_energy_error_uJ": 0.0
+    }
+  },
+  "selection": {
+    "features": [
+      "prefix",
+      "information",
+      "feedback"
+    ],
+    "replay": "causal",
+    "reason": "Each feature uniquely distinguishes pass/fail for one mechanism: prefix for energy_timing, information for information_window, feedback for load_feedback; omitting any causes misclassification. Causal replay includes source response only when load changes, preserving accuracy while reducing cost versus full recomputation."
+  },
+  "recursive_improver_tested": false,
+  "source_simulations_reused": true
+}

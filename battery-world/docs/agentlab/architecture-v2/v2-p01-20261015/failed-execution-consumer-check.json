@@ -1,0 +1,68 @@
+{
+  "schema": "v2-failed-execution-consumer-check-v1",
+  "timestamp": 1792006969.3951192,
+  "job_id": "eng-7ac31070e92df03f",
+  "status": "FAILED",
+  "execution_id": "EX-c2ceb7bb40ca5cec6702cb6a488e7f24c9ebc1698126fbb9b961bfccc2b423df",
+  "consumed_input": {
+    "input_receipt_sha256": "37e3e51bec6721186c7f83e86c71ba210e323be665ef6f580671d801548a12ee",
+    "manifest": {
+      "entrypoint": "main.c",
+      "files": [
+        "main.c",
+        "app_policy.c",
+        "app_policy.h",
+        "ad7156_nrf.c",
+        "ad7156_nrf.h",
+        "sdk_config.h"
+      ],
+      "interfaces": {
+        "board": "PCA10040",
+        "clock_hz": 64000000,
+        "events": [
+          "adv_5s",
+          "conn_bound_epoch",
+          "sample_5s",
+          "notify_2byte_le"
+        ],
+        "note": "Adapted from the official Nordic ble_app_uart example (SDK 17.1.0 / S132 7.2.0). Real I2C via the official nrf_drv_twi master; real NUS notifications; async epoch/request-id binding in app_policy.c. MCU identity conflict (paper Fig.3 STM32WB15CC vs Methods nrf52832) is NOT resolved: this is a declared nRF52832 reconstruction. BLE UUID/frame protocol not published -> declared reconstruction. Target build success is NOT evidence of radio, I2C device/bus, GPIO or power.",
+        "pins": {
+          "twi_scl": 27,
+          "twi_scl_note": "NEW dev-board assumption (PCA10040 Arduino header). The original pin mapping was NOT published; this is NOT the original mapping.",
+          "twi_sda": 26,
+          "uart_cts": 7,
+          "uart_rts": 5,
+          "uart_rx": 8,
+          "uart_tx": 6
+        },
+        "sdk": "17.1.0_ddde560",
+        "softdevice": "S132-7.2.0",
+        "target": "nRF52832-QFAA",
+        "units": "SI"
+      },
+      "kind": "firmware-nrf52832-s132",
+      "schema_version": "bf-engineering-project-v1"
+    },
+    "project_sha256": "47dddaa8d1437b7f07b1ebb2a28552cdfa391cdb21b8c2c1b59628ee21eb4879",
+    "sources": {
+      "ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+      "ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+      "app_policy.c": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+      "app_policy.h": "43bd83b9b852807603763a6829f13bf3b6aed4da2400698173c38a12eb42cc1d",
+      "main.c": "6416f77986ac77f061bd215fcf0d739d8f84e81400d8b9b354ca1a1d35a03de2",
+      "sdk_config.h": "849fbf071e2d825952626dfeafea1711ad29a3a1f4b8c85cf313ddbe710ecbae"
+    }
+  },
+  "diagnostics": {
+    "process.log": {
+      "bytes": 1497,
+      "next_offset": null,
+      "offset": 0,
+      "sha256": "0b732e46b8ecef97b24ee0fd5309c15a6778dade1f67dfea7db7130c73b63772",
+      "total_chars": 1497
+    }
+  },
+  "compiler_error_lines": 1,
+  "model_calls_started": 0,
+  "native_jobs_started": 0
+}
