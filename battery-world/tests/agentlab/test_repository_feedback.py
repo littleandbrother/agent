@@ -28,7 +28,14 @@ FILES={'design.json':(FIXTURE/'design.json').read_text(),'firmware/main.c':(FIXT
 
 
 class FeedbackRepositoryTests(unittest.TestCase):
-    setUp=fixtures.RepositoryCase.setUp
+    def setUp(self):
+        fixtures.RepositoryCase.setUp(self)
+        # These exercise the Repository journal with a mocked executor, not
+        # native tool qualification. Keep descriptor identity explicit on every
+        # platform instead of probing an installed desktop solver accidentally.
+        environment = patch.object(execution, 'environment', return_value={'test_only': True})
+        environment.start()
+        self.addCleanup(environment.stop)
 
     def create(self):
         return self.repo.handle(OWNER,{'action':'repository_task_create','operation_id':'feedback-create',
@@ -163,6 +170,11 @@ class FeedbackRepositoryTests(unittest.TestCase):
 
 
 class FeedbackExecutionTests(unittest.TestCase):
+    def test_missing_native_tools_remains_a_preflight_error(self):
+        with patch.object(feedback_native, 'tools', side_effect=ValueError('FEEDBACK_NATIVE_TOOL_MISSING')):
+            with self.assertRaisesRegex(ValueError, 'FEEDBACK_NATIVE_TOOL_MISSING'):
+                execution.environment()
+
     @unittest.skipUnless(sys.platform == 'darwin', 'macOS sandbox integration; portable C supervisor covered separately')
     def test_program_cannot_claim_unpowered_leakage_while_powered(self):
         with tempfile.TemporaryDirectory() as tmp:

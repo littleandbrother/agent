@@ -22,7 +22,13 @@
     ],
     "saved_native_controls": 11,
     "sealed_files": 44,
-    "project_state": "PASS"
+    "project_state": "PASS",
+    "portable_repository": {
+      "tests": 281,
+      "skipped": 2,
+      "native_tools": "forced unavailable",
+      "result": "PASS"
+    }
   },
   "cost": {
     "new_model_calls": 0,
@@ -33,6 +39,17 @@
   "publication": {
     "branch": "codex/bf-architecture-v2",
     "pr": "https://github.com/littleandbrother/agent/pull/3",
-    "status": "pending"
+    "status": "pending",
+    "attempts": [
+      {
+        "head": "59e5d2486819853f49729a40e2a9481e25accf1d",
+        "runs": [
+          39118672684,
+          39118669528
+        ],
+        "result": "FAIL",
+        "reason": "Nine Repository state tests accidentally called desktop tool discovery instead of using a fixed environment fixture. Pi job and original three PDF tests passed."
+      }
+    ]
   }
 }
