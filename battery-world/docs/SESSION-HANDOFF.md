@@ -1,3 +1,21 @@
+## 2026-10-18 · BFA-041 CI修复与发布
+
+BFA-040反馈执行和BFA-041 CI修复待推送提交验收。后续优先让原V2压电主设计者在固定任务上完成两轮真实修订，再接按需资料工作者和同条件组织比较。原owner、工程、费用、Baseline和Demo保留；本轮0新模型/原生求解。详见 docs/agentlab/architecture-v2/ci-publication-20261018/REPORT.md、NEXT.md。
+
+## 当前交接 · BFA-040 A/B 完成 · 2026-10-18
+
+- 报告：docs/agentlab/architecture-v2/power-feedback-20261018/RESULTS.md；复现REPRODUCE.md；离线verify_saved.py，0模型/原生执行。
+- 配置node-feedback-v1、执行器piezo-feedback-v1；现有工具从repository_task_definition读取完整ABI、来源、单位、消费者和数值规则。BF_OFF只由供电监控器生成。操作员维护冻结任务、参考准入与检查器。
+- 新参考资格FQ-ae54a1e11eaeebafe6c665a86145c87b62f27a004d2445706ef7231f90259af9。完整证据在 ~/.local/share/bf-agent-architecture-v2/power-feedback/qualification/a8d039b17e6085d35d495363ebfb31de173896041a009f9d9c031beb302242db/；实际V2仓库feedback-qualification/current.json已读回。原生缓存位于qualification/execution-cache/design-lab/repository/feedback-native-cache。
+- 预充参考5帧；零储能17.9385秒启动、1帧，20秒3帧目标FAIL。厂商PMIC/主机C/声明状态电流/数字接收范围，physical=NOT_TESTED。不是Pi设计或组织方式收益的结果。
+- 11控制、272 Repository（20反馈专项）、19 Lab回归通过；两份同版PDF和完整源码/RAW工程包通过摘要核对。16个不同原生输入均完成，无未知作业。新模型调用0；未重跑输入未变的成功求解。
+- 原十Pi会话、工程、费用/UNKNOWN、Demo资产、6388Baseline文件及V2历史状态一致。未恢复Pi或启动原服务。启动前读回当前状态；不要另建Lead或把旧固定供电轨迹当作新程序响应。
+- 全仓库状态检查与基点同样存在BFA-035旧登记冲突（in-progress / active_feature=null），见project-state-check.json；后续先核对其终态。
+- PROJECT.active_feature=null，BFA-040 complete。下一feature先声明范围/反例，再实现按需资料工作者和动态工作范围；实际Agent比较固定任务、模型、初态、资料、执行器和评价协议。原参考owner保持；新适配器候选需显式任务基准及兼容源码。
+- codex/bf-architecture-v2基点dcd7c5448ebef67d102eae5de49938a8142efe3c；本轮未提交/推送。原来无关的未跟踪资料继续保留。不使用harness-creator、pixel-perfect-reference-ui或定时消息。
+
+---
+
 ## 2026-10-17 · BFA-038 / BFA-039 GitHub 发布批次
 
 用户已授权发布到 `codex/bf-architecture-v2`。本批次包含任务定义与评估接口、Pi 技能、默认压电与 P08 审查、实验数据、PDF 和复现脚本。20 项保存结果离线复核通过；既有 56 项相关测试、Pi 检查与 Lab init 结果随批次保存。发布不启动模型或原生仿真。下方保留实施时的历史状态。

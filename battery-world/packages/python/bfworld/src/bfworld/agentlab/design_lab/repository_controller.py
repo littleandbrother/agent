@@ -38,7 +38,7 @@ def freeze(lab):
     manifest = {'schema_version': 'bf-repository-controller-v2', 'controller': 'pi-sdk-repository',
        'files': {folder+'/'+n+'.'+suffix: sha(source/folder/(n+'.'+suffix)) for folder, suffix in [('src','ts'),('dist','js')] for n in modules},
        'python_bindings': {p.name: sha(p) for p in sorted(Path(__file__).parent.glob('*.py'))
-                           if p.name.startswith(('repository', 'report_'))},
+                           if p.name.startswith(('repository', 'report_', 'feedback_'))},
        'review_fixtures': {p.name:sha(p) for p in sorted(Path(__file__).parent.glob('repository-review-*.json'))},
        'context_bindings': {n: sha(Path(__file__).parent.parent/n) for n in
                            ('provider.py','context.py','model_profile.py','budget_policy.py','recovery.py','skill_resources.py')},
@@ -89,7 +89,10 @@ def start(repo, owner, goal=None, dry_run=False, purpose='design'):
     require_capability('model')
     project = repo.project(repo.bound(owner),owner)
     from .repository_reference_qualification import require as require_reference
-    require_reference(repo, repo.system(project['id'],project['submitted']))
+    system = repo.system(project['id'],project['submitted'])
+    require_reference(repo, system)
+    from .repository_feedback_qualification import require as require_feedback
+    require_feedback(repo, system)
     if owner in repo.lab.controllers and repo.lab.controllers[owner].is_alive(): raise ValueError('REPOSITORY_CONTROLLER_ALREADY_RUNNING')
     with repo.store.connect() as db:
         if not budget_policy.unbounded_time(db,owner): raise ValueError('EXPLICIT_CONTINUATION_AUTHORITY_REQUIRED')

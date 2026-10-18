@@ -55,6 +55,10 @@ def catalogue():
 def compile_standard(raw, cfg):
     finite_tree(raw)
     adapter = cfg['adapter']; scenario = raw['scenario']
+    from .repository_feedback_contract import FIELDS as FEEDBACK_FIELDS, UNITS as FEEDBACK_UNITS, spec as feedback_spec
+    design_fields = FEEDBACK_FIELDS if adapter=='piezo-feedback-v1' else DESIGN_FIELDS
+    scenario_units = FEEDBACK_UNITS if adapter=='piezo-feedback-v1' else SCENARIO_UNITS
+    piezo = adapter in ('piezo-reference-v1','piezo-feedback-v1')
     for key in ('functions', 'assignments'):
         for obj in raw.get(key, []):
             for refs in ('components', 'functions'):
@@ -77,7 +81,7 @@ def compile_standard(raw, cfg):
         bind = p.get('binding')
         if bind is None and p['name'] in scenario and p['value'] == scenario[p['name']]:
             bind = {'target': 'scenario', 'path': p['name']}
-        if bind is None and adapter == 'piezo-reference-v1' and p['name'] in DESIGN_FIELDS:
+        if bind is None and piezo and p['name'] in design_fields:
             bind = {'target': 'design', 'path': p['name']}
         if bind is None:
             if p['role'] == 'constraint': raise ValueError('TASK_CONSTRAINT_BINDING_REQUIRED: ' + p['name'])
@@ -87,11 +91,11 @@ def compile_standard(raw, cfg):
         target, path = bind['target'], bind['path']
         if target == 'scenario':
             if path not in scenario or p['value'] != scenario[path]: raise ValueError('TASK_PARAMETER_SCENARIO_CONFLICT')
-            if adapter == 'piezo-reference-v1' and p['unit'] != SCENARIO_UNITS.get(path): raise ValueError('TASK_PARAMETER_UNIT_MISMATCH')
+            if piezo and p['unit'] != scenario_units.get(path): raise ValueError('TASK_PARAMETER_UNIT_MISMATCH')
             if p['role'] == 'design_choice': raise ValueError('TASK_SCENARIO_IS_FIXED')
         elif target == 'design':
-            if adapter != 'piezo-reference-v1' or path not in DESIGN_FIELDS: raise ValueError('TASK_DESIGN_BINDING_UNSUPPORTED')
-            unit, lo, hi = DESIGN_FIELDS[path]
+            if not piezo or path not in design_fields: raise ValueError('TASK_DESIGN_BINDING_UNSUPPORTED')
+            unit, lo, hi = design_fields[path]
             if p['unit'] != unit: raise ValueError('TASK_PARAMETER_UNIT_MISMATCH')
             if type(p['value']) not in (int, float) or not lo <= p['value'] <= hi: raise ValueError('TASK_DESIGN_VALUE_DOMAIN')
         elif target == 'artifact':
@@ -105,6 +109,8 @@ def compile_standard(raw, cfg):
         if p['role'] == 'constraint': fixed.append(entry)
     from .repository_profiles import PREFIXES
     defaults = {
+        'piezo-feedback-v1': {'fields':{k:{'unit':u,'min':lo,'max':hi} for k,(u,lo,hi) in FEEDBACK_FIELDS.items()},
+                              'editable_files':['design.json','firmware/main.c','notes/']},
         'piezo-reference-v1': {'fields': {k: {'unit': u, 'min': lo, 'max': hi} for k, (u, lo, hi) in DESIGN_FIELDS.items()},
                               'editable_files': ['design.json', 'firmware/main.c', 'notes/']},
         'tabulated-curve-v1': {'fields': {}, 'editable_files': ['observation.csv', 'notes/']},
@@ -128,7 +134,7 @@ def compile_standard(raw, cfg):
             if 'design_space' in raw and key in space['fields']: raise ValueError('TASK_FIXED_VARIABLE_CONFLICT')
             space['fields'].pop(key, None)
     service = {'observable': cfg['scope']}
-    if adapter == 'piezo-reference-v1':
+    if piezo:
         service = {'observable': 'valid-digital-frames', 'startup': 'declared-initial-storage',
             'deadline_s': scenario['duration_s'], 'minimum_results': raw['acceptance']['receiver_service']['minimum_packets']}
     elif adapter == 'tabulated-curve-v1': service = {'observable': 'paired-sample-error'}
@@ -139,7 +145,7 @@ def compile_standard(raw, cfg):
             raise ValueError('TASK_ASSIGNMENT_COMPONENT_UNKNOWN')
     return {'version': VERSION, 'service': service, 'design_space': space, 'bindings': bindings,
         'fixed_parameters': fixed, 'interface_levels': ['format', 'source_consistency', 'engineering_compatibility'],
-        'execution_policy': {'coupling': 'average source power to storage; host events drive fixed-current load; supply checked afterward',
+        'execution_policy': feedback_spec() if adapter=='piezo-feedback-v1' else {'coupling': 'average source power to storage; host events drive fixed-current load; supply checked afterward',
             'source_step_s': 1/scenario['frequency_hz']/160, 'source_cycles': 120, 'source_evaluation_last_cycles': 20,
             'storage_max_step_s': .01, 'event_edges_s': 1e-7, 'event_order': 'ordered and non-overlapping',
             'feedback_iteration': 'not implemented; automatic startup and voltage-driven firmware require another adapter'} if adapter == 'piezo-reference-v1' else {'adapter': adapter},
@@ -169,6 +175,12 @@ def acceptance_predicates(raw, cfg):
                 'deadline_s': s['duration_s'], 'minimum_sample_and_tx_storage_v': s['minimum_storage_v']}}
         for gate, parameters in values.items():
             result[gate] = {'checker': 'repository_reference_node.independent_check', 'parameters': parameters}
+    elif cfg['adapter'] == 'piezo-feedback-v1':
+        from .repository_feedback_contract import NUMERICS, CHECK_ONLY
+        for value in result.values():
+            value['checker']='repository_feedback_validation.independent_check'
+            value['rules']=NUMERICS
+            value['service_conditions']={k:v for k,v in raw['scenario'].items() if k in CHECK_ONLY}
     elif cfg['adapter'] == 'p01-existing':
         for value in result.values(): value['checker'] = 'repository_validation.evaluate / native_review_reuse'
     return result
@@ -187,6 +199,15 @@ def interface_consumers(adapter):
             result[key] = {'status': 'IMPLEMENTED', 'producer': producer, 'consumer': consumer,
                 'checker': 'repository_reference_node.independent_check', 'scope': 'nominal-reference-chain',
                 'source_gates': sources, 'engineering_gates': engineering, 'affected_gates': sorted(set(sources+engineering))}
+    elif adapter == 'piezo-feedback-v1':
+        for key,producer,consumer,gates in [
+                ('mechanics-source','design + fixed excitation/material','reciprocal modal source',['source_model','coupling_numerics']),
+                ('source-power','piezo electrical port','vendor LTC3588-1 bridge/buck',['source_model','power_service']),
+                ('power-runtime','MCU VDD + PGOOD','sandboxed compiled C → state-current load → native solver',['load_binding','power_service','coupling_numerics']),
+                ('radio-service','completed sample/TX in one powered boot','independent digital receiver',['receiver_service'])]:
+            result[key]={'status':'IMPLEMENTED','producer':producer,'consumer':consumer,
+                'checker':'repository_feedback_validation.independent_check','scope':'vendor-PMIC-program-feedback',
+                'source_gates':gates,'engineering_gates':gates,'affected_gates':gates}
     elif adapter == 'p01-existing':
         result['power-runtime'] = {'status': 'IMPLEMENTED', 'producer': 'nRF5/S132 source + load-timeline.json',
             'consumer': 'repository_load + spice', 'checker': 'repository_contracts.check + repository_validation.evaluate',
@@ -200,11 +221,14 @@ def execution_scenario(task):
     if task.get('standards', {}).get('version') != VERSION: return scenario
     if task['case_adapter'] == 'piezo-reference-v1':
         return {k: v for k, v in scenario.items() if k not in CHECK_ONLY | DISPLAY_ONLY}
+    if task['case_adapter'] == 'piezo-feedback-v1':
+        from .repository_feedback_contract import CHECK_ONLY as FEEDBACK_CHECK_ONLY
+        return {k:v for k,v in scenario.items() if k not in FEEDBACK_CHECK_ONLY | DISPLAY_ONLY}
     return scenario
 
 
 def acceptance_scenario(task):
-    if task.get('standards', {}).get('version') == VERSION and task['case_adapter'] == 'piezo-reference-v1':
+    if task.get('standards', {}).get('version') == VERSION and task['case_adapter'] in ('piezo-reference-v1','piezo-feedback-v1'):
         return {k: v for k, v in task['scenario'].items() if k not in DISPLAY_ONLY}
     return task['scenario']
 
@@ -217,11 +241,13 @@ def check_files(task, files, read, previous=None, changed=None):
         for path in changed:
             if not path_allowed(path, space['editable_files']): raise PermissionError('TASK_DESIGN_SCOPE')
     design = None
-    if task['case_adapter'] == 'piezo-reference-v1':
+    if task['case_adapter'] in ('piezo-reference-v1','piezo-feedback-v1'):
+        from .repository_feedback_contract import FIELDS as FEEDBACK_FIELDS
+        fields = FEEDBACK_FIELDS if task['case_adapter']=='piezo-feedback-v1' else DESIGN_FIELDS
         if not {'design.json', 'firmware/main.c'} <= set(files): raise ValueError('TASK_TRANSITION_INPUT_MISSING')
         design = json.loads(read('design.json')); finite_tree(design)
-        if not isinstance(design, dict) or set(design) != set(DESIGN_FIELDS): raise ValueError('TASK_DESIGN_FIELDS')
-        for key, (unit, lo, hi) in DESIGN_FIELDS.items():
+        if not isinstance(design, dict) or set(design) != set(fields): raise ValueError('TASK_DESIGN_FIELDS')
+        for key, (unit, lo, hi) in fields.items():
             val = design[key]
             if type(val) not in (int, float) or not lo <= val <= hi: raise ValueError('TASK_DESIGN_VALUE_DOMAIN')
             if key in space['fields']:

@@ -1,0 +1,38 @@
+{
+  "status": "LOCAL_PASS_REMOTE_PENDING",
+  "base_commit": "dcd7c5448ebef67d102eae5de49938a8142efe3c",
+  "prior_failed_runs": [
+    38998125754,
+    38998122642
+  ],
+  "cause": "Hardcoded Codex Python path absent on Ubuntu; CI also omitted ReportLab and pypdf.",
+  "local": {
+    "repository_tests": 280,
+    "clean_repository_tests": 280,
+    "clean_ci_python": "3.12.14",
+    "clean_pi": [
+      "npm ci --ignore-scripts",
+      "npm run bf:build",
+      "npm run check"
+    ],
+    "clean_pi_source_files_unchanged": 2012,
+    "git_checkout_eol_filters": [
+      "pi-bf-aiot/pi-test.bat",
+      "pi-bf-aiot/pi-test.ps1"
+    ],
+    "saved_native_controls": 11,
+    "sealed_files": 44,
+    "project_state": "PASS"
+  },
+  "cost": {
+    "new_model_calls": 0,
+    "new_native_dispatches": 0,
+    "retained_native_dispatches": 16,
+    "retained_completed_native_runs": 16
+  },
+  "publication": {
+    "branch": "codex/bf-architecture-v2",
+    "pr": "https://github.com/littleandbrother/agent/pull/3",
+    "status": "pending"
+  }
+}

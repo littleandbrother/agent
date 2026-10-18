@@ -8,6 +8,7 @@ from pathlib import Path
 from ..store import identity
 from .repository import file_hash
 from .repository_profiles import system_profile, task_requirements
+from ..simulation_chain.contracts import ChainError
 
 VERSION = 'task-profile-review-v1'
 
@@ -21,6 +22,8 @@ def evaluator_identity(system):
                   Path(__file__).with_name('repository_contracts.py'), Path(__file__).with_name('repository_load.py')]
     elif cfg['adapter'] == 'piezo-reference-v1':
         files += [Path(__file__).with_name('repository_reference_node.py')]
+    elif cfg['adapter'] == 'piezo-feedback-v1':
+        files += [Path(__file__).with_name(p) for p in ('repository_feedback_validation.py','repository_feedback_contract.py')]
     return {'version': VERSION, 'adapter': cfg['adapter'], 'sources': {f.name: file_hash(f) for f in files}}
 
 
@@ -46,7 +49,7 @@ def qualification(repo, system, db):
     required = task_requirements(repo, system, db)['required_gates']
     gates = {}
     execution_id = None
-    if system_profile(system)['adapter'] in ('tabulated-curve-v1','piezo-reference-v1'):
+    if system_profile(system)['adapter'] in ('tabulated-curve-v1','piezo-reference-v1','piezo-feedback-v1'):
         from .repository_task_execution import current_execution
         execution = current_execution(repo, system, db)
         execution_id = execution['id'] if execution else None
@@ -110,8 +113,20 @@ def evaluate(repo, system):
         elif cfg['adapter'] == 'piezo-reference-v1':
             from .repository_reference_node import independent_check
             for key, value in independent_check(repo, system, execution).items(): record(key, value['status'], value)
+        elif cfg['adapter'] == 'piezo-feedback-v1':
+            from .repository_feedback_validation import independent_check
+            try:
+                values=independent_check(repo,system,execution)
+                for key,value in values.items(): record(key,value['status'],value)
+            except (ValueError,KeyError,ChainError) as error:
+                for key in task['required_gates']:
+                    if key!='delivery_version': record(key,'UNEVALUABLE',{'error':str(error)})
     for path in system['files']: read(repo, system, path)
     record('delivery_version', 'PASS', {'files': len(system['files']), 'task_definition': task['id']})
-    return {'checker': evaluator_identity(system), 'target': system['id'], 'gates': gates,
+    result = {'checker': evaluator_identity(system), 'target': system['id'], 'gates': gates,
             'scope': task['scope'], 'status': 'PASS' if all(v['status'] == 'PASS' for v in gates.values()) else 'FAIL',
             'native_jobs_dispatched': 0, 'physical': 'NOT_TESTED'}
+    if cfg['adapter']=='piezo-feedback-v1':
+        from .repository_feedback_validation import protocol
+        result['protocol']=protocol(system)
+    return result

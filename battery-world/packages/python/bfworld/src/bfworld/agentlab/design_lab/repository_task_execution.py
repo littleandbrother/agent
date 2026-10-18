@@ -11,6 +11,7 @@ from ..store import canonical, identity
 from .contracts import sealed
 from .repository import file_hash
 from .repository_profiles import system_profile, execution_identity
+from ..simulation_chain.contracts import ChainError
 
 
 def descriptor(system):
@@ -21,6 +22,10 @@ def descriptor(system):
     elif cfg['adapter'] == 'piezo-reference-v1':
         from .repository_reference_node import environment
         paths = ['design.json', 'firmware/main.c']
+        env = environment()
+    elif cfg['adapter'] == 'piezo-feedback-v1':
+        from .repository_feedback_node import environment
+        paths = ['design.json','firmware/main.c']
         env = environment()
     else: raise ValueError('TASK_USE_NATIVE_DOMAIN_EXECUTOR')
     return execution_identity(system, cfg['adapter'], env, paths)
@@ -69,11 +74,14 @@ def execute(repo, owner, body, operator=False):
     p = repo.leader(body['project_id'], owner)
     system = repo.system(p['id'], body['system_id'])
     desc = descriptor(system)
-    if desc['executor']=='piezo-reference-v1':
+    if desc['executor'] in ('piezo-reference-v1','piezo-feedback-v1'):
         from ..runtime_config import require_capability
         require_capability('native')
         if not operator:
-            from .repository_reference_qualification import require
+            if desc['executor']=='piezo-feedback-v1':
+                from .repository_feedback_qualification import require
+            else:
+                from .repository_reference_qualification import require
             require(repo,system)
     def apply(db):
         prior = current_execution(repo, system, db)
@@ -103,6 +111,9 @@ def execute(repo, owner, body, operator=False):
                 elif desc['executor'] == 'tabulated-curve-v1':
                     metrics = {path: {'samples': len(curve_rows(raw))} for path, raw in inputs.items()}
                     outputs = {'samples.json': canonical({p: curve_rows(v) for p, v in inputs.items()})}
+                elif desc['executor'] == 'piezo-feedback-v1':
+                    from .repository_feedback_node import run
+                    metrics,outputs = run(root,system,inputs,repo.root/'feedback-native-cache')
                 else:
                     from .repository_reference_node import run
                     def source_lookup(netlist):
@@ -124,11 +135,16 @@ def execute(repo, owner, body, operator=False):
                                     k:(reference['blobs']/refs[k]['sha256']).read_bytes() for k in ('source.cir','source.cir.log','source.dat')}}
                         return None
                     metrics, outputs = run(root, system, inputs, source_lookup)
-            except (ValueError, subprocess.TimeoutExpired) as error:
+            except (ValueError, ChainError, subprocess.TimeoutExpired) as error:
+                if desc['executor']=='piezo-feedback-v1' and (isinstance(error,subprocess.TimeoutExpired) or 'UNKNOWN_RECONCILE' in str(error)):
+                    raise
                 status = 'FAILED'
                 metrics = {'error': str(error), 'kind': 'execution_failure'}
                 outputs = {'failure.json': canonical(metrics)}
                 outputs.update({str(path.relative_to(root)): path.read_bytes() for path in root.glob('*.log')})
+                if desc['executor']=='piezo-feedback-v1':
+                    outputs.update({str(path.relative_to(root)):path.read_bytes() for path in root.rglob('*')
+                        if path.is_file() and path.suffix in ('.json','.csv','.log','.cir') and path.name not in ('dispatch.json','completed.json')})
             output_refs = {}
             for logical, raw in outputs.items():
                 path = root/logical; path.parent.mkdir(parents=True, exist_ok=True)

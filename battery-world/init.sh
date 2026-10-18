@@ -16,6 +16,20 @@ fi
 
 export PYTHONPATH="$ROOT_DIR/packages/python/bfworld/src"
 
+if [[ "${BFWORLD_VERIFY_PROFILE:-}" == "architecture-v2-ci" ]]; then
+  export PYTHONPATH="$PYTHONPATH:$ROOT_DIR/tests/agentlab"
+  "$PYTHON_BIN" -m unittest discover -s tests/agentlab -p 'test_repository*.py' -v
+  "$PYTHON_BIN" docs/agentlab/architecture-v2/power-feedback-20261018/verify_saved.py
+  exit
+fi
+
+if [[ "${BFWORLD_VERIFY_PROFILE:-}" == "power-feedback" ]]; then
+  "$PYTHON_BIN" scripts/verify_power_feedback.py \
+    --runtime "${BF_V2_RUNTIME:-$HOME/.local/share/bf-agent-architecture-v2}" \
+    --output "${BF_FEEDBACK_EVIDENCE:?set the feedback evidence/cache directory}"
+  exit
+fi
+
 if [[ "${BFWORLD_VERIFY_PROFILE:-}" == "architecture-v2-lab" ]]; then
   "$PYTHON_BIN" scripts/verify_lab_publication.py \
     --output "${BF_V2_EVIDENCE:?set a new verification output directory}"

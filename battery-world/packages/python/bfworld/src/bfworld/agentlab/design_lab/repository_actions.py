@@ -365,7 +365,7 @@ def release(repo, owner, body, operator=False):
         from .repository_validation import qualification
         current=qualification(repo,system,db)
         task_execution = None
-        if system.get('task_definition', {}).get('case_adapter') in ('tabulated-curve-v1','piezo-reference-v1'):
+        if system.get('task_definition', {}).get('case_adapter') in ('tabulated-curve-v1','piezo-reference-v1','piezo-feedback-v1'):
             from .repository_task_execution import current_execution
             task_execution = current_execution(repo,system,db)
             if not task_execution: raise ValueError('RELEASE_CURRENT_EXECUTION_REQUIRED')

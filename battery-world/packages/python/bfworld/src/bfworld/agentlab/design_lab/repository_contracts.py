@@ -58,7 +58,7 @@ def fingerprint(system, gate):
     if system.get('task_definition'):
         from .repository_task_checks import evaluator_identity
         adapter = system['task_definition']['case_adapter']
-        if gate != 'delivery_version' and adapter in ('tabulated-curve-v1', 'piezo-reference-v1'):
+        if gate != 'delivery_version' and adapter in ('tabulated-curve-v1', 'piezo-reference-v1','piezo-feedback-v1'):
             paths = ('reference.csv', 'observation.csv') if adapter == 'tabulated-curve-v1' else ('design.json', 'firmware/main.c')
             value['files'] = {p: h for p, h in value['files'].items() if p in paths}
         from .repository_task_standards import acceptance_scenario

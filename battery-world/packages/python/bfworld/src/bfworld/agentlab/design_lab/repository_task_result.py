@@ -3,8 +3,26 @@ import json
 
 
 def facts(repo, system, execution):
-    if execution['status'] != 'SUCCEEDED' or system['task_definition']['case_adapter'] != 'piezo-reference-v1':
+    if execution['status'] != 'SUCCEEDED':
         return []
+    if system['task_definition']['case_adapter']=='piezo-feedback-v1':
+        from .repository_task_checks import qualification
+        with repo.store.connect() as db: gates=qualification(repo,system,db)['gates']
+        out=[]
+        for key,label,gate,field,unit in [
+                ('first_powered_s','实际程序启动时间','power_service','first_powered_s','s'),
+                ('boots','实际上电次数','power_service','boots','次'),
+                ('load_energy_j','实际负载能量','power_service','load_energy_j','J'),
+                ('completed_tx','完成发送次数','power_service','completed_tx','次'),
+                ('received_count','有效接收帧数','receiver_service','received_sequences','帧'),
+                ('mechanical_residual_relative','机电能量核对残差','source_model','mechanical_residual_relative','1')]:
+            value=gates.get(gate,{}).get('findings',{}).get(field)
+            if value is not None:
+                if field=='received_sequences': value=len(value)
+                out.append({'key':key,'label':label,'value':value,'unit':unit,'execution_id':execution['id'],
+                    'sources':[gate,'fine/program.csv','fine/system.raw.zlib']})
+        return out
+    if system['task_definition']['case_adapter']!='piezo-reference-v1': return []
     def raw(path):
         return (repo.root/'blobs'/execution['artifacts'][path]['sha256']).read_text()
     scenario = system['task_definition']['scenario']
@@ -51,7 +69,7 @@ def read(repo, owner, body):
     project = repo.project(body['project_id'], owner)
     system = repo.system(project['id'], body.get('system_id') or project['submitted'])
     task = system.get('task_definition')
-    if not task or task['case_adapter'] not in ('piezo-reference-v1','tabulated-curve-v1'):
+    if not task or task['case_adapter'] not in ('piezo-reference-v1','piezo-feedback-v1','tabulated-curve-v1'):
         raise ValueError('TASK_PROFILE_EXECUTION_REQUIRED')
     execution = current_execution(repo, system)
     if not execution: raise ValueError('TASK_CURRENT_EXECUTION_MISSING')

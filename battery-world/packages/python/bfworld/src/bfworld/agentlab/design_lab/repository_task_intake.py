@@ -29,6 +29,7 @@ SCHEMA = {
         'feasibility': 'unknown | plausible | conflict; conflict needs an explicit contradiction in the request.',
     },
     'execution_profiles': {
+        'node-feedback-v1': 'Reciprocal piezo source + vendor LTC3588-1 + voltage/PGOOD-driven compiled host C + converged state-current feedback + independent digital receiver. Initial state, current provenance and numerical qualification are explicit.',
         'node-reference-v1': 'Nominal piezo modal source + average conversion + host C event load + storage SPICE + digital receiver. Actual PMIC/target MCU/native PCB require additional adapters.',
         'curve-reproduction-v1': 'Comparison of two source-bound tabulated curves.',
         'pcb-completion-v1': 'Review existing native PCB checks; editing is not qualified by this profile.',

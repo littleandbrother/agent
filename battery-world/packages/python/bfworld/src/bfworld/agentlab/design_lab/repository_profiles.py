@@ -7,6 +7,7 @@ from copy import deepcopy
 import math
 
 from ..store import identity
+from .repository_feedback_contract import GATES as FEEDBACK_GATES, interfaces as feedback_interfaces
 
 VERSION = 'bf-design-task-definition-v2'
 INTENTS = ('audit', 'reproduce', 'reconstruct', 'complete', 'optimize', 'new_design')
@@ -27,6 +28,9 @@ P01 = {'id': 'p01-digital-v1', 'adapter': 'p01-existing', 'scope': 'digital-prod
                         'power': 'project-chain/interface-params.json'},
        'roles': ['power', 'firmware']}
 PROFILES = {
+    'node-feedback-v1': {'id':'node-feedback-v1', 'adapter':'piezo-feedback-v1',
+        'scope':'vendor-PMIC-program-feedback', 'gates':FEEDBACK_GATES,
+        'report':'reference-five-section-v1', 'roles':[], 'manifests':{}, 'executors':{}},
     P01['id']: P01,
     'curve-reproduction-v1': {'id': 'curve-reproduction-v1', 'adapter': 'tabulated-curve-v1',
         'scope': 'curve-reproduction', 'gates': ['curve_binding', 'curve_accuracy', 'delivery_version'],
@@ -47,6 +51,7 @@ REPORTS = {
 }
 # Each link names the executable consumer and checker, not only its producers.
 INTERFACES = {
+    'piezo-feedback-v1': feedback_interfaces(),
     'p01-existing': [
         {'id': 'firmware-load', 'producer': 'firmware', 'consumer': 'power',
          'executor': 'spice', 'checker': 'power-firmware-source-contract-v3',
@@ -94,7 +99,7 @@ def runtime_spec(task):
               'intent':task['intent'], 'requirements_owner':'operator'}
     operations = ['task_definition', 'task_schema', 'task_state', 'summary', 'read', 'validate', 'decide', 'release', 'close']
     if cfg['report'] != 'node-eight-page-v1': operations.append('task_report')
-    if cfg['adapter'] in ('piezo-reference-v1', 'tabulated-curve-v1'):
+    if cfg['adapter'] in ('piezo-reference-v1', 'piezo-feedback-v1', 'tabulated-curve-v1'):
         operations += ['task_execute', 'task_result']
         if task['intent'] != 'audit': operations.append('task_commit')
     elif cfg['roles'] and task['intent'] != 'audit':
@@ -109,6 +114,9 @@ def runtime_spec(task):
                 'checksum':'(seq ^ value ^ 0xA5) & 255', 'receiver':'matching sample before tx, sensor_value and minimum durations from scenario',
                 'supply':'actual sample and tx windows must meet scenario.minimum_storage_v',
                 'execution':'sandboxed compile and host execution; events drive fixed state-current waveform and storage solver'})
+    elif cfg['adapter']=='piezo-feedback-v1':
+        from .repository_feedback_contract import spec
+        result.update(write_paths=['design.json','firmware/main.c','notes/'],program=spec())
     elif cfg['adapter']=='tabulated-curve-v1':
         result.update(write_paths=['observation.csv','notes/'],data_columns=['x','y'],comparison='same increasing x coordinates, finite values, maximum absolute y error')
     if task.get('standards'):
@@ -186,6 +194,9 @@ def definition(raw):
                 raise ValueError('REFERENCE_MATERIAL_REQUIRED: ' + key)
         if type(material.get('d31_m_v')) not in (int, float) or not math.isfinite(material['d31_m_v']):
             raise ValueError('REFERENCE_MATERIAL_REQUIRED: d31_m_v')
+    elif cfg['adapter'] == 'piezo-feedback-v1':
+        from .repository_feedback_contract import validate
+        validate(raw)
     report = raw.get('report', cfg['report'])
     if report != cfg['report']: raise ValueError('TASK_REPORT_PROFILE_MISMATCH')
     value = {**deepcopy(raw), 'schema_version': VERSION, 'phase': raw.get('phase', raw['intent']),

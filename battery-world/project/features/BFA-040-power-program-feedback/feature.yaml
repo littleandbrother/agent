@@ -1,0 +1,60 @@
+schema_version: battery-world-feature-v1
+id: BFA-040-power-program-feedback
+owner: bf-agent-coordinator
+status: complete
+authority: 2026-10-18 user approves A/B power-program feedback and independent validation implementation
+hypothesis: A versioned vendor-PMIC and compiled-program feedback adapter can close the default node execution through the existing task journal and independent qualification.
+paper_claim: Executable apparatus qualification and regression only.
+falsifier: A completed frame precedes adequate supply, stale or unconverged trajectories receive PASS, changed requirements rerun identical execution, or protected historical state changes.
+owned_paths:
+  - packages/python/bfworld/src/bfworld/agentlab/design_lab/
+  - configs/reference_cases/piezo-feedback/
+  - scripts/verify_power_feedback.py
+  - tests/agentlab/test_repository_feedback*.py
+  - project/features/BFA-040-power-program-feedback/
+  - docs/agentlab/architecture-v2/power-feedback-20261018/
+  - init.sh
+  - PROJECT.yaml
+  - docs/PROGRESS.md
+  - docs/SESSION-HANDOFF.md
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/progress.md
+  - /Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md
+  - /Users/depengsu/.local/share/bf-agent-architecture-v2/power-feedback/
+  - /Users/depengsu/.local/share/bf-agent-architecture-v2/workbench/design-lab/repository/feedback-qualification/
+schema_changes: [piezo-feedback-v1, bf-feedback-program-abi-v1, bf-feedback-validation-v1]
+targeted_tests:
+  - actual vendor solver and sandboxed C program consume the same candidate
+  - delayed startup, brownout, frame validity, event expiry and convergence controls
+  - independent raw-input binding and append-only qualification
+  - unchanged execution reuse, requirements-only reevaluation and unknown dispatch recovery
+  - existing Repository and Lab regression
+negative_controls: [no-energy, bad-frame, expired-sample, brownout, nonconvergence, wrong-input, stale-checker, unknown-dispatch]
+reproducible_command: BFWORLD_VERIFY_PROFILE=power-feedback BF_FEEDBACK_EVIDENCE=<output> ./init.sh
+output_artifact: docs/agentlab/architecture-v2/power-feedback-20261018/
+cost_cap: 0 model calls; native reference qualification limited to 48 new solves and 2400 seconds, exact completed inputs reused.
+claim_boundary: Linear piezo model, vendor LTC3588-1 macro-model, declared current model, sandboxed host C and digital receiver.
+stop_condition: Protected-state drift, ambiguous native operation, unbound artifacts or failed apparatus controls stop admission.
+evidence:
+  - docs/agentlab/architecture-v2/power-feedback-20261018/RESULTS.md
+  - docs/agentlab/architecture-v2/power-feedback-20261018/evidence/qualification.json
+  - docs/agentlab/architecture-v2/power-feedback-20261018/manifest.json
+verification:
+  - 11 qualification controls PASS
+  - 272 Repository tests PASS including 20 feedback tests
+  - 7 Lab Bridge and 12 Lab UI tests PASS
+  - two same-version PDF and source/raw-waveform release archives verified
+  - 6388 Baseline files and original/V2 session engineering billing state unchanged
+results:
+  precharged_received_frames: 5
+  cold_start_s: 17.9385
+  cold_received_frames: 1
+  minimum_frames_within_20_s: 3
+  cold_service_passed: false
+  distinct_native_dispatches: 16
+  final_qualification_native_dispatches: 0
+  model_calls: 0
+  qualification: FQ-ae54a1e11eaeebafe6c665a86145c87b62f27a004d2445706ef7231f90259af9
+limitations: Host C and declared current model; target MCU, measured current and physical qualification remain separate increments. Adaptive workers and architecture comparisons were not executed in A/B.
+remaining_registry_issue: BFA-035 is still in-progress with no PROJECT active feature in both the base commit and current tree; recorded separately without modifying that feature.
+next: C uses the qualified feedback environment for scoped workers and controlled BF design revisions. Resume the existing owner only through an explicitly based new candidate.

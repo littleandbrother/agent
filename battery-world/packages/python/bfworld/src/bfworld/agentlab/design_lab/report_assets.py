@@ -471,8 +471,8 @@ def build_report(repo, owner, body, root, value):
         from .contracts import sealed
         sealed(dest/'renderer-binding.json', bindings)
         script = Path(__file__).with_name('report_render.py')
-        runtime = Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3'
-        python = str(runtime if runtime.is_file() else __import__('sys').executable)
+        from .report_runtime import report_python
+        python = report_python()
         import os, subprocess
         env={**os.environ,'PYTHONPATH':str(Path(__file__).parents[3])}
         proc=subprocess.run([python,'-m','bfworld.agentlab.design_lab.report_render','--input',str(root/'input'),

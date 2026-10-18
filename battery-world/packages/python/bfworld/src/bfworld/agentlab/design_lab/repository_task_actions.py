@@ -102,6 +102,7 @@ def commit(repo, owner, body, operator):
         if contract['intent'] == 'audit': raise PermissionError('AUDIT_TASK_READ_ONLY_DESIGN')
         cfg = profile(contract['profile'])
         allowed = {'tabulated-curve-v1': ('observation.csv', 'notes/'),
+                   'piezo-feedback-v1': ('design.json','firmware/main.c','notes/'),
                    'piezo-reference-v1': ('design.json', 'firmware/main.c', 'notes/')}.get(cfg['adapter'])
         if allowed is None: raise ValueError('PROFESSIONAL_COMMIT_PATH_REQUIRED')
         if not isinstance(body.get('rationale'), str) or not body['rationale'].strip(): raise ValueError('DECISION_REASON_REQUIRED')
@@ -110,7 +111,7 @@ def commit(repo, owner, body, operator):
             if not any(path.startswith(a) if a.endswith('/') else path == a for a in allowed):
                 raise PermissionError('TASK_DESIGN_SCOPE')
         files = {**parent['files'], **file_inputs(repo, db, body['files'])}
-        previous = json.loads((repo.root/'blobs'/parent['files']['design.json']['sha256']).read_text()) if cfg['adapter'] == 'piezo-reference-v1' else None
+        previous = json.loads((repo.root/'blobs'/parent['files']['design.json']['sha256']).read_text()) if cfg['adapter'] in ('piezo-reference-v1','piezo-feedback-v1') else None
         check_files(contract, files, lambda path: (repo.root/'blobs'/files[path]['sha256']).read_text(), previous, body['files'])
         changes = [{'path': k, 'before': parent['files'].get(k, {}).get('sha256'), 'after': v['sha256']}
                    for k, v in files.items() if parent['files'].get(k) != v]

@@ -11,6 +11,7 @@ from ..store import canonical, identity
 from .contracts import sealed
 from .repository import file_hash
 from .repository_profiles import REPORTS
+from .report_runtime import report_python
 
 SECTION_LABELS = {
     'task_and_model': '任务与模型', 'mechanics_and_source': '机械与采能',
@@ -21,6 +22,7 @@ SECTION_LABELS = {
 }
 GATE_LABELS = {
     'source_model': '源模型与适用范围', 'load_binding': '程序与负载对应',
+    'coupling_numerics': '反馈收敛与步长复核',
     'power_service': '任务供电', 'receiver_service': '数字接收',
     'delivery_version': '交付版本', 'curve_binding': '曲线条件对应',
     'curve_accuracy': '曲线误差', 'pcb_connectivity_drc': 'PCB 连通与设计规则',
@@ -53,20 +55,20 @@ def prepare(repo, owner, body, operator=False):
             if path not in s['files'] and path not in q['gates']: raise ValueError('TASK_REPORT_SOURCE_UNKNOWN')
     from .repository_task_execution import current_execution
     from .repository_task_result import facts
-    execution = current_execution(repo, s) if task['case_adapter'] in ('piezo-reference-v1','tabulated-curve-v1') else None
+    execution = current_execution(repo, s) if task['case_adapter'] in ('piezo-reference-v1','piezo-feedback-v1','tabulated-curve-v1') else None
     value = {'project_id': p['id'], 'title': p['title'], 'system_id': s['id'], 'task': task,
         'qualification': q, 'content': content, 'files': s['files'], 'author': owner, 'source_author': 'operator' if operator else 'Pi',
         'measured_facts': facts(repo, s, execution) if execution else [],
-        'font': report_font(), 'renderer_sha256': file_hash(__file__)}
+        'font': report_font(), 'renderer_sha256': file_hash(__file__),
+        'runtime_contract_sha256': file_hash(Path(__file__).with_name('report_runtime.py'))}
     rid = 'TR-' + identity(value)
     def apply(db):
         folder = repo.root/'task-reports'/rid
         sealed(folder/'input.json', value)
         quality_file = folder/'quality.json'
         if not quality_file.exists():
-            runtime = Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3'
             env = {**os.environ, 'PYTHONPATH': str(Path(__file__).parents[3])}
-            result = subprocess.run([str(runtime), '-m', 'bfworld.agentlab.design_lab.repository_task_reports', str(folder)],
+            result = subprocess.run([report_python(), '-m', 'bfworld.agentlab.design_lab.repository_task_reports', str(folder)],
                 env=env, capture_output=True, text=True, timeout=45)
             if result.returncode: raise ValueError('TASK_REPORT_RENDER_FAILED: '+result.stderr[-2000:])
         quality = json.loads(quality_file.read_text())
@@ -119,7 +121,7 @@ def render(folder):
     p = lambda text, style=normal: Paragraph(html.escape(str(text)), style)
     status = {'PASS':'通过','FAIL':'未通过','NOT_CHECKED':'待检查','UNEVALUABLE':'缺少评价条件','REPAIR_REQUIRED':'需修订','CHECKS_PENDING':'待检查'}
     sections = REPORTS[task['report']]
-    scope = {'nominal-reference-chain':'名义参考链：源模型、储能、主机程序与数字接收', 'curve-reproduction':'指定条件下的曲线数据对比', 'pcb-completion':'当前原生板卡审查'}.get(task['scope'], task['scope'])
+    scope = {'vendor-PMIC-program-feedback':'压电源、厂商电源模型与实际程序的双向执行', 'nominal-reference-chain':'名义参考链：源模型、储能、主机程序与数字接收', 'curve-reproduction':'指定条件下的曲线数据对比', 'pcb-completion':'当前原生板卡审查'}.get(task['scope'], task['scope'])
     story = [p(value['title'], title_style), p(task['goal']), p('验收范围：'+scope),
              p('当前结果：'+status.get(q['status'],q['status'])), p(value['content']['conclusion']), p('候选身份：'+value['system_id'], small)]
     def make_table(data, widths):
@@ -138,16 +140,22 @@ def render(folder):
         story += [make_table(data,[365,140]),Spacer(1,8)]
     for key in sections:
         section = value['content']['sections'][key]
-        story.append(p(SECTION_LABELS.get(key,key.replace('_',' ')), heading))
-        # Keep the last prose segment and its source list on the same page.
+        section_heading = p(SECTION_LABELS.get(key,key.replace('_',' ')), heading)
+        # Keep a heading with its first paragraph, and the final paragraph with
+        # its source list, even when the section crosses a page boundary.
         chunks, part = [], ''
         for sentence in re.split(r'(?<=。)', section['text']):
             if not sentence: continue
             if part and len(part)+len(sentence)>450: chunks.append(part);part=''
             part += sentence
         if part: chunks.append(part)
-        story.extend(p(chunk) for chunk in chunks[:-1])
-        story.append(KeepTogether([p(chunks[-1]),p('依据：'+', '.join(section['sources']),small)]))
+        source_line = p('依据：'+', '.join(section['sources']),small)
+        if len(chunks) == 1:
+            story.append(KeepTogether([section_heading,p(chunks[0]),source_line]))
+        else:
+            story.append(KeepTogether([section_heading,p(chunks[0])]))
+            story.extend(p(chunk) for chunk in chunks[1:-1])
+            story.append(KeepTogether([p(chunks[-1]),source_line]))
     pdf = folder/'task-report.pdf'
     def footer(canvas, doc):
         canvas.saveState(); canvas.setFont(font_name,8);canvas.setFillColor(colors.HexColor('#526176'))

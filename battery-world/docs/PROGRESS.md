@@ -1,3 +1,7 @@
+## 2026-10-18 · BFA-041 CI修复与发布
+
+3项失败报告测试的本机Python硬编码已修复，PDF依赖固定。280项本地和干净源码回归、Pi构建/check、44件证据读回通过；0新模型/原生求解。BFA-035保留未关闭工程门并登记blocked，项目状态检查恢复通过。GitHub精确提交CI正在发布验收。详见 docs/agentlab/architecture-v2/ci-publication-20261018/REPORT.md、NEXT.md。
+
 ## 2026-10-17 · BFA-038 / BFA-039 GitHub 发布批次
 
 用户已授权发布到 `codex/bf-architecture-v2`。本批次包含任务定义与评估接口、Pi 技能、默认压电与 P08 审查、实验数据、PDF 和复现脚本。20 项保存结果离线复核通过；既有 56 项相关测试、Pi 检查与 Lab init 结果随批次保存。发布不启动模型或原生仿真。下方保留实施时的历史状态。
@@ -1320,3 +1324,11 @@ V2 已接入 task-definition-v2 / task-semantics-v1：任务意图与阶段、�
 原十个会话、工程、费用及 UNKNOWN、P01 Demo 保持。原8768与V2 8870按原配置恢复，当前控制器排空。代码在 codex/bf-architecture-v2 工作树，基点9bcdbad，未提交/推送。标准定义和接口是系统能力；当前新设计验证范围为名义机电源—储能—主机程序—数字接收，后续接目标MCU、具体电源、原生CAD/PCB和装配。
 
 结果：docs/agentlab/architecture-v2/task-design-20261017/standardization-result.json；首批Pi结果result.json；说明RESULTS.md；命令IMPLEMENTATION.md。
+
+## 2026-10-18 · BFA-040 A/B 双向执行与独立验收完成
+
+新增 node-feedback-v1 / piezo-feedback-v1：线性压电源、厂商 LTC3588-1、VDD/PGOOD 驱动的实际主机 C 程序、状态负载反馈及收敛执行；独立检查完整 RAW、复位、负载、供电、采样与接收，接入现有候选/执行/恢复/同版交付。预充参考20秒5帧通过；零储能17.9385秒启动、1帧，未达3帧要求。11项资格控制、272 Repository（20反馈专项）、19 Lab回归和两份PDF/工程包核对通过。修复机械隐含阻尼、RAW初态哨兵、负载前因性和上电程序伪报OFF状态。
+
+16次不同输入的原生求解全部完成；重复检查0新求解、0模型调用。Baseline6388文件、原P01六件原生文件、原会话/费用/UNKNOWN及V2历史状态一致。V2仅增加新适配器准入指针，未恢复Pi、未启动原Web服务、未提交或推送。报告：docs/agentlab/architecture-v2/power-feedback-20261018/RESULTS.md；离线核对：同目录 verify_saved.py。下一增量为按需工作者和任务范围调整，使用已资格化的统一闭环；目标MCU、测量电流、物理验证和组织方式比较继续单独记录。
+
+全仓库状态登记另有旧冲突：BFA-035仍为in-progress而PROJECT无active_feature；基点相同。已保留原登记并保存project-state-check.json，后续先核对其终态。

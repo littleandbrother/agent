@@ -20,7 +20,7 @@ def state(repo, owner, body):
     except (ValueError, PermissionError, KeyError) as error:
         return {**result, 'stage': 'INPUT_BLOCKED', 'reason': str(error), 'allowed_actions': ['task_definition', 'read']}
     execution = None
-    if cfg['adapter'] in ('tabulated-curve-v1', 'piezo-reference-v1'):
+    if cfg['adapter'] in ('tabulated-curve-v1', 'piezo-reference-v1','piezo-feedback-v1'):
         from .repository_task_execution import current_execution, pending_execution
         root = pending_execution(repo, s)
         execution = current_execution(repo, s)
