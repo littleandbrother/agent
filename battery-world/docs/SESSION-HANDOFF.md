@@ -1,3 +1,7 @@
+## 2026-10-18 · BFA-041 GitHub CI通过
+
+反馈执行及CI修复已推送，源码530dc4d的push/PR两套CI均通过。Linux状态测试使用固定环境夹具，PDF使用可配置解释器与固定依赖。两项作业固定Ubuntu24.04。后续按ci-publication-20261018/NEXT.md，先原V2压电主设计者连续两轮实际修订，再验证按需资料工作者和同条件组织比较。本轮0模型调用、0新原生求解，原会话、工程、费用、Baseline及Demo保留。
+
 ## 2026-10-18 · BFA-041 CI修复与发布
 
 BFA-040反馈执行和BFA-041 CI修复待推送提交验收。后续优先让原V2压电主设计者在固定任务上完成两轮真实修订，再接按需资料工作者和同条件组织比较。原owner、工程、费用、Baseline和Demo保留；本轮0新模型/原生求解。详见 docs/agentlab/architecture-v2/ci-publication-20261018/REPORT.md、NEXT.md。

@@ -12,6 +12,8 @@
 
 本机与干净源树280项Repository测试通过。Pi干净安装、构建、类型和浏览器检查通过，源文件无生成修改。11项原生资格证据读回、项目登记检查通过。新增模型调用和原生求解均为0。
 
-BFA-040反馈执行及两份PDF随本次发布。GitHub精确提交CI结果随后追加到verification.json。推进方案见 [NEXT.md](NEXT.md)。
+BFA-040反馈执行及两份PDF随本次发布。GitHub分支与PR的源码提交530dc4d均通过CI，结果保存在verification.json和ci-source-checks.json。推进方案见 [NEXT.md](NEXT.md)。
 
 首次发布59e5d24中，Linux另发现9项新反馈状态测试误用了桌面工具发现。已固定测试环境身份，增加缺工具预检反例；强制原生工具不可用的干净源码回归281项通过（2项macOS沙箱测试在本机执行）。Pi远端作业和原3项PDF测试已通过。失败记录保留在verification.json。
+
+GitHub提示ubuntu-latest将于10月19日迁移Ubuntu26，本次将两项作业固定为已验证的Ubuntu24.04。发布记录提交再次运行同一套CI。
