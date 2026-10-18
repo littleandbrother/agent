@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import shutil
 import signal
+import sqlite3
 import subprocess
 import threading
 import time
@@ -17,6 +18,15 @@ from .contracts import sealed, sha
 from .repository_actions import task, materialize
 
 
+def ingest(repo, owner, receipt):
+    try: repo.lab.app.conversations.ingest(owner,execution_state=False)
+    except sqlite3.OperationalError as error:
+        if 'locked' not in str(error): raise
+        # The cursor advances only for committed events. Retry the same trace
+        # later instead of cancelling a valid engineering operation.
+        receipt['trace_lock_deferrals']=receipt.get('trace_lock_deferrals',0)+1
+
+
 def freeze(lab):
     from .resources import bundle
     from ..skill_resources import freeze_resources, source_bundle
@@ -24,7 +34,7 @@ def freeze(lab):
     proc = subprocess.run([str(PI/'node_modules/.bin/tsgo'), '-p', str(source/'tsconfig.json')],
                           capture_output=True, text=True, timeout=60)
     if proc.returncode: raise ValueError('REPOSITORY_PI_BUILD_FAILED:' + proc.stdout[-2000:] + proc.stderr[-1000:])
-    modules = ('repository-task', 'extensions/bf-repository', 'extensions/bf-design')
+    modules = ('repository-task', 'scoped-task', 'extensions/bf-repository', 'extensions/bf-design')
     professional, professional_files = source_bundle()
     design, design_files = bundle(native=True)
     if set(professional_files) & set(design_files): raise ValueError('RESOURCE_PATH_COLLISION')
@@ -63,18 +73,19 @@ def freeze(lab):
 
 
 def state(repo, owner, target=None):
+    from .repository_work import task as scoped_task
     pid = repo.bound(owner); p = repo.project(pid,owner)
     target = target or owner
     if target != owner:
         repo.leader(pid,owner)
-        t = task(repo,target)
+        t = scoped_task(repo,target) or task(repo,target)
         if t['project_id'] != pid: raise PermissionError('SPECIALIST_PROJECT_CONFLICT')
     else:
-        t = None if p['owner'] == owner else task(repo,owner)
+        t = None if p['owner'] == owner else (scoped_task(repo,owner) or task(repo,owner))
     with repo.store.connect() as db:
         conversation = db.execute('SELECT status,error FROM conversations WHERE id=?',(target,)).fetchone()
         rows = [dict(r) for r in db.execute('SELECT id,status,charged,reserved,usage FROM model_requests WHERE owner=?',(target,))]
-        branch = None if t is None else dict(db.execute('SELECT * FROM design_branch_heads WHERE project=? AND domain=? AND branch=?',
+        branch = None if t is None or t.get('schema_version')=='bf-scoped-task-v1' else dict(db.execute('SELECT * FROM design_branch_heads WHERE project=? AND domain=? AND branch=?',
             (pid,t['role'],t['branch'])).fetchone())
     running = repo.lab.controllers.get(target)
     status = 'RUNNING' if running and running.is_alive() else ('FAILED' if conversation['status']=='FAILED' else (t['status'] if t else conversation['status']))
@@ -104,6 +115,7 @@ def start(repo, owner, goal=None, dry_run=False, purpose='design'):
 
 
 def run(repo,owner,goal,dry_run,purpose='design'):
+    from .repository_work import task as scoped_task
     lab=repo.lab; app=lab.app; home=lab.store.root.parent
     output=home/'sessions'/owner;output.mkdir(parents=True,exist_ok=True)
     attempt=output/'repository-attempts'/('attempt-'+str(time.time_ns()));attempt.mkdir(parents=True)
@@ -113,13 +125,18 @@ def run(repo,owner,goal,dry_run,purpose='design'):
     try:
         harness,manifest=freeze(lab);receipt['harness']=manifest
         p=repo.project(repo.bound(owner),owner)
-        professional = p['owner'] != owner
+        scoped = scoped_task(repo,owner)
+        professional = p['owner'] != owner and scoped is None
+        if scoped:
+            workspace=repo.root/'scoped'/owner;workspace.mkdir(parents=True,exist_ok=True)
+            if goal is None: goal=canonical({'scoped_task':scoped,'goal':'Complete the assigned scope and submit one source-bound result.'})
+            with repo.store.connect() as db: db.execute("UPDATE design_scoped_tasks SET status='RUNNING' WHERE owner=?",(owner,))
         if professional:
             t=task(repo,owner); workspace=materialize(repo,t)
             if goal is None: goal=canonical({'professional_task':t,'goal':'Complete the assigned question, submit an actual Domain Commit and finish.'})
             if purpose == 'design':
                 with repo.store.connect() as db: db.execute("UPDATE design_professional_tasks SET status='RUNNING' WHERE owner=?",(owner,))
-        else:
+        elif not scoped:
             workspace=repo.root/'lead'/owner;workspace.mkdir(parents=True,exist_ok=True)
             if goal is None:
                 with repo.store.connect() as db:
@@ -150,13 +167,16 @@ def run(repo,owner,goal,dry_run,purpose='design'):
                     if not budget_policy.unbounded_time(db,owner): os.killpg(proc.pid,signal.SIGTERM)
                 try:proc.wait(timeout=1)
                 except subprocess.TimeoutExpired:pass
-                app.conversations.ingest(owner,execution_state=False)
+                ingest(repo,owner,receipt)
             proc.stdin.close()
         receipt.update(exit_code=proc.returncode,status='COMPLETED' if proc.returncode==0 else 'FAILED')
         if professional and purpose == 'design':
             current=task(repo,owner)
             if current['status']=='RUNNING':
                 with lab.store.connect() as db:db.execute("UPDATE design_professional_tasks SET status='REVIEW_REQUIRED' WHERE owner=?",(owner,))
+        if scoped:
+            with lab.store.connect() as db:
+                db.execute("UPDATE design_scoped_tasks SET status='REVIEW_REQUIRED' WHERE owner=? AND status='RUNNING'",(owner,))
         app.conversations.state(owner,'IDLE' if proc.returncode==0 else 'FAILED',
             None if proc.returncode==0 else (attempt/'stderr.log').read_text()[-1800:])
     except Exception as error:
@@ -164,9 +184,14 @@ def run(repo,owner,goal,dry_run,purpose='design'):
         app.conversations.state(owner,'FAILED',receipt['error'])
         if purpose == 'design':
             with lab.store.connect() as db:db.execute("UPDATE design_professional_tasks SET status='BLOCKED' WHERE owner=? AND status IN ('QUEUED','RUNNING')",(owner,))
+            with lab.store.connect() as db:db.execute("UPDATE design_scoped_tasks SET status='BLOCKED' WHERE owner=? AND status IN ('QUEUED','RUNNING')",(owner,))
     finally:
-        if proc and proc.poll() is None:os.killpg(proc.pid,signal.SIGTERM);proc.wait(timeout=5)
-        app.conversations.ingest(owner,execution_state=False)
+        if proc and proc.poll() is None:
+            os.killpg(proc.pid,signal.SIGTERM)
+            try: proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                os.killpg(proc.pid,signal.SIGKILL);proc.wait(timeout=5)
+        ingest(repo,owner,receipt)
         trace=output/'trace.jsonl'
         if trace.exists():shutil.copyfile(trace,attempt/'trace-sealed.jsonl');receipt['trace_sha256']=sha(attempt/'trace-sealed.jsonl')
         receipt['ended']=time.time();sealed(attempt/'receipt.json',receipt)

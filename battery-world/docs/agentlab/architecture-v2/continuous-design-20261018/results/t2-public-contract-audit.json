@@ -1,0 +1,16 @@
+{
+  "task_definition": "TD-ce21d0d88c5fd2f04c6dccc69bb8755aa887d36c33e6954fcec50e79d2cfd88f",
+  "public_task_sha256": "0676bd4c3b957970af5763f80a7154625e13e9a7b6e435f1b4d363e214e7b3c8",
+  "public_receiver_condition": {
+    "condition": "20秒内至少3个有效且不重复的帧，符合固定供电、采样有效期、序号和校验要求",
+    "minimum_packets": 3
+  },
+  "minimum_sample_s": 0.01,
+  "minimum_tx_s": 0.004,
+  "sample_validity_s": 0.008,
+  "required_minimum_age_s": 0.014,
+  "checker_age_formula": "TX start + TX duration - SAMPLE start",
+  "public_age_origin_explicit": false,
+  "finding": "Public task lists validity duration but does not specify its time origin. The frozen checker measures from SAMPLE start, making this task infeasible.",
+  "next_batch": "Publish the complete receiver predicate and precheck contradictory bounds; preserve this batch unchanged."
+}

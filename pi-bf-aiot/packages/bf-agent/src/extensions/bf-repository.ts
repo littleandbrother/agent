@@ -9,12 +9,16 @@ export function repositoryExtension(
 	declarationText: string,
 	reportOnly = false,
 	taskMode = false,
+	workMode?: "worker" | "source" | "design",
 ): ExtensionFactory {
 	return (pi) => {
 		pi.registerTool({
 			name: "bf_repository",
 			label: "BF Design Repository",
 			description:
+				(workMode
+					? "Scoped work: work_read(path,system_id?,offset?,limit?) reads frozen candidate files or task-definition.json. work_assign(kind source|power|firmware|joint,base_system,question,completion,rationale,operation_id); work_run(task_owner) waits; work_result(task_owner?) returns result; work_tasks lists assignments; work_apply(result_id,base_system,expected_revision,rationale,operation_id) merges proposal. work_submit(content JSON string,operation_id) submits worker result; work_answer(content JSON string,operation_id) submits source-study lead answer. Result fields: completed_scope,files:{path:UTF8},facts:[{field,value,unit,conditions,sources:[{path,sha256,locator}]}],judgment,assumptions:[],issues:[]. locator JSON pointer or Lstart-Lend. "
+					: "") +
 				"Task intake: task_assessment_schema returns the shared assessment prompt and fields. task_assess(request,assessment JSON string) validates a proposed intent, scope, user requirements, missing inputs and plan without changing the project. " +
 				(taskMode && !reportOnly
 					? `Task contract: task_definition(system_id?); task_schema returns fields, allowed design files, fixed scenario, required checks, and report section IDs. task_state returns the current phase, executable scope, recovery state, independent qualification, interface levels and same-version delivery; these facts determine legal continuation. summary/state show current candidate and revision. Hard constraints and the declared design space are enforced at commit. read(system_id,path,offset?,limit?) reads frozen sources. task_commit(base_system,expected_revision,files:{path:UTF8 content},rationale,operation_id) merges changes into the full parent tree. task_execute(system_id,operation_id) compiles/runs supported inputs or reuses an exact prior result. task_result(system_id,path?,offset?,limit?) reads existing execution artifacts and compact derived facts (load-rail energy, per-frame voltage minima); it never dispatches a solver. validate(system_id,operation_id) evaluates raw results against this candidate's task requirements. decide(system_id,expected_revision,decision REVISE|REJECT|RETAIN_FOR_REVIEW|ADOPT_PASSED,rationale,operation_id). task_report(system_id,content JSON string,operation_id) expects {conclusion:string,sections:{section_id:{text:string,sources:[candidate path or gate ID]}}}; use the report section IDs from task_schema and every section must cite current sources. release(system_id,rationale,operation_id) includes frozen sources, execution artifacts, checks and PDF. close(conclusion,operation_id) finishes after same-version release. skill_catalog/skill(skill_id)/skill_resource(path) load methods on demand. Every mutation uses a stable operation_id. Requirements and evaluator code are operator-owned. No raw shell or network.`
@@ -31,6 +35,14 @@ Every mutation requires a stable operation_id. All actions use the bound project
 			parameters: Type.Object({
 				action: Type.Union(
 					[
+						"work_read",
+						"work_assign",
+						"work_run",
+						"work_result",
+						"work_tasks",
+						"work_apply",
+						"work_submit",
+						"work_answer",
 						"summary",
 						"task_assessment_schema",
 						"task_assess",
@@ -73,10 +85,12 @@ Every mutation requires a stable operation_id. All actions use the bound project
 						"report_prepare",
 						"report_build",
 					]
+						.filter((v) => !v.startsWith("work_") || Boolean(workMode))
 						.filter(
 							(v) =>
 								!taskMode ||
 								reportOnly ||
+								v.startsWith("work_") ||
 								[
 									"summary",
 									"task_assessment_schema",
@@ -121,9 +135,37 @@ Every mutation requires a stable operation_id. All actions use the bound project
 									"release",
 								].includes(v),
 						)
+						.filter(
+							(v) =>
+								workMode !== "worker" ||
+								[
+									"work_read",
+									"work_result",
+									"work_submit",
+									"state",
+									"task_schema",
+									"task_definition",
+									"task_result",
+								].includes(v),
+						)
+						.filter(
+							(v) =>
+								workMode !== "source" ||
+								[
+									"work_read",
+									"work_assign",
+									"work_run",
+									"work_result",
+									"work_tasks",
+									"work_answer",
+									"state",
+								].includes(v),
+						)
 						.map((v) => Type.Literal(v)),
 				),
 				operation_id: Type.Optional(Type.String()),
+				kind: Type.Optional(Type.String()),
+				result_id: Type.Optional(Type.String()),
 				request: Type.Optional(Type.String()),
 				assessment: Type.Optional(Type.String()),
 				report_id: Type.Optional(Type.String()),
@@ -190,7 +232,7 @@ Every mutation requires a stable operation_id. All actions use the bound project
 						});
 					}
 				}
-				if (args.action === "run_task") {
+				if (args.action === "run_task" || args.action === "work_run") {
 					let prior = "";
 					while (value.status === "STARTING" || value.status === "RUNNING" || value.status === "QUEUED") {
 						if (signal?.aborted) throw Error("SPECIALIST_WAIT_CANCELLED");
@@ -212,12 +254,21 @@ Every mutation requires a stable operation_id. All actions use the bound project
 				message: { customType: "bf-repository-state", content: JSON.stringify(value), display: false, details: {} },
 			};
 		});
-		pi.on("context", (event) =>
+		pi.on("context", async (event, ctx) => {
+			if (workMode) {
+				try {
+					await api({ action: "repository_work_request_guard" });
+				} catch (error) {
+					emit({ type: "work_request_guard_stopped", error: String(error) });
+					ctx.abort();
+					throw error;
+				}
+			}
 			emit({
 				type: "repository_context_observed",
 				messages: event.messages.length,
 				bytes: Buffer.byteLength(JSON.stringify(event.messages)),
-			}),
-		);
+			});
+		});
 	};
 }

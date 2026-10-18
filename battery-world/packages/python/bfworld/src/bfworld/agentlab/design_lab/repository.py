@@ -78,12 +78,15 @@ class Repository:
               CREATE TABLE IF NOT EXISTS design_task_executions(id TEXT PRIMARY KEY,project TEXT NOT NULL,
                 target TEXT NOT NULL,value TEXT NOT NULL);
             ''')
+            from .repository_work import install
+            install(db)
 
     def bound(self, owner):
         with self.store.connect() as db:
             row = db.execute('SELECT id FROM design_projects WHERE owner=?',(owner,)).fetchone()
             if row: return row['id']
             row = db.execute('SELECT project FROM design_professional_tasks WHERE owner=?',(owner,)).fetchone()
+            if not row: row = db.execute('SELECT project FROM design_scoped_tasks WHERE owner=?',(owner,)).fetchone()
             return row['project'] if row else None
 
     def project(self, project, owner=None, db=None):
@@ -92,7 +95,8 @@ class Repository:
         row = db.execute('SELECT * FROM design_projects WHERE id=?',(project,)).fetchone()
         if not row: raise ValueError('DESIGN_PROJECT_NOT_FOUND')
         if owner is not None and owner != row['owner'] and not db.execute(
-                'SELECT 1 FROM design_professional_tasks WHERE project=? AND owner=?',(project,owner)).fetchone():
+                'SELECT 1 FROM design_professional_tasks WHERE project=? AND owner=?',(project,owner)).fetchone() and not db.execute(
+                'SELECT 1 FROM design_scoped_tasks WHERE project=? AND owner=?',(project,owner)).fetchone():
             raise PermissionError('DESIGN_PROJECT_NOT_OWNED')
         value = dict(row)
         for k in ('baseline','requirements'): value[k]=json.loads(value[k])
@@ -256,6 +260,9 @@ class Repository:
                 'professional_tasks':[{**json.loads(r['value']),'status':r['status']} for r in db.execute('SELECT value,status FROM design_professional_tasks WHERE project=? ORDER BY rowid',(project,))],'releases':rows('design_repository_releases'),
                 'executions':rows('design_domain_executions'),'experiments':rows('design_method_experiments'),
                 'task_executions': rows('design_task_executions'),
+                'scoped_tasks': [{**json.loads(r['value']), 'status': r['status']} for r in db.execute(
+                    'SELECT value,status FROM design_scoped_tasks WHERE project=? ORDER BY rowid',(project,))],
+                'scoped_results': rows('design_scoped_results'), 'work_policies': rows('design_work_policies'),
                 'professional_task_history':rows('design_professional_task_history'),
                 'branches':[dict(r) for r in db.execute('SELECT * FROM design_branch_heads WHERE project=?',(project,))]}
 
@@ -270,6 +277,13 @@ class Repository:
 
     def handle(self, owner, body, operator=False):
         action=body.get('action')
+        from .repository_work import task as scoped_task, guard as work_guard, handle as work_actions
+        assigned=scoped_task(self,owner)
+        if assigned:
+            project=body.get('project_id') or assigned['project_id']
+            if project!=assigned['project_id']: raise PermissionError('SCOPED_WORK_PROJECT_CONFLICT')
+            work_guard(self,owner,{**body,'project_id':project},operator)
+            body={**body,'system_id':body.get('system_id',assigned['base_system'])}
         if action in ('repository_task_assessment_schema', 'repository_task_assess'):
             from .repository_task_intake import schema, validate
             if action == 'repository_task_assessment_schema': return schema()
@@ -283,6 +297,9 @@ class Repository:
         project=body.get('project_id') or self.bound(owner)
         if not project: raise ValueError('DESIGN_PROJECT_NOT_BOUND')
         self.project(project,owner)
+        work_guard(self,owner,{**body,'project_id':project},operator)
+        work_value=work_actions(self,owner,{**body,'project_id':project},operator)
+        if work_value is not None: return work_value
         task_value = task_actions(self, owner, {**body, 'project_id': project}, operator)
         if task_value is not None: return task_value
         if (action == 'repository_archive_read' or

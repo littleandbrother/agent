@@ -1,3 +1,32 @@
+## 2026-10-19 · BFA-042 GitHub发布
+
+按用户授权，将三阶段实现、固定实验配置、原始结果摘要、分析脚本与三页PDF提交到 `codex/bf-architecture-v2`，更新现有PR #3。本地V2回归294项、封存文件44件/控制11项及项目状态通过；本次发布不启动模型或原生求解。原十会话、工程、费用、Baseline与Demo保持。GitHub新提交的CI结果由PR检查显示。
+
+---
+
+## 2026-10-19 · BFA-042 三阶段有限清单完成
+
+原V2压电owner连续两轮真实修订、执行、独立检查与同版交付完成；两轮保留审查，历史采用版保持。4项资料配对结束，直接与委派各1/2正确，委派费用3.58倍。16项组织对照结束：三个可行任务11/12通过、12/12同版交付；可选组实际未委派，固定双专业2/3通过、费用为单主设计者2.83倍。8ms任务公开计龄起点缺失且固定下界冲突，四组单列。全部设计试验14/16完成候选交付，11/16服务通过。
+
+新增699请求全SETTLED，登记$13.097664；121次原生调用对应121个不同输入。两次零调用冷加载失败沿原身份恢复；13次磁盘中断调用、12次迟到失败调用已补入对账，两次对账0新增模型/求解。V2回归294项、44封存文件/11控制、源树/构建/执行/PDF/ZIP绑定及8项报告篡改反例通过。根目录全量检查在旧iCloud占位文件读取处中止，日志单列。原十会话/工程/费用/UNKNOWN、Baseline与Demo保护审计PASS。
+
+当前原压电owner pi-chat-f6463f6b0b663ebc，当前SC-cc423ab076a6ef2bd6767d610dbf20fe98a03451308c68a705e68bb0513ad203，历史采用SC-88d963b80011ebe47dc1f99a2ff88e7fbb65b0464587f118c57314a09734aeb6。PROJECT.active_feature=null，BFA-042 complete。不要重新运行本批run/drive/prepare或重采样；复核只运行REPRODUCE.md的读取命令。
+
+报告：docs/agentlab/architecture-v2/continuous-design-20261018/RESULTS.md；三页PDF、DELIVERIES.md及逐项JSON/CSV齐备。清单已结束，默认仍为单主设计者；下一批只处理来源协议、完整任务判据和空间/在途执行对账。代码未提交或推送。
+
+---
+以下为历史交接。
+
+## 当前执行 · BFA-042 有限清单运行中
+
+原压电 owner 已连续完成两轮修订、执行、独立检查和同版 PDF/工程包；两轮保留审查，服务仍有供电或帧数问题。4 项资料配对已结束：双方各 1/2 正确，委派费用 3.58 倍，不提升为默认。20 项配对/组织试验已完成12项：电容四组均通过；零储能三组通过，固定专业组数值精化检查失败并保留审查。当前正在固定电源调度任务的原注册 trial 上执行。
+
+持久驱动正在运行：`scripts/continuous_design_ops.py drive`；不要并发启动或创建新 owner。注册、dispatch/final 与日志在 `~/.local/share/bf-agent-architecture-v2/continuous-design/`。清单总计 2 原会话循环 + 4 资料 trial + 16 组织 trial，不重采样。所有对照冻结 H-4023ec7a…，运行期间不要修改 Repository/Pi/协议及任务配置；离线复核脚本和报告可整理。
+
+费用与时长按用户授权不设累计上限，每 trial 共用 80 次请求/4 个执行输入。保留 Baseline、Demo、原十会话/工程/费用及 UNKNOWN。结束后运行 verify_continuous_design.py --stage all、analyze_saved.py、preservation，完成结果与状态登记；代码保持本地，未获新提交授权。
+
+---
+
 ## 2026-10-18 · BFA-041 GitHub CI通过
 
 反馈执行及CI修复已推送，源码530dc4d的push/PR两套CI均通过。Linux状态测试使用固定环境夹具，PDF使用可配置解释器与固定依赖。两项作业固定Ubuntu24.04。后续按ci-publication-20261018/NEXT.md，先原V2压电主设计者连续两轮实际修订，再验证按需资料工作者和同条件组织比较。本轮0模型调用、0新原生求解，原会话、工程、费用、Baseline及Demo保留。

@@ -1,0 +1,89 @@
+{
+  "schema_version": "organization-pilot-v1",
+  "status": "preregistered",
+  "baseline_sha": "cf3594f9587cf75236334a594b25775e672093b8",
+  "model_profile": "engineering-reasoning-efficient-v5",
+  "model": "deepseek-flash",
+  "execution_profile": "node-feedback-v1",
+  "native_environment": "qualified piezo-feedback-v1",
+  "task_criteria_mutable": false,
+  "seed": 0,
+  "replicates": 1,
+  "ordering": "counterbalanced cyclic rotation of four arms by task index, frozen before results",
+  "conditions": {
+    "single": {
+      "responsibility": "one designer",
+      "delegation": []
+    },
+    "temporary": {
+      "responsibility": "one designer",
+      "delegation": [
+        "source"
+      ],
+      "max_workers": 1
+    },
+    "fixed": {
+      "responsibility": "one lead with fixed power and firmware scopes",
+      "delegation": [
+        "power",
+        "firmware"
+      ],
+      "required_workers": [
+        "power",
+        "firmware"
+      ],
+      "max_workers": 2
+    },
+    "joint": {
+      "responsibility": "one lead; explicitly choose interface information, shared-context or joint-experiment scope based on observed facts",
+      "delegation": [
+        "source",
+        "joint"
+      ],
+      "max_workers": 2
+    }
+  },
+  "information": "identical task, full frozen candidate, documentation and execution/result access; returned worker history archived and read on demand",
+  "limits": {
+    "candidate_evaluations_per_trial": 4,
+    "workers_per_trial": 2,
+    "worker_depth": 1,
+    "worker_submissions": 1,
+    "automatic_resampling": 0,
+    "requests_per_trial": 80
+  },
+  "metrics": [
+    "valid_service",
+    "false_adoption",
+    "candidate_evaluations",
+    "reused_execution",
+    "failed_tool_calls",
+    "rework",
+    "human_design_intervention",
+    "total_model_calls",
+    "total_tokens",
+    "cache_hit_tokens",
+    "cost_upper_bound_usd",
+    "wall_seconds",
+    "native_dispatches",
+    "coordination_calls"
+  ],
+  "splits": {
+    "validation": [
+      "V1-local-capacitance",
+      "V2-cold-feedback"
+    ],
+    "final_test": [
+      "T1-fixed-power-scheduling",
+      "T2-short-validity"
+    ]
+  },
+  "adoption_rule": "Keep a scoped-source method only when source facts are correct and parent consumes them, and matched total cost or errors/rework improves; retain null/negative outcomes. No tuning on final tests.",
+  "inference": "descriptive finite pilot, one replicate per task-arm; report task-level results, no population efficacy claim",
+  "finite_stages": {
+    "original_owner_cycles": 2,
+    "source_pairs": 2,
+    "organization_trials": 16
+  },
+  "budget": "user explicitly authorizes unlimited cumulative money/time for this finite list; usage/UNKNOWN and all failures retained"
+}

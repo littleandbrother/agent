@@ -71,6 +71,16 @@ def pending_execution(repo, system):
 
 
 def execute(repo, owner, body, operator=False):
+    import fcntl
+    key=body.get('operation_id')
+    if not isinstance(key,str) or not 1 <= len(key) <= 100: raise ValueError('OPERATION_ID_REQUIRED')
+    locks=repo.root/'execution-operation-locks';locks.mkdir(exist_ok=True)
+    with (locks/identity({'owner':owner,'operation':key})).open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX)
+        return _execute(repo,owner,body,operator)
+
+
+def _execute(repo, owner, body, operator=False):
     p = repo.leader(body['project_id'], owner)
     system = repo.system(p['id'], body['system_id'])
     desc = descriptor(system)
@@ -83,9 +93,24 @@ def execute(repo, owner, body, operator=False):
             else:
                 from .repository_reference_qualification import require
             require(repo,system)
-    def apply(db):
-        prior = current_execution(repo, system, db)
-        if prior: return {**prior, 'reused': True, 'requested_system': system['id']}
+    # A dispatch owns a durable directory/lock. SQLite is held only while
+    # reading identities or appending completed evidence, never during a solver.
+    import fcntl
+    key=body.get('operation_id')
+    if not isinstance(key,str) or not 1 <= len(key) <= 100: raise ValueError('OPERATION_ID_REQUIRED')
+    request={**body,'repository':True,'task_id':'repository:'+str(body.get('project_id','baseline-import'))}
+    with repo.store.connect() as db:
+        old=db.execute('SELECT * FROM design_operations WHERE owner=? AND operation=?',(owner,key)).fetchone()
+        if old:
+            if old['request_hash'] != identity(request): raise ValueError('REPOSITORY_OPERATION_CONFLICT')
+            if old['status'] != 'SUCCEEDED': raise ValueError('REPOSITORY_OPERATION_STATE_UNKNOWN')
+            return json.loads(old['result'])
+        prior=current_execution(repo,system,db)
+        previous_executions=[dict(r) for r in db.execute('SELECT value FROM design_task_executions WHERE project=? ORDER BY rowid DESC',(p['id'],))]
+    if prior: return repo.mutate(owner,body,lambda db:{**prior,'reused':True,'requested_system':system['id']})
+    lock_root=repo.root/'task-executions'/p['id'];lock_root.mkdir(parents=True,exist_ok=True)
+    with (lock_root/(desc['id']+'.lock')).open('a') as handle:
+        fcntl.flock(handle,fcntl.LOCK_EX)
         root = pending_execution(repo, system) or repo.root/'task-executions'/p['id']/desc['id']
         root.mkdir(parents=True, exist_ok=True)
         marker, result = root/'dispatch.json', root/'completed.json'
@@ -117,7 +142,7 @@ def execute(repo, owner, body, operator=False):
                 else:
                     from .repository_reference_node import run
                     def source_lookup(netlist):
-                        for row in db.execute('SELECT value FROM design_task_executions WHERE project=? ORDER BY rowid DESC', (p['id'],)):
+                        for row in previous_executions:
                             candidate = json.loads(row['value'])
                             if candidate['status'] != 'SUCCEEDED' or candidate['descriptor']['environment'] != desc['environment']: continue
                             if candidate['metrics'].get('source_relative_error', 1) >= .01: continue
@@ -153,11 +178,12 @@ def execute(repo, owner, body, operator=False):
                 output_refs[logical] = {'sha256': file_hash(path)}
             saved = {'descriptor': desc, 'status': status, 'metrics': metrics, 'outputs': output_refs}
             sealed(result, saved)
-        refs = {path: repo.asset(db, root/path, ref['sha256']) for path, ref in saved['outputs'].items()}
-        value = {'project_id': p['id'], 'target': system['id'], 'execution_key': desc['id'],
-                 'descriptor': desc, 'status': saved['status'], 'metrics': saved['metrics'], 'artifacts': refs}
-        value['id'] = 'TX-' + identity(value)
-        db.execute('INSERT OR IGNORE INTO design_task_executions VALUES(?,?,?,?)',
-                   (value['id'], p['id'], system['id'], canonical(value)))
-        return {**value, 'reused': False}
-    return repo.mutate(owner, body, apply)
+        def apply(db):
+            refs = {path: repo.asset(db, root/path, ref['sha256']) for path, ref in saved['outputs'].items()}
+            value = {'project_id': p['id'], 'target': system['id'], 'execution_key': desc['id'],
+                     'descriptor': desc, 'status': saved['status'], 'metrics': saved['metrics'], 'artifacts': refs}
+            value['id'] = 'TX-' + identity(value)
+            db.execute('INSERT OR IGNORE INTO design_task_executions VALUES(?,?,?,?)',
+                       (value['id'], p['id'], system['id'], canonical(value)))
+            return {**value, 'reused': False}
+        return repo.mutate(owner, body, apply)

@@ -10,6 +10,7 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { repositoryExtension } from "./extensions/bf-repository.ts";
+import { organizationPrompt, scopedPrompt, type WorkConfiguration } from "./scoped-task.ts";
 
 interface Config {
 	workspace: string;
@@ -45,13 +46,14 @@ const api = async (body: Record<string, unknown>): Promise<Record<string, unknow
 		method: "POST",
 		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
 		body: JSON.stringify(body),
-		signal: AbortSignal.timeout(100000),
+		signal: AbortSignal.timeout(body.action === "repository_task_execute" ? 2500000 : 100000),
 	});
 	const value = (await response.json()) as Record<string, unknown>;
 	if (!response.ok) throw Error(String(value.error ?? "DESIGN_SERVICE_ERROR"));
 	return value;
 };
-const declaration = await api({ action: "repository_schema" });
+const work = (await api({ action: "repository_work_policy" })) as unknown as WorkConfiguration;
+const declaration = work.task ? { description: "" } : await api({ action: "repository_schema" });
 const declarationText = String(declaration.description);
 const taskDefinition = await api({ action: "repository_task_definition" });
 const taskProfile = taskDefinition.profile as { roles: string[] };
@@ -64,7 +66,8 @@ task_schema 给出本任务的字段、报告章节和 qualified_operations。�
 当前任务和场景从 task_definition 读取。
 执行与交付合同：${JSON.stringify(taskSchema)}`;
 const core =
-	config.purpose === "report"
+	scopedPrompt(work) ??
+	(config.purpose === "report"
 		? `你是 BF 的工程交付报告作者。本轮只编写绑定 System Commit 的报告，不进行工程设计、提交、仿真或采用。
 先激活 bf-engineering-report 技能，读取 report_schema 和 report_read。所有事实和源码从指定 report_id 读取。Power 按 EasyEDA 方法组织实际网表和 PCB 标注，Firmware 用实际源码编写跨参与者时序，Lead 填写八页结论和交付说明。使用 report_write 提交自己的 JSON，完成后直接结束。模型不得编造尺寸、执行结果或物理测试。`
 		: taskMode
@@ -74,7 +77,8 @@ const core =
 Lead 用明确的 Domain Commit 和 Contract 集成 System Commit，执行独立 validate，根据结果 decide，生成同版 release，再 close。方案由你判断；模型和检查器不能修改，绿色由实际检查决定。
 接口事实必须来自实际源码或数据。${declarationText} 不复制策略参数为实际无线参数。read(domain_commit,path) 和 extract(system_id,domain_commits) 可读取其他专业的冻结输入。进入新系统基线时使用 rebase，reopen 只重开原基线任务。原生源码和模型改变时需执行，工具按精确输入复用成功作业。
 工具只返回事实。按需加载已有 skill。用简短中文公开工程理由，结束时说明候选变化、结果、设计决定、剩余问题。
-当前任务配置：${taskSchema ? JSON.stringify(taskSchema) : "原 P01 原生任务；已开放 power / firmware"}`;
+当前任务配置：${taskSchema ? JSON.stringify(taskSchema) : "原 P01 原生任务；已开放 power / firmware"}`) +
+		organizationPrompt(work);
 
 const cwd = path.resolve(config.workspace);
 const reasoning = config.modelProfile.thinking === "enabled";
@@ -92,7 +96,14 @@ const loader = new DefaultResourceLoader({
 	extensionFactories: [
 		{
 			name: "bf-repository-v2",
-			factory: repositoryExtension(api, emit, declarationText, config.purpose === "report", taskMode),
+			factory: repositoryExtension(
+				api,
+				emit,
+				declarationText,
+				config.purpose === "report",
+				taskMode,
+				work.task ? "worker" : work.policy?.kind === "source" ? "source" : work.policy ? "design" : undefined,
+			),
 			hidden: false,
 		},
 	],
