@@ -1,0 +1,29 @@
+\section{Related Work}
+Intermittent systems research addresses the consistency of execution across
+power failures. Alpaca organizes a program into tasks, privatizes shared data
+and commits task effects so interrupted execution can restart without exposing
+partial updates~\cite{alpaca}. This establishes a concrete recovery mechanism;
+it does not make a current energy summary sufficient for a different capacitor
+or establish that an event reached its receiver. Our retained-state witnesses
+use an idealized latch and do not implement or evaluate Alpaca.
+
+Curricle specifies intermittent idempotence requirements through a type system
+and information-flow qualifiers, checking programs against those
+requirements~\cite{curricle}. Its program-level consistency question complements
+our admission question: whether an observation has declared units and domain,
+is independently qualified on the supplied source, and reaches a compatible
+design consumer. Passing these interface checks does not prove intermittent
+idempotence, arbitrary program correctness or physical validity.
+
+Counterexample-guided abstraction refinement (CEGAR) refines an abstraction
+when an abstract counterexample is spurious in the concrete
+system~\cite{cegar}. Our formulation shares the use of distinguishability to
+explain missing information. Its role is narrower: two legal digital worlds
+with the same representation require different verdicts after a specified
+intervention. Proposition~\ref{prop:factorization} is an elementary
+factorization condition, not a new general theory of abstraction or a CEGAR
+algorithm. We supply neither a general model checker nor an automated
+refinement guarantee. The empirical contribution is the source-bound
+comparison among complete static information, executable feedback and
+qualified live observations, including failed chains and receiver-side
+service conditions.

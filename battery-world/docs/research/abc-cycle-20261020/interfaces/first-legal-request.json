@@ -1,0 +1,132 @@
+{
+  "schema_version": "abc-e5-input-v1",
+  "hypothesis": "Researcher-specified development rehearsal: the TX energy exceeds the current ready-to-off reserve, with a source-bound deadline condition. This relation alone does not establish service success or autonomous discovery.",
+  "expression": {
+    "op": "and",
+    "args": [
+      {
+        "op": "gt",
+        "args": [
+          {
+            "op": "mul",
+            "args": [
+              {
+                "op": "mul",
+                "args": [
+                  {
+                    "source_id": "component_record",
+                    "field": "/current/tx_current_a"
+                  },
+                  {
+                    "source_id": "component_record",
+                    "field": "/current/tx_duration_s"
+                  }
+                ]
+              },
+              {
+                "source_id": "component_record",
+                "field": "/current/output_v"
+              }
+            ]
+          },
+          {
+            "op": "mul",
+            "args": [
+              {
+                "constant": 0.5,
+                "units": "1"
+              },
+              {
+                "op": "mul",
+                "args": [
+                  {
+                    "source_id": "component_record",
+                    "field": "/current/capacitance_f"
+                  },
+                  {
+                    "op": "sub",
+                    "args": [
+                      {
+                        "op": "mul",
+                        "args": [
+                          {
+                            "source_id": "component_record",
+                            "field": "/current/ready_v"
+                          },
+                          {
+                            "source_id": "component_record",
+                            "field": "/current/ready_v"
+                          }
+                        ]
+                      },
+                      {
+                        "op": "mul",
+                        "args": [
+                          {
+                            "source_id": "component_record",
+                            "field": "/current/off_v"
+                          },
+                          {
+                            "source_id": "component_record",
+                            "field": "/current/off_v"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "op": "le",
+        "args": [
+          {
+            "source_id": "component_record",
+            "field": "/current/tx_duration_s"
+          },
+          {
+            "source_id": "excitation_record",
+            "field": "/current/deadline_s"
+          }
+        ]
+      }
+    ]
+  },
+  "domain": [
+    {
+      "source_id": "component_record",
+      "field": "/current/capacitance_f",
+      "lower": 4,
+      "upper": 22,
+      "units": "uF"
+    },
+    {
+      "source_id": "excitation_record",
+      "field": "/current/deadline_s",
+      "equals": 100,
+      "units": "ms"
+    },
+    {
+      "source_id": "component_record",
+      "field": "/current/event_latch",
+      "equals": "volatile"
+    }
+  ],
+  "consumer": {
+    "input_type": "boolean",
+    "units": "1",
+    "branches": [
+      {
+        "equals": true,
+        "decision": "adopt"
+      },
+      {
+        "equals": false,
+        "decision": "retain"
+      }
+    ]
+  }
+}

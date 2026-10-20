@@ -42,6 +42,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests/agentlab -p 'test_campaign*.py' -v
           python3 -m unittest discover -s tests/agentlab -p 'test_storage.py' -v
+          python3 -m unittest discover -s tests/agentlab -p 'test_abc_*.py' -v
 
   publication-reproduction:
     runs-on: ubuntu-24.04
@@ -51,7 +52,7 @@ jobs:
         env:
           PYTHONDONTWRITEBYTECODE: '1'
         run: |
-          python3 release/verify_source.py --manifest release/source-manifest-20261020.json
+          python3 release/verify_source.py --manifest release/abc-20261020/source-manifest.json
           python3 battery-world/papers/method-reexecution-20261019/final/reproduce.py --output "$RUNNER_TEMP/bf-method-results" --negative-controls
           python3 battery-world/papers/interface-sufficiency-20261019/final/E_reproduce.py --output "$RUNNER_TEMP/bf-interface-results"
 

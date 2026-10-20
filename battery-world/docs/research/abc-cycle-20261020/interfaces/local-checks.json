@@ -1,0 +1,278 @@
+{
+  "schema_version": "abc-B-local-checks-v1",
+  "at": "2026-10-20T11:19:45.364700+00:00",
+  "checks": [
+    {
+      "name": "targeted-negative-controls",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "battery-world/tests/agentlab",
+        "-p",
+        "test_abc_interfaces.py",
+        "-v"
+      ],
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "ABC_SOURCE_ROOT": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world"
+      },
+      "exit_code": 0,
+      "wall_s": 0.24945862501044758,
+      "output": "test_boolean_number_requires_explicit_conversion (test_abc_interfaces.ABCInterfacesTest.test_boolean_number_requires_explicit_conversion) ... ok\ntest_cross_source_conditions_are_legal_without_science (test_abc_interfaces.ABCInterfacesTest.test_cross_source_conditions_are_legal_without_science) ... ok\ntest_cross_task_source_and_inapplicable_condition_rejected (test_abc_interfaces.ABCInterfacesTest.test_cross_task_source_and_inapplicable_condition_rejected) ... ok\ntest_five_original_failures_remain_immutable (test_abc_interfaces.ABCInterfacesTest.test_five_original_failures_remain_immutable) ... ok\ntest_fixture_consumption_is_bound_but_cannot_be_scientific_evidence (test_abc_interfaces.ABCInterfacesTest.test_fixture_consumption_is_bound_but_cannot_be_scientific_evidence) ... ok\ntest_frozen_18_have_equal_information_and_permissions (test_abc_interfaces.ABCInterfacesTest.test_frozen_18_have_equal_information_and_permissions) ... ok\ntest_incompatible_source_unit_has_exact_field (test_abc_interfaces.ABCInterfacesTest.test_incompatible_source_unit_has_exact_field) ... ok\ntest_operator_unit_error_has_exact_arguments (test_abc_interfaces.ABCInterfacesTest.test_operator_unit_error_has_exact_arguments) ... ok\ntest_payload_and_unit_registry_mutations_rejected (test_abc_interfaces.ABCInterfacesTest.test_payload_and_unit_registry_mutations_rejected) ... ok\ntest_prefixes_normalize_in_expression_domain_and_consumer (test_abc_interfaces.ABCInterfacesTest.test_prefixes_normalize_in_expression_domain_and_consumer) ... ok\ntest_rejection_never_reaches_executor_and_missing_results_stay_unknown (test_abc_interfaces.ABCInterfacesTest.test_rejection_never_reaches_executor_and_missing_results_stay_unknown) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.107s\n\nOK\n"
+    },
+    {
+      "name": "cli-development-preflight",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python",
+        "-B",
+        "battery-world/scripts/campaign_abc_interfaces.py",
+        "preflight",
+        "--spec",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/docs/research/abc-cycle-20261020/interfaces/first-preflight-spec.json",
+        "--episode-root",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/docs/research/abc-cycle-20261020/interfaces/local-preflight-only",
+        "--request",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/docs/research/abc-cycle-20261020/interfaces/first-legal-request.json"
+      ],
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "ABC_SOURCE_ROOT": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world"
+      },
+      "exit_code": 0,
+      "wall_s": 0.1403757499938365,
+      "result": {
+        "consumer_input": {
+          "type": "boolean",
+          "units": "1",
+          "value": true
+        },
+        "context_id": "5a37a96bd0ee51675e741c2816a282d0f50e1f4201004d7a11749064e0c4a416",
+        "decision": "adopt",
+        "independent_source_algebra_agrees": true,
+        "normalized_source_spec": {
+          "ast": {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "field": "/component_record/current/tx_current_a",
+                            "units": "A"
+                          },
+                          {
+                            "field": "/component_record/current/tx_duration_s",
+                            "units": "s"
+                          }
+                        ],
+                        "op": "mul"
+                      },
+                      {
+                        "field": "/component_record/current/output_v",
+                        "units": "V"
+                      }
+                    ],
+                    "op": "mul"
+                  },
+                  {
+                    "args": [
+                      {
+                        "constant": 0.5,
+                        "units": "1"
+                      },
+                      {
+                        "args": [
+                          {
+                            "field": "/component_record/current/capacitance_f",
+                            "units": "F"
+                          },
+                          {
+                            "args": [
+                              {
+                                "args": [
+                                  {
+                                    "field": "/component_record/current/ready_v",
+                                    "units": "V"
+                                  },
+                                  {
+                                    "field": "/component_record/current/ready_v",
+                                    "units": "V"
+                                  }
+                                ],
+                                "op": "mul"
+                              },
+                              {
+                                "args": [
+                                  {
+                                    "field": "/component_record/current/off_v",
+                                    "units": "V"
+                                  },
+                                  {
+                                    "field": "/component_record/current/off_v",
+                                    "units": "V"
+                                  }
+                                ],
+                                "op": "mul"
+                              }
+                            ],
+                            "op": "sub"
+                          }
+                        ],
+                        "op": "mul"
+                      }
+                    ],
+                    "op": "mul"
+                  }
+                ],
+                "op": "gt"
+              },
+              {
+                "args": [
+                  {
+                    "field": "/component_record/current/tx_duration_s",
+                    "units": "s"
+                  },
+                  {
+                    "field": "/excitation_record/current/deadline_s",
+                    "units": "s"
+                  }
+                ],
+                "op": "le"
+              }
+            ],
+            "op": "and"
+          },
+          "domain": {
+            "constraints": [
+              {
+                "field": "/component_record/current/capacitance_f",
+                "lower": 4e-06,
+                "units": "F",
+                "upper": 2.2e-05
+              }
+            ]
+          },
+          "hypothesis": "Researcher-specified development rehearsal: the TX energy exceeds the current ready-to-off reserve, with a source-bound deadline condition. This relation alone does not establish service success or autonomous discovery.",
+          "mode": "construction",
+          "schema_version": "phase2-observation-proposal-v1",
+          "source_id": "bundle",
+          "units": "1"
+        },
+        "observation": {
+          "type": "boolean",
+          "units": "1",
+          "value": true
+        },
+        "preflight_wall_s": 0.0015932079986669123,
+        "request_sha256": "48be5c6f56461edc8109d86ed82e9b373e82e3421d0792c9508e9686a4442b64",
+        "schema_version": "abc-e5-input-v1",
+        "scientific_executions": 0,
+        "scope": "Deterministic source/unit/domain/type consistency, not service or physical qualification",
+        "source_bindings": {
+          "component_record": "c13da9c2b9c76455572adaaef688d54eaed9a2170bfff58f95980644c3e13991",
+          "excitation_record": "71db3af47615f6e01fdc15752bf36532a8147924984ce35e8256a87d57befd3d"
+        },
+        "status": "LEGAL"
+      }
+    }
+  ],
+  "protected_readback": [
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase2_discovery.py",
+      "expected_sha256": "a1a3247803b0fa912c7ceffb7de58698c81682202424609da9e590969d693314",
+      "actual_sha256": "a1a3247803b0fa912c7ceffb7de58698c81682202424609da9e590969d693314",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py",
+      "expected_sha256": "86bdf88573956518ed09783f4f83e161b55b2e37e661e74218842542bb7e986b",
+      "actual_sha256": "86bdf88573956518ed09783f4f83e161b55b2e37e661e74218842542bb7e986b",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/interfaces.py",
+      "expected_sha256": "e6b22090c2fb0006702e7776f49a226ad20e5c0ed63236d99e8afada1b4befd3",
+      "actual_sha256": "e6b22090c2fb0006702e7776f49a226ad20e5c0ed63236d99e8afada1b4befd3",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/bf_interfaces.py",
+      "expected_sha256": "5f0fba111585e850e4ee5b683e8cf1ef8c25bdc04e15158352a9c15c04d4566f",
+      "actual_sha256": "5f0fba111585e850e4ee5b683e8cf1ef8c25bdc04e15158352a9c15c04d4566f",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_interfaces.py",
+      "expected_sha256": "a804c27a0595f9429c4b0308727c7a0bbf446e2ca2c680cf622824d745c7f2c1",
+      "actual_sha256": "a804c27a0595f9429c4b0308727c7a0bbf446e2ca2c680cf622824d745c7f2c1",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase4_interfaces.py",
+      "expected_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+      "actual_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/delivery-manifest.json",
+      "expected_sha256": "cb4330252d4da17da643a01b73a52d2822d74a1e41f4eca4468765ecf59a7c04",
+      "actual_sha256": "cb4330252d4da17da643a01b73a52d2822d74a1e41f4eca4468765ecf59a7c04",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/interface-sufficiency.pdf",
+      "expected_sha256": "084e501db04edb8fe391fc46adc5888389062938ca67d7b6c2794cbfd2d19ada",
+      "actual_sha256": "084e501db04edb8fe391fc46adc5888389062938ca67d7b6c2794cbfd2d19ada",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/data/raw/p3-failure-gateway-1.jsonl",
+      "expected_sha256": "a68fd30de321b48a38773392a7513d376e03ea059989fd3e1fc328fdb9d4503e",
+      "actual_sha256": "a68fd30de321b48a38773392a7513d376e03ea059989fd3e1fc328fdb9d4503e",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/data/raw/p3-failure-gateway-2.jsonl",
+      "expected_sha256": "f9717f904e81e99f37203756ac961b621484de798c78b5e5d7252b8136231e71",
+      "actual_sha256": "f9717f904e81e99f37203756ac961b621484de798c78b5e5d7252b8136231e71",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/data/raw/p3-failure-gateway-3.jsonl",
+      "expected_sha256": "72385db8f4c4695928fd2056221038b030ada98254d51bf5310d41148fb323d3",
+      "actual_sha256": "72385db8f4c4695928fd2056221038b030ada98254d51bf5310d41148fb323d3",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/data/raw/p3-failure-gateway-4.jsonl",
+      "expected_sha256": "118f62585708730f6646e87ec5030b16cf13805efc4ed2b5c94fec093a93e491",
+      "actual_sha256": "118f62585708730f6646e87ec5030b16cf13805efc4ed2b5c94fec093a93e491",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/final/data/raw/p3-failure-gateway-5.jsonl",
+      "expected_sha256": "6030b1f9b51a1d447c3bb7bae5f7e932853e2cd4bff057e406dc1c0c88865ad5",
+      "actual_sha256": "6030b1f9b51a1d447c3bb7bae5f7e932853e2cd4bff057e406dc1c0c88865ad5",
+      "unchanged": true
+    }
+  ],
+  "available_after_bytes": 15668924416,
+  "retained_owned_bytes_before_receipt": 135160,
+  "scratch_remaining": [],
+  "scientific_executions": 0,
+  "paid_requests": 0,
+  "pi_runs": 0,
+  "native_solver_jobs": 0,
+  "qualification": "LOCAL_SOFTWARE_ONLY; REAL_CONSUMPTION_PENDING_S0",
+  "full_init_sh": "NOT_RUN_NO_REPOSITORY_HEALTH_CLAIM"
+}

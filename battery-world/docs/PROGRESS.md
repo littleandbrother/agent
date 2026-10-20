@@ -1513,3 +1513,22 @@ The first published SHA exposed an undeclared jsonschema dependency, host-bound 
 ## Publication CI: complete offline test isolation
 
 Latest remote failure af29849 was confined to author-machine test paths; Pi and paper reproduction already passed. Resolved temporary A/R output, checkout-relative phase3 adapter, exact saved initial cache and temporary interface output now pass all196 campaign tests with original workspace/private runtime access denied. Saved cache/inputs/results remain unchanged; unit path projections are separate. No production model, evaluator, frozen protocol, provider/native execution or manuscript result changed. Final publication receipt records the subsequent exact-SHA remote CI.
+
+
+## ABC finite cycle complete; final exit review pending — 2026-10-20T13:50:33.784060+00:00
+
+BFA-068/069/070 complete on the frozen list:48 model episodes,307 SETTLED requests, conservative fixed-rate upper estimate USD5.5299957; no new usage UNKNOWN. A selected-candidate finite service result remains negative, productNOT_ACCEPTED/physicalNOT_CALIBRATED. B18 has correct decisions and selected service in all arms, two fixed-rule budget stops retained, no refinement accuracy/acquired-byte gain. C24 all four arms6/6, no gain over equal-history H0; formation/validation/first-use27 requests separate from126formal, allC153requests. Frozen H relations and independent D gates remain separate. All48 actual first API payloads,129 frozen source files and307 live billing rows were read back without changes.
+
+Two complete local increments accepted after exact handoff readback and actual S0 two-pass builds: C16pages / B23pages, all-page visual checks, embedded fonts/noType3, shared official vector logo and aligned two-line title/abstract. Old final/shared assets10protectedfiles unchanged; old published/Overleaf sources, failures, billing and UNKNOWN retained. New paper builds add no provider/scientific/native execution, new env/worktree/whole-tree backup, commit or push. Rebuildable paper scratch removed with receipts; physical cleanup credit remains the earlier isolated12,261,535,744B window only. Final usage/readings: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/final-space.json.
+
+Report: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/REPORT.md. Targeted24 new software checks passed; full init.sh not run, no full health claim. Original A/B idle. Paid and scientific dispatch closed; next only independent final exit review and pause the same bf heartbeat. No G, automatic next cycle or publication.
+
+
+## ABC final exit accepted; heartbeat paused — 2026-10-20T13:59:48.449125+00:00
+
+Independent review accepted completion ABC-cycle-complete-v1-3d095785d149c563: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json. All finite ABC cores and two complete local paper increments are accepted within their stated negative/digital boundaries. Same bf heartbeat PAUSED, confirmed from live automation.toml; original A/B and reviewer idle. BFA-068/069/070 complete and exit-accepted. No additional experiment, G, RSI, automatic next cycle, publication or acknowledgement message. Sealed science/paper/resource receipts unchanged; final reviewer scratch removed. Current available bytes 16908668928, without crediting background APFS changes as reclaimed space. Final result entry: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/FINAL-RESULTS.md.
+
+
+## Authorized ABC manuscript and whole-project publication — 2026-10-20T22:47:33.069804+08:00
+
+BFA-071 registered for original Overleaf RSI/interface projects, actual browser compilation/alignment inspection and current BF GitHub branch update. Use existing worktrees/environments,350MB peak/180MB retained cap with10GB reserve. New model/science/native execution0. Original ABC results/defaultH0/physical limitations and billingUNKNOWN retained. Registration: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/abc-publication-20261020/registration.json.

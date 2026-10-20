@@ -1,5 +1,17 @@
 # BF-AIoT Agent
 
+## 2026-10-20 ABC 研究与双论文更新
+
+本分支已补齐本轮 A 产品整合、B 接口充分性、C 方法迁移的实现、测试、完整研究记录和最新论文。
+
+- [RSI / 方法论文，16 页](battery-world/papers/method-reexecution-20261019/abc-20261020/main.pdf) · [原 Overleaf 项目](https://www.overleaf.com/project/6ad5fb6e87c3ac6782d05b2c)
+- [Agent 接口论文，23 页](battery-world/papers/interface-sufficiency-20261019/abc-20261020/interface-sufficiency-abc.pdf) · [原 Overleaf 项目](https://www.overleaf.com/project/6ad5fbda856b284d5d917ffd)
+- [ABC 独立复核与最终结果](docs/research/abc-cycle-20261020/reviews/FINAL-RESULTS.md) · [复现证据与验证入口](release/abc-20261020/README.md)
+
+两篇保留 HKUST(GZ) 右上矢量校徽、两行标题及统一摘要位置，已在各自 Overleaf 项目实际在线编译。A 产品仍未验收；B 三组均为 6/6 正确预测、决策和选定服务通过，未证明精化优势；C 四组均为 6/6 服务通过，所提方法未优于共享相同历史的 H0。48 次实际 episode、307 条已结算模型请求与原始失败均保留；本轮新 UNKNOWN 为 0，原历史 UNKNOWN 记录不改写。
+
+当前源码校验入口为 `python3 release/verify_source.py --manifest release/abc-20261020/source-manifest.json`。历史五阶段交付及已封存 Release 继续保留。
+
 ## 2026-10-20 五阶段研究与工程交付
 
 当前 V2 实现、Power/Firmware 协作与联合执行、五阶段实验、两篇完整论文及工程接手资料已集中到本分支。

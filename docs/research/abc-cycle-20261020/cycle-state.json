@@ -1,0 +1,667 @@
+{
+  "schema": "bf-abc-cycle-v1",
+  "dispatch_id": "BF-ABC-20261020-001",
+  "status": "COMPLETE",
+  "at": "2026-10-20T11:00:33.168786+00:00",
+  "source_baseline": "b8498ee6c712dd52f060bc84abebebfd461c5fdc",
+  "authority": {
+    "review_thread": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "human_message": "01a158ec-daaa-7680-a933-a904f5b35ab9",
+    "verified_direct_human_three_work_package_request": true,
+    "notify_authority": "Direct human completion-notification authorization01a15568-19b2-7f81-bd50-59657e6ae141, preserved by dispatch plan"
+  },
+  "storage": {
+    "available_before_bytes": 14669664256,
+    "output_directory": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020",
+    "reserve_bytes": 10000000000,
+    "estimated_peak_additional_bytes": 1500000000,
+    "retained_new_outputs_cap_bytes": 800000000,
+    "provider_growth_cap_bytes": 300000000,
+    "worker_retained_cap_bytes": 180000000,
+    "new_environments": 0,
+    "new_worktrees": 0,
+    "whole_tree_backups": 0,
+    "max_active_models_including_Pi": 3,
+    "max_new_native_solver_jobs": 0,
+    "new_scientific_executions_ceiling": 200,
+    "finite_episode_upper_bound": 49,
+    "provider_request_ceiling": 600,
+    "conservative_estimated_usd_guard": 100,
+    "summed_episode_wall_s_guard": 45000,
+    "common_solver_episode": {
+      "requests": 12,
+      "wall_s": 900,
+      "distinct_designs": 2,
+      "tool_calls": 40,
+      "max_output_tokens": 65536,
+      "auto_retry": false
+    },
+    "A_design_episode": {
+      "requests": 20,
+      "wall_s": 1800,
+      "source_concepts": 2,
+      "candidate_revisions": 2
+    }
+  },
+  "features": [
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-068-abc-product-integration",
+      "owner": "campaign-s0",
+      "title": "A/R sourced design space and ABC shared execution integration",
+      "status": "complete",
+      "started_at": "2026-10-20T11:00:33.168786+00:00",
+      "dispatch_id": "BF-ABC-20261020-001",
+      "hypothesis": "A sourced new implementation may evade the old necessary bound without relaxing original service or input/space constraints.",
+      "paper_claim": "Finite sourced A/R negative result: selected single module and two revisions, twelve original-service executions; all four final servicesFAIL, productNOT_ACCEPTED; broader A/R design space untested.",
+      "falsifier": "Any source/domain/energy omission, changed fixed service/input/space, old failure rewrite, cross-candidate substitution or failed original independent service gate refutes a product success claim.",
+      "owned_paths": [
+        "scripts/campaign_abc.py",
+        "scripts/campaign_abc_product.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/abc_shared.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/abc_product.py",
+        "configs/studies/abc-20261020/",
+        "tests/agentlab/test_abc_shared.py",
+        "tests/agentlab/test_abc_product.py",
+        "docs/research/abc-cycle-20261020/shared/",
+        "docs/research/abc-cycle-20261020/product/",
+        "project/features/BFA-068-abc-product-integration/",
+        "project/features/BFA-069-abc-interfaces/",
+        "project/features/BFA-070-abc-method-transfer/",
+        "PROJECT.yaml",
+        "docs/PROGRESS.md",
+        "docs/SESSION-HANDOFF.md",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/cycle-state.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/product",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/completion-signals",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/RESULT-INDEX.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/INTEGRATION-REVIEW.md",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/REPORT.md",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/final-space.json"
+      ],
+      "schema_changes": [
+        "Additive versioned ABC task/episode/result records only; old stage state and sealed artifacts immutable."
+      ],
+      "targeted_tests": [
+        "Only changed preflight/task/evaluator/episode paths; first real input to independent judgment, then frozen finite formal list."
+      ],
+      "negative_controls": [
+        "Missing/incompatible source, wrong domain/type and cross-candidate evidence rejected",
+        "Final tasks excluded from formation; same information and budgets for declared controls",
+        "No hidden-success rerun or failed-attempt removal"
+      ],
+      "reproducible_command": "python scripts/campaign_abc.py run --spec <frozen-episode.json> (shared entry to be implemented against existing gateway/SDK); owner module exposes task/tool/independent consumer.",
+      "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/product",
+      "cost_cap": {
+        "reserve_bytes": 10000000000,
+        "estimated_peak_additional_bytes": 1500000000,
+        "retained_new_outputs_cap_bytes": 800000000,
+        "provider_growth_cap_bytes": 300000000,
+        "worker_retained_cap_bytes": 180000000,
+        "new_environments": 0,
+        "new_worktrees": 0,
+        "whole_tree_backups": 0,
+        "max_active_models_including_Pi": 3,
+        "max_new_native_solver_jobs": 0,
+        "new_scientific_executions_ceiling": 200,
+        "finite_episode_upper_bound": 49,
+        "provider_request_ceiling": 600,
+        "conservative_estimated_usd_guard": 100,
+        "summed_episode_wall_s_guard": 45000,
+        "common_solver_episode": {
+          "requests": 12,
+          "wall_s": 900,
+          "distinct_designs": 2,
+          "tool_calls": 40,
+          "max_output_tokens": 65536,
+          "auto_retry": false
+        },
+        "A_design_episode": {
+          "requests": 20,
+          "wall_s": 1800,
+          "source_concepts": 2,
+          "candidate_revisions": 2
+        }
+      },
+      "claim_boundary": "Digital model-scope results only; same original A/R service; physical NOT_CALIBRATED until measured; no stable RSI.",
+      "stop_condition": "Budget/storage/source identity/usage/hash/isolation gate fails; hold only dependent path. Scientific/service changes require concrete human choice. No extra retries/experiments beyond frozen finite list.",
+      "completed_at": "2026-10-20T13:50:33.784060+00:00",
+      "paid_dispatch_allowed": false,
+      "exit_review_status": "ACCEPTED",
+      "S0_integration": {
+        "status": "ACCEPTED_LOCAL_FINITE_DELIVERY",
+        "at": "2026-10-20T13:50:33.784060+00:00",
+        "evidence": [
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/A-finite-negative-v1.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/final-input-audit.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/live-accounting-readback.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/REPORT.md"
+        ],
+        "no_further_experiments": true,
+        "no_commit_push_or_publish": true
+      },
+      "completion_limitations": [
+        "Finite registered task completion, not confirmation of improvement hypothesis.",
+        "Physical NOT_CALIBRATED, product NOT_ACCEPTED, exact model weights UNKNOWN, no established stable RSI.",
+        "Full init.sh not run; no full repository health claim.",
+        "New manuscripts local only; prior final/delivery/Overleaf and original failures/billing remain preserved."
+      ],
+      "verification": {
+        "targeted_new_software_tests_passed": 24,
+        "actual_model_episodes": 48,
+        "settled_requests": 307,
+        "conservative_estimated_upper_usd": 5.5299957,
+        "new_usage_UNKNOWN": 0,
+        "actual_initial_API_payloads_audited": 48,
+        "frozen_source_files_audited": 129,
+        "new_live_billing_rows_exact_readback": 307,
+        "new_native_jobs": 0,
+        "papers_actual_S0_passes_each": 2,
+        "paper_pages_C_B": [
+          16,
+          23
+        ],
+        "full_init_sh": "NOT_RUN_NO_FULL_HEALTH_CLAIM"
+      },
+      "reproducible_saved_data_command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/opt/python@3.14/bin/python3.14 -B docs/research/abc-cycle-20261020/shared/summarize.py",
+      "exit_review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json",
+      "next_handoff": [
+        "Finite cycle closed. Wait for a new direct human instruction; no additional model/science/G/RSI or publication."
+      ]
+    },
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-069-abc-interfaces",
+      "owner": "campaign-b",
+      "title": "B intervention information with deterministic legal-input preflight",
+      "status": "complete",
+      "started_at": "2026-10-20T11:00:33.168786+00:00",
+      "dispatch_id": "BF-ABC-20261020-001",
+      "hypothesis": "With equal information access, prospective relation acquisition may reduce judgment errors or acquisition/execution costs on unseen intervention mechanisms.",
+      "paper_claim": "B18 all arms6/6 correct predictions/decisions/selected service; two fixed-rule budget stops preserved, typed1/4/3 is path-only; equal acquired bytes and mixed cost, no scientific-accuracy advantage.",
+      "falsifier": "No actual legal-consumer execution, missing strong-baseline information, post-result family selection, type/format success alone, or no scientific/cost advantage refutes an interface-benefit claim.",
+      "owned_paths": [
+        "scripts/campaign_abc_interfaces.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/abc_interfaces.py",
+        "tests/agentlab/test_abc_interfaces.py",
+        "papers/interface-sufficiency-20261019/abc-20261020/",
+        "docs/research/abc-cycle-20261020/interfaces/",
+        "project/features/BFA-069-abc-interfaces/"
+      ],
+      "schema_changes": [
+        "Additive versioned ABC task/episode/result records only; old stage state and sealed artifacts immutable."
+      ],
+      "targeted_tests": [
+        "11 local software negative controls; command/exit/output in docs/research/abc-cycle-20261020/interfaces/local-checks.json",
+        "Deterministic CLI first-legal-request returns LEGAL Boolean; no executor installed",
+        "13 original protected files read back by SHA256, including the five failure logs"
+      ],
+      "negative_controls": [
+        "Missing/incompatible source, wrong domain/type and cross-candidate evidence rejected",
+        "Final tasks excluded from formation; same information and budgets for declared controls",
+        "No hidden-success rerun or failed-attempt removal"
+      ],
+      "reproducible_command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B build_paper.py --render (cwd: /Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/abc-20261020)",
+      "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/abc-20261020/PAPER-HANDOFF.json",
+      "cost_cap": {
+        "reserve_bytes": 10000000000,
+        "estimated_peak_additional_bytes": 1500000000,
+        "retained_new_outputs_cap_bytes": 800000000,
+        "provider_growth_cap_bytes": 300000000,
+        "worker_retained_cap_bytes": 180000000,
+        "new_environments": 0,
+        "new_worktrees": 0,
+        "whole_tree_backups": 0,
+        "max_active_models_including_Pi": 3,
+        "max_new_native_solver_jobs": 0,
+        "new_scientific_executions_ceiling": 200,
+        "finite_episode_upper_bound": 49,
+        "provider_request_ceiling": 600,
+        "conservative_estimated_usd_guard": 100,
+        "summed_episode_wall_s_guard": 45000,
+        "common_solver_episode": {
+          "requests": 12,
+          "wall_s": 900,
+          "distinct_designs": 2,
+          "tool_calls": 40,
+          "max_output_tokens": 65536,
+          "auto_retry": false
+        },
+        "A_design_episode": {
+          "requests": 20,
+          "wall_s": 1800,
+          "source_concepts": 2,
+          "candidate_revisions": 2
+        }
+      },
+      "claim_boundary": "Digital model-scope results only; same original A/R service; physical NOT_CALIBRATED until measured; no stable RSI.",
+      "stop_condition": "Budget/storage/source identity/usage/hash/isolation gate fails; hold only dependent path. Scientific/service changes require concrete human choice. No extra retries/experiments beyond frozen finite list.",
+      "handoff_status": "B_MANUSCRIPT_COMPLETE_READY_FOR_S0_INTEGRATION",
+      "additive_schema_versions": [
+        "abc-e5-input-v1",
+        "abc-B-independent-result-v1"
+      ],
+      "formal_freeze": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/project/features/BFA-069-abc-interfaces/frozen-families.json",
+        "sha256": "7aa6051c06117b8f2b7c152c87254ca25121460f3a4c2c337ac6543a991fcc2f",
+        "formal_attempts": 18,
+        "mechanism_families": 3,
+        "conditions": 3,
+        "repeats": 2,
+        "outcome_based_revisions": 0
+      },
+      "verification": {
+        "targeted_software_tests": 11,
+        "cli_preflight": "LEGAL",
+        "actual_consumer": "S0_COMPLETED_FIRST_LEGAL_REHEARSAL_AND_18_FORMAL_ROWS",
+        "scientific_executions_by_worker": 0,
+        "paid_requests_by_worker": 0,
+        "pi_runs_by_worker": 0,
+        "full_init_sh": "NOT_RUN_NO_REPOSITORY_HEALTH_CLAIM",
+        "actual_consumer_source": "docs/research/abc-cycle-20261020/shared/B-first-legal-consumption-v1.json and B-formal18-v1.json in canonical root",
+        "formal_attempts": 18,
+        "formal_correct_actual_artifacts": 18,
+        "normal_budget_completion": 16,
+        "typed_formal_paths": 8,
+        "document_pdflatex_passes": 2,
+        "document_pages": 23,
+        "document_warnings": 0,
+        "document_visual_pages": 23,
+        "all_18_formal_result_hashes_checked": true,
+        "old_paper_and_canonical_hashes_unchanged": 24,
+        "original_code_and_failure_hashes_unchanged": 13
+      },
+      "limitations": [
+        "No demonstrated scientific-accuracy or acquired-source-volume advantage for refinement over complete static information.",
+        "Refinement uses more requests but a slightly lower fixed-rate fee estimate; this is a mixed cost result, not general cost superiority.",
+        "Two fixed-rule attempts retain INCOMPLETE_OR_STOPPED after correct direct artifact submission; typed-path statistics do not penalize legal direct submissions.",
+        "Three fixed mechanisms with two fresh contexts each; no statistical, population or physical generalization.",
+        "First legal-consumer rehearsal is researcher supplied and excluded from 18 formal attempts.",
+        "Earlier seven-pass/five-incomplete E5 result, original failures, UNKNOWN billing and four older truncations remain preserved.",
+        "C24 proves the scoped event component on its finite tasks, with no equal-history success/request/fee gain.",
+        "A remains NOT_ACCEPTED and NOT_CALIBRATED; its twelve finite service runs do not prove global infeasibility.",
+        "Underlying model weights UNKNOWN; full raw experimental archive is external, not copied into this manuscript folder.",
+        "No hardware, venue-compliance, broad novelty-priority, G/RSI or product acceptance claim."
+      ],
+      "next_handoff": [
+        "Finite cycle closed. Wait for a new direct human instruction; no additional model/science/G/RSI or publication."
+      ],
+      "ended_local_at": "2026-10-20T11:19:45.364700+00:00",
+      "completed_at": "2026-10-20T13:50:33.784060+00:00",
+      "current_phase": "Full manuscript increment from completed S0 evidence; no additional execution",
+      "previous_adapter_handoff_status": "READY_FOR_S0_FIRST_REAL_CONSUMPTION",
+      "paid_dispatch_allowed": false,
+      "manuscript_cost_cap": {
+        "reserve_bytes": 10000000000,
+        "estimated_peak_additional_bytes": 50000000,
+        "retained_manuscript_cap_bytes": 20000000,
+        "new_paid_requests": 0,
+        "new_scientific_executions": 0
+      },
+      "paper_handoff": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/papers/interface-sufficiency-20261019/abc-20261020/PAPER-HANDOFF.json",
+        "sha256": "76c0e135c7e3ccd757ac801ed7db317373386aeead9976dfe3c520fb2f776941",
+        "pdf_sha256": "2525bd36a6ec1085bb249dcbf0129a8840571035908ad6525b3e6b084650538e",
+        "pages": 23,
+        "warnings": 0,
+        "visual_pages": 23
+      },
+      "exit_review_status": "ACCEPTED",
+      "S0_integration": {
+        "status": "ACCEPTED_LOCAL_FINITE_DELIVERY",
+        "at": "2026-10-20T13:50:33.784060+00:00",
+        "evidence": [
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-formal18-v1.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-paper-integration-review.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-paper-import.json"
+        ],
+        "no_further_experiments": true,
+        "no_commit_push_or_publish": true
+      },
+      "completion_limitations": [
+        "Finite registered task completion, not confirmation of improvement hypothesis.",
+        "Physical NOT_CALIBRATED, product NOT_ACCEPTED, exact model weights UNKNOWN, no established stable RSI.",
+        "Full init.sh not run; no full repository health claim.",
+        "New manuscripts local only; prior final/delivery/Overleaf and original failures/billing remain preserved."
+      ],
+      "canonical_S0_pdf_sha256": "324a71e5cc4617c58c8ad03f16e7bcc78e480d15997ccfe21a0b01dbebca5bb3",
+      "exit_review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json"
+    },
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-070-abc-method-transfer",
+      "owner": "campaign-a",
+      "title": "C O event-time rule and controlled new-task transfer",
+      "status": "complete",
+      "started_at": "2026-10-20T11:00:33.168786+00:00",
+      "dispatch_id": "BF-ABC-20261020-001",
+      "hypothesis": "A general time-error relation learned from recorded O failures may improve new-mechanism decisions beyond equal-history and equal-budget controls.",
+      "paper_claim": "C24 all four arms6/6; proposed29requests/USD0.7532616 vs equal-history26/USD0.69885, no gain. Formation/validation/first-use27requests/USD0.7154043 separate, allC153requests/USD3.4548018. Frozen relation false does not prove unsoundness.",
+      "falsifier": "A fixed0.75s memory, leaked final tasks, unequal history/formation/solver budgets, outcome-based retries, or no gain over equal-history controls refutes a transferable-method improvement claim.",
+      "owned_paths": [
+        "scripts/campaign_abc_methods.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/abc_methods.py",
+        "tests/agentlab/test_abc_methods.py",
+        "papers/method-reexecution-20261019/abc-20261020/",
+        "docs/research/abc-cycle-20261020/methods/",
+        "project/features/BFA-070-abc-method-transfer/"
+      ],
+      "schema_changes": [
+        "Additive bf-abc-o-time-v1 task, design, raw response and independent assessment; bf-abc-o-time-method-v1 generic expression AST. Old O/A/R contracts untouched."
+      ],
+      "targeted_tests": [
+        "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/bfworld/src /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B -m unittest discover -s tests/agentlab -p test_abc_methods.py -v"
+      ],
+      "negative_controls": [
+        "Matched/timely event with inaccurate timestamp rejected",
+        "Changed event-time definition changes truth, independent of detection",
+        "Foreign/tampered response and bad CRC rejected",
+        "Formation has no validation/final task; no D evaluation in formation",
+        "Unknown AST variable and executable source text rejected",
+        "Same tool permissions in all four conditions; exact response reuse and two-D cap"
+      ],
+      "reproducible_command": "Shared S0 scripts/campaign_abc.py with module APIs and pack/specs; preparation: scripts/campaign_abc_methods.py prepare; actual model dispatch S0-only.",
+      "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods",
+      "cost_cap": {
+        "reserve_bytes": 10000000000,
+        "estimated_peak_additional_bytes": 1500000000,
+        "retained_new_outputs_cap_bytes": 800000000,
+        "provider_growth_cap_bytes": 300000000,
+        "worker_retained_cap_bytes": 180000000,
+        "new_environments": 0,
+        "new_worktrees": 0,
+        "whole_tree_backups": 0,
+        "max_active_models_including_Pi": 3,
+        "max_new_native_solver_jobs": 0,
+        "new_scientific_executions_ceiling": 200,
+        "finite_episode_upper_bound": 49,
+        "provider_request_ceiling": 600,
+        "conservative_estimated_usd_guard": 100,
+        "summed_episode_wall_s_guard": 45000,
+        "common_solver_episode": {
+          "requests": 12,
+          "wall_s": 900,
+          "distinct_designs": 2,
+          "tool_calls": 40,
+          "max_output_tokens": 65536,
+          "auto_retry": false
+        },
+        "A_design_episode": {
+          "requests": 20,
+          "wall_s": 1800,
+          "source_concepts": 2,
+          "candidate_revisions": 2
+        }
+      },
+      "claim_boundary": "C finite ideal continuous-power timing component only. Two actual original H formations frozen, validation/first-use separate,24formal attempts complete. No success/request/cost advantage over equal-history H0; no H semantic proof, full O/A/R product acceptance, physical calibration or RSI. Earlier G differences conditional and four token-censored attempts retained.",
+      "stop_condition": "Budget/storage/source identity/usage/hash/isolation gate fails; hold only dependent path. Scientific/service changes require concrete human choice. No extra retries/experiments beyond frozen finite list.",
+      "handoff": {
+        "status": "S0_INTEGRATION_ACCEPTED",
+        "at": "2026-10-20T13:34:12.479293+00:00",
+        "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods/PAPER-HANDOFF.json",
+        "pending": [],
+        "new_paid_requests": 0,
+        "new_study_executions": 0
+      },
+      "last_verification": {
+        "status": "PASS",
+        "at": "2026-10-20T13:34:12.479293+00:00",
+        "scope": "Paper/saved-data only; no root health claim or old broad regression rerun.",
+        "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods/paper-qa.json",
+        "source_files_and_C_results_verified": 42,
+        "protected_original_files_unchanged": 722,
+        "latex_passes": 2,
+        "pages_visually_reviewed": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "fonts_embedded": 18,
+        "type3_fonts": 0,
+        "scientific_executions": 0
+      },
+      "preparation_handoff": {
+        "status": "PREPARED_A_IDLE_FOR_S0_PI",
+        "at": "2026-10-20T11:12:01.773439+00:00",
+        "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods/HANDOFF.json",
+        "protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods/pack/protocol.json",
+        "first_chain": [
+          "C-formation-proposed",
+          "C-validation-proposed",
+          "C-first-proposed"
+        ],
+        "pending": [
+          "S0 backend/usage/slot admission",
+          "Actual BF-authored H and provider-bound freeze",
+          "Independent validation and first-use result",
+          "Ordinary formation/validation and 24 frozen formal attempts",
+          "Paper figures/tables/claims after actual results"
+        ],
+        "new_paid_requests": 0,
+        "new_study_executions": 0
+      },
+      "preparation_verification": {
+        "status": "PASS",
+        "at": "2026-10-20T11:12:01.773439+00:00",
+        "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/bfworld/src /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B -m unittest discover -s tests/agentlab -p test_abc_methods.py -v",
+        "tests_run": 7,
+        "failures": 0,
+        "errors": 0,
+        "wall_s_reported": 0.01,
+        "tool_schema": "PASS",
+        "finite_queue": "24 distinct formal identities; disjoint validation/first/final IDs",
+        "old_source_dependencies_unchanged": true,
+        "dependencies_checked": 30,
+        "history_sha256": "24362fec36a2e3b22c7dcdd0cad7637cfd6399636e30618c370a4217eb1f3d7b",
+        "history_bytes": 172012,
+        "source_identity": {
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/abc_methods.py": "47070b5b61ab36c877808e7f8b7062ac60ac52fee10ee31771cdbbdca6f4861b",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c"
+        },
+        "scope": "Targeted apparatus fixtures and saved-source readback only; no new BF method, SDK/Pi, study attempt, native solve or root health claim."
+      },
+      "owned_work_status": "complete; S0 integration accepted",
+      "paper_increment": {
+        "status": "A_OWNED_PAPER_COMPLETE_IDLE_FOR_S0",
+        "at": "2026-10-20T13:34:12.479293+00:00",
+        "source_baseline": "campaign-a papers/method-reexecution-20261019/final/main.tex + body.tex (protected unchanged)",
+        "paper": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020/main.pdf",
+        "paper_sha256": "4e9e7cee87d70c2bcafbd5706620fab33886ae2ef36e0c4273cbfef27b2f04fc",
+        "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/abc-cycle-20261020/methods/PAPER-HANDOFF.json",
+        "pages": 16,
+        "new_paid_study_requests": 0,
+        "new_scientific_executions": 0,
+        "new_native_jobs": 0,
+        "estimated_peak_additional_bytes": 50000000,
+        "retained_cap_bytes": 20000000,
+        "no_commit_or_push": true
+      },
+      "completed_at": "2026-10-20T13:50:33.784060+00:00",
+      "paid_dispatch_allowed": false,
+      "exit_review_status": "ACCEPTED",
+      "S0_integration": {
+        "status": "ACCEPTED_LOCAL_FINITE_DELIVERY",
+        "at": "2026-10-20T13:50:33.784060+00:00",
+        "evidence": [
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-formal24-v1.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-paper-integration-review.json",
+          "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-paper-import.json"
+        ],
+        "no_further_experiments": true,
+        "no_commit_push_or_publish": true
+      },
+      "completion_limitations": [
+        "Finite registered task completion, not confirmation of improvement hypothesis.",
+        "Physical NOT_CALIBRATED, product NOT_ACCEPTED, exact model weights UNKNOWN, no established stable RSI.",
+        "Full init.sh not run; no full repository health claim.",
+        "New manuscripts local only; prior final/delivery/Overleaf and original failures/billing remain preserved."
+      ],
+      "exit_review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json",
+      "next_handoff": [
+        "Finite cycle closed. Wait for a new direct human instruction; no additional model/science/G/RSI or publication."
+      ]
+    }
+  ],
+  "work_packages": {
+    "A": {
+      "owner": "S0",
+      "status": "FINITE_NEGATIVE_COMPLETE",
+      "maximum_concepts": 2,
+      "maximum_revisions": 2,
+      "core_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/A-finite-negative-v1.json",
+      "actual_candidate_inputs": 3,
+      "actual_original_service_executions": 12
+    },
+    "B": {
+      "owner": "original_B",
+      "status": "FINITE_FORMAL_AND_PAPER_COMPLETE",
+      "formal_attempts": 18,
+      "core_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-first-legal-consumption-v1.json",
+      "formal_completed": 18,
+      "formal_core_receipt": "docs/research/abc-cycle-20261020/shared/B-formal18-v1.json",
+      "paper_integration_review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-paper-integration-review.json"
+    },
+    "C": {
+      "owner": "original_A",
+      "status": "FINITE_FORMAL_AND_PAPER_COMPLETE",
+      "formal_attempts": 24,
+      "handoff_sha256": "f94d6285eacb76f87c48e53e9bd45cd6e7abcde8aa79979bb0c1c0419f2b1e41",
+      "core_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-first-transfer-v1.json",
+      "formal_completed": 24,
+      "formal_core_receipt": "docs/research/abc-cycle-20261020/shared/C-formal24-v1.json",
+      "paper_integration_review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-paper-integration-review.json"
+    }
+  },
+  "paid_dispatch_allowed": false,
+  "paid_admission_pending": [],
+  "model_schedule": {
+    "initial": "S0+originalB+originalA prepare, no Pi",
+    "paid": "S0+at most one active execution chat+one Pi; or S0+two Pi while both chats idle only if distinct declared owners",
+    "no_concurrent_model_execution_within_owner": true
+  },
+  "old_five_phases": "COMPLETE_UNCHANGED",
+  "old_published_baseline_and_delivery": "READ_ONLY_FROZEN",
+  "reviewer_owned_files": [
+    "review-state.json",
+    "dispatch.json"
+  ],
+  "new_commit_push_or_publish_authorization": false,
+  "completion_signals": [
+    {
+      "id": "ABC-C-first-transfer-v1-84bde5023b9a663f",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/C-first-transfer-v1.json",
+      "sent_unix": 1792495948.6642292
+    },
+    {
+      "id": "ABC-B-first-legal-v1-7e0a6c67c00fea7f",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/B-first-legal-consumption-v1.json",
+      "sent_unix": 1792496252.7009459
+    },
+    {
+      "id": "ABC-A-finite-negative-v1-badcdaca5a02f267",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/A-finite-negative-v1.json",
+      "sent_unix": 1792497206.40752
+    },
+    {
+      "id": "ABC-B-formal18-v1-a9826ad1e510ba4e",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "docs/research/abc-cycle-20261020/shared/B-formal18-v1.json",
+      "sent_unix": 1792502095.3738282
+    },
+    {
+      "id": "ABC-C-formal24-v1-b399da66b6b2e1d3",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "docs/research/abc-cycle-20261020/shared/C-formal24-v1.json",
+      "sent_unix": 1792502095.373837
+    },
+    {
+      "id": "ABC-cycle-complete-v1-3d095785d149c563",
+      "status": "SENT_ONCE",
+      "recipient": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/cycle-complete-v1.json",
+      "sent_at": "2026-10-20T13:53:15.438963+00:00"
+    }
+  ],
+  "paid_admitted_packages": [
+    "A",
+    "B",
+    "C"
+  ],
+  "shared_executor_protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/protocol-entry-fix-v1.1.json",
+  "shared_executor_protocol_sha256": "a6e511d381cde82bdd35effc55ffffb434866fe6d396477b44260bd1c38435c7",
+  "B_executor_protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/protocol-B-v1.json",
+  "B_executor_protocol_sha256": "62c5040f263f9be7e00d6bb2d6c2b997bd87353a506d96877bcb20f8518fbd57",
+  "A_executor_protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/protocol-A-v1.json",
+  "A_executor_protocol_sha256": "d9bcc1889bf94f98e692f0b621f966e0c5f1e25a18b837e1293a72e68a120d74",
+  "updated_at": "2026-10-20T13:59:48.449125+00:00",
+  "finite_execution": {
+    "planned_model_episodes": 48,
+    "finished_model_episodes": 48,
+    "requests_settled": 307,
+    "charge_upper_usd": 5.5299957,
+    "unknown_new_usage": 0,
+    "additional_experiments_authorized": false
+  },
+  "core_review": {
+    "status": "ACCEPTED_PAPERS_PENDING",
+    "receipt": "docs/research/abc-cycle-20261020/reviews/ABC-BC-formal-core-v1.json",
+    "paid_dispatch_allowed": false
+  },
+  "paper_workers": {
+    "original_A": "C-method full increment only",
+    "original_B": "B-interface full increment only",
+    "model_scientific_native_dispatch_allowed": false,
+    "one_current_pdf_each": true,
+    "original_A_status": "IDLE",
+    "original_B_status": "IDLE"
+  },
+  "next_cycle_authorized": false,
+  "local_papers_complete": true,
+  "final_completion_receipt": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/cycle-complete-v1.json",
+    "sha256": "3d095785d149c56311b522b96630acd135c396db33b0cdba83d1d76b48e28f44",
+    "id": "ABC-cycle-complete-v1-3d095785d149c563"
+  },
+  "final_exit_review": {
+    "status": "ACCEPTED",
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json",
+    "sha256": "9ee58bb84ced43c3b6d5c434f1e8e7c2fed9b458b5a0d032e29d4790c6638a50",
+    "at": "2026-10-20T13:59:48.449125+00:00"
+  },
+  "automation": {
+    "id": "bf",
+    "status": "PAUSED",
+    "verified_at": "2026-10-20T13:59:48.449125+00:00"
+  },
+  "closure_resource_readback": {
+    "at": "2026-10-20T13:59:48.449125+00:00",
+    "available_bytes": 16908668928,
+    "review_scratch_files_remaining": 0,
+    "attributable_extra_physical_cleanup_credit_bytes": 0
+  }
+}

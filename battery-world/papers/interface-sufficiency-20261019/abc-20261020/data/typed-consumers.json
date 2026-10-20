@@ -1,0 +1,1588 @@
+[
+  {
+    "episode_id": "abc-B-package-response-fixed_rule-r2",
+    "arm": "fixed_rule",
+    "task_id": "package-response",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": true
+      },
+      "context_id": "a039cc505bbe10eab96a197381927910556cc33cb1192fdfbd78cf8d4f63895a",
+      "executed_input_sha256": "265fb3503deabddc7c3c3cbd02e4d3dcafce0fe55efb320c34c0aef444809473",
+      "execution_key": "84f8a7150462b1c06cfe21cf051d6ad82754f32ea24ada61198e0d32c00d8967",
+      "input_edge_sha256": "78ce81d37efdf51e622031a4ae61fea8ed321a632a8d0cd5401c25389ede51c3",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/capacitance_f",
+                              "units": "F"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        }
+                      ],
+                      "op": "div"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                                  "units": "W"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                                  "units": "1"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/off_power_w",
+                              "units": "W"
+                            }
+                          ],
+                          "op": "sub"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/deadline_s",
+                                  "units": "s"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/source_segments/0/start_s",
+                                  "units": "s"
+                                }
+                              ],
+                              "op": "sub"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/boot_delay_s",
+                                  "units": "s"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                                  "units": "s"
+                                }
+                              ],
+                              "op": "add"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "le"
+                },
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/ready_v",
+                          "units": "V"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/esr_ohm",
+                              "units": "ohm"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/tx_current_a",
+                              "units": "A"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "sub"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/output_v",
+                      "units": "V"
+                    }
+                  ],
+                  "op": "ge"
+                }
+              ],
+              "op": "and"
+            },
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/capacitance_f",
+                              "units": "F"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "args": [
+                            {
+                              "constant": 2.0,
+                              "units": "1"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/boot_j",
+                              "units": "J"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "sub"
+                    },
+                    {
+                      "args": [
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/output_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_current_a",
+                                  "units": "A"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/tx_duration_s",
+                              "units": "s"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "sub"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/device/capacitance_f",
+                      "units": "F"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/off_v",
+                          "units": "V"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/off_v",
+                          "units": "V"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "ge"
+            }
+          ],
+          "op": "and"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 1e-07,
+              "units": "F",
+              "upper": 0.01
+            },
+            {
+              "field": "/complete_inputs/intervention/device/ready_v",
+              "lower": 1.9,
+              "units": "V",
+              "upper": 3.3
+            },
+            {
+              "field": "/complete_inputs/intervention/source_segments/0/power_w",
+              "lower": 0.0,
+              "units": "W",
+              "upper": 1.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/harvest_efficiency",
+              "lower": 0.0,
+              "units": "1",
+              "upper": 1.0
+            },
+            {
+              "field": "/complete_inputs/intervention/deadline_s",
+              "lower": 0.05,
+              "units": "s",
+              "upper": 1.0
+            },
+            {
+              "field": "/complete_inputs/intervention/source_segments/0/start_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            },
+            {
+              "field": "/complete_inputs/intervention/device/boot_delay_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.01
+            }
+          ]
+        },
+        "hypothesis": "Broadened delayed equal-energy intervention still charges storage to ready, boots, keeps the loaded TX rail above output_v, retains the event via the passive-mechanical latch (capture survives any reset before TX), stays above the off threshold through TX, and completes the single 8-byte frame within the 100 ms deadline.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": true
+      },
+      "request_sha256": "15d52b16c7650c25d4bbfd6a6ce2f7892a07703d4cff39d8869efa7d13d8cb8b",
+      "selected_decision": "adopt",
+      "source_bindings": {
+        "complete_inputs": "237384a10f7bfd267399bcf53286febe37326fe27ee56d3a5a8449c62d7273b5"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-package-response-observation_refinement-r1",
+    "arm": "observation_refinement",
+    "task_id": "package-response",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": true
+      },
+      "context_id": "a039cc505bbe10eab96a197381927910556cc33cb1192fdfbd78cf8d4f63895a",
+      "executed_input_sha256": "265fb3503deabddc7c3c3cbd02e4d3dcafce0fe55efb320c34c0aef444809473",
+      "execution_key": "84f8a7150462b1c06cfe21cf051d6ad82754f32ea24ada61198e0d32c00d8967",
+      "input_edge_sha256": "f249d03f53d8158272cf7cc79c5d17b2a138a8dedebb66ae107c69b9356062f9",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/deadline_s",
+                              "units": "s"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/source_segments/0/start_s",
+                              "units": "s"
+                            }
+                          ],
+                          "op": "sub"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/boot_delay_s",
+                          "units": "s"
+                        }
+                      ],
+                      "op": "sub"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/tx_duration_s",
+                      "units": "s"
+                    }
+                  ],
+                  "op": "sub"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                      "units": "W"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                      "units": "1"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "mul"
+            },
+            {
+              "args": [
+                {
+                  "constant": 0.5,
+                  "units": "1"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/device/capacitance_f",
+                      "units": "F"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/ready_v",
+                          "units": "V"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/ready_v",
+                          "units": "V"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "mul"
+            }
+          ],
+          "op": "ge"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/source_segments/0/power_w",
+              "lower": 0.003,
+              "units": "W",
+              "upper": 0.005
+            },
+            {
+              "field": "/complete_inputs/intervention/device/harvest_efficiency",
+              "lower": 0.8,
+              "units": "1",
+              "upper": 1.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 2e-05,
+              "units": "F",
+              "upper": 2.4e-05
+            },
+            {
+              "field": "/complete_inputs/intervention/device/ready_v",
+              "lower": 2.6,
+              "units": "V",
+              "upper": 3.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/boot_delay_s",
+              "lower": 0.0005,
+              "units": "s",
+              "upper": 0.002
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_duration_s",
+              "lower": 0.0015,
+              "units": "s",
+              "upper": 0.0025
+            },
+            {
+              "field": "/complete_inputs/intervention/deadline_s",
+              "lower": 0.09,
+              "units": "s",
+              "upper": 0.11
+            }
+          ]
+        },
+        "hypothesis": "The intervention delivers the same 150 uJ but broadens/delays the source pulse into [0.07,0.11] s at 3.75 mW. The executable device.event_latch='passive-mechanical' selector captures the press at event_s=0 with zero stored energy and retains it across the unpowered interval; event_latch_scope is provenance and does not override the selector. Retention makes the late pulse viable: the device boots after harvesting eon=0.5*C*ready_v^2, then boot_delay+tx_duration later emits one 8-byte frame near 0.0987 s, before deadline_s=0.1 s. Qualifying energy budget: (deadline - start_s - boot_delay_s - tx_duration_s)*power_w*harvest_efficiency >= eon; here 9.11e-5 J > 8.624e-5 J so complete service is preserved (adopt/PASS). Under a volatile latch, shorter deadline, or later pulse the relation fails and the decision flips to retain.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": true
+      },
+      "request_sha256": "191c68f4d5ed03a47582c57ba4e29816dd6c194fb7b3cad3bd657dbdf1730be6",
+      "selected_decision": "adopt",
+      "source_bindings": {
+        "complete_inputs": "237384a10f7bfd267399bcf53286febe37326fe27ee56d3a5a8449c62d7273b5"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-reset-placement-fixed_rule-r2",
+    "arm": "fixed_rule",
+    "task_id": "reset-placement",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "2c0e942ee9bcfb2d87526a955ccd73757fbd7bdbf8e93721f2213854ffebfff3",
+      "executed_input_sha256": "29d674b2e1e89c7a77a6f985467a89e80026eb715969503ed739b5f7b70baf5e",
+      "execution_key": "e1d00861c75947e3b7fe278bacf91215c47982b96a9b3f72a45f2411bdb4fa29",
+      "input_edge_sha256": "563e8beeb03edcf59fa845f3af3572aec911663af4795ff3a1dbe8fc22fe4266",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "field": "/complete_inputs/intervention/shunts/0/time_s",
+              "units": "s"
+            },
+            {
+              "args": [
+                {
+                  "field": "/complete_inputs/intervention/device/tx_not_before_s",
+                  "units": "s"
+                },
+                {
+                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                  "units": "s"
+                }
+              ],
+              "op": "add"
+            }
+          ],
+          "op": "ge"
+        },
+        "domain": {
+          "constraints": []
+        },
+        "hypothesis": "With the executable device.event_latch='volatile' selector, a brownout reset clears the captured event. In the intervention the 40 uJ shunt at 0.012 s fires after the 0-0.008 s contact capture window and before TX (not before 0.045 s), draining stored energy below the off threshold; the volatile capture is cleared and cannot be re-captured because the contact window has closed, so no frame is transmitted. In the current design the shunt at 0.08 s fires only after TX completes (~0.047 s), so the volatile capture survives and complete service is preserved. Adopt only when the shunt-induced reset does not fall between capture and TX completion.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "17cfd68a9b145f31d515fb847881d5cbdcdd7044ac1df45bbb80579ad668ae7c",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "7f7b9531d3a1352a00fb451dc527e9a0ea083789dbb6a420d45b7b8b166d0dfc"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-reset-placement-observation_refinement-r2",
+    "arm": "observation_refinement",
+    "task_id": "reset-placement",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "2c0e942ee9bcfb2d87526a955ccd73757fbd7bdbf8e93721f2213854ffebfff3",
+      "executed_input_sha256": "29d674b2e1e89c7a77a6f985467a89e80026eb715969503ed739b5f7b70baf5e",
+      "execution_key": "e1d00861c75947e3b7fe278bacf91215c47982b96a9b3f72a45f2411bdb4fa29",
+      "input_edge_sha256": "c6ec80ad0336cb9f6785a28fdb72fc9d48fae5d57f667f161a89064ae4eadbd1",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "field": "/excitation_record/intervention/shunts/0/time_s",
+                      "units": "s"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/event_s",
+                          "units": "s"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/contact_duration_s",
+                          "units": "s"
+                        }
+                      ],
+                      "op": "add"
+                    }
+                  ],
+                  "op": "gt"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "/excitation_record/intervention/shunts/0/time_s",
+                      "units": "s"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/tx_not_before_s",
+                          "units": "s"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/tx_duration_s",
+                          "units": "s"
+                        }
+                      ],
+                      "op": "add"
+                    }
+                  ],
+                  "op": "lt"
+                }
+              ],
+              "op": "and"
+            }
+          ],
+          "op": "not"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/event_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            },
+            {
+              "field": "/complete_inputs/intervention/contact_duration_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_not_before_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_duration_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            },
+            {
+              "field": "/excitation_record/intervention/shunts/0/time_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 0.15
+            }
+          ]
+        },
+        "hypothesis": "Complete service is preserved only if the relocated reset shunt does not brown out the device during the volatile retention interval (capture .. TX-complete). The executable selector device.event_latch='volatile' governs retention; the inherited event_latch_scope string (passive-mechanical persistence) is apparatus provenance and does NOT override it, so a brownout clears the captured flag. The event is captured inside contact [0,0.008s]; TX cannot start before tx_not_before=0.045s and completes at ~0.047s having emitted the 8-byte frame. CURRENT design puts the 40uJ shunt at 0.08s, i.e. after TX-complete, so the frame is already sent (1 frame received, service preserved => retain baseline). INTERVENTION moves the same 40uJ shunt to 0.012s: this is after contact closes (0.008s) but before TX (0.045s), dropping stored energy below off_v threshold, so the volatile captured flag is cleared and, because contact has ended, cannot be re-captured; the device never transmits (0 frames) => the intervention does NOT preserve complete service => retain, prediction FAIL. Service is preserved only when the shunt time lies outside (contact_end, tx_complete).",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "304c7964bed1d74a00b6b43ad7e276dcc93d30836b7f789ce270784dbd39341d",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "7f7b9531d3a1352a00fb451dc527e9a0ea083789dbb6a420d45b7b8b166d0dfc",
+        "excitation_record": "58a8f621210ebccfcd8278ef4e29b9d6eeadd8a7c5a085c65ad5efc608b60752"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-storage-connection-complete_information-r1",
+    "arm": "complete_information",
+    "task_id": "storage-connection",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "65968b76272ade1095b79769e2cc9dbcb604fa82d1faf98c92f519ca8d15189c",
+      "executed_input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+      "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+      "input_edge_sha256": "4e958721a01440f2429519741d43a9ecdb8e47fd9e3fb5b075563a0a59d0d393",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/device/capacitance_f",
+                      "units": "F"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/cap_voltage_max_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/cap_voltage_max_v",
+                              "units": "V"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/off_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/off_v",
+                              "units": "V"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "sub"
+                    }
+                  ],
+                  "op": "mul"
+                },
+                {
+                  "constant": 0.5,
+                  "units": "1"
+                }
+              ],
+              "op": "mul"
+            },
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/device/output_v",
+                      "units": "V"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/tx_current_a",
+                      "units": "A"
+                    }
+                  ],
+                  "op": "mul"
+                },
+                {
+                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                  "units": "s"
+                }
+              ],
+              "op": "mul"
+            }
+          ],
+          "op": "ge"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 1e-06,
+              "units": "F",
+              "upper": 1e-05
+            },
+            {
+              "field": "/complete_inputs/intervention/device/esr_ohm",
+              "lower": 1.0,
+              "units": "ohm",
+              "upper": 2.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/cap_voltage_max_v",
+              "lower": 3.0,
+              "units": "V",
+              "upper": 3.6
+            },
+            {
+              "field": "/complete_inputs/intervention/device/off_v",
+              "lower": 1.5,
+              "units": "V",
+              "upper": 2.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/output_v",
+              "lower": 1.5,
+              "units": "V",
+              "upper": 2.0
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_current_a",
+              "lower": 0.001,
+              "units": "A",
+              "upper": 0.02
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_duration_s",
+              "lower": 0.001,
+              "units": "s",
+              "upper": 0.005
+            }
+          ]
+        },
+        "hypothesis": "Series reconfiguration of the two equal storage capacitors (C=5.5uF, ESR=1.2ohm) does not preserve complete service: the usable stored-energy band C*(cap_voltage_max_v^2-off_v^2)/2 (about 21.0uJ) is smaller than the single-frame delivered energy output_v*tx_current_a*tx_duration_s (28.8uJ), so no 8-byte frame can be completed within the deadline; retain the parallel configuration.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "82d41ed6949294db0c89e494514bd5b21b8edf21faa5485efdc66b75f0b20a2e",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "c585f1153048013abf56f12f3704598a0f320834ff68a50bd99548a3df250ddb"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-storage-connection-fixed_rule-r1",
+    "arm": "fixed_rule",
+    "task_id": "storage-connection",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "65968b76272ade1095b79769e2cc9dbcb604fa82d1faf98c92f519ca8d15189c",
+      "executed_input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+      "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+      "input_edge_sha256": "a4cbd4d6d7b007ce4c38d83604fb36f1a4577375d175a5e786841bc30c3e0312",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/off_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/ready_v",
+                              "units": "V"
+                            }
+                          ],
+                          "op": "lt"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/ready_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/cap_voltage_max_v",
+                              "units": "V"
+                            }
+                          ],
+                          "op": "le"
+                        }
+                      ],
+                      "op": "and"
+                    },
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/cap_voltage_max_v",
+                              "units": "V"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/esr_ohm",
+                                  "units": "ohm"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_current_a",
+                                  "units": "A"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "sub"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/output_v",
+                          "units": "V"
+                        }
+                      ],
+                      "op": "ge"
+                    }
+                  ],
+                  "op": "and"
+                },
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/capacitance_f",
+                          "units": "F"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    },
+                    {
+                      "args": [
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "constant": 2.0,
+                                  "units": "1"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/boot_j",
+                                  "units": "J"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "args": [
+                                    {
+                                      "field": "/complete_inputs/intervention/device/output_v",
+                                      "units": "V"
+                                    },
+                                    {
+                                      "field": "/complete_inputs/intervention/device/tx_current_a",
+                                      "units": "A"
+                                    }
+                                  ],
+                                  "op": "mul"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                                  "units": "s"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "add"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "ge"
+                }
+              ],
+              "op": "and"
+            },
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/tx_not_before_s",
+                          "units": "s"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/boot_delay_s",
+                          "units": "s"
+                        }
+                      ],
+                      "op": "add"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/tx_duration_s",
+                      "units": "s"
+                    }
+                  ],
+                  "op": "add"
+                },
+                {
+                  "field": "/complete_inputs/intervention/deadline_s",
+                  "units": "s"
+                }
+              ],
+              "op": "le"
+            }
+          ],
+          "op": "and"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 0.0,
+              "units": "F",
+              "upper": 0.001
+            },
+            {
+              "field": "/complete_inputs/intervention/deadline_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 10.0
+            }
+          ]
+        },
+        "hypothesis": "Series rewire C 22->5.5 uF, ESR 0.3->1.2 ohm; passive-mechanical latch keeps capture across resets, so capture is not the failure mode. Usable energy at the first legal TX opportunity is bounded by C*ready_v^2/2 - boot_j - C*off_v^2/2 = 21.56 - 5 - 8.91 = 7.65 uJ (no credit taken for the 1 ms boot-delay recharge), while the 2 ms, 8 mA TX at 1.8 V against 6.75 mW harvest nets about 15.7 uJ of drain; the loaded rail falls through off_v/output_v before tx-complete, each retry restarts with the same budget, and no 8-byte frame arrives inside the 100 ms deadline, so the intervention does not preserve complete service and is retained.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "6bbfc7896cacfc654f4137b5d0a9a376277dff2143dc9f7488ffd8e9596f717e",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "c585f1153048013abf56f12f3704598a0f320834ff68a50bd99548a3df250ddb"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-storage-connection-fixed_rule-r2",
+    "arm": "fixed_rule",
+    "task_id": "storage-connection",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "65968b76272ade1095b79769e2cc9dbcb604fa82d1faf98c92f519ca8d15189c",
+      "executed_input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+      "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+      "input_edge_sha256": "524b53b910462738a2eb6c5f7acb79fe4c983dabf2f6cd424bb086c520bcdab5",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/capacitance_f",
+                          "units": "F"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    },
+                    {
+                      "args": [
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "args": [
+                                    {
+                                      "field": "/complete_inputs/intervention/device/output_v",
+                                      "units": "V"
+                                    },
+                                    {
+                                      "field": "/complete_inputs/intervention/device/tx_current_a",
+                                      "units": "A"
+                                    }
+                                  ],
+                                  "op": "mul"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                                  "units": "s"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "args": [
+                                    {
+                                      "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                                      "units": "1"
+                                    },
+                                    {
+                                      "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                                      "units": "W"
+                                    }
+                                  ],
+                                  "op": "mul"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                                  "units": "s"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "ge"
+                },
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/ready_v",
+                          "units": "V"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/esr_ohm",
+                              "units": "ohm"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/tx_current_a",
+                              "units": "A"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "sub"
+                    },
+                    {
+                      "field": "/complete_inputs/intervention/device/output_v",
+                      "units": "V"
+                    }
+                  ],
+                  "op": "ge"
+                }
+              ],
+              "op": "and"
+            },
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/capacitance_f",
+                          "units": "F"
+                        },
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/ready_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/ready_v",
+                              "units": "V"
+                            }
+                          ],
+                          "op": "mul"
+                        }
+                      ],
+                      "op": "mul"
+                    },
+                    {
+                      "args": [
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/boot_j",
+                          "units": "J"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "add"
+                },
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/deadline_s",
+                              "units": "s"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/boot_delay_s",
+                              "units": "s"
+                            }
+                          ],
+                          "op": "sub"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/tx_duration_s",
+                          "units": "s"
+                        }
+                      ],
+                      "op": "sub"
+                    },
+                    {
+                      "args": [
+                        {
+                          "constant": 2.0,
+                          "units": "1"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                                  "units": "1"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                                  "units": "W"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/off_power_w",
+                              "units": "W"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "le"
+            }
+          ],
+          "op": "and"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 1e-06,
+              "units": "F",
+              "upper": 0.0001
+            },
+            {
+              "field": "/complete_inputs/intervention/dt_s",
+              "lower": 1e-07,
+              "units": "s",
+              "upper": 0.001
+            }
+          ]
+        },
+        "hypothesis": "The series-reconfigured two-cell storage intervention preserves complete 8-byte event service only if the energy stored above the off/UVLO floor when the ready rail is first reached covers the net payload TX energy over tx_duration (output_v*tx_current_a*tx_duration_s minus harvested power over the same interval), the loaded rail worst case at the ready threshold (ready_v - esr_ohm*tx_current_a) still meets output_v, and estimated charge-to-ready plus boot_delay plus tx_duration stay inside the service deadline; otherwise the TX transient drops the loaded rail below output_v and resets the node before the application body is framed, so retain.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "f8793a2607e954dd7150e19854c557377a24aef4f23af5fd629de9449e8e2db8",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "c585f1153048013abf56f12f3704598a0f320834ff68a50bd99548a3df250ddb"
+      },
+      "used_observation": true
+    }
+  },
+  {
+    "episode_id": "abc-B-storage-connection-observation_refinement-r1",
+    "arm": "observation_refinement",
+    "task_id": "storage-connection",
+    "consumer": {
+      "consumer_input": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "context_id": "65968b76272ade1095b79769e2cc9dbcb604fa82d1faf98c92f519ca8d15189c",
+      "executed_input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+      "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+      "input_edge_sha256": "f621e55f6b24caabe4ab66a3db616a5ae32abef87148d54b5b82fbb5a56b0e6b",
+      "normalized_source_spec": {
+        "ast": {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/capacitance_f",
+                          "units": "F"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/ready_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/off_v",
+                                  "units": "V"
+                                }
+                              ],
+                              "op": "mul"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    },
+                    {
+                      "constant": 2.0,
+                      "units": "1"
+                    }
+                  ],
+                  "op": "div"
+                },
+                {
+                  "args": [
+                    {
+                      "field": "/complete_inputs/intervention/device/boot_j",
+                      "units": "J"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/device/boot_delay_s",
+                          "units": "s"
+                        },
+                        {
+                          "args": [
+                            {
+                              "args": [
+                                {
+                                  "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                                  "units": "W"
+                                },
+                                {
+                                  "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                                  "units": "1"
+                                }
+                              ],
+                              "op": "mul"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/idle_power_w",
+                              "units": "W"
+                            }
+                          ],
+                          "op": "sub"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "sub"
+                }
+              ],
+              "op": "sub"
+            },
+            {
+              "args": [
+                {
+                  "field": "/complete_inputs/intervention/device/tx_duration_s",
+                  "units": "s"
+                },
+                {
+                  "args": [
+                    {
+                      "args": [
+                        {
+                          "args": [
+                            {
+                              "field": "/complete_inputs/intervention/device/output_v",
+                              "units": "V"
+                            },
+                            {
+                              "field": "/complete_inputs/intervention/device/tx_current_a",
+                              "units": "A"
+                            }
+                          ],
+                          "op": "mul"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/idle_power_w",
+                          "units": "W"
+                        }
+                      ],
+                      "op": "add"
+                    },
+                    {
+                      "args": [
+                        {
+                          "field": "/complete_inputs/intervention/source_segments/0/power_w",
+                          "units": "W"
+                        },
+                        {
+                          "field": "/complete_inputs/intervention/device/harvest_efficiency",
+                          "units": "1"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "sub"
+                }
+              ],
+              "op": "mul"
+            }
+          ],
+          "op": "gt"
+        },
+        "domain": {
+          "constraints": [
+            {
+              "field": "/complete_inputs/intervention/device/capacitance_f",
+              "lower": 1e-06,
+              "units": "F",
+              "upper": 0.0001
+            },
+            {
+              "field": "/complete_inputs/intervention/device/ready_v",
+              "lower": 1.0,
+              "units": "V",
+              "upper": 3.3
+            },
+            {
+              "field": "/complete_inputs/intervention/device/off_v",
+              "lower": 0.5,
+              "units": "V",
+              "upper": 1.9
+            },
+            {
+              "field": "/complete_inputs/intervention/device/tx_not_before_s",
+              "lower": 0.0,
+              "units": "s",
+              "upper": 1e-06
+            },
+            {
+              "field": "/complete_inputs/intervention/source_segments/0/end_s",
+              "lower": 0.02,
+              "units": "s",
+              "upper": 0.02
+            }
+          ]
+        },
+        "hypothesis": "Under frozen b-transient-behavior-v1 with a passive-mechanical latch already captured (event retention identical in current and intervention), the only mechanism that can change the outcome is the stored-energy buffer above the off_v brownout floor, whose size is set by capacitance_f. Series reconfiguration of the two-cell assembly (C=5.5uF, ESR=1.2ohm) instead of parallel (22uF, 0.3ohm) shrinks buffer=C/2*(ready_v^2-off_v^2) to ~12.65uJ minus boot_j 5uJ plus net harvest during boot_delay_s ~0.0066uJ => ~7.66uJ available, while one 2 ms frame needs tx_duration_s*(output_v*tx_current_a+idle_power_w-source power*harvest_efficiency)~15.7uJ. Criterion: adopt iff available>needed (2 ms tx completes, one unique 8-byte frame before deadline_s=0.1s); else the tx-transient brownout aborts the packet and service is incomplete (retain). Conditions: passive-mechanical latch, dt_s=1e-4, single 7.5mW segment ending 0.02s, tx_not_before_s=0. UNKNOWN residual: boot-step overshoot above E_on and the ESR loaded_v guard are not modelled, so near zero margin this proxy is conservative rather than exact.",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "bundle",
+        "units": "1"
+      },
+      "observation": {
+        "type": "boolean",
+        "units": "1",
+        "value": false
+      },
+      "request_sha256": "d44807442a5423a60ed8a48b447e1345d5f8bf66064326deefb38043353bff23",
+      "selected_decision": "retain",
+      "source_bindings": {
+        "complete_inputs": "c585f1153048013abf56f12f3704598a0f320834ff68a50bd99548a3df250ddb"
+      },
+      "used_observation": true
+    }
+  }
+]

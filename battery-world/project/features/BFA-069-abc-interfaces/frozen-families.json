@@ -1,0 +1,601 @@
+{
+  "schema_version": "abc-B-frozen-families-v1",
+  "dispatch_id": "BF-ABC-20261020-001",
+  "frozen_before_new_case_execution": true,
+  "frozen_at": "2026-10-20T11:07:34.898003+00:00",
+  "source_baseline": "b8498ee6c712dd52f060bc84abebebfd461c5fdc",
+  "cases": {
+    "storage-connection": {
+      "family": "storage_structure",
+      "task_id": "abc-B-storage-series-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 5.5e-06,
+          "esr_ohm": 1.2,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "two equal passive capacitors: parallel to series",
+        "cell_capacitance_uf": 11.0,
+        "cell_esr_ohm": 0.6,
+        "parallel_count": 2,
+        "series_count": 2,
+        "mapping": "parallel C=2*Ccell, ESR=Rcell/2; series C=Ccell/2, ESR=2*Rcell; common PMIC clamp stays 3.3 V",
+        "assumptions": [
+          "identical ideal capacitors",
+          "zero initial voltage",
+          "no balancing/leakage/dynamic switching model",
+          "not hardware calibrated"
+        ]
+      }
+    },
+    "reset-placement": {
+      "family": "reset_position",
+      "task_id": "abc-B-reset-placement-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.08,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "same declared 40 microJ reset shunt moved from 80 to 12 ms relative to contact and TX",
+        "before_s": 0.08,
+        "after_s": 0.012,
+        "assumptions": [
+          "same source, event and deadline",
+          "volatile pending memory in both designs",
+          "timed shunt is a declared digital intervention, not a measured reset circuit"
+        ]
+      }
+    },
+    "package-response": {
+      "family": "packaging_response",
+      "task_id": "abc-B-package-transfer-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.07,
+            "end_s": 0.11,
+            "power_w": 0.00375,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "prescribed package transfer broadens and delays equal-energy source pulse",
+        "current_delay_ms": 0.0,
+        "current_width_ms": 20.0,
+        "intervention_delay_ms": 70.0,
+        "intervention_width_ms": 40.0,
+        "source_energy_uj": 150.0,
+        "assumptions": [
+          "unit-integral rectangular transfer with specified delay",
+          "load-independent prescribed source",
+          "no claim of calibrated mechanical package transfer"
+        ]
+      }
+    },
+    "development-cross-source": {
+      "family": "development_not_formal",
+      "task_id": "abc-B-dev-legal-consumer-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1.5e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "separate legacy-related legal-consumer rehearsal",
+        "assumptions": [
+          "researcher-specified relation example",
+          "excluded from formal 18",
+          "not autonomous discovery or a new hardware measurement"
+        ]
+      }
+    }
+  },
+  "conditions": {
+    "complete_information": "Acquire the entire source catalogue, including full current/intervention inputs and executable model law. Use all relevant information to predict the intervention result and choose adopt/retain. No source is withheld. You may use the same relation/preflight/check tools as every other arm.",
+    "fixed_rule": "Use the fixed conservative rules: inspect complete inputs; require ready/off and loaded-rail feasibility, enough usable energy over the operation interval, capture surviving any reset before TX, and receive time within the deadline. Use the same source catalogue and tools. If any required fact is unresolved predict UNKNOWN; do not treat average energy as sufficient. This is a fixed classical rule baseline, not a learned method.",
+    "observation_refinement": "Compare the stated current design and legal intervention. Identify which previously inactive mechanism could change the result, acquire the sources needed to distinguish it, and express a qualified relation and applicable conditions that drive adopt/retain through the typed consumer. Preserve UNKNOWN for unresolved conditions. You have the same complete sources and tools as the strong baseline."
+  },
+  "formal_attempts": [
+    {
+      "episode_id": "abc-B-storage-connection-complete_information-r1",
+      "case": "storage-connection",
+      "condition": "complete_information",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-storage-connection-complete_information-r2",
+      "case": "storage-connection",
+      "condition": "complete_information",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-storage-connection-fixed_rule-r1",
+      "case": "storage-connection",
+      "condition": "fixed_rule",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-storage-connection-fixed_rule-r2",
+      "case": "storage-connection",
+      "condition": "fixed_rule",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-storage-connection-observation_refinement-r1",
+      "case": "storage-connection",
+      "condition": "observation_refinement",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-storage-connection-observation_refinement-r2",
+      "case": "storage-connection",
+      "condition": "observation_refinement",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "88ae557530eba190bc9447032d3983966940ce0d21206533d769d780dd9aa446"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-complete_information-r1",
+      "case": "reset-placement",
+      "condition": "complete_information",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-complete_information-r2",
+      "case": "reset-placement",
+      "condition": "complete_information",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-fixed_rule-r1",
+      "case": "reset-placement",
+      "condition": "fixed_rule",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-fixed_rule-r2",
+      "case": "reset-placement",
+      "condition": "fixed_rule",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-observation_refinement-r1",
+      "case": "reset-placement",
+      "condition": "observation_refinement",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-reset-placement-observation_refinement-r2",
+      "case": "reset-placement",
+      "condition": "observation_refinement",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "1c957ec63e94a97d66b5d7b8c3525e1c4c02fe4f904d25153fdc534fffadbd6b"
+    },
+    {
+      "episode_id": "abc-B-package-response-complete_information-r1",
+      "case": "package-response",
+      "condition": "complete_information",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    },
+    {
+      "episode_id": "abc-B-package-response-complete_information-r2",
+      "case": "package-response",
+      "condition": "complete_information",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    },
+    {
+      "episode_id": "abc-B-package-response-fixed_rule-r1",
+      "case": "package-response",
+      "condition": "fixed_rule",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    },
+    {
+      "episode_id": "abc-B-package-response-fixed_rule-r2",
+      "case": "package-response",
+      "condition": "fixed_rule",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    },
+    {
+      "episode_id": "abc-B-package-response-observation_refinement-r1",
+      "case": "package-response",
+      "condition": "observation_refinement",
+      "repeat": 1,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    },
+    {
+      "episode_id": "abc-B-package-response-observation_refinement-r2",
+      "case": "package-response",
+      "condition": "observation_refinement",
+      "repeat": 2,
+      "stage": "formal",
+      "task_sha256": "404108e82feed6b25f82ed82cede8969d4d23608d3a4f050c6e0f9919b2be4a8"
+    }
+  ],
+  "formal_count": 18,
+  "reserved_not_in_batch": [
+    "sampling_phase"
+  ],
+  "operating_limits": {
+    "requests": 12,
+    "wall_s": 900,
+    "tools": 40,
+    "distinct_designs": 2,
+    "max_output_tokens": 65536,
+    "automatic_retry": false,
+    "output_budget_backend_verification": "S0_REQUIRED_BEFORE_PAID_FREEZE"
+  },
+  "evaluator": "Unmodified b.simulate_b and scripts/campaign_reference.py energy_reference/reference_b via S0 exact-input executor. No fixture can count as scientific execution.",
+  "source_scope": "Mechanism-specific model interventions using existing B input fields. NOT_CALIBRATED; no new physical model or hardware validation.",
+  "selection_rule": "No outcome-driven task-family replacement, retry or denominator deletion. Failures/incomplete are retained. Development rehearsal excluded."
+}

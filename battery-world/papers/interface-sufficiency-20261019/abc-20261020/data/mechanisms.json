@@ -1,0 +1,1314 @@
+{
+  "storage-connection": {
+    "case": {
+      "family": "storage_structure",
+      "task_id": "abc-B-storage-series-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 5.5e-06,
+          "esr_ohm": 1.2,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "two equal passive capacitors: parallel to series",
+        "cell_capacitance_uf": 11.0,
+        "cell_esr_ohm": 0.6,
+        "parallel_count": 2,
+        "series_count": 2,
+        "mapping": "parallel C=2*Ccell, ESR=Rcell/2; series C=Ccell/2, ESR=2*Rcell; common PMIC clamp stays 3.3 V",
+        "assumptions": [
+          "identical ideal capacitors",
+          "zero initial voltage",
+          "no balancing/leakage/dynamic switching model",
+          "not hardware calibrated"
+        ]
+      }
+    },
+    "roles": {
+      "retain": {
+        "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+        "input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+        "truth": "PASS",
+        "reference": {
+          "brownouts_before_deadline": 0,
+          "captured_before_reset": false,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.0129,
+          "first_receive_s": 0.0158,
+          "max_esr_equation_error_v": 0.0,
+          "received_frames": 1,
+          "receiver_errors": [],
+          "transient_failed_steps": 0,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "FAIL",
+            "event_receive": "PASS",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "PASS"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 7.352199999999598e-05,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 1e-20,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 4.552802091491864e-21,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00015,
+          "source_total_error_j": 0.0,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 2.7678e-05,
+            "boot_j": 5e-06,
+            "conversion_j": 1.5000000000000004e-05,
+            "harvest_j": 0.000135,
+            "shunt_j": 0.0,
+            "source_j": 0.00015,
+            "spill_j": 0.0,
+            "tx_j": 2.8799999999999995e-05
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 8.181700000000014e-05,
+            "time_s": 0.0129
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.013900000000000001
+          },
+          {
+            "action": "tx-complete",
+            "event_id": 1,
+            "time_s": 0.0158
+          }
+        ]
+      },
+      "adopt": {
+        "execution_key": "14f21c969c195acda237e2b408162e5dd7507cf0f4f5005c67de2089310f28c9",
+        "input_sha256": "412cf47eb0d7a7e348e666bfa4f55dad9716a967ce58b895c25ac7c2ec1fa98c",
+        "truth": "FAIL",
+        "reference": {
+          "brownouts_before_deadline": 4,
+          "captured_before_reset": true,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.0033,
+          "first_receive_s": null,
+          "max_esr_equation_error_v": 0.0,
+          "received_frames": 0,
+          "receiver_errors": [],
+          "transient_failed_steps": 4,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "FAIL",
+            "event_receive": "FAIL",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "FAIL"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 4.917999999999733e-06,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 3e-21,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 4.552802091491864e-21,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00015,
+          "source_total_error_j": 0.0,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 4.962e-06,
+            "boot_j": 2e-05,
+            "conversion_j": 1.5000000000000004e-05,
+            "harvest_j": 0.000135,
+            "shunt_j": 0.0,
+            "source_j": 0.00015,
+            "spill_j": 0.0,
+            "tx_j": 0.00010512000000000001
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 1.7208999999999987e-05,
+            "time_s": 0.0033
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0043
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.0043
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0044
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0045000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0046
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0047
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0048000000000000004
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0049
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0051
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0053
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0054
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0055000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0056
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0057
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0058000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0059
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0061
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": true,
+            "reason": "tx-transient",
+            "time_s": 0.0061
+          },
+          {
+            "action": "boot",
+            "energy_j": 1.664899999999997e-05,
+            "time_s": 0.0081
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.0091
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": true,
+            "reason": "tx-transient",
+            "time_s": 0.0108
+          },
+          {
+            "action": "boot",
+            "energy_j": 1.687399999999995e-05,
+            "time_s": 0.0128
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.013800000000000002
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": true,
+            "reason": "tx-transient",
+            "time_s": 0.0155
+          },
+          {
+            "action": "boot",
+            "energy_j": 1.7098999999999932e-05,
+            "time_s": 0.0175
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.018500000000000003
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": true,
+            "reason": "tx-transient",
+            "time_s": 0.020200000000000003
+          }
+        ]
+      }
+    }
+  },
+  "reset-placement": {
+    "case": {
+      "family": "reset_position",
+      "task_id": "abc-B-reset-placement-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.08,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 1e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "volatile",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0.045
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "same declared 40 microJ reset shunt moved from 80 to 12 ms relative to contact and TX",
+        "before_s": 0.08,
+        "after_s": 0.012,
+        "assumptions": [
+          "same source, event and deadline",
+          "volatile pending memory in both designs",
+          "timed shunt is a declared digital intervention, not a measured reset circuit"
+        ]
+      }
+    },
+    "roles": {
+      "retain": {
+        "execution_key": "e1d00861c75947e3b7fe278bacf91215c47982b96a9b3f72a45f2411bdb4fa29",
+        "input_sha256": "29d674b2e1e89c7a77a6f985467a89e80026eb715969503ed739b5f7b70baf5e",
+        "truth": "PASS",
+        "reference": {
+          "brownouts_before_deadline": 1,
+          "captured_before_reset": false,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.0027,
+          "first_receive_s": 0.046900000000000004,
+          "max_esr_equation_error_v": 0.0,
+          "received_frames": 1,
+          "receiver_errors": [],
+          "transient_failed_steps": 0,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "PASS",
+            "event_receive": "PASS",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "PASS"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 9.011999999999833e-06,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 1.007e-20,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 1.4981895254560437e-20,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00021,
+          "source_total_error_j": 6e-21,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 1.6932e-05,
+            "boot_j": 5e-06,
+            "conversion_j": 2.0999999999999992e-05,
+            "harvest_j": 0.000189,
+            "shunt_j": 4e-05,
+            "source_j": 0.00021,
+            "spill_j": 8.925599999999786e-05,
+            "tx_j": 2.8799999999999995e-05
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 3.5446000000000026e-05,
+            "time_s": 0.0027
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0037
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0038
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0039000000000000003
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.004
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0041
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.004200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0043
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0044
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0045000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0046
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0047
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0048000000000000004
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0049
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0051
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0053
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0054
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0055000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0056
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0057
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0058000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0059
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0061
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0063
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0064
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006500000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0066
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0067
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0068000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006900000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0071
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0073
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0074
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007500000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0076
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0077
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0078000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0079
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.045000000000000005
+          },
+          {
+            "action": "tx-complete",
+            "event_id": 1,
+            "time_s": 0.046900000000000004
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": false,
+            "reason": "energy-threshold",
+            "time_s": 0.0801
+          }
+        ]
+      },
+      "adopt": {
+        "execution_key": "fe26745181ac3bf90fb2c3d62354f657441996bd0564bad35210838f64f9d9b0",
+        "input_sha256": "cfd5a0c5d7576c3717edc5dbdd9d0ef9a5f07b0c4fde5429ff5421f7c29a9b6f",
+        "truth": "FAIL",
+        "reference": {
+          "brownouts_before_deadline": 1,
+          "captured_before_reset": true,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.0027,
+          "first_receive_s": null,
+          "max_esr_equation_error_v": 0,
+          "received_frames": 0,
+          "receiver_errors": [],
+          "transient_failed_steps": 0,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "FAIL",
+            "event_receive": "FAIL",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "PASS"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 3.6429999999997115e-05,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 1.007e-20,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 1.4981895254560437e-20,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00021,
+          "source_total_error_j": 6e-21,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 2.4834e-05,
+            "boot_j": 1e-05,
+            "conversion_j": 2.0999999999999992e-05,
+            "harvest_j": 0.000189,
+            "shunt_j": 4e-05,
+            "source_j": 0.00021,
+            "spill_j": 7.773599999999885e-05,
+            "tx_j": 0.0
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 3.5446000000000026e-05,
+            "time_s": 0.0027
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0037
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0038
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0039000000000000003
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.004
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0041
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.004200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0043
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0044
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0045000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0046
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0047
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0048000000000000004
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0049
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0051
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.005200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0053
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0054
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0055000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0056
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0057
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0058000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0059
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0061
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0063
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0064
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006500000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0066
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0067
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0068000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.006900000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0071
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007200000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0073
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0074
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.007500000000000001
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0076
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0077
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0078000000000000005
+          },
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 0.0079
+          },
+          {
+            "action": "brownout",
+            "event_was_captured": true,
+            "reason": "energy-threshold",
+            "time_s": 0.012100000000000001
+          },
+          {
+            "action": "boot",
+            "energy_j": 3.441999999999984e-05,
+            "time_s": 0.0381
+          }
+        ]
+      }
+    }
+  },
+  "package-response": {
+    "case": {
+      "family": "packaging_response",
+      "task_id": "abc-B-package-transfer-v1",
+      "current": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "compliance_v": 3.3,
+            "end_s": 0.02,
+            "power_w": 0.0075,
+            "start_s": 0
+          }
+        ]
+      },
+      "intervention": {
+        "contact_duration_s": 0.008,
+        "deadline_s": 0.1,
+        "device": {
+          "boot_delay_s": 0.001,
+          "boot_j": 5e-06,
+          "cap_initial_voltage_v": 0,
+          "cap_voltage_max_v": 3.3,
+          "capacitance_f": 2.2e-05,
+          "esr_ohm": 0.3,
+          "event_latch": "passive-mechanical",
+          "harvest_efficiency": 0.9,
+          "id": 260,
+          "idle_power_w": 0.0002,
+          "off_power_w": 2e-05,
+          "off_v": 1.8,
+          "output_v": 1.8,
+          "ready_v": 2.8,
+          "tx_current_a": 0.008,
+          "tx_duration_s": 0.002,
+          "tx_not_before_s": 0
+        },
+        "dt_s": 0.0001,
+        "duration_s": 0.15,
+        "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+        "event_s": 0,
+        "model_id": "b-transient-behavior-v1",
+        "partition": "public-development",
+        "schema_version": "campaign-task-v1",
+        "shunts": [],
+        "source_calibration": "UNAVAILABLE",
+        "source_segments": [
+          {
+            "start_s": 0.07,
+            "end_s": 0.11,
+            "power_w": 0.00375,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "mechanism_record": {
+        "kind": "prescribed package transfer broadens and delays equal-energy source pulse",
+        "current_delay_ms": 0.0,
+        "current_width_ms": 20.0,
+        "intervention_delay_ms": 70.0,
+        "intervention_width_ms": 40.0,
+        "source_energy_uj": 150.0,
+        "assumptions": [
+          "unit-integral rectangular transfer with specified delay",
+          "load-independent prescribed source",
+          "no claim of calibrated mechanical package transfer"
+        ]
+      }
+    },
+    "roles": {
+      "retain": {
+        "execution_key": "5e36dacc71427db3c734d0844f2fe0288f7b4cc871b9534cd6935f2e96cf29da",
+        "input_sha256": "be354ce86b63ec0582ffefd6267fff2d0f2cb422f60a0378acad1c9bdf2c70dc",
+        "truth": "PASS",
+        "reference": {
+          "brownouts_before_deadline": 0,
+          "captured_before_reset": false,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.0129,
+          "first_receive_s": 0.0158,
+          "max_esr_equation_error_v": 0.0,
+          "received_frames": 1,
+          "receiver_errors": [],
+          "transient_failed_steps": 0,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "FAIL",
+            "event_receive": "PASS",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "PASS"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 7.352199999999598e-05,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 1e-20,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 4.552802091491864e-21,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00015,
+          "source_total_error_j": 0.0,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 2.7678e-05,
+            "boot_j": 5e-06,
+            "conversion_j": 1.5000000000000004e-05,
+            "harvest_j": 0.000135,
+            "shunt_j": 0.0,
+            "source_j": 0.00015,
+            "spill_j": 0.0,
+            "tx_j": 2.8799999999999995e-05
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 8.181700000000014e-05,
+            "time_s": 0.0129
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.013900000000000001
+          },
+          {
+            "action": "tx-complete",
+            "event_id": 1,
+            "time_s": 0.0158
+          }
+        ]
+      },
+      "adopt": {
+        "execution_key": "84f8a7150462b1c06cfe21cf051d6ad82754f32ea24ada61198e0d32c00d8967",
+        "input_sha256": "265fb3503deabddc7c3c3cbd02e4d3dcafce0fe55efb320c34c0aef444809473",
+        "truth": "PASS",
+        "reference": {
+          "brownouts_before_deadline": 0,
+          "captured_before_reset": false,
+          "datasheet_range_check": "PASS",
+          "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+          "first_boot_s": 0.09580000000000001,
+          "first_receive_s": 0.09870000000000001,
+          "max_esr_equation_error_v": 0.0,
+          "received_frames": 1,
+          "receiver_errors": [],
+          "transient_failed_steps": 0,
+          "verdicts": {
+            "deduplication": "PASS",
+            "event_preserved_after_reset": "FAIL",
+            "event_receive": "PASS",
+            "independent_energy": "PASS",
+            "independent_receiver": "PASS",
+            "physical_qualification": "UNKNOWN",
+            "transient_voltage": "PASS"
+          }
+        },
+        "energy": {
+          "bad_steps": [],
+          "final_storage_j": 8.984399999999863e-05,
+          "implementation": "independent Decimal ledger and piecewise input integral",
+          "max_balance_error_j": 1e-20,
+          "max_port_vi_error_j": 0.0,
+          "max_source_step_error_j": 1.0693790959085542e-20,
+          "max_voltage_error_v": 0.0,
+          "physical_calibration": "UNKNOWN",
+          "source_integral_j": 0.00015,
+          "source_total_error_j": 0.0,
+          "step_count": 1500,
+          "time_resolution_s": 0.0001,
+          "totals_j": {
+            "background_j": 1.1356e-05,
+            "boot_j": 5e-06,
+            "conversion_j": 1.5000000000000004e-05,
+            "harvest_j": 0.000135,
+            "shunt_j": 0.0,
+            "source_j": 0.00015,
+            "spill_j": 0.0,
+            "tx_j": 2.8799999999999995e-05
+          },
+          "verdict": "PASS"
+        },
+        "activity": [
+          {
+            "action": "boot",
+            "energy_j": 8.155900000000015e-05,
+            "time_s": 0.09580000000000001
+          },
+          {
+            "action": "tx-start",
+            "event_id": 1,
+            "time_s": 0.09680000000000001
+          },
+          {
+            "action": "tx-complete",
+            "event_id": 1,
+            "time_s": 0.09870000000000001
+          }
+        ]
+      }
+    }
+  }
+}

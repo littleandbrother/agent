@@ -1,0 +1,118 @@
+{
+  "schema": "bf-abc-paper-storage-readback-v1",
+  "time_utc": "2026-10-20T13:34:12.479293+00:00",
+  "available_bytes_at_admission": 17014456320,
+  "estimated_peak_additional_bytes": 50000000,
+  "retained_cap_bytes": 20000000,
+  "retained_manuscript_bytes": 903854,
+  "retained_manuscript_files": 22,
+  "free_bytes_before_scratch_cleanup": 16955109376,
+  "free_bytes_after_scratch_cleanup": 16955052032,
+  "scratch_logical_bytes_removed": 6308748,
+  "scratch_files_removed": [
+    {
+      "path": ".build/layout-before-final.html",
+      "bytes": 857898
+    },
+    {
+      "path": ".build/layout.html",
+      "bytes": 857996
+    },
+    {
+      "path": ".build/main.aux",
+      "bytes": 11457
+    },
+    {
+      "path": ".build/main.log",
+      "bytes": 34827
+    },
+    {
+      "path": ".build/main.out",
+      "bytes": 8048
+    },
+    {
+      "path": ".build/main.pdf",
+      "bytes": 384780
+    },
+    {
+      "path": ".build/matplotlib/fontlist-v3.11.0.json",
+      "bytes": 367961
+    },
+    {
+      "path": ".build/pages/page-01.png",
+      "bytes": 210001
+    },
+    {
+      "path": ".build/pages/page-02.png",
+      "bytes": 269278
+    },
+    {
+      "path": ".build/pages/page-03.png",
+      "bytes": 266759
+    },
+    {
+      "path": ".build/pages/page-04.png",
+      "bytes": 253135
+    },
+    {
+      "path": ".build/pages/page-05.png",
+      "bytes": 247126
+    },
+    {
+      "path": ".build/pages/page-06.png",
+      "bytes": 234474
+    },
+    {
+      "path": ".build/pages/page-07.png",
+      "bytes": 136819
+    },
+    {
+      "path": ".build/pages/page-08.png",
+      "bytes": 283239
+    },
+    {
+      "path": ".build/pages/page-09.png",
+      "bytes": 258525
+    },
+    {
+      "path": ".build/pages/page-10.png",
+      "bytes": 243418
+    },
+    {
+      "path": ".build/pages/page-11.png",
+      "bytes": 267943
+    },
+    {
+      "path": ".build/pages/page-12.png",
+      "bytes": 134649
+    },
+    {
+      "path": ".build/pages/page-13.png",
+      "bytes": 265252
+    },
+    {
+      "path": ".build/pages/page-14.png",
+      "bytes": 276118
+    },
+    {
+      "path": ".build/pages/page-15.png",
+      "bytes": 225558
+    },
+    {
+      "path": ".build/pages/page-16.png",
+      "bytes": 213098
+    },
+    {
+      "path": ".build/rendered-before-check.json",
+      "bytes": 389
+    }
+  ],
+  "restore_commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -B render_assets.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -B build.py",
+    "mkdir -p .build/pages",
+    "pdftoppm -r 96 -png main.pdf .build/pages/page"
+  ],
+  "restore_requirements": "Reuse registered Python3/Matplotlib, system TeX2026 and Poppler. No new environment. Scratch PDFs/aux/log/pages/font-cache are reproducible; source, data, final PDF, preview and figure retained.",
+  "storage_delta_boundary": "APFS/free-space change observed while other chats may write; logical removed bytes are not a claim of exclusive physical reclamation."
+}

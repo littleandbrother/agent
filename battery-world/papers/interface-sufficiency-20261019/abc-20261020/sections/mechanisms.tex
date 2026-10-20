@@ -1,0 +1,96 @@
+\section{Mechanism counterexamples and their sufficient conditions}
+\subsection{An unexcited storage clamp: E2}
+Two ideal worlds receive 20~$\mu$W for 2 s and face a 30~$\mu$J service
+transaction at 2.5 s. Both start with zero stored energy, use
+$C=10~\mu$F and must retain the energy associated with a 1 V minimum rail.
+Their clamps are 3 V and 5 V. The current maximum voltage is
+$\sqrt{8}=2.828$ V, so neither clamp activates. Their complete current
+observed event and rail traces coincide and both services pass.
+
+The common legal change sets $C=4~\mu$F within the declared
+$[4,12]~\mu$F domain. At 3 V, only 18~$\mu$J can be stored; 22~$\mu$J
+spills and only 16~$\mu$J is available above the 1 V reserve. Service
+fails with a $-14~\mu$J margin. At 5 V, all 40~$\mu$J is retained and
+the margin is $8~\mu$J, so service passes. The task, source, requested
+transaction and common change are identical. Thus the current trace does
+not distinguish a mechanism needed for the prospective verdict~\cite{structural}.
+
+An enriched static description resolves the ambiguity. Under the exact
+assumptions that all input precedes service, the capacitor is ideal and
+there is no leakage or intervening workload, define
+\begin{equation}
+ M(C)=\min\!\left(E_0+P_{\rm in}t_{\rm in},\frac{CV_{\max}^2}{2}\right)
+       -\frac{CV_{\min}^2}{2}-E_{\rm service}.
+ \label{eq:margin}
+\end{equation}
+Service passes exactly when $M(C)\geq0$. The first term is the stored
+energy after the source ends; the next is the required residual energy.
+With no other transaction between those times, their difference is exactly
+the budget available to service. The sufficient object is the functional
+$M(\cdot)$ and its parameters on the legal domain, not merely its value at
+the current $C$. Both worlds have the same current margin. A current scalar
+margin alone therefore retains the counterexample.
+
+\subsection{An unexcited reset transition: E3}
+The second pair captures event 1 at 1 s and attempts its single transmission
+at 4 s, before a 5 s deadline. A volatile pending memory and a retained
+pending memory both deliver in the current uninterrupted execution. The
+same legal change inserts a power outage from 2 to 3 s. Volatile memory
+clears the pending event and delivers none; retained memory delivers one.
+External event timing and the transmission schedule remain fixed.
+This witness changes a state transition rather than scaling an energy
+total~\cite{structural}.
+
+The sufficient static state description must state capture, reset and send
+semantics and their order. If pending state survives each intervening reset,
+and the scheduled send can execute after restoration, the captured event
+remains available. If the only pending copy is cleared and no recapture is
+possible before sending, it does not. These are conditions of the ideal
+machine, not a claim that an arbitrary nonvolatile device has free writes,
+atomic persistence or a qualified energy budget.
+
+\input{generated/tables/witnesses.tex}
+
+The saved analytic and numerical clamp implementations and the separate
+memory interpreter agree on eight current/intervention cases at both 1 ms
+and 0.5 ms settings: sixteen resolution-specific comparisons. Maximum
+reported energy discrepancy is $2.84\times10^{-12}~\mu$J. The enriched
+static model agrees on all 28 exposed grid points, and an additive static
+control agrees on five service costs spanning PASS and FAIL. Removing the
+unexcited clamp or reset-retention fact restores aliasing in these encodings.
+These checks establish software consistency under common ideal assumptions,
+not independent physical truth or universal necessity of a particular field
+name~\cite{structural}.
+
+\subsection{Connecting the witnesses to transient BF behavior}
+Seven separate saved BF controls exercise source timing, startup, loaded
+rail, reset and reception (Table~\ref{tab:reference}). Their transient model
+uses ready/off thresholds, boot energy, finite TX current and duration, and
+the loaded-rail relation
+\begin{equation}
+ V_{\rm load}=\sqrt{2E/C}-I_{\rm TX}R_{\rm ESR}.
+\end{equation}
+A failed energy or rail gate can reset the program and clear volatile
+pending state. The causal path is load to stored energy and loaded rail,
+then reset and program behavior. The source is prescribed, so no
+load-dependent source feedback is established~\cite{mechanisms}.
+
+\input{generated/tables/reference.tex}
+
+Fast, slow and late pulses each supply 150~$\mu$J, yet their first
+receptions differ; the late one misses the 100 ms deadline. A 150~$\Omega$
+ESR control prevents reception despite the same source integral. The
+no-energy control passes its rail check vacuously and fails service.
+The reset pair supplies 210~$\mu$J with the same 40~$\mu$J shunt and
+postponed transmission, but pending-event survival differs. Its retained
+mechanism is an explicitly ideal passive mechanical latch able to capture
+without stored electrical energy. It is not a model of a qualified
+commercial contact device or a powered NVM write.
+
+All seven agree with their predeclared control expectations, including the
+intended failures. That agreement is different from seven service passes.
+The full input laws and source calibration limits accompany the saved data;
+physical qualification remains UNKNOWN for every control. These transient
+examples connect the structural issue to BF operation without turning the
+two ideal witness models into a complete physical node.
+\FloatBarrier
