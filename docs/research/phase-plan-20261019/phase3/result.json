@@ -1,0 +1,549 @@
+{
+  "schema_version": "bf-phase3-closed-result-v1",
+  "status": "WORK_PACKAGES_COMPLETE_PHASE_EXIT_REVIEW_PENDING",
+  "completed_at": "2026-10-19T22:33:17.982158+00:00",
+  "dispatch_id": "phase-3-controlled-comparison-bf-20261020-001",
+  "features": [
+    "BFA-057-phase3-controlled-integration",
+    "BFA-058-phase3-method-comparison",
+    "BFA-059-phase3-interface-comparison"
+  ],
+  "summary": "Keep unchanged base H. Strong complete static controls saturate all four fixed formal tasks; task-local proposed H has no success/request advantage. Prospective E5 completes seven of twelve formal chains with five retained incomplete groups.",
+  "primary_sources": {
+    "protocol.json": {
+      "sha256": "50029d0ed95d2f8abbce61b5767c712c16617debdd7b1a66bf84292ec9bcf880",
+      "bytes": 39626
+    },
+    "formal-repeat-freeze.json": {
+      "sha256": "37bc7dbf6c922033469ad8712e220419d6c5fb045f6617fce32f1e135cc0cac9",
+      "bytes": 1774
+    },
+    "actual-comparison.json": {
+      "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+      "bytes": 1834131
+    },
+    "main-tables.json": {
+      "sha256": "4b05dfa01c7316656427af42a9fe53f2b2aaa5d47f99fff044a86626eed48166",
+      "bytes": 28242
+    },
+    "ordered-selected-witnesses.json": {
+      "sha256": "5bc0212a3be71ba2df8ae9f3ff7dfc2cb61139f29fcfab30bfcb06c387150ad7",
+      "bytes": 28364
+    },
+    "ordered-initial-controls.json": {
+      "sha256": "2743c51b613083eade7788e3712997ea34e43c1bedf6ed6e37c3881e97ebb0c2",
+      "bytes": 15349
+    },
+    "stage4-selection-freeze.json": {
+      "sha256": "ff0b8bf550d8e684098f2c8621067d3446f6815b98f3d07ffccbfaecc0bcddc1",
+      "bytes": 2711
+    }
+  },
+  "study": {
+    "formal_tasks": 4,
+    "formal_repetitions_per_task": 3,
+    "formal_conditions": 8,
+    "formal_groups": 96,
+    "formal_episodes": 120,
+    "pilot_groups": 16,
+    "pilot_episodes": 20,
+    "actual_episodes": 140,
+    "H_parent_episodes": 28,
+    "repeats_frozen_once": true,
+    "no_failed_group_replaced": true,
+    "shared_cells": [
+      "complete-raw = A fixed H = B complete-input",
+      "rich-static = E4 JSON"
+    ],
+    "formal_request_count": 659,
+    "pilot_request_count": 112
+  },
+  "formal_results": [
+    {
+      "H_proposal_counts": {},
+      "condition": "live-e5",
+      "mean_group_requests": 6.666666666666667,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 7,
+        "NO_ADMITTED_EXECUTION": 5
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "INCOMPLETE": 2,
+          "PASS": 1
+        },
+        "b-pulse-fast": {
+          "INCOMPLETE": 1,
+          "PASS": 2
+        },
+        "b-volatile-reset": {
+          "INCOMPLETE": 1,
+          "PASS": 2
+        },
+        "clite-query-window-derived-v1": {
+          "INCOMPLETE": 1,
+          "PASS": 2
+        }
+      },
+      "requests": 80,
+      "run_count": 12,
+      "service_counts": {
+        "INCOMPLETE": 5,
+        "PASS": 7
+      },
+      "settled_upper_usd": 0.7824162,
+      "task_count": 4,
+      "wall_s": 1373.6686153339979
+    },
+    {
+      "H_proposal_counts": {
+        "propose": 12
+      },
+      "condition": "proposed_method",
+      "mean_group_requests": 10.583333333333334,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 11,
+        "PENDING_EVENT_RETAINED_ACROSS_RESET": 1
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 127,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.9367913999999999,
+      "task_count": 4,
+      "wall_s": 1527.515520624016
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "complete-raw",
+      "mean_group_requests": 5.333333333333333,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 10,
+        "PENDING_EVENT_RETAINED_ACROSS_RESET": 2
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 64,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.42318059999999996,
+      "task_count": 4,
+      "wall_s": 711.1866428759968
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "average-energy",
+      "mean_group_requests": 6.25,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 8,
+        "NO_VALID_EVENT_DELIVERY": 4
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "FAIL": 2,
+          "PASS": 1
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "FAIL": 2,
+          "PASS": 1
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 75,
+      "run_count": 12,
+      "service_counts": {
+        "FAIL": 4,
+        "PASS": 8
+      },
+      "settled_upper_usd": 0.34451309999999996,
+      "task_count": 4,
+      "wall_s": 937.156022834999
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "rich-static",
+      "mean_group_requests": 5.416666666666667,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 12
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 65,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.42672,
+      "task_count": 4,
+      "wall_s": 676.4841202530224
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "e4-rich-static-table",
+      "mean_group_requests": 5.416666666666667,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 11,
+        "PENDING_EVENT_RETAINED_ACROSS_RESET": 1
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 65,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.5145681,
+      "task_count": 4,
+      "wall_s": 611.431107499986
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "executable-response",
+      "mean_group_requests": 5.5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 12
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 66,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.4660749,
+      "task_count": 4,
+      "wall_s": 718.6453466269741
+    },
+    {
+      "H_proposal_counts": {
+        "no-update": 2,
+        "propose": 10
+      },
+      "condition": "ordinary_reflection",
+      "mean_group_requests": 9.75,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 12
+      },
+      "per_task_counts": {
+        "b-latched-reset": {
+          "PASS": 3
+        },
+        "b-pulse-fast": {
+          "PASS": 3
+        },
+        "b-volatile-reset": {
+          "PASS": 3
+        },
+        "clite-query-window-derived-v1": {
+          "PASS": 3
+        }
+      },
+      "requests": 117,
+      "run_count": 12,
+      "service_counts": {
+        "PASS": 12
+      },
+      "settled_upper_usd": 0.8190117,
+      "task_count": 4,
+      "wall_s": 1304.8541925409518
+    }
+  ],
+  "accounting": {
+    "requests": 771,
+    "settled_upper_usd": 5.4478605,
+    "unknown_usage": [],
+    "wall_s": 8914.2819140449,
+    "provider_usage_boundary": "All 771 requests SETTLED, no new UNKNOWN. Conservative estimate uses provider-reported usage and existing fixed rates, not invoice audit.",
+    "Codex_and_end_to_end_cost": "UNKNOWN",
+    "new_scientific_executions": 57,
+    "comparison_executions": 56,
+    "derived_baseline_executions": 1,
+    "native_dispatches": 0,
+    "logical_D_evaluations": 122,
+    "group_job_overlays": 112,
+    "initial_cache_entries": 13,
+    "per_group_distinct_D_cap": 2
+  },
+  "E5_formal": {
+    "PASS": 7,
+    "FAIL": 0,
+    "INCOMPLETE": 5,
+    "selection": 6,
+    "construction": 1,
+    "source_unit_binding_incomplete_groups": 4,
+    "typed_consumer_incomplete_groups": 1,
+    "new_physical_measurements": 0,
+    "qualification_boundary": "Supplied-data relation binding and typed consumption, not causal necessity, new physical knowledge or advantage over complete static. Source-unit binding rejection is not nonexistence of a physical quantity.",
+    "old_phase2_actual_failure_preserved": true
+  },
+  "E4": {
+    "equal_decoded_initial_packet_and_tool_hash_pairs": 14,
+    "formal_pairs": 12,
+    "pilot_pairs": 2,
+    "formal_json": {
+      "PASS": 12,
+      "requests": 65
+    },
+    "formal_table": {
+      "PASS": 12,
+      "requests": 65
+    },
+    "scope": "Initial serialization only; later acquisitions use common JSON. No observed service or request advantage."
+  },
+  "ordered_cross_reset_witnesses": {
+    "formal_fresh_Agent_selections": 4,
+    "distinct_reused_historical_digital_execution_keys": 1,
+    "key": "d706be371e54b235b3f5b030019bbf5aae9f339ad386fd27b7a03c1a8392e795",
+    "capacitance_uf": 10,
+    "earliest_tx_ms": 45,
+    "capture_end_ms": 7.9,
+    "brownout_ms": 12.1,
+    "first_valid_receive_ms": 46.9,
+    "new_scientific_executions_for_audit": 0,
+    "boundary": "Four fresh choices reuse one historical fixed ideal passive-latch response; no invented mechanism or physical qualification.",
+    "source": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/ordered-selected-witnesses.json"
+  },
+  "reexecution_audit": {
+    "admitted_groups": 107,
+    "changed_D_old_trajectory_invalid": 91,
+    "stale_label_disagreements": 61,
+    "extra_scientific_executions": 0,
+    "dependency_scope_speedup_proven": false,
+    "method": "Deterministic source-bound saved-response audit; dependency/scope conservatively expand to the same full response."
+  },
+  "selection": {
+    "condition_decision": "KEEP_UNCHANGED_BASE_H",
+    "default_H_changed": false,
+    "global_transferable_H_proven": false,
+    "mean_group_requests_not_higher": false,
+    "scope": "Phase3 H instantiations are task-local. This selection cannot establish a globally transferred H or a recursively improved G.",
+    "strict_task_vector_dominance_without_a_lost_task": false,
+    "task_order": [
+      "b-pulse-fast",
+      "b-volatile-reset",
+      "b-latched-reset",
+      "clite-query-window-derived-v1"
+    ],
+    "task_success_vectors": {
+      "complete-raw": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "ordinary_reflection": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "proposed_method": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "governing_task_reservation": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/stage4-selection-freeze.json",
+    "historical_task_exclusion": "b-esr-fail and b-no-energy were used previously, so they cannot count as unseen. The later stage4-selection-freeze explicitly binds two newly defined, unexposed, within-model digital parameter cases.",
+    "unexecuted_reserved_tasks": [
+      "p4-bf-stretched-port-window-v1",
+      "p4-clite-half-power-query-v1"
+    ]
+  },
+  "verification": {
+    "targeted_unique_tests": 26,
+    "registered_ci_tests": 343,
+    "saved_files": 44,
+    "saved_controls": 11,
+    "registered_scope": "S0 architecture-v2-ci only, not root-wide health or hardware/product acceptance",
+    "registered_profile": "/Users/depengsu/.local/share/bf-campaign-20261019-s0/profile.json",
+    "registered_command": [
+      "rtk",
+      "proxy",
+      "bash",
+      "./init.sh"
+    ],
+    "source_and_cache_readback": {
+      "unique_bound_files": 54,
+      "cached_response_files": 208,
+      "phase2_manifest_files": 263,
+      "historical_UNKNOWN_preserved": 24,
+      "new_UNKNOWN": 0
+    },
+    "receipts": {
+      "preservation-final.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/preservation-final.json",
+        "sha256": "ddcc044f6467bfa689880016b40a1a55abcf8e78caa47fc7cf394615611dd701",
+        "bytes": 3264
+      },
+      "targeted-verification.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/targeted-verification.json",
+        "sha256": "e4f5f79d0ebd81625babb260d1b38df888431e253ab77a0f4d1bf61596798c16",
+        "bytes": 1197
+      },
+      "query-gate-verification.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/query-gate-verification.json",
+        "sha256": "766495738eff7ebce232c5b45ba595f91f077b5a87104683f8bae7be1dc064ce",
+        "bytes": 649
+      },
+      "final-integration.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/final-integration.json",
+        "sha256": "36b1ca23c33988c75fcb6c4b73546629a3d0533c8fbefb483dbca41ba73b9911",
+        "bytes": 2271
+      },
+      "paper-readback.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-readback.json",
+        "sha256": "c3c93406cef7c9e4fb996caf4f47f270412f3347bc7e2b3ef530acb5471dd4b7",
+        "bytes": 1867
+      },
+      "storage-final.json": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/storage-final.json",
+        "sha256": "83c1ea8595b51e6abaeac146c836dab7a7bfc8c8bdc102b603df7c4f4b48077a",
+        "bytes": 13239
+      }
+    },
+    "initial_environment_failure_preserved": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/final-integration-attempt1.json",
+    "new_model_or_scientific_execution_for_final_verification": false
+  },
+  "papers": {
+    "A": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/method-reexecution-20261019/phase3.pdf",
+      "pdf_sha256": "b61bf30b7683fedf02f12c40c238641115349627b5df56fb261916d6babfb02f",
+      "pdf_bytes": 216762,
+      "pages": 5,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-import-a.json",
+      "import_receipt_sha256": "d6a2b644b4572ae71059f184eaaa6dd78c64765425f92864b111379c5ecf41e8"
+    },
+    "B": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/interface-sufficiency-20261019/phase3.pdf",
+      "pdf_sha256": "c19f7a9ece1b08c1f992318a83d333539336a66b08ce5fcb55c8559edb2963df",
+      "pdf_bytes": 270729,
+      "pages": 6,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-import-b.json",
+      "import_receipt_sha256": "617474f5157d1eb0746aa1157dc8ca57473973ada02b39f66ba5258f95b0d379"
+    }
+  },
+  "papers_local_only": true,
+  "commits": 0,
+  "pushes": 0,
+  "Overleaf_updates": 0,
+  "storage": {
+    "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/storage-final.json",
+    "apfs_available_bytes": 23052652544,
+    "prior_verified_central_net_free_increase_bytes": 12261535744,
+    "phase3_private_logical_bytes": 58202626,
+    "provider_workbench_logical_growth_bytes": 43290453,
+    "paper_scratch_removed_logical_bytes": 9548636,
+    "new_environments": 0,
+    "new_worktrees": 0,
+    "new_full_tree_backups": 0,
+    "net_release_boundary": "Prior central APFS before/after measurement only; temporary logical deletions and background fluctuations are not added to that net release."
+  },
+  "AR_product_baseline": {
+    "status": "CONFIRMED_KEEP_FAILED_BASELINE",
+    "choice": "保留当前失败基线，先完成第二阶段方法研究",
+    "source_thread": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "received_at": "2026-10-19T19:21:44.380916+00:00",
+    "fixed_space": "NO_GO",
+    "dark_service": "FAIL",
+    "strict_FIFO": "FAIL",
+    "product_acceptance": "NOT_ACCEPTED",
+    "original_service_and_FIFO_requirements_unchanged": true,
+    "awaiting_user_choice": false
+  },
+  "claim_boundary": [
+    "Four fixed public digital tasks; repetitions are not additional task families.",
+    "Host raw trace is not all exposed to the model; complete static supplies all inputs and model definition.",
+    "Synthetic C-lite DC and fixed one-query token are not RF/PHY/security/hardware qualification.",
+    "No global H transfer, no G change, no RSI, no dependency/scope speedup, no E5 superiority over complete static.",
+    "Phase 2 original failures and posthoc distinction, old ledger/UNKNOWN records and negative results remain intact."
+  ],
+  "state": {
+    "paid_dispatch_allowed": false,
+    "new_dispatch_allowed": false,
+    "workers": "A and B idle after paper handoff; no Pi executor remains",
+    "phase_advanced": false,
+    "next_phase": 4,
+    "next_gate": "Independent Phase 3 exit review, then separate frozen protocol admission; no Phase 4 execution in this batch."
+  },
+  "report": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/RESULTS.md",
+  "evidence_manifest": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/source-manifest.json",
+  "reproducible_readback_command": [
+    "rtk",
+    "proxy",
+    "python3",
+    "-B",
+    "docs/research/phase-plan-20261019/phase3/verify_final.py"
+  ]
+}

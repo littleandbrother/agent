@@ -1,0 +1,1330 @@
+{
+  "schema_version": "bf-load-checker-amendment-calibration-v1",
+  "time_utc": "2026-10-14T21:12:14.174935+00:00",
+  "query": "SQLite mode=ro; SimpleNamespace; no Workbench",
+  "systems": [
+    {
+      "system": "SC-a1974dece1a65f85d410d4cd5438f1a72aa7db476da793ddc34e8feab7db56e8",
+      "immutable_system_sha256": "f4fb7c781d1dbca89f3176a3ef5e78da9405f791e6d6a8ea1a488a18144697c9",
+      "result": {
+        "checker": "p01-system-independent-review-v2",
+        "checker_sha256": "73e454fe118f417ee67566c717830791a34fd4142f349bee4b20be5cde5b2440",
+        "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+        "fixture_sha256": "3bf9401bf2c430ec4ad7316506272c617bb43870394f68fc12d731dc8a619851",
+        "target": "SC-a1974dece1a65f85d410d4cd5438f1a72aa7db476da793ddc34e8feab7db56e8",
+        "scope": "eight original P01 digital gates plus source timing contract",
+        "interface": {
+          "checker": "power-firmware-source-contract-v3",
+          "checker_sha256": "90b9399190383a13b9e3baf7bc6fe6fd527f81998acb4d2b407f4e946cc56043",
+          "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+          "checks": [
+            {
+              "id": "advertising_ms",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "APP_ADV_INTERVAL"
+            },
+            {
+              "id": "connection_min_ms",
+              "status": "PASS",
+              "actual": 100.0,
+              "expected": 100.0,
+              "source": "MIN_CONN_INTERVAL"
+            },
+            {
+              "id": "connection_max_ms",
+              "status": "PASS",
+              "actual": 200.0,
+              "expected": 200.0,
+              "source": "MAX_CONN_INTERVAL"
+            },
+            {
+              "id": "sample_ms",
+              "status": "PASS",
+              "actual": 5000.0,
+              "expected": 5000.0,
+              "source": "m_cfg.sample_period_ms"
+            },
+            {
+              "id": "connection_bound",
+              "status": "PASS",
+              "actual": 100.0,
+              "expected": [
+                100.0,
+                200.0
+              ],
+              "source": "load-timeline actual_radio_timing"
+            },
+            {
+              "id": "model_interface_advertising",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "interface-params load_timing"
+            },
+            {
+              "id": "manual_admission_energy",
+              "status": "PASS",
+              "actual": 0.0,
+              "expected": 0,
+              "source": "interface-params manual_action"
+            },
+            {
+              "id": "power_declaration_rail_v",
+              "status": "PASS",
+              "actual": 1.8,
+              "expected": 1.8,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_storage_initial_v",
+              "status": "PASS",
+              "actual": 4.2,
+              "expected": 4.2,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_manual_admission",
+              "status": "PASS",
+              "actual": true,
+              "expected": true,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_sece_resolved",
+              "status": "PASS",
+              "actual": false,
+              "expected": false,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_source_project-chain/load-timeline.json",
+              "status": "PASS",
+              "actual": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+              "expected": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+              "source": "schema_version / revision_note / advertising_gate_fw18 / declared_scenario_advertising / activity_schedule / window_charge_* (bf-p01-load-timeline-v3, committed on this branch in revision 1)"
+            },
+            {
+              "id": "power_source_project-chain/gen-chain-load-r5.py",
+              "status": "PASS",
+              "actual": "fd3dca6149822a044b2bb1e0c81f2744480438ae4f4aac3d12af95efc20c84ea",
+              "expected": "fd3dca6149822a044b2bb1e0c81f2744480438ae4f4aac3d12af95efc20c84ea",
+              "source": "constants ADV_INTERVAL_UNITS/ADV_UNIT_MS/POLICY_PERIOD_MS/BURST_EVENTS/BURST_WINDOW_MS, K=(RAIL_V/STORAGE_V)/EFFICIENCY, declared amplitudes, advertising_pulse_times_ms() gate rule"
+            },
+            {
+              "id": "power_source_project-chain/interface-params.json",
+              "status": "PASS",
+              "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "source": "rail voltage, storage initial voltage, manual switch closure and sece/resolved fields"
+            },
+            {
+              "id": "power_source_project-chain/chain_joint.cir",
+              "status": "PASS",
+              "actual": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+              "expected": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+              "source": "Iload PWL staircase (emitted storage-rail load); source of the connection event count, pulse amplitudes and the window aggregates"
+            },
+            {
+              "id": "power_source_project-chain/project.json",
+              "status": "PASS",
+              "actual": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+              "expected": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+              "source": "solve manifest consumed by execute() (entrypoint chain_joint.cir)"
+            },
+            {
+              "id": "firmware_declaration_advertising_ms",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_connection_min_ms",
+              "status": "PASS",
+              "actual": 100,
+              "expected": 100.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_connection_max_ms",
+              "status": "PASS",
+              "actual": 200,
+              "expected": 200.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_sample_ms",
+              "status": "PASS",
+              "actual": 5000,
+              "expected": 5000.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_policy_advertising_ms",
+              "status": "PASS",
+              "actual": 5000,
+              "expected": 5000.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/main.c",
+              "status": "PASS",
+              "actual": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+              "expected": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+              "source": "APP_ADV_INTERVAL = 300 GAP units of 0.625 ms -> 187.5 ms (advertising_ms); MIN_CONN_INTERVAL/MAX_CONN_INTERVAL = MSEC_TO_UNITS(100/200, UNIT_1_25_MS) (connection_min_ms/connection_max_ms); m_cfg.sample_period_ms = 5000 (sample_ms); APP_POLICY_ADV_PERIOD_MS / m_cfg.adv_period_ms = 5000 (policy_advertising_ms)"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/app_policy.h",
+              "status": "PASS",
+              "actual": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+              "expected": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+              "source": "APP_POLICY_BURST_EVENTS = 12, APP_POLICY_BURST_MS = 2250 (FW-18 advertising burst window in the policy millisecond domain)"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/app_policy.c",
+              "status": "PASS",
+              "actual": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+              "expected": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+              "source": "app_tick(): unconnected branch admits at most one APP_ACT_START_ADV burst per cfg->adv_period_ms and closes that window with APP_ACT_STOP_ADV"
+            },
+            {
+              "id": "firmware_source_project-chain/load-timeline.json",
+              "status": "FAIL",
+              "actual": "6a959ca6ea6e504bc03503aeee92c5f6e9a99b127e288b31bc983d79c19f0ade",
+              "expected": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+              "source": "source extraction"
+            },
+            {
+              "id": "firmware_source_project-chain/interface-params.json",
+              "status": "PASS",
+              "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "source": "source extraction"
+            }
+          ],
+          "source_hashes": {
+            "project-fw-s132/main.c": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+            "project-chain/load-timeline.json": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+            "project-chain/interface-params.json": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1"
+          },
+          "scope": "source timing and declared load/power interface",
+          "native_jobs_dispatched": 0,
+          "physical": "NOT_TESTED",
+          "facts": {
+            "firmware": {
+              "advertising_ms": 187.5,
+              "connection_min_ms": 100.0,
+              "connection_max_ms": 200.0,
+              "sample_ms": 5000.0,
+              "policy_advertising_ms": 5000.0
+            },
+            "rail_v": 1.8,
+            "storage_initial_v": 4.2,
+            "manual_admission": true,
+            "sece_resolved": false,
+            "current_amplitudes_origin": "assumption (no measured current profile exists)"
+          },
+          "issues": [
+            {
+              "id": "policy-radio-duty",
+              "status": "OPEN",
+              "category": "design_configuration",
+              "policy_ms": 5000.0,
+              "radio_ms": 187.5,
+              "source": "project-fw-s132/main.c"
+            },
+            {
+              "id": "sece-envelope",
+              "status": "OPEN",
+              "category": "model_applicability",
+              "unresolved": [
+                "fast SECE switching instant and duty",
+                "switch on-resistance and gate/drive charge",
+                "transformer/inductor values and saturation",
+                "diode vs synchronous rectification in the extraction stage",
+                "series resistance of the real extraction path"
+              ]
+            }
+          ],
+          "status": "FAIL",
+          "input_fingerprint": "d11508fd108d3bca32cd00368b3db274c3cc340b877c7afed5cbababad312e33"
+        },
+        "gates": {
+          "schematic_bom_pins": {
+            "status": "RECHECK_REQUIRED",
+            "findings": {
+              "pending": "fresh native check for changed inputs"
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "69919454b4ace054d9dad2405a63f37dfb2e84bc2f6c8149e036e44206115cd7"
+          },
+          "pcb_connectivity_drc": {
+            "status": "RECHECK_REQUIRED",
+            "findings": {
+              "pending": "fresh native check for changed inputs"
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "69919454b4ace054d9dad2405a63f37dfb2e84bc2f6c8149e036e44206115cd7"
+          },
+          "geometry_fit": {
+            "status": "UNEVALUABLE",
+            "findings": {
+              "exact_reuse": {
+                "status": "UNEVALUABLE",
+                "validation_id": "RV-26974610a9b7f493e9a38348734abcec94cf97dba9bd901405fc1f789fc9dd71",
+                "evidence": {
+                  "asset_id": "B-39c61d512bc378c10121346a34efe478ec8c29145b176adc3f6299eef5dfbb5a",
+                  "bytes": 2047,
+                  "media_type": "application/json",
+                  "sha256": "39c61d512bc378c10121346a34efe478ec8c29145b176adc3f6299eef5dfbb5a"
+                },
+                "origin_design_id": "D-c7890e74e32b4a43508e4accf3e68f0c3e0cb0e270f67bc2d9ac2262e66613fd"
+              }
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "0752dc660067c2becae1a8557b2d75acd3af11bb557f0e7303a6492e39b4bac0"
+          },
+          "firmware_event_logic": {
+            "status": "PASS",
+            "findings": {
+              "status": "PASS",
+              "exact_reuse_validation": "RV-5ecab3ff88732aec1e0d072fe87cf1dbe86488b24911b5ebee03e1076c79214b",
+              "scope": "exact validated firmware input reuse",
+              "consumed_sources": {
+                "project-fw-s132/ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+                "project-fw-s132/ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+                "project-fw-s132/app_policy.c": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                "project-fw-s132/app_policy.h": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+                "project-fw-s132/main.c": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+                "project-fw-s132/sdk_config.h": "849fbf071e2d825952626dfeafea1711ad29a3a1f4b8c85cf313ddbe710ecbae"
+              }
+            },
+            "scope": "exact validated firmware input reuse",
+            "input_fingerprint": "e2204184b3f8f5b601e98cb2fc875cb6f0f9ae7610769d6e7c612c9d7a45b319"
+          },
+          "power_load_chain": {
+            "status": "FAIL",
+            "findings": {
+              "status": "FAIL",
+              "findings": [
+                "firmware activity and power declaration disagree",
+                "supply falls below the declared operating voltage",
+                "manual admission produces a negative MCU rail"
+              ],
+              "model_applicability": {
+                "status": "UNEVALUABLE",
+                "pending": [
+                  "CS-TENG capacitance and its stroke dependence",
+                  "rectifier diode part number / Vf / recovery",
+                  "SECE switch part number and drive",
+                  "storage capacitor ESR and leakage",
+                  "regulator part number, dropout and efficiency curve",
+                  "AD7156 conversion current and timing (declared only)",
+                  "nRF52832 radio TX/RX current profile (declared only)",
+                  "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)",
+                  "fast SECE switching instant and duty",
+                  "switch on-resistance and gate/drive charge",
+                  "transformer/inductor values and saturation",
+                  "diode vs synchronous rectification in the extraction stage",
+                  "series resistance of the real extraction path"
+                ]
+              },
+              "job_id": "eng-9d45631d57148be4",
+              "consumed_sources": {
+                "project-chain/chain_joint.cir": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604"
+              },
+              "load_pwl_equal": null,
+              "load_binding": {
+                "status": "PASS",
+                "pwl_equal": null,
+                "method": "compact immutable netlist binding",
+                "expected_sha256": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+                "actual_sha256": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+                "actual_points": 656,
+                "waveform_scope": "expanded declared points unavailable"
+              },
+              "pwl_points": 656,
+              "evaluation_gaps": [],
+              "event_cadence_checks": {
+                "sampling": true
+              },
+              "load_charge_c": 0.000899621193281307,
+              "declared_charge_c": 0.0008996218487394819,
+              "raw_sha256": "b0dd16783f53065b89d97d6099c0a7c9979722ee1d63c9c9f1fc441852ca3f93",
+              "time_span_s": [
+                1.0000000000000001e-11,
+                16.001
+              ],
+              "points": 165018,
+              "storage_v": [
+                4.199999999940137,
+                0.3527849685467067
+              ],
+              "minimum_supply_v": 0.15875323584601803,
+              "minimum_mcu_v": -1315962.1900000018,
+              "scope": "fixed nominal/manual-admission load and actual native transient; source calibration pending"
+            },
+            "scope": "fixed nominal/manual-admission load and actual native transient; source calibration pending",
+            "input_fingerprint": "216fc0e5b61ac9b42050ec28c3ac87fb529e9bcbe3c061c21ec382ff55b0528a"
+          },
+          "source_domain": {
+            "status": "UNEVALUABLE",
+            "findings": {
+              "status": "UNEVALUABLE",
+              "pending": [
+                "CS-TENG capacitance and its stroke dependence",
+                "rectifier diode part number / Vf / recovery",
+                "SECE switch part number and drive",
+                "storage capacitor ESR and leakage",
+                "regulator part number, dropout and efficiency curve",
+                "AD7156 conversion current and timing (declared only)",
+                "nRF52832 radio TX/RX current profile (declared only)",
+                "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)",
+                "fast SECE switching instant and duty",
+                "switch on-resistance and gate/drive charge",
+                "transformer/inductor values and saturation",
+                "diode vs synchronous rectification in the extraction stage",
+                "series resistance of the real extraction path"
+              ]
+            },
+            "scope": "original source calibration and SECE applicability",
+            "input_fingerprint": "554b87dea615828884e70e188e04e53c78e0d5f18bd601b6ea97a244dc308fa6"
+          },
+          "board_firmware_interfaces": {
+            "status": "FAIL",
+            "findings": {
+              "timing_contract": {
+                "checker": "power-firmware-source-contract-v3",
+                "checker_sha256": "90b9399190383a13b9e3baf7bc6fe6fd527f81998acb4d2b407f4e946cc56043",
+                "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+                "checks": [
+                  {
+                    "id": "advertising_ms",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "APP_ADV_INTERVAL"
+                  },
+                  {
+                    "id": "connection_min_ms",
+                    "status": "PASS",
+                    "actual": 100.0,
+                    "expected": 100.0,
+                    "source": "MIN_CONN_INTERVAL"
+                  },
+                  {
+                    "id": "connection_max_ms",
+                    "status": "PASS",
+                    "actual": 200.0,
+                    "expected": 200.0,
+                    "source": "MAX_CONN_INTERVAL"
+                  },
+                  {
+                    "id": "sample_ms",
+                    "status": "PASS",
+                    "actual": 5000.0,
+                    "expected": 5000.0,
+                    "source": "m_cfg.sample_period_ms"
+                  },
+                  {
+                    "id": "connection_bound",
+                    "status": "PASS",
+                    "actual": 100.0,
+                    "expected": [
+                      100.0,
+                      200.0
+                    ],
+                    "source": "load-timeline actual_radio_timing"
+                  },
+                  {
+                    "id": "model_interface_advertising",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "interface-params load_timing"
+                  },
+                  {
+                    "id": "manual_admission_energy",
+                    "status": "PASS",
+                    "actual": 0.0,
+                    "expected": 0,
+                    "source": "interface-params manual_action"
+                  },
+                  {
+                    "id": "power_declaration_rail_v",
+                    "status": "PASS",
+                    "actual": 1.8,
+                    "expected": 1.8,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_storage_initial_v",
+                    "status": "PASS",
+                    "actual": 4.2,
+                    "expected": 4.2,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_manual_admission",
+                    "status": "PASS",
+                    "actual": true,
+                    "expected": true,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_sece_resolved",
+                    "status": "PASS",
+                    "actual": false,
+                    "expected": false,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_source_project-chain/load-timeline.json",
+                    "status": "PASS",
+                    "actual": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+                    "expected": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+                    "source": "schema_version / revision_note / advertising_gate_fw18 / declared_scenario_advertising / activity_schedule / window_charge_* (bf-p01-load-timeline-v3, committed on this branch in revision 1)"
+                  },
+                  {
+                    "id": "power_source_project-chain/gen-chain-load-r5.py",
+                    "status": "PASS",
+                    "actual": "fd3dca6149822a044b2bb1e0c81f2744480438ae4f4aac3d12af95efc20c84ea",
+                    "expected": "fd3dca6149822a044b2bb1e0c81f2744480438ae4f4aac3d12af95efc20c84ea",
+                    "source": "constants ADV_INTERVAL_UNITS/ADV_UNIT_MS/POLICY_PERIOD_MS/BURST_EVENTS/BURST_WINDOW_MS, K=(RAIL_V/STORAGE_V)/EFFICIENCY, declared amplitudes, advertising_pulse_times_ms() gate rule"
+                  },
+                  {
+                    "id": "power_source_project-chain/interface-params.json",
+                    "status": "PASS",
+                    "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "source": "rail voltage, storage initial voltage, manual switch closure and sece/resolved fields"
+                  },
+                  {
+                    "id": "power_source_project-chain/chain_joint.cir",
+                    "status": "PASS",
+                    "actual": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+                    "expected": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604",
+                    "source": "Iload PWL staircase (emitted storage-rail load); source of the connection event count, pulse amplitudes and the window aggregates"
+                  },
+                  {
+                    "id": "power_source_project-chain/project.json",
+                    "status": "PASS",
+                    "actual": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+                    "expected": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+                    "source": "solve manifest consumed by execute() (entrypoint chain_joint.cir)"
+                  },
+                  {
+                    "id": "firmware_declaration_advertising_ms",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_connection_min_ms",
+                    "status": "PASS",
+                    "actual": 100,
+                    "expected": 100.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_connection_max_ms",
+                    "status": "PASS",
+                    "actual": 200,
+                    "expected": 200.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_sample_ms",
+                    "status": "PASS",
+                    "actual": 5000,
+                    "expected": 5000.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_policy_advertising_ms",
+                    "status": "PASS",
+                    "actual": 5000,
+                    "expected": 5000.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/main.c",
+                    "status": "PASS",
+                    "actual": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+                    "expected": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+                    "source": "APP_ADV_INTERVAL = 300 GAP units of 0.625 ms -> 187.5 ms (advertising_ms); MIN_CONN_INTERVAL/MAX_CONN_INTERVAL = MSEC_TO_UNITS(100/200, UNIT_1_25_MS) (connection_min_ms/connection_max_ms); m_cfg.sample_period_ms = 5000 (sample_ms); APP_POLICY_ADV_PERIOD_MS / m_cfg.adv_period_ms = 5000 (policy_advertising_ms)"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/app_policy.h",
+                    "status": "PASS",
+                    "actual": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+                    "expected": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+                    "source": "APP_POLICY_BURST_EVENTS = 12, APP_POLICY_BURST_MS = 2250 (FW-18 advertising burst window in the policy millisecond domain)"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/app_policy.c",
+                    "status": "PASS",
+                    "actual": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "expected": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "source": "app_tick(): unconnected branch admits at most one APP_ACT_START_ADV burst per cfg->adv_period_ms and closes that window with APP_ACT_STOP_ADV"
+                  },
+                  {
+                    "id": "firmware_source_project-chain/load-timeline.json",
+                    "status": "FAIL",
+                    "actual": "6a959ca6ea6e504bc03503aeee92c5f6e9a99b127e288b31bc983d79c19f0ade",
+                    "expected": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+                    "source": "source extraction"
+                  },
+                  {
+                    "id": "firmware_source_project-chain/interface-params.json",
+                    "status": "PASS",
+                    "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "source": "source extraction"
+                  }
+                ],
+                "source_hashes": {
+                  "project-fw-s132/main.c": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+                  "project-chain/load-timeline.json": "077f7e54c9b0353979b45afbfdd82472b3fab328162ad502846a29784e7c19c9",
+                  "project-chain/interface-params.json": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1"
+                },
+                "scope": "source timing and declared load/power interface",
+                "native_jobs_dispatched": 0,
+                "physical": "NOT_TESTED",
+                "facts": {
+                  "firmware": {
+                    "advertising_ms": 187.5,
+                    "connection_min_ms": 100.0,
+                    "connection_max_ms": 200.0,
+                    "sample_ms": 5000.0,
+                    "policy_advertising_ms": 5000.0
+                  },
+                  "rail_v": 1.8,
+                  "storage_initial_v": 4.2,
+                  "manual_admission": true,
+                  "sece_resolved": false,
+                  "current_amplitudes_origin": "assumption (no measured current profile exists)"
+                },
+                "issues": [
+                  {
+                    "id": "policy-radio-duty",
+                    "status": "OPEN",
+                    "category": "design_configuration",
+                    "policy_ms": 5000.0,
+                    "radio_ms": 187.5,
+                    "source": "project-fw-s132/main.c"
+                  },
+                  {
+                    "id": "sece-envelope",
+                    "status": "OPEN",
+                    "category": "model_applicability",
+                    "unresolved": [
+                      "fast SECE switching instant and duty",
+                      "switch on-resistance and gate/drive charge",
+                      "transformer/inductor values and saturation",
+                      "diode vs synchronous rectification in the extraction stage",
+                      "series resistance of the real extraction path"
+                    ]
+                  }
+                ],
+                "status": "FAIL",
+                "input_fingerprint": "d11508fd108d3bca32cd00368b3db274c3cc340b877c7afed5cbababad312e33"
+              },
+              "prior_board_status": "FAIL",
+              "pending": [
+                "native PCB peripheral initialization and full pin/interface audit"
+              ]
+            },
+            "scope": "native board and firmware interfaces",
+            "input_fingerprint": "7a386dd64e631b789ec6c8047c1b3b1132ebc6c266d968cab95fc92e7f28f8b9"
+          },
+          "delivery_version": {
+            "status": "PASS",
+            "findings": {
+              "execution_bindings": {
+                "firmware": {
+                  "job_id": "eng-68513e5516fb0bb8",
+                  "project_sha256": "218a503aea440c1679b3609807705d9e01429fcb5f45aeea358d6ff709249462",
+                  "consumed_sources": {
+                    "project-fw-s132/ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+                    "project-fw-s132/ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+                    "project-fw-s132/app_policy.c": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "project-fw-s132/app_policy.h": "5d5d29f86cda167c7c0ceacf445c6047cb2e844a5956e127a5d1a69e1c049dc0",
+                    "project-fw-s132/main.c": "9f5b28672dbe00e52a02982b788cd2f719452fa2b4066df1835aba9f16106e35",
+                    "project-fw-s132/sdk_config.h": "849fbf071e2d825952626dfeafea1711ad29a3a1f4b8c85cf313ddbe710ecbae"
+                  }
+                },
+                "power": {
+                  "job_id": "eng-9d45631d57148be4",
+                  "project_sha256": "5f1ab8e13ac8cd1cf05f81b8ba5b0d4c499b4b7c557f79549ab4b46f40599c3f",
+                  "consumed_sources": {
+                    "project-chain/chain_joint.cir": "790c2ba94e6d7319cab69d7b9e5efd7f0b45bdaa68eab6f60fb82db04368b604"
+                  }
+                }
+              },
+              "errors": {},
+              "file_count": 89
+            },
+            "scope": "current source and selected worker inputs; immutable review manifest",
+            "input_fingerprint": "216fc0e5b61ac9b42050ec28c3ac87fb529e9bcbe3c061c21ec382ff55b0528a"
+          }
+        },
+        "status": "FAIL",
+        "native_jobs_dispatched": 0,
+        "physical": "NOT_TESTED"
+      }
+    },
+    {
+      "system": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9",
+      "immutable_system_sha256": "744db6b46d3afe6fe445a9a78ea4f8b0d3b764e75df6620de3dc8a23447aec78",
+      "result": {
+        "checker": "p01-system-independent-review-v2",
+        "checker_sha256": "73e454fe118f417ee67566c717830791a34fd4142f349bee4b20be5cde5b2440",
+        "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+        "fixture_sha256": "3bf9401bf2c430ec4ad7316506272c617bb43870394f68fc12d731dc8a619851",
+        "target": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9",
+        "scope": "eight original P01 digital gates plus source timing contract",
+        "interface": {
+          "checker": "power-firmware-source-contract-v3",
+          "checker_sha256": "90b9399190383a13b9e3baf7bc6fe6fd527f81998acb4d2b407f4e946cc56043",
+          "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+          "checks": [
+            {
+              "id": "advertising_ms",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "APP_ADV_INTERVAL"
+            },
+            {
+              "id": "connection_min_ms",
+              "status": "PASS",
+              "actual": 100.0,
+              "expected": 100.0,
+              "source": "MIN_CONN_INTERVAL"
+            },
+            {
+              "id": "connection_max_ms",
+              "status": "PASS",
+              "actual": 200.0,
+              "expected": 200.0,
+              "source": "MAX_CONN_INTERVAL"
+            },
+            {
+              "id": "sample_ms",
+              "status": "PASS",
+              "actual": 5000.0,
+              "expected": 5000.0,
+              "source": "m_cfg.sample_period_ms"
+            },
+            {
+              "id": "connection_bound",
+              "status": "PASS",
+              "actual": 100.0,
+              "expected": [
+                100.0,
+                200.0
+              ],
+              "source": "load-timeline actual_radio_timing"
+            },
+            {
+              "id": "model_interface_advertising",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "interface-params load_timing"
+            },
+            {
+              "id": "manual_admission_energy",
+              "status": "PASS",
+              "actual": 0.0,
+              "expected": 0,
+              "source": "interface-params manual_action"
+            },
+            {
+              "id": "power_declaration_rail_v",
+              "status": "PASS",
+              "actual": 1.8,
+              "expected": 1.8,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_storage_initial_v",
+              "status": "PASS",
+              "actual": 4.2,
+              "expected": 4.2,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_manual_admission",
+              "status": "PASS",
+              "actual": true,
+              "expected": true,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_declaration_sece_resolved",
+              "status": "PASS",
+              "actual": false,
+              "expected": false,
+              "source": "interfaces/power.json \u2192 immutable source"
+            },
+            {
+              "id": "power_source_project-chain/load-timeline.json",
+              "status": "PASS",
+              "actual": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+              "expected": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+              "source": "schema_version bf-p01-load-timeline-v5 / actual_radio_timing / referral / declared_amplitudes_1v8 / windows_ms / advertising_admission.gate_constants / window_charge / pwl_equality (v5 committed on this branch in revision 3 of this task; numerically identical to the v4 revision-1 content it supersedes)"
+            },
+            {
+              "id": "power_source_project-chain/gen-chain-load-r5.py",
+              "status": "PASS",
+              "actual": "d33e4fdc777b07527b6c17da1743ccd14aa65dd6819f2e322517e5465426de45",
+              "expected": "d33e4fdc777b07527b6c17da1743ccd14aa65dd6819f2e322517e5465426de45",
+              "source": "BURST_EVENTS/BURST_WINDOW_MS, K=(RAIL_V/STORAGE_V)/EFFICIENCY, declared amplitudes, active_windows_ms(), pwl_points() edge rule (committed on this branch in revision 1)"
+            },
+            {
+              "id": "power_source_project-chain/interface-params.json",
+              "status": "PASS",
+              "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+              "source": "rail voltage, storage initial voltage, manual switch closure, sece/resolved fields"
+            },
+            {
+              "id": "power_source_project-chain/chain_joint.cir",
+              "status": "PASS",
+              "actual": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c",
+              "expected": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c",
+              "source": "Iload PWL staircase (672 points, emitted storage-rail load), Bsece one-way envelope, Cstore ic=4.2, Vman manual boundary (committed on this branch in revision 1; NOT re-emitted in revision 3)"
+            },
+            {
+              "id": "power_source_project-chain/project.json",
+              "status": "PASS",
+              "actual": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+              "expected": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+              "source": "solve manifest consumed by execute() (entrypoint chain_joint.cir)"
+            },
+            {
+              "id": "firmware_declaration_advertising_ms",
+              "status": "PASS",
+              "actual": 187.5,
+              "expected": 187.5,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_connection_min_ms",
+              "status": "PASS",
+              "actual": 100,
+              "expected": 100.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_connection_max_ms",
+              "status": "PASS",
+              "actual": 200,
+              "expected": 200.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_sample_ms",
+              "status": "PASS",
+              "actual": 5000,
+              "expected": 5000.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_declaration_policy_advertising_ms",
+              "status": "PASS",
+              "actual": 5000,
+              "expected": 5000.0,
+              "source": "interfaces/firmware.json \u2192 immutable source"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/main.c",
+              "status": "PASS",
+              "actual": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+              "expected": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+              "source": "APP_ADV_INTERVAL = 300 GAP units of 0.625 ms -> 187.5 ms (advertising_ms); MIN_CONN_INTERVAL/MAX_CONN_INTERVAL = MSEC_TO_UNITS(100/200, UNIT_1_25_MS) (connection_min_ms/connection_max_ms); SLAVE_LATENCY = 0, CONN_SUP_TIMEOUT = MSEC_TO_UNITS(4000, UNIT_10_MS); m_cfg.sample_period_ms = 5000 (sample_ms); APP_POLICY_ADV_PERIOD_MS / m_cfg.adv_period_ms = 5000 (policy_advertising_ms); FW-18 compile-time asserts burst_window_agrees_with_gap_interval_units and burst_window_is_shorter_than_policy_period"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/app_policy.h",
+              "status": "PASS",
+              "actual": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+              "expected": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+              "source": "APP_POLICY_BURST_EVENTS = 6, APP_POLICY_BURST_MS = 1125 (shortened in this revision from 12 / 2250): the unconnected advertising burst window, carried in the policy's own millisecond domain"
+            },
+            {
+              "id": "firmware_source_project-fw-s132/app_policy.c",
+              "status": "PASS",
+              "actual": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+              "expected": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+              "source": "app_tick(): the unconnected branch admits at most one APP_ACT_START_ADV burst per cfg->adv_period_ms and closes the window with APP_ACT_STOP_ADV; the window is used symbolically (APP_POLICY_BURST_MS), so no numeric literal changed here"
+            }
+          ],
+          "source_hashes": {
+            "project-fw-s132/main.c": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+            "project-chain/load-timeline.json": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+            "project-chain/interface-params.json": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1"
+          },
+          "scope": "source timing and declared load/power interface",
+          "native_jobs_dispatched": 0,
+          "physical": "NOT_TESTED",
+          "facts": {
+            "firmware": {
+              "advertising_ms": 187.5,
+              "connection_min_ms": 100.0,
+              "connection_max_ms": 200.0,
+              "sample_ms": 5000.0,
+              "policy_advertising_ms": 5000.0
+            },
+            "rail_v": 1.8,
+            "storage_initial_v": 4.2,
+            "manual_admission": true,
+            "sece_resolved": false,
+            "current_amplitudes_origin": "assumption (no measured current profile exists)"
+          },
+          "issues": [
+            {
+              "id": "policy-radio-duty",
+              "status": "OPEN",
+              "category": "design_configuration",
+              "policy_ms": 5000.0,
+              "radio_ms": 187.5,
+              "source": "project-fw-s132/main.c"
+            },
+            {
+              "id": "sece-envelope",
+              "status": "OPEN",
+              "category": "model_applicability",
+              "unresolved": [
+                "fast SECE switching instant and duty",
+                "switch on-resistance and gate/drive charge",
+                "transformer/inductor values and saturation",
+                "diode vs synchronous rectification in the extraction stage",
+                "series resistance of the real extraction path"
+              ]
+            }
+          ],
+          "status": "PASS",
+          "input_fingerprint": "6210bf34b71d913954ee904634d80fafdd02c751a052fdc6ef75ff9de547b382"
+        },
+        "gates": {
+          "schematic_bom_pins": {
+            "status": "RECHECK_REQUIRED",
+            "findings": {
+              "pending": "fresh native check for changed inputs"
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "cf13d08bf855e5af76ee27547abc62c02463fc7dec7d710edaa2ca0805aacf8b"
+          },
+          "pcb_connectivity_drc": {
+            "status": "RECHECK_REQUIRED",
+            "findings": {
+              "pending": "fresh native check for changed inputs"
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "cf13d08bf855e5af76ee27547abc62c02463fc7dec7d710edaa2ca0805aacf8b"
+          },
+          "geometry_fit": {
+            "status": "UNEVALUABLE",
+            "findings": {
+              "exact_reuse": {
+                "status": "UNEVALUABLE",
+                "validation_id": "RV-26974610a9b7f493e9a38348734abcec94cf97dba9bd901405fc1f789fc9dd71",
+                "evidence": {
+                  "asset_id": "B-39c61d512bc378c10121346a34efe478ec8c29145b176adc3f6299eef5dfbb5a",
+                  "bytes": 2047,
+                  "media_type": "application/json",
+                  "sha256": "39c61d512bc378c10121346a34efe478ec8c29145b176adc3f6299eef5dfbb5a"
+                },
+                "origin_design_id": "D-c7890e74e32b4a43508e4accf3e68f0c3e0cb0e270f67bc2d9ac2262e66613fd"
+              }
+            },
+            "scope": "original P01 independent product gate",
+            "input_fingerprint": "0752dc660067c2becae1a8557b2d75acd3af11bb557f0e7303a6492e39b4bac0"
+          },
+          "firmware_event_logic": {
+            "status": "PASS",
+            "findings": {
+              "status": "PASS",
+              "exact_reuse_validation": "RV-26974610a9b7f493e9a38348734abcec94cf97dba9bd901405fc1f789fc9dd71",
+              "scope": "exact validated firmware input reuse",
+              "consumed_sources": {
+                "project-fw-s132/ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+                "project-fw-s132/ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+                "project-fw-s132/app_policy.c": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                "project-fw-s132/app_policy.h": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+                "project-fw-s132/main.c": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+                "project-fw-s132/sdk_config.h": "849fbf071e2d825952626dfeafea1711ad29a3a1f4b8c85cf313ddbe710ecbae"
+              }
+            },
+            "scope": "exact validated firmware input reuse",
+            "input_fingerprint": "f1d567f876424c639a4e3cafae0c3a29967f4af99b08c6e6328724d9bffd7bd6"
+          },
+          "power_load_chain": {
+            "status": "FAIL",
+            "findings": {
+              "status": "FAIL",
+              "findings": [
+                "netlist load differs from the declared load witness",
+                "load charge differs from timeline",
+                "supply falls below the declared operating voltage",
+                "manual admission produces a negative MCU rail"
+              ],
+              "model_applicability": {
+                "status": "UNEVALUABLE",
+                "pending": [
+                  "CS-TENG capacitance and its stroke dependence",
+                  "rectifier diode part number / Vf / recovery",
+                  "SECE switch part number and drive",
+                  "storage capacitor ESR and leakage",
+                  "regulator part number, dropout and efficiency curve",
+                  "AD7156 conversion current and timing (declared only)",
+                  "nRF52832 radio TX/RX current profile (declared only)",
+                  "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)",
+                  "fast SECE switching instant and duty",
+                  "switch on-resistance and gate/drive charge",
+                  "transformer/inductor values and saturation",
+                  "diode vs synchronous rectification in the extraction stage",
+                  "series resistance of the real extraction path"
+                ]
+              },
+              "job_id": "eng-2cf474f68315a9d8",
+              "consumed_sources": {
+                "project-chain/chain_joint.cir": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c"
+              },
+              "load_pwl_equal": false,
+              "load_binding": {
+                "status": "FAIL",
+                "pwl_equal": false,
+                "method": "independent declared-window staircase",
+                "expected_points": 664,
+                "actual_points": 672
+              },
+              "pwl_points": 672,
+              "evaluation_gaps": [],
+              "event_cadence_checks": {
+                "advertising": true,
+                "connection": true,
+                "sampling": true
+              },
+              "load_charge_c": 0.0009120850588268327,
+              "declared_charge_c": 0.0009117226890756307,
+              "raw_sha256": "0f9c0c95fc39d287a55841c686370e8710f2182233a9a35da543a327a84740bd",
+              "time_span_s": [
+                1.0000000000000001e-11,
+                16.001
+              ],
+              "points": 165130,
+              "storage_v": [
+                4.199999999940137,
+                0.2966849698582461
+              ],
+              "minimum_supply_v": 0.13350823643621074,
+              "minimum_mcu_v": -1315962.1900000018,
+              "scope": "fixed nominal/manual-admission load and actual native transient; source calibration pending"
+            },
+            "scope": "fixed nominal/manual-admission load and actual native transient; source calibration pending",
+            "input_fingerprint": "c2233b705329efee667f09c18249a24ab74dd25682d86dcc06bbaeb2ba4edefe"
+          },
+          "source_domain": {
+            "status": "UNEVALUABLE",
+            "findings": {
+              "status": "UNEVALUABLE",
+              "pending": [
+                "CS-TENG capacitance and its stroke dependence",
+                "rectifier diode part number / Vf / recovery",
+                "SECE switch part number and drive",
+                "storage capacitor ESR and leakage",
+                "regulator part number, dropout and efficiency curve",
+                "AD7156 conversion current and timing (declared only)",
+                "nRF52832 radio TX/RX current profile (declared only)",
+                "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)",
+                "fast SECE switching instant and duty",
+                "switch on-resistance and gate/drive charge",
+                "transformer/inductor values and saturation",
+                "diode vs synchronous rectification in the extraction stage",
+                "series resistance of the real extraction path"
+              ]
+            },
+            "scope": "original source calibration and SECE applicability",
+            "input_fingerprint": "30eb3dc541c5684586ee7d029bfd8be5a6aff05d616b1507bcbadb35f0b39aec"
+          },
+          "board_firmware_interfaces": {
+            "status": "UNEVALUABLE",
+            "findings": {
+              "timing_contract": {
+                "checker": "power-firmware-source-contract-v3",
+                "checker_sha256": "90b9399190383a13b9e3baf7bc6fe6fd527f81998acb4d2b407f4e946cc56043",
+                "load_checker_sha256": "57d2512e99915dc09bbed329dbbc7dff892d412ca6ab539fe8ceeabf87346d58",
+                "checks": [
+                  {
+                    "id": "advertising_ms",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "APP_ADV_INTERVAL"
+                  },
+                  {
+                    "id": "connection_min_ms",
+                    "status": "PASS",
+                    "actual": 100.0,
+                    "expected": 100.0,
+                    "source": "MIN_CONN_INTERVAL"
+                  },
+                  {
+                    "id": "connection_max_ms",
+                    "status": "PASS",
+                    "actual": 200.0,
+                    "expected": 200.0,
+                    "source": "MAX_CONN_INTERVAL"
+                  },
+                  {
+                    "id": "sample_ms",
+                    "status": "PASS",
+                    "actual": 5000.0,
+                    "expected": 5000.0,
+                    "source": "m_cfg.sample_period_ms"
+                  },
+                  {
+                    "id": "connection_bound",
+                    "status": "PASS",
+                    "actual": 100.0,
+                    "expected": [
+                      100.0,
+                      200.0
+                    ],
+                    "source": "load-timeline actual_radio_timing"
+                  },
+                  {
+                    "id": "model_interface_advertising",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "interface-params load_timing"
+                  },
+                  {
+                    "id": "manual_admission_energy",
+                    "status": "PASS",
+                    "actual": 0.0,
+                    "expected": 0,
+                    "source": "interface-params manual_action"
+                  },
+                  {
+                    "id": "power_declaration_rail_v",
+                    "status": "PASS",
+                    "actual": 1.8,
+                    "expected": 1.8,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_storage_initial_v",
+                    "status": "PASS",
+                    "actual": 4.2,
+                    "expected": 4.2,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_manual_admission",
+                    "status": "PASS",
+                    "actual": true,
+                    "expected": true,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_declaration_sece_resolved",
+                    "status": "PASS",
+                    "actual": false,
+                    "expected": false,
+                    "source": "interfaces/power.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "power_source_project-chain/load-timeline.json",
+                    "status": "PASS",
+                    "actual": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+                    "expected": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+                    "source": "schema_version bf-p01-load-timeline-v5 / actual_radio_timing / referral / declared_amplitudes_1v8 / windows_ms / advertising_admission.gate_constants / window_charge / pwl_equality (v5 committed on this branch in revision 3 of this task; numerically identical to the v4 revision-1 content it supersedes)"
+                  },
+                  {
+                    "id": "power_source_project-chain/gen-chain-load-r5.py",
+                    "status": "PASS",
+                    "actual": "d33e4fdc777b07527b6c17da1743ccd14aa65dd6819f2e322517e5465426de45",
+                    "expected": "d33e4fdc777b07527b6c17da1743ccd14aa65dd6819f2e322517e5465426de45",
+                    "source": "BURST_EVENTS/BURST_WINDOW_MS, K=(RAIL_V/STORAGE_V)/EFFICIENCY, declared amplitudes, active_windows_ms(), pwl_points() edge rule (committed on this branch in revision 1)"
+                  },
+                  {
+                    "id": "power_source_project-chain/interface-params.json",
+                    "status": "PASS",
+                    "actual": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "expected": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1",
+                    "source": "rail voltage, storage initial voltage, manual switch closure, sece/resolved fields"
+                  },
+                  {
+                    "id": "power_source_project-chain/chain_joint.cir",
+                    "status": "PASS",
+                    "actual": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c",
+                    "expected": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c",
+                    "source": "Iload PWL staircase (672 points, emitted storage-rail load), Bsece one-way envelope, Cstore ic=4.2, Vman manual boundary (committed on this branch in revision 1; NOT re-emitted in revision 3)"
+                  },
+                  {
+                    "id": "power_source_project-chain/project.json",
+                    "status": "PASS",
+                    "actual": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+                    "expected": "de4cb484de6057f67bf40565361f5c4cc0a81586c0e822435b9181b277e23e24",
+                    "source": "solve manifest consumed by execute() (entrypoint chain_joint.cir)"
+                  },
+                  {
+                    "id": "firmware_declaration_advertising_ms",
+                    "status": "PASS",
+                    "actual": 187.5,
+                    "expected": 187.5,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_connection_min_ms",
+                    "status": "PASS",
+                    "actual": 100,
+                    "expected": 100.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_connection_max_ms",
+                    "status": "PASS",
+                    "actual": 200,
+                    "expected": 200.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_sample_ms",
+                    "status": "PASS",
+                    "actual": 5000,
+                    "expected": 5000.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_declaration_policy_advertising_ms",
+                    "status": "PASS",
+                    "actual": 5000,
+                    "expected": 5000.0,
+                    "source": "interfaces/firmware.json \u2192 immutable source"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/main.c",
+                    "status": "PASS",
+                    "actual": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+                    "expected": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+                    "source": "APP_ADV_INTERVAL = 300 GAP units of 0.625 ms -> 187.5 ms (advertising_ms); MIN_CONN_INTERVAL/MAX_CONN_INTERVAL = MSEC_TO_UNITS(100/200, UNIT_1_25_MS) (connection_min_ms/connection_max_ms); SLAVE_LATENCY = 0, CONN_SUP_TIMEOUT = MSEC_TO_UNITS(4000, UNIT_10_MS); m_cfg.sample_period_ms = 5000 (sample_ms); APP_POLICY_ADV_PERIOD_MS / m_cfg.adv_period_ms = 5000 (policy_advertising_ms); FW-18 compile-time asserts burst_window_agrees_with_gap_interval_units and burst_window_is_shorter_than_policy_period"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/app_policy.h",
+                    "status": "PASS",
+                    "actual": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+                    "expected": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+                    "source": "APP_POLICY_BURST_EVENTS = 6, APP_POLICY_BURST_MS = 1125 (shortened in this revision from 12 / 2250): the unconnected advertising burst window, carried in the policy's own millisecond domain"
+                  },
+                  {
+                    "id": "firmware_source_project-fw-s132/app_policy.c",
+                    "status": "PASS",
+                    "actual": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "expected": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "source": "app_tick(): the unconnected branch admits at most one APP_ACT_START_ADV burst per cfg->adv_period_ms and closes the window with APP_ACT_STOP_ADV; the window is used symbolically (APP_POLICY_BURST_MS), so no numeric literal changed here"
+                  }
+                ],
+                "source_hashes": {
+                  "project-fw-s132/main.c": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+                  "project-chain/load-timeline.json": "cb0ea34c1014c94988227ea211271fd8eea1ba86bbcae661b7c40f3761250cc6",
+                  "project-chain/interface-params.json": "e05613709720dd9d292c20d5485740e00cf2a6f4481cfbcfe7bd74eff1fcd2f1"
+                },
+                "scope": "source timing and declared load/power interface",
+                "native_jobs_dispatched": 0,
+                "physical": "NOT_TESTED",
+                "facts": {
+                  "firmware": {
+                    "advertising_ms": 187.5,
+                    "connection_min_ms": 100.0,
+                    "connection_max_ms": 200.0,
+                    "sample_ms": 5000.0,
+                    "policy_advertising_ms": 5000.0
+                  },
+                  "rail_v": 1.8,
+                  "storage_initial_v": 4.2,
+                  "manual_admission": true,
+                  "sece_resolved": false,
+                  "current_amplitudes_origin": "assumption (no measured current profile exists)"
+                },
+                "issues": [
+                  {
+                    "id": "policy-radio-duty",
+                    "status": "OPEN",
+                    "category": "design_configuration",
+                    "policy_ms": 5000.0,
+                    "radio_ms": 187.5,
+                    "source": "project-fw-s132/main.c"
+                  },
+                  {
+                    "id": "sece-envelope",
+                    "status": "OPEN",
+                    "category": "model_applicability",
+                    "unresolved": [
+                      "fast SECE switching instant and duty",
+                      "switch on-resistance and gate/drive charge",
+                      "transformer/inductor values and saturation",
+                      "diode vs synchronous rectification in the extraction stage",
+                      "series resistance of the real extraction path"
+                    ]
+                  }
+                ],
+                "status": "PASS",
+                "input_fingerprint": "6210bf34b71d913954ee904634d80fafdd02c751a052fdc6ef75ff9de547b382"
+              },
+              "prior_board_status": "UNEVALUABLE",
+              "pending": [
+                "native PCB peripheral initialization and full pin/interface audit"
+              ]
+            },
+            "scope": "native board and firmware interfaces",
+            "input_fingerprint": "697f61e7288cb44eaadc09e10567ae958cbb31547f66da8f3e62020064adc40b"
+          },
+          "delivery_version": {
+            "status": "PASS",
+            "findings": {
+              "execution_bindings": {
+                "firmware": {
+                  "job_id": "eng-42f734718d566c30",
+                  "project_sha256": "4506ff91418909142d0cfa84c1273f40c2c2bab2516c2316aea18f11f0e5e4f7",
+                  "consumed_sources": {
+                    "project-fw-s132/ad7156_nrf.c": "5849b69139af070cfffea5ae6129cbe9bfb659ed84efde38ed8f4461fdc0cbb9",
+                    "project-fw-s132/ad7156_nrf.h": "19f133d52d223f36536fd2eec940db4cb798664110b596072855d60a6bc28832",
+                    "project-fw-s132/app_policy.c": "e815763e3367f427db83e5c478d7aaac6089dd62806d61a6e97643ea7a071ac9",
+                    "project-fw-s132/app_policy.h": "e73f4fe5381e8ce5e8dadb0077739db108495fa8aa9f06488c15c5fb43f87544",
+                    "project-fw-s132/main.c": "a514a56030b5faf9f7077243855571a01cb6f25c6605f9f40e5c2f4c1fabb174",
+                    "project-fw-s132/sdk_config.h": "849fbf071e2d825952626dfeafea1711ad29a3a1f4b8c85cf313ddbe710ecbae"
+                  }
+                },
+                "power": {
+                  "job_id": "eng-2cf474f68315a9d8",
+                  "project_sha256": "db0d16dee1248d80dcf4aef2a690bb8e83333fa664614800883cae4c69574caf",
+                  "consumed_sources": {
+                    "project-chain/chain_joint.cir": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c"
+                  }
+                }
+              },
+              "errors": {},
+              "file_count": 89
+            },
+            "scope": "current source and selected worker inputs; immutable review manifest",
+            "input_fingerprint": "c2233b705329efee667f09c18249a24ab74dd25682d86dcc06bbaeb2ba4edefe"
+          }
+        },
+        "status": "FAIL",
+        "native_jobs_dispatched": 0,
+        "physical": "NOT_TESTED"
+      }
+    }
+  ],
+  "model_calls": 0,
+  "native_jobs_dispatched": 0
+}

@@ -1,0 +1,28 @@
+两篇论文 v0.2 文档包
+2026-10-19
+
+用户交付
+  output/pdf/两篇论文的大纲、实验设计与案例选择_v0.2.pdf
+  两篇论文的大纲、实验设计与案例选择_v0.2.docx
+  case_catalog_v0.2.json
+
+内容入口
+  build_plan.py：方案正文与排版生成源。仅创建文档和案例目录，不运行科学装置。
+  proposal_content.json：全文结构化中间表示。
+  verify_deliverable.py：文档完整性检查，不是科学实验验证。
+  qa/validation.json：最终检查回执。
+  qa/final-render/：最终 Word 导出的 PDF 与每页预览。
+
+重建使用当前安装的 bundled runtime，避免调用用户桌面 LibreOffice。
+在仓库根目录按顺序执行下列文档命令；这些不是实验启动命令。
+
+rtk proxy /Users/depengsu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 docs/research/two-papers-v0.2-20261019/build_plan.py
+
+rtk proxy env SAL_FONTPATH=/Library/Fonts FONTCONFIG_FILE=/Users/depengsu/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/libreoffice-headless/libreoffice/LibreOfficeDev.app/Contents/Resources/fontconfig/fonts.conf /Users/depengsu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 /Users/depengsu/.codex/plugins/cache/openai-primary-runtime/documents/26.1015.12040/skills/documents/render_docx.py docs/research/two-papers-v0.2-20261019/两篇论文的大纲、实验设计与案例选择_v0.2.docx --output_dir docs/research/two-papers-v0.2-20261019/qa/final-render --emit_pdf --dpi 120
+
+rtk proxy /Users/depengsu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 docs/research/two-papers-v0.2-20261019/verify_deliverable.py
+
+仅当全部检查及最终逐页视觉核对通过后，将 final-render 中的 PDF 复制到 output/pdf。
+中文字体加载需保留 SAL_FONTPATH 与 FONTCONFIG_FILE；Arial Unicode MS 是本机已存在字体。
+所有数值任务剖面和继续阈值都是拟议要求，不能将其解释为已验证能力或实验授权。
+本轮科学实验、付费模型请求、原生器件求解均为 0，未运行根目录 init，不声称仓库整体健康。

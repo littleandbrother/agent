@@ -1,0 +1,183 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.066894324,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 8,
+    "settled_charge_upper_bound_usd": 0.0760389,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "O0-candidate",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "cache": "nvm",
+      "capacitance_f": 0.015,
+      "program": "confirmed_events",
+      "retry_s": 1,
+      "sample_period_s": 1,
+      "schema_version": "bf-o-candidate-v1",
+      "threshold_off_g": 0.01,
+      "threshold_on_g": 0.05,
+      "tx_backoff_s": 0
+    },
+    "execution": {
+      "accepted_packets": 18,
+      "case_sha256": "2eabd6028b8e72e7906041641fa543cb44d777561846955d088245bc220808d0",
+      "complete_service": "PASS",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": {
+        "errors": [],
+        "final_storage_j": 0.04636234545454709,
+        "impulse_counts": {
+          "boot": 3,
+          "sense": 18343,
+          "tx": 18,
+          "wake": 18349,
+          "write": 18
+        },
+        "ledger_rows": 11,
+        "source_integral_j": 1.368,
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+      "evaluator_version": "phase4-original-O-event-service-v1",
+      "execution_key": "ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6",
+      "expected_event_count": 8,
+      "false_event_sequences": [],
+      "false_keepalive_sequences": [],
+      "input_sha256": "936d397559a4908e6151d51f292b38e0e881edd592fa576a57220ce4a63fffd0",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "keepalive_gaps": [],
+      "matched_event_count": 8,
+      "origin": "phase4-new-full-response",
+      "per_event": [
+        {
+          "kind": "start",
+          "matched_seq": 1,
+          "reasons": [],
+          "receive_s": 4203.070422535211,
+          "state": 1,
+          "time_s": 4203,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 4,
+          "reasons": [],
+          "receive_s": 4560.070422535211,
+          "state": 0,
+          "time_s": 4560,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 5,
+          "reasons": [],
+          "receive_s": 7803.070422535211,
+          "state": 1,
+          "time_s": 7803,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 8,
+          "reasons": [],
+          "receive_s": 8160.070422535211,
+          "state": 0,
+          "time_s": 8160,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 9,
+          "reasons": [],
+          "receive_s": 11403.587878787977,
+          "state": 1,
+          "time_s": 11403,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 15,
+          "reasons": [],
+          "receive_s": 12060.587878787977,
+          "state": 0,
+          "time_s": 12060,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 16,
+          "reasons": [],
+          "receive_s": 16803.587878787977,
+          "state": 1,
+          "time_s": 16803,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 18,
+          "reasons": [],
+          "receive_s": 16980.587878787977,
+          "state": 0,
+          "time_s": 16980,
+          "verdict": "PASS"
+        }
+      ],
+      "physical_qualification": "UNKNOWN",
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6/response.json.zlib",
+      "reasons": [],
+      "response_sha256": "5de883753e37ba524d34928ee9e03c2c36e477cf3d09d16af6ff25dbe28493bf",
+      "reused": true,
+      "schema_version": "bf-o-service-v1",
+      "verdict": "PASS",
+      "world": "o0-original-service-development-v1"
+    },
+    "reason": "输入（全部 acquire）：task=2eabd6…（ar_task+design_space），ar_hardware=5635bb…，photovoltaic_source=76d3ff…，rms_waveform=eb1ab5…，wake_sample_cache=08ddbf…（status=PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED），model_law=080e8d…。导出常量：C 固定 15 mF（design_space 单值），e_off=39.675 mJ、e_on=54.675 mJ、e_max=81.675 mJ、boot 阈值 54.775 mJ；收获 72/16/0 µW（光源段 0-7200/10800-18000、9000-10800/19800-21600、7200-9000/18000-19800），采样成本 26 µJ（wake 1 + sense 20 + write 5），上电背景 5.5 µW（sleep 5 + standby 0.5）。\n\n设计依据：服务要求“每次 start/stop + 活跃期连续 keepalive + ACK 后才清除待发 + 记录须跨复位存活”，故 program=confirmed_events、cache=nvm（volatile 会在掉电丢失 pending/seq）；阈值直接取服务阈值 on=0.05 / off=0.01（两者均在合法域内且 off<on），严格比较下 0.08>0.05、0.005<0.01，避开“相等即复位计时器”的歧义；tx_backoff_s=0、retry_s=1 s 使确认后同拍发送，投递延迟≈采样滞后；sample_period_s=1 s 使 3 s/60 s 连续窗落在采样栅格上（3/1、60/1 为整数），把确认滞后压到 <1 s。\n\n观察（check #1，candidate_sha256=011736fe…，response 完整度声明为 first-six-last-six 投影，非完整原始轨迹）：770.07 s 首次 boot，772.07 s 就绪并同步；18 条记录 seq 1–18 全为 accepted=true / ack=true / reason=\"live\" / valid=true（无 stale、无 duplicate、无重传）；启动确认 4203.07、停止 4560.07（真值 4203/4560，滞后 0.07 s），7803.07、8160 左右，11403.59、12060.59（真值 11403/12060，滞后 0.59 s），16803.59、16980.59（真值 16803/16980，滞后 0.59 s），全部 ≤1 s；活跃期内 keepalive 间隔恰 120 s，活跃期外无 keepalive；两次掉电 pending_lost=0、restored_active=false，seq 跨复位单调。\n\n保留的失败/未知：check #2（candidate 6d98fe4d…，sample_period=1.5 s）无掉电、9 段连续采样、18 条记录全 live/ACK，但每次确认滞后约 1.07 s（4204.07 对 4203；4561.07 对 4560；16804.07 对 16803；16981.07 对 16980），越过冻结的 event_time_error_s=1，且暗段末能量仅高于 e_off 约 50 µJ；故按其时序闸门记为失败对照，未采用。所选 P=1 s 方案在两次 1800 s 黑暗段各掉电一次（8766.18 s、19587.64 s，末次 reboot 20814.16 s / ready 20816.16 s），暗段内采样中断约 20 min，而合法 O 程序无 gap/中断记录种类，任务 service_semantics.gap 要求的“以最后耐久观测与新同步括起未观测区间”无法发出；两次中断均落在静默暗窗、不与任何已确认活跃区间相交，因此没有漏掉 start/stop 或破坏 keepalive 覆盖。另外 required_first_receive_s=1800 与 required_dark_report_period_s=600 在两种合法程序下都不可达（confirmed_events 在首个确认事件 4203 s 前无记录，而活跃期外发 keepalive 本身判失败；periodic_snapshot 则完全没有 start/stop），源的 source_calibration=UNAVAILABLE、physical_qualification=UNKNOWN（PV/PMIC/振动/standby 均为假定理想）。\n\n结论：事件检测、活跃期 keepalive、live+ACK 投递、nvm 跨复位保留与序号单调在观察到的模型运行内成立；但存在未声明的暗期未观测中断、上述两项 AR 遗留上报项不可达、且物理资格未知，因此我不宣称验收通过，服务判定保留 UNKNOWN。参考真值与最终服务验收、完整响应均在宿主侧，本响应为投影观测，不构成硬件、统计优势、迁移或 RSI 主张。",
+    "service_judgment": "UNKNOWN",
+    "wrong_service_judgment": true
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-812ef7654718d8fb",
+  "protocol_sha256": "0651014c8b40d39a85bb33630a5593f3ec55a1e0f5379e08cd5c96699203c650",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "669f8117f1a894a80bba82524d778ab0e8226261a17312b056c46f9555ad6741",
+  "spec": {
+    "condition": "candidate",
+    "id": "O0-candidate",
+    "kind": "D",
+    "stage": "O-transfer",
+    "world": "o0-original-service-development-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 10,
+    "gateway_chain_tip": "388bfad81d0257f92d9a3e3a10116ec18055f15932ca0ec628a175bd0296b276",
+    "model_submitted": true,
+    "model_tool_calls": 10,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 123.02571383301984,
+  "wall_seconds_total": 123.14172933300142
+}

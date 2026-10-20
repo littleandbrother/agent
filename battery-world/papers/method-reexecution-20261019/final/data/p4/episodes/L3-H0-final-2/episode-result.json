@@ -1,0 +1,164 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.014773259999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0268155,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L3-H0-final-2",
+  "episode": "L3-H0-final-2",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 5e-05,
+      "tx_not_before_s": 6.5
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 5e-05,
+        "tx_not_before_s": 6.5
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 9.9999e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 1.2222420731083537e-20,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.0003,
+        "source_total_error_j": 0.0,
+        "step_count": 30000,
+        "time_resolution_s": 0.001,
+        "totals_j": {
+          "background_j": 3e-05,
+          "boot_j": 0.0,
+          "conversion_j": 0.0,
+          "harvest_j": 0.0003,
+          "shunt_j": 0.0,
+          "source_j": 0.0003,
+          "spill_j": 0.00012000099999987454,
+          "tx_j": 5e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "fb8dff6cc1c728299c5fa7b86b6b20c664ad11c7cd4429e74e41a24ffaea2469",
+      "input_sha256": "02c2075fefa6206442e0f718fbd084ff4b7be279b5e45c415b4febf85ac905ae",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 3.0
+          }
+        ],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "volatile",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 3
+        },
+        "first_valid_receive_s": 6.501,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "69bd198497418bf3a6b037867a830d4a938038dac36b288d48f57b141bd9e36e",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "phase4-new-full-response",
+      "physical_qualification": "UNKNOWN",
+      "query_service": {
+        "gates": {
+          "freshness": true,
+          "query_before_reply": true,
+          "query_state_capture": true,
+          "single_query_token": true
+        },
+        "protocol": {
+          "deadline_s": 8,
+          "issued_s": 3,
+          "mapping": "Fixed seq=1, key=1, event=1 single digital query; no multiquery/security/RF qualification.",
+          "max_data_age_s": 5,
+          "nonce": "phase4-q-001",
+          "nonce_sequence": 1,
+          "single_query_only": true
+        },
+        "status": "PASS"
+      },
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/fb8dff6cc1c728299c5fa7b86b6b20c664ad11c7cd4429e74e41a24ffaea2469/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "OUTSIDE_RANGE",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 2.778,
+        "first_receive_s": 6.501,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "p4-clite-half-power-query-v1"
+    },
+    "reason": "Legal design within permitted D fields only: capacitance_f=50 µF (range 25–100 µF), tx_not_before_s=6.5 (range 3–8). Derived from the frozen sources: net charging = source 10 µW − 1 µW background = 9 nJ/ms; eon = C/2 = 25 µJ; eoff = 0.02·C = 1 µJ; TX costs 25 µJ per 1 ms step (0.025 A × 1 V), 50 µJ total. The frozen default (C=50 µF, tx≥3 s) is arithmetically infeasible: energy at the 3.000 s contact is 9e-6·3 ≈ 27 µJ < 50 µJ, so the second TX step would brown out; that candidate is retained as a failed design, not resubmitted. Fixes chosen: keep C below 54 µF so boot C/(1.8e-5) = 2.778 s precedes contact (component_record ready_v/off_v, cap_voltage_max_v=2), and delay TX to 6.5 s so pre-TX storage 9e-6·6.5 = 58.5 µJ ≥ 51 µJ = 50 µJ draw + 0.02·C post-TX margin. Observed check record (version: this check call): boot 2.778 s, capture 3.000 s, tx-start 6.500 s, tx-complete 6.501 s, loaded_v 1.1577 V ≥ output_v 1 V, spill 1.2e-4 J consistent with voltage ≤ cap_voltage_max 2 V, one 8-byte frame 012d00010101b026436d with received_frames=1 (dedup via done latch and single event_id), first_receive_s 6.501 ≤ deadline_s 8, data age 3.501 s ≤ max_data_age_s 5, single-query gates seq=1/key=1/event=1 with nonce_sequence 1. energy_ledger verdict PASS (max balance error 1e-20). Basis: observed activity/ledger/packet record from the check call, matching model_law b-transient-behavior-v1 and excitation_record p4-clite-half-power-query-v1 (SYNTHETIC_DC_CONTRACT_NOT_RF_MEASUREMENT). Judgment scoped to the frozen digital transient apparatus; the returned record is an observation, not host acceptance. Physical/RF qualification and source calibration are UNKNOWN; no hardware, transfer, statistical, or recursive-self-improvement claim is made, and this repair is not a method migration.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-7de03fee7c0e2408",
+  "protocol_sha256": "153701f52b0067d1cb9da9596cc5d578b7af01d96f41469dd696bbc0c4738489",
+  "recovery_of": null,
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "c53ee819fe144f3d49d1ee29f1935b6695da335045bd38325afb892cd80d9005",
+  "spec": {
+    "condition": "H0",
+    "id": "L3-H0-final-2",
+    "kind": "D",
+    "lineage": 3,
+    "slot": "final-2",
+    "stage": "final",
+    "world": "p4-clite-half-power-query-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "5d1c96d8597ef16a651a3cc0255285383f548b5edd763d04412da5e336ab58f2",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 46.339123291982105,
+  "wall_seconds_total": 46.756032541015884
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "bf-research-campaign-contract-v1",
+  "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "tasks": [
+    {
+      "id": "AR-cold",
+      "mechanism": "zero-storage startup and digital temperature reception",
+      "partition": "public-development",
+      "role": "A/R-1 reference and F1a input"
+    },
+    {
+      "id": "AR-light-dark",
+      "mechanism": "energy arrival order, storage and loss of power",
+      "partition": "public-development",
+      "role": "A/R-2 service failure and E2"
+    },
+    {
+      "id": "AR-history",
+      "mechanism": "NVM retention distinct from continued sampling and time knowledge",
+      "partition": "public-development",
+      "role": "A/R-2/3 independent requirements"
+    },
+    {
+      "id": "AR-upload",
+      "mechanism": "gateway recovery, acknowledgment and deduplication",
+      "partition": "public-development",
+      "role": "A/R-2/3 service completion"
+    },
+    {
+      "id": "B-pulse",
+      "mechanism": "single actuation cold start and transient load",
+      "partition": "public-development",
+      "role": "B positive/negative qualification"
+    },
+    {
+      "id": "B-event-memory",
+      "mechanism": "event lost across reset or delayed energy",
+      "partition": "public-development",
+      "role": "B structural event/state control"
+    }
+  ],
+  "formal_test_status": "NOT_CREATED; no public development task may later be relabeled unseen",
+  "selection_status": "Protocol prepared only; fresh selection and final tasks must be independently frozen before a transfer claim",
+  "development_exposure": "S0 and both research executors see the public development mechanisms; shared across both papers",
+  "cache_rule": "Same initial immutable input cache for paired methods; construction and warm-up charged explicitly; unchanged valid successful solves reused",
+  "resource_protocol": "Deterministic qualification first; then two fixed H conditions x two full attempts = four paid development trials, each <= 80 parent+child requests, <= 4 distinct physical execution inputs, <= 1200 s decision wall time. No automatic resampling. Native jobs serial and globally locked. At most three active model sessions including S0 and executors. Provider identity/usage prerequisite. Existing cumulative unlimited authorization retained.",
+  "native_lock": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/locks/native-resource.lock",
+  "protected": [
+    "Baseline",
+    "current Demo",
+    "ten original Pi sessions/projects",
+    "all historical billing and UNKNOWN",
+    "BFA-043 native project"
+  ],
+  "no_original_owner_resume": true,
+  "require_reference_before_agent": true,
+  "papers": {
+    "P1": "interface adequacy under legal intervention; observation choice/construction",
+    "P2": "D/H/G separation, F1a/F1b/F4 and later F5"
+  }
+}

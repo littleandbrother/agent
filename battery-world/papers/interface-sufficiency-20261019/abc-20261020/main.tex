@@ -1,0 +1,148 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tikz,placeins}
+\usepackage{flafter,needspace}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\bottomfraction}{.85}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.8}
+\setcounter{topnumber}{5}
+\setcounter{totalnumber}{6}
+\AddToHook{cmd/section/before}{\Needspace{6\baselineskip}}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{style/hkustgz-paper}
+\newtheorem{proposition}{Proposition}
+\newcommand{\D}{\mathcal D}
+\newcommand{\W}{\mathcal W}
+\title{When Battery-Free Interfaces Support Design Changes\\Qualified Observations and Strong Static Controls}
+\hypersetup{pdftitle={When Battery-Free Interfaces Support Design Changes: Qualified Observations and Strong Static Controls},pdfauthor={Development manuscript}}
+\author{Development manuscript}
+\papersubtitle{20 October 2026}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Battery-free design decisions depend on when energy is usable, which event
+state survives reset, and what reaches the receiver. Current success can omit
+the mechanism activated by a legal design change. We distinguish current-verdict
+from intervention sufficiency, give an elementary factorization condition, and
+connect storage and reset counterexamples to a source-bound observation
+interface. An earlier four-task comparison gives 8/12 service passes with
+average-energy inputs and 12/12 with each strong static or executable control;
+live observation completes seven chains and leaves five incomplete. We retain
+these failures and add deterministic cross-source unit, domain and type
+preflight before actual consumption. A new frozen comparison uses storage
+connection, reset placement and package-response interventions, each in two
+fresh contexts per arm. Complete information, conservative fixed rules and
+observation refinement each produce 6/6 correct predictions, decisions and
+selected-service passes. Typed observation consumption occurs in 1/6, 4/6 and
+3/6 respectively; it is a path statistic, not the success criterion for direct
+baselines. Two fixed-rule episodes stop at the request cap after correct
+submissions. Refinement uses 50 requests versus complete information's 37,
+with equal source acquisition and a slightly lower fixed-rate fee estimate:
+there is no accuracy, acquisition or comprehensive cost advantage. Saved event
+studies additionally separate matched delivery from encoded-time accuracy.
+All results concern prescribed-source digital apparatus; physical qualification
+is unavailable and the original product remains unaccepted.
+\end{abstract}
+\input{sections/introduction.tex}
+\input{sections/related-work.tex}
+\input{sections/sufficiency.tex}
+\input{sections/mechanisms.tex}
+\input{sections/abc-mechanisms.tex}
+\input{sections/observations.tex}
+\input{sections/abc-contract.tex}
+\input{sections/protocol.tex}
+\input{sections/abc-protocol.tex}
+\input{sections/results.tex}
+\input{sections/abc-results.tex}
+\input{sections/event-time.tex}
+\input{sections/discussion.tex}
+\FloatBarrier
+\begin{thebibliography}{99}
+\footnotesize\raggedright
+\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}\setlength{\parskip}{0pt}
+\bibitem{alpaca} Kiwan Maeng, Alexei Colin and Brandon Lucia.
+Alpaca: Intermittent Execution without Checkpoints.
+\emph{Proceedings of the ACM on Programming Languages} 1, OOPSLA,
+Article 96, 2017. \href{https://doi.org/10.1145/3133920}{doi:10.1145/3133920}.
+\bibitem{curricle} Milijana Surbatovich, Naomi Spargo, Limin Jia and Brandon
+Lucia. Technical Report: A Type System for Safe Intermittent Computing.
+Carnegie Mellon University, 2023. Long version of the PLDI 2023 Curricle paper.
+\href{https://doi.org/10.1184/R1/22583920}{doi:10.1184/R1/22583920}.
+Published paper: \href{https://doi.org/10.1145/3591250}{doi:10.1145/3591250}.
+\bibitem{cegar} Edmund Clarke, Orna Grumberg, Somesh Jha, Yuan Lu and
+Helmut Veith. Counterexample-guided Abstraction Refinement.
+\emph{Computer Aided Verification}, LNCS 1855, pp. 154--169, 2000.
+\href{https://doi.org/10.1007/10722167_15}{doi:10.1007/10722167\_15}.
+\bibitem{structural} B. Structural witnesses, independent numerical checks,
+static controls and acquisition receipts. Dataset
+\path{structural-results}, run \path{IF-7412532c4a6ab7a5879e}, 19 October 2026.
+\bibitem{mechanisms} B. BF mechanism map and seven saved transient controls.
+Datasets \path{p1-mechanisms} and \path{reference-b-*}, 20 October 2026.
+\bibitem{contract} B. Discovery-to-consumer contract and strong baseline
+definitions. Datasets \path{p1-e5-contract} and \path{p1-baselines}.
+\bibitem{original} S0. Original rejected live observation episode and retained
+public trace. Datasets \path{p2-original_result}, \path{p2-original_trace}
+and \path{p2-provider_costs}.
+\bibitem{posthoc} S0. Separately authorized post-hoc qualification, typed
+consumer and service evaluation. Datasets \path{p2-posthoc_plan},
+\path{p2-qualification}, \path{p2-consumer} and \path{p2-service}.
+\bibitem{adapter} S0/B. Versioned observation schema and two targeted adapter
+regressions. Datasets \path{p2-adapter_e5_schema} and \path{p2-adapter_regression}.
+\bibitem{protocol} S0. Matched digital comparison protocol and one-time repeat
+freeze. Datasets \path{p3-protocol} and \path{p3-formal-repeat-freeze},
+protocol \path{phase3-bf-matched-v1}.
+\bibitem{comparison} S0. Complete 112-group, 140-episode saved comparison.
+Dataset \path{p3-actual-comparison}, schema
+\path{bf-phase3-actual-comparison-v1}.
+\bibitem{tables} S0. Authoritative formal/pilot tables, E4 parity receipts and
+E5 audit. Dataset \path{p3-main-tables}.
+\bibitem{gateways} S0. Original gateway records for all five incomplete formal
+E5 groups. Datasets \path{p3-failure-gateway-1} through
+\path{p3-failure-gateway-5}.
+\bibitem{ordered} S0. Ordered initial controls and four actual selected
+witnesses. Datasets \path{p3-ordered-initial-controls} and
+\path{p3-ordered-selected-witnesses}.
+\bibitem{derivative} B/S0. Frozen single-query derivative and condition
+definitions. Datasets \path{p3-provenance-derived-case} and
+\path{p3-provenance-conditions}.
+\bibitem{o0} S0. Original O0 candidate and two fixed controls. Datasets
+\path{o0-O0-candidate}, \path{o0-O0-fixed-periodic},
+\path{o0-O0-rich-state} and \path{o0-candidate-gateway}.
+\bibitem{otask} S0/B. Frozen O task, declared costs and versioned event
+evaluator. Datasets \path{p4-o0-task.v1} and \path{p4-phase4_interfaces}.
+\bibitem{final} S0. All 27 final cells, complete encoded-event details and
+last-response censoring metadata. Dataset \path{p4-final-details}.
+\bibitem{transfer} S0. Complete 77-attempt/73-cell record, frozen methods and
+selection. Datasets \path{p4-actual-results}, \path{p4-final-selection-freeze},
+\path{p4-selected-methods} and \path{p4-G1-freeze}.
+\bibitem{repair} S0. Preserved host incidents, registered repair and four
+approved recoveries. Datasets \path{p4-host-error-hold},
+\path{p4-amendment-registration}, \path{p4-cache-repair-qualification}
+and \path{p4-recovery-results}.
+\bibitem{preservation} S0. Closed-study analysis and source preservation.
+Datasets \path{p4-analysis-summary}, \path{p4-preservation-final}
+and \path{p4-accepted-result}.
+\bibitem{ar} S0. Preserved original A/R service and strict FIFO failure.
+Dataset \path{ar-preserved-result}; product status \path{NOT_ACCEPTED}.
+\bibitem{abcfirst} S0/B. Researcher-specified legal-input rehearsal and actual
+immutable consumer. Record \path{B-first-legal-consumption-v1},
+\path{BF-ABC-20261020-001}, 20 October 2026. Excluded from the formal eighteen.
+\bibitem{abcb} S0. Frozen three-mechanism interface comparison, all eighteen
+formal attempts. Record \path{B-formal18-v1}, SHA-256 prefix
+\texttt{a9826ad1e510ba4e}, 20 October 2026.
+\bibitem{abcaudit} S0. Final source/input audit and canonical result index.
+Records \path{final-input-audit} and \path{RESULT-INDEX},
+\path{BF-ABC-20261020-001}. Source-bound derived views accompany this manuscript.
+\bibitem{abca} S0. Finite component-catalogue A/R negative result.
+Record \path{A-finite-negative-v1}, 20 October 2026. Three candidate inputs,
+twelve original-service executions; product \path{NOT_ACCEPTED}.
+\bibitem{abcc} S0. Frozen event-time method formation and twenty-four formal
+transfer attempts. Record \path{C-formal24-v1}, 20 October 2026.
+\bibitem{abcreview} S0 review. Independent read-only finite-core synthesis.
+Record \path{ABC-BC-formal-core-v1}, 20 October 2026. Scientific core exits
+accepted; paper construction is a separate deliverable.
+\end{thebibliography}
+\end{document}

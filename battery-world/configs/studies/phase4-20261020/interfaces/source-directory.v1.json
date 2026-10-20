@@ -1,0 +1,858 @@
+{
+  "schema_version": "bf-o-source-directory-v1",
+  "case_sha256": "2eabd6028b8e72e7906041641fa543cb44d777561846955d088245bc220808d0",
+  "source_payload_sha256": "b868e87e116d93be121ea386aeda51f70362ad9af0a370a5bad03b6019f02af7",
+  "sources": [
+    {
+      "source_id": "task",
+      "payload": {
+        "schema_version": "bf-o-case-v1",
+        "task_id": "o0-original-service-development-v1",
+        "duration_s": 21600,
+        "ar_task": {
+          "schema_version": "campaign-task-v1",
+          "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+          "partition": "public-development",
+          "model_id": "ar-light-behavior-v1",
+          "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+          "duration_s": 21600,
+          "dt_s": 1,
+          "service_start_s": 1800,
+          "source_segments": [
+            {
+              "start_s": 0,
+              "end_s": 7200,
+              "illuminance_lux": 200,
+              "power_w": 9e-05,
+              "voc_v": 3.2,
+              "mpp_ratio": 0.75
+            },
+            {
+              "start_s": 7200,
+              "end_s": 9000,
+              "illuminance_lux": 0,
+              "power_w": 0,
+              "voc_v": 0,
+              "mpp_ratio": 0.75
+            },
+            {
+              "start_s": 9000,
+              "end_s": 10800,
+              "illuminance_lux": 50,
+              "power_w": 2e-05,
+              "voc_v": 2.6,
+              "mpp_ratio": 0.75
+            },
+            {
+              "start_s": 10800,
+              "end_s": 18000,
+              "illuminance_lux": 200,
+              "power_w": 9e-05,
+              "voc_v": 3.2,
+              "mpp_ratio": 0.75
+            },
+            {
+              "start_s": 18000,
+              "end_s": 19800,
+              "illuminance_lux": 0,
+              "power_w": 0,
+              "voc_v": 0,
+              "mpp_ratio": 0.75
+            },
+            {
+              "start_s": 19800,
+              "end_s": 21600,
+              "illuminance_lux": 50,
+              "power_w": 2e-05,
+              "voc_v": 2.6,
+              "mpp_ratio": 0.75
+            }
+          ],
+          "source_calibration": "UNAVAILABLE",
+          "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+          "gateway_windows": [
+            [
+              0,
+              21601
+            ]
+          ],
+          "temperature_segments": [
+            [
+              0,
+              21601,
+              22.0
+            ]
+          ],
+          "recovery_at_s": null,
+          "required_sample_period_s": 120,
+          "required_live_receive_delay_s": 10,
+          "required_first_receive_s": 1800,
+          "required_dark_report_period_s": 600,
+          "required_temperature_error_c": 1.0,
+          "max_timestamp_error_s": 60,
+          "device": {
+            "id": 271828,
+            "capacitance_f": 0.015,
+            "cap_voltage_max_v": 3.3,
+            "cap_initial_voltage_v": 0.0,
+            "rated_voltage_v": 5.5,
+            "esr_ohm": 0.3,
+            "ready_v": 2.7,
+            "off_v": 2.3,
+            "output_v": 1.8,
+            "dropout_v": 0.3,
+            "harvest_efficiency": 0.8,
+            "cold_start_voltage_v": 0.38,
+            "cold_start_power_w": 3e-06,
+            "off_power_w": 1e-06,
+            "sleep_power_w": 5e-06,
+            "boot_storage_j": 0.0001,
+            "sense_storage_j": 2e-05,
+            "write_storage_j": 5e-06,
+            "tx_storage_j": 0.00013,
+            "tx_peak_output_a": 0.008,
+            "tx_duration_s": 0.005,
+            "sample_period_s": 60,
+            "boot_delay_s": 2,
+            "upload_period_s": 1,
+            "nvm_capacity_records": 2048,
+            "nvm_persistent": true,
+            "sequence_persistent": true,
+            "clock_persistent": false,
+            "clock_ppm": 20,
+            "receiver_dedup": true,
+            "ack_drop_first_n": 0,
+            "stamp_age_fault_s": 0,
+            "temperature_bias_c": 0.1
+          },
+          "temperature_event": {
+            "threshold_c": 8,
+            "minimum_duration_s": 300,
+            "enabled": false
+          },
+          "service_semantics": {
+            "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+            "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence).",
+            "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+            "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+            "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared."
+          }
+        },
+        "photovoltaic_area_cm2": 15,
+        "light_metadata": {
+          "cct_k": 3500,
+          "spectrum": "Same A0 LED contract; calibrated spectral irradiance/IV unavailable",
+          "illuminance_is_metadata_not_watts": true
+        },
+        "rms_segments": [
+          {
+            "start_s": 0,
+            "end_s": 4200,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 4200,
+            "end_s": 4500,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 4500,
+            "end_s": 7800,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 7800,
+            "end_s": 8100,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 8100,
+            "end_s": 11400,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 11400,
+            "end_s": 12000,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 12000,
+            "end_s": 16800,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 16800,
+            "end_s": 16920,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 16920,
+            "end_s": 21600,
+            "rms_g": 0.005
+          }
+        ],
+        "components": {
+          "schema_version": "bf-o-digital-components-v1",
+          "sampler_id": "proposed-rms-poll-v1",
+          "standby_power_w": 5e-07,
+          "wake_storage_j": 1e-06,
+          "sense_storage_j": 2e-05,
+          "write_storage_j": 5e-06,
+          "cache_capacity_records": 2048,
+          "cache_options": [
+            "nvm",
+            "volatile"
+          ],
+          "physical_qualification": "UNKNOWN",
+          "status": "PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED",
+          "source_notes": {
+            "sense_storage_j": "Reuses the registered A/R 20 uJ storage-side sample impulse as a proposed RMS sampler cost; temperature-load precedent is not qualification of vibration hardware.",
+            "wake_storage_j": "Proposed ideal 1 uJ wake impulse; no independent device power measurement.",
+            "standby_power_w": "Proposed ideal 0.5 uW powered RMS front-end standby; off when the managed rail is off.",
+            "write_storage_j": "Unchanged A/R ideal atomic 5 uJ store impulse; persistence does not supply detection power.",
+            "ar_chain": "Unchanged source port/cold-start/PMIC/boot/ESR/TX parameters and digital AR wire/CRC envelope; no calibrated PV or RF model."
+          }
+        },
+        "service": {
+          "schema_version": "bf-o-service-contract-v1",
+          "start_threshold_g": 0.05,
+          "stop_threshold_g": 0.01,
+          "start_continuous_s": 3,
+          "stop_continuous_s": 60,
+          "event_delivery_s": 10,
+          "keepalive_interval_s": 120,
+          "event_time_error_s": 1,
+          "scope": "Every individual start/stop plus continuous keepalive; darkness is applicable; no occupancy inference or final-state substitution.",
+          "threshold_comparison": "Strict > for start and < for stop; equality resets the corresponding confirmation timer.",
+          "event_time_basis": "Confirmation time, not raw rising/falling edge.",
+          "keepalive_basis": "Accepted active-state messages must cover each confirmed active interval with gaps <=120 s; keepalive outside confirmed active state fails.",
+          "waveform_abi": "Ordered contiguous [start_s,end_s) piecewise constant external RMS g segments; amplitude is an externally supplied RMS observation, not harvested mechanical energy.",
+          "sampling_semantics": "Powered periodic RMS observations with declared zero-order hold between consecutive successful samples. Confirmation runs only on successful powered wake/sample; unobserved gaps reset timers.",
+          "radio_scope": "Ideal atomic A/R storage-side TX impulse and AR digital wire/CRC with O message kinds; not a BLE air link."
+        },
+        "design_space": {
+          "capacitance_f": [
+            0.015,
+            0.015
+          ],
+          "sample_period_s": [
+            0.25,
+            120
+          ],
+          "threshold_on_g": [
+            0.01,
+            0.05
+          ],
+          "threshold_off_g": [
+            0.001,
+            0.02
+          ],
+          "retry_s": [
+            0.25,
+            120
+          ],
+          "tx_backoff_s": [
+            0,
+            120
+          ],
+          "cache": [
+            "nvm",
+            "volatile"
+          ],
+          "program": [
+            "confirmed_events",
+            "periodic_snapshot"
+          ]
+        },
+        "link_delay_s": 0,
+        "provenance": {
+          "catalog_path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/two-papers-v0.2-20261019/case_catalog_v0.2.json",
+          "catalog_sha256": "eb1aed8426371a5f857018da7cab9987e380083ca7a736f30d164beb51072ebb",
+          "catalog_case": "O",
+          "A0_case": "A",
+          "reference_protocol_path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/configs/studies/parallel-20261019/reference/conditions.v1.json",
+          "reference_protocol_sha256": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb",
+          "ar_module_sha256": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+          "qualification": "Previously independently checked digital A/R apparatus only; PV/PMIC dynamics, vibration costs and physical receiver remain UNKNOWN.",
+          "hardware_match": "O0 C fixed at the original 15 mF and PV area at 15 cm2 across the first three episodes; other AR hardware fixed. General ABI supports a separately frozen legal C range, never participant changes to case limits."
+        },
+        "bindings": {
+          "source_payload_sha256": "b868e87e116d93be121ea386aeda51f70362ad9af0a370a5bad03b6019f02af7"
+        }
+      },
+      "sha256": "2eabd6028b8e72e7906041641fa543cb44d777561846955d088245bc220808d0",
+      "field_units": {
+        "/schema_version": "1",
+        "/task_id": "1",
+        "/duration_s": "s",
+        "/ar_task/schema_version": "1",
+        "/ar_task/baseline": "1",
+        "/ar_task/partition": "1",
+        "/ar_task/model_id": "1",
+        "/ar_task/model_scope": "1",
+        "/ar_task/duration_s": "s",
+        "/ar_task/dt_s": "s",
+        "/ar_task/service_start_s": "s",
+        "/ar_task/source_segments/0/start_s": "s",
+        "/ar_task/source_segments/0/end_s": "s",
+        "/ar_task/source_segments/0/illuminance_lux": "lux",
+        "/ar_task/source_segments/0/power_w": "W",
+        "/ar_task/source_segments/0/voc_v": "V",
+        "/ar_task/source_segments/0/mpp_ratio": "1",
+        "/ar_task/source_segments/1/start_s": "s",
+        "/ar_task/source_segments/1/end_s": "s",
+        "/ar_task/source_segments/1/illuminance_lux": "lux",
+        "/ar_task/source_segments/1/power_w": "W",
+        "/ar_task/source_segments/1/voc_v": "V",
+        "/ar_task/source_segments/1/mpp_ratio": "1",
+        "/ar_task/source_segments/2/start_s": "s",
+        "/ar_task/source_segments/2/end_s": "s",
+        "/ar_task/source_segments/2/illuminance_lux": "lux",
+        "/ar_task/source_segments/2/power_w": "W",
+        "/ar_task/source_segments/2/voc_v": "V",
+        "/ar_task/source_segments/2/mpp_ratio": "1",
+        "/ar_task/source_segments/3/start_s": "s",
+        "/ar_task/source_segments/3/end_s": "s",
+        "/ar_task/source_segments/3/illuminance_lux": "lux",
+        "/ar_task/source_segments/3/power_w": "W",
+        "/ar_task/source_segments/3/voc_v": "V",
+        "/ar_task/source_segments/3/mpp_ratio": "1",
+        "/ar_task/source_segments/4/start_s": "s",
+        "/ar_task/source_segments/4/end_s": "s",
+        "/ar_task/source_segments/4/illuminance_lux": "lux",
+        "/ar_task/source_segments/4/power_w": "W",
+        "/ar_task/source_segments/4/voc_v": "V",
+        "/ar_task/source_segments/4/mpp_ratio": "1",
+        "/ar_task/source_segments/5/start_s": "s",
+        "/ar_task/source_segments/5/end_s": "s",
+        "/ar_task/source_segments/5/illuminance_lux": "lux",
+        "/ar_task/source_segments/5/power_w": "W",
+        "/ar_task/source_segments/5/voc_v": "V",
+        "/ar_task/source_segments/5/mpp_ratio": "1",
+        "/ar_task/source_calibration": "1",
+        "/ar_task/iv_model": "1",
+        "/ar_task/gateway_windows/0/0": "s",
+        "/ar_task/gateway_windows/0/1": "s",
+        "/ar_task/temperature_segments/0/0": "s",
+        "/ar_task/temperature_segments/0/1": "s",
+        "/ar_task/temperature_segments/0/2": "degC",
+        "/ar_task/recovery_at_s": "s",
+        "/ar_task/required_sample_period_s": "s",
+        "/ar_task/required_live_receive_delay_s": "s",
+        "/ar_task/required_first_receive_s": "s",
+        "/ar_task/required_dark_report_period_s": "s",
+        "/ar_task/required_temperature_error_c": "degC",
+        "/ar_task/max_timestamp_error_s": "s",
+        "/ar_task/device/id": "1",
+        "/ar_task/device/capacitance_f": "F",
+        "/ar_task/device/cap_voltage_max_v": "V",
+        "/ar_task/device/cap_initial_voltage_v": "V",
+        "/ar_task/device/rated_voltage_v": "V",
+        "/ar_task/device/esr_ohm": "ohm",
+        "/ar_task/device/ready_v": "V",
+        "/ar_task/device/off_v": "V",
+        "/ar_task/device/output_v": "V",
+        "/ar_task/device/dropout_v": "V",
+        "/ar_task/device/harvest_efficiency": "1",
+        "/ar_task/device/cold_start_voltage_v": "V",
+        "/ar_task/device/cold_start_power_w": "W",
+        "/ar_task/device/off_power_w": "W",
+        "/ar_task/device/sleep_power_w": "W",
+        "/ar_task/device/boot_storage_j": "J",
+        "/ar_task/device/sense_storage_j": "J",
+        "/ar_task/device/write_storage_j": "J",
+        "/ar_task/device/tx_storage_j": "J",
+        "/ar_task/device/tx_peak_output_a": "A",
+        "/ar_task/device/tx_duration_s": "s",
+        "/ar_task/device/sample_period_s": "s",
+        "/ar_task/device/boot_delay_s": "s",
+        "/ar_task/device/upload_period_s": "s",
+        "/ar_task/device/nvm_capacity_records": "1",
+        "/ar_task/device/nvm_persistent": "1",
+        "/ar_task/device/sequence_persistent": "1",
+        "/ar_task/device/clock_persistent": "1",
+        "/ar_task/device/clock_ppm": "ppm",
+        "/ar_task/device/receiver_dedup": "1",
+        "/ar_task/device/ack_drop_first_n": "1",
+        "/ar_task/device/stamp_age_fault_s": "s",
+        "/ar_task/device/temperature_bias_c": "degC",
+        "/ar_task/temperature_event/threshold_c": "degC",
+        "/ar_task/temperature_event/minimum_duration_s": "s",
+        "/ar_task/temperature_event/enabled": "1",
+        "/ar_task/service_semantics/history": "1",
+        "/ar_task/service_semantics/upload": "1",
+        "/ar_task/service_semantics/gap": "1",
+        "/ar_task/service_semantics/time": "1",
+        "/ar_task/service_semantics/priority": "1",
+        "/photovoltaic_area_cm2": "cm2",
+        "/light_metadata/cct_k": "K",
+        "/light_metadata/spectrum": "1",
+        "/light_metadata/illuminance_is_metadata_not_watts": "1",
+        "/rms_segments/0/start_s": "s",
+        "/rms_segments/0/end_s": "s",
+        "/rms_segments/0/rms_g": "g",
+        "/rms_segments/1/start_s": "s",
+        "/rms_segments/1/end_s": "s",
+        "/rms_segments/1/rms_g": "g",
+        "/rms_segments/2/start_s": "s",
+        "/rms_segments/2/end_s": "s",
+        "/rms_segments/2/rms_g": "g",
+        "/rms_segments/3/start_s": "s",
+        "/rms_segments/3/end_s": "s",
+        "/rms_segments/3/rms_g": "g",
+        "/rms_segments/4/start_s": "s",
+        "/rms_segments/4/end_s": "s",
+        "/rms_segments/4/rms_g": "g",
+        "/rms_segments/5/start_s": "s",
+        "/rms_segments/5/end_s": "s",
+        "/rms_segments/5/rms_g": "g",
+        "/rms_segments/6/start_s": "s",
+        "/rms_segments/6/end_s": "s",
+        "/rms_segments/6/rms_g": "g",
+        "/rms_segments/7/start_s": "s",
+        "/rms_segments/7/end_s": "s",
+        "/rms_segments/7/rms_g": "g",
+        "/rms_segments/8/start_s": "s",
+        "/rms_segments/8/end_s": "s",
+        "/rms_segments/8/rms_g": "g",
+        "/components/schema_version": "1",
+        "/components/sampler_id": "1",
+        "/components/standby_power_w": "W",
+        "/components/wake_storage_j": "J",
+        "/components/sense_storage_j": "J",
+        "/components/write_storage_j": "J",
+        "/components/cache_capacity_records": "1",
+        "/components/cache_options/0": "1",
+        "/components/cache_options/1": "1",
+        "/components/physical_qualification": "1",
+        "/components/status": "1",
+        "/components/source_notes/sense_storage_j": "J",
+        "/components/source_notes/wake_storage_j": "J",
+        "/components/source_notes/standby_power_w": "W",
+        "/components/source_notes/write_storage_j": "J",
+        "/components/source_notes/ar_chain": "1",
+        "/service/schema_version": "1",
+        "/service/start_threshold_g": "g",
+        "/service/stop_threshold_g": "g",
+        "/service/start_continuous_s": "s",
+        "/service/stop_continuous_s": "s",
+        "/service/event_delivery_s": "s",
+        "/service/keepalive_interval_s": "s",
+        "/service/event_time_error_s": "s",
+        "/service/scope": "1",
+        "/service/threshold_comparison": "1",
+        "/service/event_time_basis": "1",
+        "/service/keepalive_basis": "1",
+        "/service/waveform_abi": "1",
+        "/service/sampling_semantics": "1",
+        "/service/radio_scope": "1",
+        "/design_space/capacitance_f/0": "F",
+        "/design_space/capacitance_f/1": "F",
+        "/design_space/sample_period_s/0": "s",
+        "/design_space/sample_period_s/1": "s",
+        "/design_space/threshold_on_g/0": "g",
+        "/design_space/threshold_on_g/1": "g",
+        "/design_space/threshold_off_g/0": "g",
+        "/design_space/threshold_off_g/1": "g",
+        "/design_space/retry_s/0": "s",
+        "/design_space/retry_s/1": "s",
+        "/design_space/tx_backoff_s/0": "s",
+        "/design_space/tx_backoff_s/1": "s",
+        "/design_space/cache/0": "1",
+        "/design_space/cache/1": "1",
+        "/design_space/program/0": "1",
+        "/design_space/program/1": "1",
+        "/link_delay_s": "s",
+        "/provenance/catalog_path": "1",
+        "/provenance/catalog_sha256": "1",
+        "/provenance/catalog_case": "1",
+        "/provenance/A0_case": "1",
+        "/provenance/reference_protocol_path": "1",
+        "/provenance/reference_protocol_sha256": "1",
+        "/provenance/ar_module_sha256": "1",
+        "/provenance/qualification": "1",
+        "/provenance/hardware_match": "1",
+        "/bindings/source_payload_sha256": "1"
+      }
+    },
+    {
+      "source_id": "ar_hardware",
+      "payload": {
+        "id": 271828,
+        "capacitance_f": 0.015,
+        "cap_voltage_max_v": 3.3,
+        "cap_initial_voltage_v": 0.0,
+        "rated_voltage_v": 5.5,
+        "esr_ohm": 0.3,
+        "ready_v": 2.7,
+        "off_v": 2.3,
+        "output_v": 1.8,
+        "dropout_v": 0.3,
+        "harvest_efficiency": 0.8,
+        "cold_start_voltage_v": 0.38,
+        "cold_start_power_w": 3e-06,
+        "off_power_w": 1e-06,
+        "sleep_power_w": 5e-06,
+        "boot_storage_j": 0.0001,
+        "sense_storage_j": 2e-05,
+        "write_storage_j": 5e-06,
+        "tx_storage_j": 0.00013,
+        "tx_peak_output_a": 0.008,
+        "tx_duration_s": 0.005,
+        "sample_period_s": 60,
+        "boot_delay_s": 2,
+        "upload_period_s": 1,
+        "nvm_capacity_records": 2048,
+        "nvm_persistent": true,
+        "sequence_persistent": true,
+        "clock_persistent": false,
+        "clock_ppm": 20,
+        "receiver_dedup": true,
+        "ack_drop_first_n": 0,
+        "stamp_age_fault_s": 0,
+        "temperature_bias_c": 0.1
+      },
+      "sha256": "5635bb283a76193668060cae53042f7d9a2b4f9ffc8ef4937eb76130ace88752",
+      "field_units": {
+        "/id": "1",
+        "/capacitance_f": "F",
+        "/cap_voltage_max_v": "V",
+        "/cap_initial_voltage_v": "V",
+        "/rated_voltage_v": "V",
+        "/esr_ohm": "ohm",
+        "/ready_v": "V",
+        "/off_v": "V",
+        "/output_v": "V",
+        "/dropout_v": "V",
+        "/harvest_efficiency": "1",
+        "/cold_start_voltage_v": "V",
+        "/cold_start_power_w": "W",
+        "/off_power_w": "W",
+        "/sleep_power_w": "W",
+        "/boot_storage_j": "J",
+        "/sense_storage_j": "J",
+        "/write_storage_j": "J",
+        "/tx_storage_j": "J",
+        "/tx_peak_output_a": "A",
+        "/tx_duration_s": "s",
+        "/sample_period_s": "s",
+        "/boot_delay_s": "s",
+        "/upload_period_s": "s",
+        "/nvm_capacity_records": "1",
+        "/nvm_persistent": "1",
+        "/sequence_persistent": "1",
+        "/clock_persistent": "1",
+        "/clock_ppm": "ppm",
+        "/receiver_dedup": "1",
+        "/ack_drop_first_n": "1",
+        "/stamp_age_fault_s": "s",
+        "/temperature_bias_c": "degC"
+      }
+    },
+    {
+      "source_id": "photovoltaic_source",
+      "payload": {
+        "segments": [
+          {
+            "start_s": 0,
+            "end_s": 7200,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 7200,
+            "end_s": 9000,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 9000,
+            "end_s": 10800,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 10800,
+            "end_s": 18000,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 18000,
+            "end_s": 19800,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 19800,
+            "end_s": 21600,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "light_metadata": {
+          "cct_k": 3500,
+          "spectrum": "Same A0 LED contract; calibrated spectral irradiance/IV unavailable",
+          "illuminance_is_metadata_not_watts": true
+        },
+        "area_cm2": 15,
+        "source_calibration": "UNAVAILABLE"
+      },
+      "sha256": "76d3ff06006b69620b03c5027bbe649604ff69aa4f0e118e281de43150df914d",
+      "field_units": {
+        "/segments/0/start_s": "s",
+        "/segments/0/end_s": "s",
+        "/segments/0/illuminance_lux": "lux",
+        "/segments/0/power_w": "W",
+        "/segments/0/voc_v": "V",
+        "/segments/0/mpp_ratio": "1",
+        "/segments/1/start_s": "s",
+        "/segments/1/end_s": "s",
+        "/segments/1/illuminance_lux": "lux",
+        "/segments/1/power_w": "W",
+        "/segments/1/voc_v": "V",
+        "/segments/1/mpp_ratio": "1",
+        "/segments/2/start_s": "s",
+        "/segments/2/end_s": "s",
+        "/segments/2/illuminance_lux": "lux",
+        "/segments/2/power_w": "W",
+        "/segments/2/voc_v": "V",
+        "/segments/2/mpp_ratio": "1",
+        "/segments/3/start_s": "s",
+        "/segments/3/end_s": "s",
+        "/segments/3/illuminance_lux": "lux",
+        "/segments/3/power_w": "W",
+        "/segments/3/voc_v": "V",
+        "/segments/3/mpp_ratio": "1",
+        "/segments/4/start_s": "s",
+        "/segments/4/end_s": "s",
+        "/segments/4/illuminance_lux": "lux",
+        "/segments/4/power_w": "W",
+        "/segments/4/voc_v": "V",
+        "/segments/4/mpp_ratio": "1",
+        "/segments/5/start_s": "s",
+        "/segments/5/end_s": "s",
+        "/segments/5/illuminance_lux": "lux",
+        "/segments/5/power_w": "W",
+        "/segments/5/voc_v": "V",
+        "/segments/5/mpp_ratio": "1",
+        "/light_metadata/cct_k": "K",
+        "/light_metadata/spectrum": "1",
+        "/light_metadata/illuminance_is_metadata_not_watts": "1",
+        "/area_cm2": "cm2",
+        "/source_calibration": "1"
+      }
+    },
+    {
+      "source_id": "rms_waveform",
+      "payload": {
+        "segments": [
+          {
+            "start_s": 0,
+            "end_s": 4200,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 4200,
+            "end_s": 4500,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 4500,
+            "end_s": 7800,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 7800,
+            "end_s": 8100,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 8100,
+            "end_s": 11400,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 11400,
+            "end_s": 12000,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 12000,
+            "end_s": 16800,
+            "rms_g": 0.005
+          },
+          {
+            "start_s": 16800,
+            "end_s": 16920,
+            "rms_g": 0.08
+          },
+          {
+            "start_s": 16920,
+            "end_s": 21600,
+            "rms_g": 0.005
+          }
+        ],
+        "units": "g RMS"
+      },
+      "sha256": "eb1ab5b0ef1764eb1151cbdbc773fccaee394d349a87771b073429340eb43573",
+      "field_units": {
+        "/segments/0/start_s": "s",
+        "/segments/0/end_s": "s",
+        "/segments/0/rms_g": "g",
+        "/segments/1/start_s": "s",
+        "/segments/1/end_s": "s",
+        "/segments/1/rms_g": "g",
+        "/segments/2/start_s": "s",
+        "/segments/2/end_s": "s",
+        "/segments/2/rms_g": "g",
+        "/segments/3/start_s": "s",
+        "/segments/3/end_s": "s",
+        "/segments/3/rms_g": "g",
+        "/segments/4/start_s": "s",
+        "/segments/4/end_s": "s",
+        "/segments/4/rms_g": "g",
+        "/segments/5/start_s": "s",
+        "/segments/5/end_s": "s",
+        "/segments/5/rms_g": "g",
+        "/segments/6/start_s": "s",
+        "/segments/6/end_s": "s",
+        "/segments/6/rms_g": "g",
+        "/segments/7/start_s": "s",
+        "/segments/7/end_s": "s",
+        "/segments/7/rms_g": "g",
+        "/segments/8/start_s": "s",
+        "/segments/8/end_s": "s",
+        "/segments/8/rms_g": "g",
+        "/units": "1"
+      }
+    },
+    {
+      "source_id": "wake_sample_cache",
+      "payload": {
+        "schema_version": "bf-o-digital-components-v1",
+        "sampler_id": "proposed-rms-poll-v1",
+        "standby_power_w": 5e-07,
+        "wake_storage_j": 1e-06,
+        "sense_storage_j": 2e-05,
+        "write_storage_j": 5e-06,
+        "cache_capacity_records": 2048,
+        "cache_options": [
+          "nvm",
+          "volatile"
+        ],
+        "physical_qualification": "UNKNOWN",
+        "status": "PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED",
+        "source_notes": {
+          "sense_storage_j": "Reuses the registered A/R 20 uJ storage-side sample impulse as a proposed RMS sampler cost; temperature-load precedent is not qualification of vibration hardware.",
+          "wake_storage_j": "Proposed ideal 1 uJ wake impulse; no independent device power measurement.",
+          "standby_power_w": "Proposed ideal 0.5 uW powered RMS front-end standby; off when the managed rail is off.",
+          "write_storage_j": "Unchanged A/R ideal atomic 5 uJ store impulse; persistence does not supply detection power.",
+          "ar_chain": "Unchanged source port/cold-start/PMIC/boot/ESR/TX parameters and digital AR wire/CRC envelope; no calibrated PV or RF model."
+        }
+      },
+      "sha256": "08ddbf7a8ec3c537434096a67e8d52c4fd074ae365b15f3264e9e365885090f4",
+      "field_units": {
+        "/schema_version": "1",
+        "/sampler_id": "1",
+        "/standby_power_w": "W",
+        "/wake_storage_j": "J",
+        "/sense_storage_j": "J",
+        "/write_storage_j": "J",
+        "/cache_capacity_records": "1",
+        "/cache_options/0": "1",
+        "/cache_options/1": "1",
+        "/physical_qualification": "1",
+        "/status": "1",
+        "/source_notes/sense_storage_j": "J",
+        "/source_notes/wake_storage_j": "J",
+        "/source_notes/standby_power_w": "W",
+        "/source_notes/write_storage_j": "J",
+        "/source_notes/ar_chain": "1"
+      }
+    },
+    {
+      "source_id": "model_law",
+      "payload": {
+        "model_id": "o-ar-powered-rms-v1",
+        "engine_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+        "producer_python": "def evaluate_candidate(case, candidate):\n    \"\"\"Execute a legal D from supplied source, energy and sampled program state.\n\n    No expected-event table is read. Regular polling is computed internally but\n    observations and energy are run-length/piecewise compressed. Every sampling\n    impulse, boot, write and TX is charged. NVM restores committed state/queue;\n    continuous-confirmation timers never bridge an unpowered/failed sample gap.\n    \"\"\"\n    validate_case(case)\n    validate_candidate(case, candidate)\n    task, p, comp = case[\"ar_task\"], candidate, case[\"components\"]\n    d = copy.deepcopy(task[\"device\"])\n    d[\"capacitance_f\"] = p[\"capacitance_f\"]\n    c, horizon = d[\"capacitance_f\"], case[\"duration_s\"]\n    e = c * d[\"cap_initial_voltage_v\"] ** 2 / 2\n    emax, eon, eoff = (c * d[k] ** 2 / 2 for k in (\"cap_voltage_max_v\", \"ready_v\", \"off_v\"))\n    costs = {\"boot_j\": d[\"boot_storage_j\"], \"wake_j\": comp[\"wake_storage_j\"],\n             \"sense_j\": comp[\"sense_storage_j\"], \"write_j\": comp[\"write_storage_j\"], \"tx_j\": d[\"tx_storage_j\"]}\n    t, source_index = 0., 0\n    powered, ready, sync_at = False, math.inf, None\n    next_sample = next_tx = next_keepalive = math.inf\n    active, durable_active, seq = False, False, 0\n    high_since = low_since = last_rms = last_sample = None\n    ledger, activity, sample_runs, records, pending, packets, receiver = [], [], [], [], [], [], []\n    seen, ack_left, iterations = set(), d[\"ack_drop_first_n\"], 0\n\n    def energy_row(start, end, before, after, **values):\n        row = {\"start_s\": start, \"end_s\": end, \"source_index\": source_index, \"powered\": powered,\n               \"start_j\": before, \"stored_j\": after, \"minimum_j\": min(before, after),\n               \"voltage_v\": math.sqrt(max(0., 2 * after / c)), \"source_j\": 0., \"harvest_j\": 0.,\n               \"background_j\": 0., \"spill_j\": 0., **{k: 0. for k in costs},\n               **{k.replace(\"_j\", \"_count\"): 0 for k in costs}}\n        row.update(values)\n        if (ledger and ledger[-1][\"end_s\"] == start and ledger[-1][\"source_index\"] == source_index\n                and ledger[-1][\"powered\"] == powered):\n            old = ledger[-1]\n            old.update(end_s=end, stored_j=after, voltage_v=row[\"voltage_v\"], minimum_j=min(old[\"minimum_j\"], row[\"minimum_j\"]))\n            for key in (\"source_j\", \"harvest_j\", *DEBITS, *[k.replace(\"_j\", \"_count\") for k in costs]):\n                old[key] += row[key]\n        else:\n            ledger.append(row)\n\n    def pay(key):\n        nonlocal e\n        amount = costs[key]\n        if e - amount < eoff - EPS:\n            return False\n        before, e = e, e - amount\n        energy_row(t, t, before, e, **{key: amount, key.replace(\"_j\", \"_count\"): 1})\n        return True\n\n    def off(reason):\n        nonlocal powered, active, durable_active, seq, high_since, low_since, last_rms, last_sample\n        nonlocal next_sample, next_tx, next_keepalive, sync_at\n        activity.append({\"time_s\": t, \"action\": \"brownout\", \"reason\": reason,\n                         \"pending_lost\": len(pending) if p[\"cache\"] == \"volatile\" else 0})\n        powered = False\n        high_since = low_since = last_rms = last_sample = None\n        next_sample = next_tx = next_keepalive = math.inf\n        sync_at = None\n        if p[\"cache\"] == \"volatile\":\n            pending.clear()\n            active, durable_active, seq = False, False, 0\n        else:\n            active = durable_active\n\n    def commit(kind, state):\n        nonlocal seq, next_tx, durable_active\n        activity.append({\"time_s\": t, \"action\": \"detected\", \"kind\": kind, \"state\": state})\n        if len(pending) >= comp[\"cache_capacity_records\"] or not pay(\"write_j\"):\n            activity.append({\"time_s\": t, \"action\": \"write-blocked\", \"kind\": kind})\n            return\n        seq += 1\n        stamp = t + (t - sync_at) * d[\"clock_ppm\"] / 1e6 if sync_at is not None else None\n        rec = {\"seq\": seq, \"kind\": kind, \"state\": int(state), \"observed_s\": t,\n               \"stamp_s\": stamp, \"time_known\": stamp is not None, \"last_sample_s\": last_sample}\n        records.append(rec)\n        pending.append(rec)\n        durable_active = bool(active)\n        activity.append({\"time_s\": t, \"action\": \"commit\", \"seq\": seq, \"kind\": kind})\n        if not math.isfinite(next_tx):\n            next_tx = t + p[\"tx_backoff_s\"]\n\n    status = \"COMPLETE\"\n    while t < horizon - EPS:\n        iterations += 1\n        if iterations > MAX_EVENTS:\n            status = \"RESOURCE_CAP_UNKNOWN\"\n            break\n        while source_index + 1 < len(task[\"source_segments\"]) and task[\"source_segments\"][source_index][\"end_s\"] <= t + EPS:\n            source_index += 1\n        src = task[\"source_segments\"][source_index]\n        permitted = src[\"voc_v\"] * src[\"mpp_ratio\"] >= d[\"cold_start_voltage_v\"] and src[\"power_w\"] >= d[\"cold_start_power_w\"]\n        hp = src[\"power_w\"] * d[\"harvest_efficiency\"] if permitted else 0.\n        bg = d[\"sleep_power_w\"] + comp[\"standby_power_w\"] if powered else d[\"off_power_w\"]\n        net = hp - bg\n        threshold = max(eon, eoff + d[\"boot_storage_j\"])\n        if powered and net < 0 and e <= eoff + EPS:\n            off(\"background-threshold\")\n            continue\n        if not powered and e >= threshold - EPS:\n            powered = True\n            if not pay(\"boot_j\"):\n                powered = False\n                raise ValueError(\"O_BOOT_ENERGY_INCONSISTENT\")\n            active = durable_active if p[\"cache\"] == \"nvm\" else False\n            ready = next_sample = t + d[\"boot_delay_s\"]\n            next_tx = ready + p[\"tx_backoff_s\"] if pending else math.inf\n            next_keepalive = ready + 120 if active else math.inf\n            activity.append({\"time_s\": t, \"action\": \"boot\", \"ready_s\": ready, \"restored_active\": active})\n            continue\n        if powered and t >= ready - EPS:\n            gateway = any(a <= t < b for a, b in task[\"gateway_windows\"])\n            if sync_at is None and gateway:\n                sync_at = t\n                activity.append({\"time_s\": t, \"action\": \"clock-sync\", \"basis\": \"Same ideal A/R digital gateway synchronization\"})\n            if t >= next_sample - EPS:\n                next_sample = t + p[\"sample_period_s\"]\n                woke = pay(\"wake_j\")\n                sampled = woke and pay(\"sense_j\")\n                if not sampled:\n                    high_since = low_since = last_rms = last_sample = None\n                    activity.append({\"time_s\": t, \"action\": \"sample-blocked\"})\n                else:\n                    measured = next(row[\"rms_g\"] for row in case[\"rms_segments\"] if row[\"start_s\"] <= t < row[\"end_s\"])\n                    if (sample_runs and sample_runs[-1][\"rms_g\"] == measured\n                            and abs(sample_runs[-1][\"last_s\"] + p[\"sample_period_s\"] - t) < EPS):\n                        sample_runs[-1][\"last_s\"], sample_runs[-1][\"count\"] = t, sample_runs[-1][\"count\"] + 1\n                    else:\n                        sample_runs.append({\"first_s\": t, \"last_s\": t, \"period_s\": p[\"sample_period_s\"], \"count\": 1, \"rms_g\": measured})\n                    # Confirm the held interval BEFORE applying this new sample.\n                    # Exact 3/60 s boundaries therefore do not lose a transition.\n                    if p[\"program\"] == \"confirmed_events\":\n                        if not active and high_since is not None and t - high_since >= 3 - EPS:\n                            active, high_since, next_keepalive = True, None, t + 120\n                            commit(\"start\", True)\n                        if active and low_since is not None and t - low_since >= 60 - EPS:\n                            active, low_since, next_keepalive = False, None, math.inf\n                            commit(\"stop\", False)\n                        if active:\n                            low_since = (t if low_since is None else low_since) if measured < p[\"threshold_off_g\"] else None\n                            high_since = None\n                        else:\n                            high_since = (t if high_since is None else high_since) if measured > p[\"threshold_on_g\"] else None\n                            low_since = None\n                        last_rms, last_sample = measured, t\n                        if active and t >= next_keepalive - EPS:\n                            commit(\"keepalive\", True)\n                            next_keepalive += 120\n                    else:\n                        last_rms, last_sample = measured, t\n                        commit(\"periodic_snapshot\", measured > p[\"threshold_on_g\"])\n            if pending and t >= next_tx - EPS:\n                loaded_v = math.sqrt(2 * e / c) - d[\"esr_ohm\"] * d[\"tx_peak_output_a\"]\n                if loaded_v < d[\"output_v\"] + d[\"dropout_v\"]:\n                    off(\"tx-dropout\")\n                    continue\n                if pay(\"tx_j\"):\n                    rec = pending[0]\n                    # Exact original AR envelope; O kind/state interpretation is versioned.\n                    wire_record = {\"seq\": rec[\"seq\"], \"kind\": KINDS[rec[\"kind\"]], \"temperature_c\": rec[\"state\"],\n                                   \"time_interval_s\": [rec[\"stamp_s\"] or 0., rec[\"stamp_s\"] or 0.], \"time_known\": rec[\"time_known\"]}\n                    raw = ar.frame(wire_record, d[\"id\"])\n                    pkt = {\"time_s\": t, \"receive_s\": t + case[\"link_delay_s\"], \"seq\": rec[\"seq\"],\n                           \"hex\": raw.hex(), \"loaded_v\": loaded_v, \"storage_energy_j\": d[\"tx_storage_j\"]}\n                    packets.append(pkt)\n                    valid, reason = ar._receiver(raw, pkt[\"receive_s\"], wire_record, task) if gateway else (False, \"no-gateway\")\n                    duplicate = rec[\"seq\"] in seen\n                    accepted = valid and not duplicate\n                    ack = valid and ack_left == 0\n                    if valid:\n                        seen.add(rec[\"seq\"])\n                        if ack_left:\n                            ack_left -= 1\n                    if gateway:\n                        receiver.append({**pkt, \"valid\": valid, \"reason\": reason, \"accepted\": accepted, \"duplicate\": duplicate, \"ack\": ack})\n                    activity.append({\"time_s\": t, \"action\": \"tx\", \"seq\": rec[\"seq\"], \"ack\": ack})\n                    if ack:\n                        pending.pop(0)\n                    next_tx = t + (d[\"upload_period_s\"] if ack else p[\"retry_s\"]) if pending else math.inf\n                else:\n                    next_tx = t + p[\"retry_s\"]\n                    activity.append({\"time_s\": t, \"action\": \"tx-blocked\"})\n        # Analytic source/background integration between program/power events.\n        bg = d[\"sleep_power_w\"] + comp[\"standby_power_w\"] if powered else d[\"off_power_w\"]\n        net = hp - bg\n        crossing = math.inf\n        if powered and net < 0:\n            crossing = t + max(0., (e - eoff) / -net)\n        elif not powered and net > 0:\n            crossing = t + max(0., (threshold - e) / net)\n        target = min(horizon, src[\"end_s\"], crossing, next_sample if powered else math.inf, next_tx if powered else math.inf)\n        if target <= t + 1e-10:\n            raise ValueError(\"O_NONADVANCING_SCHEDULER\")\n        dt, before = target - t, e\n        source_j, harvest_j = src[\"power_w\"] * dt, hp * dt\n        background_j = min(bg * dt, e + harvest_j)\n        unclipped = e + harvest_j - background_j\n        spill_j = max(0., unclipped - emax)\n        e = max(0., unclipped - spill_j)\n        energy_row(t, target, before, e, source_j=source_j, harvest_j=harvest_j,\n                   background_j=background_j, spill_j=spill_j)\n        t = target\n    response = {\"schema_version\": \"bf-o-response-v1\", \"model_id\": MODEL_ID, \"engine_sha256\": _engine_hash(),\n                \"case_sha256\": identity(case), \"source_payload_sha256\": case[\"bindings\"][\"source_payload_sha256\"],\n                \"candidate\": copy.deepcopy(candidate), \"candidate_sha256\": identity(candidate),\n                \"status\": status, \"energy\": ledger, \"activity\": activity, \"sample_runs\": sample_runs,\n                \"records\": records, \"state\": {\"active\": active, \"durable_active\": durable_active, \"pending\": pending,\n                                             \"powered\": powered, \"stored_j\": e, \"end_s\": t},\n                \"packets\": packets, \"receiver\": receiver, \"internal_scheduler_events\": iterations,\n                \"physical_qualification\": \"UNKNOWN\", \"source_scope\": case[\"provenance\"][\"qualification\"]}\n    response[\"execution_key\"] = identity({\"case\": identity(case), \"candidate\": identity(candidate), \"engine\": _engine_hash()})\n    response[\"response_sha256\"] = identity(response)\n    return response\n",
+        "producer_dependencies_python": "def canonical(value):\n    return json.dumps(value, sort_keys=True, separators=(\",\", \":\"), allow_nan=False).encode()\n\n\ndef identity(value):\n    return hashlib.sha256(canonical(value)).hexdigest()\n\n\ndef _engine_hash():\n    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()\n\n\ndef _finite(value):\n    return type(value) in (float, int) and math.isfinite(value)\n\n\ndef validate_case(case):\n    if case.get(\"schema_version\") != \"bf-o-case-v1\":\n        raise ValueError(\"O_CASE_SCHEMA\")\n    if case[\"bindings\"] != {\"source_payload_sha256\": identity({k: v for k, v in case.items() if k != \"bindings\"})}:\n        raise ValueError(\"O_SOURCE_BINDING\")\n    if hashlib.sha256(Path(ar.__file__).read_bytes()).hexdigest() != case[\"provenance\"][\"ar_module_sha256\"]:\n        raise ValueError(\"O_AR_MODEL_BINDING\")\n    task = case[\"ar_task\"]\n    ar.validate(task)\n    if not 0 < case[\"duration_s\"] <= 21600 or task[\"duration_s\"] != case[\"duration_s\"]:\n        raise ValueError(\"O_HORIZON\")\n    if not 0 < case[\"photovoltaic_area_cm2\"] <= 25 or task[\"device\"][\"rated_voltage_v\"] > 5.5:\n        raise ValueError(\"O_HARDWARE_LIMIT\")\n    s = case[\"service\"]\n    required = {\"start_threshold_g\": .05, \"stop_threshold_g\": .01, \"start_continuous_s\": 3,\n                \"stop_continuous_s\": 60, \"event_delivery_s\": 10,\n                \"keepalive_interval_s\": 120, \"event_time_error_s\": 1}\n    if any(s.get(k) != value for k, value in required.items()):\n        raise ValueError(\"O_ORIGINAL_SERVICE_CHANGED\")\n    t = 0\n    if not 1 <= len(case[\"rms_segments\"]) <= 10000:\n        raise ValueError(\"O_WAVEFORM_SIZE\")\n    for row in case[\"rms_segments\"]:\n        if (set(row) != {\"start_s\", \"end_s\", \"rms_g\"} or not all(_finite(v) for v in row.values())\n                or row[\"start_s\"] != t or row[\"end_s\"] <= t or row[\"rms_g\"] < 0):\n            raise ValueError(\"O_RMS_WAVEFORM\")\n        t = row[\"end_s\"]\n    if t != case[\"duration_s\"]:\n        raise ValueError(\"O_WAVEFORM_HORIZON\")\n    comp = case[\"components\"]\n    for key in (\"standby_power_w\", \"wake_storage_j\", \"sense_storage_j\", \"write_storage_j\"):\n        if not _finite(comp[key]) or comp[key] < 0:\n            raise ValueError(\"O_COMPONENT_DOMAIN:\" + key)\n    if type(comp[\"cache_capacity_records\"]) is not int or not 1 <= comp[\"cache_capacity_records\"] <= 2048:\n        raise ValueError(\"O_CACHE_DOMAIN\")\n    if not _finite(case[\"link_delay_s\"]) or case[\"link_delay_s\"] < 0:\n        raise ValueError(\"O_LINK_DOMAIN\")\n    canonical(case)\n\n\ndef candidate_schema(case):\n    space = case[\"design_space\"]\n    properties = {\"schema_version\": {\"const\": CANDIDATE_SCHEMA}}\n    for key in (\"capacitance_f\", \"sample_period_s\", \"threshold_on_g\", \"threshold_off_g\", \"retry_s\", \"tx_backoff_s\"):\n        properties[key] = {\"type\": \"number\", \"minimum\": space[key][0], \"maximum\": space[key][1]}\n    for key in (\"cache\", \"program\"):\n        properties[key] = {\"enum\": space[key]}\n    return {\"type\": \"object\", \"additionalProperties\": False, \"required\": list(properties), \"properties\": properties}\n\n\ndef validate_candidate(case, candidate):\n    schema = candidate_schema(case)\n    if not isinstance(candidate, dict) or set(candidate) != set(schema[\"required\"]):\n        raise ValueError(\"O_CANDIDATE_KEYS_NO_EVENT_TABLE\")\n    if candidate[\"schema_version\"] != CANDIDATE_SCHEMA:\n        raise ValueError(\"O_CANDIDATE_SCHEMA\")\n    for key, spec in schema[\"properties\"].items():\n        if spec.get(\"type\") == \"number\" and (not _finite(candidate[key]) or not spec[\"minimum\"] <= candidate[key] <= spec[\"maximum\"]):\n            raise ValueError(\"O_CANDIDATE_DOMAIN:\" + key)\n        if \"enum\" in spec and candidate[key] not in spec[\"enum\"]:\n            raise ValueError(\"O_CANDIDATE_ENUM:\" + key)\n    if not .25 <= candidate[\"sample_period_s\"] <= 120 or not .001 <= candidate[\"retry_s\"]:\n        raise ValueError(\"O_PROGRAM_TIME_DOMAIN\")\n    if not 0 < candidate[\"threshold_off_g\"] < candidate[\"threshold_on_g\"]:\n        raise ValueError(\"O_THRESHOLD_ORDER\")\n    physical = copy.deepcopy(case[\"ar_task\"])\n    physical[\"device\"][\"capacitance_f\"] = candidate[\"capacitance_f\"]\n    ar.validate(physical)\n",
+        "producer_globals": {
+          "MODEL_ID": "o-ar-powered-rms-v1",
+          "CANDIDATE_SCHEMA": "bf-o-candidate-v1",
+          "KINDS": {
+            "start": 3,
+            "stop": 4,
+            "keepalive": 5,
+            "periodic_snapshot": 6
+          },
+          "EPS": 1e-08,
+          "MAX_EVENTS": 250000,
+          "DEBITS": [
+            "background_j",
+            "boot_j",
+            "wake_j",
+            "sense_j",
+            "write_j",
+            "tx_j",
+            "spill_j"
+          ]
+        },
+        "producer_imports": [
+          "copy",
+          "hashlib",
+          "json",
+          "math",
+          "pathlib.Path",
+          "bfworld.agentlab.campaign20261019.ar"
+        ],
+        "ar_python": "\"\"\"Finite public-development light/storage/program reference, version 1.\n\nPower is an explicitly assumed port input in watts. Illuminance is never\nconverted to power. This module is not a calibrated Epishine or AEM10941 model.\nThe consumer checks saved traces independently in scripts/campaign_reference.py.\n\"\"\"\nfrom __future__ import annotations\n\nimport binascii\nimport math\nimport struct\nfrom typing import Any\n\n\nMODEL_ID = \"ar-light-behavior-v1\"\nWIRE = struct.Struct(\">IIiihBB\")\nOFFLINE_RETRY_S = 30\n\n\ndef _at(segments: list, t: float, key: str | None = None, default=0):\n    for row in segments:\n        if isinstance(row, dict):\n            if row[\"start_s\"] <= t < row[\"end_s\"]:\n                return row.get(key, default) if key else row\n        elif row[0] <= t < row[1]:\n            return row[2]\n    return default\n\n\ndef frame(record: dict, device_id: int, historical: bool = False) -> bytes:\n    lo, hi = record[\"time_interval_s\"]\n    flags = int(record[\"time_known\"]) | (int(historical) << 1)\n    body = WIRE.pack(device_id, record[\"seq\"], round(lo * 1000),\n                     round(hi * 1000) if hi is not None else -1,\n                     round(record[\"temperature_c\"] * 100), record[\"kind\"], flags)\n    return body + binascii.crc_hqx(body, 0xFFFF).to_bytes(2, \"big\")\n\n\ndef _receiver(raw: bytes, now: float, record: dict, task: dict) -> tuple[bool, str]:\n    \"\"\"Digital endpoint only: no RF propagation, BLE stack, or hardware claim.\"\"\"\n    if len(raw) != WIRE.size + 2:\n        return False, \"length\"\n    if binascii.crc_hqx(raw[:-2], 0xFFFF) != int.from_bytes(raw[-2:], \"big\"):\n        return False, \"crc\"\n    device, seq, lo, hi, temp, kind, flags = WIRE.unpack(raw[:-2])\n    if device != task[\"device\"][\"id\"] or seq != record[\"seq\"]:\n        return False, \"identity\"\n    if kind == 2:\n        return (hi >= lo, \"gap\")\n    if not flags & 1:\n        return True, \"uncertain-history\"\n    # Old queued history is accepted as history, never as a fresh live sample.\n    if not flags & 2 and now - lo / 1000 > task[\"required_sample_period_s\"]:\n        return False, \"stale\"\n    return True, \"history\" if flags & 2 else \"live\"\n\n\ndef validate(task: dict) -> None:\n    d = task[\"device\"]\n    if task[\"model_id\"] != MODEL_ID or task[\"dt_s\"] <= 0:\n        raise ValueError(\"unsupported reference model or time step\")\n    if not 0 < d[\"capacitance_f\"] <= 1 or not 0 <= d[\"cap_initial_voltage_v\"] <= d[\"cap_voltage_max_v\"]:\n        raise ValueError(\"storage outside declared domain\")\n    if not (2.2 <= d[\"off_v\"] < d[\"ready_v\"] < d[\"cap_voltage_max_v\"] <= 4.5):\n        raise ValueError(\"AEM10941 threshold domain\")\n    if d[\"output_v\"] > d[\"off_v\"] - d[\"dropout_v\"]:\n        raise ValueError(\"HV LDO dropout domain\")\n    if not 0 < d[\"harvest_efficiency\"] <= 1:\n        raise ValueError(\"efficiency outside (0,1]\")\n    if d[\"sample_period_s\"] < task[\"dt_s\"] or d[\"nvm_capacity_records\"] < 1:\n        raise ValueError(\"unsupported scheduler/storage resolution\")\n    previous = 0.0\n    for row in task[\"source_segments\"]:\n        if row[\"start_s\"] != previous or row[\"end_s\"] <= previous or row[\"power_w\"] < 0:\n            raise ValueError(\"source segments must cover horizon in order\")\n        if row[\"power_w\"] and not 0 < row[\"mpp_ratio\"] * row[\"voc_v\"] <= 4.5:\n            raise ValueError(\"source operating point outside input domain\")\n        previous = row[\"end_s\"]\n    if previous != task[\"duration_s\"]:\n        raise ValueError(\"source horizon mismatch\")\n\n\ndef simulate_ar(task: dict[str, Any]) -> dict[str, Any]:\n    \"\"\"Execute the supplied immutable task and design; return raw observations.\n\n    One-second default steps integrate background energy; sense/write/TX are\n    storage-side energy impulses with an additional ESR/dropout guard. This is\n    suitable for service chronology, not regulator switching or RF transients.\n    \"\"\"\n    validate(task)\n    d = task[\"device\"]\n    dt, horizon, c = task[\"dt_s\"], task[\"duration_s\"], d[\"capacitance_f\"]\n    e = c * d[\"cap_initial_voltage_v\"] ** 2 / 2\n    emax, eon, eoff = (c * d[x] ** 2 / 2 for x in (\"cap_voltage_max_v\", \"ready_v\", \"off_v\"))\n    trace, actions, committed, packets, arrivals, gaps, evictions = [], [], [], [], [], [], []\n    memory: dict[int, dict] = {}\n    pending: list[int] = []\n    seq = 0\n    powered = False\n    next_sample = next_tx = boot_ready = math.inf\n    sync_at: float | None = None\n    last_durable = 0.0\n    reset_since_sync = False\n    gap_start = 0.0\n    high_since = None\n    high_reported = False\n    receiver_seen = set()\n    ack_loss = d[\"ack_drop_first_n\"]\n    first_boot = None\n\n    for step in range(round(horizon / dt)):\n        t0, t = step * dt, (step + 1) * dt\n        start_e = e\n        src = _at(task[\"source_segments\"], t0)\n        source_j = src[\"power_w\"] * dt\n        vsrc = src[\"voc_v\"] * src[\"mpp_ratio\"]\n        permitted = vsrc >= d[\"cold_start_voltage_v\"] and src[\"power_w\"] >= d[\"cold_start_power_w\"]\n        harvest_j = source_j * d[\"harvest_efficiency\"] if permitted else 0.0\n        e += harvest_j\n        spill_j = max(0.0, e - emax)\n        e -= spill_j\n        background_j = min(e, (d[\"sleep_power_w\"] if powered else d[\"off_power_w\"]) * dt)\n        e -= background_j\n        boot_j = sense_j = write_j = tx_j = 0.0\n        gateway = any(a <= t < b for a, b in task[\"gateway_windows\"])\n        temperature = float(_at(task[\"temperature_segments\"], t))\n\n        def turn_off(reason: str):\n            nonlocal powered, next_sample, next_tx, sync_at, reset_since_sync, gap_start, high_since, high_reported\n            if not powered:\n                return\n            actions.append({\"time_s\": t, \"action\": \"brownout\", \"reason\": reason, \"energy_j\": e})\n            powered = False\n            next_sample = next_tx = math.inf\n            high_since, high_reported = None, False\n            gap_start = last_durable\n            reset_since_sync = True\n            if not d[\"clock_persistent\"]:\n                sync_at = None\n            if not d[\"nvm_persistent\"]:\n                memory.clear()\n                pending.clear()\n\n        if powered and e < eoff:\n            turn_off(\"background-threshold\")\n        if not powered and e >= eon:\n            if e - d[\"boot_storage_j\"] >= eoff:\n                e -= d[\"boot_storage_j\"]\n                boot_j += d[\"boot_storage_j\"]\n                powered = True\n                first_boot = t if first_boot is None else first_boot\n                boot_ready = next_sample = t + d[\"boot_delay_s\"]\n                next_tx = boot_ready\n                actions.append({\"time_s\": t, \"action\": \"boot\", \"energy_j\": e})\n\n        def store(kind: int, temp: float, interval: list, known: bool) -> bool:\n            nonlocal e, seq, write_j, last_durable\n            if e - d[\"write_storage_j\"] < eoff:\n                actions.append({\"time_s\": t, \"action\": \"write-blocked\", \"kind\": kind})\n                return False\n            if len(memory) >= d[\"nvm_capacity_records\"]:\n                routine = [s for s in memory if memory[s][\"kind\"] == 0]\n                victim = min(routine) if routine else min(memory)\n                # Priority protects events; no silent loss: every eviction is durable output.\n                evictions.append({\"time_s\": t, \"seq\": victim, \"kind\": memory[victim][\"kind\"], \"reason\": \"capacity\"})\n                memory.pop(victim)\n                if victim in pending:\n                    pending.remove(victim)\n            seq += 1\n            record = {\"seq\": seq, \"kind\": kind, \"created_s\": t, \"temperature_c\": temp,\n                      \"time_interval_s\": interval, \"time_known\": known, \"acked\": False}\n            memory[seq] = dict(record)\n            committed.append(dict(record))\n            pending.append(seq)\n            e -= d[\"write_storage_j\"]\n            write_j += d[\"write_storage_j\"]\n            last_durable = t\n            actions.append({\"time_s\": t, \"action\": \"commit\", \"seq\": seq, \"kind\": kind})\n            return True\n\n        if powered and t >= boot_ready:\n            if gateway and sync_at is None:\n                if reset_since_sync:\n                    interval = [gap_start, t]\n                    if store(2, 0, interval, False):\n                        gaps.append({\"start_s\": gap_start, \"end_s\": t, \"basis\": \"last-durable-observation-to-sync; outage edges unknown\"})\n                        reset_since_sync = False\n                sync_at = t\n                actions.append({\"time_s\": t, \"action\": \"clock-sync\"})\n            if t >= next_sample:\n                next_sample = t + d[\"sample_period_s\"]\n                if e - d[\"sense_storage_j\"] - d[\"write_storage_j\"] >= eoff:\n                    e -= d[\"sense_storage_j\"]\n                    sense_j += d[\"sense_storage_j\"]\n                    measured = round(temperature + d[\"temperature_bias_c\"], 2)\n                    stamp = t + ((t - sync_at) * d[\"clock_ppm\"] / 1e6 if sync_at is not None else 0)\n                    stamp -= d[\"stamp_age_fault_s\"]\n                    interval = [stamp, stamp] if sync_at is not None else [gap_start, None]\n                    store(0, measured, interval, sync_at is not None)\n                    actions.append({\"time_s\": t, \"action\": \"sample\", \"temperature_c\": measured})\n                    event = task[\"temperature_event\"]\n                    if event[\"enabled\"] and measured > event[\"threshold_c\"]:\n                        high_since = t if high_since is None else high_since\n                        if not high_reported and t - high_since >= event[\"minimum_duration_s\"]:\n                            high_reported = store(1, measured, interval, sync_at is not None)\n                    else:\n                        high_since, high_reported = None, False\n                else:\n                    actions.append({\"time_s\": t, \"action\": \"sample-blocked\"})\n            if pending and t >= next_tx:\n                vcap = math.sqrt(2 * e / c)\n                loaded_v = vcap - d[\"esr_ohm\"] * d[\"tx_peak_output_a\"]\n                if loaded_v < d[\"output_v\"] + d[\"dropout_v\"]:\n                    turn_off(\"tx-dropout\")\n                elif e - d[\"tx_storage_j\"] >= eoff:\n                    rec = memory[pending[0]]\n                    old = t - rec[\"created_s\"] > task[\"required_sample_period_s\"]\n                    raw = frame(rec, d[\"id\"], old)\n                    e -= d[\"tx_storage_j\"]\n                    tx_j += d[\"tx_storage_j\"]\n                    pkt = {\"time_s\": t, \"seq\": rec[\"seq\"], \"hex\": raw.hex(), \"gateway\": gateway,\n                           \"loaded_v\": loaded_v, \"storage_energy_j\": d[\"tx_storage_j\"]}\n                    packets.append(pkt)\n                    valid, reason = _receiver(raw, t, rec, task) if gateway else (False, \"no-gateway\")\n                    duplicate = rec[\"seq\"] in receiver_seen\n                    accepted = valid and (not duplicate or not d[\"receiver_dedup\"])\n                    ack = False\n                    if valid:\n                        receiver_seen.add(rec[\"seq\"])\n                        if ack_loss:\n                            ack_loss -= 1\n                        else:\n                            ack = True\n                    if gateway:\n                        arrivals.append({**pkt, \"valid\": valid, \"reason\": reason, \"duplicate\": duplicate,\n                                         \"accepted\": accepted, \"ack\": ack})\n                    if ack:\n                        rec[\"acked\"] = True\n                        pending.pop(0)\n                    next_tx = t + (d[\"upload_period_s\"] if ack else OFFLINE_RETRY_S)\n                    actions.append({\"time_s\": t, \"action\": \"tx\", \"seq\": rec[\"seq\"], \"ack\": ack})\n                else:\n                    next_tx = t + 1\n        trace.append({\"time_s\": t, \"dt_s\": dt, \"lux\": src[\"illuminance_lux\"], \"source_v\": vsrc,\n                      \"source_a\": src[\"power_w\"] / vsrc if vsrc else 0, \"source_j\": source_j,\n                      \"harvest_j\": harvest_j, \"conversion_j\": source_j - harvest_j,\n                      \"background_j\": background_j, \"boot_j\": boot_j, \"sense_j\": sense_j,\n                      \"write_j\": write_j, \"tx_j\": tx_j, \"spill_j\": spill_j,\n                      \"start_j\": start_e, \"stored_j\": e, \"voltage_v\": math.sqrt(2 * e / c),\n                      \"powered\": int(powered), \"gateway\": int(gateway), \"pending_records\": len(pending),\n                      \"retained_records\": len(memory), \"temperature_c\": temperature})\n    return {\"model_id\": MODEL_ID, \"trace\": trace, \"activity\": actions, \"records\": committed,\n            \"final_history\": list(memory.values()), \"packets\": packets, \"receiver\": arrivals,\n            \"gaps\": gaps, \"evictions\": evictions, \"first_boot_s\": first_boot}\n",
+        "scope": "Powered sample/hold observation, independent of host continuous truth; ideal digital AR chain only"
+      },
+      "sha256": "080e8d7439d074a6c621de437dd85bc7e3c229060d2d1eb54db56dcd5e1fcdcb",
+      "field_units": {
+        "/model_id": "1",
+        "/engine_sha256": "1",
+        "/producer_python": "1",
+        "/producer_dependencies_python": "1",
+        "/producer_globals/MODEL_ID": "1",
+        "/producer_globals/CANDIDATE_SCHEMA": "1",
+        "/producer_globals/KINDS/start": "1",
+        "/producer_globals/KINDS/stop": "1",
+        "/producer_globals/KINDS/keepalive": "1",
+        "/producer_globals/KINDS/periodic_snapshot": "1",
+        "/producer_globals/EPS": "1",
+        "/producer_globals/MAX_EVENTS": "1",
+        "/producer_globals/DEBITS/0": "1",
+        "/producer_globals/DEBITS/1": "1",
+        "/producer_globals/DEBITS/2": "1",
+        "/producer_globals/DEBITS/3": "1",
+        "/producer_globals/DEBITS/4": "1",
+        "/producer_globals/DEBITS/5": "1",
+        "/producer_globals/DEBITS/6": "1",
+        "/producer_imports/0": "1",
+        "/producer_imports/1": "1",
+        "/producer_imports/2": "1",
+        "/producer_imports/3": "1",
+        "/producer_imports/4": "1",
+        "/producer_imports/5": "1",
+        "/ar_python": "1",
+        "/scope": "1"
+      }
+    }
+  ],
+  "full_O0_executed": false
+}

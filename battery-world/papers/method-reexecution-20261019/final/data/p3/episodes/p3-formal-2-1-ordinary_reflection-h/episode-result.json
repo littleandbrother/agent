@@ -1,0 +1,82 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.012055331999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 3,
+    "settled_charge_upper_bound_usd": 0.017662499999999998,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-1-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record.event_latch.volatile",
+        "component_record.tx_not_before.0.045",
+        "component_record.ready_v",
+        "component_record.off_v",
+        "excitation_record.shunts.0.012",
+        "excitation_record.source_segments",
+        "saved_activity.brownout_at_0.0121",
+        "saved_activity.packets.empty",
+        "saved_activity.boot_at_0.0027",
+        "model_law.b-transient-behavior-v1",
+        "full_public_facts_sha256.49b3e48b"
+      ],
+      "falsifier": "Following this procedure on the next trial still yields packets=[] (e.g., simulate_b on the selected candidate shows a brownout between capture and tx-complete, or loaded_v drops below output_v mid-TX), or the derived safe interval is empty across the entire legal capacitance_f/tx_not_before_s grid so no capture-to-TX window exists before a cliff. Either outcome would refute the claim that scheduling TX inside a pre-cliff powered interval is sufficient, and the procedure would be revised or abandoned.",
+      "hypothesis": "The retained failure came from scheduling the TX window without modeling the volatile event latch or the energy cliffs. In world b-volatile-reset the latch is 'volatile', so any brownout between capture and tx-complete erases the captured event; the shunt of 4e-5 J at t=0.012 s forces a brownout (saved_activity shows brownout at 0.0121 with event_was_captured=true), while tx_not_before_s=0.045 schedules TX long after that cliff, so packets stays empty. I hypothesize that if the design procedure first derives, from component_record/excitation_record/model_law, the power-continuous 'safe interval' in which a capture can be followed by a complete TX with loaded_v>=output_v and stored energy staying >=eoff, and only then selects a legal (capacitance_f, tx_not_before_s) whose whole TX fits inside that interval before the first energy cliff, the resulting design will emit a packet before deadline_s. The improvement is procedural (how to derive and validate candidates), not a fixed device assignment.",
+      "impact_scope": "task-entry",
+      "method_sha256": "7908a9192d8573a6e3a17a2a54e80a4e15e2a5fc9e23642c63e707d32e077ec0",
+      "method_text": "Repeatable design procedure (H), not a device submission:\n1. Ground first: read component_record, excitation_record, model_law and the latest saved_activity; record model_id (b-transient-behavior-v1) and the event_latch mode. For b-volatile-reset treat capture as erased by any brownout.\n2. For each candidate capacitance_f compute energy thresholds eon=C*ready_v^2/2, eoff=C*off_v^2/2, emax=C*cap_voltage_max_v^2/2, and boot cost boot_j.\n3. Build a power-continuous timeline: harvest power per source segment = power_w*harvest_efficiency; treat source gaps and each shunt (time, energy) as 'energy cliffs' that can force a brownout. Identify maximal powered intervals.\n4. Volatile-latch feasibility constraint: if event_latch is volatile, the entire TX (tx-start .. tx-start+tx_duration_s) must lie inside a single powered interval that (a) starts after a valid capture (t inside [event_s, event_s+contact_duration_s) and t>=ready_at=boot_time+boot_delay_s) and (b) ends before the next energy cliff where stored energy would fall below eoff. Require loaded_v=sqrt(2e/C)-esr_ohm*tx_current_a >= output_v at every TX step.\n5. Select (capacitance_f, tx_not_before_s) only within the legal ranges, choosing the smallest tx_not_before_s consistent with a valid capture, with eoff headroom across the whole TX. Do not hard-code values; derive them from steps 2-4.\n6. Order experiments: derive constraints first, then validate candidates with simulate_b (acquire) BEFORE submitting. Across the at-most-2 distinct legal designs, keep the one with packets non-empty, tx-complete before deadline_s and before the first cliff.\n7. Preserve failures and unknowns: if validation shows brownout mid-TX or empty packets, record it and revise the interval computation only; never edit the task, evaluator, or model law to force passage. Do not claim hardware, statistical, migration, or RSI results.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-1-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-3766eb441377b4b6",
+  "protocol_sha256": "69e64984c2b23a22d3852e1e5e75cda4bc01347572d984ef509b063025f82b88",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "b6659c1cfee18a2f2b446be2ec20ba2435b29790c7c73dd87dca8534b0ec813c",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-2-1-ordinary_reflection",
+    "id": "p3-formal-2-1-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 3,
+    "gateway_chain_tip": "ed938564e9d0455462cf6d5c295bb0c7e7eda67e6ce474d1371555d09ec704d5",
+    "model_submitted": true,
+    "model_tool_calls": 3,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 36.643364416988334,
+  "wall_seconds_total": 37.12575537500379
+}

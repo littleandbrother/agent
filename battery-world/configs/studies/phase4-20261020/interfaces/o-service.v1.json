@@ -1,0 +1,17 @@
+{
+  "schema_version": "bf-o-service-contract-v1",
+  "start_threshold_g": 0.05,
+  "stop_threshold_g": 0.01,
+  "start_continuous_s": 3,
+  "stop_continuous_s": 60,
+  "event_delivery_s": 10,
+  "keepalive_interval_s": 120,
+  "event_time_error_s": 1,
+  "scope": "Every individual start/stop plus continuous keepalive; darkness is applicable; no occupancy inference or final-state substitution.",
+  "threshold_comparison": "Strict > for start and < for stop; equality resets the corresponding confirmation timer.",
+  "event_time_basis": "Confirmation time, not raw rising/falling edge.",
+  "keepalive_basis": "Accepted active-state messages must cover each confirmed active interval with gaps <=120 s; keepalive outside confirmed active state fails.",
+  "waveform_abi": "Ordered contiguous [start_s,end_s) piecewise constant external RMS g segments; amplitude is an externally supplied RMS observation, not harvested mechanical energy.",
+  "sampling_semantics": "Powered periodic RMS observations with declared zero-order hold between consecutive successful samples. Confirmation runs only on successful powered wake/sample; unobserved gaps reset timers.",
+  "radio_scope": "Ideal atomic A/R storage-side TX impulse and AR digital wire/CRC with O message kinds; not a BLE air link."
+}

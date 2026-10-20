@@ -1,0 +1,131 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.022393824,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 3,
+    "settled_charge_upper_bound_usd": 0.0230712,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "L3-G0-h1-proposal",
+  "exit_code": 0,
+  "external_result": {
+    "proposal": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "H0:1784856edc321b9d97b25cc9f453b150436b348d01a5b9c20b4dcbbc67c13700",
+        "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+        "component_record:eeb8277f7faa548e82ac297fa65a5e17960824ad13ea20586108ba441280b212",
+        "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e",
+        "excitation_record:219fd490420a63f557b84ea703874a297d34b60da9a037024da38ac32ec99af5",
+        "saved_activity:a4c4b29470504b0b06e584167657f796130e0a445e26e0dccfdd0d8c9ff82d9a",
+        "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+        "check:6a751900ba874cc8f246f210fb5a31f0ac182c47e32b5b98e551e8b9be00ab96",
+        "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+        "submit:91bcd9cd8225c26ceb6cbb669f5a4caebbf6390e28345723f5bee6569b498b30",
+        "submit:EPISODE_CANDIDATE_LIMIT",
+        "episode:p2-h-proposal-001",
+        "episode:p3-formal-1-1-ordinary_reflection-d",
+        "episode:p3-formal-1-1-complete-raw-d"
+      ],
+      "falsifier": "The update is falsified if any of the following is observed on the same frozen task, physics, initial state, sources and budgets, executed from task entry in a fresh session. (a) Terminality rule inverted: a run the procedure classifies as ACHIEVED either has no packet, or has a packet whose application_bytes differ from the service requirement, or whose event_id is not unique, or whose time exceeds receive_deadline_s; i.e. a post-terminal event was allowed to excuse an actual delivery failure. (b) Calibration has no effect: a predictor that reproduces the retained observation within the stated resolution still yields a legal design that delivers no frame by the deadline, while a design the same inequalities reject is observed to deliver it. (c) Calibration is harmful: a design retained under the calibrated inequalities is observed to brown out mid-transmission or spill, while the base read-check-submit choice for the same inputs would not have. (d) Re-derivation is inert or wrong: in an episode whose acquired source sha differ from the retained ones, the procedure still returns the inherited numeric constants, or it refuses to decide although the acquired sources are complete and sufficient. (e) Budget discipline backfires: an episode ends with no valid artifact although the single attempted payload was schema-conforming and an alternative legal payload was available within the recorded budget. (f) Cost regression: reaching a comparable outcome costs strictly more candidate executions or verification calls than the base method on the same inputs. (g) The result is reported as hardware validity, physical calibration, statistical advantage, method migration or recursive self-improvement; physical qualification stays UNKNOWN regardless of any digital-model outcome.",
+      "hypothesis": "The retained record shows no evidence that the base read-acquire-check-submit method is wrong about device physics; it shows the method is under-specified in four places, and each retained failure or near-failure is traceable to one of them rather than to a bad design value. (1) Episode-locality: the same source_id carries different content across episodes (component_record 55d43741 has event_latch volatile, capacitance_f 1e-5, tx_not_before_s 0.045; component_record eeb8277f has passive-mechanical, 2.2e-5, 0), and excitation_record likewise differs (2820ae58 has 16.667 mW on 0-6 ms plus 3.667 mW on 30-60 ms; 219fd490 has one 7.5 mW segment on 0-20 ms). A procedure that reasons with numbers memorised from an earlier episode is reasoning from a false premise, which is what the phase2 proposal did when it baked a 7.4-14 uF band and 28.8 uJ TX cost into method text. (2) Calibration: a quantitative predictor used as a gate must first reproduce a retained observation on the same frozen inputs; the terminality-first ledger's closed form missed the recorded boot by about 8 ticks (0.0166 s vs 0.0158 s at dt=1e-4) while a boot-threshold-first reformulation matched within 1 tick, so the miss was in the written formula, not in the design. (3) Terminality: in submit 91bcd9cd the frame was already delivered at 0.0158 s with received_frames=1 and brownouts_before_deadline=0, so the later events in that same run (the 0.3395 s brownout in a4c4b294) are post-terminal decay; treating such an event as a failure invites a compensating knob change in the direction that removes TX energy headroom. (4) Budget: the single candidate slot in p2-h-proposal-001 was consumed by a payload re-sent unchanged after rejection, ending the episode INCOMPLETE_OR_STOPPED with no artifact learned and no verification. Hypothesis: encoding episode-local re-derivation, predictor calibration against a retained trace, terminality-first diagnosis, and one-attempt-per-validated-payload will remove these four failure modes without touching the task, the physics, the initial state, the evaluator or the budget, and will leave the design value chosen by the base method unchanged whenever the calibrated inequalities hold with positive margins.",
+      "impact_scope": "task-entry",
+      "method_sha256": "aac659f8d95365c699dec50abf9f7c45ed0d803dbe606c969157ed367efeff2e",
+      "method_text": "H method v3: episode-local re-derivation, calibrate-before-gating, terminality-first reading, one-attempt budget. Re-executable from task entry. It governs only how I obtain facts, order experiments and read observations. It never edits the task, the physics, the initial state, the event, the source access, the evaluator or the budget; it is not a device assignment and not an acceptance claim. Complete service is determined outside the participant. Physical calibration stays UNKNOWN.\n\nSTEP 0 - entry read. Call inspect. Record verbatim: the service fields (application_bytes, event_time_s, receive_deadline_s, unique_valid_frames), the legal design ranges, the current design, the partition and scope string, the retained_failures block, the episode's candidate/tool/budget limits, and which actions this episode's tool schema actually exposes (e.g. whether a design-verification channel exists at all). Note the role boundary: an H proposal is not a D submission, and the proposal role cannot submit or check D.\n\nSTEP 1 - acquire, per episode, and treat every number as episode-local. Acquire every source listed for this episode; keep source_id, source_sha256 and the acquisition block (bytes, native_calls, new_scientific_executions, wall_seconds) as the actual cost.\n1a. Never carry a numeric constant from a retained episode into the current one. Retained episodes demonstrably disagree on the same source_id: component_record 55d43741 (event_latch volatile, capacitance_f 1e-5, tx_not_before_s 0.045) versus eeb8277f (passive-mechanical, 2.2e-5, 0); excitation_record 2820ae58 (16.667 mW on 0-6 ms and 3.667 mW on 30-60 ms) versus 219fd490 (7.5 mW on 0-20 ms only). Any inherited value is a hypothesis to be checked against the freshly acquired sha, never an input.\n1b. If a source needed for a decision is missing, or its payload is host-only omitted, record that gap as UNKNOWN. Do not fill it by analogy with another episode.\n\nSTEP 2 - terminality-first reading, before any diagnosis. Classify an observation as ACHIEVED only from a packet with application_bytes equal to the service requirement, one unique event_id, and packet time <= receive_deadline_s; require nothing more. Mark every activity event strictly after the last tx-complete as POST-TERMINAL and record it as expected decay, never as a failure and never as a reason to change a field. Only an absent achieved packet, or an achieved packet violating a stated service field, is a retained failure, and it is labelled (a) deadline miss, (b) no boot, (c) mid-transmission brownout, (d) frame-shape violation. Confirmed by the phase3 pair: submit 91bcd9cd reports one 8-byte frame at 0.0158 s with received_frames=1 and brownouts_before_deadline=0, and saved_activity a4c4b294 shows a later brownout at 0.3395 s in the same run, so that brownout was not a delivery failure.\n\nSTEP 3 - pre-registered, calibrated prediction. Before spending any candidate or verification call, write down the quantitative prediction that will be compared with the observation, built only from STEP 1 values, and state its resolution (e.g. the source dt).\n3a. Calibrate the predictor on a retained observation from the same frozen inputs first; a handwritten closed form is not evidence until it reproduces that observation. Observed counter-example: a boot-threshold-first rule (boot when stored energy first reaches 0.5*C*ready_v^2, then subtract boot_j) reproduced the recorded boot within 1 tick, while the algebraically 'equivalent' ceiling form n_boot=ceil((E_on+boot_j)/step) was off by about 8 ticks (0.0166 s vs 0.0158 s). That deviation was a defect of the written formula, not of the design.\n3b. If prediction and observation disagree by more than the stated resolution: repair or discard the formula, log the measured deviation, and do not change the design in response. Only a violated service-level inequality (deadline, mid-transmission brownout, frame shape) licenses a design change, and then only one legal field at a time, with every inequality re-evaluated afterwards.\n\nSTEP 4 - evidence-availability honesty. If the verification channel is unavailable in this episode (observed: check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE in p2-h-proposal-001), record the candidate design and its prediction as UNVERIFIED/UNKNOWN, keep the ledger arithmetic as arithmetic only, and never report an unavailable check as either a pass or a failure. If verification is available, attempt it once and record the result as observed.\n\nSTEP 5 - one attempt per validated payload, no blind retry. Proposal and candidate budgets are finite and are consumed by attempts, including malformed ones. Observed loss: two submissions carrying the same payload were rejected with EPISODE_CANDIDATE_LIMIT and the episode ended INCOMPLETE_OR_STOPPED; the second attempt added no information because the payload had not changed.\n5a. Validate field names, required keys and enum values against the tool schema read at entry before sending, then spend at most one attempt per distinct payload.\n5b. Never resend an identical rejected payload to test whether the rejection was transport-level. A rejection is information; repetition is not.\n5c. Use the role-appropriate action (propose for an H proposal, submit for a D candidate) and do not route one through the other.\n5d. If the single legal attempt fails, fall back to an explicit no-update that preserves the failed attempts, the UNKNOWNs and the actual costs; do not disguise a rejected payload as a variant.\n\nSTEP 6 - keep the base method unless an inequality is violated. If STEP 2 finds an achieved delivery and STEP 3's calibrated inequalities hold with recorded positive margins, retain the choice the base read-acquire-check-submit method would make and spend nothing further; the update adds discipline, not a new selection bias.\n\nSTEP 7 - log and submit. In the final artifact state: the source versions actually read (sha), the pre-registered prediction, the measured comparison, every retained failure and UNKNOWN verbatim, and the actual cost blocks. Make no claim of hardware validity, physical calibration, statistical advantage, method migration or recursive self-improvement. One proposal, no retry.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "raw_proposal": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "H0:1784856edc321b9d97b25cc9f453b150436b348d01a5b9c20b4dcbbc67c13700",
+        "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+        "component_record:eeb8277f7faa548e82ac297fa65a5e17960824ad13ea20586108ba441280b212",
+        "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e",
+        "excitation_record:219fd490420a63f557b84ea703874a297d34b60da9a037024da38ac32ec99af5",
+        "saved_activity:a4c4b29470504b0b06e584167657f796130e0a445e26e0dccfdd0d8c9ff82d9a",
+        "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+        "check:6a751900ba874cc8f246f210fb5a31f0ac182c47e32b5b98e551e8b9be00ab96",
+        "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+        "submit:91bcd9cd8225c26ceb6cbb669f5a4caebbf6390e28345723f5bee6569b498b30",
+        "submit:EPISODE_CANDIDATE_LIMIT",
+        "episode:p2-h-proposal-001",
+        "episode:p3-formal-1-1-ordinary_reflection-d",
+        "episode:p3-formal-1-1-complete-raw-d"
+      ],
+      "falsifier": "The update is falsified if any of the following is observed on the same frozen task, physics, initial state, sources and budgets, executed from task entry in a fresh session. (a) Terminality rule inverted: a run the procedure classifies as ACHIEVED either has no packet, or has a packet whose application_bytes differ from the service requirement, or whose event_id is not unique, or whose time exceeds receive_deadline_s; i.e. a post-terminal event was allowed to excuse an actual delivery failure. (b) Calibration has no effect: a predictor that reproduces the retained observation within the stated resolution still yields a legal design that delivers no frame by the deadline, while a design the same inequalities reject is observed to deliver it. (c) Calibration is harmful: a design retained under the calibrated inequalities is observed to brown out mid-transmission or spill, while the base read-check-submit choice for the same inputs would not have. (d) Re-derivation is inert or wrong: in an episode whose acquired source sha differ from the retained ones, the procedure still returns the inherited numeric constants, or it refuses to decide although the acquired sources are complete and sufficient. (e) Budget discipline backfires: an episode ends with no valid artifact although the single attempted payload was schema-conforming and an alternative legal payload was available within the recorded budget. (f) Cost regression: reaching a comparable outcome costs strictly more candidate executions or verification calls than the base method on the same inputs. (g) The result is reported as hardware validity, physical calibration, statistical advantage, method migration or recursive self-improvement; physical qualification stays UNKNOWN regardless of any digital-model outcome.",
+      "hypothesis": "The retained record shows no evidence that the base read-acquire-check-submit method is wrong about device physics; it shows the method is under-specified in four places, and each retained failure or near-failure is traceable to one of them rather than to a bad design value. (1) Episode-locality: the same source_id carries different content across episodes (component_record 55d43741 has event_latch volatile, capacitance_f 1e-5, tx_not_before_s 0.045; component_record eeb8277f has passive-mechanical, 2.2e-5, 0), and excitation_record likewise differs (2820ae58 has 16.667 mW on 0-6 ms plus 3.667 mW on 30-60 ms; 219fd490 has one 7.5 mW segment on 0-20 ms). A procedure that reasons with numbers memorised from an earlier episode is reasoning from a false premise, which is what the phase2 proposal did when it baked a 7.4-14 uF band and 28.8 uJ TX cost into method text. (2) Calibration: a quantitative predictor used as a gate must first reproduce a retained observation on the same frozen inputs; the terminality-first ledger's closed form missed the recorded boot by about 8 ticks (0.0166 s vs 0.0158 s at dt=1e-4) while a boot-threshold-first reformulation matched within 1 tick, so the miss was in the written formula, not in the design. (3) Terminality: in submit 91bcd9cd the frame was already delivered at 0.0158 s with received_frames=1 and brownouts_before_deadline=0, so the later events in that same run (the 0.3395 s brownout in a4c4b294) are post-terminal decay; treating such an event as a failure invites a compensating knob change in the direction that removes TX energy headroom. (4) Budget: the single candidate slot in p2-h-proposal-001 was consumed by a payload re-sent unchanged after rejection, ending the episode INCOMPLETE_OR_STOPPED with no artifact learned and no verification. Hypothesis: encoding episode-local re-derivation, predictor calibration against a retained trace, terminality-first diagnosis, and one-attempt-per-validated-payload will remove these four failure modes without touching the task, the physics, the initial state, the evaluator or the budget, and will leave the design value chosen by the base method unchanged whenever the calibrated inequalities hold with positive margins.",
+      "method_text": "H method v3: episode-local re-derivation, calibrate-before-gating, terminality-first reading, one-attempt budget. Re-executable from task entry. It governs only how I obtain facts, order experiments and read observations. It never edits the task, the physics, the initial state, the event, the source access, the evaluator or the budget; it is not a device assignment and not an acceptance claim. Complete service is determined outside the participant. Physical calibration stays UNKNOWN.\n\nSTEP 0 - entry read. Call inspect. Record verbatim: the service fields (application_bytes, event_time_s, receive_deadline_s, unique_valid_frames), the legal design ranges, the current design, the partition and scope string, the retained_failures block, the episode's candidate/tool/budget limits, and which actions this episode's tool schema actually exposes (e.g. whether a design-verification channel exists at all). Note the role boundary: an H proposal is not a D submission, and the proposal role cannot submit or check D.\n\nSTEP 1 - acquire, per episode, and treat every number as episode-local. Acquire every source listed for this episode; keep source_id, source_sha256 and the acquisition block (bytes, native_calls, new_scientific_executions, wall_seconds) as the actual cost.\n1a. Never carry a numeric constant from a retained episode into the current one. Retained episodes demonstrably disagree on the same source_id: component_record 55d43741 (event_latch volatile, capacitance_f 1e-5, tx_not_before_s 0.045) versus eeb8277f (passive-mechanical, 2.2e-5, 0); excitation_record 2820ae58 (16.667 mW on 0-6 ms and 3.667 mW on 30-60 ms) versus 219fd490 (7.5 mW on 0-20 ms only). Any inherited value is a hypothesis to be checked against the freshly acquired sha, never an input.\n1b. If a source needed for a decision is missing, or its payload is host-only omitted, record that gap as UNKNOWN. Do not fill it by analogy with another episode.\n\nSTEP 2 - terminality-first reading, before any diagnosis. Classify an observation as ACHIEVED only from a packet with application_bytes equal to the service requirement, one unique event_id, and packet time <= receive_deadline_s; require nothing more. Mark every activity event strictly after the last tx-complete as POST-TERMINAL and record it as expected decay, never as a failure and never as a reason to change a field. Only an absent achieved packet, or an achieved packet violating a stated service field, is a retained failure, and it is labelled (a) deadline miss, (b) no boot, (c) mid-transmission brownout, (d) frame-shape violation. Confirmed by the phase3 pair: submit 91bcd9cd reports one 8-byte frame at 0.0158 s with received_frames=1 and brownouts_before_deadline=0, and saved_activity a4c4b294 shows a later brownout at 0.3395 s in the same run, so that brownout was not a delivery failure.\n\nSTEP 3 - pre-registered, calibrated prediction. Before spending any candidate or verification call, write down the quantitative prediction that will be compared with the observation, built only from STEP 1 values, and state its resolution (e.g. the source dt).\n3a. Calibrate the predictor on a retained observation from the same frozen inputs first; a handwritten closed form is not evidence until it reproduces that observation. Observed counter-example: a boot-threshold-first rule (boot when stored energy first reaches 0.5*C*ready_v^2, then subtract boot_j) reproduced the recorded boot within 1 tick, while the algebraically 'equivalent' ceiling form n_boot=ceil((E_on+boot_j)/step) was off by about 8 ticks (0.0166 s vs 0.0158 s). That deviation was a defect of the written formula, not of the design.\n3b. If prediction and observation disagree by more than the stated resolution: repair or discard the formula, log the measured deviation, and do not change the design in response. Only a violated service-level inequality (deadline, mid-transmission brownout, frame shape) licenses a design change, and then only one legal field at a time, with every inequality re-evaluated afterwards.\n\nSTEP 4 - evidence-availability honesty. If the verification channel is unavailable in this episode (observed: check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE in p2-h-proposal-001), record the candidate design and its prediction as UNVERIFIED/UNKNOWN, keep the ledger arithmetic as arithmetic only, and never report an unavailable check as either a pass or a failure. If verification is available, attempt it once and record the result as observed.\n\nSTEP 5 - one attempt per validated payload, no blind retry. Proposal and candidate budgets are finite and are consumed by attempts, including malformed ones. Observed loss: two submissions carrying the same payload were rejected with EPISODE_CANDIDATE_LIMIT and the episode ended INCOMPLETE_OR_STOPPED; the second attempt added no information because the payload had not changed.\n5a. Validate field names, required keys and enum values against the tool schema read at entry before sending, then spend at most one attempt per distinct payload.\n5b. Never resend an identical rejected payload to test whether the rejection was transport-level. A rejection is information; repetition is not.\n5c. Use the role-appropriate action (propose for an H proposal, submit for a D candidate) and do not route one through the other.\n5d. If the single legal attempt fails, fall back to an explicit no-update that preserves the failed attempts, the UNKNOWNs and the actual costs; do not disguise a rejected payload as a variant.\n\nSTEP 6 - keep the base method unless an inequality is violated. If STEP 2 finds an achieved delivery and STEP 3's calibrated inequalities hold with recorded positive margins, retain the choice the base read-acquire-check-submit method would make and spend nothing further; the update adds discipline, not a new selection bias.\n\nSTEP 7 - log and submit. In the final artifact state: the source versions actually read (sha), the pre-registered prediction, the measured comparison, every retained failure and UNKNOWN verbatim, and the actual cost blocks. Make no claim of hardware validity, physical calibration, statistical advantage, method migration or recursive self-improvement. One proposal, no retry.",
+      "schema_version": "bf-phase2-method-proposal-v1"
+    }
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-f0c714c8cd2ff0a0",
+  "protocol_sha256": "29824690ed2f584ba4bcd029ddce89ef30d66a6aae94a46670caa1bf42c70eaf",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "ca1f44e83c55edcf5815e26bd16ed88fb094fac2bb6360ca507ab6e88ce07b27",
+  "spec": {
+    "arm": "G0",
+    "arm_id": "L3-G0",
+    "child": 1,
+    "id": "L3-G0-h1-proposal",
+    "kind": "H",
+    "lineage": 3,
+    "slot": "h1-proposal",
+    "stage": "proposal"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 2,
+    "gateway_chain_tip": "a8dc44c0f1f1b8e9ad64ae7869ef7c9b129ecb6c491baf1f0f77487e7336690f",
+    "model_submitted": true,
+    "model_tool_calls": 2,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 44.17171100000269,
+  "wall_seconds_total": 44.37615783300134
+}

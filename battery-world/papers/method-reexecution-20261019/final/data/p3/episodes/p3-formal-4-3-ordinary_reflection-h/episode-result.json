@@ -1,0 +1,77 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.018697356000000002,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0306267,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-3-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "model_law:d690d8a8",
+        "saved_activity:0946fb89",
+        "saved_activity:brownout:tx-transient:2.001",
+        "saved_activity:packets-empty",
+        "inspect:current_design",
+        "inspect:legal_design_ranges"
+      ],
+      "falsifier": "若按该程序从 acquired model_law 计算的 E_req 与时间下限，在 simulate_b 回放中出现以下任一情况，则程序性改进被证伪：(a) 满足守卫的设计仍在某 TX 步出现 loaded_v<Vout 或扣减后 E<eoff（trace 出现 reset reason=tx-transient）；(b) 满足守卫的设计在 deadline/数据龄窗口内 tx_complete 却 packets=[] 或 application_bytes≠8/unique_frames≠1；(c) 存在明显 E1<E_req 的设计在回放中完成 TX，说明守卫定性错误（过度保守且漏掉真实机制）；(d) 守卫推导只在当前 C=Vmax=50µF/各阈值下靠凑数成立，换合法 C 或 ESR 即失效而程序未报 unknown/failure。任一出现即应保留失败、回退基础方法，不得宣称验收。",
+      "hypothesis": "上一轮失败（saved_activity: boot 1.316s, capture 2.0s, tx-start 2.0s, 2.001s brownout reason=tx-transient, packets=[]）不是时间窗问题，而是发射前储能不足以支撑多步负载：acquired model_law(b-transient-behavior-v1) 每个 dt 步先算 loaded_v=sqrt(2E/C)-esr*I 并要求 loaded_v>=Vout，再扣 draw=Vout*I*dt，然后要求剩余 E>=eoff=0.5*C*Voff^2，否则 reset 且 volatile 锁存清空 captured。当 tx_not_before 只由时间门（=event_s）触发时，发射从刚好够 boot 的低能态开始，第二/后续步的 pre-energy 低于 0.5*C*(Vout)^2 导致 loaded_v<Vout。故假设：给 H 增加一个‘先由模型律解析导出能量守卫、再选 C 与 tx_not_before’的可重复步骤，可在不修改任务/评估器/器件物理、且不越出合法区间的前提下，使程序能预先排除必然 brownout 的设计并定位可完成 2ms 发射的时间下限。",
+      "impact_scope": "task-entry",
+      "method_sha256": "8c8a7570ebab475b44d953487907aa9c45fd94353e63ce52f3454cdcb481b2a0",
+      "method_text": "【H 程序性更新：能量守卫优先的设计流程】本步骤仅为可重新执行的设计程序，不是器件指派、不是验收声明，也不修改任务/评估器/器件物理假设。\n\n1) 先 acquire component_record、excitation_record、model_law、saved_activity，读取冻结常量：C、Vmax、Vready、Voff、Vout、tx_current_a(I)、tx_duration_s、esr、boot_j/boot_delay_s、idle/off_power、harvest_efficiency、source_segments 功率、dt_s、event_s、deadline_s、max_data_age_s、required_application_bytes、unique_frames，以及 tx_not_before_s 与 C 的合法区间。\n\n2) 由 model_law 的 simulate_b 结构解析导出步进预算（符号形式，不写死数值）：L=ceil(tx_duration_s/dt)；draw=Vout*I*dt；eon=0.5*C*Vready^2；eoff=0.5*C*Voff^2；Emax=0.5*C*Vmax^2。每个 TX 步 k=1..L 需满足 pre_k >= 0.5*C*(Vout+esr*I)^2 且 pre_k-draw >= eoff。\n\n3) 推出完整 2ms 级发射的最小发射前储能：E_req=(L-1)*draw + max(0.5*C*(Vout+esr*I)^2, draw+eoff)。并推出净充电速率 P_net=(sum source power)*harvest_efficiency - background((idle if powered else off) 取用)，把 E(t)=min(P_net*t, Emax)。\n\n4) 可行性过滤：只保留 Emax>=E_req 的 C；不满足者记为 infeasible/unknown 并保留事实，不得伪造或强行发射。\n\n5) 时间窗过滤：以 t_nb>=E_req/P_net 给出最早可发射时刻（若 E 触顶则由 Emax 维持），并要求 t_nb+L*dt <= min(deadline_s, event_s+max_data_age_s)；同时要求 boot 早于 event_s 且 P_net>0 保证捕获后无 brownout（volatile 锁存在无 reset 时保持），在合法 tx_not_before 区间内选择高于下限并留余量的值。\n\n6) 回放核验：对每个候选设计用 model_law.simulate_b(或等价解析步进)回放，要求出现 >=1 个 packet、application_bytes=required_application_bytes、unique_frames=1，且 activity 中无 reason=tx-transient 的 brownout；否则判失败并保留真实 trace 与费用。\n\n7) 预算内（至多2个 distinct designs）逐一执行；失败/未知/no-update 一律如实保留，禁止事后改任务或评估器来‘通过’，也不得把本程序等同于方法迁移、统计优势或 RSI。\n\n8) 输出仅引用本次 acquire 的版本事实（source_sha256 与 saved_activity 动作）；不声明硬件或外部验收，验收在外部服务。",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-3-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-d4812198df54ab2c",
+  "protocol_sha256": "6402c6a8f7dbf16de7ad2d7be09687d967cd84e9198a055f1a2ed93e60fd74be",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "ae44327b532deb515285cc529ac91832db8852f36f5ad0d3b8ddef48be38c444",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-4-3-ordinary_reflection",
+    "id": "p3-formal-4-3-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 5,
+    "gateway_chain_tip": "740c699209059c28364a882b50270fb19986adb6ef05fe9850ba7f2d23560824",
+    "model_submitted": true,
+    "model_tool_calls": 5,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 58.634266542008845,
+  "wall_seconds_total": 59.17244145899895
+}

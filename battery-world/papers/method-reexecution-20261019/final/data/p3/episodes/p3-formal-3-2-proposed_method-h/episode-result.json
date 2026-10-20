@@ -1,0 +1,87 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.035278296,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0502182,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-2-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "saved_activity.activity.44.action",
+        "saved_activity.activity.44.event_was_captured",
+        "saved_activity.activity.45.time_s",
+        "saved_activity.activity.46.time_s",
+        "saved_activity.activity.47.time_s",
+        "saved_activity.packets.0.time_s",
+        "saved_activity.packets.0.application_bytes",
+        "saved_activity.packets.0.loaded_v",
+        "saved_activity.packets.0.hex",
+        "component_record.event_latch",
+        "component_record.off_v",
+        "component_record.ready_v",
+        "component_record.cap_voltage_max_v",
+        "excitation_record.deadline_s",
+        "excitation_record.shunts.0.time_s",
+        "model_law.model_id"
+      ],
+      "falsifier": "Falsified if any replay of simulate_b over these exact records returns zero packets, a packet with time_s>deadline_s, application_bytes<required_application_bytes, more than unique_frames frames, or a tx step with loaded_v<output_v or e<eoff; or if a brownout clears the captured event while event_latch=passive-mechanical; or if the energy/timing constraint cannot be derived from the supplied records without inventing values absent from component_record/excitation_record/model_law; or if the policy cannot be consumed from task entry. Any one invalidates the claim that reset is retention-neutral and that packet-level adjudication correctly classifies this trace.",
+      "hypothesis": "Under the frozen model b-transient-behavior-v1 and the supplied component_record/excitation_record, pending-event retention is independent of power-state resets when event_latch=passive-mechanical, because the law's reset() clears captured only for volatile latches. Therefore a task-entry procedure that (a) derives the storage thresholds and the harvest/background/shunt/boot/tx energy timeline from the records and (b) adjudicates service on the delivered packet stream (event_id match, application_bytes>=required_application_bytes, time_s<=deadline_s, unique_frames) will classify the retained trace as satisfying the service predicate: capture 0.0037-0.0079 s, brownout at 0.0121 s with event_was_captured=true, re-boot 0.0381 s, and one 8-byte event-1 frame at 0.0469 s <= 0.1 s with loaded_v 2.565 V >= output_v. The same procedure avoids the misdiagnosis of reading any brownout as event loss and therefore avoids an unwarranted device-parameter edit. Independent service acceptance remains external and is not asserted here.",
+      "impact_scope": "task-entry",
+      "method_sha256": "e33664ae735ee9adb85c94baa58675d843f8bac2beefb98f56ef0ee82747196e",
+      "method_text": "METHOD H (consumed from task entry; procedural only, no device assignment, no task/evaluator edit).\n\nInputs are frozen: task {event_s, contact_duration_s, deadline_s, required_application_bytes, unique_frames}, plus component_record, excitation_record, model_law. Never modify the task or evaluator. Never encode a specific device parameter value as the method.\n\n1) Derive thresholds from component_record only: eon=C*ready_v^2/2, eoff=C*off_v^2/2, emax=C*cap_voltage_max_v^2/2, e0=C*cap_initial_voltage_v^2/2, with C=capacitance_f. Do not assume any value not present in the records.\n\n2) Build a source-bound energy timeline from excitation_record at dt=dt_s: for each source_segment active at t0, harvest_j=power_w*harvest_efficiency*dt; subtract background_j=(idle_power_w if powered else off_power_w)*dt; subtract shunt_j from shunts whose time_s lies in the step; pay boot_j at boot; cap stored energy at emax (spill). For any tx step, requested tx_j=output_v*tx_current_a*min(dt,tx_left), and loaded_v=sqrt(2*e/C)-esr_ohm*tx_current_a. A tx step is legal only if loaded_v>=output_v and remaining e>=eoff.\n\n3) Derive the tx-window as an inequality, not a heuristic value: e_start >= sum over tx_duration steps of (tx draw - harvest during those steps) + eoff, together with the loaded_v condition. Report the feasible tx_not_before interval as a derived constraint; keep the boundary open where a heuristic merely happened to work, and do not promote 'some value worked' into 'only that value is feasible'.\n\n4) Trace every event from source through capture, reset, and delivery, and keep the labels separate. capture: with event_latch=passive-mechanical, captured is set at t>=event_s and not done (an ideal mechanical-latch assumption, not free NVM). reset: a brownout sets powered=0 and clears captured only when event_latch=volatile. delivery: a packet carrying time_s, event_id, application_bytes, loaded_v. A power-state reset is NOT evidence of pending-event loss when the latch is passive-mechanical.\n\n5) Adjudicate service on the packet stream, not on the presence or absence of brownouts: report satisfied only if the trace contains exactly unique_frames valid frames (event_id matches, application_bytes>=required_application_bytes) each at time_s<=deadline_s. Record the observed packet time, application_bytes, loaded_v, and hex.\n\n6) Report the result as a classification of the trace against the supplied predicate, plus an explicit UNKNOWN for physical calibration. Final independent acceptance is external and is not claimed by this method.\n\n7) Only if step 5 fails may a D candidate be handed to the normal design channel; any coupled D change requires complete re-simulation feedback. The H change itself must never carry a parameter value. Preserve counterexamples and UNKNOWN; if the records do not determine a value, stop and report no-update/UNKNOWN rather than guess.\n\nApplied to the retained observation: the brownout at 0.0121 s carries event_was_captured=true under the passive latch, a later boot occurs at 0.0381 s, and one 8-byte event-1 frame is delivered at 0.0469 s (<=0.1 s) with loaded_v 2.565 V >= output_v. Under the frozen model this trace matches the supplied service predicate; a procedure that read the 0.0121 s brownout as failure would misdiagnose the trace and would license an unwarranted device edit.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-2-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-3f6858c16126111d",
+  "protocol_sha256": "b7a29ae9c30443afb3ed3685df4c57398bce82348663903bd4e27f2abcc31456",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "4b16704063bf40bb6b4a565059bfbc4d752d75bf1183e9c6e1d51688b87cfa99",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-3-2-proposed_method",
+    "id": "p3-formal-3-2-proposed_method-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "0ffd54d6fdefad558cacae819732f23ffd7bde203e8c7667784149a321274b80",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 82.4751428749878,
+  "wall_seconds_total": 82.87461354100378
+}

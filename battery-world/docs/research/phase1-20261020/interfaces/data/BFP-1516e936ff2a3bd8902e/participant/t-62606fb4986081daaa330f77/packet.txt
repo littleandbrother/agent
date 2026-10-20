@@ -1,0 +1,16 @@
+The shared summary is "Judge the announced legal design change using PASS, FAIL, or UNKNOWN. The models are ideal computational assumptions, not measured devices.".
+The fact bf_model has value {"law": "pending captured when on; reset clears volatile pending; TX consumes pending", "actual_world": {"kind": "memory", "retains_pending": false}, "task": {"deadline_s": 5.0, "delivery_goal": 1, "event_at_s": 1.0, "event_id": "event-1", "horizon_s": 5.0, "tx_at_s": 4.0}, "design": {"power_off_intervals": []}, "legal_domain": {"end_max_s": 3.75, "max_intervals": 1, "min_duration_s": 0.25, "start_min_s": 1.25}, "units": {"time": "s", "energy": "uJ", "capacitance": "uF", "voltage": "V", "power": "uW", "pending": "event identifier or null", "retention": "boolean"}, "assumptions": ["forced on/off schedule", "ideal event capture when powered", "reset retention is declared", "no physical NVM write or startup model"], "evidence_type": "ideal-model-definition; not calibrated or measured"}.
+The fact current_delivered_count has value 1.
+The fact current_trace has value [{"event": "initial", "pending": null, "powered": true, "received": [], "time_s": 0.0}, {"event": "capture", "pending": "event-1", "powered": true, "received": [], "time_s": 1.0}, {"event": "send", "pending": null, "powered": true, "received": ["event-1"], "time_s": 4.0}, {"event": "end", "pending": null, "powered": true, "received": ["event-1"], "time_s": 5.0}].
+The fact current_verdict has value "PASS".
+The fact deadline_s has value 5.0.
+The fact delivery_goal has value 1.
+The fact event_at_s has value 1.0.
+The fact event_id has value "event-1".
+The fact horizon_s has value 5.0.
+The fact kind has value "memory".
+The fact legal_domain has value {"end_max_s": 3.75, "max_intervals": 1, "min_duration_s": 0.25, "start_min_s": 1.25}.
+The fact power_off_intervals has value [].
+The fact proposed_change has value {"power_off_intervals": [[2.0, 3.0]]}.
+The fact retains_pending has value false.
+The fact tx_at_s has value 4.0.

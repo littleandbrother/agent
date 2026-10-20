@@ -1,0 +1,65 @@
+{
+  "schema_version": "bf-phase3-method-conditions-v1",
+  "dispatch_id": "phase-3-controlled-comparison-bf-20261020-001",
+  "feature": "BFA-058-phase3-method-comparison",
+  "status": "PREPARED_REQUIRES_S0_FROZEN_DISPATCH",
+  "hypothesis": "Explicit artifact, dependency and event-order reasoning may improve or appropriately reject candidate methods under the same total group budget.",
+  "falsifier": "No benefit over fixed H or ordinary reflection, stale feedback accepted after a coupled change, false pending-state retention across reset, an extra method budget, or failed service promoted.",
+  "common": {
+    "base_design_instruction": "Read the fixed task and every available source. Select a legal design using only the permitted D fields, actually check it, then submit the final candidate and a concise source-bound reason. Keep the task, physics, initial state, event, source access, evaluator and budget fixed. Retain every failed check and UNKNOWN. A complete service result is determined independently outside the participant. Do not claim hardware, statistical advantage, transfer or recursive self-improvement.",
+    "proposal_instruction_prefix": "Starting from the same base H, fixed task, available sources and retained observations, propose at most one valid procedural H update with hypothesis, falsifier, method_text and changed_artifact=H, or explicitly return no-update. The proposal role cannot submit or check D. Do not supply a device assignment as the method, edit the task/evaluator, or declare acceptance. No correct parameter values or service labels are supplied by this condition.",
+    "group_budget": {
+      "total_model_requests": 24,
+      "total_wall_seconds": 1200,
+      "max_distinct_D": 2,
+      "includes": ["proposal", "acquisition", "design", "confirmation", "failed_actions", "all_parent_and_child_requests"],
+      "wall_accounting": "Sum all sequential group stages, including local acquisition/check/confirmation time; no stage resets the group clock.",
+      "proposal_unused_budget": "Only the remaining group budget is available to the fresh design. A subcap is never an addition to the group cap."
+    },
+    "parity_fields_required_before_dispatch": ["task_sha256", "sources_sha256", "information_sha256", "base_H_sha256", "model_configuration_sha256", "tool_definitions_sha256", "evaluator_sha256", "initial_cache_manifest_sha256"],
+    "source_access": "Identical source IDs, source bytes, acquisition tools and costs for every condition; neither method prompt contains hidden labels, prior successful designs or additional source facts.",
+    "cache_policy": "One frozen initial manifest per matched task/replicate; each condition receives an isolated overlay. No condition reads another condition's new entries. Exact-input response reuse requires matching all consumed identities and is recorded separately from fresh Agent decisions and cache construction cost.",
+    "design_start": "New owner, empty decision context and task-entry start for every design, including a no-update fallback. Only the declared H text differs.",
+    "proposal_actions": ["inspect", "sources", "acquire", "submit_H", "no_update"],
+    "design_actions": ["inspect", "sources", "acquire", "check_D", "submit_D"],
+    "malformed_proposal": "Does not consume the one valid-proposal slot; every request, failed action and elapsed second still consumes the proposal and total group caps. Any correction stays in the same finite episode. No automatic new owner, resampling or unregistered retry.",
+    "no_update_or_no_valid_proposal": "Preserve the proposal outcome and its costs. Use the unchanged base H in a fresh design only if group budget remains; do not relabel the proposal as successful.",
+    "selection_and_retention": "S0 performs independent full-service evaluation and an outcome-blind registered selection rule. These conditions grant no promotion authority.",
+    "stop": ["unsettled_or_unknown_usage", "ambiguous_model_identity", "unfrozen_or_unequal_initial_cache", "budget_exhausted", "hidden_label_leak", "frozen_scientific_drift"],
+    "native_dispatches": 0
+  },
+  "conditions": [
+    {
+      "id": "fixed_h",
+      "label": "Fixed H",
+      "proposal_requests_cap": 0,
+      "proposal_wall_seconds_cap": 0,
+      "proposal_instruction": null,
+      "design_H": "common.base_design_instruction",
+      "group_total_requests_cap": 24,
+      "group_total_wall_seconds_cap": 1200
+    },
+    {
+      "id": "ordinary_reflection",
+      "label": "Ordinary reflection",
+      "proposal_requests_cap": 8,
+      "proposal_wall_seconds_cap": 400,
+      "proposal_instruction": "Review the available observations and retained failures. Reflect on why the previous approach may have failed, identify assumptions or mistakes, and propose a repeatable improvement to the design procedure. Explain what could falsify the proposed improvement. Keep the base method if the evidence does not justify an update.",
+      "design_H": "common.base_design_instruction plus actual submitted H method_text, or unchanged base H on no update",
+      "group_total_requests_cap": 24,
+      "group_total_wall_seconds_cap": 1200
+    },
+    {
+      "id": "proposed_method",
+      "label": "Typed dependency and evidence scope method",
+      "proposal_requests_cap": 8,
+      "proposal_wall_seconds_cap": 400,
+      "proposal_instruction": "Before proposing a method, distinguish a device edit D from a procedural H edit and identify which observations, controller decisions and complete responses depend on the changed inputs. Trace each event from its source through capture, any reset, and delivery; separate service completion from a claim about pending-state retention. Build source-bound energy and timing constraints without treating a sufficient design heuristic as a necessary feasible-space exclusion. State the proposed procedural change, its falsifier and the evidence that would invalidate its scope. A global H update must be consumed from task entry, and coupled D changes require complete feedback. Preserve counterexamples and UNKNOWN; return no-update if unsupported. Derive every task-specific value from the same sources available to the other conditions.",
+      "design_H": "common.base_design_instruction plus actual submitted H method_text, or unchanged base H on no update",
+      "group_total_requests_cap": 24,
+      "group_total_wall_seconds_cap": 1200
+    }
+  ],
+  "accounting_boundary": "Token estimates, actual provider usage, failed proposals and local-case construction are reported separately. Codex assistance is unpriced and nonzero. A cached response is not a newly executed case.",
+  "execution_authority": "S0 only; preparation performs no provider, scientific or native dispatch."
+}

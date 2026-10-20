@@ -1,0 +1,44 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-045-ar-b-reference",
+  "owner": "campaign-a",
+  "status": "in-progress",
+  "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "authority": "Direct user authorization in 01a11b01-a75e-75c2-81c3-7d152a24f15a verified by S0; finite first batch only; no commit/push.",
+  "hypothesis": "An explicit single-light-source A/R service chain and a separate transient B model can be qualified with independent energy, event and receiver checks before an Agent is attached.",
+  "paper_claim": "One source-bound A/R computational candidate; B public positive/negative qualification and declared physical-anchor limits.",
+  "falsifier": "Independent integration or receiver disagrees; darkness is relabeled N/A; retention is counted as continued sensing; lux is converted to watts without an IV assumption; a nominal device is presented as measured.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py",
+    "scripts/campaign_reference.py",
+    "tests/agentlab/test_campaign_reference.py",
+    "configs/studies/parallel-20261019/reference/",
+    "docs/research/parallel-20261019/reference/"
+  ],
+  "schema_changes": [
+    "campaign-task-v1",
+    "campaign-result-v1"
+  ],
+  "targeted_tests": [
+    "zero-storage startup and valid digital temperature reception",
+    "darkness and finite storage",
+    "history retention vs continued sensing",
+    "recovery upload and deduplication",
+    "B cold pulse and volatile event-loss controls",
+    "independent energy/event readback"
+  ],
+  "negative_controls": [
+    "no source energy",
+    "startup too late",
+    "stale sample",
+    "volatile event lost on reset",
+    "duplicate upload",
+    "unavailable calibration -> UNKNOWN"
+  ],
+  "reproducible_command": "PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_reference.py --output <new-absolute-directory>",
+  "output_artifact": "docs/research/parallel-20261019/reference/",
+  "cost_cap": "Existing unlimited cumulative money/time authorization retained. This executor performs a finite deterministic development list, zero paid model requests, zero native EDA/hardware writes, <= 500 MB outputs. Paid work is dispatched by S0 after a model-session slot is free.",
+  "claim_boundary": "Public development computational evidence; datasheet bounds are not calibrated device models. No hardware, unseen-mechanism generalization or Agent benefit claim.",
+  "stop_condition": "Stop on baseline/content drift, reference disagreement, unavailable model domain, hidden evaluator exposure, < 5 GB free, unknown native state or need for an out-of-scope source edit. Return the exact blocker; retain failures."
+}

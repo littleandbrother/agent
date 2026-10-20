@@ -1,0 +1,77 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.019219884,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0338211,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-2-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "component_record.sha256.eeb8277f",
+        "excitation_record",
+        "excitation_record.sha256.219fd490",
+        "model_law",
+        "model_law.sha256.d690d8a8",
+        "saved_activity",
+        "saved_activity.sha256.a4c4b294",
+        "saved_activity.activity.boot.0.0129",
+        "saved_activity.activity.txstart.0.0139",
+        "saved_activity.activity.txcomplete.0.0158",
+        "saved_activity.activity.brownout.0.3395",
+        "saved_activity.packets.0.loaded_v",
+        "saved_activity.packets.0.hex"
+      ],
+      "falsifier": "The update is falsified if any of the following holds on a re-executed audit: (1) the ledger, using only the acquired facts and the model's own ordering, fails to reproduce an observed term or timestamp of an acquired trace within a stated tolerance (e.g. boot instant, tx-complete instant or the recorded loaded_v), proving the term set is incomplete; (2) for some legal design point the ledger predicts min loaded_v >= output_v*(1+m_v) and min stored energy >= e_off*(1+m_e) with tx complete before the deadline, yet the executed trace shows a brownout with reason 'tx-transient', a loaded_v below output_v, stored energy below e_off, or completion after the deadline, proving the bound sits on the wrong step; (3) the ledger cannot be evaluated without a field that the frozen sources do not contain (so a service label or physical calibration is required), which would make the procedure non-executable under this condition; (4) the audit silently reports spill_j > 0 or an unreconciled stored_j row as success, since spill is silent loss and would invalidate the reserve accounting; (5) an unlabeled or failed observation is later presented as a pass. If any of these appear, the base method is to be kept and the ledger repaired before any further claim.",
+      "hypothesis": "The retained base run carries no margin information because H judged a design by the presence of a packet instead of by a computed reserve. A closed-form per-step energy ledger derived only from the acquired frozen facts (harvest, background drain, boot, per-step tx request, spill, and the model's own tx guard on loaded_v and e_off) should (i) reproduce every retained action of the base trace by arithmetic alone, without spending an execution, and (ii) reduce later work to designs whose binding step is identified before execution, rather than to legal corners chosen by inspection. Prediction under test: recomputation from component_record (harvest_efficiency, off/idle power, boot_j, boot_delay_s, ready/off/output/cap_max voltages, esr, tx current and duration) and excitation_record (dt_s, source_segments, deadline) will match saved_activity, and the audit will classify the 0.3395 brownout as post-completion decay rather than as tx failure, exposing which margin is actually slack. This is a procedural claim about H only; it is not a device assignment, not an acceptance decision, and asserts no hardware, statistical, migration or RSI advantage.",
+      "impact_scope": "task-entry",
+      "method_sha256": "470dc34c9780fe3883c894b7820f6dd0fddf562627d9586e8039ddbdd309bebe",
+      "method_text": "BF-H v2 (procedural only): pre-execution energy ledger, binding-step bound, and term-wise trace audit. Scope: frozen ideal digital BF apparatus; physical calibration UNKNOWN; qualification and the final independent service remain external. This text contains no device assignment, no task/evaluator change, and no acceptance claim.\n\n1. Fact freeze. Before any design choice, pin from the acquired sources, with version hashes: component constants (boot_j, boot_delay_s, ready_v, off_v, output_v, cap_voltage_max_v, cap_initial_voltage_v, esr_ohm, tx_current_a, tx_duration_s, harvest_efficiency, idle_power_w, off_power_w, event_latch) and excitation facts (dt_s, source_segments, shunts, event_s, contact_duration_s, deadline_s), plus the model id and the exact per-step ordering (harvest, spill, background, shunt, boot, tx-guard). If a field is absent, record 'unknown' and stop; never substitute a guess, a remembered value, or a service label.\n\n2. Build the ledger symbolically, before executing anything. With c the storage choice: e_on = c*ready_v^2/2, e_off = c*off_v^2/2, e_max = c*cap_voltage_max_v^2/2; gain per step g = harvest_efficiency * sum(active source power) * dt; drains off_power_w*dt while unpowered and idle_power_w*dt while powered; boot cost boot_j; tx cost per step q = output_v * tx_current_a * min(dt, tx_left); model tx guard loaded_v = sqrt(2e/c) - esr_ohm*tx_current_a >= output_v with e >= e_off after each tx step. Write down which terms scale with c and which do not: the frame price per step q is c-independent while e_on, e_off and e_max scale linearly in c, so capacitance trades reserve against trigger height, and it does not make a frame cheaper. Note explicitly where source power is still active, since only then does postponing the tx start buy reserve, and where spill becomes possible.\n\n3. Feasibility bound at the binding step, not the typical step. For a candidate (c, tx_not_before) walk the ledger step by step to the ready instant (first step with e >= e_on, then boot_j, then boot_delay_s) and through the tx window; then require over every step of that window: min loaded_v >= output_v*(1+m_v), min stored energy >= e_off*(1+m_e), spill_j == 0 inside the window, and tx completion <= deadline_s - guard_s. Declare m_v, m_e and guard_s as procedure parameters before executing; they are not service facts. If no legal point satisfies the bound, report 'infeasible under ledger' and keep the current design instead of executing to find out.\n\n4. Experiment order and honest cost. Spend the budget in this order: (a) audit already-acquired traces by recomputation (costs no execution); (b) predict-only comparison of several legal points on the ledger (costs no execution); (c) at most the two candidate executions, and if a second one is spent it must move only the margin that the ledger named as binding, so the two outcomes separate 'bound holds' from 'bound is optimistic' instead of probing an unrelated corner. Record actual spend (executions, provider requests, wall time) whether or not it produced a usable observation. A single packet establishes feasibility at that one point; it proves no margin.\n\n5. Term-wise trace audit. For every acquired trace, recompute each row's harvest_j, background_j, spill_j, boot_j and tx_j from the ledger and reconcile them against stored_j and voltage_v; an unreconciled row means the ledger is wrong and the repair goes into the ledger, not into the design. Then classify each action without upgrading it: 'tx-complete' before the deadline gives a candidate frame (report time_s, application_bytes, loaded_v, and the computed margins); 'brownout' with reason 'tx-transient' is a bound violation and must be reported as a failure with its step and loaded_v; 'brownout' with reason 'energy-threshold' after a tx-complete, with no source remaining, is expected post-completion decay and is a diagnostic, not success evidence. Never turn an unlabeled or missing observation into a pass, and never let a later success erase an earlier failure.\n\n6. Observation and context policy. Retain failures, unknowns and actual costs verbatim, keyed by model_id and source hashes, and carry them into the next attempt. State conclusions only in the form 'feasible at this point with computed margins m_v, m_e, guard_s, within the 2-execution / 2-design budget', never as validated, calibrated, statistically better, migrated, or recursive self-improvement.\n\n7. Stop rule. If the audit and the bound agree with an observed result, the method may reuse that same arithmetic on the next instance; if they disagree, an H update proposal must name the failing term and the observation that falsified it. No acceptance decision is produced by this procedure at any stage.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-2-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-43b7c59a91f8e63c",
+  "protocol_sha256": "788226688763af1917d3fef9c0a824a125867942238d84fc1b3f7a9a9fb24244",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "69322642fc5ad41ae8db1028109575eae85574933da925620a51f174b17934c7",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-1-2-ordinary_reflection",
+    "id": "p3-formal-1-2-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "ba17d14c7e2d90c767074535a5c90ca1e27c408b8c7d466e0948dba1b7508981",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 62.966005458991276,
+  "wall_seconds_total": 63.30344795799465
+}

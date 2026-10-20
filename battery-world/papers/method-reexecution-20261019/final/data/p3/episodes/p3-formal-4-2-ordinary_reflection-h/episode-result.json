@@ -1,0 +1,81 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.016228404,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.026690099999999998,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-2-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "model_law:d690d8a8",
+        "saved_activity:0946fb89",
+        "component_record",
+        "excitation_record",
+        "saved_activity.activity.brownout.reason.tx-transient",
+        "saved_activity.activity.tx-start.t2.0",
+        "saved_activity.packets.empty",
+        "model_law.reset.clears.volatile.capture",
+        "component_record.event_latch.volatile",
+        "component_record.output_v.1.0.tx_current.0.025.tx_duration.0.002"
+      ],
+      "falsifier": "Refuted (and demoted, keeping the base procedure for that component) if any of: F1 a design that passes every certificate inequality with the stated margins still ends with packets=[] or a tx-transient / energy-threshold brownout before tx-complete, or tx-complete after deadline_s or beyond max_data_age_s; F2 the certificate does not flag the retained design (C=50e-6, tx_not_before=2) as violated, i.e. it cannot explain the retained failure; F3 a design that clearly violates the energy or ceiling inequality (e.g. emax < E_tx + eoff) nevertheless yields a valid 8-byte frame, showing the derived accounting is wrong for the frozen model; F4 the maximin selection rule produces no admissible point at all in the legal ranges while a non-maximin point in the same ranges would have been admissible. Any single observation above falsifies the size/placement of the margins, not the frozen task, evaluator or model.",
+      "hypothesis": "The retained failure is an energy-budget violation, not a gating/protocol defect. Under the frozen law, one transmit step costs V_out*I_tx*dt = 25 uJ and a full 2-step frame costs 50 uJ, while the retained design (C=50uF, tx_not_before=2) began TX at the capture instant with stored energy ~25 uJ (eon = C*V_ready^2/2), so the second step's post-draw energy fell below eoff = 1 uJ and the model emitted brownout(tx-transient); because event_latch is volatile the only capture was cleared and no later contact exists, so packets stayed empty. Therefore a design procedure that (i) derives a closed-form feasibility certificate (boot-before-event, TX energy incl. per-step voltage floor and post-TX eoff, storage ceiling emax, timing/deadline) from component_record + excitation_record + model_law BEFORE spending candidate executions, (ii) treats C as two-sided (small enough to boot before the 1 ms event, large enough that emax can hold E_tx+eoff and cross the V_out floor), and (iii) maximin-selects margins instead of choosing the earliest legal TX gate, will analytically flag the retained design as infeasible and raise the chance that a single 8-byte frame completes inside [event_s, deadline_s]. This is a procedural revision of H only; it asserts no hardware result, no statistical advantage, no migration and no RSI.",
+      "impact_scope": "task-entry",
+      "method_sha256": "6961d3f2d5b111d90899d5e367e65b9673aff34bcbd4a93b60b730ef286c0071",
+      "method_text": "M-H2: energy-budget-gated design procedure (volatile latch, single-frame deadline). Read-only derivation first; device parameters are outputs of the procedure, not inputs to it.\n\nStep 0 -- facts, no execution. From component_record, excitation_record, model_law and saved_activity record: legal C range and tx_not_before range; event_s, contact_duration_s, deadline_s, dt_s; source segments (power_w, start/end), harvest_efficiency, shunts; boot_j, boot_delay_s, idle_power_w, off_power_w; output_v (V_out), tx_current_a (I_tx), tx_duration_s (T_tx), ready_v, off_v, cap_voltage_max_v, event_latch type; required_application_bytes and unique_frames. Never edit these facts, the model, the ranges or the query token.\n\nStep 1 -- derived quantities (symbolic, per candidate C). eon = C*V_ready^2/2; eoff = C*V_off^2/2; emax = C*V_max^2/2; e_floor = C*V_out^2/2 (draw-time voltage floor); N = ceil(T_tx/dt); E_step = V_out*I_tx*dt; E_tx = V_out*I_tx*T_tx; P_net = harvest_efficiency*sum(source power over the pre-event interval) - background power, using the pessimistic (higher) background and crediting no harvest that is not in the record.\n\nStep 2 -- pre-execution feasibility certificate. A candidate (C, tx_not_before) is admissible only if every line holds WITH an explicit stated margin (report the margin value per line, never a bare pass/fail):\n (a) powered-in-time: t_boot(C) = (eon + boot_j)/P_net + boot_delay_s + 2*dt must be < event_s - dt. Rationale: with a volatile latch the 1 ms contact is captured only while powered; a late boot loses the event irrecoverably. (Retained design satisfied this: first_boot_s = 1.316 < 2.0.)\n (b) TX energy budget: e_need(C) = max(e_floor + (N-1)*E_step, E_tx + eoff); require stored energy at TX start e_s >= e_need + safety, with safety = max(E_step, 0.2*e_need), because a reset between tx-start and tx-complete destroys the only frame and no second contact exists.\n (c) storage ceiling: emax >= e_need + safety. If the capacitor cannot physically hold E_tx + eoff plus the step floor, that C is infeasible, not merely marginal.\n (d) timing window: t_tx >= max(tx_not_before, t_reach(e_need + safety)) with t_reach ~= e_need/P_net; t_tx + T_tx <= deadline_s - 2*dt; t_tx - event_s <= max_data_age_s.\n (e) per-step replay: for j = 1..N, pre-draw energy e_s - (j-1)*E_step >= e_floor, and post-draw final energy e_s - E_tx >= eoff + safety/2. Never let float equality at a threshold be load-bearing.\n\nStep 3 -- selection rule (maximin, not single-knob maximization). F = {C in range: (a),(b),(c) hold} intersected with {tx_not_before in range: (d),(e) hold}. Choose the point maximizing the minimum normalized margin over (a),(b),(c),(d),(e). Explicitly forbid the two attractors seen in the retained record: the smallest legal tx gate (fires at the capture instant with no stored packet energy) and the largest legal C (delays boot past the contact and raises eon/e_floor).\n\nStep 4 -- order of experiments (within the registered budget). (4.1) Re-derive the retained failure analytically and require the certificate to reject it: C = 50e-6, tx_not_before = 2 gives e_s ~ 25e-6 = eon, step-1 draw 25e-6 leaves ~0 < eoff, so the model's reset fires and volatile capture is cleared -> violated (b)/(e). If the certificate cannot reject the retained point, stop and keep the base procedure. (4.2) Spend at most the registered candidate executions on the maximin admissible point first, then on one off-center admissible point chosen to make the boot-before-event line (a) binding, to test whether (a) or (b) is the true constraint. Do not use an execution to test a point the certificate already rejects.\n\nStep 5 -- observation policy and retention. Judge each execution from per-step trace fields (stored_j, loaded_v, powered, event_captured) plus activity (boot, capture, tx-start, tx-complete, brownout reason) and packets (exactly one frame, application_bytes = required_application_bytes, distinctness), and convert tx-complete time to seconds versus event_s and deadline_s. Retain every failure, unknown and cost verbatim. No acceptance claim: the host's independent service decides, and physical calibration stays UNKNOWN.\n\nStep 6 -- update discipline. On a failed candidate change one item only (one margin constant or one inequality) and re-derive; if certificate prediction and observed outcome disagree, presume the certificate (not the frozen model) is wrong and weaken it rather than adding new constraints. Keep the base method for any component with no supporting observation.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-2-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-c15c01ee00918144",
+  "protocol_sha256": "51c69fa808c20a11ad67f6614fac9ab0b6a51d1e82d86c9383d3376a9f83a826",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "cbe6e499c5c19c89143fe5666f0c0b8850f5ae6424220eafa4a7042276326d0c",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-4-2-ordinary_reflection",
+    "id": "p3-formal-4-2-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 5,
+    "gateway_chain_tip": "f651311aa768c0710aeea3b56136fe69235d305658ae092e80972b9242ba7c08",
+    "model_submitted": true,
+    "model_tool_calls": 5,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 52.63714358401194,
+  "wall_seconds_total": 53.01379149999411
+}

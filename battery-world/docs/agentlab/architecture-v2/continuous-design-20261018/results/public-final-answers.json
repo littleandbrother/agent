@@ -1,0 +1,225 @@
+{
+  "scope": "assistant final text blocks only",
+  "answers": [
+    {
+      "trial": "S1-current-timing--single",
+      "owner": "pi-chat-4ec6f9f04e850b7c",
+      "status": "IDLE",
+      "current_system": "SC-148f444ff939f4978166e8d957a6021d80d081b1e67d33806053060031a6c243",
+      "final_text": "已提交来源核对答案（`ans-node-duty-currents-1`）。\n\n## 核对结果摘要\n\n**来源**：`task-definition.json`（sha256 `a99f04…a83e6ca`）与 `firmware/main.c`（sha256 `830b94…31ee0`），均为冻结候选内的唯一权威来源。\n\n| 字段 | 数值 | 单位 | 条件 | 来源 |\n|---|---|---|---|---|\n| idle_a | 8e-06 | A | BF_IDLE(=1) 状态恒流，固定电流模型 `declared-host-node-current-v1`；BF_OFF 为 1e-08 A（supervisor 施加）；<1.8 V tapered | task-definition `/scenario/current_model/values_a/idle`；main.c L16 |\n| sample_a | 0.001 | A | BF_SAMPLE(=2)，仅在 phase==2 返回；须供电存在期间正常迁移才算完成 | `/scenario/current_model/values_a/sample`、`/execution_policy/states/sample`；main.c L12, L16 |\n| tx_a | 0.008 | A | BF_TX(=3)，仅在 phase==3 返回；同样 1.8 V tapered | `/scenario/current_model/values_a/tx`；main.c L13, L16 |\n| minimum_sample_s | 0.01 | s | 六 gate service_conditions 一致下限；配套 2.2 V 供给、0.1 s 采样有效期、20 s/3 帧 | `/scenario/minimum_sample_s`、`/standards/acceptance_predicates/power_service/service_conditions/minimum_sample_s`；main.c L12 |\n| minimum_tx_s | 0.004 | s | 同上组下限；接收端 minimum_packets=3；1 ms 程序步约 4 步覆盖 | `/scenario/minimum_tx_s`、`/standards/acceptance_predicates/receiver_service/service_conditions/minimum_tx_s`；main.c L13 |\n\n**判断**：核对通过，无冲突。关键结论是**零余量**——固件 SAMPLE 驻留 0.010 s、TX 驻留 0.004 s 恰等于验收下限，任何缩短窗口的改动都会直接破坏 `power_service`/`receiver_service`；且电流为声明包络而非平均电流，IDLE 的 8e-6 A 只覆盖非 SAMPLE/TX 供电期，不能用于全时能量核算。\n\n**主要遗留风险**：窗口与下限严格相等 + 浮点比较仅 1e-10 容差，步长/事件对齐方式变化可能落到“不足下限”一侧；`main.c` 丢弃 `v`/`pgood`，窗口由时间表而非供电状态裁决。",
+      "text_sha256": "1e106a1fbf0669a519e34badf47c7a63be5d05743f1613a23f62d1faceb21346",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "S1-current-timing--temporary",
+      "owner": "pi-chat-46f8b9fcea3a4430",
+      "status": "IDLE",
+      "current_system": "SC-16adcade17c1a000bab6e7fc27a488ac6de0e834c0f243586944cf8209c44860",
+      "final_text": "本轮的来源核对已完成。\n\n## 参数表（冻结候选 SC-16adcade…44860）\n\n| 字段 | 值 | 单位 | 条件与来源定位 |\n|---|---|---|---|\n| `idle_a` | 8e-06 (8 µA) | A | BF_IDLE=1（含 phase==0 启动等待与 4.0 s 周期间隔）；声明包络 `declared-host-node-current-v1`；VDD≥1.8 V brownout，低于 1.8 V 由装置模型 taper；`task-definition.json` `/scenario/current_model/values_a/idle`、`/execution_policy/states/idle`；`firmware/main.c` L10-L16 |\n| `sample_a` | 0.001 (1 mA) | A | BF_SAMPLE=2，仅上电窗口内正常退出；采样有效期 0.1 s、sensor_value=2500；`task-definition.json` `/scenario/current_model/values_a/sample`、`/scenario/sample_validity_s`；`firmware/main.c` L12、L16 |\n| `tx_a` | 0.008 (8 mA) | A | BF_TX=3，须满足 min supply 2.2 V、PGOOD≥2.0 V；`task-definition.json` `/scenario/current_model/values_a/tx`、`/scenario/minimum_supply_v`、`/scenario/pgood_min_v`；`firmware/main.c` L13、L16 |\n| `minimum_sample_s` | 0.01 | s | 单次 SAMPLE 连续持续时间下限；`/scenario/minimum_sample_s` 与 6 个门的 `/standards/acceptance_predicates/*/service_conditions/minimum_sample_s`；固件窗口恰为 0.010 s（L12） |\n| `minimum_tx_s` | 0.004 | s | 单次 TX 连续持续时间下限，且须正常结束换回 IDLE；`/scenario/minimum_tx_s` 与 `/standards/acceptance_predicates/{power,receiver}_service/service_conditions/minimum_tx_s`；固件窗口恰为 0.004 s（L13） |\n\n补充（非 required）：`off` 泄漏 1e-08 A（supervisor 所有）、brownout_v 1.8 V、pgood_min_v 2.0 V、sample_validity_s 0.1 s、duration 20 s。\n\n## 判断\n- `scenario` 与全部 6 个验收门的 `service_conditions` 数值完全一致，无冲突；固件 SAMPLE=0.010 s / TX=0.004 s 恰等于两个最短时间门限，状态编码与 ABI 一致；电流不写入固件，由装置按状态施加（符合头文件“当前幅度属装置模型”）。\n- 风险：两个时长与门限零余量，存在边界判定风险（`program_step_s`=0.001 s）。\n\n## 过程说明\n按组织配置 `required: [\"source\"]` 先委派资料工作者 WT-cb38…bac1a；其仅回传 probe 级不完整结果（只含 `minimum_sample_s`=0.01 s）。该值与直接读取一致；因 worker_submissions 上限 1 已耗尽，改由主设计者直接读取 `task-definition.json`（sha256 a99f04…e6ca）与 `firmware/main.c`（sha256 830b94…3ee0）补齐五项并已 `work_answer` 提交。",
+      "text_sha256": "5aa696c5efad3d0f34d2d0e84ba8669979992d9ef1b977a38414bb166801997a",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "S2-startup-validity--temporary",
+      "owner": "pi-chat-99a06b65cb9492e4",
+      "status": "IDLE",
+      "current_system": "SC-b15275850d9e70b1fadecbe9bf7042d10ecbb2b7b5e8919235078045c3b6ba91",
+      "final_text": "已按组织配置完成来源核对并提交 work_answer（结果 WR-0429cac8…cd229）。\n\n**执行过程**\n- required 含 `source`：先 `work_assign` 提交 1 名 source 工作者（WT-38829c85…a33d4，已 SUBMITTED，上限内 1/1 worker、1 次提交），`work_run` 等待并 `work_result` 消费其证据。\n- 主设计者侧独立复核原始文件：`task-definition.json`（a99f0425…e6ca）、`firmware/main.c`（830b94e2…1ee0，L1–L20）、`design.json`（157f4a66…1a85）。\n\n**六项固定字段 facts**\n\n| field | value | unit | 关键条件与来源 |\n|---|---|---|---|\n| initial_storage_v | 0.0 | V | 冷启动不预充电，agent 不可覆盖；`/scenario/initial_storage_v`、`/parameters/1`、`/interfaces/0/initial_state`（4 处一致） |\n| initial_output_v | 0.0 | V | VOUT 侧同为 0 V，共同定义 in-silico 初态；`/scenario/initial_output_v`、`/parameters/2` |\n| start_v | 2.3 | V | PMIC/装置冷启动准入，固件不读（main.c L8-L9 丢弃 v/pgood）；门限阶梯 1.8 < pgood 2.0 < 服务供电 2.2 < 启动 2.3 |\n| brownout_v | 1.8 | V | 仅在器件模型层面对声明电流包络（off 1e-8/idle 8e-6/sample 1e-3/tx 8e-3 A）渐降，非固件判决；`/scenario/brownout_v`、`/scenario/current_model/values_a/*` |\n| sample_validity_s | 0.1 | s | 与 minimum_sample_s 0.01 s、minimum_tx_s 0.004 s、sensor_value 2500 成套（7 处一致）；固件 L12/L13/L19 精确对齐，采样到 TX 结束 ≈14 ms ≪ 0.1 s |\n| minimum_packets | 3 | packets | 绑定 receiver_service：20 s 内 ≥3 个有效且不重复帧（固定供电/采样有效期/序号/校验）；序列号 L14 + 校验 L20，20 s 内最多约 5 帧 |\n\n**判断**：六项约束均由 task-definition.json 唯一定义，跨位置重复数值完全一致，无数值冲突；`design.json` 不含任何节点约束常量，故不可被 agent 覆盖。\n\n**需注意的问题**（已写入 issues）\n1. `/execution_policy/*`、`/service/*`、`/fixed_parameters/*`、`/bindings/*` 指针文本存在但被提交校验器拒绝（WORK_SOURCE_POINTER），已改用 `/scenario/duration_s`、`/acceptance/*`、`/standards/*` 承载。\n2. [2.0, 2.2) V 灰区（PGOOD 有效但服务供电不合格）内 SAMPLE/TX 是否计帧，冻结定义未明确。\n3. `/parameters` 中 `controller` 的 unit 误标为 “s”；`start_v` 与 `pgood_min_v` 各仅单处出现；`notes/`、`firmware/feedback.h`、参考 case 配置均不在候选树内。",
+      "text_sha256": "0ef9e39a6c38c195a11f7a107bce32b28ef4f4fb3cfc40084575407fc0b806c0",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "S2-startup-validity--single",
+      "owner": "pi-chat-ae6a00f95bd6c3ab",
+      "status": "IDLE",
+      "current_system": "SC-0793f4adcc93be9f6cc068eae9bf548916ae1e2b4a9d51ea1de97c3630e3a1ea",
+      "final_text": "提交被接受（结果 `WR-96b723b5…0df84`，kind=source，base_system=SC-0793f4…1ea）。\n\n**核对结论（六项事实，均按单位与条件固化）**\n\n| 字段 | 值 | 单位 | 关键条件 | 来源 |\n|---|---|---|---|---|\n| initial_storage_v | 0.0 | V | 冷启动场景（V2-cold-feedback），不预充电；constraint 角色绑定到 scenario，不可改 | task-definition.json L1-L1 |\n| initial_output_v | 0.0 | V | 输出初始 0 V；除声明的 VIN/VOUT 外其余电抗状态为零 | task-definition.json L1-L1 |\n| start_v | 2.3 | V | 启动须同时满足 VDD≥2.3 V 与 PGOOD≥2.0 V；高于窗口最低供电 2.2 V | task-definition.json L1-L1 |\n| brownout_v | 1.8 | V | 1.8 V 以下电流按声明模型衰减、供电丢失触发易失复位；容差 1e-3 V | task-definition.json L1-L1 |\n| sample_validity_s | 0.1 | s | 采后 0.1 s 内有效；配套最短采样 0.01 s、最短发送 0.004 s；参考固件 0.014 s≪0.1 s | task-definition.json L1-L1；firmware/main.c L10-L16 |\n| minimum_packets | 3 | packets | 20 s 内至少 3 个有效且不重复帧，来自同一次受电启动的正常 SAMPLE→TX | task-definition.json L1-L1；firmware/main.c L8-L20 |\n\n**判断**：四个电压门限用途互斥、不可互换（2.3 启动 / 2.0 PGOOD / 2.2 窗口供电 / 1.8 掉电），采样有效期与采样+发送时序相容，收帧门限 3 在验收谓词参数、acceptance 与 goal 中三处一致；冻结候选 design.json 与 firmware/main.c 只提供设计取值与节奏，不改变任务侧要求。\n\n**过程问题（已记录在 issues）**\n- JSON 指针型 locator 连续四次被拒（`WORK_SOURCE_POINTER`），改用行区间 locator 后通过 → 本环境对需求文档的指针定位不可用，字段路径改写入 conditions（scenario.*、execution_policy.*、standards.acceptance_predicates.*、acceptance.*）。\n- 携带文件内容提交被判 `SOURCE_WORKER_READ_ONLY` → 本角色只读，最终 files 为空，仅以 path+sha256+L行区间 留证。\n- `configs/reference_cases/piezo-feedback/task.json` 与 `notes/` 不在冻结候选集（`WORK_SOURCE_NOT_IN_BASE`），原生校验器源码无法直读。",
+      "text_sha256": "349fca1b5f299023921aea15473067ff631f05c6bcb80f7aec7f174e040bf80b",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V1-local-capacitance--single",
+      "owner": "pi-chat-10a3819bddea8bb1",
+      "status": "IDLE",
+      "current_system": "SC-cbf3f9e5c36de75774dcf67eef8503d3a0097aadfb719c26a57e0a97c50beab0",
+      "final_text": "已完成，交付状态 REVIEW_DELIVERED。\n\n## 判断与结果\n\n**关键发现：原设计其实已经满足“三次发送”。** 68 µF 基线下 20 s 内完成 5 次发送、接收 5 个有效帧、仅 1 次上电，SAMPLE/TX 窗口最低 VDD = 2.4856 V（要求 ≥2.2 V）。查波形确认这个最低值出现在 TX 窗口 0.5 ms 后，是 LTC3588-1 在 8 mA 下的稳压平台，4 ms 内不再继续下跌——即**供电下限由 PMIC 决定，不是电容放电深度**，所以“改电容才能发出去”的前提不成立。\n\n**据此做的修订（真实、可测）**：output_f 6.8e-05 → 4.7e-05 F（标准值，本地储能 −31%），用同一原生求解器 + 独立验收判定它是否仍满足服务与余量。\n\n| 指标 | 基线 68 µF | 候选 47 µF |\n|---|---|---|\n| 完成发送 / 有效帧 | 5 / 5 | 5 / 5 |\n| 上电次数 | 1 | 1 |\n| 窗口最低 VDD | 2.4856 V | 2.4846 V（余量 0.285 V） |\n| 采样相位跌落 | 14.7 V/s | 21.3 V/s（=1 mA/47 µF） |\n| 负载能量 | 0.929 mJ | 0.930 mJ |\n\n六项门禁全 PASS（负载电流误差 1.28e-08 A，1 ms/0.5 ms 双步长同一服务判断，机电残差 1.54e-06），决定 ADOPT_PASSED。\n\n**边界与回退**：跌落按 1/C 放大，减到 22 µF 以下会逼近 2.2 V 判据；若想要更大瞬态裕度，把 output_f 改回 6.8e-05（单字段回退）即可，实测两者服务结果相同。\n\n交付物：design.json、notes/output-capacitance.md；执行 TX-7f454c28…、验收 RV-99fc7d17…、报告 TR-08dc598c（含 PDF）、发布 REL-2e8f7e9f…。共 2 个执行输入，无失败候选。",
+      "text_sha256": "173c9f29853cdb8181baaf7c7f088a6adc6d7d8f0ac98fd2bdd417b6c1d272f8",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V1-local-capacitance--temporary",
+      "owner": "pi-chat-3213906eed08189f",
+      "status": "IDLE",
+      "current_system": "SC-dc4201ca96bd948d574a008e7b84cb9b1bac239b03923a1a283406f20e39f7e2",
+      "final_text": "已完成并交付。\n\n**做了什么**\n- 交付候选：`design.json` 的 `output_f` 由 68 µF → **330 µF（0.00033 F）**，其余固定参数与固件不变，另加 `notes/capacitance-note.md` 设计记录。\n- 共 3 个执行输入（起点 68 µF、330 µF、22 µF 探针）；最终候选复用同一原生执行结果，未追加模型请求。\n\n**关键实测（六门独立验收）**\n| output_f | 完成/接收帧 | 上电 | 低供电序列 | 负载能量 | 结果 |\n|---|---|---|---|---|---|\n| 68 µF | 5 / 5 | 1 | 无 | 0.9287 mJ | 全 PASS |\n| 330 µF | 5 / 5 | 1 | 无 | 0.9247 mJ | 全 PASS |\n| 22 µF | 5 / 5 | 1 | 无 | 0.9349 mJ | 全 PASS（按裕度拒收） |\n\n- 首帧均为 0.251 s，seq 1–5，CRC 96/99/98/101/100，值 2500；负载电流误差 1.28e-8 A，1 ms/0.5 ms 服务判断一致，机电残差 1.76e-6。\n\n**判断**\n- 帧数对输出电容不敏感：22 µF 也能发 5 帧，说明厂商 buck 的滞环补流已在突发期间顶住负载，不能用“帧数够不够”来选电容。\n- 因此选 330 µF 的依据换成零补流兜底能力：2.5→2.2 V 可用电荷 99 µC ≈ 2.3 个完整“采样 10 ms + 发送 4 ms”突发（42 µC），68 µF 仅 0.49 个、22 µF 仅 0.16 个；代价只是轨上预充电能量 0.21→1.03 mJ，首帧时刻与上电次数不变。\n\n**交付与边界**\n- 决定 ADOPT_PASSED（DA-61ea0b…），22 µF 探针拒收（DA-21ef22…，结果按原样保留）；报告 TR-a8d90e95…（含 PDF）与发布 REL-864a6c8b… 均为同一候选，`task_passed=true`。\n- 未覆盖：物理未实测（NOT_TESTED）；未做温度/容差/老化降额与 22 µF 以下失效边界搜索，量产前建议按 −30% 容差复测 330 µF。",
+      "text_sha256": "ce07bebfaa21bc5ee5491c7162dc0ee0f187a7862c3c804d4042e02cb2a32deb",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V1-local-capacitance--fixed",
+      "owner": "pi-chat-7eca55ebc410ccd8",
+      "status": "IDLE",
+      "current_system": "SC-95af8392f95c6a050aac16a923a8a2a1d05bd065f917b1c565ac2117959884db",
+      "final_text": "已完成并同版交付，状态 `REVIEW_DELIVERED`。\n\n## 做了什么\n- **固定组织**：按策略委派 power / firmware 两项范围，各自拿到定量预算与\"程序不必改\"的独立结论。\n- **一项真实修订**：`design.json` 只改 `output_f`：68 µF → **220 µF**（2.2e-4 F）；新增 `notes/output-capacitance.md`（电荷预算、基线对照、容量上限）；固件不动。\n- **执行 1 次 + 独立验收 + 决定**：候选 SC-95af839…（rev 3）→ TX-224d8c53… → RV-f809e243… 六门全 PASS → DA-0580ed5… ADOPT_PASSED → 报告 TR-5775608…（含 PDF）→ 交付 REL-e573cf3…（qualification PASS，task_passed=true）→ close。\n\n## 关键结果\n| 项 | 68 µF 基线 | 220 µF（本交付） |\n|---|---|---|\n| 完成发送 / 有效帧 | 5 / 5 | **5 / 5**（seq 1..5） |\n| 第 3 帧完成时刻 | 8.293 s | 8.293 s（余 11.7 s） |\n| 窗口最低 VDD | 2.4856 V | **2.48727 V**（buck 调节底，余 287 mV） |\n| 窗口内源承担电荷 | ≈34 µC（81%） | ≈29.6 µC（≈70%） |\n| 最坏失去补电跌落 | 470 mV → 2.017 V（失规） | **191 mV → 2.297 V（仍 >2.2 V）** |\n\n实测印证电容已在储能：SAMPLE 段斜率 2.27 mV/0.5 ms = 1 mA/220 µF，空闲段 18 µV/0.5 ms = 8 µA/220 µF。\n\n## 判断与边界\n- 原设计“看起来能用”其实是靠 LTC3588-1 在 14 ms 窗口里实时补 81% 电荷，电容只担 8 µC，属于没有储能余量的合规。\n- 选值下限：C ≥ 42 µC/(2.5−2.2) = 140 µF（窗口内源不补流的保守口径），取 1.57× 的 E6 标准值 220 µF。\n- 不取更大：1 mF 时空闲漏放到迟滞带底约 18 s、PGOOD→带底回充 61 ms@8 mA，会吃掉 20 s 帧预算。\n- 如实记录未做项：330 µF/1 mF 上限实验与无预充冷启动对照未做；`physical=NOT_TESTED`（模型级）；固件侧零余量窗口（10/4 ms 恰等下限）与掉电后 seq 复位致跨上电重复帧属固件潜在风险，不在本任务设计自由度内。",
+      "text_sha256": "e85daddb04360f398c644cf63a29b43a97889e382f2eaf2f007d590757837527",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V1-local-capacitance--joint",
+      "owner": "pi-chat-4728816d2998f69a",
+      "status": "IDLE",
+      "current_system": "SC-821c2892b6aae433f8aa8c9cd92ded1f7a73781450965c3174509e7d44fee7b6",
+      "final_text": "已完成并交付（状态 `REVIEW_DELIVERED`）。\n\n**结论**：原条件（30 Hz、VIN 150 µF@12 V、VOUT 2.5 V、固件不动）下节点本就能发 5 帧，所以真正要回答的是\"输出电容是能量元件还是瞬态元件、能取多小\"。\n\n**设计修订（唯一可写字段 output_f）**\n- 68 µF → **22 µF**（E6 标准值，−67.6%），其余设计/固件不变。\n- 选值准则（写在笔记里、事前声明）：发送窗口下垂 ≤ 0.3 V 裕度的 1/4（75 mV）。\n\n**实测对比（同条件、同一固件）**\n| | 68 µF（基线） | 22 µF（交付） |\n|---|---|---|\n| 完成发送 / 有效帧 | 5 / 5 | 5 / 5 |\n| 首次发送窗口最低供电 | 2.4856 V | 2.4807 V（仅 −4.9 mV） |\n| 初始预充电能量 | 11.0125 mJ | 10.8688 mJ |\n| 低压序号/无效帧 | 无 | 无 |\n\n**独立验收**：6 门全 PASS（power_service、receiver_service、load_binding、source_model、coupling_numerics 1 ms/0.5 ms 一致、delivery_version）；physical 仍为 NOT_TESTED，未做物理外推。\n\n**证据与产出**：执行 TX-e1f364f4…（完整原生波形）、验收 RV-cf1aa24c…、报告 TR-dafdb6fd…（五章节 + PDF）、交付 REL-193acfc4…。用了 2/4 个执行输入（68 µF 对照 + 22 µF 修订），无失败结果被丢弃。",
+      "text_sha256": "f520592660c96191e6bddf3640759ba55f546cc18d8cd483bd3bbbc87f723d36",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V2-cold-feedback--temporary",
+      "owner": "pi-chat-e44bfc6dfafbe309",
+      "status": "IDLE",
+      "current_system": "SC-449702b8940052cbc636b78f56d79f46b380d0e7a45e6363288c1f61e0bdf4c0",
+      "final_text": "已完成并交付（`REVIEW_DELIVERED`）。\n\n## 结果\n**不预充电，20 秒内回传 15 个有效且不重复帧**（要求 3 帧），首次上电 6.7505 s，六门全 PASS。\n\n| 项目 | 数值 |\n|---|---|\n| 首上电（VIN=VOUT=0） | 6.7505 s，单次上电 |\n| 有效帧 / 发送次数 | 15（seq 1..15，无无效帧）/ 15 |\n| 帧内最低供电 | 约 2.3 V（门槛 2.2 V） |\n| 负载能量 | 1.876 mJ / 20 s，平均约 150 µW |\n| 步长耦合能量差 | 3.05e-8 J（门槛 2e-6 J） |\n\n## 本轮真实修订（v4，单变量：只改固件）\n问题：v3 中除第 1 帧外全部被接收端拒绝，但记录供电一直在 2.2 V 以上。\n取证 `fine/load.json` + `fine/events.json`：每帧末尾多一个 8 mA 窗口（1 ms 步长下 1.0 ms，0.5 ms 步长下 0.5 ms），且携带**下一个序号**——根因是帧完成分支先 `++sequence` 再返回 `BF_TX`。\n\n一处缺陷解释三处失败：\n- 接收端：每个 seq≥2 先见截短帧、再见完整帧 → 重复且时长不足；\n- `low_supply_sequences`：截短发送被归类为供电不足，而非真实电压缺口；\n- `coupling_numerics`：15 × 0.5 ms × 8 mA × 2.4 V ≈ 144 µJ，正对 1.50e-4 J。\n\n修订：帧以 `BF_IDLE` 结束（每帧只发布一个 11 ms 采样窗与一个 4 ms 发送窗），序号在帧**开始时**推进，发布帧始终携带其采样身份。`design.json` 未动以保持单变量。\n\n## 交付物\n候选 SC-449702b8（rev 5）｜执行 TX-7b59b5be｜验收 RV-6f351e8f｜报告 TR-43a6dc30（PDF 3 页）｜交付 REL-f415d9d4。改动：`firmware/main.c`、新增 `notes/rev4-frame-publish-fix.md`。失败记录（v2 阈值判据的周期 2 振荡、v3 的 14 帧被拒）保留在设计日志与执行产物中。局限：`physical=NOT_TESTED`，结论限于声明模型。",
+      "text_sha256": "3d9d56e1bb4db8fb5fe28c0fd723b1bdfe0162b6856f91b7f02299d98bc6851e",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V2-cold-feedback--fixed",
+      "owner": "pi-chat-18ea7981e7d1d230",
+      "status": "IDLE",
+      "current_system": "SC-0a5a320847980e441127d38be47b3b2161d6b57287bd1d777b2ae4cc757a6262",
+      "final_text": "已完成并交付（状态 `REVIEW_DELIVERED`）。\n\n## 结果\n\n**用户目标达成（实测）**：不预充电、单次上电，20 s 内收到 **3 个有效且不重复的帧**（seq 1/2/3、value 2500、crc 96/99/98、`invalid_frames=[]`），所有采样/发送窗口供电 ≥2.2 V，末次发送 18.838 s 完成（1.16 s 余量）。\n\n**关键设计判断**（均由实测反标定，不靠估算）\n- 上电太晚是主要矛盾：把输出电容从 180 µF 提到 **220 µF**，上电 17.94 s → **13.00 s**；但单帧 51 µC 的压降变成 `Q/C_o` = 232 mV，下限 2.295 V。\n- 帧间隔必须 ≥ 回充时间：净回充 ~28 µA，51 µC 需 ~2.0 s，所以 **2.9 s**（余量 +60%）。实测把 `low_supply_sequences=[2,3,3,4,4,5]` 变成 `[]`。\n- 程序必须**开环**：一旦读 `supply_v/pgood` 就形成程序↔电压回路，12 次迭代不收敛（修订 C 因此失败）。\n- 只发 **3 帧**：多一帧就多一次跌破 2.2 V 的机会，而任一窗口偏低即判失败，所以“冗余帧”反而降低鲁棒性。\n\n**未通过项（如实保留）**：`coupling_numerics` 的 `load_energy_difference` = 33.76 µJ > 2 µJ。根因定量定位为 1 ms/0.5 ms 栅格量化差（4.5 µC×3 帧×2.5 V = 33.8 µJ，吻合 0.4%）；`same_service_result=true`、`tx_time_difference=0` 已达标。修法（窗宽取整数毫秒 11/5 ms）已提交为修订 F，但本 trial 的 4 个候选评估配额用尽（`FINITE_CANDIDATE_LIST_EXHAUSTED`），**没有执行证据，因此未当作通过项交付**——交付的是唯一有不可变执行记录的字节内容，并把该修法与依据写进笔记第 6 节移交。\n\n**记录链**：执行 `TX-09cb9e94`（coarse/fine 完整原生波形）→ 独立验收 `RV-d17f35a5` → 报告 `TR-8f0875`（3 页 PDF）→ 交付 `REL-5a76c33c` → 决定 `DA-710ae2` = RETAIN_FOR_REVIEW，qualification `REPAIR_REQUIRED`（5/6 gates）。",
+      "text_sha256": "b3fece684d8fb68829e04a1abc6a34a923fe3b95e9d8a07f6462c68666cf572f",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V2-cold-feedback--joint",
+      "owner": "pi-chat-2b649ac8388543ef",
+      "status": "IDLE",
+      "current_system": "SC-de856adbcb51d242d65c2eddedf998a22ee8f86fd20e170fafbe5a4f34d02b0c",
+      "final_text": "已完成，状态 `REVIEW_DELIVERED`，交付 `REL-bfd908ad`。\n\n## 结论\n零初始储能下，同一换能器在 20 s 内发回 3 帧有效数据，六项验收全部 PASS。\n\n| 项目 | 数值 |\n|---|---|\n| 首次供电（cold boot） | 11.304 s |\n| 三帧 TX 完成时刻 | 12.82 / 15.34 / 17.85 s |\n| 接收序号 / 无效帧 | [1,2,3] / 0 个 |\n| 低压序号 | 无 |\n| 负载能量 | 0.5565 mJ |\n| 耦合数值（1 ms vs 0.5 ms） | 能量差 7.1e-10 J，TX 时刻差 0 s |\n| 机电残差 / 峰值端位移 | 2.13e-7 / 2.03 mm |\n\n## 设计判断\n1. **瓶颈是首次 UVLO 交叉时间，不是能量。** 参考布置（150 µF 输入 / 68 µF 输出）实测冷启动 17.94 s，反推整流电荷速率 ≈38 µA，窗口内可用约 3 mJ 而需求不足 0.9 mJ。因此把输入储能降到 22 µF（最早可达 UVLO）、输出储能升到 220 µF（桥接约 51 µC 突发，压降 ~0.16 V），机械与电感保持不变。\n2. **控制器必须与模拟轨迹解耦。** v2 用「导轨≥2.45 V 才起帧」的能量感知准入，执行报 `FEEDBACK_FIXED_POINT_NOT_REACHED`：1 ms 级准入抖动改变导轨、再改变下一帧准入，耦合定点 12 次迭代不收敛。v3 改为锚定准入启动的确定性节拍（+1.5 s 首帧、每 2.5 s、sample 11 ms / TX 5 ms），3 次迭代即收敛。这个失败与依据已保存在 `notes/cold-start-budget.md`，未做无界搜索（共 3 次执行输入）。\n\n## 残留风险（如实记录）\n第三帧 TX 结束于 17.852 s，距期限仅 2.15 s；若整流电荷速率比声明低约 15%，末帧会逼近 20 s。若要更大余量，下一轮可小幅加宽梁（提高源电流）或把节拍压到 2.0 s，但这需要新的执行输入。",
+      "text_sha256": "b899552113a2440ef05986f8d19b9e9e8547fe50e5697bef52a25e5a79c48edc",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "V2-cold-feedback--single",
+      "owner": "pi-chat-13e196a880dc4a6b",
+      "status": "IDLE",
+      "current_system": "SC-dfacfbf79c85fce886590e229720ee56753c5905b2228ad09130bd4ee2ee7d1b",
+      "final_text": "已完成并交付（状态 `REVIEW_DELIVERED`，`task_passed=true`，`physical=NOT_TESTED`）。\n\n## 结论\n\n不预充电（VIN/VOUT 均为 0）时，该振动供电节点在 20 s 服务窗内发回**三次**有效数据：冷启动在上电后 7.6675 s 上电（仅 1 次），三帧采样和发送在 **9.010 / 11.010 / 13.010 s** 完成，接收端序号 **1/2/3**、无非法帧、无重复。\n\n| 检查 | 结果 | 关键数字 |\n|---|---|---|\n| source_model | PASS | 峰值端位移 2.0283 mm（梁长 4.06% < 5%），机电残差 3.5e-7 |\n| load_binding | PASS | 负载电流误差 1.4e-8 A |\n| power_service | PASS | boots=1、completed_tx=3、load_energy 562.3 µJ、帧窗口无低供电记录 |\n| receiver_service | PASS | received [1,2,3]，invalid_frames 空 |\n| coupling_numerics | PASS（R1 为 FAIL） | TX 时刻差 **0 s**，能量差 4.75e-7 J |\n| delivery_version | PASS | 3 个文件、执行、报告同版 |\n\n## 两轮真实修订\n\n- **R1（描述机制、实测）**：输入储能 150 µF → **15 µF**（原来的 1.9 mJ 输入解锁死能量，等效启动资本 2.8 mJ → 0.66 mJ），输出 68 µF → **150 µF** 承载单帧 42 µC；固件首帧“上电后 0.3 s”。实测：3 帧全部送达，但 `coupling_numerics` FAIL，1 ms 与 0.5 ms 的 TX 时刻差 **24.5 ms**。\n- **失败诊断（如实保存）**：两次原生上电时刻本身相差 24.5 ms（7.643 vs 7.6675），而帧间隔严格等于固件常数 0.3 s 和 2.2 s，因此差异被“以上电时刻为锚”原样继承；根因是 PMIC 冷启动时输入电容打嗝次数随步长差一次，不是放宽判据能解决的问题。\n- **R2（本次修订）**：只改时序基准，三帧放到固定绝对服务时隙（9.0 s 起、2.0 s 间隔、可滑到 19.2 s 重试）；上电与轨压降为门槛（开帧 ≥2.32 V，采样中 <2.15 V 放弃并滑到下一时隙，序号不变）。结果到粗/细两步长的 `events.json` 字节相同、TX 差 **0 s**。\n\n## 工程判断与保留风险\n\n帧内实测：空闲 2.4962 V → 采样期在 2.488~2.521 V 脉动 → 发送期最低 **2.4869 V**（比 2.2 V 下限高 287 mV），说明 150 µF 提供的是安全裕度，帧内主要由 PMIC 在 ~6 ms 尺度补电；机构不动，因为实测峰值已是稳态估计的 1.18 倍，继续靠近共振会顶破线性位移比。风险：物理样机未验证；绝对时隙依赖本场景 20 s 固定契约，上电晚于 9.0 s 将依赖后续时隙余量。",
+      "text_sha256": "e0c3582d5fbe844594e5008936eabcfaad5235c9b81e2ea410bd86d8d6ce15c8",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T1-fixed-power-scheduling--fixed",
+      "owner": "pi-chat-fac631b7af935a91",
+      "status": "IDLE",
+      "current_system": "SC-b186242fa3fb89a5217ec16afc47665cae05b079ef7d543253e7d18bcde75d05",
+      "final_text": "已完成并交付。\n\n## 结论\n电源板不动，只改程序：节点在同一 20 s 窗口里发回 **8 个有效且不重复的帧**（seq 1..8，`invalid_frames=[]`），第六帧 12.765 s 就送达，末帧 TX 17.761–17.765 s 结束，余量 2.235 s。独立验收六门全 PASS，`task_passed=true`。\n\n## 关键工程判断\n- **瓶颈是调度算术，不是能量。** 参考程序在 TX 结束后装填 `deadline=t+4.0`，14 ms 帧长被累加进周期 → 实际 4.014 s，20 s 内第 6 帧落到 20.331 s，只能 5 帧（基线 power_service/receiver_service 双 FAIL，记录保留为对照）。\n- **改法**：改成绝对槽位 `base+0.250+k×2.500 s`，帧长与量化误差都不进入周期；窗口保持判据下限 10 ms/4 ms（0.001 s 步长整数倍，转场落在网格上）；序号只在 TX 正常转场自增。\n- **供电**：基线实测窗口谷值 2.4856 V（判据 2.2 V），全程在 LTC3588 稳压带 2.486–2.529 V 且 20 s 无衰减趋势 → 谷值由稳压决定，不是储能耗尽；因此准入门限取 `pgood && VDD≥2.35 V`，每槽最多延迟 0.1 s（实测 8 个槽位全部一次通过，无延迟）。\n- **能量**：1.2444 mJ（解析预算 1.24 mJ，<1% 吻合），基线 0.9287 mJ 的 1.34 倍，占 150 µF@12 V 可用储能约 12%。\n- **拒绝的备选**（写在 notes 里）：3.9 s 间距（正好 6 帧但末帧 19.835 s，仅 165 ms 余量、无冗余帧）；窗口放大到 12/6 ms（多耗 0.36 mJ 而无判据收益）；保留 4.0 s 只调首帧（算术上限就是 5 帧）。\n- 粗/细步长（1 ms / 0.5 ms）收敛且服务判定相同（能量差 2.79e-8 J，发射时刻差 ≤1 ms）。\n\n## 交付\n`REL-12f7621`，与报告 `TR-6690b938`（3 页 PDF）同版：design.json 未改、firmware/main.c `ece526e0…`、notes/firmware-schedule.md `8e34e48…`。局限已如实写明：`physical=NOT_TESTED`，结论来自厂商 PMIC 宏模型 + 声明电流包络的数值仿真。",
+      "text_sha256": "6b97b9d6fa5d5925b44cf2d373d420a4f4bfcbb78cbb0128aea9f33e51a1c1f9",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T1-fixed-power-scheduling--joint",
+      "owner": "pi-chat-25b3d50cd237ef64",
+      "status": "IDLE",
+      "current_system": "SC-60e67bcd7ac03ded8702cfaebc4dca1592cd1be45c144f4f35e955d96664ec1a",
+      "final_text": "已完成，全流程一次通过（状态 REVIEW_DELIVERED）。\n\n## 我的判断与依据\n\n**诊断（基线 SC-a9c8981a）**：`firmware/main.c` 有两个可量化缺陷\n1. 帧周期 4 s：帧起点 0.25/4.26/8.27/12.28/16.29 s，20 s 内只有 **5** 帧，阈值是 6；\n2. `bf_step` 把 `supply_v` 和 `pgood` 全部丢弃，窗口内无供电门控——一旦压到 2.2 V 就掉电重启、`sequence` 归 1，接收端按重复序号丢弃。\n\n能量核算表明瓶颈不是总量：可用储能 ≈ 0.5·150 µF·(12²−2.3²) ≈ 10.4 mJ，而单帧电荷仅 12 ms·1 mA + 5 ms·8 mA ≈ 52 µC，8 帧加 20 s idle 约 1.4 mJ。所以可以放心缩短周期，风险在 68 µF 上的瞬态跌落。\n\n**修订（仅 `firmware/main.c` + `notes/frame-schedule.md`）**：周期 2.5 s（8 个计划帧，留 2 帧余量）、采样 12 ms、发送 5 ms（各给 10 ms / 4 ms 下限留一个程序步）、PGOOD 且最低 VDD ≥2.30 V 才起帧、2.21 V 运行下限跌破即弃半帧并 0.25 s 重试、1.5 s 饥饿逃逸防止电平静在 2.21–2.30 V 时永久不发帧。\n\n## 执行与独立验收（EX-82aba8ae / VP-f70d54fd）\n\n| 门 | 结果 |\n|---|---|\n| receiver_service | PASS，`received_sequences=[1..8]`，invalid_frames 空（阈值 6） |\n| power_service | PASS，completed_tx=8、boots=1、low_supply_sequences 空 |\n| source_model | PASS，机械残差 1.48e-6（限 0.02），峰值尖端 1.57 mm 在线性区 |\n| load_binding | PASS，负载电流误差 7.3e-9 A（容差 1e-7） |\n| coupling_numerics | PASS，1 ms 与 0.5 ms 步长服务判断一致 |\n| delivery_version | PASS，3 个冻结文件与执行、验收同指一候选 |\n\n能量侧具体数字：初始储能 11.01 mJ，20 s 实取 1.44 mJ（约 13%），裕度约 7.6 倍；因此不再做参数搜索——2 帧余量意味着即使两帧被推迟仍达标。\n\n**设计决定 ADOPT_PASSED（DA-cde01300）**，报告 TR-3eca8546（含 PDF），同版交付 REL-27a66a23，已 close。物理层面仍是 NOT_TESTED，本轮结论限于模型级。若将来换更低初始储能的电源板，应先放宽帧周期 2.5 s→3 s，而不是压缩发送窗口（5 ms 已贴近 4 ms 下限）。",
+      "text_sha256": "19b056869d07b5fd149ddd8f6136564e61c936c47014de25cbaa99ddda088bcb",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T1-fixed-power-scheduling--single",
+      "owner": "pi-chat-ec562c1801a7d724",
+      "status": "IDLE",
+      "current_system": "SC-5a2a2125ccbd274369027267b9d9c51ce101008d602310dd9445844c3f0d9266",
+      "final_text": "已完成，交付状态 REVIEW_DELIVERED。\n\n## 判断与结果\n\n**问题定位（基于实测，非估计）**：基线脚本每 4.25 s 一帧，20 s 内只完成 5 帧 → `receiver_service`/`power_service` FAIL。电压轨迹显示能量并不紧张（帧前 VDD 2.60 V，采样窗 1 mA 线性下降至 2.488 V，发送窗被 PMIC 稳压在 2.486 V，帧间衰减仅 ~0.02 V/s），**唯一约束是帧节拍**。\n\n**修订内容**（只改 `firmware/main.c` + 新增 `notes/frame-schedule.md`，`design.json` 未动）：\n- 帧槽锚定上电时刻：0.25 s 后开始，此后每 2.6 s 一帧（绝对槽位累加，无漂移）；\n- 单帧成本 42 µC（10 ms×1 mA + 4 ms×8 mA），采样/发送仍取任务最小值，采样→发送间隔 10 ms 在 0.1 s 有效期内；\n- 序号只在一个正常完成的 TX 后递增；value/校验保持；\n- 有界供电守卫：仅当上一区间最小 VDD ≥2.30 V 且 PGOOD 才开帧，最多延后 3×50 ms 后仍发帧（防止守卫把任务卡死）；采样中失去 PGOOD 则放弃该帧且不占序号。\n\n**执行与验收**（2 次执行输入，共用 4 次以内）：8 帧 @ 0.251/2.851/5.451/8.051/10.651/13.251/15.851/18.451 s，末次 TX 18.465 s；接收序号 1–8、`invalid_frames` 空；`completed_tx=8`、`boots=1`、`low_supply_sequences` 空；负载能量 1.2444 mJ / 初始 11.0125 mJ（11.3%），最差点比 2.2 V 下限高约 0.29 V。**6/6 门 PASS**，`task_passed=true`。\n\n**交付**：报告 TR-39fa2ea5（md+pdf，五章节）与发布包 REL-0dbf2d84 同指候选 SC-5a2a2125；基线失败记录（TX-5ab18842、DA-68154a2e）如实保留。`physical=NOT_TESTED`，结论仅为设计侧证据。",
+      "text_sha256": "99af43c81a5b48818a65fc6b8ac23d622c10773cbf55bfe3e206c35e8f26a919",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T1-fixed-power-scheduling--temporary",
+      "owner": "pi-chat-868138bd03ae6c21",
+      "status": "IDLE",
+      "current_system": "SC-7164d83224acf6552a9e74b5b75febd63fc81fe56840cccadfded56eaaa0ade1",
+      "final_text": "已完成一轮真实修订并交付。\n\n## 判断与结果\n**基线为什么不够**：`task_state`、`task_definition` 与基线执行 TX-f9dd9914… 显示，参考程序采用固定的 4.0 s 帧间隔，20 s 内只能完成 5 次发送，因此 `power_service` 与 `receiver_service` 为 FAIL。对原生轨迹的读取给出了定量依据：空闲电流为 8 µA 时，VDD 以 0.12 V/s 下降；取样电流为 1 mA 时，VDD 以 14.7 mV/ms 下降；发送期间由厂商 buck 支撑；初始储能 11.01 mJ，而负载只用了 0.929 mJ。也就是说，**缺少第六帧的原因是帧间隔占用了 20 s 的余量，而非能量不足**。\n\n**本轮改动（只改程序，电源板与 11 项固定参数未改动）**，`firmware/main.c`：\n- 采用截止时间驱动的槽调度：名义间隔为 2.50 s，按“剩余帧/剩余时间”自适应缩短至 1.00 s 下限，19.0 s 后不再起样；\n- 起样准入：要求 PGOOD，且上一区间最低 VDD ≥ 2.45 V；12 ms 取样窗最坏压降约 0.18 V，仍高于 2.2 V 服务下限；\n- 取样 12 ms（≥10 ms）后紧接发送 5 ms（≥4 ms），取样距发出 ≤5 ms（<0.1 s 有效期）；\n- 序号由经过时间导出并强制单调（掉电重启不重号），六帧后停在 IDLE。\n另加 `notes/schedule-notes.md` 记录基线实测、修订理由与待验证问题。\n\n## 执行与独立验收\n执行 TX-efaf7e61…（coarse 和 fine 均 3 次迭代收敛）：6 组取样加发送全部 completed，时间点为 0.250、2.767、5.284、7.801、10.318、12.835 s，最后一帧于 **12.847 s** 发出，余量 7.15 s；boots=1，无低供窗。\n\n验收 RV-278c9014… **六门全 PASS**：power_service（completed_tx=6、low_supply_sequences 为空、负载 1.184 mJ）、receiver_service（received_sequences=[1,3,6,8,11,13]、invalid_frames 为空）、load_binding（电流误差 1.42e-8 A）、source_model（峰值 1.566 mm、机电残差 1.39e-6）、coupling_numerics（1 ms 与 0.5 ms 判定一致，能量差 2.42e-8 J）、delivery_version（3 文件同源）。全轨结束时 VDD=2.503 V，还略高于基线的 2.491 V，说明更快节奏没有牺牲供电质量。\n\n决定 ADOPT_PASSED → 五段报告（TR-ad4515da…，2 页 PDF）→ 同版交付 REL-c7513021… → 已 close（REVIEW_DELIVERED）。\n\n**如实保留的风险**：physical=NOT_TESTED，结论来自厂商 LTC3588-1 宏模型与声明电流包络；1.00 s 下限与 2.45 V 阈值按实测斜率外推，若实测 0.12 V/s / 14.7 mV/ms 偏大应上调 ARM_V；序号域为 1..19，若接收端要求严格连续 1..6 需改计数式序号。本轮共用 2 个执行输入（上限 4），无自动重采样。",
+      "text_sha256": "3c588f5d018eb5e4ca061aa0a7273ee4c77ef516be16f6f3ee2d9ada385ea3b3",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T2-short-validity--joint",
+      "owner": "pi-chat-c5de1eb091037bf4",
+      "status": "IDLE",
+      "current_system": "SC-aa2253b78d4fd121d10e7e7d03549eeb00ff53a41a4569eb31de8231a4ae2fc1",
+      "final_text": "## 状态汇报（流程在 RECOVERY_REQUIRED 停下）\n\n**基线（无修订直接执行的现有候选 SC-6746b9…）实测：**\n- 程序直到 **t = 17.937 s** 才第一次被上电（MCU 轨到 2.55 V），20 s 内只完成 **1 次** sample+tx（18.187 s / 18.197 s），因此“三次有效帧”不达标。\n- 上电后 VDD 以 ≈0.118 V/s 单调衰减 → 输出侧只有 8 µA 静态电流在放电，采集链基本不再补充；按 0.5·C·V² 反推，冷启动投入 ≈ 1.8 mJ（150 µF 输入储能充到约 4.9 V）+ 0.22 mJ（68 µF 输出），对应采集功率 ≈ 100 µW。**能量预算被冷启动充电吃掉，帧率瓶颈不是调度间隔。**\n- 发送窗口 VDD 最低 2.486 V（>2.2 V 任务值），说明 68 µF 输出能承受 4 ms/8 mA 冲击。\n\n**已提交的修订（revision 2，SC-aa2253…）：**\n1. `design.json`：storage_f 150 µF → **22 µF**，冷启动充电能量 1.8 mJ → 0.26 mJ；output_f 保持 68 µF（已被基线证明能承载发送冲击）。\n2. `firmware/main.c`：固定 4 s 节拍 → **“充满即发”门控 burst**：VDD 区间最小值 ≥ 2.40 V 且 PGOOD 才启动；sample 11 ms（≥10 ms），紧随 tx 5 ms（采样完成后 5 ms 发完，落在 8 ms 有效期内），burst 间隔 ≥1.2 s；序号/校验逻辑不变。\n3. `notes/design.md` 记录观测、修改依据与回退条件。\n\n**失败与当前阻塞（如实保存）：**\n- 对该修订执行 `task_execute` 返回 **`[Errno 28] No space left on device`**（工作区磁盘被上一次执行的原始波形占满：coarse 19 MB + fine 28 MB raw）。\n- 该次执行已进入 `operation_state: UNKNOWN`，`stage: RECOVERY_REQUIRED`，`recovery_action: operator_reconcile`；当前 `allowed_actions` 仅剩 `state/task_state`，因此**无法继续执行、独立验收、设计决定、报告与同版交付**。\n- 我没有换 operation_id 强行重跑，也没用旧结果冒充新候选结果；4 个执行输入目前只真正用掉 1 个。\n\n**需要你（操作者）处理：** 清理/扩容工作区磁盘后执行 reconciliation，让流程回到可执行阶段；之后我会对 SC-aa2253… 执行 → validate → 决定（若发送窗口 VDD 跌破 2.2 V 则加大 output_f 或抬高门限）→ 报告 → release → close。",
+      "text_sha256": "221861c531c449c1ea1e38360fefa0310791fc5f36e49178b6146731d38c25d2",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T2-short-validity--single",
+      "owner": "pi-chat-cd5ec68bc3060917",
+      "status": "IDLE",
+      "current_system": "SC-924098dfbdc5e60f58c38c03efad840cadd603e4bda574a14cfd1ddfccb5f453",
+      "final_text": "已完成一轮完整闭环（设计修订 → 执行 → 独立验收 → 决定 → 同版报告与交付 → close），结束状态 REVIEW_DELIVERED，任务判据如实标为未通过。\n\n**设计修订（真实改动）**\n- 储能 150 µF → 82 µF（design.json），控制器改为：按实际上电锚定（不用绝对时间）、静置 3.0 s 攒够 VIN 余量、每帧 11 ms 采样紧接 5 ms 发送、1.5 s 复充节奏、仅当上一区间最低 VDD ≥ 2.40 V 且 PGOOD 才开帧。\n\n**实测（TX-081720332501，输入指纹与当前候选一致）**\n- 冷启动上电 17.94 s → **10.11 s**；单次上电内完成 **5 次发送**（要求 ≥3），无掉电重启、无低压窗口。\n- 采样结束到发送结束 **5 ms < 8 ms** 有效期；负载能量 8.58e-4 J；机电残差 2.1e-7；峰值尖端位移 2.04 mm（4.1% 梁长）。\n- source_model / load_binding / power_service / coupling_numerics / delivery_version **五项 PASS**（coupling：1 ms 与 0.5 ms 步长同服务判断，发送窗口差 0.5 ms）。\n\n**未达成与如实记录**\n- receiver_service 仍 **FAIL**：received_sequences 为空，invalid_frames=[1..5]。决定 = RETAIN_FOR_REVIEW，未宣称通过。\n- 用实测逐项排除：掉电重启致序号重来（rev1 boots=2）、窗口供电不足、数据过期、采样窗口浮点累加差 1e-12、以及“窗口收窄到最小值+半步”（rev4 仍全拒，且把 coupling_numerics 变 FAIL，已按字节回退到较优控制器）。4 次候选评估已用尽，失败结果全部归档在 notes/short-validity.md。\n\n**下一步需要任务方确认**：接收端“有效帧”判定口径（有效期从采样起点还是终点计、窗口长度是否有上界、去重按序号还是时间间隔）。确认后应做单变量实验再修订。",
+      "text_sha256": "2a7344209ace67278281ed3795f44bc5a41b5a42e3e40d661ada49f93c2e9f71",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T2-short-validity--temporary",
+      "owner": "pi-chat-82571f04e5345b82",
+      "status": "IDLE",
+      "current_system": "SC-f98b3f7a9e25a5ea2ce16275890c0330a2e23d67afa35841a910adda36c501e7",
+      "final_text": "## 结论：目标未达成，但让每个假设都有测量结果可否定它\n\n**你的要求**：20 秒内至少 3 帧仍然有效的数据。**实测结果**：完成 4 次发送，接收端判 **0 帧有效**（`invalid_frames=[1,2,3,4]`），所以不宣称通过。\n\n### 这轮真实改了什么\n| 版本 | 改动 | 实测结果 |\n|---|---|---|\n| R2 | 储能 150→33 µF、输出 68→220 µF；固件改“顶部开包”：采样 10 ms + 发送 4 ms，4 包、0.9 s 间隔 | 冷启动 17.94 s → **13.00 s**，单次上电完成 **4 次发送**（基线仅 1 次）；供电/负载/数值耦合三项 PASS，接收端仍 0 帧 |\n| R3 | 按“窗口时长不足”假设把窗口补到 12 ms/5 ms，阈值提到 2.48 V | 4 帧**仍全部无效**；并出现两处回归：第 3 包最低供电跌破 2.2 V；第 4 包发送时刻在 1 ms 与 0.5 ms 步长下相差 0.0235 s |\n\n两次执行合起来**否证了两个假设**：①整数步进（10 ms/4 ms）落在下限之下——补到 12 ms/5 ms 后仍然无效；②供电不足——上一版在全程 ≥2.2 V 且 power_service PASS 时同样 0 帧。剩下的可疑之处缩小到接收端对帧语义的约定（序号规则、校验折叠规则、有效期从采样起点还是终点计算），需再一轮逐帧 A/B 才能确定。\n\n### 稳态事实\n- 源端无问题：peak_tip 2.0347 mm、机械残差 2.1e-7，30 Hz 下可用电功率约 37 µW\n- 能量预算已接近上限：负载 5.5e-4 J（R2）/ 6.4e-4 J（R3），13 s 后余量约 7.3e-4 J → 不能靠多发包换余量\n- 220 µF + 10 ms/4 ms（42 µC，跌落 0.19 V，最低约 2.32 V）才是留有余量的设计点\n\n### 交付物（同版一致）\n`design.json`、`firmware/main.c`、`notes/design-log.md`（含失败数据）；执行 `TX-dd89e4e5`（coarse/fine 原生波形 + 0.5 ms 细化）、验收 `RV-309f2ed8`、报告 `TR-d236e188`（PASS，含 PDF）、审查包 `REL-ee976ee5`（`REPAIR_REQUIRED`）。决策为 **RETAIN_FOR_REVIEW**：失败数据如实保全，不冒充通过；`physical` 始终 `NOT_TESTED`。\n\n下一版三条动作已写入报告：窗口回到 10 ms/4 ms、发包与瞬时电压解耦（修复数值耦合回归）、逐帧 A/B 定位接收端约定。",
+      "text_sha256": "7fa012dbfa5b92f48bc0d001bee18b394b172c5b9069a8f1194e2dc689dce85e",
+      "message_stop_reason": "stop",
+      "has_tool_calls": false,
+      "complete_final_answer": true
+    },
+    {
+      "trial": "T2-short-validity--fixed",
+      "owner": "pi-chat-164cb793ddadd566",
+      "status": "FAILED",
+      "current_system": "SC-d164119629d48a53df5afdf6a27c59873ecd2df78b3844cf38d485bfa69e3872",
+      "final_text": "",
+      "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "message_stop_reason": "error",
+      "has_tool_calls": false,
+      "complete_final_answer": false
+    }
+  ]
+}

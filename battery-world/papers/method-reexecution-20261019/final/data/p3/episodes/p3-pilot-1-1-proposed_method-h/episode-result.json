@@ -1,0 +1,91 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.025181304,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0422286,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-pilot-1-1-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "excitation_record",
+        "saved_activity",
+        "model_law",
+        "component_record.event_latch",
+        "excitation_record.shunts",
+        "excitation_record.source_segments",
+        "saved_activity.activity",
+        "saved_activity.packets",
+        "model_law.reset",
+        "model_law.tx_start_guard",
+        "world.b-volatile-reset"
+      ],
+      "falsifier": "The H scope is invalidated by any of: (1) any trace in which a packet with application_bytes=8 exists although the activity list shows a reset (brownout with event_was_captured=true, or a tx-transient reset) strictly between the last capture and tx-start - then capture continuity is not the binding mechanism and M2 is wrong; (2) for the same inputs as the retained failure (C=1e-5, tx_not_before_s=0.045) a packet appearing - then the post-shunt/deadline arithmetic in M3 excluded a feasible point; (3) a candidate that satisfies every M1-M3 inequality yet returns packets=[] with a triage label outside {no-ready-in-window, reset-cleared-capture, tx-transient-sag, deadline-overflow} - then the chain enumeration is incomplete; (4) predicted first_boot_s or first capture time off by more than about 2*dt=2e-4 s without any source or parameter change - then the phase budgets are mis-derived; (5) evidence that a brownout with event_was_captured=false is followed by a capture outside the contact window - then 'capture only inside contact duration' is misread and the chain is mis-ordered. None of these is asserted as pre-excluded beyond the stated arithmetic, and no result is claimed as service acceptance.",
+      "hypothesis": "Under the frozen b-transient-behavior-v1 apparatus with event_latch=volatile (component_record), success is governed by the continuity of the chain capture -> no reset -> tx-start(t>=tx_not_before_s) -> 20 TX steps -> tx-complete(<=deadline), not by peak stored energy or by deferring TX to the latest allowed instant. The retained failed trace is consistent only with a broken middle link, not with an energy shortage: capture is logged at 3.7-7.9 ms while powered/ready inside the 0-8 ms contact window, the 12.1 ms brownout is logged with event_was_captured=true (40 uJ shunt at 12 ms plus the source-free 6-30 ms gap pushed e under eoff=C*1.8^2/2), the volatile latch then reads event_was_captured=false at the 38.1 ms reboot, and by then the contact window has closed, so `captured` can never be re-set and the tx-start guard never fires: packets=[] at any tx_not_before. Prediction to be tested by the next candidate execution(s): the closed-form phase arithmetic (charge rates 0.01498 W unpowered / 0.0031 W powered in the 30-60 ms segment / -0.0002 W idle, shunt 4e-5 J at 12 ms, eon=C*2.8^2/2, eoff=C*1.8^2/2, emax=C*3.3^2/2, sag sqrt(2e/C)>=1.8+0.3*0.008=1.8024 V, TX charge 1.8*0.008*0.002=2.88e-5 J) reproduces the observed first_boot_s, first capture time, reset time and reason, and packet presence/absence for both continuity families; and that a TX co-located with the capture window yields a packet without ever crossing the 12 ms shunt while the deferred family requires e(post-12 ms shunt) and e(30 ms) both stay above eoff, which at C=1e-5 is arithmetically impossible (emax-eoff=C*(3.3^2-1.8^2)/2=C*3.825=3.83e-5 J < 4e-5 J shunt plus drain). No hardware, statistical, transfer or RSI claim is made.",
+      "impact_scope": "task-entry",
+      "method_sha256": "8e4dfd10722d5df995739bcf610cd761b771b28689a34c960b34c1abc9c98d86",
+      "method_text": "H METHOD - consumed from task entry, before any device choice. It reasons about the frozen apparatus and does not edit the task, the model, the ranges, the hooks or the evaluator. It does not select or submit a device: a (C, tx_not_before_s) pair is a separate D decision whose acceptance is decided externally. Physical calibration is UNKNOWN; the model is an assumption record, not hardware truth.\n\nM0. Bind inputs. component_record (id 260, event_latch=volatile, boot_j=5e-6 J, boot_delay_s=1e-3, off_v=1.8, ready_v=2.8, cap_voltage_max_v=3.3, output_v=1.8, tx_current_a=0.008, tx_duration_s=2e-3, esr=0.3 ohm, harvest_efficiency=0.9, idle_power_w=2e-4, off_power_w=2e-5, cap_initial_voltage_v=0). excitation_record (dt=1e-4 s, event_s=0, contact_duration_s=0.008, deadline_s=0.1, duration_s=1, sources 0-0.006 s at 1.6666667e-2 W and 0.03-0.06 s at 3.6666667e-3 W, shunt 4e-5 J at 0.012 s). model_law b-transient-behavior-v1. Budget: 2 candidate executions, 2 distinct designs.\n\nM1. Derive, per candidate C, before any run: eon=C*ready_v^2/2; eoff=C*off_v^2/2; emax=C*cap_voltage_max_v^2/2; usable margin emax-eoff=C*(3.3^2-1.8^2)/2=C*3.825; sag requirement sqrt(2e/C)>=output_v+esr*tx_current_a=1.8024 V, i.e. e>=C*1.6243 J; TX charge=output_v*tx_current_a*tx_duration_s=2.88e-5 J, drawn as 1.44e-6 J/step over tx_duration_s/dt=20 steps. TX per-step demand (1.44e-6 J) is below the phase-A per-step harvest (1.5e-6 J), so during an active source segment TX is nearly energy-neutral; it is only the source-free segments that make TX a net drain.\n\nM2. Write the response chain explicitly and never collapse it. A packet exists only if all links hold: (a) contact window W=[event_s, event_s+contact_duration_s)=[0,0.008) s; (b) a step sets captured only if powered AND t>=ready_at AND t in W (capture event); (c) every reset clears captured because the latch is volatile (reset paths: end-of-step e<eoff; TX step with loaded_v<output_v or e<eoff), so a capture event is evidence of (b) only and is NOT evidence that pending state survives a reset; (d) tx-start requires captured at that step AND t>=tx_not_before_s; (e) tx-complete requires 20 consecutive TX steps with no reset; (f) t_complete<=deadline_s. Hence the requirement is the conjunction: exists t_c in W with (powered, ready) at t_c, AND no reset on [t_c, t_complete], AND t_start>=tx_not_before_s, AND t_complete<=0.1 s. Check each link separately and record which one fails first.\n\nM3. Source-bound budgets per phase (formulas, then numbers for the candidate): phase A [0,0.006): net while unpowered =0.9*1.6666667e-2-2e-5=1.498e-2 W, so t_boot~eon/1.498e-2 (plus one-step quantization, then minus boot_j=5e-6) and ready_at=t_boot+1e-3; phase G [0.006,0.03): net=-idle_power_w=-2e-4 W, no harvest; shunt at 0.012 s: e<-e-min(e,4e-5); phase B [0.03,0.06): net=0.9*3.6666667e-3-2e-4=3.1e-3 W; TX steps: e<-e+harvest_step-1.44e-6. Evaluate and report in J, noting sign: (i) spill at emax in phase A; (ii) e just after the 12 ms shunt vs eoff; (iii) minimum e over phase G; (iv) e at tx-start vs eoff+net TX charge; (v) t_complete vs deadline. Two branch conditions follow and must both be shown, not assumed: an F1 (co-located) run needs t_ready<0.008 s and, if the source is active across TX, near-neutral energy plus the sag inequality; if TX would extend past 0.006 s it needs emax-eoff>=2.88e-5 + idle drain over that span, i.e. C*3.825>=~2.92e-5 -> C>=~7.6e-6 F. An F2 (deferred) run, e.g. tx_not_before_s=0.045, needs e(post-shunt)>eoff and e(0.03 s)>eoff, i.e. C*3.825>4e-5+~4.8e-6 -> C>~1.17e-5 F, plus t_ready<0.008 s. For C=1e-5, C*3.825=3.83e-5 J<4e-5 J, so any capture obtained in W is arithmetically lost at the 12 ms shunt and F2 is dead on that branch - this is a number, not a preference; at larger C both branches survive and must be compared on margin.\n\nM4. Never convert a sufficient heuristic into a necessary exclusion. 'Charge to emax and transmit at the latest permitted time' maximizes stored energy yet is exactly the shape that loses a volatile capture when the shunt plus the source-free gap force e<eoff between capture and tx-start; it is therefore sufficient-looking, not sufficient. Conversely 'transmit immediately at capture' is not universally available: it needs t_ready inside the contact window and either an active source across the 20 TX steps or emax-eoff>=2.88e-5 J. Enumerate both families, keep a family only when the M1-M3 numbers hold, prefer the family with fewer coupled links and larger J margins, and reject a design only on a failed inequality or a contradicting trace - never on 'less stored energy must be worse'.\n\nM5. Experiment order under the 2-execution / 2-distinct-design budget: spend the slots on distinct designs, one probe per family, and never run the same design twice as a retry. Probe F1 first (one phase, no shunt or gap crossing, largest margins); evaluate F2 only if F1 is rejected by its trace, and if F2 is tried, check the post-shunt margin first because it is the knife-edge at high C. Before each run, write the predicted t_boot, t_c, t_start, t_complete and the post-shunt margin; a run whose prediction disagrees is the more informative outcome and must be kept, not rerun.\n\nM6. Observation policy: read back the complete response (activity, first_boot_s, packets, and the trace fields stored_j, voltage_v, loaded_v, powered, contact, event_captured, shunt_j, spill_j). Record first boot time, every capture, every brownout with its reason and event_was_captured, tx-start/tx-complete, packets[].hex and application_bytes. Assign exactly one failure-triage label per run, in chain order: no-ready-in-window | reset-cleared-capture (cite brownout time and event_was_captured) | tx-transient-sag (cite loaded_v) | deadline-overflow. Pass the label and its J/s numbers into the next design choice; do not repeat an identical design.\n\nM7. Claim and retention discipline. Eight application bytes with unique_frames=1 in packets is a candidate completion; validity is decided by the external service, not here. If packets=[], report service as not completed and name the broken link. Keep the retained failure as evidence: saved_activity has packets=[], capture 3.7-7.9 ms, brownout 0.0121 s with event_was_captured=true, second boot 0.0381 s, later brownout with event_was_captured=false - i.e. a capture existed but pending state did not survive the reset, and re-capture was impossible after the window closed. Preserve UNKNOWN (physical calibration, any unrun design) and actual cost (<=2 candidate executions, no native dispatches). No automatic retries; no claim of hardware validation, statistical advantage, method transfer or RSI.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-pilot-1-1-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-47e024347b91d06a",
+  "protocol_sha256": "4720ea6d172e748b1b5099c09a07e82795ea942229e40ab1224f2ea93fc7f600",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "4a57819caf38c12e5679ad50a66d7c11e9175e865fd45bf5458382adab9bcf42",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-pilot-1-1-proposed_method",
+    "id": "p3-pilot-1-1-proposed_method-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "pilot",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "d8eeb2400bad951672f2077fa3e03f102fd6c44132c8f6c45ac89373acbeef03",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 78.92702533300326,
+  "wall_seconds_total": 79.31657029100461
+}

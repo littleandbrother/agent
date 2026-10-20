@@ -1,0 +1,221 @@
+{
+  "actual_call_sha256": "f1d5a381df18d0755e03c11d6942d0fffafcf621a764b6cc19f79d71570b79f2",
+  "actual_generated_corrected_call": {
+    "action": "propose",
+    "policy": [
+      {
+        "design": {
+          "capacitance_f": 1.5e-05,
+          "tx_not_before_s": 0.045
+        },
+        "equals": true
+      },
+      {
+        "design": {
+          "capacitance_f": 1e-05,
+          "tx_not_before_s": 0.03
+        },
+        "equals": false
+      }
+    ],
+    "spec": {
+      "ast": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "field": "/tx_current_a",
+                    "units": "A"
+                  },
+                  {
+                    "field": "/tx_duration_s",
+                    "units": "s"
+                  }
+                ],
+                "op": "mul"
+              },
+              {
+                "field": "/output_v",
+                "units": "V"
+              }
+            ],
+            "op": "mul"
+          },
+          {
+            "args": [
+              {
+                "constant": 0.5,
+                "units": "1"
+              },
+              {
+                "args": [
+                  {
+                    "field": "/capacitance_f",
+                    "units": "F"
+                  },
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "field": "/ready_v",
+                            "units": "V"
+                          },
+                          {
+                            "field": "/ready_v",
+                            "units": "V"
+                          }
+                        ],
+                        "op": "mul"
+                      },
+                      {
+                        "args": [
+                          {
+                            "field": "/off_v",
+                            "units": "V"
+                          },
+                          {
+                            "field": "/off_v",
+                            "units": "V"
+                          }
+                        ],
+                        "op": "mul"
+                      }
+                    ],
+                    "op": "sub"
+                  }
+                ],
+                "op": "mul"
+              }
+            ],
+            "op": "mul"
+          }
+        ],
+        "op": "gt"
+      },
+      "domain": {
+        "constraints": [
+          {
+            "field": "/capacitance_f",
+            "lower": 4e-06,
+            "units": "F",
+            "upper": 2.2e-05
+          },
+          {
+            "field": "/tx_not_before_s",
+            "lower": 0,
+            "units": "s",
+            "upper": 0.045
+          },
+          {
+            "field": "/tx_current_a",
+            "lower": 0.008,
+            "units": "A",
+            "upper": 0.008
+          }
+        ],
+        "description": "冻结理想模型下的无电池标签器件记录；仅适用于 legal_design_ranges 内 capacitance_f∈[4e-6,2.2e-5] F、tx_not_before_s∈[0,0.045] s，且瞬态参数取该记录值（ready_v 2.8 V, off_v 1.8 V, cap_voltage_max 3.3 V, esr 0.3 ohm, harvest_efficiency 0.9）。物理标定与统计优势均为 UNKNOWN，不在该观察的适用域内。"
+      },
+      "hypothesis": "由已获取的 component_record（source_sha256 55d43741…）构造的无量纲布尔量：单帧发射电荷 tx_current_a*tx_duration_s 在 output_v 下的能量是否大于当前 10 uF 电容在 ready_v 与 off_v 之间的可用能量余量 0.5*C*(ready_v^2-off_v^2)。左=0.008*0.002*1.8=2.88e-5 J，右=0.5*1e-5*(7.84-3.24)=2.30e-5 J，预期 true。若 true，则名义缓冲仅发射一项就已超支，必须提高电容并让发射落在合法窗口内电荷最充裕的时刻（tx_not_before_s 上界 0.045 s），同时电容不能大到使 ready_v 门限能量无法在 8 ms 接触窗内达到。这是我自己写的表达式，不是自主发现；资格与验收在外部。",
+      "mode": "construction",
+      "schema_version": "phase2-observation-proposal-v1",
+      "source_id": "component_record",
+      "units": "1"
+    }
+  },
+  "actual_model_owner": "pi-chat-a80a6b85edc6b0b4",
+  "domain_status": "CHECKED_ON_SOURCE",
+  "frozen_true_world_changed": false,
+  "independent_implementation": "Decimal AST interpreter separate from bounded proposal evaluator",
+  "label": "POSTHOC_HOST_ADAPTER_REEVALUATION",
+  "negative_controls": {
+    "constant_relation": "REJECT_BY_DISTINCT_PROBE_VALUES",
+    "missing_observation": "UNKNOWN",
+    "out_of_domain": "UNKNOWN",
+    "self_signed_observation": "UNKNOWN",
+    "source_hash_binding": "PASS"
+  },
+  "new_model_proposals": 0,
+  "new_provider_requests": 0,
+  "original_episode_status": "INCOMPLETE_OR_STOPPED",
+  "original_model_trace_sha256": "df328c9cdeeb2bacde8ce1174be8fa4138f691adf6d28755ee224db9b0c0c4cf",
+  "original_protocol_sha256": "75f606611381560c48f3e9af46f7efdf713fb74d6733ebec71c87d6de2bcfbbf",
+  "qualification_code_sha256": "5ad23f747f6634ba489d24127f35ff5246f08c16d3aec59276aa615b229d2a92",
+  "relation_value": true,
+  "scope": "Engineering adapter replay of existing model-generated output; not original episode success or evidence of method superiority.",
+  "source": {
+    "acquisition": {
+      "bytes": 332,
+      "native_calls": 0,
+      "new_scientific_executions": 0,
+      "wall_seconds": 0.0031025409989524633
+    },
+    "field_units": {
+      "/boot_delay_s": "s",
+      "/boot_j": "J",
+      "/cap_initial_voltage_v": "V",
+      "/cap_voltage_max_v": "V",
+      "/capacitance_f": "F",
+      "/esr_ohm": "ohm",
+      "/event_latch": "1",
+      "/harvest_efficiency": "1",
+      "/id": "1",
+      "/idle_power_w": "W",
+      "/off_power_w": "W",
+      "/off_v": "V",
+      "/output_v": "V",
+      "/ready_v": "V",
+      "/tx_current_a": "A",
+      "/tx_duration_s": "s",
+      "/tx_not_before_s": "s"
+    },
+    "parent_path": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001/cases/b-volatile-reset/input.json",
+    "parent_sha256": "e386bff51c094e8bc9066194fa01324fa3410a0467004345df3f8531c0f6269b",
+    "payload": {
+      "boot_delay_s": 0.001,
+      "boot_j": 5e-06,
+      "cap_initial_voltage_v": 0,
+      "cap_voltage_max_v": 3.3,
+      "capacitance_f": 1e-05,
+      "esr_ohm": 0.3,
+      "event_latch": "volatile",
+      "harvest_efficiency": 0.9,
+      "id": 260,
+      "idle_power_w": 0.0002,
+      "off_power_w": 2e-05,
+      "off_v": 1.8,
+      "output_v": 1.8,
+      "ready_v": 2.8,
+      "tx_current_a": 0.008,
+      "tx_duration_s": 0.002,
+      "tx_not_before_s": 0.045
+    },
+    "source_id": "component_record",
+    "source_sha256": "55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef"
+  },
+  "source_dependence_probes": [
+    {
+      "relation_value": true,
+      "value": 4e-06,
+      "variable": "capacitance_f"
+    },
+    {
+      "relation_value": false,
+      "value": 2.2e-05,
+      "variable": "capacitance_f"
+    },
+    {
+      "relation_value": true,
+      "value": 0.0,
+      "variable": "tx_not_before_s"
+    },
+    {
+      "relation_value": true,
+      "value": 0.045,
+      "variable": "tx_not_before_s"
+    }
+  ],
+  "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING"
+}

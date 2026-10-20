@@ -1,0 +1,30 @@
+{
+  "chain": 1,
+  "generation": 1,
+  "configuration": {
+    "features": [
+      "prefix",
+      "information",
+      "feedback"
+    ],
+    "replay": "causal",
+    "reason": "All three features are needed to distinguish pass/fail across the energy_timing, information_window, and load_feedback mechanisms; causal replay preserves source-response accuracy for changed loads while reducing cost versus full replay."
+  },
+  "validation": {
+    "contract": {
+      "n": 36,
+      "true_accept": 18,
+      "true_reject": 18,
+      "false_accept": 0,
+      "false_reject": 0,
+      "unknown": 0,
+      "coverage": 1.0,
+      "accuracy_all": 1.0
+    },
+    "feature_cost": 7,
+    "replay_rank_errors": 0,
+    "replay_n": 6,
+    "work_units": 18000,
+    "response_max_energy_error_uJ": 0.0
+  }
+}

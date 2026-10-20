@@ -1,0 +1,166 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.020390303999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.032733599999999995,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L3-G0-final-2",
+  "episode": "L3-G0-final-2",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 5e-05,
+      "tx_not_before_s": 7
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 5e-05,
+        "tx_not_before_s": 7
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 9.9999e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1.1929e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 1.2222420731083537e-20,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.0003,
+        "source_total_error_j": 0.0,
+        "step_count": 30000,
+        "time_resolution_s": 0.001,
+        "totals_j": {
+          "background_j": 3e-05,
+          "boot_j": 0.0,
+          "conversion_j": 0.0,
+          "harvest_j": 0.0003,
+          "shunt_j": 0.0,
+          "source_j": 0.0003,
+          "spill_j": 0.00012000099999987306,
+          "tx_j": 5e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "3ecdfb5ec8605b1824b430c630476c1a28fbf666986f21d46a50cddbc0042a88",
+      "input_sha256": "cc72ac09f01997ab4fc4ec0dce9d581a77999297ad575f592482ee0719aa8349",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 3.0
+          }
+        ],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "volatile",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 3
+        },
+        "first_valid_receive_s": 7.001,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "0955b242396ce00977ee23e053296a697cc03f84bd3050835f15dec2cb851c09",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "phase4-new-full-response",
+      "physical_qualification": "UNKNOWN",
+      "query_service": {
+        "gates": {
+          "freshness": true,
+          "query_before_reply": true,
+          "query_state_capture": true,
+          "single_query_token": true
+        },
+        "protocol": {
+          "deadline_s": 8,
+          "issued_s": 3,
+          "mapping": "Fixed seq=1, key=1, event=1 single digital query; no multiquery/security/RF qualification.",
+          "max_data_age_s": 5,
+          "nonce": "phase4-q-001",
+          "nonce_sequence": 1,
+          "single_query_only": true
+        },
+        "status": "PASS"
+      },
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/3ecdfb5ec8605b1824b430c630476c1a28fbf666986f21d46a50cddbc0042a88/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "OUTSIDE_RANGE",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 2.778,
+        "first_receive_s": 7.001,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "p4-clite-half-power-query-v1"
+    },
+    "reason": "Design {capacitance_f:5e-05, tx_not_before_s:7} submitted; only tx_not_before_s changed from the current design (3) because it was the single field whose value produced a service-level inequality violation.\n\nSources read this episode (inspect payload, world p4-clite-half-power-query-v1): component_record id301 (capacitance_f 5e-5, ready_v 1, off_v 0.2, event_latch volatile, boot_j 0, tx 0.025 A/2 ms/1 V, tx_not_before_s 3); excitation_record p4-clite-half-power-query-v1 (10 uW on [0,30) only, dt 0.001, event_s 3.0, contact 1 ms, no shunts); model_law b-transient-behavior-v1 (full python_definition present). Query protocol: single query, issued 3 s, deadline 8 s, max_data_age 5 s, nonce phase4-q-001 seq1. No retained_failures block was present in this episode's inspect output; recorded as absent, not as \"none known\".\n\nPre-registered prediction (STEP 3, resolution = dt 1 ms), derived by hand-tracing the published model code: first_boot 2.778 s (e_on=C/2=2.5e-5 J at ~9 nJ/step); capture at 3.000; tx-start 7.000; packet at 7.001 s with application_bytes 8, one event_id; step-2 loaded_v ~1.233 V >= output_v 1 V; post-TX energy ~1.30e-5 J >= e_off 1e-6 J; no brownout. Observed (check record, selected_design identical): boot 2.778, capture 3.000 (event_id 1), tx-start 7.000, tx-complete 7.001, packets[{application_bytes 8, event_id 1, time_s 7.001, loaded_v 1.2330288}], received_frames 1, first_receive_s 7.001, energy_ledger verdict PASS with bad_steps [] and max_balance_error 1.19e-20. Measured deviation 0 ticks.\n\nTerminality-first read: an 8-byte packet with one unique event_id at 7.001 s <= 8 s deadline => ACHIEVED. No activity events after tx-complete 7.001, so nothing post-terminal to reclassify; the later spill (spill_j 1.2e-4) and final storage 1e-4 J are expected decay, not failures. Service-level inequalities with margins: deadline 7.001 <= 8 (0.999 s); data age 4.001 <= 5 s; single frame / single event_id (dedup); voltage feasibility loaded_v 1.233 >= 1; volatile-latch causality satisfied because boot (2.778) precedes the 3.000 contact and no brownout intervenes, so the captured event survives to the permitted TX time.\n\nWhy capacitance was left unchanged: with the volatile latch, boot must precede the 3.000 s contact; e_on=C/2 implies C must stay below about 5.4e-5 (C=1e-4 would boot at ~5.56 s, after the event, and never capture), and emax=2C=1e-4 J still covers the required 5.1e-5 J pre-TX energy, so tx_not_before_s was the only legal field needing change (one field at a time).\n\nKept as UNKNOWN: physical_calibration/qualification UNKNOWN (synthetic DC contract, not RF measurement); the source payload is a summary observation (activity, ledger totals, packets), not an unprojected 30000-step trace; no hardware validity, statistical advantage, transfer or recursive-self-improvement is claimed. A model-derived prediction of the old field value (brownout at 3.001 with volatile event loss) was NOT spent a check and is reported as prediction, not observation.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-0f7fd9d2193cf79b",
+  "protocol_sha256": "d7bd6f06b3f9abb93bd4b0596476c2e7de22b4165127dc4c4e70281036fde9ff",
+  "recovery_of": null,
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "ba22bab66fe72769188f753f2b3b9af6add8a6e5749f1be98ccc969da0925d37",
+  "spec": {
+    "arm": "G0",
+    "arm_id": "L3-G0",
+    "condition": "G0",
+    "id": "L3-G0-final-2",
+    "kind": "D",
+    "lineage": 3,
+    "slot": "final-2",
+    "stage": "final",
+    "world": "p4-clite-half-power-query-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 3,
+    "gateway_chain_tip": "5ef47c7c698304ebefc9b9579172c588d23857e36d4004ef511a3401ddcacb24",
+    "model_submitted": true,
+    "model_tool_calls": 3,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 70.0051757080073,
+  "wall_seconds_total": 70.47545016699587
+}

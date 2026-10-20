@@ -43,6 +43,8 @@ def ui_index():
 
 class Workbench:
     def __init__(self, root):
+        from .runtime_config import validate_workbench_root
+        validate_workbench_root(root)
         self.store = Store(root)
         self.lock = (self.store.root / 'service.lock').open('a')
         fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -255,6 +257,11 @@ class Workbench:
 def handler(workbench,paper_sessions=None):
     from .paper_sessions import PaperSessions
     papers=paper_sessions or PaperSessions(workbench)
+    from .runtime_config import DEVELOPMENT_PROFILE
+    cookie_name = 'bf_operator_v2_'+str(DEVELOPMENT_PROFILE['port']) if DEVELOPMENT_PROFILE else 'bf_operator'
+    from .lab_bridge import LabBridge, static_file as lab_static_file
+    bridge_path = workbench.store.root/'lab-bridge.json'
+    lab_bridge = LabBridge(bridge_path) if bridge_path.is_file() and DEVELOPMENT_PROFILE is None else None
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
             pass
@@ -270,7 +277,7 @@ def handler(workbench,paper_sessions=None):
             self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; frame-ancestors " + ("'self'" if (urlparse(self.path).path=='/model-viewer.html' or kind=='application/pdf') else "'none'"))
             if getattr(self,'bootstrap_cookie',False):
                 token=(workbench.store.root/'operator.token').read_text().strip()
-                self.send_header('Set-Cookie','bf_operator='+token+'; Path=/; HttpOnly; SameSite=Strict')
+                self.send_header('Set-Cookie',cookie_name+'='+token+'; Path=/; HttpOnly; SameSite=Strict')
             self.end_headers()
             try:
                 if file is not None:
@@ -283,7 +290,7 @@ def handler(workbench,paper_sessions=None):
             authorization=self.headers.get('Authorization','').removeprefix('Bearer ').strip()
             if authorization:return workbench.store.authenticate(authorization)
             cookie=SimpleCookie(self.headers.get('Cookie',''))
-            return workbench.store.authenticate(cookie['bf_operator'].value if 'bf_operator' in cookie else '')
+            return workbench.store.authenticate(cookie[cookie_name].value if cookie_name in cookie else '')
 
         def engineering_reply(self, owner, status, value):
             from .scientific_figures import public_response
@@ -330,6 +337,10 @@ def handler(workbench,paper_sessions=None):
             try:
                 self.local_host()
                 path = urlparse(self.path).path
+                if (DEVELOPMENT_PROFILE or lab_bridge) and (path in ('/lab','/lab/','/lab/v2','/lab/v2/') or path.startswith('/lab/v2/')):
+                    file,kind=lab_static_file(UI,path)
+                    self.bootstrap_cookie=file.name=='index.html'
+                    return self.reply(200,file,kind)
                 static = {'/': ('index.html', 'text/html'), '/app.js': ('app.js', 'text/javascript'),
                           '/design-lab.html': ('design-lab.html','text/html'),
                           '/design-lab.js': ('design-lab.js','text/javascript'),
@@ -360,7 +371,35 @@ def handler(workbench,paper_sessions=None):
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
                 if path in ('/artifact-workspace.js','/artifact-workspace.css','/result-catalog.js','/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
+                if path in ('/node-engineering.html','/node-engineering.js','/node-engineering.css'):
+                    return self.reply(200,(UI/path[1:]).read_bytes(),{'html':'text/html','js':'text/javascript','css':'text/css'}[path.rsplit('.',1)[1]]+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
+                if lab_bridge and path.startswith('/api/design-repository'):
+                    if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_LAB_VIEW')
+                    return self.reply(*lab_bridge.get(self.path))
+                if path.startswith('/api/design-repository'):
+                    from .design_lab.repository_view import projection,artifact,archive,trace
+                    query=parse_qs(urlparse(self.path).query)
+                    target=query.get('owner',[owner])[0] if actor['role']=='operator' else owner
+                    repo=workbench.design_lab.repository
+                    if not repo.profile:raise PermissionError('ISOLATED_V2_PROFILE_REQUIRED')
+                    if path=='/api/design-repository/projects':
+                        with repo.store.connect() as db:
+                            rows=[dict(r) for r in db.execute('SELECT id,owner,title,revision,adopted,submitted FROM design_projects')]
+                        return self.reply(200,{'projects':rows if actor['role']=='operator' else [r for r in rows if repo.bound(owner)==r['id']]})
+                    project=query.get('project',[repo.bound(target)])[0]
+                    repo.project(project,target)
+                    if path=='/api/design-repository':return self.reply(200,projection(repo,project,target))
+                    if path=='/api/design-repository/file':
+                        import mimetypes
+                        file,name=artifact(repo,project,target,query.get('system',[''])[0],query.get('path',[''])[0],
+                           domain_commit=query.get('domain_commit',[None])[0],job=query.get('job',[None])[0],preview=query.get('preview',['0'])[0]=='1',realization=query.get('realization',['0'])[0]=='1')
+                        kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
+                        if kind in ('text/html','application/javascript'):kind='text/plain'
+                        return self.reply(200,file,kind)
+                    if path=='/api/design-repository/archive':return self.reply(200,archive(repo,project,target,query.get('release',[''])[0]),'application/zip')
+                    if path=='/api/design-repository/trace':return self.reply(200,trace(repo,project,target,query.get('session',[''])[0],int(query.get('after',['-1'])[0]),int(query.get('limit',['80'])[0])))
+                    return self.reply(404,{'error':'NOT_FOUND'})
                 query=parse_qs(urlparse(self.path).query)
                 if path in ('/api/execution-progress','/api/execution-progress/artifact'):
                     if actor['role'] != 'operator':
@@ -876,6 +915,9 @@ def main():
     parser.add_argument('--root', type=Path, default=DEFAULT_ROOT)
     parser.add_argument('--port', type=int, default=8768)
     args = parser.parse_args()
+    from .runtime_config import DEVELOPMENT_PROFILE
+    if DEVELOPMENT_PROFILE is not None and args.port != DEVELOPMENT_PROFILE['port']:
+        raise ValueError('DEVELOPMENT_SERVER_PORT_MISMATCH')
     workbench = Workbench(args.root)
     server = ThreadingHTTPServer(('127.0.0.1', args.port), handler(workbench))
     workbench.conversations.port=server.server_port

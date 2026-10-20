@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "base_commit": "dcd7c5448ebef67d102eae5de49938a8142efe3c",
+  "prior_failed_runs": [
+    38998125754,
+    38998122642
+  ],
+  "cause": "Hardcoded Codex Python path absent on Ubuntu; CI also omitted ReportLab and pypdf.",
+  "local": {
+    "repository_tests": 280,
+    "clean_repository_tests": 280,
+    "clean_ci_python": "3.12.14",
+    "clean_pi": [
+      "npm ci --ignore-scripts",
+      "npm run bf:build",
+      "npm run check"
+    ],
+    "clean_pi_source_files_unchanged": 2012,
+    "git_checkout_eol_filters": [
+      "pi-bf-aiot/pi-test.bat",
+      "pi-bf-aiot/pi-test.ps1"
+    ],
+    "saved_native_controls": 11,
+    "sealed_files": 44,
+    "project_state": "PASS",
+    "portable_repository": {
+      "tests": 281,
+      "skipped": 2,
+      "native_tools": "forced unavailable",
+      "result": "PASS"
+    }
+  },
+  "cost": {
+    "new_model_calls": 0,
+    "new_native_dispatches": 0,
+    "retained_native_dispatches": 16,
+    "retained_completed_native_runs": 16
+  },
+  "publication": {
+    "branch": "codex/bf-architecture-v2",
+    "pr": "https://github.com/littleandbrother/agent/pull/3",
+    "status": "PUSHED_AND_CI_PASSED",
+    "attempts": [
+      {
+        "head": "59e5d2486819853f49729a40e2a9481e25accf1d",
+        "runs": [
+          39118672684,
+          39118669528
+        ],
+        "result": "FAIL",
+        "reason": "Nine Repository state tests accidentally called desktop tool discovery instead of using a fixed environment fixture. Pi job and original three PDF tests passed."
+      }
+    ],
+    "verified_source_commit": "530dc4d49f68665a4f2f1fb9120832e43273cef5",
+    "runs": [
+      {
+        "id": 39118894331,
+        "event": "pull_request",
+        "url": "https://github.com/littleandbrother/agent/actions/runs/39118894331",
+        "conclusion": "success"
+      },
+      {
+        "id": 39118890441,
+        "event": "push",
+        "url": "https://github.com/littleandbrother/agent/actions/runs/39118890441",
+        "conclusion": "success"
+      }
+    ]
+  }
+}

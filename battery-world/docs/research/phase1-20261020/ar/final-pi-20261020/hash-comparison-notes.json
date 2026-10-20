@@ -1,0 +1,30 @@
+{
+  "schema_version": "bf-ar-hash-comparison-resolution-v1",
+  "comparisons": [
+    {
+      "initial_comparison": "Analytical receipt checker_sha256 versus service checker file bytes appeared unequal",
+      "resolution": "Different checker identities: the analytical receipt binds independent_feasibility.py; candidate receipts bind campaign_ar_service.py. Both match their actual paths.",
+      "analytical_checker": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/independent_feasibility.py",
+        "sha256": "3a44d9618758e1591f97a0e0ed8a184f6ee1f895f9aa4b8c18f514d5ff86f9eb"
+      },
+      "service_checker": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/scripts/campaign_ar_service.py",
+        "sha256": "a639f30f000663c0ba0e872da656475fe44e858bde79c5bc818ed1e256acd951"
+      },
+      "status": "RESOLVED_NO_SOURCE_DRIFT"
+    },
+    {
+      "initial_comparison": "Original episode-result protocol_sha256 versus protocol.json file bytes appeared unequal",
+      "resolution": "Original episode-result uses canonical JSON content hash, not file byte hash. Current file matches both declared encodings. No original result was changed.",
+      "canonical_encoding": "JSON ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False; UTF-8",
+      "original_protocol_canonical_sha256": "44246c4383efce6cc26e3eec92d8d6f927c892417de2f6041ee6b4b41d7487e9",
+      "original_protocol_file_sha256": "7cf49d0d60cd9c3d09653d7154e52b945db9090e37f4a4a90162b68a7f22b8b8",
+      "continuation_protocol_canonical_sha256": "dd4c64f71188dff2046cb3c09f80b1455e7836675aa55d1bab16262d05ee4e63",
+      "continuation_protocol_file_sha256": "c0a406d2c92d961f2358f1b45b5790d71977864292d87c2007c14fa9e38339af",
+      "status": "RESOLVED_NO_SOURCE_DRIFT"
+    }
+  ],
+  "upstream_files_modified": false,
+  "scope": "Preserves initial wrong-identity comparisons and their source-verified resolution; no trace/hash audit failure remains from these comparisons."
+}

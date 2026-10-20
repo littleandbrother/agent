@@ -1,0 +1,156 @@
+{
+  "authority": "Only S0 launches paid/scientific runs, supplies public facts/tools and qualification, and binds integrated source/cache/evaluator identities. B only projects and checks serialization.",
+  "cache": {
+    "key": "full versioned input, model/evaluator/source hashes, not task ID or trajectory name",
+    "overlays": "independent per arm and replicate; no cross-arm adaptive result sharing",
+    "report": "separate task-level and run-level outcomes; preserve failures, UNKNOWN, no-update and incurred usage",
+    "snapshot": "S0 freezes one common initial cache per task before first arm"
+  },
+  "conditions": [
+    {
+      "id": "average-energy",
+      "initial_projection": "average-energy-only",
+      "role": "Coarse information ablation; task, legal space, assumptions and units remain common",
+      "tool_roles": [
+        "design"
+      ]
+    },
+    {
+      "id": "rich-static",
+      "initial_projection": "all-public-facts",
+      "role": "Strong complete static facts, including all available records, state laws, waveforms, traces and applicability limits",
+      "tool_roles": [
+        "design"
+      ]
+    },
+    {
+      "id": "complete-raw",
+      "initial_projection": "all-public-facts",
+      "role": "Unabridged public raw records; no additional physics withheld from rich-static; equality of their fact sets is an admissible negative control",
+      "tool_roles": [
+        "design"
+      ]
+    },
+    {
+      "id": "executable-response",
+      "initial_projection": "all-public-facts",
+      "role": "Same complete facts plus executable response; response/check/confirmation share two distinct design exposures",
+      "tool_roles": [
+        "design",
+        "model_response"
+      ]
+    },
+    {
+      "id": "live-e5",
+      "initial_projection": "average-energy-only",
+      "role": "Generic source acquisition and bounded model-proposed observation pipeline; target relation and field relevance are not supplied",
+      "tool_roles": [
+        "design",
+        "observation"
+      ]
+    }
+  ],
+  "dispatch_id": "phase-3-controlled-comparison-bf-20261020-001",
+  "e4": {
+    "arms": [
+      {
+        "id": "e4-rich-static-json",
+        "representation": "json"
+      },
+      {
+        "id": "e4-rich-static-table",
+        "representation": "table"
+      }
+    ],
+    "base_condition": "rich-static",
+    "independent_cells": true,
+    "no_added_summaries_or_answers": true,
+    "same_budget": true,
+    "same_common_task_and_design_space": true,
+    "same_payload": true,
+    "same_tool_permissions": true,
+    "unit": "one task/arm/replicate; count separately from E5 information comparison"
+  },
+  "feature": "BFA-059-phase3-interface-comparison",
+  "group_budget": {
+    "accounting_scope": "One total per condition/task/replicate, including model calls, acquisition, proposal, qualification, consumer use and confirmation; no E5 extra allocation. Cache hits consume exposure and tool/time allowance; duplicate confirmation creates no free additional D.",
+    "candidate_executions": 2,
+    "distinct_designs": 2,
+    "native_dispatches": 0,
+    "provider_requests": 24,
+    "wall_s": 1200
+  },
+  "no_target_relation_prefilled": true,
+  "pilot": {
+    "formal_repetitions_rule": "After two pilot replicates, once choose 2 if outcomes/designs stable across repeats, else 3; no outcome-dependent stopping afterward.",
+    "formal_task_limit": 4,
+    "not_statistical_acceptance": true,
+    "repetitions": 2
+  },
+  "preregistration": {
+    "claim_boundary": "Public development pilot and finite controlled digital BF comparison, with task-level and run-level separation. Not hardware qualification, original failed-episode success, transfer or RSI.",
+    "falsifier": "Equal-information contrast silently changes facts/tools, baseline weakened, model given target expression, or derived case passed off as hardware evidence.",
+    "hypothesis": "Richer or executable BF information has mechanism-dependent value beyond average-energy and complete-static baselines.",
+    "negative_controls": [
+      "malformed syntax before valid proposal cap",
+      "H/D action separation",
+      "postdelivery reset is not pending state retention",
+      "tampered/missing source",
+      "changed input cannot reuse stale trajectory"
+    ],
+    "owned_paths": [
+      "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_interfaces.py",
+      "scripts/campaign_phase3_interfaces.py",
+      "tests/agentlab/test_campaign_phase3_interfaces.py",
+      "configs/studies/phase3-20261020/interfaces/",
+      "docs/research/phase3-20261020/interfaces/",
+      "papers/interface-sufficiency-20261019/phase3-methods.tex",
+      "papers/interface-sufficiency-20261019/phase3-manuscript.tex",
+      "papers/interface-sufficiency-20261019/phase3.pdf",
+      "papers/interface-sufficiency-20261019/phase3-binding.json",
+      "papers/interface-sufficiency-20261019/render_phase3.py"
+    ],
+    "paper_claim": "Richer or executable BF information has mechanism-dependent value beyond average-energy and complete-static baselines.",
+    "schema_changes": [
+      "additive phase3 conditions, corrected ordered-state evaluator, shared-cache snapshot/isolated overlays, prospective v2 host, matched-total-budget receipts"
+    ],
+    "stop_condition": "Frozen scientific drift, unknown usage/model identity, cost/time/request/storage cap, hidden label leakage, changed fixed semantics or unusable source. Preserve every request/failure/no-update.",
+    "worker_preparation": {
+      "native_dispatches": 0,
+      "peak_bytes": 10000000,
+      "provider_requests": 0,
+      "retained_bytes": 5000000,
+      "scientific_executions": 0,
+      "wall_cap_s": 600
+    }
+  },
+  "schema_version": "phase3-bf-interface-conditions-v1",
+  "task_matrix": {
+    "maximum_tasks": 4,
+    "tasks": [
+      {
+        "id": "b-pulse-fast",
+        "mechanism": "Existing static-sufficient pulse control; saved exact-input outputs reused"
+      },
+      {
+        "id": "b-volatile-reset",
+        "mechanism": "Cold-start/transient/reset feedback with volatile pending state"
+      },
+      {
+        "id": "b-latched-reset",
+        "mechanism": "Pending event captured before reset, retained across reset and first delivered after reset; ordered evidence required, not the legacy Boolean label"
+      },
+      {
+        "derived_case_path": "configs/studies/phase3-20261020/interfaces/derived-case.json",
+        "derived_case_sha256": "6a6b526a1e2ae657e67c8af9944a9d458189b15d4f343392632d7ef12dfb8ff9",
+        "id": "clite-query-window-derived-v1",
+        "mechanism": "Energy arrival before and after a query, cold-start readiness, volatile query capture, earliest-TX scheduling and a fixed causal reply deadline; no additional physical relation is supplied."
+      }
+    ]
+  },
+  "tool_roles": {
+    "design": "Host check/submit/no-update contract; legal D only, at most two distinct exposures",
+    "model_response": "Executable response to legal D; shares design cap and total wall/request budget with design checks",
+    "observation": "Generic sources/acquire/propose/qualify/consume/confirm pipeline under the same total budget; maps to S0's frozen host, no separate allowance"
+  }
+}

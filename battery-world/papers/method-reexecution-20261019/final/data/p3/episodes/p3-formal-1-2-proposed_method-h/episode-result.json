@@ -1,0 +1,91 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.020721648000000002,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0324252,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-2-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "excitation_record",
+        "model_law",
+        "saved_activity",
+        "component_record.event_latch",
+        "component_record.ready_v",
+        "component_record.cap_voltage_max_v",
+        "component_record.esr_ohm",
+        "excitation_record.source_segments",
+        "excitation_record.contact_duration_s",
+        "saved_activity.activity",
+        "saved_activity.packets",
+        "model_law.simulate_b",
+        "model_law.b-transient-behavior-v1",
+        "saved_activity:sha256_a4c4b29470504b0b06e584167657f796130e0a445e26e0dccfdd0d8c9ff82d9a",
+        "model_law:sha256_d690d8a89532cb37d39a6c47a4e5d2960d025ea5b85a629a4b1f513bb7003a0f"
+      ],
+      "falsifier": "M-H1/H1 is falsified by any of: (a) a re-execution under M-H1 that still reports service completion for a delivery without (i) an explicit capture action recorded while powered==1 and t>=ready_at and inside the contact window and (ii) tx-complete time <= deadline_s, and without an UNKNOWN label - i.e. the update was not consumed from task entry; (b) a source-bound replay showing the t=0.0158 s frame was in fact preceded by a powered, ready, in-window capture that the retained activity list merely omitted, which would make the provenance claim and the step-3 rule mis-specified; (c) unattainability of the powered-capture path over the entire declared legal_design_space (e_on crossing + boot_delay never inside [event_s, event_s+contact_duration_s) together with end-of-frame load margin >= output_v), which refutes H1's in-range attainability sentence and reduces the update to flagging-only while the UNKNOWN-preservation part survives; (d) any disagreement between the step-5 accounting/exclusions and a complete observed trace+activity computed from the same records (an arithmetic or ordering error, e.g. treating E>=e_off as equal to the load-voltage condition, or assuming harvest after the last source segment ends); (e) any clause of the method that can only be satisfied by naming a numeric capacitance_f or tx_not_before_s, which would make it a device edit D rather than a procedural H edit.",
+      "hypothesis": "H1 (procedural, re-executable, design-value-free): On this frozen task, a response produced under method M-H1 will stop presenting the retained saved_activity delivery at t=0.0158 s as a clean service completion, because that frame's only event-capture path is the latch line in model_law ('event_latch==passive-mechanical and event_s<=t and not done -> captured=True'), which fires irrespective of 'powered', while the activity list contains no 'capture' action. Source-bound support: e0 = C*cap_initial_voltage_v^2/2 = 0; e_on = C*ready_v^2/2 = 8.624e-5 J at C=2.2e-5 F; net charging before boot is harvest_efficiency*power_w - off_power_w = 0.9*7.5e-3 - 2e-5 = 6.73e-3 W, so the e_on crossing is ~12.8 ms (observed boot 0.0129 s), i.e. after the contact window [event_s, event_s+contact_duration_s) = [0, 0.008 s) has closed; therefore 'powered and t>=ready_at and contact' is unreachable for the current design and the frame is a retention effect only. Under M-H1 the same trace must be labelled UNKNOWN-provenance (retention, not powered capture), and for any candidate design the procedure must report either an explicit powered capture action with tx-complete <= deadline_s, or an explicit UNKNOWN. Independent attainability check to be re-derived at entry (never prescribed as a value): end-of-frame load margin requires C*3.92 - boot_j - 2.88e-5 + eta*P*(boot_delay+tx_duration) >= C*(1.8+esr*tx_current)^2/2 together with e_on crossing + boot_delay + (boot_j/net rate) < contact end; evaluated on these records the intersection is a bounded interior region of legal_design_space, so the procedure is not vacuous and 'use the largest capacitance' cannot be treated as a necessary condition. No hardware behaviour, statistical advantage, transfer or RSI is claimed; the model is an assumed synthetic law and physical calibration is UNKNOWN.",
+      "impact_scope": "task-entry",
+      "method_sha256": "bcd93d6e6f6dd59d909f1485eabf07a981672e7a3ee827ddc7adc59186f5b050",
+      "method_text": "M-H1: source-bound capture-provenance and completion-accounting procedure. Consumed from task entry for every episode of this task family. It contains no device configuration: capacitance_f and tx_not_before_s remain choices of the executing condition and are never prescribed, ranked or declared accepted here. No hardware behaviour is asserted; the waveform and retention law is an assumed synthetic model and physical calibration is UNKNOWN.\n\n1. Artifact separation (do this first, every episode). Label outputs before reasoning: (a) D = a concrete {capacitance_f, tx_not_before_s} assignment plus the device-side outcome it produces; (b) H = how the agent selects, observes, orders and labels experiments. A change to a numeric design value is D, never H. An H update must be expressible without naming any design value and must remain meaningful if the design value changes. Only H may be revised on this interface; a D change is never accepted as the method.\n\n2. Fact intake with provenance. Read the registered sources verbatim and record their identities/hashes: component_record, excitation_record, model_law, saved_activity. Sort every field into (i) declared component/excitation fact, (ii) model assumption, (iii) observation. The model docstring states that the event latch is an ideal passive-mechanical memory assumption 'not free NVM' and that the waveforms are synthetic; classify it as (ii) and never promote (ii) to (i).\n\n3. Event-chain requirement for completion. Do not accept a frame as service completion unless the complete response exhibits, with dt-quantized source-bound timestamps: an explicit capture action recorded while powered==1 and t>=ready_at and t inside [event_s, event_s+contact_duration_s); then tx-start; then tx-complete; then tx-complete time <= deadline_s; and packet application_bytes consistent with required_application_bytes. A packet whose trace contains no such powered capture is labelled UNKNOWN-provenance, not completed. Frame payload bytes are model-produced and are therefore not independent evidence of anything.\n\n4. Retention vs delivery (keep separate). The passive-mechanical latch may preserve the event marking across unpowered spans and across brownouts. That supports a retention claim only ('the marking was not lost'). It is never evidence that the transmitter was powered, that energy was available, or that a deadline was met. Energy claims are established only by step 5.\n\n5. Source-bound energy and timing budget. Re-derive every quantity per episode from the record's own numbers: e0 = C*cap_initial_voltage_v^2/2; e_on = C*ready_v^2/2; e_off = C*off_v^2/2; e_max = C*cap_voltage_max_v^2/2. Harvest exists only inside source_segments (sum power_w over the overlap with elapsed time, times harvest_efficiency); conversion loss and spill above e_max are losses; background draw is off_power_w before boot and idle_power_w after; shunts subtract. First-powered time = dt-quantized e_on crossing, then subtract boot_j and add boot_delay_s to get ready time. Per-frame cost = boot_j + output_v*tx_current_a*tx_duration_s. The per-step condition sqrt(2E/C) - esr_ohm*tx_current_a >= output_v is strictly tighter than E >= e_off and must be checked at the worst (end-of-frame) step, not only at start. After the last source segment ends no further harvest exists: compute the depletion time and treat 'no source and E < e_on' as a permanent dead state, so any plan whose transmission falls after depletion is infeasible regardless of latch retention. Report the completion time against deadline_s and the powered-capture window against [event_s, event_s+contact_duration_s); both comparisons are mandatory.\n\n6. Heuristic is not constraint. Any rule of thumb ('larger capacitance buffers more', 'transmit as late as the bound allows', or similar) is a sufficient design heuristic only. It may not be used to exclude regions of legal_design_space. Any excluded subrange must be justified by an inequality derived in step 5 from the record's own numbers and stated together with that inequality. A sufficient heuristic is never recorded as a necessary feasible-space exclusion.\n\n7. Preserve failure, unknown and cost. Log every brownout, tx-transient reset, spill, depletion and UNKNOWN verdict with its timestamp and the source field that produced it. Do not overwrite a retained failure with a later success, do not re-describe a latch-dependent delivery as a clean pass, and do not report an actual cost/energy figure that was not read from a returned trace.\n\n8. Experiment order under a small execution budget. (1) Analytic checklist of step 5 for each candidate before any execution; (2) at most one execution per distinct design; (3) require the complete response (activity, packets, per-step trace fields) before spending the next execution; if the response is partial or missing, record the run as failure/unknown instead of inferring the missing rows; (4) no automatic retry - a failed, unknown or no-update outcome is retained as-is. If a future episode couples a D change (new design value), the whole feedback must be re-read and steps 3-5 re-applied to the new trace; old activity records may not be reused as evidence for the new design.\n\n9. Reporting. For each claimed frame the final response states: powered-capture timestamp, tx-complete timestamp vs deadline_s, the end-of-frame load/energy margin, every derived exclusion with its inequality, the explicit statement of whether the outcome depends on the ideal latch assumption, and a list of retained UNKNOWNs. If the powered-capture path is shown unattainable across the whole declared legal range, the response must say so and report UNKNOWN rather than a pass.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-2-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-907b1d0314e4bfab",
+  "protocol_sha256": "dbe50328964fe5add8e7bd0980587d57c9c256be38ebb13f26e3ffd44c14b674",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "2518978f84d10be20e0ab92dfdefebe4b4c429b3dec59f32b95f20068420f5a0",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-1-2-proposed_method",
+    "id": "p3-formal-1-2-proposed_method-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "32771536f4196578b0d971ec98428df7fd9d159e1e25494baa779f62e9abd023",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 69.57707129199116,
+  "wall_seconds_total": 69.89503112500824
+}

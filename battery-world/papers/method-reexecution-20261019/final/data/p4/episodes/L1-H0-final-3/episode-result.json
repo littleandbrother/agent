@@ -1,0 +1,194 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.058469112000000004,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0606894,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L1-H0-final-3",
+  "episode": "L1-H0-final-3",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "cache": "nvm",
+      "capacitance_f": 0.015,
+      "program": "confirmed_events",
+      "retry_s": 1,
+      "sample_period_s": 1,
+      "schema_version": "bf-o-candidate-v1",
+      "threshold_off_g": 0.01,
+      "threshold_on_g": 0.05,
+      "tx_backoff_s": 0
+    },
+    "execution": {
+      "accepted_packets": 18,
+      "case_sha256": "0d1bc4269a5bec49a734c669d332e4402e45f959531fcc85f4f8ff50234feff4",
+      "complete_service": "FAIL",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": {
+        "errors": [],
+        "final_storage_j": 0.04636234545454709,
+        "impulse_counts": {
+          "boot": 3,
+          "sense": 18343,
+          "tx": 18,
+          "wake": 18349,
+          "write": 18
+        },
+        "ledger_rows": 11,
+        "source_integral_j": 1.368,
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+      "evaluator_version": "phase4-original-O-event-service-v1",
+      "execution_key": "d110e439a24ecf1db225a46178809a9705af638eeee8fce24a94b1123f820c99",
+      "expected_event_count": 8,
+      "false_event_sequences": [],
+      "false_keepalive_sequences": [],
+      "input_sha256": "16a25f82df655e7ba11cf0c7a91a4d5e057c406414df3116d085d8fed4d713a8",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "keepalive_gaps": [],
+      "matched_event_count": 8,
+      "origin": "phase4-new-full-response",
+      "per_event": [
+        {
+          "kind": "start",
+          "matched_seq": 1,
+          "reasons": [],
+          "receive_s": 4241.070422535211,
+          "state": 1,
+          "time_s": 4240.375,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 4,
+          "reasons": [],
+          "receive_s": 4589.070422535211,
+          "state": 0,
+          "time_s": 4588.625,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 5,
+          "reasons": [],
+          "receive_s": 7863.070422535211,
+          "state": 1,
+          "time_s": 7862.375,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 8,
+          "reasons": [],
+          "receive_s": 8207.070422535211,
+          "state": 0,
+          "time_s": 8206.625,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 9,
+          "reasons": [],
+          "receive_s": 11446.587878787977,
+          "state": 1,
+          "time_s": 11446.375,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 15,
+          "reasons": [
+            "WRONG_EVENT_TIME"
+          ],
+          "receive_s": 12078.587878787977,
+          "state": 0,
+          "time_s": 12077.625,
+          "verdict": "FAIL"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 16,
+          "reasons": [],
+          "receive_s": 16844.587878787977,
+          "state": 1,
+          "time_s": 16844.375,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 18,
+          "reasons": [
+            "WRONG_EVENT_TIME"
+          ],
+          "receive_s": 17044.587878787977,
+          "state": 0,
+          "time_s": 17043.625,
+          "verdict": "FAIL"
+        }
+      ],
+      "physical_qualification": "UNKNOWN",
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/d110e439a24ecf1db225a46178809a9705af638eeee8fce24a94b1123f820c99/response.json.zlib",
+      "reasons": [
+        "WRONG_EVENT_TIME"
+      ],
+      "response_sha256": "b44ea57e8fac8c4f272e205ffcae847775fcf829fd3f4faedf7b16dadbca2591",
+      "reused": true,
+      "schema_version": "bf-o-service-v1",
+      "verdict": "FAIL",
+      "world": "p4-o-unexposed-waveform-v1"
+    },
+    "reason": "Design (only D fields varied; C fixed at the frozen 0.015 F): sample_period_s=1, thresholds on=0.05/off=0.01 (equal to the strict service gates so classification matches truth: 0.065/0.08 high, 0.025/0.005 low), tx_backoff_s=0, retry_s=1, cache=nvm, program=confirmed_events.\n\nBasis from sources (task 0d1bc426…, rms_waveform 242f6862…, photovoltaic_source 76d3ff06…, wake_sample_cache 08ddbf7a…/ar_hardware 5635bb28…): truth has four confirmed intervals by the contract rules (>0.05 for 3 s, <0.01 for 60 s): ~[4240.4,4588.6], [7862.4,8206.6], [11446.4,12077.6], [16844.4,17043.6]; the 2.25 s 0.065 pulses and the 15 s 0.025 pulse cannot confirm. The second interval lies inside the 7200–9000 s dark segment, so buffered energy (81.7 mJ max, 39.7 mJ off, ~42 mJ usable) must carry ~1 s sampling (1 uJ wake + 20 uJ sense + 5.5 uW background) plus 4x130 uJ TX; p=1 s is also the largest period that keeps confirmation quantisation (3p) at exactly 3 s, i.e. <1 s event-time error.\n\nObserved (check record 9a1a267d…, projection first-six-last-six, status COMPLETE): 69 activity entries = 18 records (4 start + 4 stop + 10 keepalive) + 6 boot/sync + 2 brownout + 7 sample-blocked; no extra start/stop, so neither 2.25 s pulse caused a false event and no true interval was missed. Start/stop commits at 4241.07/4589.07, 7866.07/8207.07, 11447.07/12078.07, 16845.07/17044.07: time jitter 0.695 s (start) and 0.445 s (stop) vs truth confirmation times, within event_time_error_s=1; TX at commit instant with backoff 0, so delivery delay 0 s <= 10 s. Keepalives every 120 s inside each active window (4361/4481; 7986/8106; 11567…12047; 16965) keep coverage gaps <=120 s and none falls outside a confirmed active state. cache=nvm plus sequence_persistent keeps all durable records across the two resets; end state pending=[] means every record was ACKed (18 << 2048 records, no eviction). Brownouts at 8766.18 s and 19587.64 s with reboots (e.g. 20814.16 s) leave unobserved gaps (8766–~10000 s, 19588–20814 s); the waveform there is 0.005 g except a 15 s 0.025 g segment that cannot confirm a start, and timers correctly reset rather than bridging, so no service-relevant event is hidden and no exact outage time is claimed.\n\nResidual, retained: components status PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED with physical_qualification UNKNOWN and source_calibration UNAVAILABLE, so this is a judgement on the frozen digital service contract only, not on hardware; the frozen O program emits no gap record kind, so the two unobserved post-brownout windows are not explicitly declared. This is one checked candidate, no migration or self-improvement claim; acceptance remains host-side.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": true
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-351d39216e1d177c",
+  "protocol_sha256": "7530f23e1d747bc3eeea2f4c1f4fcd1090dbae2e40db1d6950dc431910a31c73",
+  "recovery_of": null,
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "8a11fbfb5f5eda6cb058de4b1c52813d81d9c5659ac832eb221bd49066df6711",
+  "spec": {
+    "condition": "H0",
+    "id": "L1-H0-final-3",
+    "kind": "D",
+    "lineage": 1,
+    "slot": "final-3",
+    "stage": "final",
+    "world": "p4-o-unexposed-waveform-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 9,
+    "gateway_chain_tip": "77b63f36248263186db883e7d4e7b176fd01bff8657d510c2adaf947ea769d26",
+    "model_submitted": true,
+    "model_tool_calls": 9,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 132.8387571249914,
+  "wall_seconds_total": 133.06226954201702
+}

@@ -1,0 +1,52 @@
+{
+  "profile": "node-feedback-v1",
+  "intent": "new_design",
+  "goal": "在声明的振动、初始储能和20秒窗口内，完成至少3次有效采样与接收；程序由实际VDD与PGOOD驱动，负载反馈到电源。",
+  "scenario": {
+    "frequency_hz": 30,
+    "acceleration_peak_m_s2": 4.905,
+    "damping_ratio": 0.02,
+    "duration_s": 20,
+    "initial_storage_v": 12.0,
+    "initial_output_v": 2.5,
+    "start_v": 2.3,
+    "brownout_v": 1.8,
+    "pgood_min_v": 2.0,
+    "minimum_supply_v": 2.2,
+    "minimum_sample_s": 0.010,
+    "minimum_tx_s": 0.004,
+    "sample_validity_s": 0.1,
+    "sensor_value": 2500,
+    "current_model": {
+      "id": "declared-host-node-current-v1",
+      "values_a": {"off": 0.00000001, "idle": 0.000008, "sample": 0.001, "tx": 0.008},
+      "source": {"kind": "declared", "locator": "configs/reference_cases/piezo-feedback/task.json; nominal apparatus current envelope"}
+    },
+    "material": {"substrate_E_pa": 68000000000, "piezo_E_pa": 66000000000,
+      "substrate_density": 2700, "piezo_density": 7800,
+      "relative_permittivity": 1700, "d31_m_v": -1.9e-10},
+    "boundary": "线性单模压电源；厂商LTC3588-1；声明初始VIN/VOUT；主机C程序；数字接收端",
+    "parameter_basis": "固定装置正例使用预充电；冷启动作为同协议独立控制；电流为声明包络"
+  },
+  "parameters": [
+    {"name":"frequency_hz","value":30,"unit":"Hz","source":"reference","role":"constraint"},
+    {"name":"initial_storage_v","value":12.0,"unit":"V","source":"reference","role":"constraint"},
+    {"name":"initial_output_v","value":2.5,"unit":"V","source":"reference","role":"constraint"},
+    {"name":"material","value":"nominal piezo/substrate coefficients","unit":"SI","source":"reference","role":"assumption"},
+    {"name":"beam_and_storage","value":"design.json","unit":"SI","source":"agent","role":"design_choice"},
+    {"name":"controller","value":"firmware/main.c","unit":"s","source":"agent","role":"design_choice"}
+  ],
+  "acceptance": {
+    "source_model":{"condition":"线性位移范围内，原生机电轨迹满足功率与储能平衡"},
+    "load_binding":{"condition":"编译程序状态、负载波形与原生电流一致"},
+    "power_service":{"condition":"完成至少3次发送；有效采样和发送期间VDD不低于2.2V；无额外能源"},
+    "receiver_service":{"condition":"至少3个有效且不重复的数据帧，采样有效期、序号、数据和校验一致","minimum_packets":3},
+    "coupling_numerics":{"condition":"双向负载收敛，1ms与0.5ms步长得到相同服务判断"},
+    "delivery_version":{"condition":"冻结源码、实际执行、完整原生波形和验收指向同一候选"}
+  },
+  "components":[{"id":"beam"},{"id":"power"},{"id":"soc"},{"id":"host"}],
+  "functions":[{"id":"H","components":["beam"]},{"id":"M","components":["beam"]},
+    {"id":"P","components":["power"]},{"id":"S","components":["soc"]},
+    {"id":"C","components":["soc"]},{"id":"R","components":["soc"]},{"id":"G","components":["host"]}],
+  "assignments":[{"role":"lead","functions":["H","P","S","C","R","G","M"]}]
+}

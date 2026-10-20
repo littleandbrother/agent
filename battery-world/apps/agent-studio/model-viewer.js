@@ -23,12 +23,22 @@ $('#reset').onclick=()=>{inside=false;exploded=false;update();$('#part').value='
 $('#part').onchange=e=>{const item=meshes.find(m=>m.name===e.target.value);if(!item){reset();return}fit(new THREE.Box3().setFromObject(item))};
 const observer=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;if(w&&h){renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}});observer.observe(stage);
 const parameters=new URL(location.href).searchParams;
-const resultFile=parameters.get('result_file'),resultSession=parameters.get('session'),resultUrl=resultFile&&resultSession?'/api/results/file?'+new URLSearchParams({session:resultSession,id:resultFile}):null;
+const repositoryProject=parameters.get('repository_project'),repositoryOwner=parameters.get('repository_owner'),repositorySystem=parameters.get('repository_system');
+const repositoryUrl=repositoryProject&&repositoryOwner&&repositorySystem?'/api/design-repository/file?'+new URLSearchParams({project:repositoryProject,owner:repositoryOwner,system:repositorySystem,job:parameters.get('repository_job')||'',path:parameters.get('repository_path')||'',...(parameters.get('repository_realization')==='1'?{realization:'1'}:{})}):null;
+const resultFile=parameters.get('result_file'),resultSession=parameters.get('session'),resultUrl=repositoryUrl||(resultFile&&resultSession?'/api/results/file?'+new URLSearchParams({session:resultSession,id:resultFile}):null);
 const job=parameters.get('job')||(resultFile?.startsWith('eng-')?resultFile.split('/')[0]:null),reference=parameters.get('case')==='pluck-v1',meshPreview=parameters.get('mesh')==='1';
 if(/^eng-[a-f0-9]+$/.test(job||''))fetch('/api/engineering/jobs/'+job).then(r=>{if(!r.ok)throw Error('MODEL_METADATA');return r.json()}).then(j=>{partNames=new Map((j.assembly?.payload?.parts||[]).map(p=>[p.id,p.name]));for(const o of $('#part').options)if(partNames.has(o.value))o.textContent=partNames.get(o.value)}).catch(()=>{});
 if(!reference&&!resultUrl&&!/^eng-[a-f0-9]+$/.test(job||''))$('#notice').textContent='模型编号无效';
 else if(meshPreview){
  fetch(resultUrl||'/api/engineering/jobs/'+job+'/artifact?name=project-preview-mesh.json').then(r=>{if(!r.ok)throw Error('MESH_MISSING');return r.json()}).then(m=>{
+ if(Array.isArray(m.parts)){
+  const group=new THREE.Group();group.rotation.x=-Math.PI/2;
+  for(const part of m.parts){
+   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(part.vertices.flat().map(x=>x/1000),3));geometry.setIndex(part.triangles.flat());geometry.computeVertexNormals();
+   const solid=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:part.color,roughness:.6,side:THREE.DoubleSide}));solid.name=part.name;group.add(solid);
+  }
+  loaded({scene:group});$('#notice').textContent=m.parts.length+' 个同版STEP零件';return;
+ }
  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(m.vertices.flat().map(x=>x/1000),3));geometry.setIndex(m.triangles.flat());geometry.computeVertexNormals();
  const solid=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0xb6c6d5,roughness:.6,side:THREE.DoubleSide}));solid.name='STEP 原生实体';const group=new THREE.Group();group.add(solid);group.rotation.x=-Math.PI/2;loaded({scene:group});$('#notice').textContent='精确 STEP 的派生预览 · 非整机验收';$('#inside').disabled=true;$('#explode').disabled=true;
  }).catch(()=>{$('#notice').textContent='该结果还没有 STEP 派生预览，请下载原生工程'});

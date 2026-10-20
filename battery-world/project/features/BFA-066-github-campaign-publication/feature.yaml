@@ -1,0 +1,160 @@
+{
+  "id": "BFA-066-github-campaign-publication",
+  "owner": "coordinator-publication",
+  "status": "complete",
+  "authority": "Direct user request: 现在的内容全部推送到github",
+  "target_repository": "littleandbrother/agent",
+  "target_branch": "codex/bf-architecture-v2",
+  "base_commit": "317d40fef0137d3c1ad1873e53c3e9968b31200a",
+  "scope": "Current S0 implementation, integrated paper sources/results, root campaign and storage records, engineering reports and sealed full delivery via GitHub Release. Historical root apparatus is a separate preserved repository, not a replacement for the published BF app.",
+  "owned_paths": [
+    "release/",
+    ".github/workflows/bf-v2-regression.yml",
+    ".gitignore",
+    "README.md",
+    "docs/research/",
+    "docs/storage-*/",
+    "docs/manuscript-layout-20261019/",
+    "deliveries/BF_FINAL_20261020/",
+    "battery-world/project/features/BFA-066-github-campaign-publication/",
+    "battery-world/PROJECT.yaml",
+    "battery-world/docs/PROGRESS.md",
+    "battery-world/docs/SESSION-HANDOFF.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/github-publication-20261020",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "battery-world/tests/agentlab/campaign_fixtures.py",
+    "battery-world/tests/agentlab/test_campaign_ar_service.py",
+    "battery-world/tests/agentlab/test_campaign_bf_interfaces.py",
+    "battery-world/tests/agentlab/test_campaign_phase3_interfaces.py",
+    "battery-world/tests/fixtures/campaign20261019/",
+    "battery-world/configs/ci/requirements-v2.txt",
+    "pi-bf-aiot/biome.json",
+    "battery-world/tests/agentlab/test_campaign_phase3.py",
+    "battery-world/tests/agentlab/test_campaign_interfaces.py"
+  ],
+  "hypothesis": "Current implementation and finite evidence can be published without exposing credentials or rerunning completed scientific/native work.",
+  "falsifier": "Credential leak, missing implementation or required deliverable, incompatible checkout, failing affected CI, modified sealed source evidence, or unauthorized main/baseline rewrite.",
+  "schema_changes": [],
+  "negative_controls": [
+    "Credential patterns rejected before stage",
+    "Source identity verification",
+    "Complete archived delivery and saved-data acceptance"
+  ],
+  "targeted_tests": [
+    "Architecture V2 registered init profile",
+    "Campaign and storage unit suites",
+    "Published saved-data reproduction",
+    "GitHub Actions latest SHA"
+  ],
+  "reproducible_command": "BFWORLD_VERIFY_PROFILE=architecture-v2-ci ./init.sh; python3 reproduce.py --output <new-dir> in downloaded delivery",
+  "cost_cap": {
+    "new_provider_requests": 0,
+    "new_native_dispatches": 0,
+    "new_scientific_episodes": 0,
+    "reserve_bytes": 10000000000,
+    "estimated_peak_bytes": 1500000000,
+    "retained_output_cap_bytes": 600000000
+  },
+  "claim_boundary": "Software/portable release and actual CI only; original H0, A/R failure and hardware boundaries remain.",
+  "stop_condition": "Secret present, remote divergence, capacity below reserve plus peak, or concrete CI failure; fix only affected publication path.",
+  "storage": {
+    "available_before_bytes": 14543069184,
+    "output_directory": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/github-publication-20261020"
+  },
+  "started_at": "2026-10-20T06:57:18.689137+00:00",
+  "title": "Prepare the current source and saved-data GitHub publication candidate",
+  "completion_scope": "Local source/publication candidate only; actual push, Release upload and exact-SHA CI are recorded separately in GitHub Release publication-receipt.json.",
+  "completed_at": "2026-10-20T07:18:18.940379+00:00",
+  "verification": {
+    "local": {
+      "schema": "bf-github-publication-local-checks-v1",
+      "at": "2026-10-20T07:18:18.940379+00:00",
+      "python": {
+        "status": "PASS",
+        "repository_tests": 343,
+        "campaign_tests": 196,
+        "storage_tests": 14,
+        "saved_reference_files": 44,
+        "saved_reference_controls": 11
+      },
+      "pi_offline_build": {
+        "status": "PASS",
+        "command": [
+          "npm",
+          "run",
+          "bf:build"
+        ],
+        "seconds": 357.807
+      },
+      "new_model_requests": 0,
+      "new_scientific_episodes": 0,
+      "new_native_dispatches": 0,
+      "full_delivery_archive": {
+        "bytes": 181149976,
+        "sha256": "5c63cc908af8e971cccffcccadeff2a8e39977619431770b54d54e1b1e364474",
+        "files": 1412,
+        "zip_CRC_readback": "PASS"
+      },
+      "github_latest_SHA_CI": "Read actual Actions status after push; publication receipt attached to release."
+    },
+    "remote_publication_receipt": "https://github.com/littleandbrother/agent/releases/download/bf-five-phase-20261020/publication-receipt.json"
+  },
+  "ci_repair": {
+    "schema": "bf-portable-ci-repair-v1",
+    "at": "2026-10-20T09:04:17.589721+00:00",
+    "original_commit": "b3886f8a3a19175583a8bcaf15e7711a2e5f5931",
+    "original_failed_ci": "https://github.com/littleandbrother/agent/actions/runs/39391143743",
+    "repairs": [
+      "Pin the already-used jsonschema 4.23.0 dependency",
+      "Use exact archived reference/failed inputs via a temporary offline test mount",
+      "Create a distinct disabled E4 unit registration; production resource gates unchanged",
+      "Resolve recorded catalog/baseline paths to the checked-in artifacts",
+      "Prevent automatic formatter rewrites of the two frozen phase1 transport inputs; type/dependency checks retained"
+    ],
+    "local": {
+      "campaign_tests": 196,
+      "campaign_status": "PASS",
+      "pi_check": "PASS",
+      "private_BF_environment_required": false,
+      "credential_scan_files": 97,
+      "credential_findings": [],
+      "frozen_transport_bytes": [
+        {
+          "path": "pi-bf-aiot/packages/bf-agent/src/phase1/episode.ts",
+          "unchanged": true
+        },
+        {
+          "path": "pi-bf-aiot/packages/bf-agent/src/phase1/continuation.ts",
+          "unchanged": true
+        }
+      ]
+    },
+    "scientific_contract_evaluator_inputs_changed": false,
+    "new_model_requests": 0,
+    "new_scientific_episodes": 0,
+    "new_native_dispatches": 0,
+    "final_CI": "Read actual latest-SHA Actions status; attached publication receipt records result.",
+    "followup": {
+      "at": "2026-10-20T09:53:46.461210+00:00",
+      "failed_ci": "https://github.com/littleandbrother/agent/actions/runs/39398843884",
+      "cause": "Two remaining test roots used author-machine directories. Initial local success did not isolate the historical home. No science result failure.",
+      "repairs": [
+        "A/R output root mounted in a resolved temporary directory; original output guard unchanged",
+        "Phase3 adapter read from the published checkout; historical reference and exact-input cache mounted from saved fixtures",
+        "Interface qualification writes confined to temporary directories"
+      ],
+      "local_verification": {
+        "campaign_tests": 196,
+        "status": "PASS",
+        "seconds": 9.08,
+        "original_workspace_and_private_runtime_access": "DENIED_BY_PYTHON_AUDIT_HOOK",
+        "phase3_first_and_cross_group_exact_input_reuse": "PASS",
+        "new_scientific_episodes": 0,
+        "new_provider_requests": 0,
+        "new_native_dispatches": 0
+      }
+    }
+  }
+}

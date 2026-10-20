@@ -1,0 +1,75 @@
+{
+  "complete_raw": {
+    "case_readbacks": [
+      {
+        "pair": "clamp-capacitance",
+        "physical_raw_preserved": true,
+        "removed_metadata_only": [
+          "pair.id",
+          "world.name",
+          "pair.worlds[0].name",
+          "pair.worlds[1].name"
+        ],
+        "world": "low-clamp"
+      },
+      {
+        "pair": "clamp-capacitance",
+        "physical_raw_preserved": true,
+        "removed_metadata_only": [
+          "pair.id",
+          "world.name",
+          "pair.worlds[0].name",
+          "pair.worlds[1].name"
+        ],
+        "world": "high-clamp"
+      },
+      {
+        "pair": "reset-memory",
+        "physical_raw_preserved": true,
+        "removed_metadata_only": [
+          "pair.id",
+          "world.name",
+          "pair.worlds[0].name",
+          "pair.worlds[1].name"
+        ],
+        "world": "volatile"
+      },
+      {
+        "pair": "reset-memory",
+        "physical_raw_preserved": true,
+        "removed_metadata_only": [
+          "pair.id",
+          "world.name",
+          "pair.worlds[0].name",
+          "pair.worlds[1].name"
+        ],
+        "world": "retained"
+      }
+    ],
+    "kept": "all physical fields, current outputs, alternative worlds and public grids",
+    "removed": "historical case identifiers/names only; no target response added",
+    "unweakened": true
+  },
+  "e4_fixed_parser": {
+    "counting": "4 cases x 2 formats x 2 observation regimes per level; no Agent runs",
+    "current_unknown": 16,
+    "rich_static_correct": 16
+  },
+  "executable_response": {
+    "entry": "python -B model.py raw.json '<legal patch JSON>'",
+    "model_executions": 0,
+    "model_source": {
+      "bytes": 7250,
+      "sha256": "390650f588ad53cf854ddd51c0609e98032296719cc812d471ba55fb1815913b"
+    },
+    "scope": "unchanged exported numerical function bodies; not independent truth",
+    "syntax_checked": true
+  },
+  "rich_static": {
+    "boundary": "sufficiency on these ideal domains; no blanket static failure claim",
+    "saved_additive_checks": 5,
+    "saved_sufficient_grid_checks": 28,
+    "scope": "all actual-world declarative parameters/laws/assumptions",
+    "unweakened": true
+  }
+}

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="650" viewBox="0 0 1300 650">
+<rect width="1300" height="650" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#264b70"/></marker></defs>
+<g font-family="Arial, sans-serif" fill="#18354f">
+<text x="35" y="37" font-size="28" font-weight="bold">nRF52832 target control flow</text>
+<text x="35" y="68" font-size="19" font-weight="normal">Saved source; configured bounds only. Hardware and RF timing remain unmeasured.</text>
+<rect x="35" y="102" width="285" height="135" rx="8" fill="#edf4f9" stroke="#7995aa"/>
+<text x="51" y="133" font-size="18" font-weight="bold">Initialize / re-admit</text>
+<text x="51" y="163" font-size="15" font-weight="normal">Stack, timer, SAADC, advertising</text>
+<text x="51" y="188" font-size="15" font-weight="normal">On reset: no NVM state</text>
+<text x="51" y="213" font-size="15" font-weight="normal">PGOOD and VDD &gt;= 2300 mV</text>
+<rect x="365" y="102" width="275" height="135" rx="8" fill="#edf4f9" stroke="#7995aa"/>
+<text x="381" y="133" font-size="18" font-weight="bold">PH_IDLE: scheduled slot</text>
+<text x="381" y="163" font-size="15" font-weight="normal">First slot: +1500 ms</text>
+<text x="381" y="188" font-size="15" font-weight="normal">seq++; sample temperature</text>
+<text x="381" y="213" font-size="15" font-weight="normal">Read VDD; set status flags</text>
+<rect x="685" y="102" width="245" height="135" rx="8" fill="#edf4f9" stroke="#7995aa"/>
+<text x="701" y="133" font-size="18" font-weight="bold">PH_SAMPLE</text>
+<text x="701" y="163" font-size="15" font-weight="normal">Window: 11 ms from slot</text>
+<text x="701" y="188" font-size="15" font-weight="normal">Build payload: seq, value, CRC</text>
+<text x="701" y="213" font-size="15" font-weight="normal">Service threshold: 2200 mV</text>
+<rect x="975" y="102" width="290" height="135" rx="8" fill="#edf4f9" stroke="#7995aa"/>
+<text x="991" y="133" font-size="18" font-weight="bold">PH_TX</text>
+<text x="991" y="163" font-size="15" font-weight="normal">Start only with supply flags clear</text>
+<text x="991" y="188" font-size="15" font-weight="normal">One advertising event</text>
+<text x="991" y="213" font-size="15" font-weight="normal">Completion event or 40 ms bound</text>
+<path d="M 320 169 L 365 169" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M 640 169 L 685 169" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M 930 169 L 975 169" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="325" y="145" font-size="15" font-weight="normal">admit</text>
+<path d="M 1120 237 L 1120 282 L 502 282 L 502 237" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="630" y="273" font-size="18" font-weight="normal">Stop TX; PH_IDLE; advance scheduled slot by 800 ms</text>
+<rect x="365" y="335" width="565" height="130" rx="8" fill="#fff4e3" stroke="#7995aa"/>
+<text x="381" y="366" font-size="18" font-weight="bold">PGOOD lost during SAMPLE or TX</text>
+<text x="381" y="396" font-size="15" font-weight="normal">On the next wake: cancel window and stop active advertising</text>
+<text x="381" y="421" font-size="15" font-weight="normal">Mark skipped / aborted; PH_IDLE; advance exactly one period</text>
+<text x="381" y="446" font-size="15" font-weight="normal">Detection depends on wake-up; hardware latency unmeasured</text>
+<path d="M 808 237 L 808 248 M 808 290 L 808 335" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M 1120 237 L 1120 400 L 930 400" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<path d="M 365 400 L 340 400 L 340 260 L 502 260" fill="none" stroke="#264b70" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="35" y="515" font-size="19" font-weight="normal">Admission wait: PGOOD GPIO sense and 250 ms probe; sleep with sd_app_evt_wait().</text>
+<text x="35" y="548" font-size="19" font-weight="normal">Actual BLE event duration differs from the host reference TX window; advertising start is not receiver delivery.</text>
+<text x="35" y="581" font-size="18" font-weight="normal">Source: target-source/main.c, lines 93-100, 392-474, 513-569. SHA-256 bound in target-control-flow.json.</text>
+<text x="35" y="617" font-size="18" font-weight="normal">No new build, simulation, native design revision or hardware execution was performed for this diagram.</text>
+</g></svg>

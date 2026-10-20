@@ -1,0 +1,53 @@
+{
+  "schema_version": "bf-phase2-finite-case-registry-v1",
+  "dispatch_id": "phase-2-core-methods-bf-20261020-001",
+  "baseline": "P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+  "frozen_conditions": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/configs/studies/parallel-20261019/reference/conditions.v1.json",
+  "frozen_scientific_files": {
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py": "86bdf88573956518ed09783f4f83e161b55b2e37e661e74218842542bb7e986b",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/interfaces.py": "e6b22090c2fb0006702e7776f49a226ad20e5c0ed63236d99e8afada1b4befd3",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/reexecution.py": "0da34a20f8daf1505910f89f18426d8deeb28203733c9cd57fc3acdbd99c09f8",
+    "configs/studies/parallel-20261019/reference/conditions.v1.json": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb"
+  },
+  "partition": "public-development",
+  "model_id": "b-transient-behavior-v1",
+  "e5_target": "b-volatile-reset",
+  "paired_reference": "b-latched-reset",
+  "additional_saved_controls": [
+    "b-pulse-fast",
+    "b-esr-fail",
+    "b-no-energy"
+  ],
+  "new_design_variables": {
+    "capacitance_f": [
+      4e-06,
+      2.2e-05
+    ],
+    "tx_not_before_s": [
+      0,
+      0.045
+    ]
+  },
+  "fixed_other_task_and_device_fields": true,
+  "new_observation_qualification_grid": {
+    "world_conditions": [
+      "b-volatile-reset",
+      "b-latched-reset"
+    ],
+    "design_patches": [
+      {
+        "capacitance_f": 1e-05,
+        "tx_not_before_s": 0
+      },
+      {
+        "capacitance_f": 1e-05,
+        "tx_not_before_s": 0.004
+      }
+    ],
+    "reuse_original_current_design": true
+  },
+  "maximum_new_case_executions": 12,
+  "qualification_labels_visibility": "independent evaluator only; not in participant tools/packets/schema",
+  "source_assumptions": "Existing ideal port/ESR/load/reset/event apparatus only, not calibrated hardware."
+}

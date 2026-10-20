@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-20T07:35:39.051743+08:00",
+  "event_id": "phase4-cache-trace-amendment-20261020-001",
+  "phase": 4,
+  "dispatch_key": "phase-4-transfer-and-improver-bf-20261020-001",
+  "status": "TARGETED_HOST_REPAIR_AND_PROSPECTIVE_RECOVERY_AUTHORIZED",
+  "actual_progress": {
+    "G1_formed": true,
+    "H_descendants_formed": 12,
+    "closed_episodes": 25,
+    "settled_requests": 112,
+    "provider_upper_usd": 0.9623148,
+    "new_unknown": 0,
+    "new_scientific_executions": 5,
+    "valid_selection_cells": 5,
+    "host_error_selection_cells": 3,
+    "stop_censored_cells": 1,
+    "unstarted_selection_cells": 21,
+    "unstarted_final_cells": 27
+  },
+  "finding": "Historical cache raw reader omits separate trace.csv required by assess; canonical reference reader already loads both. Apparatus fault, not method outcome.",
+  "fix_scope": "Versioned historical CSV reader/source binding only; preserve original frozen bytes, physics, evaluator semantics, tasks, G/H and unexposed final split.",
+  "verification_scope": [
+    "Historical 22uF/TX0 cached assessment agrees with existing reference",
+    "Compressed raw reading unchanged",
+    "Missing trace or incorrect source fails as host error"
+  ],
+  "selection_disposition": {
+    "reuse_complete_valid": 5,
+    "recover_once_under_new_attempt_ids": 4,
+    "remaining_selection": 21,
+    "final_after_original_selection_freeze": 27,
+    "reuse_G_and_H_proposals": true,
+    "include_all_original_attempts_and_costs": true,
+    "no_error_feedback_to_recovery_participants": true,
+    "original_starting_cache_and_effective_budgets": true
+  },
+  "amended_finite_limits": {
+    "total_actual_episodes": 77,
+    "remaining_episodes": 52,
+    "total_provider_requests": 908,
+    "total_episode_wall_s": 57600,
+    "total_provider_upper_usd": 100,
+    "new_scientific_executions": 150,
+    "recovery_episode_requests": 12,
+    "recovery_episode_wall_s": 800,
+    "recovery_episode_distinct_D": 2
+  },
+  "default_H0_changed": false,
+  "phase_exit_satisfied": false,
+  "new_phase_dispatch": false,
+  "instruction_sent": true,
+  "recipient": "01a1542b-bdb1-7013-87eb-e8abd5b0cf54",
+  "evidence": [
+    "phase4/HOST-ERROR-HOLD.md",
+    "phase4/host-error-hold.json",
+    "phase4/protocol.json",
+    "workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase4.py:389",
+    "workbench/bf-campaign-s0-20261019/battery-world/scripts/campaign_reference.py:256"
+  ],
+  "next_action": "S0 implements the targeted reader, verifies changed path, recovers four affected selection cells, then completes original selection and independent final tests."
+}

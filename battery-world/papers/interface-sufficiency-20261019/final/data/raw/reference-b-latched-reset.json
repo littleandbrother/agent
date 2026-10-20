@@ -1,0 +1,67 @@
+{
+  "candidate_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+  "energy": {
+    "bad_steps": [],
+    "final_storage_j": 1.2139999999980954e-06,
+    "implementation": "independent Decimal ledger and piecewise input integral",
+    "max_balance_error_j": 1.007e-20,
+    "max_port_vi_error_j": 0.0,
+    "max_source_step_error_j": 1.4981895254560437e-20,
+    "max_voltage_error_v": 0.0,
+    "physical_calibration": "UNKNOWN",
+    "source_integral_j": 0.00021,
+    "source_total_error_j": 6e-21,
+    "step_count": 10000,
+    "time_resolution_s": 0.0001,
+    "totals_j": {
+      "background_j": 6.005e-05,
+      "boot_j": 1e-05,
+      "conversion_j": 2.0999999999999992e-05,
+      "harvest_j": 0.000189,
+      "shunt_j": 4e-05,
+      "source_j": 0.00021,
+      "spill_j": 4.8935999999998855e-05,
+      "tx_j": 2.8799999999999995e-05
+    },
+    "verdict": "PASS"
+  },
+  "expectations": {
+    "event_preserved_after_reset": {
+      "actual": "PASS",
+      "expected": "PASS",
+      "matched": true
+    },
+    "event_receive": {
+      "actual": "PASS",
+      "expected": "PASS",
+      "matched": true
+    }
+  },
+  "id": "b-latched-reset",
+  "input_sha256": "247e614ef49b337ad5e9d085119f00cdc26b03a6429b658d618903faebdbfe4b",
+  "predeclared_control": "PASS",
+  "reference": {
+    "brownouts_before_deadline": 1,
+    "captured_before_reset": true,
+    "datasheet_range_check": "PASS",
+    "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+    "first_boot_s": 0.0027,
+    "first_receive_s": 0.046900000000000004,
+    "max_esr_equation_error_v": 0.0,
+    "received_frames": 1,
+    "receiver_errors": [],
+    "transient_failed_steps": 0,
+    "verdicts": {
+      "deduplication": "PASS",
+      "event_preserved_after_reset": "PASS",
+      "event_receive": "PASS",
+      "independent_energy": "PASS",
+      "independent_receiver": "PASS",
+      "physical_qualification": "UNKNOWN",
+      "transient_voltage": "PASS"
+    }
+  },
+  "schema_version": "campaign-result-v1",
+  "scope": "nominal public-development computation; calibration and hardware UNKNOWN",
+  "task_id": "B-event-memory"
+}

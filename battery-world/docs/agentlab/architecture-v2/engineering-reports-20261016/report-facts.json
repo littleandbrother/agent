@@ -1,0 +1,266 @@
+{
+  "candidate_files": 89,
+  "cad_parts": 38,
+  "cad_bbox_mm": [
+    168.0,
+    187.5,
+    20.0
+  ],
+  "board_mm": [
+    40.0,
+    70.0
+  ],
+  "board_thickness_mm": 1.6,
+  "schematic_components": 39,
+  "schematic_pins": 172,
+  "drc": {
+    "Clearance Error": 52,
+    "Connection Error": 50
+  },
+  "timing": {
+    "advertising_ms": 187.5,
+    "connection_max_ms": 200.0,
+    "connection_min_ms": 100.0,
+    "policy_advertising_ms": 5000.0,
+    "sample_ms": 5000.0
+  },
+  "burst": {
+    "EVENTS": 6,
+    "MS": 1125
+  },
+  "parameters": {
+    "schema_version": "bf-p01-chain-interface-params-v2",
+    "netlist": "project-chain/chain_joint.cir",
+    "units": "SI",
+    "timeline": {
+      "t_stop_s": 16.001,
+      "timebase_tick_s": 0.001,
+      "timebase_ticks": 16001,
+      "manual_switch_close_s": 0.0,
+      "pwl_edge_quantum_s": 1e-06,
+      "pwl_time_points_strictly_increasing": true,
+      "origin": "assumption",
+      "note": "t = 0 is the declared manual MCU-admission action (manual switch close). Window covers the 4 recorded sample/notify events plus margin, matching the firmware 1 ms time base (16001 ticks).",
+      "revision": "round-3: t=0 is still the declared manual MCU-admission action"
+    },
+    "manual_action": {
+      "element": "Sman (storage_rail -> mcu_rail), control Vman PWL(0 0 1n 1)",
+      "switch_ron_ohm": 0.5,
+      "manual_action_energy": 0.0,
+      "origin": "assumption",
+      "note": "The manual MCU admission action is the frozen declared human boundary of the contract; it is an ideal switch and contributes NO undeclared auxiliary energy. The load timeline is admitted only through it."
+    },
+    "mechanical": {
+      "d_max_m": 0.01,
+      "f_mech_hz": 5,
+      "waveform": "disp(t) = 0.5*d_max*(1-cos(2*pi*f*t)), node disp in metres",
+      "origin": "assumption",
+      "source": "declared nominal mechanical input (1 cm travel is the experimental driving condition, not a design-specified stroke)"
+    },
+    "cs_teng": {
+      "voc_pk_v": 361.8,
+      "c_teng_f": 1e-09,
+      "polarity_model": "smooth sign of the separation derivative, sin(wt)/sqrt(sin^2(wt)+1e-6)",
+      "drive": "V(disp)/d_max",
+      "origin": "assumption",
+      "note": "|Voc| proportional to separation; declared ~720 V open-circuit peak-to-peak is NOT derated against the 600 V Q1 device here (Q1 belongs to the schematic requirement, not this interface file)."
+    },
+    "rectifier": {
+      "topology": "2-diode with return path (D1 teng_ac->teng_rect, D2 0->teng_ac)",
+      "c_bus_f": 1e-07,
+      "diode_model": {
+        "IS": 1e-09,
+        "N": 1.15,
+        "RS": 1.0,
+        "CJO": 1e-11,
+        "BV": 1200,
+        "IBV": 1e-06
+      },
+      "origin": "assumption",
+      "note": "The bridge-vs-2-diode choice is a declared modelling choice for the interface calibration, not read off the frozen schematic."
+    },
+    "sece": {
+      "model": "average envelope",
+      "g_se_s": 5e-05,
+      "expression": "I(teng_rect->storage_rail) = GSE*max(v(teng_rect)-v(storage_rail),0)",
+      "resolved": false,
+      "origin": "assumption",
+      "unresolved": [
+        "fast SECE switching instant and duty",
+        "switch on-resistance and gate/drive charge",
+        "transformer/inductor values and saturation",
+        "diode vs synchronous rectification in the extraction stage",
+        "series resistance of the real extraction path"
+      ]
+    },
+    "storage": {
+      "c_store_f": 0.00022,
+      "initial_v": 4.2,
+      "r_leak_ohm": 4200000,
+      "origin": "assumption",
+      "note": "Declared initial state v(storage_rail) = 4.2 V (uic). 220 uF is the characterisation-envelope value; 440 uF/100 uF variants are context-dependent and NOT used here."
+    },
+    "regulator": {
+      "v_out_v": 1.8,
+      "cold_start_v": 4.0,
+      "envelope": "v(supply_1v8) = 1.8*min(1, v(storage_rail)/4.0)",
+      "eta_declared": 0.85,
+      "origin": "assumption",
+      "note": "supply_1v8 is an operating-range observer in this file; the load current is referred to storage_rail using eta_declared."
+    },
+    "load_referral": {
+      "reference": "public-interface-facts-20261014/firmware-events.json",
+      "from_node": "1.8 V domain",
+      "to_node": "storage_rail",
+      "formula": "I_store = I_1V8 * (1.8/4.2) / 0.85",
+      "factor": 0.5042016806722689,
+      "machine_readable": "project-chain/load-timeline.json"
+    },
+    "unresolved_device_parameters": [
+      "CS-TENG capacitance and its stroke dependence",
+      "rectifier diode part number / Vf / recovery",
+      "SECE switch part number and drive",
+      "storage capacitor ESR and leakage",
+      "regulator part number, dropout and efficiency curve",
+      "AD7156 conversion current and timing (declared only)",
+      "nRF52832 radio TX/RX current profile (declared only)",
+      "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)"
+    ],
+    "provenance": [
+      {
+        "parameter": "d_max_m, f_mech_hz",
+        "origin": "assumption",
+        "source": "folder/contract declared nominal mechanical input",
+        "locator": "contract.scenario.manual_action_energy",
+        "conditions": "1 cm travel, 5 Hz, declared driving condition"
+      },
+      {
+        "parameter": "voc_pk_v",
+        "origin": "assumption",
+        "source": "paper characterisation envelope (~720 V pp)",
+        "locator": "requirement source_domain note",
+        "conditions": "open-circuit, unloaded"
+      },
+      {
+        "parameter": "c_teng_f, c_bus_f, c_store_f, r_leak_ohm, g_se_s, diode_model",
+        "origin": "assumption",
+        "source": "declared interface model of this round",
+        "locator": "project-chain/interface-params.json",
+        "conditions": "average-envelope SECE, not device-calibrated"
+      },
+      {
+        "parameter": "storage initial 4.2 V",
+        "origin": "assumption",
+        "source": "declared initial state",
+        "locator": "contract.scenario.initial_state",
+        "conditions": "BF declares and validates the chosen initial state"
+      },
+      {
+        "parameter": "load currents and event times",
+        "origin": "assumption",
+        "source": "public-interface-facts-20261014/firmware-events.json",
+        "locator": "project-chain/load-timeline.json",
+        "conditions": "1.8 V referred, referred to storage_rail at eta=0.85"
+      },
+      {
+        "parameter": "actual radio timing (advertising 187.5 ms, connection 100/200 ms)",
+        "origin": "source (firmware configuration)",
+        "source": "project-fw-s132/main.c",
+        "locator": "gap_params_init() APP_ADV_INTERVAL / MIN_CONN_INTERVAL / MAX_CONN_INTERVAL",
+        "conditions": "S132 7.2.0, 0 slave latency; the negotiated interval on a real link is unmeasured"
+      }
+    ],
+    "load_timing": {
+      "origin": "datasheet/source (actual firmware configuration)",
+      "actual_advertising_period_ms": 187.5,
+      "actual_advertising_source": "project-fw-s132/main.c APP_ADV_INTERVAL 300 x 0.625 ms",
+      "actual_connection_period_range_ms": [
+        100.0,
+        200.0
+      ],
+      "connection_period_used_ms": 100.0,
+      "connection_period_choice": "minimum interval = worst-case keep-alive energy (conservative bound)",
+      "actual_connection_source": "project-fw-s132/main.c MIN/MAX_CONN_INTERVAL, SLAVE_LATENCY 0, SUP_TIMEOUT 4000 ms",
+      "sample_period_ms": 5000,
+      "sample_period_source": "project-fw-s132/main.c cfg.sample_period_ms (matches app_policy.c)",
+      "event_identity_source": "public-interface-facts-20261014/firmware-events.json (4x sample+notify 5b0a, raw12=2651, 16001 ticks)",
+      "current_amplitudes_origin": "assumption (no measured current profile exists)",
+      "machine_readable": "project-chain/load-timeline.json"
+    },
+    "load_timing_policy_mismatch": {
+      "status": "UNRESOLVED (reported, firmware NOT modified)",
+      "policy_adv_period_ms": 5000,
+      "policy_conn_param_period_ms": 3000,
+      "policy_source": "project-fw-s132/app_policy.c app_cfg m_cfg",
+      "finding": "the policy duty-cycle parameters disagree with the actual radio configuration; the round-2 interface gate flagged exactly this (adv 187.5 vs 5000 ms, conn 200 vs 3000 ms). Round 3 follows the ACTUAL radio values in the chain model and records the firmware-side mismatch for round-4 refinement."
+    }
+  },
+  "power": {
+    "consumed_sources": {
+      "project-chain/chain_joint.cir": "0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c"
+    },
+    "declared_charge_c": 0.0009117226890756307,
+    "evaluation_gaps": [],
+    "event_cadence_checks": {
+      "advertising": true,
+      "connection": true,
+      "sampling": true
+    },
+    "findings": [
+      "netlist load differs from the declared load witness",
+      "load charge differs from timeline",
+      "supply falls below the declared operating voltage",
+      "manual admission produces a negative MCU rail"
+    ],
+    "job_id": "eng-2cf474f68315a9d8",
+    "load_binding": {
+      "actual_points": 672,
+      "expected_points": 664,
+      "method": "independent declared-window staircase",
+      "pwl_equal": false,
+      "status": "FAIL"
+    },
+    "load_charge_c": 0.0009120850588268295,
+    "load_pwl_equal": false,
+    "minimum_mcu_v": -1315962.1900000018,
+    "minimum_supply_v": 0.13350823643621074,
+    "model_applicability": {
+      "pending": [
+        "CS-TENG capacitance and its stroke dependence",
+        "rectifier diode part number / Vf / recovery",
+        "SECE switch part number and drive",
+        "storage capacitor ESR and leakage",
+        "regulator part number, dropout and efficiency curve",
+        "AD7156 conversion current and timing (declared only)",
+        "nRF52832 radio TX/RX current profile (declared only)",
+        "negotiated connection interval on a real link (only the 100/200 ms bounds are configured)",
+        "fast SECE switching instant and duty",
+        "switch on-resistance and gate/drive charge",
+        "transformer/inductor values and saturation",
+        "diode vs synchronous rectification in the extraction stage",
+        "series resistance of the real extraction path"
+      ],
+      "status": "UNEVALUABLE"
+    },
+    "points": 165130,
+    "pwl_points": 672,
+    "raw_sha256": "0f9c0c95fc39d287a55841c686370e8710f2182233a9a35da543a327a84740bd",
+    "scope": "fixed nominal/manual-admission load and actual native transient; source calibration pending",
+    "status": "FAIL",
+    "storage_v": [
+      4.199999999940137,
+      0.2966849698582461
+    ],
+    "time_span_s": [
+      1.0000000000000001e-11,
+      16.001
+    ]
+  },
+  "source_refs": {
+    "dimensions": "selected CAD job/project-cad_summary.json + geometry_fit evidence",
+    "pcb_counts": "schematic_bom_pins + pcb_connectivity_drc current qualification",
+    "timing": "board_firmware_interfaces/timing_contract + project-fw-s132/app_policy.h",
+    "power": "power_load_chain current qualification + selected native RAW",
+    "scenario": "project-chain/interface-params.json"
+  }
+}

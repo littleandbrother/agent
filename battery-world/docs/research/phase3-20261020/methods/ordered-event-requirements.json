@@ -1,0 +1,26 @@
+{
+  "schema_version": "bf-phase3-ordered-event-requirements-v1",
+  "required_facts": [
+    "event_origin_id",
+    "event_source_sha256",
+    "capture_id",
+    "capture_order",
+    "reset_orders",
+    "delivery_order",
+    "delivered_event_origin_id",
+    "delivered_capture_id",
+    "pending_state_lineage",
+    "postreset_recapture_orders"
+  ],
+  "order": "Use (time_s, sequence) or a proven total trace order; equal timestamps without action order are UNKNOWN.",
+  "pending_across_reset_witness": "Same captured pending event: capture < intervening reset < delivery, with source/capture identity and pending-state lineage preserved; a new event or postreset reacquisition cannot substitute for the pre-reset pending state.",
+  "delivery_before_any_reset": "DELIVERED_BEFORE_RESET; no cross-reset pending-state witness, even if a later brownout occurs.",
+  "reset_before_capture": "No cross-reset pending-state witness for this capture.",
+  "no_reset": "Cross-reset retention NOT_ESTABLISHED; service is evaluated separately.",
+  "missing_identity_or_order": "UNKNOWN; never infer pending-state retention from frame counts or success-and-any-reset.",
+  "service_boundary": "Evaluate the same frozen task and complete feedback independently. Retention is a separate diagnostic unless the predeclared task explicitly requires it.",
+  "legacy_labels": "Preserve raw labels for provenance; do not use them as ordered pending-state retention verdicts.",
+  "source_binding": "Bind the raw response, source identity, evaluator version and actual consumed inputs. Do not rerun an already valid full response merely to relabel temporal order.",
+  "qualification_authority": "S0 independent evaluator only",
+  "new_scientific_executions": 0
+}

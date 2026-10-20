@@ -1,0 +1,80 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.02298264,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0372828,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-1-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "component_record.event_latch",
+        "component_record.ready_v",
+        "excitation_record.shunts.0",
+        "saved_activity.activity.44",
+        "saved_activity.activity.45",
+        "saved_activity.activity.47",
+        "saved_activity.packets.0",
+        "model_law"
+      ],
+      "falsifier": "在与冻结 base H、同一 task/来源一致的全新会话中，若按本程序：(i) 提交的候选在 tx-complete 之前出现任一 event_was_captured=false 的 brownout，或任一 TX 步 stored<E_off 或 loaded_v<output_v，或 tx-complete 的 time_s>=deadline_s，或 model 轨迹中 !=1 个唯一 8 字节帧；或 (ii) 程序报告不可行，但 model_law 对合法范围内某候选的实际仿真产生了截止前有效帧；或 (iii) 程序预测的 t_boot/loaded_v 与 model 轨迹偏差超过 1 个 dt（时间）与 0.1 V（电压），说明审计误读了已 acquire 的输入——则本假设被反证。",
+      "hypothesis": "保留轨迹本身是两次通过（0.0469 s 的 1 个 8 字节帧、loaded_v=2.565>=1.8），没有可观察的设备失败；但 base 程序的通过隐含依赖一个未被显式检查的条件：0.012 s 的 4e-5 J shunt 造成 brownout（activity.44，event_was_captured=true），直到 0.0381 s 才重启（activity.45），而 base 把 tx_not_before 顶在合法上限 0.045。真正可复现的失败模式是把 TX 时序绑定在接触窗(0-0.008 s)或单一边界点、并默认锁存跨 brownout 保留，而不是把‘shunt 后能量恢复时刻’作为 TX 就绪下界、并对锁存保留与 TX 期间能量/电压余量设硬性门。假设：把这三项审计显式化后，程序要么可复现一个截止前唯一有效帧，要么正确报告不可行，从而避免上述回退。",
+      "impact_scope": "task-entry",
+      "method_sha256": "812a9cf96eba375b491b3a01709a2d40136f3da94a52f38907ce540b646933ba",
+      "method_text": "H 程序（可复现的‘shunt 后能量恢复门控’设计审计；本方法只给程序，不替代搜索给出器件赋值，不改 task/model/evaluator/阈值，不宣称外部验收）：\n\n输入：先 acquire component_record、excitation_record、model_law；不采信 datasheet 能量区间，按 model_law 语义计算。\n\n步骤0 符号量：E_on=0.5*C*ready_v^2；E_off=0.5*C*off_v^2；E_max=0.5*C*cap_voltage_max_v^2；E_boot=boot_j；每步 harvest=power_w*dt*harvest_efficiency；每步背景=(powered?idle_power_w:off_power_w)*dt。\n\n步骤1 识别扰动汇：对每个 shunt(t_s,energy_j)，其最多排走 min(stored,energy_j)。把 deadline 前最大 shunt 视为约束性扰动。记录 event_latch 是 passive-mechanical（跨 brownout 保留捕获）还是 volatile（丢失）。若为 volatile，则捕获后任一 brownout 即视为不可恢复，需在无 brownout 的候选上才可接受。\n\n步骤2 计算 shunt 后恢复：从 shunt 时刻起沿 source_segments 前向累加能量，求最早的首次上电 t_boot（stored>=E_on 且在该 shunt 之后），t_ready=t_boot+boot_delay_s。当锁存为 passive-mechanical 时，该时刻（而非接触窗）才是 TX 就绪下界。\n\n步骤3 TX 下界：要求 tx_not_before>=t_ready+margin，margin 必须为正且不少于数个 dt 以吸收 1 步 off-by-one 与取整；同时遵守 legal_design_ranges 且 tx_not_before+tx_duration_s<deadline_s（严格小于）。优先取满足 margin 的最小可行 tx_not_before，除非审计证明别无选择，否则不钉在合法上限。\n\n步骤4 TX 期间余量门：在整个 TX 窗口逐 dt 校验，扣减 output_v*tx_current_a*dt 后 stored>=E_off（不得 TX 中途 brownout），且 loaded_v=sqrt(2*stored/C)-esr_ohm*tx_current_a>=output_v。两项均需正余量而非等号。不满足时，调整电容与/或推迟 tx_not_before 后重审（这是搜索，不是本方法直接赋值）。\n\n步骤5 锁存保留门：对 tx-complete 之前的每个 brownout 动作，要求 event_was_captured=true；若任一显示 false，视为捕获丢失并拒绝。\n\n步骤6 形状化验证（不等于外部验收）：model_law 的 trace/activity 必须恰含 1 个 tx-complete，application_bytes==required_application_bytes，event_id 一致、帧唯一、time_s<deadline_s 且 loaded_v>=output_v。\n\n步骤7 记录所有拒绝及原因；若步骤3-6 无候选通过，报告 failure/unknown，而非猜测边界点。严禁修改 task、model_law、evaluator、阈值来变通。\n\n实验顺序：(a) 先对候选做本审计；(b) 审计通过才运行 model；(c) 将预测的 t_boot 与 loaded_v 与 model 轨迹对齐，差异超 1 个 dt / 0.1 V 视为输入误读的告警。",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-1-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-caa7a178e2e91251",
+  "protocol_sha256": "8ab50f8761bee2f24c34fcc4085c41a0415d723e2c23202c2d2ce66531e02e3b",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "d7da699cdd3ea6ac7f3dac9e187b69837cf4e904c8cbd169b4fe330b8ebc113b",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-3-1-ordinary_reflection",
+    "id": "p3-formal-3-1-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "b0819d759b770e95f9003d7bb729a2e1c19c3d9132d1808e08b7ae56e001af44",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 70.18057345900161,
+  "wall_seconds_total": 70.62452841699996
+}

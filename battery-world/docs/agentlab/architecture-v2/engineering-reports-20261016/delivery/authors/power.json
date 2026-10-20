@@ -1,0 +1,232 @@
+{
+  "content": {
+    "circuit_groups": [
+      {
+        "id": "teng-input-rectify",
+        "notes": [
+          "电流入口：J1.1=teng_terminal_pos → D2 阳极(2)/阴极(1) → 网络 teng_rect；J1.2=GND，是整流与开关回流的实际参考地。",
+          "teng_rect 是 T1(LPR6235-123QMRC) pin1 的原边节点；T1 pin2=sece_primary_sw 经跨组接口 sece_primary_sw 接 Q1 漏极（组4）；T1 pin4=GND。",
+          "副边 T1 pin3=sece_secondary → D1 阳极(2)，D1 阴极(1)=storage_rail（跨组接口 storage_rail → 组2）。",
+          "按冻结网表的真实拓扑，本版是“端子-串联二极管-原边-开关-地 / 副边-串联二极管-储能轨”的开关电感提取路径；网表中不存在二极管桥的四个二极管，D1、D2 均为 US1M(1 kV/1 A)。",
+          "sece_primary_sw 在冻结网表上没有任何 RCD 缓冲或钳位元件（DZ1 只钳 storage_rail），属本版实际缺件。",
+          "保留真实空脚：J1.3、J1.4 无网络（NC）。"
+        ],
+        "refs": [
+          "J1",
+          "D2",
+          "T1",
+          "D1"
+        ],
+        "title": "采能输入与整流/提取变压器"
+      },
+      {
+        "id": "storage-supply",
+        "notes": [
+          "storage_rail 实际节点：D1.1(组1注入) ｜ C2.1(220 µF/16 V)+C9.1(10 µF) 储能 ｜ DZ1(AZ23C5V1 双齐纳) pin1、pin2 → storage_rail，pin3=GND（唯一实际钳位）｜ U3.2 感知 ｜ U4.2(VIN)。",
+          "人工接通边界：U3(TPS3840DL40) pin3=GND、pin2=storage_rail、pin1=buck_enable；R3 100 kΩ 从 storage_rail(1) 上拉到 buck_enable(2)；J2.1=buck_enable、J2.2=buck_en，短接 J2 才把使能送到 U4。这是声明 manual_admission 的硬件落点。",
+          "供能：U4(TPS62840) pin4(EN)=buck_en，pin7=buck_sw → L1(2.2 µH) pin1，L1 pin2=supply_1v8；U4 pin1/3/5/6=GND；输出 C10 10 µF(1→supply_1v8,2→GND)、C5 100 nF(1→supply_1v8,2→GND)。",
+          "跨组接口（有名字的网络）：storage_rail → 组1 D1.1 与组3 U5.5/U6.13,11,5,3 及 R8.2；supply_1v8 → 组5 U1.13/36/48、组6 U2.2 与 R7.1/R4.1、组5 J3.1；组内 buck_sw 为 U4↔L1 局部网络。",
+          "保留真实空脚：U3.4、U3.5 无网络（NC）。"
+        ],
+        "refs": [
+          "C2",
+          "C9",
+          "DZ1",
+          "U3",
+          "R3",
+          "J2",
+          "U4",
+          "L1",
+          "C5",
+          "C10"
+        ],
+        "title": "储能轨、钳位与 1.8 V 供能"
+      },
+      {
+        "id": "peak-detect-trigger",
+        "notes": [
+          "检测链实际导线：teng_rect（跨组，组1）→ R1 1 MΩ(1→2) → pd_node；pd_node 由 R2 10 kΩ(1→2 GND) 与 C1 1 pF(1→2 GND) 构成峰值检测节点，并与 U5.2(A) 直连。",
+          "整形：U5(SN74AHC1G14) pin5(VCC)=storage_rail（跨组，组2）、pin3=GND、pin2=pd_node、pin4(Y)=sece_trigger；pin1 无网络（NC）。",
+          "单稳：sece_trigger → U6(CD4098BMT) pin4(+TR1)；U6 pin5(-TR1)=storage_rail、pin3(RESET1)=storage_rail、pin8/12/14=GND、pin11/13/16=storage_rail；定时网络 pin1(CX1)=mono_cx、pin2(RXCX1)=mono_rx，由 C13 100 nF(1→mono_cx,2→mono_rx) 与 R8 100 kΩ(2→storage_rail,1→mono_rx) 实连；输出 pin6(Q1)=sece_pulse（跨组接口 → 组4）。",
+          "第二路单稳与未用引脚保留真实空脚：U6.7、U6.9、U6.10、U6.15 无网络（NC），本版无任何导线连到这些引脚。"
+        ],
+        "refs": [
+          "R1",
+          "R2",
+          "C1",
+          "U5",
+          "U6",
+          "C13",
+          "R8"
+        ],
+        "title": "峰值检测、施密特整形与单稳触发"
+      },
+      {
+        "id": "gate-drive-switch",
+        "notes": [
+          "sece_pulse（跨组，来自组3 U6.6）→ R6 100 kΩ(1→2)=sece_gate → Q1(CMN3160M) 栅极 pin1；Q1 pin2(S)=GND，pin3(D)=sece_primary_sw（跨组，接组1 T1.2）。",
+          "实际主电流路径：teng_rect → T1 原边(1→2) → sece_primary_sw → Q1(D→S) → GND，经 T1.4 与 GND 闭合。",
+          "本组只有栅极串联电阻，无栅极下拉/关断加速元件，也无原边吸收网络；Q1 为 600 V 器件，而声明 TENG 开路幅度约 720 V pp（参数源自述未做降额），属后续工程修订项，不在报告中改写连线。"
+        ],
+        "refs": [
+          "Q1",
+          "R6"
+        ],
+        "title": "栅驱动与提取开关"
+      },
+      {
+        "id": "mcu-clock-debug",
+        "notes": [
+          "电源：U1(nRF52832-QFAA) pin13/36/48=supply_1v8（跨组，组2），pin31/45/49(EP)=GND；内部电源去耦实连：pin1 mcu_dec1-C3 100 nF，pin32 mcu_dec2-C4 100 nF，pin33 mcu_dec3-C6 1 µF，pin46 mcu_dec4-C7 1 µF，pin47 mcu_dcc-C8 1 µF（各电容另一端=GND）。",
+          "时钟：pin34(XC1)=xtal_hf_a、pin35(XC2)=xtal_hf_b；Y1 32 MHz(1→xtal_hf_a,3→xtal_hf_b,2/4→GND)，C11 12 pF(xtal_hf_a→GND)、C12 12 pF(xtal_hf_b→GND)。",
+          "射频：pin30(ANT)=ant_rf → AE1(2450AT18A100E) 天线 pin1，AE1.2=GND；本版无匹配网络元件。",
+          "跨组接口（有名字的网络）：sensor_sda(U1.38)、sensor_scl(U1.39) → 组6 U2.10/U2.9；storage/supply 双向引用见组2说明。",
+          "调试口：pin25(SWDCLK)=swd_clk → J3.3，pin26(SWDIO)=swd_io → J3.2，J3.1=supply_1v8，J3.4=GND。",
+          "保留真实空脚：U1.2–12、14–24、27、29、37、40–44 全部无网络（NC）。"
+        ],
+        "refs": [
+          "U1",
+          "Y1",
+          "AE1",
+          "C11",
+          "C12",
+          "C3",
+          "C4",
+          "C6",
+          "C7",
+          "C8",
+          "J3"
+        ],
+        "title": "主控、时钟、去耦与调试/天线"
+      },
+      {
+        "id": "cap-sense-frontend",
+        "notes": [
+          "电源与总线：U2(AD7156) pin2(VDD)=supply_1v8（跨组，组2）、pin1/11=GND；pin9(SCL)=sensor_scl、pin10(SDA)=sensor_sda（跨组 → 组5 U1.39/U1.38）。",
+          "传感通道实连：pin6(EXC1)=sensor_exc1→J4.2，pin5(EXC2)=sensor_exc2→J4.4，pin4(CIN1)=sensor_cin1→J4.1，pin3(CIN2)=sensor_cin2→J4.3，传感器经 J4 与 CDC 直连。",
+          "就绪中断：pin7(RDY)=cdc_rdy1，R7 1 MΩ(1→supply_1v8,2→cdc_rdy1) 实连上拉。",
+          "实际缺线（半装电路）：R4 100 kΩ 仅 pin1 接 supply_1v8、pin2 为空网络；R5 4.7 kΩ 仅 pin2 接 GND、pin1 为空网络；两者之间在该版网表与 PCB 网络中不存在任何网络连接（空网络名，非绘图省略），因此预期的 I2C 上拉/分压支路实际断开，与原生 DRC 的 50 处 Connection Error 一致。",
+          "保留真实空脚：U2.8 无网络（NC）。"
+        ],
+        "refs": [
+          "U2",
+          "J4",
+          "R7",
+          "R4",
+          "R5"
+        ],
+        "title": "电容传感前端与传感接插件"
+      }
+    ],
+    "conclusions": [
+      "同版一致性基础：冻结原理图/PCB 的器件-引脚-网络对应 PASS（39 器件、172 引脚、differences=[]），故本报告的回路与网络引用均来自同版 readback；本报告只重排版面，未新增任何电气连接。",
+      "本版实际连线问题（如实记录，不与后续修订混淆）：(1) 原生 DRC 本版实读 Clearance Error 52、Connection Error 50，pcb_connectivity_drc=FAIL；(2) R4(100 kΩ) 仅一端接 supply_1v8、R5(4.7 kΩ) 仅一端接 GND，二者另一端均为空网络且彼此无网络连接 → 传感 I2C 上拉/分压实际未接通；(3) sece_primary_sw 无原边缓冲/钳位；(4) 保留的真实空脚：J1.3/J1.4、U1.2–12/14–24/27/29/37/40–44、U2.8、U3.4/U3.5、U5.1、U6.7/9/10/15（报告中不作连线补全）。",
+      "供能结论：power_load_chain=FAIL，四条 finding 为 netlist load 与声明负载窗口不一致、负载电荷与时间线不一致、供电低于声明工作电压、人工接通导致 MCU 轨负值伪像；source_domain 与 model_applicability=UNEVALUABLE（13 项未定参数）；sece_resolved=false（SECE 仅平均包络、单向），声明口径未放宽。",
+      "几何结论：PCB 与 CAD 外形均为 40×70 mm、器件中心均在板框内（PASS），故 PCB 区域描述使用本版实测坐标（mil→mm）；native 3D 高度、PCB↔CAD 放置变换、安装孔对应关系仍 UNEVALUABLE，因此本报告不给出器件高度或装配尺寸。",
+      "未做物理验证：无任何实测电流、效率、纹波或储能充放电曲线；全部能量数字来自声明参数与既有 RAW 检查（raw_sha256 0f9c0c95…，165130 点），physical 状态为 NOT_TESTED，报告不编造实验结果。"
+    ],
+    "energy_interpretation": [
+      "求解输入与本版 RAW：power 作业 eng-2cf474f68315a9d8，consumed_sources 仅 project-chain/chain_joint.cir（sha 0d8dcd265bcca32a9e37167dc27a07c2dbc9f3eb24333dba176798352b2b714c），project_sha256 db0d16dee1248d80dcf4aef2a690bb8e83333fa664614800883cae4c69574caf；实读轨迹 165130 点、13 变量、raw_sha256 0f9c0c95fc39d287a55841c686370e8710f2182233a9a35da543a327a84740bd，时间跨度 1e-11…16.001 s（1 ms 时基，16001 ticks，t=0 为声明的人工接通 Sman）。",
+      "储能轨电压：声明初值 4.2 V，本次 RAW 读到 v(storage_rail) 由 4.199999999940137 V 落到 0.2966849698582461 V，即窗口内储能被声明负载抽空；事件节拍检查 advertising/connection/sampling 均为 true，说明事件本身按声明序列发生，问题在能量收支而非事件缺失。",
+      "负载积分与一致性：曲线负载电荷 0.0009120850588268295 C，声明 0.0009117226890756307 C（差约 +3.6e-7 C）；负载点 672 而声明窗口 664 点，load_binding.pwl_equal=false → 门 power_load_chain 记 FAIL，findings 明确列出“netlist load differs from the declared load witness”“load charge differs from timeline”。报告如实并列出两个数字，不做四舍五入掩盖。",
+      "供电电压异常：minimum_supply_v=0.13350823643621074 V，远低于声明 1.8 V 工作电压（finding：supply falls below the declared operating voltage）。该值与声明稳压包络 supply_1v8=1.8×min(1, v(storage_rail)/4.0)（cold_start 4.0 V，η=0.85）在 storage 跌到约 0.297 V 时的结果同源，属负载窗口内储能耗尽的表观电压，不是独立测量值。",
+      "MCU 轨异常：minimum_mcu_v=−1315962.1900000018 V，是本版最严重的数值伪像，只可能出自 t=0 人工接通瞬间 Sman(storage_rail→mcu_rail, Ron 0.5 Ω, PWL 边沿 1e-6 s) 的求解行为（finding：manual admission produces a negative MCU rail）。本轮数值一律不动，该异常的解释与修正归后续工程修订。",
+      "声明参数（供能/负载/储能口径，来自接口参数文件，均标 origin=assumption）：储能 C=220 µF、初始 4.2 V、r_leak 4.2 MΩ；稳压 1.8 V/冷启动 4.0 V/η=0.85；负载折算 K=0.5042016806722689（I_store = I_1V8×(1.8/4.2)/0.85）；人工开关 Ron 0.5 Ω 且 manual_action_energy=0.0；时间基 1 ms、16001 ticks、t_stop 16.001 s；目标 CS-TENG C=1e-9 F、Voc 峰值 361.8 V（约 720 V pp）。这些是声明假设，非实测。",
+      "模型适用范围 UNEVALUABLE：source_domain/model_applicability 列出 13 项未定项（CS-TENG 电容及行程依赖、整流二极管型号/Vf/恢复、SECE 开关型号与驱动、储能 ESR 与漏电、稳压器型号/压差/效率曲线、AD7156 转换电流与时间（仅声明）、nRF52832 收发电流曲线（仅声明）、真实链路协商的连接间隔、快速 SECE 开关时刻与占空、开关 Ron 与栅极驱动电荷、变压器/电感值与饱和、提取级二极管 vs 同步整流、实际提取路径串联电阻）；报告不给出这些项的数值。",
+      "实际电路与声明模型的差异：冻结原理图为“串联二极管 + 变压器/开关提取”（D2/T1/Q1/D1，无二极管桥），而接口参数文件自述其整流器是建模选择“2-diode with return path”，SECE 用平均包络电导 g_se_s=5e-5 S 且 sece.resolved=false；模型未包含实际存在的 U5/U6/R6/C13/R8 触发-驱动链，且声明的二极管 BV=1200 V 与实装 US1M(1 kV) 不一致。这些差异是报告的解释边界，不改连线。",
+      "时序单位域不可合并：实际无线域 advertising 187.5 ms、connection 100–200 ms（取 100 ms 作最坏保持），策略域 app_policy 为 adv 5000 ms/conn 3000 ms，load_timing_policy_mismatch 状态 UNRESOLVED（只报告、未改固件）；报告不得把 5000 ms 策略值写成实际无线周期（该检查器读键已由 power 声明 v5 的 actual_radio_timing 恢复）。"
+    ],
+    "pcb_regions": [
+      {
+        "description": "实际坐标（本版 mil→mm）：J1 x≈2.4–10.0 / y≈34.2；T1 x≈1.8–9.0 / y≈50.5–57.2；D2 x≈12.6–19.9 / y≈51.9–54.8。端子-TENG 换能器入口与串联整流二极管、原边绕组集中在板左下部，模块间用加粗的 teng_rect/sece_primary_sw 走线形成大电流回路。",
+        "name": "采能端子与提取变压区（板左下，40×70 mm 板）",
+        "refs": [
+          "J1",
+          "T1",
+          "D2"
+        ]
+      },
+      {
+        "description": "D1 x≈10.2–16.7 / y≈24.7–27.6；DZ1 x≈18.2–20.5 / y≈21.4–23.3；C9 x≈8.4–12.5 / y≈28.9–30.8；C2 x≈12.6–21.4 / y≈35.8–42.7；U3 x≈13.8–17.0 / y≈31.3–35.0；R3 x≈21.3–23.4 / y≈29.9–31.1；J2 x≈1.0–6.4 / y≈35.9–38.7；U4 x≈4.0–6.4 / y≈38.4–40.9；L1 x≈2.6–7.4 / y≈27.7–32.0；C5 x≈7.1–9.0 / y≈36.4–37.5。储能电容与钳位/监控/人工跳线/Buck 电感沿板左侧自下而上排布，storage_rail 与 supply_1v8 为两个分开的铜面区域。",
+        "name": "储能与供能调节区（板左中/上部）",
+        "refs": [
+          "D1",
+          "DZ1",
+          "C9",
+          "C2",
+          "U3",
+          "R3",
+          "J2",
+          "U4",
+          "L1",
+          "C5"
+        ]
+      },
+      {
+        "description": "R1 x≈13.2–15.2 / y≈5.0–6.2；C1 x≈13.3–15.2 / y≈7.3–8.5；R2 x≈13.2–15.2 / y≈9.6–10.7；U5 x≈12.4–16.1 / y≈12.1–14.9；Q1 x≈10.4–14.0 / y≈18.5–21.7；R6 x≈11.2–13.2 / y≈22.5–23.7。高阻峰值检测分压与施密特反相器自上而下串成一条短线，随后经栅极电阻下到提取开关 Q1。",
+        "name": "峰值检测与开关驱动区（板上部中间）",
+        "refs": [
+          "R1",
+          "C1",
+          "R2",
+          "U5",
+          "Q1",
+          "R6"
+        ]
+      },
+      {
+        "description": "U6 x≈29.0–39.6 / y≈29.2–36.8；C13 x≈29.7–31.6 / y≈27.4–28.5；R8 x≈33.5–35.6 / y≈39.0–40.2。触发信号 sece_trigger 从板中部横跨到板右侧的单稳，输出 sece_pulse 再折回左中部开关，是板上最长的信号跨区走线。",
+        "name": "单稳触发整形区（板右中）",
+        "refs": [
+          "U6",
+          "C13",
+          "R8"
+        ]
+      },
+      {
+        "description": "U1 x≈29.7–36.4 / y≈43.5–50.5；C3 x≈28.6–30.5 / y≈41.3–42.5；C4 x≈34.7–36.6 / y≈51.5–52.7；C6 x≈31.1–33.0 / y≈53.4–54.6；C7 x≈26.9–28.8 / y≈46.4–47.6；C8 x≈26.0–27.9 / y≈39.0–40.2；C11 x≈31.2–33.1 / y≈51.4–52.5；C10(1.8 V 输出电容，pin1=supply_1v8) x≈14.5–18.6 / y≈46.6–48.6，位于主控/调试口一侧；J3 x≈11.8–22.2 / y≈42.8–45.6。全部去耦电容贴近 U1 电源/DEC 引脚，SWD 排针在板中部便于夹持。",
+        "name": "主控、调试与去耦区（板右）",
+        "refs": [
+          "U1",
+          "C3",
+          "C4",
+          "C6",
+          "C7",
+          "C8",
+          "C10",
+          "C11",
+          "J3"
+        ]
+      },
+      {
+        "description": "Y1 x≈15.6–20.0 / y≈58.1–61.8；C12 x≈16.8–18.7 / y≈65.5–66.6；AE1 x≈10.1–14.3 / y≈67.1–69.5。32 MHz 晶振连同负载电容置于板底中部，天线位于左下角边缘以获得净空；两者之间无屏蔽措施。",
+        "name": "时钟-天线区（板下缘）",
+        "refs": [
+          "Y1",
+          "C12",
+          "AE1"
+        ]
+      },
+      {
+        "description": "U2 x≈21.0–24.7 / y≈57.6–61.8；J4 x≈1.0–11.4 / y≈42.3–45.1；R7 x≈26.4–28.4 / y≈58.3–59.5；R4 x≈26.4–28.4 / y≈55.8–57.0；R5 x≈26.4–28.4 / y≈60.9–62.1。CDC 靠近传感接插件所在的下半区，R4/R5 并排贴在 U2 右侧但仅有单端接入（见组6 实际缺线）。",
+        "name": "传感前端与接插件区（板右下）",
+        "refs": [
+          "U2",
+          "J4",
+          "R7",
+          "R4",
+          "R5"
+        ]
+      }
+    ],
+    "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+    "schema_version": "bf-report-author-content-v1",
+    "scope": "power",
+    "system_commit": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9"
+  },
+  "owner": "pi-chat-0fe155a873295087",
+  "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+  "scope": "power",
+  "sha256": "6626ce58623ba7af275b348989a3cabf663984b3e22bfdc89ca5973a100f8114",
+  "source_author": "Pi"
+}

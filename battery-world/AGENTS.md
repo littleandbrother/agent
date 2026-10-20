@@ -48,6 +48,16 @@ evolution infrastructure serve this question rather than competing with it.
 - Milestones have no manual completion percentage. A milestone is complete only
   when every exit gate in `project/ROADMAP.yaml` is evidence-bound and passed.
 
+## Storage-bounded development
+
+Follow `docs/architecture/STORAGE.md`: estimate and reserve peak bytes before a
+batch, reuse registered dependencies, copy immutable artifacts and completed
+traces with independent APFS clones, and review/clean generated scratch before
+the next batch. Keep at least 10 GB free plus the estimated peak. Preserve all
+sealed evidence, failures, costs and UNKNOWN records. Use
+`PYTHONDONTWRITEBYTECODE=1` during verification; never create a full runtime copy
+as a checkpoint. An unbounded output producer cannot enter a new experiment.
+
 ## Definition of done
 
 A feature is complete only when its hypothesis, falsifier, owned paths, schema

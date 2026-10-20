@@ -1,0 +1,225 @@
+{
+  "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "shared_state_writer": "campaign-s0",
+  "owners": [
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-045-ar-b-reference",
+      "owner": "campaign-a",
+      "status": "complete",
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "authority": "Direct user authorization in 01a11b01-a75e-75c2-81c3-7d152a24f15a verified by S0; finite first batch only; no commit/push.",
+      "hypothesis": "An explicit single-light-source A/R service chain and a separate transient B model can be qualified with independent energy, event and receiver checks before an Agent is attached.",
+      "paper_claim": "One source-bound A/R computational candidate; B public positive/negative qualification and declared physical-anchor limits.",
+      "falsifier": "Independent integration or receiver disagrees; darkness is relabeled N/A; retention is counted as continued sensing; lux is converted to watts without an IV assumption; a nominal device is presented as measured.",
+      "owned_paths": [
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py",
+        "scripts/campaign_reference.py",
+        "tests/agentlab/test_campaign_reference.py",
+        "configs/studies/parallel-20261019/reference/",
+        "docs/research/parallel-20261019/reference/"
+      ],
+      "schema_changes": [
+        "campaign-task-v1",
+        "campaign-result-v1"
+      ],
+      "targeted_tests": [
+        "zero-storage startup and valid digital temperature reception",
+        "darkness and finite storage",
+        "history retention vs continued sensing",
+        "recovery upload and deduplication",
+        "B cold pulse and volatile event-loss controls",
+        "independent energy/event readback"
+      ],
+      "negative_controls": [
+        "no source energy",
+        "startup too late",
+        "stale sample",
+        "volatile event lost on reset",
+        "duplicate upload",
+        "unavailable calibration -> UNKNOWN"
+      ],
+      "reproducible_command": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_reference.py --verify-run /Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001",
+      "output_artifact": "docs/research/parallel-20261019/reference/",
+      "cost_cap": "Existing unlimited cumulative money/time authorization retained. This executor performs a finite deterministic development list, zero paid model requests, zero native EDA/hardware writes, <= 500 MB outputs. Paid work is dispatched by S0 after a model-session slot is free.",
+      "claim_boundary": "Public development computational evidence; datasheet bounds are not calibrated device models. No hardware, unseen-mechanism generalization or Agent benefit claim.",
+      "stop_condition": "Stop on baseline/content drift, reference disagreement, unavailable model domain, hidden evaluator exposure, < 5 GB free, unknown native state or need for an out-of-scope source edit. Return the exact blocker; retain failures.",
+      "completed_at": "2026-10-19T13:28:07.139722+00:00",
+      "results": {
+        "run_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+        "cases": 17,
+        "targeted_tests": 12,
+        "physical_qualification": "UNKNOWN",
+        "service": "A/R nominal 6h PASS; 12h darkness continuous sensing/recovery FAIL; FIFO freshness FAIL",
+        "new_paid_requests": 0,
+        "new_native_dispatches": 0,
+        "sealed_files": 81,
+        "reproduce": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_reference.py --verify-run /Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001"
+      },
+      "limitations": "A/R nominal 6h PASS; 12h darkness continuous sensing/recovery FAIL; FIFO freshness FAIL",
+      "evidence": [
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/parallel-campaign-20261019/integration-a.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-targeted-tests.log",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-init.log"
+      ]
+    },
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-046-interface-interventions",
+      "owner": "campaign-b",
+      "status": "complete",
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "authority": "Direct user authorization in 01a11b01-a75e-75c2-81c3-7d152a24f15a verified by S0; finite first batch only; no commit/push.",
+      "hypothesis": "Two currently successful systems may share a verdict-level representation yet respond differently to the same legal design intervention; an executable observation may separate the pair at measured acquisition cost.",
+      "paper_claim": "A new structural development counterexample with independent reference, intervention outcomes, equal-information representation control and real observation costs; null format gain is allowed.",
+      "falsifier": "Pair only rescales an existing template, current success differs, the intervention is not jointly legal, reference implementations disagree, or information/format controls see different facts.",
+      "owned_paths": [
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/interfaces.py",
+        "scripts/campaign_interfaces.py",
+        "tests/agentlab/test_campaign_interfaces.py",
+        "configs/studies/parallel-20261019/interfaces/",
+        "docs/research/parallel-20261019/interfaces/",
+        "papers/interface-sufficiency-20261019/"
+      ],
+      "schema_changes": [
+        "campaign-task-v1",
+        "campaign-result-v1"
+      ],
+      "targeted_tests": [
+        "both systems pass before intervention",
+        "same legal change yields different outcomes",
+        "at least one static-sufficient negative control",
+        "independent parser/integrator",
+        "identical facts in text and structured views",
+        "measured observation wall time/bytes and discovery-vs-selection labels"
+      ],
+      "negative_controls": [
+        "pure additive static-sufficient task",
+        "uninformative observation",
+        "illegal patch",
+        "same data different formatting",
+        "tampered observation hash"
+      ],
+      "reproducible_command": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_interfaces.py --verify docs/research/parallel-20261019/interfaces/data/IF-7412532c4a6ab7a5879e",
+      "output_artifact": "docs/research/parallel-20261019/interfaces/",
+      "cost_cap": "Existing unlimited cumulative money/time authorization retained. This executor performs a finite deterministic development list, zero paid model requests, zero native EDA/hardware writes, <= 500 MB outputs. Paid work is dispatched by S0 after a model-session slot is free.",
+      "claim_boundary": "Public development computational evidence; datasheet bounds are not calibrated device models. No hardware, unseen-mechanism generalization or Agent benefit claim.",
+      "stop_condition": "Stop on baseline/content drift, reference disagreement, unavailable model domain, hidden evaluator exposure, < 5 GB free, unknown native state or need for an out-of-scope source edit. Return the exact blocker; retain failures.",
+      "completed_at": "2026-10-19T13:28:07.140605+00:00",
+      "results": {
+        "run_id": "IF-7412532c4a6ab7a5879e",
+        "new_mechanisms": 2,
+        "targeted_tests": 19,
+        "sealed_files": 41,
+        "sufficient_static_grid_checks": 28,
+        "format_agent_gain": "NOT_RUN",
+        "observation_selection_gain": "NO_INDEPENDENT_GAIN_IN_THIS_DEVELOPMENT_RUN",
+        "autonomous_observation_generation": "NOT_RUN",
+        "new_paid_requests": 0,
+        "new_native_dispatches": 0,
+        "paper_pdf": "papers/interface-sufficiency-20261019/build/manuscript.pdf",
+        "reproduce": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_interfaces.py --verify docs/research/parallel-20261019/interfaces/data/IF-7412532c4a6ab7a5879e"
+      },
+      "limitations": "NOT_RUN",
+      "evidence": [
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/parallel-campaign-20261019/integration-b.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-targeted-tests.log",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-init.log"
+      ]
+    },
+    {
+      "schema_version": "battery-world-feature-v1",
+      "id": "BFA-047-method-reexecution",
+      "owner": "campaign-s0",
+      "status": "complete",
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "authority": "Direct user authorization in 01a11b01-a75e-75c2-81c3-7d152a24f15a verified by S0; finite first batch only; no commit/push.",
+      "hypothesis": "A real global H prompt change can be evaluated only by replaying design decisions from task entry; exact-input physics cache reuse is compatible with fresh decisions and must be compared to conservative dependency invalidation and full response.",
+      "paper_claim": "Finite F1a/F1b/F4 development comparison; report actual H changes, fresh decisions, all costs, failures, and no-update outcomes without claiming RSI.",
+      "falsifier": "H1 only rescored an old D; conditions use different task/evaluator/backend/cache starts; costs omit failures or UNKNOWN; stale trajectory determines the new design; method selection consumes final-test feedback.",
+      "owned_paths": [
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/__init__.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/common.py",
+        "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/reexecution.py",
+        "scripts/campaign_methods.py",
+        "tests/agentlab/test_campaign_methods.py",
+        "configs/studies/parallel-20261019/shared/",
+        "configs/studies/parallel-20261019/methods/",
+        "docs/research/parallel-20261019/shared/",
+        "docs/research/parallel-20261019/methods/",
+        "papers/method-reexecution-20261019/",
+        "PROJECT.yaml",
+        "project/features/",
+        "docs/PROGRESS.md",
+        "docs/SESSION-HANDOFF.md",
+        "../.bf-development-profile.json",
+        "../pi-bf-aiot/node_modules",
+        "../pi-bf-aiot/packages/bf-agent/dist/",
+        "/Users/depengsu/.local/share/bf-campaign-20261019-s0/"
+      ],
+      "schema_changes": [
+        "campaign-task-v1",
+        "campaign-result-v1"
+      ],
+      "targeted_tests": [
+        "D vs H vs G typed interventions",
+        "fixed-trajectory vs dependency vs boundary vs full vs exact response cache",
+        "global H restart from entry",
+        "same method task/backend/info/resources across arms",
+        "all parent/child usage and UNKNOWN accounting",
+        "protected-state preservation"
+      ],
+      "negative_controls": [
+        "unchanged exact-input cache hit",
+        "feedback dependency expands to full",
+        "changed prompt with no changed decisions",
+        "infeasible task",
+        "missing provider usage",
+        "cache warm-start mismatch"
+      ],
+      "reproducible_command": "rtk proxy python3 docs/research/parallel-20261019/methods/audit_paid.py",
+      "output_artifact": "docs/research/parallel-20261019/methods/",
+      "cost_cap": "Deterministic qualification first; then two fixed H conditions x two full attempts = four paid development trials, each <= 80 parent+child requests, <= 4 distinct physical execution inputs, <= 1200 s decision wall time. No automatic resampling. Native jobs serial and globally locked. At most three active model sessions including S0 and executors. Provider identity/usage prerequisite. Existing cumulative unlimited authorization retained.",
+      "claim_boundary": "Public development computational evidence; datasheet bounds are not calibrated device models. No hardware, unseen-mechanism generalization or Agent benefit claim.",
+      "stop_condition": "Stop on baseline/content drift, reference disagreement, unavailable model domain, hidden evaluator exposure, < 5 GB free, unknown native state or need for an out-of-scope source edit. Return the exact blocker; retain failures.",
+      "completed_at": "2026-10-19T13:55:08.119264+00:00",
+      "outcome": "FINITE_BATCH_CLOSED_RESOURCE_STOP_NO_PROMOTION",
+      "results": {
+        "fresh_attempts": 4,
+        "computational_deliveries": 3,
+        "resource_censored": [
+          "H0-r2"
+        ],
+        "requests": 68,
+        "all_usage_settled": true,
+        "cost_upper_bound_usd": 1.142922,
+        "cache_aware_estimate_usd": 0.350730768,
+        "candidate_executions": 7,
+        "native_dispatches": 8,
+        "actual_prompt_consumption": "PASS",
+        "normalized_core_match": true,
+        "default_method_changed": false,
+        "autonomous_G": "NOT_RUN",
+        "transfer": "NOT_TESTED",
+        "physical": "NOT_TESTED"
+      },
+      "limitations": "H0-r2 hit the frozen 5 GB disk gate before validation/release; no resampling. Arm comparison incomplete, no method gain or promotion. F1a is synthetic correctness qualification, not an incremental algorithm or speedup. Proposal/orchestration/historical cache costs are not all priced.",
+      "next_handoff": "Do not resume or replace any of these four attempts. Before a new separately frozen batch, provision measured peak storage and define resource-censoring handling. Qualify A/R darkness/recovery and physical anchors before larger Agent or transfer claims.",
+      "evidence": [
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/methods/paid-audit.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/methods/native-artifact-readback.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/methods/protected-state-final.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/final-init.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/final-targeted-tests.json",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/manuscript-verification.json"
+      ],
+      "reproducible_commands": [
+        "rtk proxy python3 docs/research/parallel-20261019/methods/audit_paid.py",
+        "rtk proxy python3 docs/research/parallel-20261019/methods/verify_artifacts.py --check"
+      ]
+    }
+  ],
+  "runtime_s0": "/Users/depengsu/.local/share/bf-campaign-20261019-s0",
+  "first_batch_closed_at": "2026-10-19T13:55:08.119264+00:00"
+}

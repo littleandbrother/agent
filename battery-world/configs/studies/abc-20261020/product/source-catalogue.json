@@ -1,0 +1,197 @@
+{
+  "schema_version": "bf-abc-ar-sourced-catalogue-v1",
+  "scope": "Researcher-assembled finite component catalogue; BF selects concepts/program. Test-point projections are explicitly uncalibrated; no broad component-search optimality claim.",
+  "source_capture_unix": 1792496567.088117,
+  "source_documents": [
+    {
+      "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/ga209-r4.5.pdf",
+      "url": "https://cap-xx-assets.s3.eu-west-2.amazonaws.com/CAP_XX_GA_109_GA_209_Datasheet_b3bd3177e3.pdf",
+      "bytes": 957337,
+      "sha256": "d6a8db590b85d72461daff4a4434b87a6d1a5398e05f8bcffbe118f7c7d80397"
+    },
+    {
+      "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/bq25570-rev-g.pdf",
+      "url": "https://www.ti.com/lit/ds/symlink/bq25570.pdf",
+      "bytes": 2040178,
+      "sha256": "3caec3945eab27823d07532c39a862bb8f90927019dd8c3811836bedad6b33b7"
+    },
+    {
+      "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/msp430fr2433-rev-f.pdf",
+      "url": "https://www.ti.com/lit/ds/symlink/msp430fr2433.pdf",
+      "bytes": 2676717,
+      "sha256": "70c1ef07c0fc79ff4625533a9aba76a610f5a757a2857e3d7afa50ab1a6cf1e7"
+    },
+    {
+      "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/tpl5110-rev-a.pdf",
+      "url": "https://www.ti.com/lit/ds/symlink/tpl5110.pdf",
+      "bytes": 597864,
+      "sha256": "1f1b280beedd244762edca079316e22ebd62f7f02cdbf0ce91ecee2820246f18"
+    },
+    {
+      "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/tmp117-rev-d.pdf",
+      "url": "https://www.ti.com/lit/ds/symlink/tmp117.pdf",
+      "bytes": 1718043,
+      "sha256": "4002364bdbb5c4c47e42b828939e12daf17f5249ae162866ca0a445b730f66c9"
+    }
+  ],
+  "fixed_installation": {
+    "source_module_footprint_mm": [
+      71.5,
+      40.0
+    ],
+    "active_window_nominal_mm": [
+      50,
+      30
+    ],
+    "basis": "Original physical anchor for Epishine LEH3_50x30_6_10, source assumptions unchanged",
+    "source_url": "https://kb.epishine.com/wp-content/uploads/2021/08/LEH3-Data-Sheet.pdf",
+    "fixed_port_powers_w": [
+      9e-05,
+      2e-05
+    ],
+    "input_scope": "Original task assumptions, not guaranteed installed IV measurements. Outer installation envelope/thickness unknown; parametric packaging remains a fit hypothesis."
+  },
+  "parts": {
+    "GA209F": {
+      "document": {
+        "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/ga209-r4.5.pdf",
+        "url": "https://cap-xx-assets.s3.eu-west-2.amazonaws.com/CAP_XX_GA_109_GA_209_Datasheet_b3bd3177e3.pdf",
+        "bytes": 957337,
+        "sha256": "d6a8db590b85d72461daff4a4434b87a6d1a5398e05f8bcffbe118f7c7d80397"
+      },
+      "revision": "4.5 May2020",
+      "electrical_page": 1,
+      "capacitance_typ_f": 0.09,
+      "capacitance_min_f": 0.072,
+      "capacitance_max_f": 0.108,
+      "esr_typ_ohm": 0.095,
+      "esr_max_ohm": 0.114,
+      "rated_v": 5.0,
+      "leakage_typ_a_at_test_point": 1e-06,
+      "leakage_max_a_at_test_point": 2e-06,
+      "leakage_domain": {
+        "voltage_v": 2.3,
+        "temperature_c": 23,
+        "conditioning_hours": 120
+      },
+      "size_mm": [
+        20,
+        18,
+        2.1
+      ],
+      "size_source": "https://www.cap-xx.com/wp-content/uploads/datasheets/CAP-XX-Product-Guide.pdf page4; indexed official table. Datasheet page1 confirms thickness; live product-page100mF differs from linked datasheet90mF. Use explicitly bound4.5 datasheet values.",
+      "dynamic_gap": "DC capacitance differs from millisecond effective capacitance. Original one-second energy kernel does not qualify RF transients or low-current fresh-cap charge kinetics."
+    },
+    "BQ25570": {
+      "document": {
+        "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/bq25570-rev-g.pdf",
+        "url": "https://www.ti.com/lit/ds/symlink/bq25570.pdf",
+        "bytes": 2040178,
+        "sha256": "3caec3945eab27823d07532c39a862bb8f90927019dd8c3811836bedad6b33b7"
+      },
+      "revision": "G",
+      "electrical_page": 6,
+      "full_operating_iq_typ_a": 4.88e-07,
+      "full_operating_iq_max_a_25c": 7e-07,
+      "iq_domain": {
+        "vin_v": 0,
+        "vstor_v": 2.1,
+        "temperature_c": 25,
+        "EN": 0,
+        "VOUT_EN": 1
+      },
+      "cold_start_voltage_typ_v": 0.6,
+      "cold_start_voltage_max_v": 0.7,
+      "cold_start_power_typ_w": 1.5e-05,
+      "size_mm": [
+        3.5,
+        3.5
+      ],
+      "warning": "Ship-mode1nA disables harvest/output; never used as operating current. Constant test-point power and unchanged0.8 conversion are uncalibrated model projections."
+    },
+    "MSP430FR2433": {
+      "document": {
+        "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/msp430fr2433-rev-f.pdf",
+        "url": "https://www.ti.com/lit/ds/symlink/msp430fr2433.pdf",
+        "bytes": 2676717,
+        "sha256": "70c1ef07c0fc79ff4625533a9aba76a610f5a757a2857e3d7afa50ab1a6cf1e7"
+      },
+      "revision": "F",
+      "electrical_page": 18,
+      "lpm3_xt1_typ_a_at_25c": {
+        "2": 1.16e-06,
+        "3": 1.18e-06
+      },
+      "lpm3_xt1_max_a_3v25c": 1.65e-06,
+      "lpm3_xt1_domain": "XT1 32768Hz, 12.5pF load crystal MicroCrystalMS1V-T1K, RTC/watchdog/SVS included; no external load. 2V entry has no guaranteed max. LPM3 retained avoids free reset-per-wake assumption.",
+      "lpm3_5_typ_a_3v25c": 7.3e-07,
+      "lpm3_5_max_a_3v25c": 9.5e-07,
+      "lpm3_5_gap": "Core regulator off; waking requires reset/startup accounting, not executable in this retained-RTC projection.",
+      "lpm4_5_typ_a_3v25c": 1.6e-08,
+      "lpm4_5_gap": "SVS excluded and RTC off; cannot imply persistent absolute time.",
+      "size_mm": [
+        4,
+        4
+      ],
+      "size_variant": "IRGE VQFN24 body, page2; routing/support passives not qualified."
+    },
+    "TMP117": {
+      "document": {
+        "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/tmp117-rev-d.pdf",
+        "url": "https://www.ti.com/lit/ds/symlink/tmp117.pdf",
+        "bytes": 1718043,
+        "sha256": "4002364bdbb5c4c47e42b828939e12daf17f5249ae162866ca0a445b730f66c9"
+      },
+      "revision": "D",
+      "electrical_page": 6,
+      "shutdown_typ_a_at_25c": 1.5e-07,
+      "shutdown_max_a_at_25c": 5e-07,
+      "domain": "Serial bus inactive, SCL/SDA/ADD0=V+, 25C. One-shot AVG=1 between shutdowns; retain original20uJ total sense debit as explicit unmeasured assumption.",
+      "size_mm": [
+        2,
+        2
+      ],
+      "size_variant": "DRV WSON6 nominal body page1; thermal pad/path not qualified."
+    },
+    "TPL5110": {
+      "document": {
+        "file": "/Users/depengsu/.local/share/bf-abc-20261020/sources/tpl5110-rev-a.pdf",
+        "url": "https://www.ti.com/lit/ds/symlink/tpl5110.pdf",
+        "bytes": 597864,
+        "sha256": "1f1b280beedd244762edca079316e22ebd62f7f02cdbf0ce91ecee2820246f18"
+      },
+      "revision": "A",
+      "electrical_page": 5,
+      "supply_typ_a": 3.5e-08,
+      "supply_max_a": 5e-08,
+      "domain": "25C,2.5V. Rext conversion200uAtyp/400uAmax100ms typ/120msmax; timer100ms..7200s.",
+      "oscillator_accuracy_fraction": 0.005,
+      "interval_setting_accuracy_fraction": 0.006,
+      "size_mm": [
+        3,
+        3
+      ],
+      "gap": "An alternative concept only, not executable here: repeated boot/latency and absence of accurate retained clock must be implemented and sourced; no free timer substitution."
+    }
+  },
+  "bound_files": {
+    "/Users/depengsu/.local/share/bf-abc-20261020/sources/ga209-r4.5.pdf": "d6a8db590b85d72461daff4a4434b87a6d1a5398e05f8bcffbe118f7c7d80397",
+    "/Users/depengsu/.local/share/bf-abc-20261020/sources/bq25570-rev-g.pdf": "3caec3945eab27823d07532c39a862bb8f90927019dd8c3811836bedad6b33b7",
+    "/Users/depengsu/.local/share/bf-abc-20261020/sources/msp430fr2433-rev-f.pdf": "70c1ef07c0fc79ff4625533a9aba76a610f5a757a2857e3d7afa50ab1a6cf1e7",
+    "/Users/depengsu/.local/share/bf-abc-20261020/sources/tpl5110-rev-a.pdf": "1f1b280beedd244762edca079316e22ebd62f7f02cdbf0ce91ecee2820246f18",
+    "/Users/depengsu/.local/share/bf-abc-20261020/sources/tmp117-rev-d.pdf": "4002364bdbb5c4c47e42b828939e12daf17f5249ae162866ca0a445b730f66c9",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/configs/studies/phase1-20261020/ar/service-contract.v1.json": "53c29aba7b95e178ad76594ae9c240c21b91d6af5d8929e5aec8f2a7aa64853b",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar_service.py": "d0b1fb78097d0c6505e240bccb664b4b5548f3ab0f23e8d24be1ea6ae2b42122",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/scripts/campaign_ar_service.py": "a639f30f000663c0ba0e872da656475fe44e858bde79c5bc818ed1e256acd951",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/scripts/campaign_reference.py": "a3f374eb8ed750e524be650e8cce51a246683b1f69d8ca0ac7e279f875cddd85"
+  },
+  "fixed_activity_and_clock": "Original boot100uJ/2s, sense20uJ,write5uJ,TX130uJ/5ms,20ppm clock,2048 durable records, wire receiver and strictFIFO retained as unmeasured engineering assumptions; no manufactured hardware claim.",
+  "source_coverage_gaps": [
+    "Installed IV and spectral/environment variation",
+    "Whole-board voltage-temperature loss and fresh-capacitor leakage",
+    "Regulator efficiency/startup trajectory and series balancing",
+    "RTC crystal loading/drift, binary/FRAM layout and RF transients",
+    "External mounting envelope/thickness, thermal contact and PCB routing"
+  ]
+}

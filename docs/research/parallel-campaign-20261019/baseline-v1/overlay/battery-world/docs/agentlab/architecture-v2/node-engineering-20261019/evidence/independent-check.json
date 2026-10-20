@@ -1,0 +1,246 @@
+{
+  "evaluator": {
+    "adapter": "piezo-feedback-v1",
+    "sources": {
+      "repository_feedback_contract.py": "83f3c92758c09a5e12734ecb8d5ecbf81d2c4f74a94da32566284988f158b36d",
+      "repository_feedback_validation.py": "ec26364af8a0004957e92f958e3a11681196e51753fc5fb2d528be8489c64bfa",
+      "repository_profiles.py": "eec7a2cc1046ba5c4de7a1d4e012d26688c1561da37544a17d67f8d320e53340",
+      "repository_task_checks.py": "cbeb3b6766254a2d355c4c669877546be680fb2441b39807d97c7878f78db16e",
+      "repository_task_standards.py": "83482592924da53f578c667609ac4e000412bb96189612e5807326b9ffa32ab4"
+    },
+    "version": "task-profile-review-v1"
+  },
+  "id": "RV-bdd8d0b07650e4a727338e12e3dffb7f5bfbd83a4b39ccada23d16b7485f1b66",
+  "immutable_input": "SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec",
+  "kind": "task-acceptance",
+  "physical": "NOT_TESTED",
+  "project_id": "PR-6aef9acbf1aa49919909ed34524cabb6349806c95f32e54ea74bc7b977b53ec4",
+  "result": {
+    "checker": {
+      "adapter": "piezo-feedback-v1",
+      "sources": {
+        "repository_feedback_contract.py": "83f3c92758c09a5e12734ecb8d5ecbf81d2c4f74a94da32566284988f158b36d",
+        "repository_feedback_validation.py": "ec26364af8a0004957e92f958e3a11681196e51753fc5fb2d528be8489c64bfa",
+        "repository_profiles.py": "eec7a2cc1046ba5c4de7a1d4e012d26688c1561da37544a17d67f8d320e53340",
+        "repository_task_checks.py": "cbeb3b6766254a2d355c4c669877546be680fb2441b39807d97c7878f78db16e",
+        "repository_task_standards.py": "83482592924da53f578c667609ac4e000412bb96189612e5807326b9ffa32ab4"
+      },
+      "version": "task-profile-review-v1"
+    },
+    "gates": {
+      "coupling_numerics": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "converged": true,
+          "load_energy_difference_j": 3.053557723472697e-08,
+          "maximum_tx_time_difference_s": 0.0015000000000000568,
+          "same_service_result": true,
+          "status": "PASS",
+          "steps_s": [
+            0.001,
+            0.0005
+          ]
+        },
+        "input_fingerprint": "63340570db31e60e7aac4e8af40617b45b2886ef897ec6e9c0aa935fbe1ab627",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      },
+      "delivery_version": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "files": 10,
+          "task_definition": "TD-fa4a43b10566de3dab639261aad48b53fdac9d5d2c9d6460bc8db1c1872bef61"
+        },
+        "input_fingerprint": "857895d3ac33ff4bdd338df6593c0a217f3138a23247e630ddc649497dac877f",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      },
+      "load_binding": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "current_model": {
+            "id": "declared-host-node-current-v1",
+            "source": {
+              "kind": "declared",
+              "locator": "configs/reference_cases/piezo-feedback/task.json; nominal apparatus current envelope"
+            },
+            "values_a": {
+              "idle": 8e-06,
+              "off": 1e-08,
+              "sample": 0.001,
+              "tx": 0.008
+            }
+          },
+          "load_error_a": 1.4196662883259457e-08,
+          "status": "PASS"
+        },
+        "input_fingerprint": "8eaa2aee6440e4119e649fb034da198f84cfd014952bfb69190685942be0d8dd",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      },
+      "power_service": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "boots": 1,
+          "completed_tx": 15,
+          "first_powered_s": 6.7505,
+          "initial_energy_j": 0.0,
+          "initial_state_error_v": 3.2798719140927796e-34,
+          "load_energy_j": 0.0018761245197869334,
+          "low_supply_sequences": [],
+          "status": "PASS",
+          "unresolved_electrical_j": 0.0015772285727659167
+        },
+        "input_fingerprint": "4e46190f930fc30bd5ad9bdfda4ede881602343727463f3864dc49e68c05f3d8",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      },
+      "receiver_service": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "invalid_frames": [],
+          "minimum_packets": 3,
+          "received_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "status": "PASS"
+        },
+        "input_fingerprint": "82020665d065f6f6f673dac9c3ce005ed791d0493e83f65976c086891a94d7cd",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      },
+      "source_model": {
+        "execution_id": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+        "findings": {
+          "mechanical_residual_relative": 8.739227247107722e-07,
+          "peak_tip_m": 0.0032849447550349206,
+          "status": "PASS"
+        },
+        "input_fingerprint": "8126ff655218eaa9c94aa8afdbeb17b375e188a66d715f3296a7fa129645d6e2",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS"
+      }
+    },
+    "native_jobs_dispatched": 0,
+    "physical": "NOT_TESTED",
+    "protocol": {
+      "abi": "bf-feedback-program-abi-v1",
+      "acceptance": {
+        "coupling_numerics": {
+          "condition": "双向负载收敛，1ms与0.5ms步长得到相同服务判断"
+        },
+        "delivery_version": {
+          "condition": "冻结源码、实际执行、完整原生波形和验收指向同一候选"
+        },
+        "load_binding": {
+          "condition": "编译程序状态、负载波形与原生电流一致"
+        },
+        "power_service": {
+          "condition": "完成至少3次发送，采样和发送窗口最低供电满足任务值"
+        },
+        "receiver_service": {
+          "condition": "20秒内至少3个有效且不重复的帧，符合固定供电、采样有效期、序号和校验要求",
+          "minimum_packets": 3
+        },
+        "source_model": {
+          "condition": "线性位移范围内，原生机电轨迹满足功率与储能平衡"
+        }
+      },
+      "adapter": "piezo-feedback-v1",
+      "authority": {
+        "design": "participant candidate",
+        "requirements": "operator",
+        "validation": "independent immutable record"
+      },
+      "id": "VP-3d27aeb03c24fc0d8d204da8020797d215c6db38cc12fe66729c6ab241d19315",
+      "rules": {
+        "current_tolerance_a": 1e-12,
+        "energy_absolute_tolerance_j": 2e-06,
+        "initial_condition_tolerance_v": 0.003,
+        "linear_displacement_ratio": 0.05,
+        "load_current_tolerance_a": 1e-07,
+        "max_iterations": 12,
+        "native_max_step_s": 0.0001,
+        "native_timeout_s": 600,
+        "program_step_s": 0.001,
+        "refinement": 2,
+        "refinement_energy_relative": 0.03,
+        "refinement_event_steps": 2,
+        "relative_mechanical_residual": 0.02,
+        "voltage_tolerance_v": 0.001
+      },
+      "scenario": {
+        "acceleration_peak_m_s2": 4.905,
+        "boundary": "线性单模压电源；厂商LTC3588-1；声明初始VIN/VOUT；主机C程序；数字接收端",
+        "brownout_v": 1.8,
+        "current_model": {
+          "id": "declared-host-node-current-v1",
+          "source": {
+            "kind": "declared",
+            "locator": "configs/reference_cases/piezo-feedback/task.json; nominal apparatus current envelope"
+          },
+          "values_a": {
+            "idle": 8e-06,
+            "off": 1e-08,
+            "sample": 0.001,
+            "tx": 0.008
+          }
+        },
+        "damping_ratio": 0.02,
+        "duration_s": 20,
+        "frequency_hz": 30,
+        "initial_output_v": 0.0,
+        "initial_storage_v": 0.0,
+        "material": {
+          "d31_m_v": -1.9e-10,
+          "piezo_E_pa": 66000000000,
+          "piezo_density": 7800,
+          "relative_permittivity": 1700,
+          "substrate_E_pa": 68000000000,
+          "substrate_density": 2700
+        },
+        "minimum_sample_s": 0.01,
+        "minimum_supply_v": 2.2,
+        "minimum_tx_s": 0.004,
+        "parameter_basis": "固定装置正例使用预充电；冷启动作为同协议独立控制；电流为声明包络",
+        "pgood_min_v": 2.0,
+        "sample_validity_s": 0.1,
+        "sensor_value": 2500,
+        "start_v": 2.3
+      },
+      "scope": "reciprocal linear piezo, vendor PMIC, declared current model, host C, digital RX",
+      "service": {
+        "deadline_s": 20,
+        "minimum_results": 3,
+        "observable": "valid-digital-frames",
+        "startup": "declared-initial-storage"
+      },
+      "sources": {
+        "repository_feedback_contract.py": "83f3c92758c09a5e12734ecb8d5ecbf81d2c4f74a94da32566284988f158b36d",
+        "repository_feedback_validation.py": "ec26364af8a0004957e92f958e3a11681196e51753fc5fb2d528be8489c64bfa"
+      },
+      "task_definition": "TD-fa4a43b10566de3dab639261aad48b53fdac9d5d2c9d6460bc8db1c1872bef61",
+      "version": "bf-feedback-validation-v1"
+    },
+    "scope": "vendor-PMIC-program-feedback",
+    "status": "PASS",
+    "target": "SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec"
+  },
+  "scope": "vendor-PMIC-program-feedback",
+  "status": "PASS",
+  "target": "SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec"
+}

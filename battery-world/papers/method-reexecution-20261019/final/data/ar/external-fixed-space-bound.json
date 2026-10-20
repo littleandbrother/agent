@@ -1,0 +1,37 @@
+{
+  "schema_version": "bf-phase1-external-necessary-bound-v1",
+  "status": "FIXED_SPACE_NO_GO",
+  "protocol_sha256": "7cf49d0d60cd9c3d09653d7154e52b945db9090e37f4a4a90162b68a7f22b8b8",
+  "contract_sha256": "53c29aba7b95e178ad76594ae9c240c21b91d6af5d8929e5aec8f2a7aa64853b",
+  "world_sha256": "d0b1fb78097d0c6505e240bccb664b4b5548f3ab0f23e8d24be1ea6ae2b42122",
+  "checker_sha256": "3a44d9618758e1591f97a0e0ed8a184f6ee1f895f9aa4b8c18f514d5ff86f9eb",
+  "numeric_decimal": {
+    "cold_optimistic_available_j": "0.127800",
+    "cold_capacitance_upper_bound_f": "0.05280991735537190082644628099173553719008",
+    "dark_duration_s": "43200",
+    "edge_slack_s": "122",
+    "powered_duration_lower_bound_s": "43078",
+    "sleep_only_energy_lower_bound_j": "0.215390",
+    "usable_energy_per_f": "3.025",
+    "dark_capacitance_lower_bound_f": "0.07120330578512396694214876033057851239669",
+    "loaded_voltage_at_legal_off_min_v": "2.1976"
+  },
+  "proof": [
+    "Any cold receive requires charging above the legal ready voltage, which exceeds off_min. Omit boot, sampling and TX costs and grant every available source joule.",
+    "At voltages above legal off_min the fixed ESR cannot trigger TX dropout. The executable grammar cannot request a power-off state.",
+    "A background-threshold brownout leaves energy below off threshold; zero dark input cannot recharge to the strictly higher ready threshold. Sampling throughout the dark service therefore needs continuous power between its first and last required samples.",
+    "Grant full charge at dark entry and a full sampling interval plus dt slack at both edges; charge only the fixed sleep power and ignore every other debit. The required capacitance still exceeds the cold upper bound."
+  ],
+  "optimistic_human_tradeoff_limits_decimal": {
+    "minimum_cold_deadline_s_for_dark_lower_bound": "2426.929577464788732394366197183098591549",
+    "maximum_dark_duration_s_for_cold_upper_bound": "32072.0000000000000000000000000000000000",
+    "maximum_sleep_power_w_at_cold_upper_bound": "0.000003708389433121314824272250336598727888946"
+  },
+  "tradeoff_scope": "Necessary optimistic limits only, not sufficient designs. Any relaxed service or changed physical power needs a new human-approved task and new qualification.",
+  "physical_qualification": "UNKNOWN",
+  "agent_method_benefit": "NOT_TESTED",
+  "rsi": "NOT_TESTED",
+  "new_simulations": 0,
+  "paid_requests": 0,
+  "native_dispatches": 0
+}

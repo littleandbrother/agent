@@ -1,0 +1,287 @@
+{
+  "definition": {
+    "acceptance": {
+      "coupling_numerics": {
+        "condition": "双向负载收敛，1ms与0.5ms步长得到相同服务判断"
+      },
+      "delivery_version": {
+        "condition": "冻结源码、实际执行、完整原生波形和验收指向同一候选"
+      },
+      "load_binding": {
+        "condition": "编译程序状态、负载波形与原生电流一致"
+      },
+      "power_service": {
+        "condition": "完成至少6次发送，采样和发送窗口最低供电满足任务值"
+      },
+      "receiver_service": {
+        "condition": "20秒内至少6个有效且不重复的帧，符合固定供电、采样有效期、序号和校验要求",
+        "minimum_packets": 6
+      },
+      "source_model": {
+        "condition": "线性位移范围内，原生机电轨迹满足功率与储能平衡"
+      }
+    },
+    "assignments": [
+      {
+        "functions": [
+          "H",
+          "P",
+          "S",
+          "C",
+          "R",
+          "G",
+          "M"
+        ],
+        "role": "lead"
+      }
+    ],
+    "components": [
+      {
+        "id": "beam"
+      },
+      {
+        "id": "power"
+      },
+      {
+        "id": "soc"
+      },
+      {
+        "id": "host"
+      }
+    ],
+    "design_space": {
+      "editable_files": [
+        "firmware/main.c",
+        "notes/"
+      ],
+      "fields": {}
+    },
+    "functions": [
+      {
+        "components": [
+          "beam"
+        ],
+        "id": "H"
+      },
+      {
+        "components": [
+          "beam"
+        ],
+        "id": "M"
+      },
+      {
+        "components": [
+          "power"
+        ],
+        "id": "P"
+      },
+      {
+        "components": [
+          "soc"
+        ],
+        "id": "S"
+      },
+      {
+        "components": [
+          "soc"
+        ],
+        "id": "C"
+      },
+      {
+        "components": [
+          "soc"
+        ],
+        "id": "R"
+      },
+      {
+        "components": [
+          "host"
+        ],
+        "id": "G"
+      }
+    ],
+    "goal": "固定电源板，在20秒内完成六帧有效数据；仅修订程序，并交付与执行同版的结果。",
+    "intent": "optimize",
+    "parameters": [
+      {
+        "name": "frequency_hz",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "Hz",
+        "value": 30
+      },
+      {
+        "name": "initial_storage_v",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "V",
+        "value": 12.0
+      },
+      {
+        "name": "initial_output_v",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "V",
+        "value": 2.5
+      },
+      {
+        "name": "material",
+        "role": "assumption",
+        "source": "reference",
+        "unit": "SI",
+        "value": "nominal piezo/substrate coefficients"
+      },
+      {
+        "name": "beam_and_storage",
+        "role": "design_choice",
+        "source": "agent",
+        "unit": "SI",
+        "value": "design.json"
+      },
+      {
+        "name": "controller",
+        "role": "design_choice",
+        "source": "agent",
+        "unit": "s",
+        "value": "firmware/main.c"
+      },
+      {
+        "binding": {
+          "path": "tip_mass_kg",
+          "target": "design"
+        },
+        "name": "tip_mass_kg",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "kg",
+        "value": 0.002
+      },
+      {
+        "binding": {
+          "path": "inductance_h",
+          "target": "design"
+        },
+        "name": "inductance_h",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "H",
+        "value": 1e-05
+      },
+      {
+        "binding": {
+          "path": "width_m",
+          "target": "design"
+        },
+        "name": "width_m",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "m",
+        "value": 0.01
+      },
+      {
+        "binding": {
+          "path": "length_m",
+          "target": "design"
+        },
+        "name": "length_m",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "m",
+        "value": 0.05
+      },
+      {
+        "binding": {
+          "path": "substrate_m",
+          "target": "design"
+        },
+        "name": "substrate_m",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "m",
+        "value": 0.0002
+      },
+      {
+        "binding": {
+          "path": "storage_f",
+          "target": "design"
+        },
+        "name": "storage_f",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "F",
+        "value": 0.00015
+      },
+      {
+        "binding": {
+          "path": "output_f",
+          "target": "design"
+        },
+        "name": "output_f",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "F",
+        "value": 6.8e-05
+      },
+      {
+        "binding": {
+          "path": "piezo_m",
+          "target": "design"
+        },
+        "name": "piezo_m",
+        "role": "constraint",
+        "source": "reference",
+        "unit": "m",
+        "value": 0.0002
+      }
+    ],
+    "phase": "campaign-20261019-public-fixed-power",
+    "profile": "node-feedback-v1",
+    "scenario": {
+      "acceleration_peak_m_s2": 4.905,
+      "boundary": "线性单模压电源；厂商LTC3588-1；声明初始VIN/VOUT；主机C程序；数字接收端",
+      "brownout_v": 1.8,
+      "current_model": {
+        "id": "declared-host-node-current-v1",
+        "source": {
+          "kind": "declared",
+          "locator": "configs/reference_cases/piezo-feedback/task.json; nominal apparatus current envelope"
+        },
+        "values_a": {
+          "idle": 8e-06,
+          "off": 1e-08,
+          "sample": 0.001,
+          "tx": 0.008
+        }
+      },
+      "damping_ratio": 0.02,
+      "duration_s": 20,
+      "frequency_hz": 30,
+      "initial_output_v": 2.5,
+      "initial_storage_v": 12.0,
+      "material": {
+        "d31_m_v": -1.9e-10,
+        "piezo_E_pa": 66000000000,
+        "piezo_density": 7800,
+        "relative_permittivity": 1700,
+        "substrate_E_pa": 68000000000,
+        "substrate_density": 2700
+      },
+      "minimum_sample_s": 0.01,
+      "minimum_supply_v": 2.2,
+      "minimum_tx_s": 0.004,
+      "parameter_basis": "固定装置正例使用预充电；冷启动作为同协议独立控制；电流为声明包络",
+      "pgood_min_v": 2.0,
+      "sample_validity_s": 0.1,
+      "sensor_value": 2500,
+      "start_v": 2.3
+    }
+  },
+  "files": {
+    "design.json": "{\n  \"length_m\": 0.05,\n  \"width_m\": 0.01,\n  \"substrate_m\": 0.0002,\n  \"piezo_m\": 0.0002,\n  \"tip_mass_kg\": 0.002,\n  \"storage_f\": 0.00015,\n  \"output_f\": 6.8e-05,\n  \"inductance_h\": 1e-05\n}\n",
+    "firmware/main.c": "#include \"feedback.h\"\n/* Reference host controller: schedule relative to actual admitted boot.\n * Volatile state is reset by the apparatus on loss of supply. */\nstatic int phase;\nstatic unsigned sequence;\nstatic double deadline;\nvoid bf_reset(void) { phase=0; sequence=1; deadline=0; }\nint bf_step(double t, double dt, double v, int pgood) {\n    (void)dt; (void)v; (void)pgood;\n    if (phase==0) { deadline=t+0.25; phase=1; }\n    if (t+1e-10 >= deadline) {\n        if (phase==1) { phase=2; deadline=t+0.010; }\n        else if (phase==2) { phase=3; deadline=t+0.004; }\n        else { phase=1; ++sequence; deadline=t+4.0; }\n    }\n    return phase==2 ? BF_SAMPLE : phase==3 ? BF_TX : BF_IDLE;\n}\nunsigned bf_sequence(void) { return sequence; }\nunsigned bf_value(void) { return 2500; }\nunsigned bf_checksum(void) { return (sequence ^ bf_value() ^ 0xA5) & 255; }\n"
+  },
+  "id": "P2-public-fixed-power-v1",
+  "max_evaluations": 4,
+  "request": "固定电源板，在20秒内完成六帧有效数据；仅修订程序，并交付与执行同版的结果。",
+  "split": "public-development"
+}

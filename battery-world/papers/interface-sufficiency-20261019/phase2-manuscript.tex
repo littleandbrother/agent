@@ -1,0 +1,70 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\def\input@path{{../shared/}}
+\makeatother
+\usepackage{hkustgz-paper}
+\title{Relation Construction for Battery-Free Design\\An Actual Attempt and Post-Hoc Validation}
+\hypersetup{pdftitle={Relation Construction for Battery-Free Design: An Actual Attempt and Post-Hoc Validation},pdfauthor={Development manuscript}}
+\author{Development manuscript}
+\papersubtitle{Phase 2: public development evidence, 20 October 2026}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A model-generated relation can affect scientific design only if its source,
+interpretation, qualification and consumer use survive the host interface.
+We report one actual battery-free design episode and a separately authorized
+post-hoc adapter evaluation. The model acquired three sources and constructed
+an energy comparison, but invalid JSON Pointer paths exhausted the registered
+one-proposal allowance. The original episode therefore established no successful
+E5 chain. A subsequent evaluation reused the model's already generated corrected
+call, with no new model proposal or provider request. Source binding, independent
+units and Decimal evaluation qualified a source-dependent relation; a real
+consumer used the original policy to change capacitance from 10 to 15~$\mu$F.
+The independently checked nominal service changed from FAIL to PASS. A strong
+static complete-information design also passed with 10~$\mu$F and earlier
+transmission. The result establishes a post-hoc engineering connection from
+constructed relation to executed design, while the original failure, static
+baseline, unknown physical qualification and absence of autonomous discovery
+remain explicit.
+\end{abstract}
+
+\section{Question and evidence scope}
+Battery-free service depends on the ordering of energy arrival, storage,
+startup, event capture, reset and transmission. A derived energy comparison
+can summarize part of this behavior, but a design decision still needs an
+executable input edge and a complete service check. We examine whether an
+actual model-generated observation can enter that chain without replacing a
+failed attempt with a retrospectively improved outcome.
+
+The unit of evidence is the public development episode
+\texttt{p2-e5-001} and its separately labeled adapter evaluation. The original
+episode result is retained as a syntax rejection~\cite{attempt}. The
+post-hoc receipts bind the previously generated corrected call to external
+qualification, an executed consumer and an independent service
+check~\cite{qualification,consumer,service}. These are two evidence records
+with different admissibility conditions. They do not form a successful
+preregistered live episode or a population-level comparison.
+
+\input{phase2-methods.tex}
+
+\begin{thebibliography}{9}
+\bibitem{attempt} S0. Original episode and usage receipts, 20 October 2026.
+\texttt{p2-e5-001}: \path{external/result.json},
+\path{episode-result.json}, \path{provider-costs.json} and
+\path{pi-public-trace.jsonl}.
+\bibitem{qualification} S0. Post-hoc source and relation qualification.
+\path{p2-e5-001/posthoc-adapter-001/qualification.json}.
+\bibitem{consumer} S0. Post-hoc real consumer input and decision receipt.
+\path{p2-e5-001/posthoc-adapter-001/consumer.json}.
+\bibitem{service} S0. Original, selected and static-complete service receipts.
+\path{p2-e5-001/posthoc-adapter-001/service.json} and
+\path{result.json}.
+\bibitem{adapter} S0. Post-hoc validation plan and adapter-v2 targeted
+regressions. \path{docs/research/phase-plan-20261019/phase2/},
+\path{posthoc-interface-validation-plan.json} and
+\path{adapter-v2/regression-result.json}.
+\end{thebibliography}
+\end{document}

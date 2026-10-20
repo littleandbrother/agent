@@ -1,0 +1,95 @@
+{
+  "schema_version": "bf-phase4-o-preparation-v1",
+  "feature": "BFA-062-phase4-service-transfer",
+  "hypothesis": "Frozen A/R knowledge and source-qualified additional O event information can support unchanged-contract O start/keepalive/stop service under matched digital hardware and budget.",
+  "paper_claim": "Frozen A/R knowledge and source-qualified additional O event information can support unchanged-contract O start/keepalive/stop service under matched digital hardware and budget.",
+  "falsifier": "Missing/delayed dark-segment events, periodic/event controls tie or outperform, unbound wake/sensor power, or success requires changing service/hardware without declaration.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase4_interfaces.py",
+    "tests/agentlab/test_campaign_phase4_interfaces.py",
+    "configs/studies/phase4-20261020/interfaces/",
+    "docs/research/phase4-20261020/interfaces/",
+    "papers/interface-sufficiency-20261019/phase4-methods.tex",
+    "papers/interface-sufficiency-20261019/phase4-manuscript.tex",
+    "papers/interface-sufficiency-20261019/phase4.pdf",
+    "papers/interface-sufficiency-20261019/phase4-binding.json",
+    "papers/interface-sufficiency-20261019/render_phase4.py"
+  ],
+  "schema_changes": [
+    "bf-o-case-v1",
+    "bf-o-candidate-v1",
+    "bf-o-response-v1",
+    "bf-o-service-v1",
+    "O kinds 3=start 4=stop 5=keepalive 6=periodic_snapshot in unchanged AR wire envelope"
+  ],
+  "targeted_tests": [
+    "Small software fixtures only: 3/60s edges; dark missed events/false keepalive; brownout cache loss; independent CRC/sequence/time/deadline; energy/source binding"
+  ],
+  "negative_controls": [
+    "Final test payload or results unavailable to G/H formation and selection",
+    "No H/D/G mixing or changed budget/service/evaluator",
+    "Energy/state loss must not count as event detection or receive",
+    "All failures/no-update/unqualified descendants retained",
+    "Candidate/total budget includes proposal, G1 formation, selection, design and confirmation"
+  ],
+  "reproducible_command": "Registered CAD Python -B -m unittest discover -s tests/agentlab -p test_campaign_phase4_interfaces.py -v with PYTHONPATH=packages/python/bfworld/src and PYTHONDONTWRITEBYTECODE=1",
+  "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/docs/research/phase4-20261020/interfaces",
+  "cost_cap": {
+    "wall_s": 900,
+    "peak_additional_bytes": 2000000,
+    "retained_bytes": 500000,
+    "reserve_bytes": 10000000000,
+    "provider_requests": 0,
+    "full_O0_executions": 0,
+    "native_dispatches": 0
+  },
+  "available_bytes_before": 22993440768,
+  "claim_boundary": "Minimal new digital service adapter and adversarial software checks. No full O0 run, Agent episode, heldout exposure or physical qualification. Original waveform remains original O0; final unexposed file is not read.",
+  "stop_condition": "Scientific identity or frozen service drift, unavailable usage, ambiguous model/backend, final-test leakage before selection freeze, request/cost/wall/storage cap, original-history tamper, or unqualified physical prerequisite for a dependent claim; preserve failures and continue independent qualified work.",
+  "read_only_guards": {
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py": {
+      "sha256": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+      "bytes": 12661
+    },
+    "configs/studies/parallel-20261019/reference/conditions.v1.json": {
+      "sha256": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb",
+      "bytes": 18295
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_interfaces.py": {
+      "sha256": "a804c27a0595f9429c4b0308727c7a0bbf446e2ca2c680cf622824d745c7f2c1",
+      "bytes": 11528
+    },
+    "papers/shared/hkustgz-paper.sty": {
+      "sha256": "473994c5eb69167576ae0427ed4696e6542d5aadd10497868e38304e7c850872",
+      "bytes": 2687
+    },
+    "papers/shared/assets/hkustgz-english.pdf": {
+      "sha256": "25f016add579c729d3447b4fca72b66fa98bd309cc82a9a4971bd61d8837f12e",
+      "bytes": 11646
+    },
+    "papers/interface-sufficiency-20261019/phase3-methods.tex": {
+      "sha256": "2b6bd3b0c5726ef232c4317f11303d4e79cd391e993639a837a75d3c76e72e7b",
+      "bytes": 18867
+    },
+    "papers/interface-sufficiency-20261019/phase3-manuscript.tex": {
+      "sha256": "1f1b29bd716181cd8878a8aad2b40376de45055f1858fe7bc4ba334a619c3101",
+      "bytes": 5006
+    },
+    "papers/interface-sufficiency-20261019/phase3.pdf": {
+      "sha256": "c19f7a9ece1b08c1f992318a83d333539336a66b08ce5fcb55c8559edb2963df",
+      "bytes": 270729
+    },
+    "papers/interface-sufficiency-20261019/phase3-binding.json": {
+      "sha256": "51fe719a0228b4d6a4fc7a5fc962247cc6a1c2ce403094ae1c0758684e5166c8",
+      "bytes": 25652
+    },
+    "papers/interface-sufficiency-20261019/render_phase3.py": {
+      "sha256": "3cd582c5584fb7cf96030680afd2a18d10164577b29eb8b88c0f4835d5288693",
+      "bytes": 39785
+    }
+  },
+  "catalog": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/two-papers-v0.2-20261019/case_catalog_v0.2.json",
+    "sha256": "eb1aed8426371a5f857018da7cab9987e380083ca7a736f30d164beb51072ebb"
+  }
+}

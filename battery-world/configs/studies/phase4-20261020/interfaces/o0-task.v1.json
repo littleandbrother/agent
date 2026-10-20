@@ -1,0 +1,275 @@
+{
+  "schema_version": "bf-o-case-v1",
+  "task_id": "o0-original-service-development-v1",
+  "duration_s": 21600,
+  "ar_task": {
+    "schema_version": "campaign-task-v1",
+    "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+    "partition": "public-development",
+    "model_id": "ar-light-behavior-v1",
+    "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+    "duration_s": 21600,
+    "dt_s": 1,
+    "service_start_s": 1800,
+    "source_segments": [
+      {
+        "start_s": 0,
+        "end_s": 7200,
+        "illuminance_lux": 200,
+        "power_w": 9e-05,
+        "voc_v": 3.2,
+        "mpp_ratio": 0.75
+      },
+      {
+        "start_s": 7200,
+        "end_s": 9000,
+        "illuminance_lux": 0,
+        "power_w": 0,
+        "voc_v": 0,
+        "mpp_ratio": 0.75
+      },
+      {
+        "start_s": 9000,
+        "end_s": 10800,
+        "illuminance_lux": 50,
+        "power_w": 2e-05,
+        "voc_v": 2.6,
+        "mpp_ratio": 0.75
+      },
+      {
+        "start_s": 10800,
+        "end_s": 18000,
+        "illuminance_lux": 200,
+        "power_w": 9e-05,
+        "voc_v": 3.2,
+        "mpp_ratio": 0.75
+      },
+      {
+        "start_s": 18000,
+        "end_s": 19800,
+        "illuminance_lux": 0,
+        "power_w": 0,
+        "voc_v": 0,
+        "mpp_ratio": 0.75
+      },
+      {
+        "start_s": 19800,
+        "end_s": 21600,
+        "illuminance_lux": 50,
+        "power_w": 2e-05,
+        "voc_v": 2.6,
+        "mpp_ratio": 0.75
+      }
+    ],
+    "source_calibration": "UNAVAILABLE",
+    "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+    "gateway_windows": [
+      [
+        0,
+        21601
+      ]
+    ],
+    "temperature_segments": [
+      [
+        0,
+        21601,
+        22.0
+      ]
+    ],
+    "recovery_at_s": null,
+    "required_sample_period_s": 120,
+    "required_live_receive_delay_s": 10,
+    "required_first_receive_s": 1800,
+    "required_dark_report_period_s": 600,
+    "required_temperature_error_c": 1.0,
+    "max_timestamp_error_s": 60,
+    "device": {
+      "id": 271828,
+      "capacitance_f": 0.015,
+      "cap_voltage_max_v": 3.3,
+      "cap_initial_voltage_v": 0.0,
+      "rated_voltage_v": 5.5,
+      "esr_ohm": 0.3,
+      "ready_v": 2.7,
+      "off_v": 2.3,
+      "output_v": 1.8,
+      "dropout_v": 0.3,
+      "harvest_efficiency": 0.8,
+      "cold_start_voltage_v": 0.38,
+      "cold_start_power_w": 3e-06,
+      "off_power_w": 1e-06,
+      "sleep_power_w": 5e-06,
+      "boot_storage_j": 0.0001,
+      "sense_storage_j": 2e-05,
+      "write_storage_j": 5e-06,
+      "tx_storage_j": 0.00013,
+      "tx_peak_output_a": 0.008,
+      "tx_duration_s": 0.005,
+      "sample_period_s": 60,
+      "boot_delay_s": 2,
+      "upload_period_s": 1,
+      "nvm_capacity_records": 2048,
+      "nvm_persistent": true,
+      "sequence_persistent": true,
+      "clock_persistent": false,
+      "clock_ppm": 20,
+      "receiver_dedup": true,
+      "ack_drop_first_n": 0,
+      "stamp_age_fault_s": 0,
+      "temperature_bias_c": 0.1
+    },
+    "temperature_event": {
+      "threshold_c": 8,
+      "minimum_duration_s": 300,
+      "enabled": false
+    },
+    "service_semantics": {
+      "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+      "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence).",
+      "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+      "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+      "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared."
+    }
+  },
+  "photovoltaic_area_cm2": 15,
+  "light_metadata": {
+    "cct_k": 3500,
+    "spectrum": "Same A0 LED contract; calibrated spectral irradiance/IV unavailable",
+    "illuminance_is_metadata_not_watts": true
+  },
+  "rms_segments": [
+    {
+      "start_s": 0,
+      "end_s": 4200,
+      "rms_g": 0.005
+    },
+    {
+      "start_s": 4200,
+      "end_s": 4500,
+      "rms_g": 0.08
+    },
+    {
+      "start_s": 4500,
+      "end_s": 7800,
+      "rms_g": 0.005
+    },
+    {
+      "start_s": 7800,
+      "end_s": 8100,
+      "rms_g": 0.08
+    },
+    {
+      "start_s": 8100,
+      "end_s": 11400,
+      "rms_g": 0.005
+    },
+    {
+      "start_s": 11400,
+      "end_s": 12000,
+      "rms_g": 0.08
+    },
+    {
+      "start_s": 12000,
+      "end_s": 16800,
+      "rms_g": 0.005
+    },
+    {
+      "start_s": 16800,
+      "end_s": 16920,
+      "rms_g": 0.08
+    },
+    {
+      "start_s": 16920,
+      "end_s": 21600,
+      "rms_g": 0.005
+    }
+  ],
+  "components": {
+    "schema_version": "bf-o-digital-components-v1",
+    "sampler_id": "proposed-rms-poll-v1",
+    "standby_power_w": 5e-07,
+    "wake_storage_j": 1e-06,
+    "sense_storage_j": 2e-05,
+    "write_storage_j": 5e-06,
+    "cache_capacity_records": 2048,
+    "cache_options": [
+      "nvm",
+      "volatile"
+    ],
+    "physical_qualification": "UNKNOWN",
+    "status": "PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED",
+    "source_notes": {
+      "sense_storage_j": "Reuses the registered A/R 20 uJ storage-side sample impulse as a proposed RMS sampler cost; temperature-load precedent is not qualification of vibration hardware.",
+      "wake_storage_j": "Proposed ideal 1 uJ wake impulse; no independent device power measurement.",
+      "standby_power_w": "Proposed ideal 0.5 uW powered RMS front-end standby; off when the managed rail is off.",
+      "write_storage_j": "Unchanged A/R ideal atomic 5 uJ store impulse; persistence does not supply detection power.",
+      "ar_chain": "Unchanged source port/cold-start/PMIC/boot/ESR/TX parameters and digital AR wire/CRC envelope; no calibrated PV or RF model."
+    }
+  },
+  "service": {
+    "schema_version": "bf-o-service-contract-v1",
+    "start_threshold_g": 0.05,
+    "stop_threshold_g": 0.01,
+    "start_continuous_s": 3,
+    "stop_continuous_s": 60,
+    "event_delivery_s": 10,
+    "keepalive_interval_s": 120,
+    "event_time_error_s": 1,
+    "scope": "Every individual start/stop plus continuous keepalive; darkness is applicable; no occupancy inference or final-state substitution.",
+    "threshold_comparison": "Strict > for start and < for stop; equality resets the corresponding confirmation timer.",
+    "event_time_basis": "Confirmation time, not raw rising/falling edge.",
+    "keepalive_basis": "Accepted active-state messages must cover each confirmed active interval with gaps <=120 s; keepalive outside confirmed active state fails.",
+    "waveform_abi": "Ordered contiguous [start_s,end_s) piecewise constant external RMS g segments; amplitude is an externally supplied RMS observation, not harvested mechanical energy.",
+    "sampling_semantics": "Powered periodic RMS observations with declared zero-order hold between consecutive successful samples. Confirmation runs only on successful powered wake/sample; unobserved gaps reset timers.",
+    "radio_scope": "Ideal atomic A/R storage-side TX impulse and AR digital wire/CRC with O message kinds; not a BLE air link."
+  },
+  "design_space": {
+    "capacitance_f": [
+      0.015,
+      0.015
+    ],
+    "sample_period_s": [
+      0.25,
+      120
+    ],
+    "threshold_on_g": [
+      0.01,
+      0.05
+    ],
+    "threshold_off_g": [
+      0.001,
+      0.02
+    ],
+    "retry_s": [
+      0.25,
+      120
+    ],
+    "tx_backoff_s": [
+      0,
+      120
+    ],
+    "cache": [
+      "nvm",
+      "volatile"
+    ],
+    "program": [
+      "confirmed_events",
+      "periodic_snapshot"
+    ]
+  },
+  "link_delay_s": 0,
+  "provenance": {
+    "catalog_path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/two-papers-v0.2-20261019/case_catalog_v0.2.json",
+    "catalog_sha256": "eb1aed8426371a5f857018da7cab9987e380083ca7a736f30d164beb51072ebb",
+    "catalog_case": "O",
+    "A0_case": "A",
+    "reference_protocol_path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/configs/studies/parallel-20261019/reference/conditions.v1.json",
+    "reference_protocol_sha256": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb",
+    "ar_module_sha256": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+    "qualification": "Previously independently checked digital A/R apparatus only; PV/PMIC dynamics, vibration costs and physical receiver remain UNKNOWN.",
+    "hardware_match": "O0 C fixed at the original 15 mF and PV area at 15 cm2 across the first three episodes; other AR hardware fixed. General ABI supports a separately frozen legal C range, never participant changes to case limits."
+  },
+  "bindings": {
+    "source_payload_sha256": "b868e87e116d93be121ea386aeda51f70362ad9af0a370a5bad03b6019f02af7"
+  }
+}

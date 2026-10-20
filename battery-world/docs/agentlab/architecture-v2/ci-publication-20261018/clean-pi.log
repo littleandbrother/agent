@@ -1,0 +1,134 @@
+COMMAND ['npm', 'ci', '--ignore-scripts']
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@earendil-works/gondolin@0.12.0',
+npm warn EBADENGINE   required: { node: '>=23.6.0' },
+npm warn EBADENGINE   current: { node: 'v22.22.0', npm: '10.9.4' }
+npm warn EBADENGINE }
+npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+
+added 312 packages, and audited 335 packages in 5s
+
+47 packages are looking for funding
+  run `npm fund` for details
+
+14 vulnerabilities (3 moderate, 10 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+COMMAND ['npm', 'run', 'bf:build']
+
+> pi-monorepo@0.0.3 bf:build
+> npm run build:offline && npm --prefix packages/bf-harness run build && npm --prefix packages/bf-agent run build
+
+
+> pi-monorepo@0.0.3 build:offline
+> cd packages/chord && npm run build && cd ../tui && npm run build && cd ../telemetry && npm run build && cd ../ai && npm run build:offline && cd ../agent && npm run build && cd ../session-backends/sqlite-node && npm run build && cd ../../protocol && npm run build && cd ../client && npm run build && cd ../server && npm run build && cd ../coding-agent && npm run build
+
+
+> @earendil-works/chord@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-tui@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-telemetry@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-ai@0.85.1 build:offline
+> npm run check:model-data && tsgo -p tsconfig.build.json && shx rm -rf dist/providers/data && shx cp -r src/providers/data dist/providers/data
+
+
+> @earendil-works/pi-ai@0.85.1 check:model-data
+> node scripts/check-model-data.ts
+
+Generated model data is valid.
+
+> @earendil-works/pi-agent-core@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-session-backend-sqlite-node@0.85.1 build
+> tsgo -p tsconfig.build.json && node scripts/copy-migrations.mjs
+
+
+> @earendil-works/pi-protocol@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-client@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-server@0.85.1 build
+> tsgo -p tsconfig.build.json
+
+
+> @earendil-works/pi-coding-agent@0.85.1 build
+> npm run build:unbundled && node ../../scripts/build-coding-agent-bundle.mjs
+
+
+> @earendil-works/pi-coding-agent@0.85.1 build:unbundled
+> tsgo -p tsconfig.build.json && shx chmod +x dist/cli.js dist/rpc-entry.js && npm run copy-assets
+
+
+> @earendil-works/pi-coding-agent@0.85.1 copy-assets
+> shx mkdir -p dist/modes/interactive/theme && shx cp src/modes/interactive/theme/*.json dist/modes/interactive/theme/ && shx mkdir -p dist/modes/interactive/assets && shx cp src/modes/interactive/assets/*.png dist/modes/interactive/assets/ && shx mkdir -p dist/core/export-html/vendor && shx cp src/core/export-html/template.html src/core/export-html/template.css src/core/export-html/template.js dist/core/export-html/ && shx cp src/core/export-html/vendor/*.js dist/core/export-html/vendor/
+
+Built packages/coding-agent/dist/bundle (50 files, 7.8 MiB)
+
+> @bf-aiot/harness@0.1.0 build
+> tsgo -p tsconfig.json
+
+
+> @bf-aiot/agent@0.1.0 build
+> tsgo -p tsconfig.json
+
+COMMAND ['npm', 'run', 'check']
+
+> pi-monorepo@0.0.3 check
+> biome check --write --error-on-warnings . && npm run check:pinned-deps && npm run check:runtime-deps && npm run check:ts-imports && npm run check:entry-graphs && npm run check:shrinkwrap && npm run check:install-lock:coding-agent && tsgo --noEmit && npm run check:browser-smoke
+
+Checked 1321 files in 2s. No fixes applied.
+
+> pi-monorepo@0.0.3 check:pinned-deps
+> node scripts/check-pinned-deps.mjs
+
+
+> pi-monorepo@0.0.3 check:runtime-deps
+> node scripts/check-runtime-deps.mjs
+
+Public package runtime imports have declared dependencies.
+
+> pi-monorepo@0.0.3 check:ts-imports
+> node scripts/check-ts-relative-imports.mjs
+
+
+> pi-monorepo@0.0.3 check:entry-graphs
+> node scripts/check-entry-graphs.mjs
+
+Entry point graphs are within budget.
+
+> pi-monorepo@0.0.3 check:shrinkwrap
+> node scripts/generate-coding-agent-shrinkwrap.mjs --check
+
+packages/coding-agent/npm-shrinkwrap.json is up to date.
+
+> pi-monorepo@0.0.3 check:install-lock:coding-agent
+> node scripts/generate-coding-agent-install-lock.mjs --check
+
+packages/coding-agent/install-lock is up to date.
+
+> pi-monorepo@0.0.3 check:browser-smoke
+> node scripts/check-browser-smoke.mjs

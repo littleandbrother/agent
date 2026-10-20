@@ -1,0 +1,80 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.015085752000000001,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0240798,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-1-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:0b7f9244",
+        "excitation_record:34aff723",
+        "saved_activity:0946fb89",
+        "model_law:d690d8a8",
+        "inspect:a893ed78"
+      ],
+      "falsifier": "The update is falsified if any design admitted by the screen either (a) shows a brownout with reason tx-transient or before tx-complete, (b) yields zero or more than one packet, or a packet with application_bytes != 8, (c) completes after min(deadline_s, issued_s + max_data_age_s), or (d) is not powered during the whole contact window starting at event_s. It is also falsified in the reverse direction if a design the screen rejects as below the TX floor nevertheless completes a valid frame, or if the closed-form predicted first_boot/boot energy deviates materially from the observed activity (indicating the charge model used by the screen is wrong). If no legal design passes the screen at all, the hypothesis that the screen is sufficient is falsified and H should be revised rather than the task, evaluator, or model assumptions.",
+      "hypothesis": "Prior H assumed that setting tx_not_before_s equal to event_s is safe because capture happens at the contact window, treating the stored-energy state at capture as sufficient for transmission. It ignored two facts in the acquired model_law (b-transient-behavior-v1): (a) loaded_v >= output_v is tested before spending on every dt slice, so a complete tx_duration_s needs about (ceil(tx_duration_s/dt)+1) slices of energy at start, not one slice; (b) with event_latch=volatile any brownout erases the capture, so the design must stay powered continuously from the 1 ms contact window until tx-complete. Hence the retained failure at t=2.001 (tx-transient, no packet) is an energy-budget/ordering error, not a numerical near-miss. New hypothesis: an analytic pre-execution screen that derives e_on/e_off/e_max and a TX energy floor from the acquired records, then places tx_not_before_s at the first time the closed-form charge curve reaches that floor (and checks the frame still fits deadline and max_data_age_s), will select at least one design inside the legal ranges that yields exactly one valid 8-byte frame, without spending the finite candidate_executions on infeasible designs.",
+      "impact_scope": "task-entry",
+      "method_sha256": "0c9a6a135b39fd9c8a9db7a4ebd57ba4816447e6a50f2294fe2b7752e3127215",
+      "method_text": "Procedure E-BUDGET (repeatable, runs before each candidate execution; frozen task, model_law b-transient-behavior-v1 and the source records are read-only inputs, never edited):\n\n1. SOURCE EXTRACTION. Read only acquired fields: from component_record take C, ready_v, off_v, cap_voltage_max_v, output_v, tx_current_a, tx_duration_s, esr_ohm, boot_j, boot_delay_s, idle_power_w, off_power_w, harvest_efficiency, event_latch; from excitation_record take the source power segments, contact window [event_s, event_s+contact_duration_s), deadline_s, dt_s; from the task take issued_s and max_data_age_s. Do not substitute datasheet guesses or memory for missing calibration; mark anything unknown as UNKNOWN and do not spend an execution on a design whose screen depends on the unknown.\n\n2. ENERGY LADDER. Compute e_on = C*ready_v^2/2, e_off = C*off_v^2/2, e_max = C*cap_voltage_max_v^2/2. Compute net charging rate p_net(t) = harvest_efficiency*sum(source_w) - (idle_power_w if powered else off_power_w) for intervals without tx, and integrate to get e(t) with e(0) = C*cap_initial_voltage_v^2/2, applying the e_max cap (any excess is spill and is not usable later).\n\n3. TX ENERGY FLOOR. Because the model tests loaded_v = sqrt(2e/C) - esr*I >= output_v before spending on each dt slice, a complete transmission of N = ceil(tx_duration_s/dt) slices each drawing output_v*tx_current_a*dt requires start energy e_start >= (N+1)*output_v*tx_current_a*dt + e_off (the extra slice keeps the last pre-spend check and the post-spend e >= e_off check satisfied). Treat this floor as a hard admission test: if the floor plus boot_j exceeds e_max for the candidate C, the design is infeasible in the frozen ranges and is rejected without execution.\n\n4. LATCH/WINDOW ORDERING. If event_latch is volatile, capture exists only if the device is powered inside [event_s, event_s+contact_duration_s), and it is erased by any brownout (energy-threshold or tx-transient). Therefore require: first_boot < event_s (checked with the step-2 curve), e never below e_off from first_boot through tx-complete, and tx_not_before_s >= the first time t* at which e(t*) >= e_start floor. Also require no tx attempt before t* (earlier attempts spend energy and reset a volatile latch). If event_latch were passive-mechanical, relax only the continuity requirement but keep the floor and timing checks.\n\n5. TIMING FIT. The completed frame time t* + tx_duration_s must be <= min(deadline_s, issued_s + max_data_age_s). If the floor is reached later than that bound for a candidate C, move C within the legal range where e_max supports the floor and charge time fits; if no legal C satisfies both, report no admissible design instead of executing.\n\n6. ANALYTIC SCREEN, NOT FLASHING. Screen candidates by re-solving the step 2-5 inequalities in closed form and comparing predicted first_boot, capture time, tx-start and tx-complete against the source facts. Do not run the simulator for screening, since native/execution budget is finite. Rank candidates by minimum margin max(e_start_floor, predicted e at t*) and keep the two allowed designs distinct (e.g. smallest legal C that fits the timing bound and one larger C that raises e_max) so the pair brackets the feasible region rather than duplicating one point.\n\n7. OBSERVATION POLICY AND RECORD KEEPING. For each executed candidate, read the returned activity list and packets: require exactly one packet with application_bytes = required_application_bytes and event_id 1, a capture inside the contact window, no brownout with reason tx-transient and no brownout between contact and tx-complete, and tx-complete within deadline and data age. Record verbatim the derived e_on/e_off/e_max/floor, predicted times, and any deviation (time, reason, packet hex). Retain failures and UNKNOWN results unchanged; do not overwrite them with later successes.\n\n8. ITERATION RULE. If the screened design fails any step-7 check, the feedback is treated as a falsifier of the derived floor/charge model: revise step 3-4 constants only from observed trace values, or return no-update, and keep the base method when the evidence does not justify a change. This procedure is limited to this frozen apparatus and claims no hardware, statistical, transfer or self-improvement result.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-1-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-1dd49e859e4beb41",
+  "protocol_sha256": "34a78263b8c1403128a322a4456c958aac3c69422ce4c8d0e0fc9d592eac5c4e",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "30cf62250a213ddc824b3b886b29152ce9c448edcff3bc1dca35971ac0ff421b",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-4-1-ordinary_reflection",
+    "id": "p3-formal-4-1-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "29f12a4347c7a52b6529061089740ca48943b140bd16a701228021a36c0b8f65",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 43.596505333000096,
+  "wall_seconds_total": 44.004695541996625
+}

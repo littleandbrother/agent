@@ -1,0 +1,5528 @@
+{
+  "additive_static_rows": [
+    {
+      "reference": "PASS",
+      "service_cost_uj": 10.0,
+      "static": "PASS"
+    },
+    {
+      "reference": "PASS",
+      "service_cost_uj": 30.0,
+      "static": "PASS"
+    },
+    {
+      "reference": "PASS",
+      "service_cost_uj": 40.0,
+      "static": "PASS"
+    },
+    {
+      "reference": "PASS",
+      "service_cost_uj": 45.0,
+      "static": "PASS"
+    },
+    {
+      "reference": "FAIL",
+      "service_cost_uj": 50.0,
+      "static": "FAIL"
+    }
+  ],
+  "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "budget_control": {
+    "budget_bytes": 0,
+    "estimated_payload_bytes": 0,
+    "operation": null,
+    "policy_origin": "researcher-supplied required fields; finite catalogue selection",
+    "selector_wall_ns": 1750,
+    "status": "BUDGET_EXHAUSTED"
+  },
+  "claim_boundary": "Public development, ideal clamped energy buffer and ideal reset state machine. Independent implementations share assumptions; neither physical calibration nor hardware, Agent efficacy, unseen generalization, format benefit or autonomous observation discovery.",
+  "construction": {
+    "construction_wall_ns": 239458,
+    "definition": {
+      "domain": {
+        "capacitance_uf": [
+          4.0,
+          12.0
+        ]
+      },
+      "expression": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "name": "initial_energy_uj",
+                        "op": "field"
+                      },
+                      {
+                        "args": [
+                          {
+                            "name": "source_power_uw",
+                            "op": "field"
+                          },
+                          {
+                            "name": "source_end_s",
+                            "op": "field"
+                          }
+                        ],
+                        "op": "mul"
+                      }
+                    ],
+                    "op": "add"
+                  },
+                  {
+                    "args": [
+                      {
+                        "op": "constant",
+                        "value": 0.5
+                      },
+                      {
+                        "args": [
+                          {
+                            "name": "capacitance_uf",
+                            "op": "field"
+                          },
+                          {
+                            "args": [
+                              {
+                                "name": "clamp_v",
+                                "op": "field"
+                              }
+                            ],
+                            "op": "square"
+                          }
+                        ],
+                        "op": "mul"
+                      }
+                    ],
+                    "op": "mul"
+                  }
+                ],
+                "op": "min"
+              },
+              {
+                "args": [
+                  {
+                    "op": "constant",
+                    "value": 0.5
+                  },
+                  {
+                    "args": [
+                      {
+                        "name": "capacitance_uf",
+                        "op": "field"
+                      },
+                      {
+                        "args": [
+                          {
+                            "name": "min_v",
+                            "op": "field"
+                          }
+                        ],
+                        "op": "square"
+                      }
+                    ],
+                    "op": "mul"
+                  }
+                ],
+                "op": "mul"
+              }
+            ],
+            "op": "sub"
+          },
+          {
+            "name": "service_energy_uj",
+            "op": "field"
+          }
+        ],
+        "op": "sub"
+      },
+      "inputs": [
+        "capacitance_uf",
+        "clamp_v",
+        "initial_energy_uj",
+        "min_v",
+        "service_energy_uj",
+        "source_end_s",
+        "source_power_uw"
+      ],
+      "model_assumptions": "ideal clamp; no leakage; all input precedes service",
+      "origin": "researcher-specified relation, deterministic compiler; no Agent invention",
+      "output_unit": "uJ",
+      "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+      "schema_version": "campaign-observation-expression-v1"
+    },
+    "fresh_process_executions": [
+      {
+        "input_bytes": 212,
+        "input_sha256": "e28553136f9303a534ecb1645aade1f8a76bea6ad89e90f353d4824dcea9bcbb",
+        "process_executions": 1,
+        "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+        "result": {
+          "energy_headroom_uj": -14.0
+        },
+        "wall_ns": 18877042,
+        "world": "low-clamp"
+      },
+      {
+        "input_bytes": 212,
+        "input_sha256": "ad85e07c0b2f46ad86b2da80c9b47211cef63a488b4e281d125c8e5ef8389062",
+        "process_executions": 1,
+        "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+        "result": {
+          "energy_headroom_uj": 8.0
+        },
+        "wall_ns": 18853167,
+        "world": "high-clamp"
+      }
+    ],
+    "human_intervention": "equation and relevant inputs supplied by researcher; not autonomously discovered",
+    "qualification_model_runs": 20,
+    "qualification_rows": [
+      {
+        "capacitance_uf": 4.0,
+        "reference_margin_uj": -14.0,
+        "reference_verdict": "FAIL",
+        "value_uj": -14.0,
+        "verdict": "FAIL",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 5.0,
+        "reference_margin_uj": -10.0,
+        "reference_verdict": "FAIL",
+        "value_uj": -10.0,
+        "verdict": "FAIL",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 6.0,
+        "reference_margin_uj": -6.0,
+        "reference_verdict": "FAIL",
+        "value_uj": -6.0,
+        "verdict": "FAIL",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 7.0,
+        "reference_margin_uj": -2.0,
+        "reference_verdict": "FAIL",
+        "value_uj": -2.0,
+        "verdict": "FAIL",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 7.5,
+        "reference_margin_uj": 0.0,
+        "reference_verdict": "PASS",
+        "value_uj": 0.0,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 8.0,
+        "reference_margin_uj": 2.0,
+        "reference_verdict": "PASS",
+        "value_uj": 2.0,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 9.0,
+        "reference_margin_uj": 5.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 5.5,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 10.0,
+        "reference_margin_uj": 4.999999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 5.0,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 11.0,
+        "reference_margin_uj": 4.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 4.5,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 12.0,
+        "reference_margin_uj": 3.9999999999978684,
+        "reference_verdict": "PASS",
+        "value_uj": 4.0,
+        "verdict": "PASS",
+        "world": "low-clamp"
+      },
+      {
+        "capacitance_uf": 4.0,
+        "reference_margin_uj": 7.999999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 8.0,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 5.0,
+        "reference_margin_uj": 7.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 7.5,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 6.0,
+        "reference_margin_uj": 6.999999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 7.0,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 7.0,
+        "reference_margin_uj": 6.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 6.5,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 7.5,
+        "reference_margin_uj": 6.249999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 6.25,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 8.0,
+        "reference_margin_uj": 5.999999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 6.0,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 9.0,
+        "reference_margin_uj": 5.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 5.5,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 10.0,
+        "reference_margin_uj": 4.999999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 5.0,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 11.0,
+        "reference_margin_uj": 4.499999999997868,
+        "reference_verdict": "PASS",
+        "value_uj": 4.5,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      },
+      {
+        "capacitance_uf": 12.0,
+        "reference_margin_uj": 3.9999999999978684,
+        "reference_verdict": "PASS",
+        "value_uj": 4.0,
+        "verdict": "PASS",
+        "world": "high-clamp"
+      }
+    ],
+    "qualification_solver_steps": 116800,
+    "qualification_wall_ns": 13017208,
+    "status": "PASS"
+  },
+  "costs": {
+    "claim": "host measurements, not monetary costs; all new development computations retained",
+    "construction_fresh_process_executions": 2,
+    "construction_qualification_model_runs": 20,
+    "native_dispatches": 0,
+    "observation_model_runs": 4,
+    "paid_model_requests": 0,
+    "primary_model_runs": 8,
+    "reference_model_runs": 44,
+    "reference_solver_steps": 274000,
+    "runner_wall_ns": 88437666
+  },
+  "e3_boundary": "Ablating one unexcited mechanism parameter restores aliasing in this encoding; no universal field necessity or device-level E3 claim",
+  "e4_status": "equal-information export/parser/decision prepared; Agent format effect NOT_RUN",
+  "historical_runs_reexecuted": 0,
+  "human_provenance": "researcher-specified AST compiled by deterministic builder; NOT autonomous Agent discovery",
+  "illegal_patch_controls": [
+    {
+      "patch": {
+        "capacitance_uf": 0
+      },
+      "reason": "Capacitance outside legal interval",
+      "rejected": true
+    },
+    {
+      "patch": {
+        "power_off_intervals": [
+          [
+            0,
+            4
+          ]
+        ]
+      },
+      "reason": "Power interval outside legal domain",
+      "rejected": true
+    },
+    {
+      "patch": {
+        "service_energy_uj": 1
+      },
+      "reason": "Undeclared design field",
+      "rejected": true
+    }
+  ],
+  "negative_controls": {
+    "additive_static_sufficient": true,
+    "enriched_static_sufficient": true,
+    "exhausted_budget_abstains": true,
+    "illegal_patches_rejected": true,
+    "tampered_hash_rejected": true,
+    "uninformative_returns_unknown": true
+  },
+  "observation_exports": [
+    {
+      "catalogue": {
+        "executable-dynamic": {
+          "bytes": 2104,
+          "coverage": [
+            "proposed_verdict"
+          ],
+          "declared_model_runs": 1,
+          "operation": "executable-dynamic",
+          "origin": "developer-defined legal observation",
+          "sha256": "f59eadcbd8122710d3521897a3acfe927bd4a97b01cb5f46687b1d87beef0022",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/raw.json"
+        },
+        "fixed-rich": {
+          "bytes": 1162,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "fixed-rich",
+          "origin": "developer-defined legal observation",
+          "sha256": "373bdb925c38f3f3ba2ac1c35260f72d313ad4797aa2c1cef59e0d8a8aebef24",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/rich.json"
+        },
+        "full-raw": {
+          "bytes": 2104,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "full-raw",
+          "origin": "developer-defined legal observation",
+          "sha256": "f59eadcbd8122710d3521897a3acfe927bd4a97b01cb5f46687b1d87beef0022",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/raw.json"
+        },
+        "mechanism-spec": {
+          "bytes": 21,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "mechanism-spec",
+          "origin": "developer-defined legal observation",
+          "sha256": "188e51f85b919c94d605d27a16b5e0d1c316b023da2521f5d587ab34bacd70e4",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/mechanism.json"
+        },
+        "uninformative": {
+          "bytes": 1142,
+          "coverage": [],
+          "declared_model_runs": 0,
+          "operation": "uninformative",
+          "origin": "developer-defined legal observation",
+          "sha256": "21b1594703d2c27c3ebb7f211b943482428cdb0d9806888785efa746e32ac58d",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/current.json"
+        }
+      },
+      "export_wall_ns": 765708,
+      "pair": "clamp-capacitance",
+      "unique_source_bytes": 4429,
+      "world": "low-clamp"
+    },
+    {
+      "catalogue": {
+        "executable-dynamic": {
+          "bytes": 2105,
+          "coverage": [
+            "proposed_verdict"
+          ],
+          "declared_model_runs": 1,
+          "operation": "executable-dynamic",
+          "origin": "developer-defined legal observation",
+          "sha256": "14fffb5de7dbfb1bdf57294df4204a17a20363698f79679d3825005a0d52034c",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/raw.json"
+        },
+        "fixed-rich": {
+          "bytes": 1162,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "fixed-rich",
+          "origin": "developer-defined legal observation",
+          "sha256": "79ac70338b39e22f8b27a9b87be690d1ae83d904dda4e678a5a716bb499d77ec",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/rich.json"
+        },
+        "full-raw": {
+          "bytes": 2105,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "full-raw",
+          "origin": "developer-defined legal observation",
+          "sha256": "14fffb5de7dbfb1bdf57294df4204a17a20363698f79679d3825005a0d52034c",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/raw.json"
+        },
+        "mechanism-spec": {
+          "bytes": 21,
+          "coverage": [
+            "clamp_v"
+          ],
+          "declared_model_runs": 0,
+          "operation": "mechanism-spec",
+          "origin": "developer-defined legal observation",
+          "sha256": "36a88059d2cb9c4fe05defb83cf4ba3b3ecebf75d23dd28b86c6566a29edd19d",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/mechanism.json"
+        },
+        "uninformative": {
+          "bytes": 1142,
+          "coverage": [],
+          "declared_model_runs": 0,
+          "operation": "uninformative",
+          "origin": "developer-defined legal observation",
+          "sha256": "21b1594703d2c27c3ebb7f211b943482428cdb0d9806888785efa746e32ac58d",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/current.json"
+        }
+      },
+      "export_wall_ns": 709459,
+      "pair": "clamp-capacitance",
+      "unique_source_bytes": 4430,
+      "world": "high-clamp"
+    },
+    {
+      "catalogue": {
+        "executable-dynamic": {
+          "bytes": 2168,
+          "coverage": [
+            "proposed_verdict"
+          ],
+          "declared_model_runs": 1,
+          "operation": "executable-dynamic",
+          "origin": "developer-defined legal observation",
+          "sha256": "0f201d9c09768ea8b2f94c01829488e1d4b1d63cfe5adad5948a2bc052c5b5b5",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/raw.json"
+        },
+        "fixed-rich": {
+          "bytes": 1212,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "fixed-rich",
+          "origin": "developer-defined legal observation",
+          "sha256": "a61ac6f5176300ea28a2e80b5e9494e01a89ba2a58e76b063f1a13dbc63882dd",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/rich.json"
+        },
+        "full-raw": {
+          "bytes": 2168,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "full-raw",
+          "origin": "developer-defined legal observation",
+          "sha256": "0f201d9c09768ea8b2f94c01829488e1d4b1d63cfe5adad5948a2bc052c5b5b5",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/raw.json"
+        },
+        "mechanism-spec": {
+          "bytes": 31,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "mechanism-spec",
+          "origin": "developer-defined legal observation",
+          "sha256": "cfccb51f342f647c8b776c1195d043e09f4924b4a9a0c5ac0dc37b5f4fd1941a",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/mechanism.json"
+        },
+        "uninformative": {
+          "bytes": 1182,
+          "coverage": [],
+          "declared_model_runs": 0,
+          "operation": "uninformative",
+          "origin": "developer-defined legal observation",
+          "sha256": "5e2c2f0a4b9797d3ec66d8f6b4153f2ce0ad877ae438c6cd6df2a16a907f1cc8",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/current.json"
+        }
+      },
+      "export_wall_ns": 698584,
+      "pair": "reset-memory",
+      "unique_source_bytes": 4593,
+      "world": "volatile"
+    },
+    {
+      "catalogue": {
+        "executable-dynamic": {
+          "bytes": 2167,
+          "coverage": [
+            "proposed_verdict"
+          ],
+          "declared_model_runs": 1,
+          "operation": "executable-dynamic",
+          "origin": "developer-defined legal observation",
+          "sha256": "97affbd29265f76160438301972f9e0a5c89c56afdc7b1682c234e918b6d2b9d",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/raw.json"
+        },
+        "fixed-rich": {
+          "bytes": 1211,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "fixed-rich",
+          "origin": "developer-defined legal observation",
+          "sha256": "c12ec3874fb586c89b9547a4d322b55386c2fc12c18cb384171562f0ff2b0920",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/rich.json"
+        },
+        "full-raw": {
+          "bytes": 2167,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "full-raw",
+          "origin": "developer-defined legal observation",
+          "sha256": "97affbd29265f76160438301972f9e0a5c89c56afdc7b1682c234e918b6d2b9d",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/raw.json"
+        },
+        "mechanism-spec": {
+          "bytes": 30,
+          "coverage": [
+            "retains_pending"
+          ],
+          "declared_model_runs": 0,
+          "operation": "mechanism-spec",
+          "origin": "developer-defined legal observation",
+          "sha256": "d9e7780b54c4a9fc69f73e34d6ef28422ba212e937b5ca3e1bc7683d42232054",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/mechanism.json"
+        },
+        "uninformative": {
+          "bytes": 1182,
+          "coverage": [],
+          "declared_model_runs": 0,
+          "operation": "uninformative",
+          "origin": "developer-defined legal observation",
+          "sha256": "5e2c2f0a4b9797d3ec66d8f6b4153f2ce0ad877ae438c6cd6df2a16a907f1cc8",
+          "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/current.json"
+        }
+      },
+      "export_wall_ns": 561333,
+      "pair": "reset-memory",
+      "unique_source_bytes": 4590,
+      "world": "retained"
+    }
+  ],
+  "observation_summary": [
+    {
+      "arm": "uninformative",
+      "audit_read_bytes": 4648,
+      "audit_wall_ns": 127708,
+      "cases": 4,
+      "correct": 0,
+      "model_runs": 0,
+      "observation_wall_ns": 161625,
+      "read_bytes": 4648,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 4
+    },
+    {
+      "arm": "mechanism-spec",
+      "audit_read_bytes": 103,
+      "audit_wall_ns": 130334,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 129749,
+      "read_bytes": 103,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "fixed-rich",
+      "audit_read_bytes": 4747,
+      "audit_wall_ns": 127541,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 154041,
+      "read_bytes": 4747,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "full-raw",
+      "audit_read_bytes": 8544,
+      "audit_wall_ns": 119124,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 214208,
+      "read_bytes": 8544,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "executable-dynamic",
+      "audit_read_bytes": 8544,
+      "audit_wall_ns": 133874,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 4,
+      "observation_wall_ns": 1752334,
+      "read_bytes": 8544,
+      "selector_wall_ns": 0,
+      "solver_steps": 20600,
+      "unknown": 0
+    },
+    {
+      "arm": "selected",
+      "audit_read_bytes": 103,
+      "audit_wall_ns": 111584,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 114459,
+      "read_bytes": 103,
+      "selector_wall_ns": 10207,
+      "solver_steps": 0,
+      "unknown": 0
+    }
+  ],
+  "observations": [
+    {
+      "arm": "uninformative",
+      "correct": false,
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "receipt": {
+        "audit_read_bytes": 1142,
+        "audit_wall_ns": 34208,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+        "model_runs": 0,
+        "operation": "uninformative",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1142,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/current.json",
+        "source_sha256": "21b1594703d2c27c3ebb7f211b943482428cdb0d9806888785efa746e32ac58d",
+        "status": "OBSERVED",
+        "wall_ns": 41708
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "low-clamp"
+    },
+    {
+      "arm": "mechanism-spec",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 21,
+        "audit_wall_ns": 34792,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 3.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 21,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/mechanism.json",
+        "source_sha256": "188e51f85b919c94d605d27a16b5e0d1c316b023da2521f5d587ab34bacd70e4",
+        "status": "OBSERVED",
+        "wall_ns": 36167
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "low-clamp"
+    },
+    {
+      "arm": "fixed-rich",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 1162,
+        "audit_wall_ns": 31458,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 3.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+        "model_runs": 0,
+        "operation": "fixed-rich",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1162,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/rich.json",
+        "source_sha256": "373bdb925c38f3f3ba2ac1c35260f72d313ad4797aa2c1cef59e0d8a8aebef24",
+        "status": "OBSERVED",
+        "wall_ns": 39083
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "low-clamp"
+    },
+    {
+      "arm": "full-raw",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 2104,
+        "audit_wall_ns": 31750,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 3.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+        "model_runs": 0,
+        "operation": "full-raw",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2104,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/raw.json",
+        "source_sha256": "f59eadcbd8122710d3521897a3acfe927bd4a97b01cb5f46687b1d87beef0022",
+        "status": "OBSERVED",
+        "wall_ns": 48625
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "low-clamp"
+    },
+    {
+      "arm": "executable-dynamic",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 2104,
+        "audit_wall_ns": 37458,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "proposed_delivered_count": 0,
+          "proposed_verdict": "FAIL",
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "a18a4775a5597c6b1868a65b3a8c8f73eaef96b0521ea69df2a4acf1aa1bce22",
+        "model_runs": 1,
+        "operation": "executable-dynamic",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2104,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 4600,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/raw.json",
+        "source_sha256": "f59eadcbd8122710d3521897a3acfe927bd4a97b01cb5f46687b1d87beef0022",
+        "status": "OBSERVED",
+        "wall_ns": 623125
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "low-clamp"
+    },
+    {
+      "arm": "selected",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 21,
+        "audit_wall_ns": 30291,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 3.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 21,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/low-clamp/mechanism.json",
+        "source_sha256": "188e51f85b919c94d605d27a16b5e0d1c316b023da2521f5d587ab34bacd70e4",
+        "status": "OBSERVED",
+        "wall_ns": 31542
+      },
+      "reference_verdict": "FAIL",
+      "selection": {
+        "budget_bytes": 1000000,
+        "estimated_payload_bytes": 21,
+        "operation": "mechanism-spec",
+        "policy_origin": "researcher-supplied required fields; finite catalogue selection",
+        "selector_wall_ns": 3125,
+        "status": "SELECTED"
+      },
+      "world": "low-clamp"
+    },
+    {
+      "arm": "uninformative",
+      "correct": false,
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "receipt": {
+        "audit_read_bytes": 1142,
+        "audit_wall_ns": 33500,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+        "model_runs": 0,
+        "operation": "uninformative",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1142,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/current.json",
+        "source_sha256": "21b1594703d2c27c3ebb7f211b943482428cdb0d9806888785efa746e32ac58d",
+        "status": "OBSERVED",
+        "wall_ns": 41750
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "high-clamp"
+    },
+    {
+      "arm": "mechanism-spec",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 21,
+        "audit_wall_ns": 33000,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 5.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 21,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/mechanism.json",
+        "source_sha256": "36a88059d2cb9c4fe05defb83cf4ba3b3ecebf75d23dd28b86c6566a29edd19d",
+        "status": "OBSERVED",
+        "wall_ns": 32958
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "high-clamp"
+    },
+    {
+      "arm": "fixed-rich",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 1162,
+        "audit_wall_ns": 33042,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 5.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+        "model_runs": 0,
+        "operation": "fixed-rich",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1162,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/rich.json",
+        "source_sha256": "79ac70338b39e22f8b27a9b87be690d1ae83d904dda4e678a5a716bb499d77ec",
+        "status": "OBSERVED",
+        "wall_ns": 42375
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "high-clamp"
+    },
+    {
+      "arm": "full-raw",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 2105,
+        "audit_wall_ns": 34333,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 5.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+        "model_runs": 0,
+        "operation": "full-raw",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2105,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/raw.json",
+        "source_sha256": "14fffb5de7dbfb1bdf57294df4204a17a20363698f79679d3825005a0d52034c",
+        "status": "OBSERVED",
+        "wall_ns": 54791
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "high-clamp"
+    },
+    {
+      "arm": "executable-dynamic",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 2105,
+        "audit_wall_ns": 35333,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "proposed_delivered_count": 1,
+          "proposed_verdict": "PASS",
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "34250076cd41429dbbe244e56e47efc7862e16a20218302ec14c9b8faf4d94f8",
+        "model_runs": 1,
+        "operation": "executable-dynamic",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2105,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 6000,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/raw.json",
+        "source_sha256": "14fffb5de7dbfb1bdf57294df4204a17a20363698f79679d3825005a0d52034c",
+        "status": "OBSERVED",
+        "wall_ns": 707542
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "high-clamp"
+    },
+    {
+      "arm": "selected",
+      "correct": true,
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 21,
+        "audit_wall_ns": 32417,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "capacitance_uf": 10.0,
+          "clamp_v": 5.0,
+          "consume_at_s": 2.5,
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "energy_uj": 0.0,
+              "event": "initial",
+              "time_s": 0.0,
+              "voltage_v": 0.0
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "harvest-ended",
+              "time_s": 2.0,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 40.0,
+              "event": "before-service",
+              "time_s": 2.5,
+              "voltage_v": 2.8284271247
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "after-service",
+              "time_s": 2.5,
+              "voltage_v": 1.4142135624
+            },
+            {
+              "energy_uj": 10.0,
+              "event": "end",
+              "time_s": 3.0,
+              "voltage_v": 1.4142135624
+            }
+          ],
+          "current_verdict": "PASS",
+          "horizon_s": 3.0,
+          "initial_energy_uj": 0.0,
+          "kind": "clamp",
+          "legal_domain": {
+            "capacitance_uf": [
+              4.0,
+              12.0
+            ]
+          },
+          "min_v": 1.0,
+          "proposed_change": {
+            "capacitance_uf": 4.0
+          },
+          "service_energy_uj": 30.0,
+          "source_end_s": 2.0,
+          "source_power_uw": 20.0
+        },
+        "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 21,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/clamp-capacitance/high-clamp/mechanism.json",
+        "source_sha256": "36a88059d2cb9c4fe05defb83cf4ba3b3ecebf75d23dd28b86c6566a29edd19d",
+        "status": "OBSERVED",
+        "wall_ns": 27417
+      },
+      "reference_verdict": "PASS",
+      "selection": {
+        "budget_bytes": 1000000,
+        "estimated_payload_bytes": 21,
+        "operation": "mechanism-spec",
+        "policy_origin": "researcher-supplied required fields; finite catalogue selection",
+        "selector_wall_ns": 2833,
+        "status": "SELECTED"
+      },
+      "world": "high-clamp"
+    },
+    {
+      "arm": "uninformative",
+      "correct": false,
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "receipt": {
+        "audit_read_bytes": 1182,
+        "audit_wall_ns": 31583,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+        "model_runs": 0,
+        "operation": "uninformative",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1182,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/current.json",
+        "source_sha256": "5e2c2f0a4b9797d3ec66d8f6b4153f2ce0ad877ae438c6cd6df2a16a907f1cc8",
+        "status": "OBSERVED",
+        "wall_ns": 40709
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "volatile"
+    },
+    {
+      "arm": "mechanism-spec",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 31,
+        "audit_wall_ns": 30042,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": false,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 31,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/mechanism.json",
+        "source_sha256": "cfccb51f342f647c8b776c1195d043e09f4924b4a9a0c5ac0dc37b5f4fd1941a",
+        "status": "OBSERVED",
+        "wall_ns": 29666
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "volatile"
+    },
+    {
+      "arm": "fixed-rich",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 1212,
+        "audit_wall_ns": 33333,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": false,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+        "model_runs": 0,
+        "operation": "fixed-rich",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1212,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/rich.json",
+        "source_sha256": "a61ac6f5176300ea28a2e80b5e9494e01a89ba2a58e76b063f1a13dbc63882dd",
+        "status": "OBSERVED",
+        "wall_ns": 39167
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "volatile"
+    },
+    {
+      "arm": "full-raw",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 2168,
+        "audit_wall_ns": 27416,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": false,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+        "model_runs": 0,
+        "operation": "full-raw",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2168,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/raw.json",
+        "source_sha256": "0f201d9c09768ea8b2f94c01829488e1d4b1d63cfe5adad5948a2bc052c5b5b5",
+        "status": "OBSERVED",
+        "wall_ns": 64667
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "volatile"
+    },
+    {
+      "arm": "executable-dynamic",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 2168,
+        "audit_wall_ns": 26000,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "proposed_delivered_count": 0,
+          "proposed_verdict": "FAIL",
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "3f3ea0c0993d0214b5ce12779560b150726bfad20433c54b82d51d215a02b9e1",
+        "model_runs": 1,
+        "operation": "executable-dynamic",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2168,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 5000,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/raw.json",
+        "source_sha256": "0f201d9c09768ea8b2f94c01829488e1d4b1d63cfe5adad5948a2bc052c5b5b5",
+        "status": "OBSERVED",
+        "wall_ns": 211917
+      },
+      "reference_verdict": "FAIL",
+      "selection": null,
+      "world": "volatile"
+    },
+    {
+      "arm": "selected",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "receipt": {
+        "audit_read_bytes": 31,
+        "audit_wall_ns": 24167,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": false,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 31,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/volatile/mechanism.json",
+        "source_sha256": "cfccb51f342f647c8b776c1195d043e09f4924b4a9a0c5ac0dc37b5f4fd1941a",
+        "status": "OBSERVED",
+        "wall_ns": 28208
+      },
+      "reference_verdict": "FAIL",
+      "selection": {
+        "budget_bytes": 1000000,
+        "estimated_payload_bytes": 31,
+        "operation": "mechanism-spec",
+        "policy_origin": "researcher-supplied required fields; finite catalogue selection",
+        "selector_wall_ns": 2291,
+        "status": "SELECTED"
+      },
+      "world": "volatile"
+    },
+    {
+      "arm": "uninformative",
+      "correct": false,
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "receipt": {
+        "audit_read_bytes": 1182,
+        "audit_wall_ns": 28417,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+        "model_runs": 0,
+        "operation": "uninformative",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1182,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/current.json",
+        "source_sha256": "5e2c2f0a4b9797d3ec66d8f6b4153f2ce0ad877ae438c6cd6df2a16a907f1cc8",
+        "status": "OBSERVED",
+        "wall_ns": 37458
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "retained"
+    },
+    {
+      "arm": "mechanism-spec",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 30,
+        "audit_wall_ns": 32500,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": true,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 30,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/mechanism.json",
+        "source_sha256": "d9e7780b54c4a9fc69f73e34d6ef28422ba212e937b5ca3e1bc7683d42232054",
+        "status": "OBSERVED",
+        "wall_ns": 30958
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "retained"
+    },
+    {
+      "arm": "fixed-rich",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 1211,
+        "audit_wall_ns": 29708,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": true,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+        "model_runs": 0,
+        "operation": "fixed-rich",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 1211,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/rich.json",
+        "source_sha256": "c12ec3874fb586c89b9547a4d322b55386c2fc12c18cb384171562f0ff2b0920",
+        "status": "OBSERVED",
+        "wall_ns": 33416
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "retained"
+    },
+    {
+      "arm": "full-raw",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 2167,
+        "audit_wall_ns": 25625,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": true,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+        "model_runs": 0,
+        "operation": "full-raw",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2167,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/raw.json",
+        "source_sha256": "97affbd29265f76160438301972f9e0a5c89c56afdc7b1682c234e918b6d2b9d",
+        "status": "OBSERVED",
+        "wall_ns": 46125
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "retained"
+    },
+    {
+      "arm": "executable-dynamic",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 2167,
+        "audit_wall_ns": 35083,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "proposed_delivered_count": 1,
+          "proposed_verdict": "PASS",
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "901352eb9d499ca105c631f51b4cdb1c19d44a52dd02f32fe644420fda049b77",
+        "model_runs": 1,
+        "operation": "executable-dynamic",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 2167,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 5000,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/raw.json",
+        "source_sha256": "97affbd29265f76160438301972f9e0a5c89c56afdc7b1682c234e918b6d2b9d",
+        "status": "OBSERVED",
+        "wall_ns": 209750
+      },
+      "reference_verdict": "PASS",
+      "selection": null,
+      "world": "retained"
+    },
+    {
+      "arm": "selected",
+      "correct": true,
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "receipt": {
+        "audit_read_bytes": 30,
+        "audit_wall_ns": 24709,
+        "cache_rule": "empty per-arm application cache; OS file cache uncontrolled",
+        "cost_boundary": "Python payload bytes returned, host wall time, actual executions; not money or physical I/O blocks",
+        "facts": {
+          "current_delivered_count": 1,
+          "current_trace": [
+            {
+              "event": "initial",
+              "pending": null,
+              "powered": true,
+              "received": [],
+              "time_s": 0.0
+            },
+            {
+              "event": "capture",
+              "pending": "event-1",
+              "powered": true,
+              "received": [],
+              "time_s": 1.0
+            },
+            {
+              "event": "send",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 4.0
+            },
+            {
+              "event": "end",
+              "pending": null,
+              "powered": true,
+              "received": [
+                "event-1"
+              ],
+              "time_s": 5.0
+            }
+          ],
+          "current_verdict": "PASS",
+          "deadline_s": 5.0,
+          "delivery_goal": 1,
+          "event_at_s": 1.0,
+          "event_id": "event-1",
+          "horizon_s": 5.0,
+          "kind": "memory",
+          "legal_domain": {
+            "end_max_s": 3.75,
+            "max_intervals": 1,
+            "min_duration_s": 0.25,
+            "start_min_s": 1.25
+          },
+          "power_off_intervals": [],
+          "proposed_change": {
+            "power_off_intervals": [
+              [
+                2.0,
+                3.0
+              ]
+            ]
+          },
+          "retains_pending": true,
+          "tx_at_s": 4.0
+        },
+        "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+        "model_runs": 0,
+        "operation": "mechanism-spec",
+        "origin": "developer-defined legal observation",
+        "read_bytes": 30,
+        "schema_version": "campaign-observation-audit-v1",
+        "solver_steps": 0,
+        "source": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b/run-20261019T130830Z/observation-inputs/reset-memory/retained/mechanism.json",
+        "source_sha256": "d9e7780b54c4a9fc69f73e34d6ef28422ba212e937b5ca3e1bc7683d42232054",
+        "status": "OBSERVED",
+        "wall_ns": 27292
+      },
+      "reference_verdict": "PASS",
+      "selection": {
+        "budget_bytes": 1000000,
+        "estimated_payload_bytes": 30,
+        "operation": "mechanism-spec",
+        "policy_origin": "researcher-supplied required fields; finite catalogue selection",
+        "selector_wall_ns": 1958,
+        "status": "SELECTED"
+      },
+      "world": "retained"
+    }
+  ],
+  "packets": [
+    {
+      "bytes": 1104,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+      "file": "packets/clamp-capacitance/low-clamp/current-free-text.txt",
+      "format": "free-text",
+      "information": "current",
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "low-clamp"
+    },
+    {
+      "bytes": 858,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+      "file": "packets/clamp-capacitance/low-clamp/current-structured.json",
+      "format": "structured",
+      "information": "current",
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "low-clamp"
+    },
+    {
+      "bytes": 1136,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+      "file": "packets/clamp-capacitance/low-clamp/sufficient-free-text.txt",
+      "format": "free-text",
+      "information": "sufficient",
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "low-clamp"
+    },
+    {
+      "bytes": 872,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "432afa5c92eb55d38ba2e20c73d8c296390e33d2b558e111271052b0efd02809",
+      "file": "packets/clamp-capacitance/low-clamp/sufficient-structured.json",
+      "format": "structured",
+      "information": "sufficient",
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "low-clamp"
+    },
+    {
+      "bytes": 1104,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+      "file": "packets/clamp-capacitance/high-clamp/current-free-text.txt",
+      "format": "free-text",
+      "information": "current",
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "high-clamp"
+    },
+    {
+      "bytes": 858,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+      "file": "packets/clamp-capacitance/high-clamp/current-structured.json",
+      "format": "structured",
+      "information": "current",
+      "pair": "clamp-capacitance",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "high-clamp"
+    },
+    {
+      "bytes": 1136,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+      "file": "packets/clamp-capacitance/high-clamp/sufficient-free-text.txt",
+      "format": "free-text",
+      "information": "sufficient",
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "high-clamp"
+    },
+    {
+      "bytes": 872,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "8004d4114e037dbb242eba639c21425ec92a985de00b0bd9dec0c5c3a40e39ab",
+      "file": "packets/clamp-capacitance/high-clamp/sufficient-structured.json",
+      "format": "structured",
+      "information": "sufficient",
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "high-clamp"
+    },
+    {
+      "bytes": 1066,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+      "file": "packets/reset-memory/volatile/current-free-text.txt",
+      "format": "free-text",
+      "information": "current",
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "volatile"
+    },
+    {
+      "bytes": 832,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+      "file": "packets/reset-memory/volatile/current-structured.json",
+      "format": "structured",
+      "information": "current",
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "volatile"
+    },
+    {
+      "bytes": 1108,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+      "file": "packets/reset-memory/volatile/sufficient-free-text.txt",
+      "format": "free-text",
+      "information": "sufficient",
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "volatile"
+    },
+    {
+      "bytes": 856,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "915ff485d7428972283b99314695f7f8de3a65e4206eb46a574fd54084d48f23",
+      "file": "packets/reset-memory/volatile/sufficient-structured.json",
+      "format": "structured",
+      "information": "sufficient",
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "volatile"
+    },
+    {
+      "bytes": 1066,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+      "file": "packets/reset-memory/retained/current-free-text.txt",
+      "format": "free-text",
+      "information": "current",
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "retained"
+    },
+    {
+      "bytes": 832,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": false,
+      "current_verdict": "PASS",
+      "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+      "file": "packets/reset-memory/retained/current-structured.json",
+      "format": "structured",
+      "information": "current",
+      "pair": "reset-memory",
+      "prediction": "UNKNOWN",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "retained"
+    },
+    {
+      "bytes": 1107,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+      "file": "packets/reset-memory/retained/sufficient-free-text.txt",
+      "format": "free-text",
+      "information": "sufficient",
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "retained"
+    },
+    {
+      "bytes": 855,
+      "consumer": "deterministic preparation only; Agent format effect NOT_RUN",
+      "correct": true,
+      "current_verdict": "PASS",
+      "facts_sha256": "25403a65cd1630f2982c626d38859655120a8bbdef8ef514c7d3cfdcd688a094",
+      "file": "packets/reset-memory/retained/sufficient-structured.json",
+      "format": "structured",
+      "information": "sufficient",
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "summary_sha256": "57abaa7d2a0b10094d6a3945c158c64c49ab139358478a1de83d84628ae0ac95",
+      "world": "retained"
+    }
+  ],
+  "pairs": [
+    {
+      "cases": [
+        {
+          "current": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 5.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "capacitance_uf": 10.0,
+            "consume_at_s": 2.5,
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "current_verdict": "PASS",
+            "horizon_s": 3.0,
+            "initial_energy_uj": 0.0,
+            "kind": "clamp",
+            "legal_domain": {
+              "capacitance_uf": [
+                4.0,
+                12.0
+              ]
+            },
+            "min_v": 1.0,
+            "proposed_change": {
+              "capacitance_uf": 4.0
+            },
+            "service_energy_uj": 30.0,
+            "source_end_s": 2.0,
+            "source_power_uw": 20.0
+          },
+          "current_representation_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+          "intervention": {
+            "delivered_count": 0,
+            "delivered_energy_uj": 16.0,
+            "final_energy_uj": 2.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": -14.0,
+            "spill_energy_uj": 22.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 18.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 3.0
+              },
+              {
+                "energy_uj": 18.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 3.0
+              },
+              {
+                "energy_uj": 2.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.0
+              },
+              {
+                "energy_uj": 2.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.0
+              }
+            ],
+            "verdict": "FAIL"
+          },
+          "world": "low-clamp"
+        },
+        {
+          "current": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 5.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "capacitance_uf": 10.0,
+            "consume_at_s": 2.5,
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "current_verdict": "PASS",
+            "horizon_s": 3.0,
+            "initial_energy_uj": 0.0,
+            "kind": "clamp",
+            "legal_domain": {
+              "capacitance_uf": [
+                4.0,
+                12.0
+              ]
+            },
+            "min_v": 1.0,
+            "proposed_change": {
+              "capacitance_uf": 4.0
+            },
+            "service_energy_uj": 30.0,
+            "source_end_s": 2.0,
+            "source_power_uw": 20.0
+          },
+          "current_representation_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+          "intervention": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 8.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 4.472135955
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 4.472135955
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 2.2360679775
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 2.2360679775
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "world": "high-clamp"
+        }
+      ],
+      "current_both_pass": true,
+      "current_same": true,
+      "design": {
+        "capacitance_uf": 10.0
+      },
+      "intervention_diverges": true,
+      "jointly_legal": true,
+      "legal_domain": {
+        "capacitance_uf": [
+          4.0,
+          12.0
+        ]
+      },
+      "mechanism": "unexcited upper voltage clamp; capacitance modification changes the storage energy ceiling",
+      "modified_design": {
+        "capacitance_uf": 4.0
+      },
+      "pair": "clamp-capacitance",
+      "shared_patch": {
+        "capacitance_uf": 4.0
+      },
+      "task": {
+        "consume_at_s": 2.5,
+        "horizon_s": 3.0,
+        "initial_energy_uj": 0.0,
+        "min_v": 1.0,
+        "service_energy_uj": 30.0,
+        "source_end_s": 2.0,
+        "source_power_uw": 20.0
+      }
+    },
+    {
+      "cases": [
+        {
+          "current": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "current_verdict": "PASS",
+            "deadline_s": 5.0,
+            "delivery_goal": 1,
+            "event_at_s": 1.0,
+            "event_id": "event-1",
+            "horizon_s": 5.0,
+            "kind": "memory",
+            "legal_domain": {
+              "end_max_s": 3.75,
+              "max_intervals": 1,
+              "min_duration_s": 0.25,
+              "start_min_s": 1.25
+            },
+            "power_off_intervals": [],
+            "proposed_change": {
+              "power_off_intervals": [
+                [
+                  2.0,
+                  3.0
+                ]
+              ]
+            },
+            "tx_at_s": 4.0
+          },
+          "current_representation_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+          "intervention": {
+            "delivered_count": 0,
+            "received": [],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "down",
+                "pending": null,
+                "powered": false,
+                "received": [],
+                "time_s": 2.0
+              },
+              {
+                "event": "up",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 3.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "FAIL"
+          },
+          "world": "volatile"
+        },
+        {
+          "current": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "current_verdict": "PASS",
+            "deadline_s": 5.0,
+            "delivery_goal": 1,
+            "event_at_s": 1.0,
+            "event_id": "event-1",
+            "horizon_s": 5.0,
+            "kind": "memory",
+            "legal_domain": {
+              "end_max_s": 3.75,
+              "max_intervals": 1,
+              "min_duration_s": 0.25,
+              "start_min_s": 1.25
+            },
+            "power_off_intervals": [],
+            "proposed_change": {
+              "power_off_intervals": [
+                [
+                  2.0,
+                  3.0
+                ]
+              ]
+            },
+            "tx_at_s": 4.0
+          },
+          "current_representation_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+          "intervention": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "down",
+                "pending": "event-1",
+                "powered": false,
+                "received": [],
+                "time_s": 2.0
+              },
+              {
+                "event": "up",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 3.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "world": "retained"
+        }
+      ],
+      "current_both_pass": true,
+      "current_same": true,
+      "design": {
+        "power_off_intervals": []
+      },
+      "intervention_diverges": true,
+      "jointly_legal": true,
+      "legal_domain": {
+        "end_max_s": 3.75,
+        "max_intervals": 1,
+        "min_duration_s": 0.25,
+        "start_min_s": 1.25
+      },
+      "mechanism": "pending event retained or lost on power reset, with unchanged external event and TX windows",
+      "modified_design": {
+        "power_off_intervals": [
+          [
+            2.0,
+            3.0
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "shared_patch": {
+        "power_off_intervals": [
+          [
+            2.0,
+            3.0
+          ]
+        ]
+      },
+      "task": {
+        "deadline_s": 5.0,
+        "delivery_goal": 1,
+        "event_at_s": 1.0,
+        "event_id": "event-1",
+        "horizon_s": 5.0,
+        "tx_at_s": 4.0
+      }
+    }
+  ],
+  "partition": "public-development",
+  "protocol_sha256": "526b63034c4c5adc7af9efa9e4b7adb19f1e6688d0fea38568e844b35db2d942",
+  "reference_checks": [
+    {
+      "max_error_uj": 2.1316282072803006e-12,
+      "pair": "clamp-capacitance",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 5.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998975,
+        "input_energy_uj": 39.99999999999787,
+        "service_margin_uj": 4.999999999997868,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.001,
+        "steps": 6000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "low-clamp"
+    },
+    {
+      "max_error_uj": 2.8350655156827997e-12,
+      "pair": "clamp-capacitance",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 5.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998272,
+        "input_energy_uj": 39.999999999997165,
+        "service_margin_uj": 4.999999999997165,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.0005,
+        "steps": 9000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "low-clamp"
+    },
+    {
+      "max_error_uj": 2.1316282072803006e-12,
+      "pair": "clamp-capacitance",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 0,
+        "delivered_energy_uj": 16.0,
+        "final_energy_uj": 2.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": -14.0,
+        "spill_energy_uj": 22.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "reference": {
+        "delivered_count": 0,
+        "delivered_energy_uj": 15.999999999999691,
+        "final_energy_uj": 2.0,
+        "input_energy_uj": 39.99999999999787,
+        "service_margin_uj": -14.0,
+        "spill_energy_uj": 21.99999999999787,
+        "step_s": 0.001,
+        "steps": 4600,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "world": "low-clamp"
+    },
+    {
+      "max_error_uj": 2.8386182293616002e-12,
+      "pair": "clamp-capacitance",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 0,
+        "delivered_energy_uj": 16.0,
+        "final_energy_uj": 2.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": -14.0,
+        "spill_energy_uj": 22.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "reference": {
+        "delivered_count": 0,
+        "delivered_energy_uj": 15.999999999999691,
+        "final_energy_uj": 2.0,
+        "input_energy_uj": 39.999999999997165,
+        "service_margin_uj": -13.999999999999996,
+        "spill_energy_uj": 21.99999999999716,
+        "step_s": 0.0005,
+        "steps": 7600,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 18.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 3.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.0
+          },
+          {
+            "energy_uj": 2.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "world": "low-clamp"
+    },
+    {
+      "max_error_uj": 2.1316282072803006e-12,
+      "pair": "clamp-capacitance",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 5.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998975,
+        "input_energy_uj": 39.99999999999787,
+        "service_margin_uj": 4.999999999997868,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.001,
+        "steps": 6000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "high-clamp"
+    },
+    {
+      "max_error_uj": 2.8350655156827997e-12,
+      "pair": "clamp-capacitance",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 5.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998272,
+        "input_energy_uj": 39.999999999997165,
+        "service_margin_uj": 4.999999999997165,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.0005,
+        "steps": 9000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 2.8284271247
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 1.4142135624
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 1.4142135624
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "high-clamp"
+    },
+    {
+      "max_error_uj": 2.1316282072803006e-12,
+      "pair": "clamp-capacitance",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 8.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 2.2360679775
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 2.2360679775
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998975,
+        "input_energy_uj": 39.99999999999787,
+        "service_margin_uj": 7.999999999997868,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.001,
+        "steps": 6000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 2.2360679775
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 2.2360679775
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "high-clamp"
+    },
+    {
+      "max_error_uj": 2.8350655156827997e-12,
+      "pair": "clamp-capacitance",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 10.0,
+        "input_energy_uj": 40.0,
+        "service_margin_uj": 8.0,
+        "spill_energy_uj": 0.0,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 2.2360679775
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 2.2360679775
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "delivered_energy_uj": 30.0,
+        "final_energy_uj": 9.999999999998272,
+        "input_energy_uj": 39.999999999997165,
+        "service_margin_uj": 7.999999999997165,
+        "spill_energy_uj": 0.0,
+        "step_s": 0.0005,
+        "steps": 9000,
+        "trace": [
+          {
+            "energy_uj": 0.0,
+            "event": "initial",
+            "time_s": 0.0,
+            "voltage_v": 0.0
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "harvest-ended",
+            "time_s": 2.0,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 40.0,
+            "event": "before-service",
+            "time_s": 2.5,
+            "voltage_v": 4.472135955
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "after-service",
+            "time_s": 2.5,
+            "voltage_v": 2.2360679775
+          },
+          {
+            "energy_uj": 10.0,
+            "event": "end",
+            "time_s": 3.0,
+            "voltage_v": 2.2360679775
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "high-clamp"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.001,
+        "steps": 5000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "volatile"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.0005,
+        "steps": 10000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "volatile"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 0,
+        "received": [],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": null,
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "reference": {
+        "delivered_count": 0,
+        "received": [],
+        "step_s": 0.001,
+        "steps": 5000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": null,
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "world": "volatile"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 0,
+        "received": [],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": null,
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "reference": {
+        "delivered_count": 0,
+        "received": [],
+        "step_s": 0.0005,
+        "steps": 10000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": null,
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "FAIL"
+      },
+      "world": "volatile"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.001,
+        "steps": 5000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "retained"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "current",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.0005,
+        "steps": 10000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "retained"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": "event-1",
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.001,
+        "steps": 5000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": "event-1",
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "retained"
+    },
+    {
+      "max_error_uj": 0.0,
+      "pair": "reset-memory",
+      "phase": "intervention",
+      "primary": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": "event-1",
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "reference": {
+        "delivered_count": 1,
+        "received": [
+          "event-1"
+        ],
+        "step_s": 0.0005,
+        "steps": 10000,
+        "trace": [
+          {
+            "event": "initial",
+            "pending": null,
+            "powered": true,
+            "received": [],
+            "time_s": 0.0
+          },
+          {
+            "event": "capture",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 1.0
+          },
+          {
+            "event": "down",
+            "pending": "event-1",
+            "powered": false,
+            "received": [],
+            "time_s": 2.0
+          },
+          {
+            "event": "up",
+            "pending": "event-1",
+            "powered": true,
+            "received": [],
+            "time_s": 3.0
+          },
+          {
+            "event": "send",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 4.0
+          },
+          {
+            "event": "end",
+            "pending": null,
+            "powered": true,
+            "received": [
+              "event-1"
+            ],
+            "time_s": 5.0
+          }
+        ],
+        "verdict": "PASS"
+      },
+      "world": "retained"
+    }
+  ],
+  "reference_max_error_uj": 2.8386182293616002e-12,
+  "run_id": "IF-7412532c4a6ab7a5879e",
+  "schema_version": "campaign-interface-result-v1",
+  "source_bindings": {
+    "configs/studies/parallel-20261019/interfaces/protocol.json": {
+      "bytes": 6645,
+      "sha256": "526b63034c4c5adc7af9efa9e4b7adb19f1e6688d0fea38568e844b35db2d942"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/interfaces.py": {
+      "bytes": 46869,
+      "sha256": "e6b22090c2fb0006702e7776f49a226ad20e5c0ed63236d99e8afada1b4befd3"
+    },
+    "scripts/campaign_interfaces.py": {
+      "bytes": 2044,
+      "sha256": "c17b16863f3ac7ca556ef00506ec67842104c8efb262636c82efe0897980870c"
+    },
+    "tests/agentlab/test_campaign_interfaces.py": {
+      "bytes": 11404,
+      "sha256": "c477b340d549abf6ae13972c0d5843835eb8afe764714dc038a6e2129026810e"
+    }
+  },
+  "static_sufficiency_argument": "In this no-leak, all-input-before-service domain, min(E0+Pin*t,C*Vclamp^2/2)-C*Vmin^2/2 is exactly usable energy. In the reset domain, retention OR absence of reset between capture and TX determines delivery. Additive control needs only total energy.",
+  "static_sufficient_rows": [
+    {
+      "design": {
+        "capacitance_uf": 4.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 5.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 6.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 7.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 7.5
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 8.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 9.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 10.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 11.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 12.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 4.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 5.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 6.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 7.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 7.5
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 8.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 9.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 10.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 11.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "capacitance_uf": 12.0
+      },
+      "pair": "clamp-capacitance",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "design": {
+        "power_off_intervals": []
+      },
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "volatile"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            1.25,
+            1.5
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "volatile"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            2.0,
+            3.0
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "volatile"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            3.0,
+            3.75
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "FAIL",
+      "reference_verdict": "FAIL",
+      "world": "volatile"
+    },
+    {
+      "design": {
+        "power_off_intervals": []
+      },
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "retained"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            1.25,
+            1.5
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "retained"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            2.0,
+            3.0
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "retained"
+    },
+    {
+      "design": {
+        "power_off_intervals": [
+          [
+            3.0,
+            3.75
+          ]
+        ]
+      },
+      "pair": "reset-memory",
+      "prediction": "PASS",
+      "reference_verdict": "PASS",
+      "world": "retained"
+    }
+  ],
+  "status": "PASS"
+}

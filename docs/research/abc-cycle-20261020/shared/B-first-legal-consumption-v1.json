@@ -1,0 +1,338 @@
+{
+  "actual_consumer": {
+    "brownouts_before_deadline": 0,
+    "decision": "adopt",
+    "exact_input_reused": false,
+    "executed_input_sha256": "a714f5c9e8661e44fd60f537ebd475f907a5f04bef8a730f587fc2b6636806b3",
+    "execution_key": "d901b56b1415622d99dd719d1237ec31876d9d7284dc906c85d17a953038269e",
+    "first_receive_s": 0.046900000000000004,
+    "physical_qualification": "UNKNOWN",
+    "received_frames": 1,
+    "recorded": "submit",
+    "used_observation": true
+  },
+  "conclusion": "Source/unit/domain/type valid relation was read by the real immutable B consumer. No autonomous discovery or comparative advantage follows. Prediction UNKNOWN is intentional for researcher rehearsal.",
+  "dispatch_id": "BF-ABC-20261020-001",
+  "independent_result": {
+    "boundary": "Digital fixed B executor and independent receiver/energy checks; no fixture or hardware promotion",
+    "costs": {
+      "acquisition_read_bytes": 15571,
+      "independent_final_evaluation_cost": "S0_EXACT_INPUT_EXECUTOR_LEDGER_REQUIRED",
+      "preflight_calls": 1,
+      "provider_usage": "S0_SHARED_LEDGER_REQUIRED",
+      "rejected_actions": 0,
+      "tool_calls": 3,
+      "tool_wall_s": 0.044073374971048906
+    },
+    "coverage": false,
+    "decision_correct": true,
+    "execution_keys": {
+      "adopt": "d901b56b1415622d99dd719d1237ec31876d9d7284dc906c85d17a953038269e",
+      "retain": "fe26745181ac3bf90fb2c3d62354f657441996bd0564bad35210838f64f9d9b0"
+    },
+    "interface_decision_success": false,
+    "new_physical_measurement": false,
+    "physical_qualification": "UNKNOWN",
+    "prediction_correct": null,
+    "real_typed_consumer": true,
+    "schema_version": "abc-B-independent-result-v1",
+    "selected_service": "PASS",
+    "status": "EVALUATED",
+    "submission": {
+      "consumer": {
+        "consumer_input": {
+          "type": "boolean",
+          "units": "1",
+          "value": true
+        },
+        "context_id": "5a37a96bd0ee51675e741c2816a282d0f50e1f4201004d7a11749064e0c4a416",
+        "executed_input_sha256": "a714f5c9e8661e44fd60f537ebd475f907a5f04bef8a730f587fc2b6636806b3",
+        "execution_key": "d901b56b1415622d99dd719d1237ec31876d9d7284dc906c85d17a953038269e",
+        "input_edge_sha256": "6705b8a985cd368ba17592b5e19127e88f94c5c260517524c0f871091ea361ec",
+        "normalized_source_spec": {
+          "ast": {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "args": [
+                          {
+                            "field": "/component_record/current/tx_current_a",
+                            "units": "A"
+                          },
+                          {
+                            "field": "/component_record/current/tx_duration_s",
+                            "units": "s"
+                          }
+                        ],
+                        "op": "mul"
+                      },
+                      {
+                        "field": "/component_record/current/output_v",
+                        "units": "V"
+                      }
+                    ],
+                    "op": "mul"
+                  },
+                  {
+                    "args": [
+                      {
+                        "constant": 0.5,
+                        "units": "1"
+                      },
+                      {
+                        "args": [
+                          {
+                            "field": "/component_record/current/capacitance_f",
+                            "units": "F"
+                          },
+                          {
+                            "args": [
+                              {
+                                "args": [
+                                  {
+                                    "field": "/component_record/current/ready_v",
+                                    "units": "V"
+                                  },
+                                  {
+                                    "field": "/component_record/current/ready_v",
+                                    "units": "V"
+                                  }
+                                ],
+                                "op": "mul"
+                              },
+                              {
+                                "args": [
+                                  {
+                                    "field": "/component_record/current/off_v",
+                                    "units": "V"
+                                  },
+                                  {
+                                    "field": "/component_record/current/off_v",
+                                    "units": "V"
+                                  }
+                                ],
+                                "op": "mul"
+                              }
+                            ],
+                            "op": "sub"
+                          }
+                        ],
+                        "op": "mul"
+                      }
+                    ],
+                    "op": "mul"
+                  }
+                ],
+                "op": "gt"
+              },
+              {
+                "args": [
+                  {
+                    "field": "/component_record/current/tx_duration_s",
+                    "units": "s"
+                  },
+                  {
+                    "field": "/excitation_record/current/deadline_s",
+                    "units": "s"
+                  }
+                ],
+                "op": "le"
+              }
+            ],
+            "op": "and"
+          },
+          "domain": {
+            "constraints": [
+              {
+                "field": "/component_record/current/capacitance_f",
+                "lower": 4e-06,
+                "units": "F",
+                "upper": 2.2e-05
+              }
+            ]
+          },
+          "hypothesis": "Researcher-specified development rehearsal: the TX energy exceeds the current ready-to-off reserve, with a source-bound deadline condition. This relation alone does not establish service success or autonomous discovery.",
+          "mode": "construction",
+          "schema_version": "phase2-observation-proposal-v1",
+          "source_id": "bundle",
+          "units": "1"
+        },
+        "observation": {
+          "type": "boolean",
+          "units": "1",
+          "value": true
+        },
+        "request_sha256": "48be5c6f56461edc8109d86ed82e9b373e82e3421d0792c9508e9686a4442b64",
+        "selected_decision": "adopt",
+        "source_bindings": {
+          "component_record": "c13da9c2b9c76455572adaaef688d54eaed9a2170bfff58f95980644c3e13991",
+          "excitation_record": "71db3af47615f6e01fdc15752bf36532a8147924984ce35e8256a87d57befd3d"
+        },
+        "used_observation": true
+      },
+      "decision": "adopt",
+      "prediction": "UNKNOWN"
+    },
+    "task_id": "abc-B-dev-legal-consumer-v1",
+    "truth": {
+      "adopt": "PASS",
+      "retain": "FAIL"
+    },
+    "wrong_adoption": false,
+    "wrong_rejection": false
+  },
+  "model_cost_usd": 0,
+  "model_requests": 0,
+  "native_jobs": 0,
+  "physical_qualification": "NOT_CALIBRATED",
+  "preflight": {
+    "consumer_input": {
+      "type": "boolean",
+      "units": "1",
+      "value": true
+    },
+    "context_id": "5a37a96bd0ee51675e741c2816a282d0f50e1f4201004d7a11749064e0c4a416",
+    "decision": "adopt",
+    "independent_source_algebra_agrees": true,
+    "normalized_source_spec": {
+      "ast": {
+        "args": [
+          {
+            "args": [
+              {
+                "args": [
+                  {
+                    "args": [
+                      {
+                        "field": "/component_record/current/tx_current_a",
+                        "units": "A"
+                      },
+                      {
+                        "field": "/component_record/current/tx_duration_s",
+                        "units": "s"
+                      }
+                    ],
+                    "op": "mul"
+                  },
+                  {
+                    "field": "/component_record/current/output_v",
+                    "units": "V"
+                  }
+                ],
+                "op": "mul"
+              },
+              {
+                "args": [
+                  {
+                    "constant": 0.5,
+                    "units": "1"
+                  },
+                  {
+                    "args": [
+                      {
+                        "field": "/component_record/current/capacitance_f",
+                        "units": "F"
+                      },
+                      {
+                        "args": [
+                          {
+                            "args": [
+                              {
+                                "field": "/component_record/current/ready_v",
+                                "units": "V"
+                              },
+                              {
+                                "field": "/component_record/current/ready_v",
+                                "units": "V"
+                              }
+                            ],
+                            "op": "mul"
+                          },
+                          {
+                            "args": [
+                              {
+                                "field": "/component_record/current/off_v",
+                                "units": "V"
+                              },
+                              {
+                                "field": "/component_record/current/off_v",
+                                "units": "V"
+                              }
+                            ],
+                            "op": "mul"
+                          }
+                        ],
+                        "op": "sub"
+                      }
+                    ],
+                    "op": "mul"
+                  }
+                ],
+                "op": "mul"
+              }
+            ],
+            "op": "gt"
+          },
+          {
+            "args": [
+              {
+                "field": "/component_record/current/tx_duration_s",
+                "units": "s"
+              },
+              {
+                "field": "/excitation_record/current/deadline_s",
+                "units": "s"
+              }
+            ],
+            "op": "le"
+          }
+        ],
+        "op": "and"
+      },
+      "domain": {
+        "constraints": [
+          {
+            "field": "/component_record/current/capacitance_f",
+            "lower": 4e-06,
+            "units": "F",
+            "upper": 2.2e-05
+          }
+        ]
+      },
+      "hypothesis": "Researcher-specified development rehearsal: the TX energy exceeds the current ready-to-off reserve, with a source-bound deadline condition. This relation alone does not establish service success or autonomous discovery.",
+      "mode": "construction",
+      "schema_version": "phase2-observation-proposal-v1",
+      "source_id": "bundle",
+      "units": "1"
+    },
+    "observation": {
+      "type": "boolean",
+      "units": "1",
+      "value": true
+    },
+    "preflight_wall_s": 0.002793791994918138,
+    "request_sha256": "48be5c6f56461edc8109d86ed82e9b373e82e3421d0792c9508e9686a4442b64",
+    "schema_version": "abc-e5-input-v1",
+    "scientific_executions": 0,
+    "scope": "Deterministic source/unit/domain/type consistency, not service or physical qualification",
+    "source_bindings": {
+      "component_record": "c13da9c2b9c76455572adaaef688d54eaed9a2170bfff58f95980644c3e13991",
+      "excitation_record": "71db3af47615f6e01fdc15752bf36532a8147924984ce35e8256a87d57befd3d"
+    },
+    "status": "LEGAL"
+  },
+  "root": "/Users/depengsu/.local/share/bf-abc-20261020/development/B-first-legal-consumption",
+  "scientific_execution_keys": {
+    "adopt": "d901b56b1415622d99dd719d1237ec31876d9d7284dc906c85d17a953038269e",
+    "retain": "fe26745181ac3bf90fb2c3d62354f657441996bd0564bad35210838f64f9d9b0"
+  },
+  "source_and_raw_readback": "Both independent feedback inputs cache-bound by canonical task hash; original producer and reference sources unchanged.",
+  "source_protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/shared/protocol-B-v1.json",
+  "source_protocol_sha256": "62c5040f263f9be7e00d6bb2d6c2b997bd87353a506d96877bcb20f8518fbd57",
+  "stage": "researcher-specified development rehearsal, excluded from formal18",
+  "status": "LEGAL_RELATION_ACTUALLY_CONSUMED",
+  "wall_s": 0.08657495898660272
+}

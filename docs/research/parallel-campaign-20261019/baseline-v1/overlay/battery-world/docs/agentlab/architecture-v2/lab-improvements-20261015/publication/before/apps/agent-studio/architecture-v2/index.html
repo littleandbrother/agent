@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BF Agent · Lab</title><link rel="stylesheet" href="/lab/v2/lab.css"></head>
+<body>
+ <header class="topbar"><a class="brand" id="studio-home" href="/"><span data-icon="brand"></span><strong>BF Agent</strong></a><div class="workspace-switch" aria-label="工作空间"><a id="studio-link" href="/">Studio</a><a class="active" href="/lab#system" aria-current="page">Lab</a></div><select id="project" aria-label="选择项目"></select><label class="search"><span data-icon="search"></span><input id="search" placeholder="搜索候选、提交、检查…" aria-label="搜索当前页面"><kbd>⌘ K</kbd></label><span class="chip synced" id="sync">读取中</span><span class="chip" id="issue-count"></span><span class="chip" id="agent-count"></span><button id="refresh" aria-label="刷新状态"><span data-icon="refresh"></span></button></header>
+ <div class="shell"><aside class="navigation" id="navigation"><nav aria-label="Lab 页面">
+  <a href="#system" data-page="system"><span data-icon="system"></span>System Design</a>
+  <a href="#runs" data-page="runs"><span data-icon="runs"></span>Runs / Trace</a>
+  <a href="#validation" data-page="validation"><span data-icon="validation"></span>Validation</a>
+  <a href="#environment" data-page="environment"><span data-icon="environment"></span>Environment</a>
+  <a href="#harness" data-page="harness"><span data-icon="harness"></span>Harness / Skills</a>
+  <a href="#experiments" data-page="experiments"><span data-icon="experiments"></span>Experiments / RSI</a>
+ </nav><div id="design-objects" aria-label="设计对象"></div><footer><span class="env-tag">BF DESIGN REPOSITORY</span><p id="workspace-note">候选 · 接口 · 验证 · 交付</p></footer></aside>
+ <main id="main"><div class="page-heading"><div><h1 id="title">System Design</h1><p id="subtitle"></p></div><div class="version-selector"><div><small>当前采用</small><button id="adopted" aria-label="查看当前采用版本"></button></div><div><label for="system">查看候选</label><select id="system"></select></div><button id="inspector-toggle" aria-expanded="true">详情</button></div></div><section id="current-question" aria-label="当前工程问题"></section><div id="content" aria-live="polite"></div></main>
+ <aside class="inspector" id="inspector"><header><strong id="inspector-title">当前候选</strong><button id="inspector-close" aria-label="关闭详情"><span data-icon="close"></span></button></header><div id="detail"></div></aside></div>
+ <dialog id="viewer"><header><strong id="viewer-title"></strong><button id="viewer-close" aria-label="关闭预览"><span data-icon="close"></span></button></header><div id="viewer-body"></div></dialog>
+ <div id="notice" role="status"></div><script type="module" src="/lab/v2/lab.js"></script>
+</body></html>

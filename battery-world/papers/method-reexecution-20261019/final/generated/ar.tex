@@ -1,0 +1,13 @@
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrrl@{}}
+\toprule
+Candidate & Retry (s) & History samples & Late backlog & Missed events & FIFO \\
+\midrule
+001 & 2 & 106 & 10 & 2 & FAIL \\
+002 (selected) & 30 & 168 & 73 & 1 & FAIL \\
+003 & 8 & 129 & 34 & 1 & FAIL \\
+\bottomrule
+\end{tabular}
+\caption{All A/R alternatives remain in the record. Sample counts cover the whole history profile. Conditional fresh-delay improvement does not satisfy the unchanged dark-service and oldest-first requirements.}\label{tab:ar}
+\end{table}

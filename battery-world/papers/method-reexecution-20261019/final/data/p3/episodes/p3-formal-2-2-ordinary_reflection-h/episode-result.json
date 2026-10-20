@@ -1,0 +1,85 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.019486715999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0387543,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-2-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+        "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+        "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e",
+        "model_law:d690d8a89532cb37d39a6c47a4e5d2960d025ea5b85a629a4b1f513bb7003a0f",
+        "saved_activity:packets-empty",
+        "saved_activity:capture-0.0037-to-0.0079",
+        "saved_activity:brownout-0.0121-captured-true",
+        "saved_activity:brownout-0.2512-captured-false",
+        "component_record:event_latch-volatile",
+        "component_record:tx_not_before_s-at-legal-max",
+        "excitation_record:shunt-0.012-40uJ",
+        "excitation_record:source-gap-0.006-to-0.030",
+        "excitation_record:deadline-0.1-not-binding",
+        "observed:sha256-49b3e48b334da6ee"
+      ],
+      "falsifier": "Falsified if any of the following holds under the same world/model and the retained record. F1: the screen's predicted t_b for the retained design disagrees with the retained brownout time (0.0121) by more than one dt_s step, meaning the trajectory derivation the screen relies on is wrong. F2: the top-ranked survivor yields zero valid packets in the external service while a baseline that maximizes tx_not_before_s (or the retained pair) yields at least one - retention would then not be the binding constraint. F3: both budgeted candidates pass the retention screen yet neither produces a packet while a candidate that deliberately crosses the 0.012 shunt or the 0.006-0.030 gap does. F4: removing the retention screen or the discontinuity screen changes no candidate ranking on this record, so the update adds no decision-relevant content and the base method should be kept. Falsification is scoped: it says nothing about hardware, other worlds, or any statistical or transfer advantage.",
+      "hypothesis": "Scope: world b-volatile-reset, model_id b-transient-behavior-v1, public-development record only; physical calibration remains UNKNOWN and no hardware claim is made. Claim: with event_latch=volatile the binding constraint is energy-continuity of the captured event, not the transmission deadline. A candidate succeeds only if one uninterrupted powered episode contains both the capture and the full tx_duration_s, i.e. [tx start, tx start + tx_duration_s) lies inside [t_c, t_b), where t_c is the first ready+powered contact step and t_b is the first post-capture brownout (energy-threshold or tx-transient). Retained evidence: capture occurred at 0.0037-0.0079 but the 40 uJ shunt at 0.012 drove brownout at 0.0121 with event_was_captured=true and the volatile latch cleared it, so the retained tx_not_before_s=0.045 never started a transmission; packets=[] although deadline_s=0.1 was never reached. Inference (not observed): the retained pair sitting at the legal maximum of tx_not_before_s is consistent with a 'transmit as late as possible to bank energy' heuristic, which is unsound here because the source is absent from 0.006 to 0.030 and the reservoir spills at cap_voltage_max. Consequence: a procedure that derives t_b first and then places the TX window inside it (never across a known shunt, source-segment end, or gap) should produce at least one 8-byte packet from at most 2 candidate executions, whereas maximizing tx_not_before_s should keep producing zero-packet designs.",
+      "impact_scope": "task-entry",
+      "method_sha256": "19655e0f84d12d5847a691238778ac11c3ba090cf65d1fc6c90d9865f5e13721",
+      "method_text": "H update: retention-window screen with discontinuity-aware transmit placement. Runs before any candidate execution; it consumes only already-acquired records (no native dispatch, no new scientific execution). All quantities are symbolic inputs; the procedure computes candidate values per acquired record and does not carry fixed constants.\n\nDefinitions (field names from the acquired records):\n- Candidate = one pair over the legal ranges of capacitance_f and tx_not_before_s.\n- E(t): capacitor energy trajectory integrated exactly as model_law declares it: dt_s steps, harvest_efficiency, off_power_w while unpowered / idle_power_w while powered, boot_j on each transition to powered, spill at C*cap_voltage_max_v^2/2, shunts, source_segments.\n- t_c: first step at which the device is powered, past ready (boot + boot_delay_s), and inside the contact interval while the event is true.\n- t_b: first power loss after t_c that can erase the event. Under event_latch=volatile the latch is cleared by any brownout (energy-threshold or tx-transient) and also by a completed transmission; under passive-mechanical only by a completed transmission.\n- TX demand per step: output_v*tx_current_a*min(dt_s, tx_duration_s remaining), admitted only while per-step loaded_v = sqrt(2E/C) - esr_ohm*tx_current_a >= output_v and E after deduction >= C*off_v^2/2.\n\nStep 1 (enumerate, do not execute). Coarse grid over the legal ranges of both parameters, including at least one interior point per decade of capacitance_f. For each pair derive t_c, the no-TX trajectory, and t_b; treat TX start as max(tx_not_before_s, t_c, ready) when the latch still holds.\nStep 2 (retention screen, new). Keep only pairs with start + tx_duration_s < t_b and start + tx_duration_s <= deadline_s, with every TX step satisfying the loaded_v and off_v energy tests and at least one dt_s step of margin at start and at end.\nStep 3 (discontinuity screen, new). Reject any pair whose TX interval crosses a source_segment boundary, a harvesting gap, or a shunt time, unless the surplus at the crossing E - C*off_v^2/2 exceeds the remaining TX demand plus that shunt energy. Rationale: the retained failure places its TX window inside a gap-plus-shunt region where nothing refills the reservoir.\nStep 4 (rank). Order survivors by retention margin t_b - (start + tx_duration_s), then by surplus at TX start, then by start time closeness to the local energy maximum. Do not rank by latency or by taking tx_not_before_s to its legal extreme.\nStep 5 (spend the budget). Use at most the two permitted candidate executions, never twice on the same design: (a) rank-1 survivor; (b) a diagnostic partner differing in exactly one component (either a strictly later tx_not_before_s still inside the predicted window, or a capacitance that raises t_b), so that one observation separates 'retention is binding' from 'energy level at TX start is binding'.\nStep 6 (observation policy). Pre-register for each candidate: predicted t_c, predicted t_b, predicted TX start/end, loaded_v margin, predicted shunt/gap crossings, and the expected packet count. After acquisition, record the observed activity and packet count verbatim; retain zero-packet outcomes and any disagreement with the prediction unchanged rather than re-deriving the prediction.\n\nBase method retained: any prior step not named above stays as is. This text is a design-procedure change only; it assigns no device values, edits no task/evaluator, and makes no acceptance claim. Feasibility remains external.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-2-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-3b37b9ed89e78c5a",
+  "protocol_sha256": "284fe2d1f467bb28408500c12b40d33ab729d2549a946ec97352f220e4dd0c38",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "93be04e9e25465c10bf8069d762b6952c73e53eb6ae00e03db61817a93cd7e69",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-2-2-ordinary_reflection",
+    "id": "p3-formal-2-2-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 8,
+    "gateway_chain_tip": "bc29b4b50c872f1504c542212a92ef0d8f9cb043fc801e14d186ba6a033251ae",
+    "model_submitted": true,
+    "model_tool_calls": 8,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 57.07917395798722,
+  "wall_seconds_total": 57.5032427499973
+}

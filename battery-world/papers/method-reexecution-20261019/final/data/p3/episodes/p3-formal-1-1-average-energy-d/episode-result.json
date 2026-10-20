@@ -1,0 +1,132 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.020503367999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.029008199999999994,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-1-average-energy-d",
+  "exit_code": 0,
+  "external_result": {
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 1.8e-05,
+        "tx_not_before_s": 0.045
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 1.3553999999987509e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 4.552802091491864e-21,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.00015,
+        "source_total_error_j": 0.0,
+        "step_count": 10000,
+        "time_resolution_s": 0.0001,
+        "totals_j": {
+          "background_j": 5.7746e-05,
+          "boot_j": 5e-06,
+          "conversion_j": 1.5000000000000004e-05,
+          "harvest_j": 0.000135,
+          "shunt_j": 0.0,
+          "source_j": 0.00015,
+          "spill_j": 2.990000000000016e-05,
+          "tx_j": 2.8799999999999995e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_version": "phase3-independent-service-with-ordered-event-v1",
+      "execution_key": "f34148b8b947e889ee2bd1294d96545d9affea2e3a7e18c3b09c18cc651e05ca",
+      "input_sha256": "d7e5fe8339b2854fe04b312defb42927cc6d4d44f6a04d58aabb14fac4a97764",
+      "job_accounting": {
+        "another_group_output_not_exposed_before_query": true,
+        "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+        "initial_physical_cache_hit": false,
+        "new_logical_D_evaluation": true,
+        "physical_exact_input_reused": false,
+        "scope": "Physical deduplication does not enlarge the two-D arm budget; new group job histories remain isolated"
+      },
+      "ordered_event_state": {
+        "capture_actions": [],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "passive-mechanical",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 0
+        },
+        "first_valid_receive_s": 0.046900000000000004,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "da4ba188522d240903ac96b3325b91cab470d3de3473552e4434ba22e665b980",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "new-full-feedback-response",
+      "physical_qualification": "UNKNOWN",
+      "raw_path": "/Users/depengsu/.local/share/bf-phase3-20261020/physical-cache/f34148b8b947e889ee2bd1294d96545d9affea2e3a7e18c3b09c18cc651e05ca/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "PASS",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 0.0105,
+        "first_receive_s": 0.046900000000000004,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": false,
+      "world": "b-pulse-fast"
+    },
+    "prospective_E5_consumer": false
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-1-average-energy",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-db3e1a309a94346e",
+  "protocol_sha256": "b67b8cd26387c671c2ace4630eb504e4ca38fd68a7044394305381a6d2f6f7d6",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "5579c9fcb0a97e36dc21120c31fd205cad71934fd3aa5ad550a8469b65fabac8",
+  "spec": {
+    "condition": "average-energy",
+    "group": "p3-formal-1-1-average-energy",
+    "id": "p3-formal-1-1-average-energy-d",
+    "kind": "D",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 8,
+    "gateway_chain_tip": "cb2b7e894fe4b68c5aed74352b33228871e9a57e3ec65024fec1ea2e01c63be5",
+    "model_submitted": true,
+    "model_tool_calls": 8,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 78.35426929200185,
+  "wall_seconds_total": 78.80108258299879
+}

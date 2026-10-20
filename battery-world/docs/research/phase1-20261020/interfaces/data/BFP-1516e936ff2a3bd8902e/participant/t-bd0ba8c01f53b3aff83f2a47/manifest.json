@@ -1,0 +1,61 @@
+{
+  "assets": [],
+  "facts_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+  "format": "structured",
+  "information": "current",
+  "local_computation": "allowed on supplied facts/assets; future kernel accounts cost",
+  "observation_access": "active",
+  "observation_regime": "active",
+  "packet": {
+    "bytes": 899,
+    "path": "packet.json",
+    "sha256": "6292c26aa50bd32a2cb809b1ea33b7065c0b822ec2b965230e617c83821571c0"
+  },
+  "partition": "public-development",
+  "resources": {
+    "enforcement_now": "one offline replay request; cumulative ledger requires future kernel",
+    "native_dispatches_admitted_now": 0,
+    "observation_calls_per_future_trial": 3,
+    "observation_payload_bytes_per_future_trial": 262144,
+    "output_tokens_per_future_trial": 4096,
+    "paid_requests_admitted_now": 0,
+    "wall_s_per_future_trial": 30
+  },
+  "response_schema": {
+    "judgment": [
+      "PASS",
+      "FAIL",
+      "UNKNOWN"
+    ],
+    "reason": "participant explanation",
+    "used_observations": "receipt hashes"
+  },
+  "schema_version": "bf-e4-participant-v1",
+  "summary_sha256": "3c41e4bc04cc1b39a9d425775acf673529037c38644754d1ce8f9e4be1585d17",
+  "tools": [
+    {
+      "arguments": {},
+      "operation": "read_current",
+      "returns": "saved current task, design and trajectory"
+    },
+    {
+      "arguments": {},
+      "operation": "read_spec",
+      "returns": "complete declarative actual-world parameters, laws and assumptions"
+    },
+    {
+      "arguments": {},
+      "operation": "read_raw",
+      "returns": "complete raw model definition and saved current output"
+    },
+    {
+      "arguments": {
+        "patch": "public legal design patch"
+      },
+      "execution_mode": "saved-response-only; no new solve in this phase",
+      "operation": "query_model",
+      "returns": "saved model response for the announced patch; cache miss abstains"
+    }
+  ],
+  "trial_id": "t-bd0ba8c01f53b3aff83f2a47"
+}

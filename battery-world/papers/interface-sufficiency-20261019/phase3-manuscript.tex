@@ -1,0 +1,84 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\def\input@path{{../shared/}}
+\makeatother
+\usepackage{hkustgz-paper}
+\title{What Rich Interfaces Add to Battery-Free Design\\A Matched Digital Study with Strong Static Controls}
+\hypersetup{pdftitle={What Rich Interfaces Add to Battery-Free Design: A Matched Digital Study with Strong Static Controls},pdfauthor={Development manuscript}}
+\author{Development manuscript}
+\papersubtitle{Phase 3: controlled public development study, 20 October 2026}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Battery-free design requires decisions about energy arrival, startup, event
+capture, reset and delivery. We compare information and observation interfaces
+on four fixed digital tasks with three formal repetitions per task and condition.
+The average-energy arm achieves 8 PASS and 4 FAIL; complete-input, rich-static
+and executable-response arms each achieve 12 PASS. Rich-static therefore remains
+a successful strong control, and executable access shows no service advantage
+on these tasks. Prospective live observation (E5) achieves 7 PASS and 5 INCOMPLETE,
+with every incomplete group retained in the denominator. Its successes comprise
+six selections of supplied fields and one constructed relation; none adds a
+physical measurement. An equal-information JSON/table comparison achieves
+12 PASS and 65 provider requests in each arm. Four fresh Agent groups select
+delivery across a reset, but all reuse one historical digital response, rather
+than constituting four new physical experiments. These finite public development
+results establish operational interface behavior and its failures. They do not
+establish interface superiority over complete static information, new physical
+knowledge, hardware qualification, transfer or recursive self-improvement.
+\end{abstract}
+
+\section{Question and evidence scope}
+An energy total alone does not specify when a device becomes ready, whether an
+event is captured, whether pending state survives a reset, or whether a reply
+reaches a receiver before its deadline. A richer interface might expose those
+facts as supplied records, an executable response, or a model-proposed typed
+observation. The relevant comparison must include complete static information:
+otherwise a successful interactive arm could merely recover facts withheld
+from its baseline.
+
+This study asks whether richer or executable battery-free information improves
+complete service under a matched finite budget. The strong version of the
+registered hypothesis requires value beyond complete static inputs. The present
+results do not support that stronger claim. The information ablation misses
+service in four reset-task runs, while all strong static and executable arms
+pass. Live observation demonstrates seven prospective source-to-consumer
+chains but also five admission failures. We report these as distinct outcomes,
+without treating a missing final execution as a failed physical design.
+
+The evidence is the completed Phase 3 public development matrix and its frozen
+protocol, repeat decision and source-bound ordered-event receipts~\cite{tables,comparison,protocol,freeze,ordered}.
+The four task identifiers denote four fixed inputs. Repetitions, method owners,
+cached responses and selected witnesses do not create additional tasks. All
+scientific conclusions concern the fixed ideal digital apparatus and one
+preregistered synthetic DC derivative. Physical qualification remains UNKNOWN.
+
+\input{phase3-methods.tex}
+
+\begin{thebibliography}{9}
+\small\raggedright
+\bibitem{tables} S0. Phase 3 authoritative main tables and data dictionary.
+\path{main-tables.json}, 20 October 2026.
+\bibitem{comparison} S0. Source-bound actual group comparison.
+\path{actual-comparison.json}, schema \path{bf-phase3-actual-comparison-v1}.
+\bibitem{protocol} S0. Controlled matrix protocol.
+\path{protocol.json}, identifier \path{phase3-bf-matched-v1}.
+\bibitem{freeze} S0. One-time formal repeat decision.
+\path{formal-repeat-freeze.json}.
+\bibitem{ordered} S0. Ordered initial controls and actual selected witnesses.
+\path{ordered-initial-controls.json} and \path{ordered-selected-witnesses.json}.
+\bibitem{selection} S0. Frozen follow-up selection rule and task reservation.
+\path{stage4-selection-freeze.json}.
+\bibitem{interfaces} B. Frozen interface conditions and synthetic case derivation.
+\path{configs/studies/phase3-20261020/interfaces/conditions.json} and
+\path{derived-case.json}. Actual execution status comes from the later matrix,
+not the preparation files' historical ``not executed'' status.
+\bibitem{gateways} S0. Original Phase 3 E5 gateway event records for the five
+incomplete groups; exact paths and SHA-256 bindings in \path{phase3-binding.json}.
+\bibitem{phase2} B/S0. Frozen Phase 2 actual-attempt and post-hoc boundaries.
+\path{phase2-binding.json}; neither record is counted as a Phase 3 success.
+\end{thebibliography}
+\end{document}

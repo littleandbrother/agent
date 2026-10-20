@@ -1,0 +1,31 @@
+{
+  "version": "energy-information-feedback-pilot-v1",
+  "code_sha256": "c3d3bebf89a33915bceb5fafddc52333e03868cd260533c13f460987432aa341",
+  "cases_sha256": "6138222678569c37454253ea9025b06989a77e809d5bd7e85798785c4ebad9e7",
+  "costs": {
+    "prefix": 2,
+    "information": 1,
+    "feedback": 3
+  },
+  "partitions": {
+    "development": 72,
+    "validation": 36,
+    "test": 72
+  },
+  "study_unit": "parameterized scenario; sides are paired counterexamples",
+  "methods": [
+    "static-budget",
+    "static-rich",
+    "fixed-event-contract",
+    "counterexample-refinement",
+    "abstain-on-ambiguity"
+  ],
+  "controls": [
+    "zero energy",
+    "ample energy",
+    "zero feedback",
+    "same policy replay",
+    "fine step invariance"
+  ],
+  "interpretation": "Controlled constructed counterexamples; test scenarios use independent seeds, same three mechanism families."
+}

@@ -1,0 +1,125 @@
+\section{Event-time service exposes another interface boundary}
+\subsection{The original O service and its strong fixed control}
+The O study extends the digital apparatus to vibration start, active
+keepalive and stop service. O0 is a 21,600 s task with zero initial
+capacitor energy, $C=15$ mF and a prescribed source associated with a
+$15~\mathrm{cm}^2$ photovoltaic area. Its six intervals have nominal
+light levels 200/0/50/200/0/50 lux at boundaries
+0/120/150/180/300/330/360 min. The corresponding electrical inputs
+are separately prescribed as 90/0/20/90/0/20~$\mu$W; the 3500 K label
+is metadata and lux is not converted into watts. RMS vibration is
+0.08 g in the four declared activity intervals and 0.005 g otherwise.
+These inputs are uncalibrated digital assumptions~\cite{otask}.
+
+Start requires RMS continuously above 0.05 g for 3 s; stop requires
+RMS continuously below 0.01 g for 60 s. Equality resets confirmation.
+The confirmation instant is the event time. Each start and stop must
+arrive within 10 s and carry an encoded timestamp within 1 s; active
+keepalive gaps must not exceed 120 s and idle false events fail.
+The first dark interval contains one required active interval, so
+darkness cannot simply be excluded from service.
+
+The inherited ideal energy path has 0.8 harvest efficiency, 0.38 V/
+3~$\mu$W cold-start gates, 2.7/2.3 V ready/off thresholds, 3.3 V
+maximum capacitor voltage, 5.5 V rating and $0.3~\Omega$ ESR.
+It supplies 1.8 V with 0.3 V dropout, 1/5~$\mu$W off/sleep power,
+100~$\mu$J boot and 130~$\mu$J atomic TX transactions. Added RMS
+costs are 0.5~$\mu$W standby, 1~$\mu$J wake, 20~$\mu$J per
+successful sample and 5~$\mu$J per committed write. The write is
+not charged at every poll. These proposed costs do not qualify a
+vibration sensor, PMIC, clock, NVM or RF receiver.
+
+O0 compares a free legal candidate, a fixed 60 s periodic snapshot
+control and a fixed rich-state start/stop machine. They share the
+same task, source, hardware and event evaluator. The candidate and
+rich-state control submit the same one-second, NVM,
+\path{confirmed_events} program with the same thresholds, one-second
+retry and zero backoff. They share an exact execution key and
+response, match eight events, deliver 18 accepted packets and pass
+the nominal O predicate. The periodic control delivers 348 accepted
+packets and passes energy, but matches no required event. It fails
+service~\cite{o0}.
+
+\input{generated/tables/O0.tex}
+
+The candidate checks one-second sampling, then 1.5-second sampling,
+and ultimately submits the former. In the retained 1.5-second
+alternative, the first start is observed at 4204.070423 s and stamped
+4204.139063 s against truth 4203 s. The stamp error 1.139063 s
+exceeds tolerance even though energy and delivery can appear
+adequate. This checked alternative is preserved in the same episode's
+exposure and cost history, not treated as a later repair to its
+accepted design~\cite{o0}.
+
+The candidate's own judgment is UNKNOWN. Its original explanation
+concerns unobserved dark intervals after brownout, absent gap-report
+messages, inherited A/R first-report and dark-report metadata, and
+unavailable source/hardware calibration. In particular, inherited
+metadata calls for reception by 1800 s and dark reporting every
+600 s, while the first confirmed O event is later. The host's O
+predicate asks a narrower event-service question and returns PASS.
+Its saved disagreement flag is nominal to that predicate. This is
+not evidence of a mistaken physical-acceptance judgment. Neither
+the flag nor O PASS discharges inherited reporting obligations.
+The observed brownouts near 8766.18 and 19587.64 s occur after
+required active intervals; success on this waveform does not
+establish uninterrupted six-hour sensing~\cite{o0,otask}.
+
+\subsection{A frozen new waveform and complete denominators}
+A secondary closed comparison freezes six descendant design procedures
+before any final input. Fixed H0 is unchanged; G0 is a fixed
+procedure improver; G1 is one actually proposed improver. Three paired
+descendant lineages are conditional on that single G1 formation,
+not three independent G1 training runs. Thirty effective selection
+cells pass before freezing. Each final design episode then sees the
+complete current task, including its waveform. ``Unexposed'' describes
+formation and selection, not concealment of the waveform from the
+final designer~\cite{transfer}.
+
+Each arm has nine final cells: three lineage contexts on each of
+two reserved digital tasks and a new O waveform. Both digital tasks
+pass in all eighteen cells. The complete 27-cell totals are H0
+7/1/1, G0 6/1/2 and G1 8/0/1 in PASS/submitted-FAIL/INCOMPLETE
+order. The O rows account for all differences
+(Tables~\ref{tab:finalarms} and~\ref{tab:ofinal}). G1's 8/9 is
+descriptive conditional evidence, not a stable improvement claim or
+a reason to replace H0~\cite{final,preservation}.
+
+\input{generated/tables/final-arms.tex}
+\input{generated/tables/O-final.tex}
+
+All five submitted new-O designs pass energy, match all eight events
+and receive 18 accepted packets. Three designs sampled at 0.75 s
+pass complete service, with maximum encoded-time error 0.728 s.
+The two one-second submissions each pass six individual event
+checks and fail two stops with \path{WRONG_EVENT_TIME}. Their
+retry values differ, and their execution keys are distinct.
+
+\input{generated/tables/timing.tex}
+
+Both failed stop receptions occur less than one second after
+confirmation, but the encoded stamps are 1.004 and 1.103 s late
+(Table~\ref{tab:timing}). Thus a correct match, prompt arrival,
+empty final queue and passing energy ledger cannot substitute for
+the encoded-time predicate. Detection and encoding must be checked
+together: for detection instant $t_{\rm det}$,
+$|\hat t-t^*|\leq|t_{\rm det}-t^*|+|\hat t-t_{\rm det}|$.
+The saved comparison does not isolate sampling phase from encoded
+clock behavior causally. Retry periods also vary, and one passing
+0.75 s design belongs to H0. This is an observed design association,
+not a single-factor sampling ablation or an exclusive G1 mechanism.
+
+Four O episodes have no submission: L1-G0, L2-G0, L2-G1 and L3-H0.
+Each last SDK assistant response reports stop reason \path{length},
+32,768 output tokens and 32,768 reasoning tokens, with thinking
+content and no final design or judgment. These are last-response
+counters, not the whole episode's token total or two additive token
+budgets. The outcomes remain INCOMPLETE; they are neither hardware
+failures nor energy FAILs. All requests, costs and nine O slots
+remain in the denominator, with no automatic retry~\cite{final}.
+
+The two submitted failures self-report PASS and therefore disagree
+with the nominal event predicate within the submitted scope. This
+differs from O0's broader UNKNOWN judgment. Missing submissions
+have no self-judgment and cannot be counted as zero-error successes.
+\FloatBarrier

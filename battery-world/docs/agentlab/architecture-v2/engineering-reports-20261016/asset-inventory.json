@@ -1,0 +1,191 @@
+{
+  "schema_version": "bf-report-asset-inventory-v1",
+  "system_commit": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9",
+  "pages": [
+    {
+      "page": 1,
+      "title": "整机方案与交付结论",
+      "ready": "当前任务、八项检查、CAD与电气对象",
+      "missing": "R01、R09"
+    },
+    {
+      "page": 2,
+      "title": "CAD 外形、尺寸与安装接口",
+      "ready": "三张尺寸图；168 × 187.5 × 20 mm 外包络；40 × 70 mm PCB",
+      "missing": "R02、E01"
+    },
+    {
+      "page": 3,
+      "title": "机械结构、装配与工作原理",
+      "ready": "assembly.json、38 件 CAD、STEP",
+      "missing": "R03、E01"
+    },
+    {
+      "page": 4,
+      "title": "电气架构与 PCB",
+      "ready": "原生 PCB 正反面、39 器件/172 引脚、52 间距/50 连接问题",
+      "missing": "R04"
+    },
+    {
+      "page": 5,
+      "title": "电路原理图与关键回路",
+      "ready": "原生矢量原理图、BOM/引脚/网络",
+      "missing": "R05、E02"
+    },
+    {
+      "page": 6,
+      "title": "固件状态与任务时序",
+      "ready": "当前源码、目标构建、时序参数、声明负载窗口",
+      "missing": "R06、R07"
+    },
+    {
+      "page": 7,
+      "title": "供能、功耗与储能仿真",
+      "ready": "165130 点 RAW、16.001 s 结果、当前独立检查",
+      "missing": "R07、R08、E02"
+    },
+    {
+      "page": 8,
+      "title": "需求验收与交付目录",
+      "ready": "八项当前门、89 文件清单、同版审查包",
+      "missing": "R09"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "R01",
+      "pages": [
+        1
+      ],
+      "kind": "出图",
+      "owner": "BF Lead",
+      "task": "制作同版整机组成图，关联 TENG、采能电路、感知节点与接收端",
+      "source": "assembly.json + native schematic/PCB + receiver/",
+      "acceptance": "图中模块均能对应当前工程对象"
+    },
+    {
+      "id": "R02",
+      "pages": [
+        2
+      ],
+      "kind": "出图",
+      "owner": "BF Lead / CAD 工具",
+      "task": "导出同版等轴视图，补完整尺寸与安装标注",
+      "source": "selected CAD STEP + CAD readback",
+      "acceptance": "标注数值与原生几何读回一致"
+    },
+    {
+      "id": "R03",
+      "pages": [
+        3
+      ],
+      "kind": "出图",
+      "owner": "BF Lead / CAD 工具",
+      "task": "导出带零件编号的爆炸图与装配步骤",
+      "source": "assembly.json + selected CAD STEP",
+      "acceptance": "编号与零件清单一致，标明运动件和固定件"
+    },
+    {
+      "id": "R04",
+      "pages": [
+        4
+      ],
+      "kind": "标注",
+      "owner": "Power Pi",
+      "task": "对 PCB 功能区与关键接口进行标注",
+      "source": "current PCB top/bottom + native parts/nets",
+      "acceptance": "每个区域、接口指向真实器件和网络"
+    },
+    {
+      "id": "R05",
+      "pages": [
+        5
+      ],
+      "kind": "出图",
+      "owner": "Power Pi",
+      "task": "导出采能/SECE、储能稳压、CDC/MCU 三组关键回路局部图",
+      "source": "current native schematic",
+      "acceptance": "图中器件编号、数值和网络与原生工程一致"
+    },
+    {
+      "id": "R06",
+      "pages": [
+        6
+      ],
+      "kind": "分析图",
+      "owner": "Firmware Pi",
+      "task": "审定当前固件状态图，补异常、重试与重连路径",
+      "source": "project-fw-s132/main.c + app_policy.c/.h",
+      "acceptance": "每个状态/转换有当前源码函数依据"
+    },
+    {
+      "id": "R07",
+      "pages": [
+        6,
+        7
+      ],
+      "kind": "事件数据",
+      "owner": "Firmware Pi",
+      "task": "补当前源码绑定的事件记录；旧记录源码已有变化",
+      "source": "current firmware source + selected build",
+      "acceptance": "事件记录包含当前输入哈希；记录实际测试条件",
+      "stale_sources": [
+        "project-fw-s132/main.c",
+        "project-fw-s132/app_policy.c",
+        "project-fw-s132/app_policy.h"
+      ]
+    },
+    {
+      "id": "R08",
+      "pages": [
+        7
+      ],
+      "kind": "分析",
+      "owner": "Power Pi",
+      "task": "完成现有 RAW 的源、储能、负载、损耗能量核算",
+      "source": "current RAW + chain_joint.cir + interface-params.json",
+      "acceptance": "给出积分口径、单位及异常接通样本的处理"
+    },
+    {
+      "id": "R09",
+      "pages": [
+        1,
+        8
+      ],
+      "kind": "结论",
+      "owner": "BF Lead",
+      "task": "依据当前八项检查完成逐页结论和下一版目标",
+      "source": "current_qualification + selected engineering results",
+      "acceptance": "逐项对应同一候选的检查与交付文件"
+    },
+    {
+      "id": "E01",
+      "pages": [
+        2,
+        3
+      ],
+      "kind": "工程数据",
+      "owner": "BF Lead / 机械任务",
+      "task": "补 PCB 放置变换、安装孔对应及器件高度",
+      "source": "geometry_fit pending fields",
+      "acceptance": "装配检查能消费这些尺寸和变换"
+    },
+    {
+      "id": "E02",
+      "pages": [
+        5,
+        7
+      ],
+      "kind": "工程数据",
+      "owner": "Power Pi",
+      "task": "解决器件/绕组身份、采能源与 SECE 参数适用性",
+      "source": "source_domain + schematic_bom_pins",
+      "acceptance": "参数具备来源、条件及可用范围"
+    }
+  ],
+  "historical_event_record_stale_inputs": [
+    "project-fw-s132/main.c",
+    "project-fw-s132/app_policy.c",
+    "project-fw-s132/app_policy.h"
+  ]
+}

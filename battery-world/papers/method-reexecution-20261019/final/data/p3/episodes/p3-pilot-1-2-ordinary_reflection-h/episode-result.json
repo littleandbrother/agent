@@ -1,0 +1,87 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.015883476,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0406077,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-pilot-1-2-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:55d43741fcc5",
+        "excitation_record:2820ae5862b2",
+        "saved_activity:ae3c8933de67",
+        "model_law:d690d8a89532",
+        "saved_activity:activity.0.boot.t0.0027",
+        "saved_activity:activity.44.brownout.t0.0121",
+        "saved_activity:activity.45.boot.t0.0381",
+        "saved_activity:activity.46.brownout.t0.2512",
+        "saved_activity:packets.empty",
+        "component_record:event_latch.volatile",
+        "excitation_record:shunts.0.time_s.0.012",
+        "excitation_record:source_segments.gap.0.006-0.03"
+      ],
+      "falsifier": "The update is falsified if, re-running from the same base H on the same frozen facts, any of the following holds: (a) a candidate admitted by the interval gate still has no interval that contains capture plus a complete TX burst before the first shunt/source-gap collapse and before the deadline, i.e. the gate's inequality is stated but not actually enforced; (b) the gate rejects as infeasible a candidate that the acquired model law shows producing a valid 8-byte frame within the deadline with no reset between capture and transmit, i.e. the gate is over-restrictive and costs an execution slot; (c) the envelope derived from excitation_record plus component_record does not reproduce the retained saved_activity event sequence at C=1e-5 F, tx_not_before_s=0.045 s (boot 0.0027 s, capture from 0.0037 s, brownout 0.0121 s immediately after the 0.012 s shunt, no packet), meaning the window accounting is inconsistent with the model law; or (d) the procedure still spends both candidate executions on designs that differ only in storage capacitance while leaving every time-window parameter unexamined. Note this H interface has no device check and this proposal makes no acceptance claim; hardware and service behaviour remain unknown.",
+      "hypothesis": "Retained failure is a window-accounting error, not a tuning error. At the base design (C=1e-5 F, tx_not_before_s at its range maximum 0.045 s) the volatile latch captured during the only contact window (event_s=0 to event_s+contact_duration_s=0.008 s; captures observed 0.0037-0.0079 s) and then lost that capture at the 0.012 s shunt (4e-5 J) via an energy-threshold brownout at 0.0121 s; the retry at 0.0381 s falls in the second, weaker source segment (0.003667 W from 0.03-0.06 s) after the 0.006-0.03 s dark gap, decays to off_v by 0.2512 s, and emits zero packets. The wait-and-transmit-late reading of tx_not_before_s assumes capture survives brownouts; under a volatile latch the correct object is a single uninterrupted powered interval that must contain capture, the full TX burst (output_v*tx_current_a*tx_duration_s), and completion before any shunt, source-gap collapse, or deadline. Procedure improvement: make that interval inequality the gate every candidate must pass before an execution slot is spent, and stop treating bounded design knobs as defaults-at-range-max. Prediction under the current H baseline: candidate designs are being chosen without any stated window inequality, so the retained zero-packet outcome recurs or succeeds only by luck.",
+      "impact_scope": "task-entry",
+      "method_sha256": "a71281e83568658980ea79e3590b5a2b6ff2ca90d2830740744eab805558659a",
+      "method_text": "H (procedural) update, applied before any candidate design is executed. It changes how the design procedure reads the frozen facts and spends its two candidate execution slots; it does not fix device parameter values.\n\n1. Window enumeration first (observation_policy). Before proposing any candidate, write out, in seconds, the ordered constraint set taken from the acquired sources: the contact interval [event_s, event_s+contact_duration_s]; every source segment as [start_s, end_s] with its power, plus every dark gap between segments; every shunt time and its energy; the deadline; and dt. Label which of these are reset-capable (they can force stored energy below off_v) and which are only energy sources. Quote the source ids and hashes the numbers came from.\n\n2. Latch-lifetime obligation (skills). Read event_latch from component_record and state the retention rule in words. If the latch is volatile, record that any reset (energy threshold, transmit-transient voltage floor, or a shunt/dark-gap decay) clears the capture, so the design must be judged on a single powered interval: capture, then transmit burst, then completion, with no reset in between and completion before the earliest later reset-capable event and before the deadline. If the latch is passive-mechanical, note the weaker obligation instead. Also derive, from component_record only, the per-frame transmit energy and the loaded-voltage floor needed to stay off the transmit-transient reset.\n\n3. Feasibility envelope, then ranking (experiment_order). Compute, within the legal design ranges only, the interval inequality from steps 1-2 and record which parameter region satisfies it. Treat every bounded parameter as constrained by that inequality: any value placed at a range endpoint, and especially at the maximum-delay endpoint, must carry an explicit window reason; 'wait longer for stability' is not such a reason when the latch is volatile. Rank candidate designs by margin to the nearest reset-capable event and to the deadline, not by nominal stored energy at peak. Only then execute; spend the two available candidate executions on designs that differ in the constraint-relevant parameter identified here, and pre-register what observation would reject each one.\n\n4. Consistency check by replay (observation_policy). Before executing, replay the retained saved_activity against the envelope in steps 1-2 using the recorded settings and the acquired model law, and require agreement on first boot time, on the first brownout relative to the shunt, and on the empty packet list. Report disagreement as a retained unknown rather than silently rescaling assumptions. Never edit the task, the excitation record, the model law, or the ranges to make a candidate fit.\n\n5. Reporting discipline (global_prompt). For each candidate, report the stated inequalities, the observed events with timestamps, the packet list (including empty), and any no-update or failure as retained. Do not claim acceptance, hardware validity, statistical advantage, or method transfer: qualification and independent service are external, and physical calibration is UNKNOWN. If the envelope cannot discriminate among candidates, return no-update rather than adding rules.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-pilot-1-2-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-783c5436370f3ca7",
+  "protocol_sha256": "4ac008ed80e2314e7a803306c4a83e15f147b22347d650037e800a6add84cd70",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "52711d28d80fa91c6ede635bb1e9c3a54ccc160e1450cca6f80a0ed1daf01d09",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-pilot-1-2-ordinary_reflection",
+    "id": "p3-pilot-1-2-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "pilot",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 8,
+    "gateway_chain_tip": "4e113155ccf4aa605db00522d4297a30a53389dec31ea350c2d76c5b402b3c63",
+    "model_submitted": true,
+    "model_tool_calls": 9,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 39.767797000007704,
+  "wall_seconds_total": 40.29196195899567
+}

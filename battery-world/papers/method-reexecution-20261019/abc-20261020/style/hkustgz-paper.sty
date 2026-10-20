@@ -1,0 +1,58 @@
+% Common HKUST(GZ) manuscript layout; reference geometry: arXiv:2608.31100v1.
+% Local sources share this file. Overleaf receives the same file and assets.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\@currpath\@currname}[2026/10/19 Reference-aligned manuscript layout]
+\RequirePackage[letterpaper,top=2.75cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{microtype}
+\RequirePackage{parskip}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{tgadventor}
+\RequirePackage{titlesec}
+\RequirePackage[skins]{tcolorbox}
+\definecolor{paperblue}{HTML}{2E5AA8}
+\newcommand{\paperheading}{\fontfamily{qag}\bfseries\selectfont}
+\titleformat*{\section}{\fontsize{12}{14}\selectfont\paperheading\color{paperblue}}
+\titleformat*{\subsection}{\fontsize{11}{13}\selectfont\paperheading\color{paperblue}}
+\titleformat*{\subsubsection}{\normalsize\paperheading\color{paperblue}}
+\titleformat*{\paragraph}{\normalsize\itshape}
+\hypersetup{colorlinks=true,linkcolor=paperblue,citecolor=paperblue,urlcolor=paperblue}
+\graphicspath{{assets/}{../shared/assets/}}
+\makeatletter
+\newcommand{\papersubtitle}[1]{\gdef\paper@subtitle{#1}}
+\let\paper@subtitle\@empty
+% Official English combination mark, extracted as vector paths from the
+% university brand guidelines, physical page 69 (printed page 66).
+\newcommand{\paper@logo}{\includegraphics[width=42mm]{hkustgz-english.pdf}}
+\AddToHook{shipout/foreground}{%
+  \ifnum\value{page}=1\relax
+    \put(0,0){\makebox[\paperwidth][l]{%
+      \hspace*{\dimexpr\paperwidth-2.5cm-42mm\relax}%
+      \raisebox{\dimexpr-2.7cm\relax}[0pt][0pt]{\paper@logo}}}%
+  \fi}
+\renewcommand{\maketitle}{%
+  \begingroup
+  \setlength{\parskip}{0pt}\centering
+  {\color{paperblue}\hrule height .5pt}\vskip6mm
+  {\fontsize{17}{20}\selectfont\paperheading\@title\par}
+  \vskip6mm{\color{paperblue}\hrule height .5pt}
+  \vskip6mm
+  {\fontsize{10}{12}\selectfont\fontfamily{qag}\selectfont\@author\par}
+  \vskip3mm
+  {\fontsize{10}{12}\selectfont
+    \ifx\paper@subtitle\@empty\@date\else\paper@subtitle\fi\strut\par}
+  \endgroup
+  \vskip\dimexpr6mm+7.025pt\relax
+  \thispagestyle{plain}}
+\renewenvironment{abstract}{%
+  \begin{tcolorbox}[enhanced,colback=white,colframe=paperblue,boxrule=.5pt,
+    left=8mm,right=8mm,top=6mm,bottom=6mm,arc=2.5mm,
+    before skip=0pt,after skip=0pt,grow to left by=1.5pt,grow to right by=1.5pt]
+  \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
+  \begin{center}{\fontsize{12}{12}\selectfont\paperheading\color{paperblue}Abstract\par}\vskip3mm\end{center}
+  \fontsize{10}{12}\selectfont\ignorespaces
+}{\par\end{tcolorbox}\vskip8mm\ignorespacesafterend}
+\makeatother
+\pagestyle{plain}
+\endinput

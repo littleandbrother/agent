@@ -1,0 +1,508 @@
+{
+  "artifact": "default-design-reference",
+  "version": "pi-default-delivery-3",
+  "supersedes": "pi-default-delivery-2 (notes/default-design.json, sha256 187d28723b6664a7cdada32a640650ec78118935bd15f9e5bbb7ef9331a6a193)：按 notes/vendor-connection-facts.json 更正电感位置（SW 与 VOUT 之间）与整流（器件集成全波桥，压电接 PZ1/PZ2），并纳入器件级零初态探测（notes/vendor-probe-result.json）的结论；名义参考结果不变",
+  "scope": "压电梁 + 低功耗感知节点的默认参考交付（标称参考链）。名义数值为仿真结果（已执行），物理未测试（physical=NOT_TESTED）。器件级结论见 vendor_probe：零初态下服务未通过。",
+  "design_basis": {
+    "system": "SC-136652e43d2817879b2488a469358692c229063b7ef836c8da07fba16c53f07e（默认交付候选）",
+    "design_json_sha256": "cc780e93ecb08b244018c3b8b9707d2996fdb3e6aa6d283a7a2f8e239a475630",
+    "firmware_sha256": "938344a5630c7deadd45be66dd74dd8222c666e8d2ec986c8d3a346e115c8d29",
+    "design_fields": {
+      "length_m": 0.05,
+      "width_m": 0.01,
+      "substrate_m": 0.0002,
+      "piezo_m": 0.0002,
+      "tip_mass_kg": 0.002,
+      "storage_f": 6.8e-05
+    },
+    "change_policy": "本轮仍未修订 design.json 与 firmware/main.c（字节不变），执行输入指纹不变，故继续复用 TX-84f4ff52e6e2fcc7c98dc0ff651dda40fe892c72552579b10f649a98768cc170。本轮只更新本说明，并新增 notes/vendor-review.json（判断）。器件级探测是独立能力的原生执行，不是本候选的执行指纹。"
+  },
+  "executed_evidence": {
+    "execution_id": "TX-84f4ff52e6e2fcc7c98dc0ff651dda40fe892c72552579b10f649a98768cc170",
+    "status": "SUCCEEDED",
+    "source": {
+      "native_source_power_uw": 305.51369767901815,
+      "analytic_power_uw": 304.2954861971331,
+      "relative_error": 0.004003383346593272,
+      "resonance_hz": 31.08682616758932,
+      "tip_peak_mm": 1.3289,
+      "tip_over_length": 0.0266,
+      "raw_piezo_voltage_peak_v": 7.8012240859641135
+    },
+    "energy": {
+      "rail_v": 2.5,
+      "load_charge_uc": 327.552,
+      "load_energy_uj": 818.88,
+      "average_load_uw": 40.944,
+      "converted_available_uw": 152.75684883950908,
+      "supply_over_load": 3.7308726269908745,
+      "storage_residual_percent": 0.015512348716881442,
+      "node": "模型抽象储能节点（不是 VIN，也不是 VOUT）"
+    },
+    "load_decomposition": {
+      "frame_charge_uc": 42.0,
+      "sample_charge_uc": 10.0,
+      "tx_charge_uc": 32.0,
+      "frames": 4,
+      "idle_charge_uc": 159.552,
+      "idle_current_ua": 8,
+      "idle_span_s": 19.944,
+      "total_charge_uc": 327.552
+    },
+    "service_minima_v": {
+      "node": "模型抽象储能节点",
+      "tx_window": 3.15309003,
+      "sample_window": 3.50317408,
+      "task_floor": 2.2,
+      "model_internal_margin": 0.9530900299999998
+    },
+    "receiver": {
+      "received_sequences": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "frame_errors": [],
+      "minimum_packets": 3
+    }
+  },
+  "node_domains": {
+    "note": "区分四个位置：VIN（器件输入储能）、VOUT（器件稳压轨）、模型抽象储能节点、以及探测中的 C_IN/C_OUT。拿抽象节点电压或 VIN 电压去比另一域阈值都不构成结论",
+    "VIN_device_input_reservoir": {
+      "domain": "器件输入储能节点（集成整流桥输出端）",
+      "thresholds_v": {
+        "uvlo_rising_typ": 4.04,
+        "uvlo_rising_min_max": [
+          3.77,
+          4.3
+        ],
+        "uvlo_falling_typ": 2.87,
+        "uvlo_falling_min_max": [
+          2.66,
+          3.08
+        ],
+        "uvlo_falling_worst_case_v": 3.08,
+        "uvlo_falling_worst_case_note": "最坏（最早跳闸）= 3.08 V（即 max）；最小 2.66 V 是最好情况，不是最坏"
+      },
+      "modeled_nominally": false,
+      "modeled_in_probe": true
+    },
+    "VOUT_device_regulated_rail": {
+      "domain": "器件稳压输出轨（D0=VIN2 逻辑高, D1=GND 逻辑低 -> 2.5 V）",
+      "nominal_v": 2.5,
+      "pgood_falling_v": 2.3,
+      "pgood_rule": "0.92 x VOUT（PGOOD 监视 VOUT，不监视 VIN）",
+      "modeled_nominally": "没有作为储能节点建模；模型只是把负载电荷在 2.5 V 上折算为能量（如每帧 42 µC -> 105 µJ）",
+      "modeled_in_probe": true
+    },
+    "model_abstract_storage": {
+      "domain": "design.json storage_f = 68 µF 的抽象储能节点",
+      "band_v": [
+        2.5,
+        3.6
+      ],
+      "executed_minima_v": {
+        "tx_window": 3.15309003,
+        "sample_window": 3.50317408
+      },
+      "task_floor_v": 2.2,
+      "model_internal_margin_v": 0.9530900299999998,
+      "is_not": [
+        "VIN",
+        "VOUT"
+      ],
+      "consequence": "执行结果（含 3.15309003 V 与残差 0.0155%）只说明该抽象节点在声明式预充的名义场景下自洽；它既不能证明 VIN 能启动，也不能证明 VOUT 在 PGOOD 之上（后者已由 vendor_probe 在零初态下否证）"
+    }
+  },
+  "power_route": {
+    "selected": "LTC3588-1（Rev C，datasheet 35881fc）压电能量收集 PMIC，输出配置 VOUT=2.5 V（D0=VIN2, D1=GND）",
+    "facts_source": "notes/adi-source-facts.json（阈值）+ notes/default-source-review.json（独立来源审查）+ notes/vendor-connection-facts.json（连接事实，源自已实战过的原生厂商适配器与数据手册典型应用）；选型与设计判断由 Pi 负责",
+    "why_this_route": [
+      "场景固定 rail_v=2.5 V，LTC3588-1 的 2.5 V 输出档与负载轨一致，无需二次变换。",
+      "器件集成全波整流桥，压电直接接 PZ1/PZ2，无需外部整流器件；无需外部整流器件但 buck 仍需外部电感（典型 10 µH，接在 SW 与 VOUT 之间）。",
+      "负载是 8 µA…8 mA 级的突发帧（4 ms），量级处于该器件输出能力范围；但零初态启动时间已由 vendor_probe 实测为 18.21 s，是当前的瓶颈。"
+    ],
+    "device_voltage_conditions_v": {
+      "vin_uvlo_rising_typ": 4.04,
+      "vin_uvlo_rising_min_max": [
+        3.77,
+        4.3
+      ],
+      "vin_uvlo_falling_typ": 2.87,
+      "vin_uvlo_falling_min_max": [
+        2.66,
+        3.08
+      ],
+      "vin_uvlo_falling_worst_case_v": 3.08,
+      "pgood_falling_v": 2.3,
+      "pgood_falling_rule": "0.92 x VOUT"
+    },
+    "topology_reference": [
+      "压电梁 -> PZ1/PZ2（器件集成全波整流桥）-> VIN（外部输入储能 C_IN）",
+      "VIN -> buck（外部电感 10 µH 接 SW 与 VOUT，Rser 0.4 Ω）-> VOUT = 2.5 V（外部输出储能 C_OUT）",
+      "D0 -> VIN2（逻辑高）、D1 -> GND（逻辑低）选定 2.5 V 档；PGOOD -> MCU 使能；MCU -> 传感器（SPI 采样）与射频（发送帧）",
+      "注：上一版把电感写成 SW 与 VIN 之间、并把整流写成「待核」，均已按 notes/vendor-connection-facts.json 更正"
+    ]
+  },
+  "recommended_parts": [
+    {
+      "role": "能量收集 PMIC",
+      "candidate": "LTC3588-1",
+      "config": "VOUT 2.5 V (D0=VIN2, D1=GND)",
+      "must_meet": [
+        "VIN 必须升到 3.77…4.3 V（typ 4.04 V）才能启动",
+        "VIN 跌到 2.87 V typ（2.66…3.08 V）以下停止稳压；最坏为 3.08 V",
+        "PGOOD 在 VOUT 跌到 2.30 V（0.92 x 2.5 V）以下失效",
+        "需外部 buck 电感（典型 10 µH，SW 与 VOUT 之间）与输入/输出储能电容"
+      ],
+      "verification_status": "阈值为数据手册提取值；启动行为已由 vendor_probe 在宏模型、零初态下仿真（非硅片实测），结果为零初态下服务未通过"
+    },
+    {
+      "role": "MCU",
+      "candidate": "低功耗 Cortex-M 级 MCU（如 MAX32660 一类）",
+      "must_meet": [
+        "供电范围覆盖 2.5 V 轨",
+        "唤醒后 10 ms 内完成一次采样、其后 4 ms 内发帧",
+        "活动/待机电流使模型 state_currents（sample 1 mA、tx 8 mA、idle 8 µA）成立",
+        "须支持 PGOOD/电压门控启动（当前固件是固定时刻调度）"
+      ],
+      "verification_status": "候选型号未核数据手册；模型状态电流是场景假设，不是器件数据"
+    },
+    {
+      "role": "传感器",
+      "candidate": "超低功耗加速度计（如 ADXL362 一类）",
+      "must_meet": [
+        "供电覆盖 2.5 V 轨",
+        "10 ms 窗口内可取回一次原始值（scenario.sensor_value=2500 是模型载荷而非器件标定值）"
+      ],
+      "verification_status": "未核数据手册；仓库 sensing-data 接口为 NOT_IMPLEMENTED"
+    },
+    {
+      "role": "射频与接收",
+      "candidate": "低功耗 sub-GHz 收发器（如 ADF7030-1 一类）",
+      "must_meet": [
+        "供电覆盖 2.5 V 轨",
+        "发送瞬时电流不超模型 tx 状态电流 8 mA，否则必须重定义 state_currents 并重跑"
+      ],
+      "verification_status": "未核数据手册；接收侧只按仓库数字接收端契约检查"
+    }
+  ],
+  "required_external_components": {
+    "basis": "notes/vendor-connection-facts.json（连接事实：电感位置、集成整流桥、D0/D1）+ notes/default-source-review.json + notes/adi-source-facts.json",
+    "items": [
+      {
+        "ref": "L_buck",
+        "component": "buck 电感，典型 10 µH",
+        "where": "SW 与 VOUT 之间（不是 VIN）",
+        "why": "LTC3588-1 的 buck 必须外接电感；上一版误写「无外部电感」，更正后又误写位置为 SW↔VIN，现按已验证连接事实更正为 SW↔VOUT；vendor_probe 用 10 µH、Rser 0.4 Ω",
+        "source": "notes/vendor-connection-facts.json + notes/vendor-probe.cir（L1 sw out 10u Rser=0.4）"
+      },
+      {
+        "ref": "C_IN",
+        "component": "输入储能电容",
+        "where": "VIN 到 GND",
+        "why": "把整流后的脉冲积到 4.04 V typ 启动阈值以上；本说明估算约 104 µF，vendor_probe 用 150 µF（探测侧选择）",
+        "source": "notes/adi-source-facts.json + notes/vendor-probe-protocol.json"
+      },
+      {
+        "ref": "C_OUT",
+        "component": "输出储能电容",
+        "where": "VOUT 到 GND",
+        "why": "2.5 V 稳压轨本地储能；名义模型中由 storage_f = 68 µF 抽象代表，vendor_probe 同样用 68 µF",
+        "source": "design.json + notes/vendor-probe-protocol.json"
+      },
+      {
+        "ref": "piezo_input",
+        "component": "压电输入端（无需外部整流器件）",
+        "where": "压电梁接 PZ1/PZ2",
+        "why": "整流为器件集成全波桥，不再列为待核（上一版错误保留为待核）",
+        "source": "notes/vendor-connection-facts.json"
+      },
+      {
+        "ref": "D0_D1",
+        "component": "输出选择引脚固定接法 D0=VIN2（高）, D1=GND（低）",
+        "where": "器件配置引脚",
+        "why": "选定 2.5 V 输出档",
+        "source": "notes/vendor-connection-facts.json + notes/adi-source-facts.json"
+      },
+      {
+        "ref": "PGOOD_interface",
+        "component": "PGOOD 到 MCU 的接口（是否需要外部上拉仍待核）",
+        "where": "PGOOD -> MCU",
+        "why": "作为 MCU 上电/使能门；探测把 PGOOD 监视 VOUT 的模拟值作为启动判据（VOUT 首达 2.3 V），实际器件接口要求未核",
+        "source": "notes/adi-source-facts.json + notes/vendor-probe.cir"
+      },
+      {
+        "ref": "node_decoupling",
+        "component": "MCU / 传感器 / 射频及其去耦",
+        "where": "VOUT 2.5 V 轨",
+        "why": "器件级电流未核，去耦未定；对应接口在仓库中为 NOT_IMPLEMENTED",
+        "source": "notes/adi-source-facts.json"
+      }
+    ]
+  },
+  "storage_io": {
+    "input_reservoir_C_IN": {
+      "node": "VIN",
+      "role": "把整流后的压电脉冲积到输入欠压上升阈值以上，使 buck 启动并维持到帧完成",
+      "thresholds_v": {
+        "rising_typ": 4.04,
+        "falling_typ": 2.87,
+        "falling_worst_case": 3.08
+      },
+      "modeled_nominally": false,
+      "modeled_in_probe": true,
+      "values_used": {
+        "estimate_uF": 104,
+        "probe_uF": 150,
+        "note": "104 µF 是按阈值窗口与模型效率的估算（未执行）；vendor_probe 用 150 µF，零初态下 VIN 峰值 4.0575 V、启动在 18.2096 s"
+      }
+    },
+    "output_reservoir_C_OUT": {
+      "node": "VOUT",
+      "role": "2.5 V 稳压轨的本地储能，供采样/发送突发使用",
+      "modeled_as": "design.json storage_f = 68 µF（抽象单节点模型，电压带 2.5->3.6 V）；vendor_probe 用 68 µF 于 VOUT（IC=0）",
+      "note": "真实 VOUT 是稳压轨而不是充电节点；抽象模型把储能放在一个 2.5->3.6 V 的节点上，电压带又低于 VIN 启动阈值，故两种读法都不能单独成立（见 G3/G4）。"
+    },
+    "distinction_summary": "VIN（输入储能，4.04 / 2.87 V typ，最坏 3.08 V）、VOUT（2.5 V 稳压轨，PGOOD 2.30 V）、模型抽象储能节点（2.5->3.6 V，名义仿真最低 3.15309003 V）是三个不同域；vendor_probe 才是把 VIN 与 VOUT 分开、从零初态跑的双节点工况。"
+  },
+  "interfaces": {
+    "power": [
+      "名义模型：源 -> 储能按平均功率耦合；原生源 305.5137 µW x 效率 0.5 = 152.7568 µW 写入抽象储能节点，不做整流/电感/输入电容/UVLO 的电路级仿真。",
+      "名义模型：储能 -> 负载由编译事件表驱动固定状态电流（sample 1 mA、tx 8 mA、idle 8 µA），在 2.5 V 负载轨上折算能量，验收看抽象节点的采样/发送窗口电压。",
+      "帧电荷分解：每帧 42 µC = 采样 10 µC（1 mA x 10 ms）+ 发送 32 µC（8 mA x 4 ms）；4 帧 168 µC；idle 159.552 µC（8 µA x 19.944 s）；合计 327.552 µC = 818.88 µJ = 40.944 µW 平均。",
+      "名义收支：可用 152.7568 µW / 平均负载 40.944 µW = 3.7309 倍；20 s 内 4 帧净能量为正（前提是 2.5 V 声明式预充）。",
+      "器件侧（vendor_probe）：同一编译事件表直接驱动实际的桥/电感/双电容网络；零初态下 4 帧全部落空（见 vendor_probe）。"
+    ],
+    "signal": [
+      "采样先于同序号发送：events.json 中 seq 的 sample 在 2/6/10/14 s，tx 在 +11 ms，帧内间隔 1 ms。",
+      "帧载荷：value=2500，crc=(seq ^ value ^ 0xA5) & 255，名义仿真输出为 96 / 99 / 98 / 101；vendor_probe 里数字载荷与序号一致，但 VOUT 未上电故无有效帧。",
+      "接收要求：20 s 窗口内 >= 3 个唯一序号且无帧错误；名义候选接收 [1,2,3,4]；vendor_probe valid_sequences = [] 。",
+      "器件侧信号路径：MCU 经 SPI 读传感器、驱动射频发帧、以 PGOOD 作上电/使能门；仓库 board-firmware、board-package、sensing-data 接口均为 NOT_IMPLEMENTED。"
+    ]
+  },
+  "vendor_probe": {
+    "what": "器件级原生探测（厂商宏模型 + 已实战过的原生适配器），是本轮新增的、与名义任务链不同的工况；它不是本候选的执行指纹，也不是任务验收门",
+    "files": {
+      "netlist": "notes/vendor-probe.cir（sha256 c4b05ee2a6002a386edb0405781972d73784e273076304e03433cfb98e1bcea1）",
+      "protocol": "notes/vendor-probe-protocol.json（sha256 3b5cddda45a9601ea3736504bc0309a2c27abc74f1aea371875e12f6a30dfb5b）",
+      "result": "notes/vendor-probe-result.json（sha256 6b27f7d6fdb01ba9fbc8d83cb69314d604e40956a52f8a15ca6f69565575f5d9）",
+      "connections": "notes/vendor-connection-facts.json（sha256 781d941c9ce5dffa9b87313f32b9709ac8e1fee19b9a94473f03e059f77fde2a）",
+      "judgement": "notes/vendor-review.json"
+    },
+    "initial_state": {
+      "initial_vin_v": 0,
+      "initial_vout_v": 0,
+      "cin_uF": 150,
+      "cout_uF": 68,
+      "inductor_uH": 10,
+      "inductor_series_ohm": 0.4,
+      "model_sha256": "53775f934b1b1c7929282b753a7fba947dc9d249314e0c39a06eb8aa06899a62",
+      "note": "零初态冷启动；无固定效率级（changed_physics: reciprocal beam loaded by vendor bridge/buck with separate VIN/VOUT）"
+    },
+    "outcome": {
+      "solver": "SUCCEEDED",
+      "points": 293282,
+      "vin_peak_v": 4.057499885559082,
+      "vout_peak_v": 2.553384780883789,
+      "startup_vout_2p3v_s": 18.209585174510323,
+      "service_passed": false,
+      "valid_sequences": [],
+      "powered_windows": 0,
+      "windows": 8,
+      "minimum_vout_v_range": [
+        9.647143315305584e-07,
+        3.972895865445025e-05
+      ],
+      "physical": "NOT_TESTED"
+    },
+    "reading": [
+      "服务结论：4 个采样 + 4 个发送窗口全部 powered=false（VOUT 在 1e-6…4e-5 V 量级），valid_sequences 为空、service_passed=false；序号/载荷/校验与名义一致（96/99/98/101），失败原因在能量与时序、不在数字契约。",
+      "启动时间：VOUT 首次达 2.3 V 在 18.2096 s；最后一个计划事件在 14.015 s 结束，早于启动 4.1946 s；启动后 20 s 窗口只剩 1.7904 s。",
+      "VIN 峰值 4.0575 V：高于 typ 4.04 V、低于最坏 4.3 V，故名义器件可启动，但最坏器件在 20 s 内可能根本不启动。",
+      "负载整形：netlist 中 I=V(schedule)*limit(V(out)/1.8,0,1)，VOUT<1.8 V 时基本不取流；窗口的「未供电」记录因此是 VOUT≈0 时的取流状态，不代表 MCU 欠压下的真实行为。",
+      "窗口剩余量提示：启动后 1.7904 s 足以容纳 3 帧（各约 15 ms），说明当前失败是可调度性问题，不一定只是能量不足。"
+    ]
+  },
+  "condition_separation": {
+    "nominal_reference": {
+      "工况": "固定场景 + 声明式初始储能 2.5 V（scenario.startup = declared-initial-storage）",
+      "model": "抽象单储能节点（storage_f = 68 µF，2.5->3.6 V）+ 平均功率耦合 + 固定 0.5 效率 + 固定状态电流",
+      "execution": "TX-84f4ff52",
+      "outcome": "四门任务验收 PASS"
+    },
+    "device_probe": {
+      "工况": "零初态冷启动（initial_vin = initial_vout = 0）+ 分立 VIN/C_IN 与 VOUT/C_OUT + 集成全波桥与 10 µH 电感",
+      "model": "LTC3588-1 厂商宏模型（sha 53775f93…），无固定效率级",
+      "execution": "notes/vendor-probe-result.json（独立能力执行）",
+      "outcome": "service_passed = false（0 有效帧）"
+    },
+    "shared": "同一场景（30 Hz、4.905 m/s²、20 s、4 帧在 2/6/10/14 s、采样 10 ms + 发送 4 ms、判定下限 2.2 V）、同一梁与同一源执行（protocol.source_execution = TX-84f4ff52）",
+    "why_different": [
+      "初始条件：2.5 V 声明式预充 vs 0 V",
+      "拓扑：单抽象节点 vs VIN/VOUT 双节点 + UVLO/PGOOD 阈值状态机",
+      "变换：固定 0.5 效率 vs 宏模型的桥/电感/开关损耗",
+      "负载整形：固定状态电流 vs 低电压电流衰减（limit(V(out)/1.8)）"
+    ],
+    "conclusion": "两者不能互相替代：名义结果只证明声明式预充下参考链自洽；探测结果只证明零初态冷启动下固定时刻调度不可服务。两者都不构成硅片结论。"
+  },
+  "interface_gaps_device_vs_model": [
+    {
+      "id": "G1_startup_ceiling",
+      "gap": "抽象储能节点上限 storage_max_v=3.6 V 低于器件 VIN 启动阈值 3.77…4.04 V",
+      "magnitude_v": "0.17…0.44（typ 0.44）",
+      "consequence": "模型无法体现经 PMIC 的启动过程；模型的 2.5 V 起始是声明式预充。現已在 vendor_probe 中部分补上：零初态下启动在 18.2096 s（VIN 峰值 4.0575 V）"
+    },
+    {
+      "id": "G2_floor_permissiveness",
+      "gap": "验收下限 2.2 V 低于器件 VIN 返回阈值 typ 2.87 V（最坏 3.08 V）与 PGOOD 2.30 V",
+      "magnitude_v": "0.67（对 2.87）/ 0.88（对最坏 3.08）/ 0.10（对 PGOOD 2.30）",
+      "consequence": "模型比器件宽松；贴器件后不得把 2.2 V 当作可用下限。vendor_probe 已把同一 2.2 V 判据用在 VOUT 上，结果为零帧（判决未被改动）"
+    },
+    {
+      "id": "G3_domain_mismatch",
+      "gap": "抽象储能节点既不是 VIN 也不是 VOUT，其读数与器件阈值不可直接比较",
+      "magnitude_v": "仅记录差值：抽象节点名义仿真最低 3.15309003 V 与 3.08 V 差 +0.07309003、与 2.87 V 差 +0.28309、与 PGOOD 2.30 V 差 +0.85309",
+      "consequence": "保留上一轮结论：不构成器件兼容性；已由 vendor_probe（分域模型）接手回答"
+    },
+    {
+      "id": "G4_single_node",
+      "gap": "名义模型只有一个储能节点；器件需要 C_IN（VIN，4.04/2.87 V 域）与 C_OUT（VOUT，2.5 V 稳压域）两个",
+      "consequence": "部分已由 vendor_probe 补：探测用 C_IN=150 µF、C_OUT=68 µF；但容量选择仍只有一轮探测，未扫描、未实测"
+    },
+    {
+      "id": "G5_conversion",
+      "gap": "名义模型用固定 0.5 平均效率；器件效率随 VIN/VOUT 变化且还有静态电流",
+      "consequence": "vendor_probe 移除了固定效率级，但仍是厂商宏模型；効率曲线与静态电流仍未对照数据手册核对"
+    },
+    {
+      "id": "G6_source_load",
+      "gap": "名义模型源端是 100 kOhm 阻性负载；器件端是集成桥 + 电感 + 电容 + 欠压门限的非线性负载",
+      "consequence": "vendor_probe 已用非线性网络（集成桥 + 10 µH + C_IN/C_OUT）跑过；结果：零初态下 VIN 峰值 4.0575 V、启动 18.2096 s、服务失败。残余差异：宏模型准确性与直流/瞬态细节未核"
+    }
+  ],
+  "missing_execution_steps": [
+    {
+      "step": 1,
+      "name": "双储能节点模型（VIN/C_IN 与 VOUT/C_OUT）+ UVLO/PGOOD 阈值状态机",
+      "why": "名义链仍缺；vendor_probe 提供了在宏模型下的一次实例（零初态），但不是任务门、未参数化、未实测"
+    },
+    {
+      "step": 2,
+      "name": "把调度从固定时刻改为启动/PGOOD 门控并验证",
+      "why": "探测显示固定时刻调度（2/6/10/14 s）在零初态下必然全部落空（启动 18.2096 s），而启动后剩 1.7904 s 足以容纳 3 帧；需电压驱动固件（execution_policy.feedback_iteration: not implemented）"
+    },
+    {
+      "step": 3,
+      "name": "启动时间的支配因素扫描（C_IN / 耦合功率 / UVLO 阈值）",
+      "why": "当前只有一个点：C_IN=150 µF、耦合不变 -> 18.2096 s；无扫描则无法判断能否把启动压到足够早"
+    },
+    {
+      "step": 4,
+      "name": "器件效率曲线与静态电流对照（包括最优/最坏 UVLO 阈值）",
+      "why": "探测只在一个标称宏模型下进行；最坏 VIN 上升 4.3 V > 观测峰值 4.0575 V，风险未量化"
+    },
+    {
+      "step": 5,
+      "name": "MCU / 传感器 / 射频器件级电流核对",
+      "why": "state_currents（1 mA / 8 mA / 8 µA）仍是场景假设；sensing-data、board-firmware、board-package 为 NOT_IMPLEMENTED"
+    },
+    {
+      "step": 6,
+      "name": "硬件台架验证（physical）",
+      "why": "启动时间、VIN 纹波、PGOOD 时序、帧成功率；当前 physical=NOT_TESTED"
+    }
+  ],
+  "next_engineering_question": {
+    "question": "在零初态、固定 20 s 窗口下，把帧调度改为启动/PGOOD 门控（启动后仍有 1.7904 s，足以容 3 帧、各约 15 ms）是否足以完成服务，还是必须依赖声明式预充？",
+    "why_now": "探测显示瓶颈可能是调度而非纯能量：四帧全部安排在启动之前；同时 VIN 峰值 4.0575 V 已过 typ 阈值，说明收获侧并不完全无力。",
+    "candidate_levers": [
+      "固件调度改为 PGOOD/电压门控或把帧移到启动之后（firmware/main.c 属设计空间）",
+      "缩短启动：降低 C_IN（探测用 150 µF）或提高耦合功率（梁参数在设计空间内）",
+      "若维持固定时刻调度，则必须保留声明式初始储能（任务场景即如此）"
+    ],
+    "requires": "电压/PGOOD 门控固件需要新适配器（execution_policy.feedback_iteration: not implemented）；本轮不执行新仿真。",
+    "measurement_plan": "下一轮在同一厂商宏模型路径上比较：(a) 现有固定调度 vs (b) 启动后门控调度；(c) C_IN 扫描（150/100/68 µF）对启动时间的支配关系；均在零初态、同一 2.2 V 判据下。"
+  },
+  "executed_vs_pending": {
+    "executed_nominal_reference": [
+      "source_model：模态源 + ngspice 原生见证，误差 0.4003% < 1%，tip/length 2.66% < 5%（TX-84f4ff52）。",
+      "load_binding：编译事件与求解器消费电荷一致，327.5520 µC。",
+      "power_service：4 帧全部满足供电，抽象储能节点采样/发送窗口最低 3.50317408 / 3.15309003 V >= 2.2 V，储能核算残差 0.0155%。",
+      "receiver_service：接收 [1,2,3,4]，无帧错误，20 s 内 >= 3 帧。",
+      "设计侧压力探针 EXP-E / EXP-F（两帧背靠背，47 µF 失败、68 µF 通过，针对抽象节点）。"
+    ],
+    "executed_device_probe": [
+      "notes/vendor-probe-result.json：厂商宏模型、零初态、双储能节点、集成桥 + 10 µH 电感；求解成功但 service_passed=false（启动 18.2096 s，0 有效帧）。这不是任务门，也不改变名义参考结论。"
+    ],
+    "pending": [
+      "启动/PGOOD 门控调度（next_engineering_question；需新适配器）。",
+      "启动时间支配因素扫描与 C_IN 取值（missing_execution_steps 2/3）。",
+      "器件效率曲线、静态电流与最坏 UVLO 阈值风险（step 4）。",
+      "MCU / 传感器 / 射频器件级电流与实际采集链路（step 5）。",
+      "硬件台架验证（step 6）。"
+    ],
+    "must_not_claim": [
+      "不得把仿真数值表述为实测（physical=NOT_TESTED）。",
+      "不得把抽象储能节点的最低电压与 VIN/PGOOD 阈值相比来声称器件接口兼容。",
+      "不得声称默认方案在零初态下已启动或已服务（vendor_probe: service_passed=false、0 有效帧）。",
+      "不得修改验收定义、下限或场景来把该失败改绿。",
+      "不得把厂商宏模型结果写成硅片实测或已通过器件验证。",
+      "不得再把最坏 VIN 返回阈值写成 2.66 V（最坏为 3.08 V），也不得再把电感位置写成 SW↔VIN 或把整流写成待核。",
+      "不得把推荐器件型号（MCU/传感器/射频）的供电与电流要求写成已验证结论。"
+    ]
+  },
+  "corrections_applied": [
+    {
+      "review_finding": "external-inductor",
+      "was": "说明称「无需外部电感」",
+      "now": "buck 需外部电感，典型 10 µH",
+      "effect": "新增 required_external_components"
+    },
+    {
+      "review_finding": "falling-worst",
+      "was": "把 2.66 V 称作最坏情况",
+      "now": "最坏（最早跳闸）为 3.08 V",
+      "effect": "与验收下限 2.2 V 的差距更正为 0.88 V（对 3.08 V）"
+    },
+    {
+      "review_finding": "voltage-domains",
+      "was": "把抽象储能节点最低电压与 VIN/PGOOD 阈值相比并称「接口一致」",
+      "now": "撤回该结论，新增 node_domains",
+      "effect": "G3 改写为「不构成兼容性结论」"
+    },
+    {
+      "review_finding": "source-claim",
+      "was": "把仿真读数写成「实测」",
+      "now": "统一改为「仿真结果」",
+      "effect": "措辞更正，数值不变"
+    },
+    {
+      "review_finding": "inductor-location（本轮）",
+      "was": "电感写在 SW 与 VIN 之间",
+      "now": "电感在 SW 与 VOUT 之间（10 µH，Rser 0.4 Ω）",
+      "effect": "按 notes/vendor-connection-facts.json 与 notes/vendor-probe.cir 更正"
+    },
+    {
+      "review_finding": "rectifier-status（本轮）",
+      "was": "整流排列写为「内部桥或外部器件待核」",
+      "now": "器件集成全波桥，压电接 PZ1/PZ2，无需外部整流器件",
+      "effect": "从待核改为已验证的连接事实"
+    }
+  ],
+  "sources": [
+    "notes/adi-source-facts.json",
+    "notes/default-source-review.json",
+    "notes/vendor-connection-facts.json",
+    "notes/vendor-probe-protocol.json",
+    "notes/vendor-probe-result.json",
+    "notes/vendor-probe.cir",
+    "notes/vendor-review.json",
+    "design.json",
+    "firmware/main.c",
+    "notes/candidate-r7-retention.md",
+    "notes/exp-e-pair-stress-47uf.md",
+    "notes/exp-f-pair-stress-68uf.md"
+  ]
+}

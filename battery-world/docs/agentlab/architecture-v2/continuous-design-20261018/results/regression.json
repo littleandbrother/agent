@@ -1,0 +1,63 @@
+{
+  "v2": {
+    "status": "PASS",
+    "tests": 294,
+    "sealed_files": 44,
+    "controls": 11,
+    "log": "/Users/depengsu/.local/share/bf-agent-architecture-v2/continuous-design/final-init-configured.log",
+    "log_sha256": "8f110bd1fd4ab2fcdc6946f669a3d2374180caea615141236e09daedb4fe1a66",
+    "model_calls": 0,
+    "native_solves": 0
+  },
+  "root": {
+    "status": "INTERRUPTED_CLOUD_FILE_READ",
+    "command": "PYTHONPYCACHEPREFIX=<runtime>/continuous-design/root-pycache ./init.sh",
+    "pid": 60623,
+    "process": "/Library/Frameworks/Python.framework/Versions/3.11/Resources/Python.app/Contents/MacOS/Python -m unittest discover -s tests -v",
+    "tests_seen": 536,
+    "observed_error_labels": 98,
+    "observed_failure_labels": 11,
+    "blocked_test": "test_secrets_check_passes (test_m48_submission_gate.M48SubmissionGateTests.test_secrets_check_passes) ... ",
+    "blocked_file": "experiments/snapshots/coupled-design-v2/m40a-task-bank-v1/cells/cell-9faf11228ab0a43b37ac3df0/coupled/cell-9faf11228ab0a43b37ac3df0/solver/precharge/facts.json",
+    "blocked_file_flags": "compressed,dataless",
+    "sample": "/Users/depengsu/.local/share/bf-agent-architecture-v2/continuous-design/root-init-active-sample.txt",
+    "reason": "Root historical snapshot file read blocked; no source or fixture repair in BFA-042 scope",
+    "full_root_verification_passed": false,
+    "signal": "SIGINT",
+    "at": 1792337172.578064,
+    "exit_code": 1,
+    "log": "/Users/depengsu/.local/share/bf-agent-architecture-v2/continuous-design/root-init-materialized.log",
+    "log_sha256": "dba72c4ee0b596942c5bee849d82f6cd59d9e87e9ccd92b37aee91254a07a321"
+  },
+  "project_state": {
+    "status": "PASS",
+    "log": "/Users/depengsu/.local/share/bf-agent-architecture-v2/continuous-design/project-state-final.log",
+    "log_sha256": "abb00b4cfbedfd6a9c54d824a80b4d548b0becdd748a554c9f2b8cbd7ec8b8d9",
+    "result": {
+      "a001_bundle_hash": "sha256:6fa761099b10c9b10060a3636380e5d83221cd95272ee6ac9efa96955ad97059",
+      "active_feature": null,
+      "b0_manifest_hash": "sha256:70077a2af5d3bdd54fbd0c8f0593a41a8c7df1502f21ece9a75ad8088f0f2618",
+      "foundation_features_complete": 4,
+      "method": "EpiDesign",
+      "next_feature": "B2-003-repair-and-blind-transfer",
+      "product": "Battery World Studio",
+      "research_milestones_complete": 3,
+      "research_milestones_total": 6,
+      "schema_version": "battery-world-project-state-validation-v1",
+      "status": "passed"
+    }
+  },
+  "scoped_whitespace_check": {
+    "status": "PASS",
+    "exit_code": 0,
+    "model_calls": 0,
+    "native_solves": 0
+  },
+  "quiescence": {
+    "status": "PASS",
+    "registered_owners_checked": 31,
+    "active_owners": 0,
+    "model_calls": 0,
+    "native_solves": 0
+  }
+}

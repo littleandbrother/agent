@@ -1,0 +1,44 @@
+\section{Battery-free mechanism mapping}
+The two structural pairs isolate BF relations that a passing current trace need
+not excite: a capacitor's upper energy ceiling and pending-event state across
+power loss. Their consumers are a timed service-energy transaction and a
+transmit guard. They are deliberately ideal witnesses, not complete nodes.
+
+A separate saved BF reference supplies startup, transient and event examples
+(Table~\ref{tab:bf-reference}). The prescribed source first charges a capacitor;
+ready/off thresholds and boot cost govern startup. A transmit attempt loads the
+rail according to $V_{\rm load}=\sqrt{2E/C}-I_{\rm TX}R_{\rm ESR}$; a failed rail
+or energy threshold resets the program. Reset can clear a volatile pending
+event. This is load--storage--program feedback. The source is prescribed and
+does not respond to load, so these examples do not establish source feedback.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+Condition & Input ($\mu$J) & First RX (ms) & Event by deadline & Rail gate \\
+\midrule
+Fast pulse & 150 & 15.8 & PASS & PASS \\
+Slow pulse & 150 & 54.8 & PASS & PASS \\
+High ESR & 150 & --- & FAIL & FAIL \\
+No energy & 0 & --- & FAIL & PASS \\
+Late pulse & 150 & 105.8 & FAIL & PASS \\
+Latched reset & 210 & 46.9 & PASS & PASS \\
+Volatile reset & 210 & --- & FAIL & PASS \\
+\bottomrule
+\end{tabular}
+\caption{Readback of seven saved ideal BF controls; no new simulation. The
+deadline is 100 ms. A passing rail gate without a receive event does not mean
+service success. Physical qualification is UNKNOWN for every row.}
+\label{tab:bf-reference}
+\end{table}
+
+Fast and slow pulses both supply 150 $\mu$J and pass, with different startup and
+receive times. The same total energy arriving late misses the service deadline.
+At 150 $\Omega$ ESR, transient droop prevents reception despite the same input
+energy. With 210 $\mu$J input, a common 40 $\mu$J shunt and postponed TX, the
+latched and volatile cases differ in event survival. The passive mechanical
+latch explicitly captures at zero electrical energy and retains across reset;
+this assumes neither free powered NVM writes nor a calibrated commercial latch.
+All sources and devices remain uncalibrated. Agreement with a predeclared
+negative control is distinct from a passing event-service verdict.

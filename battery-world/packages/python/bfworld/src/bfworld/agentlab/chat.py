@@ -138,6 +138,9 @@ class Conversations:
 
     def readiness(self,owner=None):
         model=self.app.provider.status(owner); reasons=[]
+        from .runtime_config import DEVELOPMENT_PROFILE
+        if DEVELOPMENT_PROFILE is not None and not all(DEVELOPMENT_PROFILE['capabilities'][k] for k in ['model','agent']):
+            reasons.append('DEVELOPMENT_EXECUTION_NOT_ENABLED')
         with self.store.connect() as db:
             if (self.home/'paid-window-closed.json').exists() and not budget_policy.unbounded_time(db,owner):reasons.append('PAID_WINDOW_CLOSED')
             if self.app.provider.recovery.unknown_blockers(db,owner):reasons.append('PROVIDER_USAGE_UNKNOWN_STOP')
@@ -159,7 +162,13 @@ class Conversations:
         if status['reasons']:raise ValueError(status['reasons'][0])
 
     def start(self,cid):
+        from .runtime_config import require_capability
+        require_capability('agent')
         if hasattr(self.app,'design_lab'):
+            if self.app.design_lab.repository.bound(cid):
+                from .design_lab.repository_controller import start
+                start(self.app.design_lab.repository,cid)
+                return
             with self.store.connect() as db:design_task=db.execute('SELECT 1 FROM design_tasks WHERE owner=?',(cid,)).fetchone()
             if design_task:
                 from .design_lab.paper_candidate import bound

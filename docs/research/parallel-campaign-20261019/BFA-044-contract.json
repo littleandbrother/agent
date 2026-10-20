@@ -1,0 +1,35 @@
+{
+  "id": "BFA-044-campaign-baseline",
+  "owner": "campaign-s0",
+  "status": "in-progress",
+  "hypothesis": "A frozen V2 HEAD plus content-bound overlay can reproduce identical source in three isolated worktrees without changing protected assets.",
+  "paper_claim": "Infrastructure prerequisite only; no scientific benefit claimed.",
+  "falsifier": "Any source digest mismatch, original protected asset drift, ownership overlap or wrong Git history.",
+  "owned_paths": [
+    "docs/research/parallel-campaign-20261019/",
+    "workbench/bf-campaign-s0-20261019/",
+    "feature_list.json",
+    "progress.md",
+    "session-handoff.md"
+  ],
+  "schema_changes": [
+    "bf-parallel-campaign-baseline-v1",
+    "bf-research-campaign-contract-v1"
+  ],
+  "targeted_tests": [
+    "manifest equality across source and worktrees",
+    "overlay patch reproduction",
+    "exclusive owner path validation",
+    "bounded source initialization"
+  ],
+  "negative_controls": [
+    "altered overlay rejected",
+    "wrong HEAD rejected",
+    "overlapping owner path rejected"
+  ],
+  "reproducible_command": "python3 docs/research/parallel-campaign-20261019/baseline.py verify",
+  "output_artifact": "docs/research/parallel-campaign-20261019/baseline-v1/",
+  "cost_cap": "No paid dispatch or native solve in baseline stage; 3 source trees < 1 GB plus <= 2 GB bounded pilot artifact reservation. Existing cumulative authorization retained.",
+  "claim_boundary": "Reproducible engineering state only. Original Baseline/Demo/ten Pi sessions and UNKNOWN retained.",
+  "stop_condition": "Source drift, mismatch, less than 5 GB available or ambiguous repository history stops dispatch."
+}

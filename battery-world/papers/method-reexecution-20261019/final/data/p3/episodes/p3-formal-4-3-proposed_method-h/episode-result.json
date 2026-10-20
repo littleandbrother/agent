@@ -1,0 +1,95 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.025541051999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0439431,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-3-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record.payload.event_latch",
+        "component_record.payload.cap_initial_voltage_v",
+        "component_record.payload.cap_voltage_max_v",
+        "component_record.payload.ready_v",
+        "component_record.payload.off_v",
+        "component_record.payload.output_v",
+        "component_record.payload.tx_current_a",
+        "component_record.payload.tx_duration_s",
+        "excitation_record.payload.dt_s",
+        "excitation_record.payload.contact_duration_s",
+        "excitation_record.payload.source_segments.0.power_w",
+        "saved_activity.payload.activity.3.reason",
+        "saved_activity.payload.activity.3.event_was_captured",
+        "saved_activity.payload.packets",
+        "model_law.payload.python_definition",
+        "saved_activity.source_sha256"
+      ],
+      "falsifier": "Falsified on a fresh session from the same base H and sources if any of: (a) a legal design that satisfies the derived predicates of that session still browns out between capture and tx-complete, or still yields packets=[], or yields more or fewer than the one required frame; (b) a legal design that violates the capture-reachability predicate or the transmit-admissibility predicate still delivers the required frame by the deadline, i.e. one of the predicates is not necessary in this model; (c) the procedure cannot decide a case and the outcome would have to be guessed instead of reported UNKNOWN; (d) dt does not divide tx_duration_s, so N (and the final step's min(dt,tx_left)) is ambiguous and two derivations from the same sources predict different outcomes. Any one such observation retires the necessity claim for the offending predicate, while the ledger and source-binding steps stand. Scope of the claim is also invalidated if the latch variant changes to passive-mechanical (capture would survive a reset), if more than one contact window or a shunt appears, if esr_ohm or boot_j is nonzero and unread, if dt changes, or if the question is moved from the frozen digital model to physical hardware, where no calibration exists and the answer must stay UNKNOWN.",
+      "hypothesis": "The retained failure (capture at the contact step, then brownout reason=tx-transient one step later, packets=[], no retry) is not an unlucky draw but the forced consequence of admitting transmit on capture alone. In the frozen b-transient-behavior-v1 model a request lasts N = tx_duration_s/dt model steps, and each of those steps independently requires pre-debit loaded_v >= output_v (equivalently stored energy >= C*output_v^2/2) and post-debit stored energy >= Eoff; the per-step debit q = output_v*tx_current_a*min(dt,tx_left) does not shrink with C while Emax and Eon do. Hence transmit is admissible only if the transmit-start energy e_T satisfies e_T >= max(C*output_v^2/2, C*off_v^2/2 + q) + (N-1)*(q - g), where g is the per-step net charge. Because the latch is volatile and the contact window is a single non-recurring step, any reset between capture and tx-complete is total loss of that episode, so 'powered and ready at the contact step' and 'the whole request completes without a reset' are one joint obligation, not two. An H that derives these predicates symbolically from the entry sources, screens the legal design space against them, lets transmit start later as a legitimate charge-accumulation lever, and keeps the infeasible boundary and the failed activity as counterexamples will predict the frozen model's per-design outcome (frame count, application bytes, deadline, brownout occurrence) without being handed any value.",
+      "impact_scope": "task-entry",
+      "method_sha256": "d31392a0ebb34d75f844b46e1eaf93cabb33bca8658593859f77556adab96be8",
+      "method_text": "M-H, consumed from task entry. Every symbol below is read from the frozen sources at entry; no value is assumed and no value is pre-chosen.\n\nSTEP 0 - Bind sources, mark UNKNOWN. Read capacitance_f, cap_voltage_max_v, ready_v, off_v, cap_initial_voltage_v, event_latch, output_v, tx_current_a, tx_duration_s, esr_ohm, boot_j, boot_delay_s, harvest_efficiency, idle_power_w, off_power_w from component_record; dt_s, duration_s, event_s, contact_duration_s, source_segments, shunts from excitation_record; deadline_s, issued_s, single_query_only, nonce_sequence, the seq/key/event token, required_application_bytes from the task query_protocol; and the simulation semantics from model_law. Anything missing is UNKNOWN and must not be filled with a plausible number. Note explicitly that the model_law docstring describes an ideal passive-mechanical latch while the configured event_latch may be volatile: read the field, do not inherit the docstring assumption. Physical calibration, nonce cryptography and datasheet equivalence are out of scope and must never be claimed.\n\nSTEP 1 - Keep D and H separate. Capacitance and the transmit-not-before time are device edits (D). This procedure is H: it may not contain a chosen capacitance or a chosen transmit time, may not submit a device assignment as the method, and may not edit the task, the model, or the acceptance rule. Its only output is an admission test plus a derived feasible set that a later D step consumes.\n\nSTEP 2 - Build the per-step energy ledger at the model's dt, not an average-power budget. Thresholds on stored energy E: Emax = C*cap_voltage_max_v^2/2, Eon = C*ready_v^2/2, Eoff = C*off_v^2/2. Per-step net charge while idle: g = (sum of active source_segments power_w * harvest_efficiency - P_drain) * dt, with P_drain = off_power_w while unpowered and idle_power_w while powered; the switch is a discrete event, so bound both. Per-step transmit debit: q = output_v * tx_current_a * min(dt, tx_left). Read esr_ohm and boot_j rather than assuming them zero. A 'there is enough energy overall' heuristic is sufficient reasoning at best and must not be promoted into a feasibility exclusion; the model resets on a single step.\n\nSTEP 3 - Trace every event source to delivery before choosing values. (a) Capture: the powered capture branch fires only when powered, ready (t >= ready_at), and event_s <= t < event_s + contact_duration_s, so the window is ceil(contact_duration_s/dt) steps wide; the boot branch runs earlier in the same step, so a boot landing exactly on the contact step still captures. (b) Pending state: with a volatile latch, capture is cleared by every reset, and the contact window does not recur, so a reset after capture destroys that episode for good. (c) Delivery: a frame exists only at the step where tx_left reaches zero on a non-reset path; that packet is the service completion and nothing follows it - no retry and no second frame. Therefore treat 'powered and ready at the contact step' and 'the request runs to completion without any reset' as one joint obligation.\n\nSTEP 4 - State the admissibility predicates symbolically. P1 capture reachable: the first boot step is no later than the step containing event_s, with Eon compared against the net charge accumulated by that step. P2 hold: between capture and transmit start the device must stay at or above Eoff; stored energy rises in that interval, so the only bound is spill at Emax, which caps E but does not lose feasibility. P3 transmit admissible: with e_T the stored energy at the transmit-start step, every transmit step k = 0..N-1 requires pre-debit energy e_T - k*(q - g) >= C*output_v^2/2 (with the esr_ohm*tx_current_a term subtracted from loaded_v when esr is nonzero) and post-debit energy >= Eoff; N = tx_duration_s/dt is valid only when dt divides tx_duration_s, otherwise the final step's min(dt, tx_left) and the tx_left tolerance make N uncertain - record UNKNOWN. P4 deadline: the completing step occurs no later than min(deadline_s, event_s + max_data_age_s). P5 frame: exactly one frame carrying required_application_bytes, with the seq/key/event token already fixed by the model, so de-duplication or nonce machinery is not part of the fix and must not be proposed as one. P6 reachability of e_T: e_T <= Emax and e_T <= g*t at the chosen start time, so the earliest admissible start is the smallest t >= max(event_s, transmit-not-before) with g*t >= the required e_T; extra wait raises e_T up to Emax. Consequence to state openly: 'transmit as early as possible' is not a safe default, and a later transmit time is a legitimate lever.\n\nSTEP 5 - Derive a feasible set, not a point. Eliminate the legal ranges against P1-P6 and keep the feasible region together with its infeasible boundary as evidence. Preserve the derived non-monotonicity in capacitance: q is fixed by output_v and tx_current_a and does not shrink with C, while Emax and Eon do, so too small a C cannot hold roughly two transmit debits and too large a C boots after the single contact step; the safe direction is not monotone and both edges are real. If the feasible set is empty or touchable only at a boundary, report UNKNOWN / no-update instead of forcing a design.\n\nSTEP 6 - Preregister order and margin under the candidate budget. Predict each candidate's outcome from Steps 2-4 before running it, run at most the budgeted number of distinct designs, and make the first candidate sit strictly inside the derived region and the second probe the edge whose predicate is least sure. Label the interior margin as a robustness heuristic only: boundary designs remain feasible and are recorded, never excluded from the feasible space on heuristic grounds. After each observation, compare the actual activity and packet record against the prediction and record the mismatch.\n\nSTEP 7 - Keep failures as counterexamples. Retain the observation with capture, a tx-transient brownout on the next step, packets=[], and a late reboot as a standing counterexample proving capture-then-reset is unrecoverable under a volatile latch with one contact window; cite it whenever a later design re-asserts that capturing is sufficient. Never overwrite it, and never report a completed service the trace does not contain.\n\nSTEP 8 - Claim discipline. Report only the derived predicates and feasible region, the frozen model's predicted outcome for the designs actually run, and retained observations with their real brownout and energy costs. Do not claim hardware behaviour, statistical advantage, transfer to other tasks, or any recursive self-improvement; leave acceptance to the independent service.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-3-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-296398597c66387d",
+  "protocol_sha256": "5c875b6c3c525739ffe47ba4dbeec771670ddf2cf7f86f1f1da039a1d8c5a288",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "d1ff34b335bc8a6695af8dbad7ed2ff4d35d6ef30ce19716e6468c9b375dce03",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-4-3-proposed_method",
+    "id": "p3-formal-4-3-proposed_method-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "0c814dcf7c80b1fc6a9f395ff0296c19f4a9380a7bebdfe2258800d78fbb5c4e",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 85.4244862080086,
+  "wall_seconds_total": 85.87858345799032
+}

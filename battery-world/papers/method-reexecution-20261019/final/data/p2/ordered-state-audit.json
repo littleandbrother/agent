@@ -1,0 +1,57 @@
+{
+  "cases": {
+    "p2-h0-design-001": {
+      "design": {
+        "capacitance_f": 2.2e-05,
+        "tx_not_before_s": 0.045
+      },
+      "event_latch_unchanged": "volatile",
+      "first_receive_s": 0.046900000000000004,
+      "legacy_event_preserved_after_reset_label": "FAIL",
+      "ordered_interpretation": "EVENT_DELIVERED_BEFORE_ANY_RESET",
+      "pending_state_retained_across_reset": "NOT_ESTABLISHED_BY_SUCCESSFUL_RUN",
+      "physical_qualification": "UNKNOWN",
+      "raw_sha256": "910c55c5bbc6647eef94699948f901e3da8be9fafe67753876e4ff7955bbd7f7",
+      "resets_after_delivery_before_deadline": [],
+      "resets_before_first_delivery": [],
+      "tx_completes_s": [
+        0.046900000000000004
+      ],
+      "tx_starts_s": [
+        0.045000000000000005
+      ]
+    },
+    "p2-hprime-design-001": {
+      "design": {
+        "capacitance_f": 9e-06,
+        "tx_not_before_s": 0.0037
+      },
+      "event_latch_unchanged": "volatile",
+      "first_receive_s": 0.0056,
+      "legacy_event_preserved_after_reset_label": "PASS",
+      "ordered_interpretation": "EVENT_DELIVERED_BEFORE_ANY_RESET",
+      "pending_state_retained_across_reset": "NOT_ESTABLISHED_BY_SUCCESSFUL_RUN",
+      "physical_qualification": "UNKNOWN",
+      "raw_sha256": "d0ee89fe918ca38fe3363e06f3afedc066711c4097e59c52572e185c56036776",
+      "resets_after_delivery_before_deadline": [
+        {
+          "action": "brownout",
+          "event_was_captured": true,
+          "reason": "energy-threshold",
+          "time_s": 0.012100000000000001
+        }
+      ],
+      "resets_before_first_delivery": [],
+      "tx_completes_s": [
+        0.0056
+      ],
+      "tx_starts_s": [
+        0.0037
+      ]
+    }
+  },
+  "frozen_checker_changed": false,
+  "legacy_label_limitation": "reference_b uses success-and-any-reset for event_preserved_after_reset; it does not establish that pending state persisted through a reset. Successful early delivery must be distinguished from reset retention.",
+  "new_scientific_executions": 0,
+  "status": "PASS"
+}

@@ -1,0 +1,214 @@
+{
+  "actual_E5": "NOT_RUN_BY_B_PREPARATION",
+  "actual_consumer": "S0_REQUIRED",
+  "additional_preparation": "STOPPED",
+  "api": {
+    "authority": "S0 supplies real sources, independent qualification/units/consumer, exact source hash and usage ledger; participant metadata is not authority",
+    "caps": {
+      "ast_depth": 8,
+      "ast_nodes": 64,
+      "source_bytes": 8000000,
+      "vector_items": 32768
+    },
+    "evaluate_proposal": "(spec: dict, source_payload: raw JSON, *, field_units: optional S0-owned mapping=None) -> unqualified typed scalar or UNKNOWN",
+    "hashes": "evaluate payload_sha256 binds canonical JSON; bind_acquisition separately binds original bytes using S0 expected hash",
+    "policy": "propose/submit have top-level model-supplied policy=[{equals:typed scalar,design:{capacitance_f:number,tx_not_before_s:number}}], 1..3 branches; S0 executes real consumer",
+    "tool_schema": "() -> generic sources/acquire/propose/submit parameters JSON Schema; no source fields/formula/examples inserted",
+    "units": "Without field_units mapping status is DECLARED_ONLY. Supplied unit mapping checks consistency, never self-qualifies source. OBSERVED means computed value only.",
+    "validate_proposal": "(proposal: dict) -> normalized safe spec; ValueError on rejected proposal"
+  },
+  "commits": 0,
+  "dispatch_id": "phase-2-core-methods-bf-20261020-001",
+  "examples": [
+    {
+      "evaluate_proposal_return": {
+        "discovery_claim": "NOT_ESTABLISHED",
+        "domain_status": "NOT_ESTABLISHED",
+        "evaluation": {
+          "ast_nodes_visited": 0,
+          "provider_requests": 0,
+          "scientific_executions": 0,
+          "wall_ns": 46208
+        },
+        "mode": "selection",
+        "payload_sha256": "2a8199939ad03f40b3086f82c20981e00cff6eabe05aa9d2aac65dbb068306f8",
+        "proposal_sha256": "f6fc773be6e8271af5a3b2e39d6328f4e09a135bfdd4227b2f0d2cd34089dc42",
+        "qualification": "EXTERNAL_REQUIRED",
+        "real_consumer": "NOT_EXECUTED",
+        "reason": null,
+        "schema_version": "phase2-observation-result-v1",
+        "source_authenticity": "EXTERNAL_REQUIRED",
+        "source_id": "mock-record",
+        "status": "OBSERVED",
+        "type": "boolean",
+        "unit_status": "DECLARED_ONLY",
+        "units": "1",
+        "value": true
+      },
+      "evaluate_proposal_second_argument": {
+        "flag": true
+      },
+      "label": "MOCK only; keep out of live initial prompt",
+      "validate_proposal_input": {
+        "domain": {
+          "constraints": []
+        },
+        "field": "/flag",
+        "hypothesis": "MOCK documentation fixture, not an Agent discovery",
+        "mode": "selection",
+        "source_id": "mock-record",
+        "units": "1"
+      },
+      "validate_proposal_return": {
+        "domain": {
+          "constraints": []
+        },
+        "field": "/flag",
+        "hypothesis": "MOCK documentation fixture, not an Agent discovery",
+        "mode": "selection",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "mock-record",
+        "units": "1"
+      }
+    },
+    {
+      "evaluate_proposal_return": {
+        "discovery_claim": "NOT_ESTABLISHED",
+        "domain_status": "NOT_ESTABLISHED",
+        "evaluation": {
+          "ast_nodes_visited": 3,
+          "provider_requests": 0,
+          "scientific_executions": 0,
+          "wall_ns": 50209
+        },
+        "mode": "construction",
+        "payload_sha256": "035d95636deb60dd8aff0a63aeacfcea5177eac3be97ad7dd46b0224df516415",
+        "proposal_sha256": "bf3ad9d6b1049cec42f861b9d71e5d39951b4980f0001f74494e3665123f1cc5",
+        "qualification": "EXTERNAL_REQUIRED",
+        "real_consumer": "NOT_EXECUTED",
+        "reason": null,
+        "schema_version": "phase2-observation-result-v1",
+        "source_authenticity": "EXTERNAL_REQUIRED",
+        "source_id": "mock-record",
+        "status": "OBSERVED",
+        "type": "number",
+        "unit_status": "DECLARED_ONLY",
+        "units": "J",
+        "value": 5.0
+      },
+      "evaluate_proposal_second_argument": {
+        "alpha": 2,
+        "beta": 3
+      },
+      "label": "MOCK only; keep out of live initial prompt",
+      "validate_proposal_input": {
+        "ast": {
+          "args": [
+            {
+              "field": "/alpha",
+              "units": "J"
+            },
+            {
+              "field": "/beta",
+              "units": "J"
+            }
+          ],
+          "op": "add"
+        },
+        "domain": {
+          "constraints": []
+        },
+        "hypothesis": "MOCK researcher-authored arithmetic, not discovery",
+        "mode": "construction",
+        "source_id": "mock-record",
+        "units": "J"
+      },
+      "validate_proposal_return": {
+        "ast": {
+          "args": [
+            {
+              "field": "/alpha",
+              "units": "J"
+            },
+            {
+              "field": "/beta",
+              "units": "J"
+            }
+          ],
+          "op": "add"
+        },
+        "domain": {
+          "constraints": []
+        },
+        "hypothesis": "MOCK researcher-authored arithmetic, not discovery",
+        "mode": "construction",
+        "schema_version": "phase2-observation-proposal-v1",
+        "source_id": "mock-record",
+        "units": "J"
+      }
+    }
+  ],
+  "external_qualification": "S0_REQUIRED",
+  "feature": "BFA-056-phase2-information-discovery",
+  "files": {
+    "configs/studies/phase2-20261020/interfaces/protocol.json": {
+      "bytes": 8482,
+      "sha256": "a9e3d3f83cb088bb498cd2498fd91c8fa3a8e284116f56f5c3936a56ac015235"
+    },
+    "docs/research/phase2-20261020/interfaces/PREFLIGHT.json": {
+      "bytes": 711,
+      "sha256": "d69e0da4febd4929c7b17891336b7a2faa53a5bdd3b67733b3a0da8c137cb856"
+    },
+    "docs/research/phase2-20261020/interfaces/verification/minimal-tests-001.json": {
+      "bytes": 674,
+      "sha256": "a570dcafd9086759d603e2b702b1b38a925768a8e7ef7d9165b6691a21cd4108"
+    },
+    "docs/research/phase2-20261020/interfaces/verification/minimal-tests-001.log": {
+      "bytes": 2135,
+      "sha256": "446f8dbf9e91f09af231c31fde8d11b10e119c0e7112e929b873d882d2a59df4"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase2_discovery.py": {
+      "bytes": 34333,
+      "sha256": "a1a3247803b0fa912c7ceffb7de58698c81682202424609da9e590969d693314"
+    },
+    "scripts/campaign_phase2_discovery.py": {
+      "bytes": 2746,
+      "sha256": "128ccd30ce80a0e3241997c6a643f328d41b831839c3cd09f51990ef0c10908b"
+    },
+    "tests/agentlab/test_campaign_phase2_discovery.py": {
+      "bytes": 10074,
+      "sha256": "a84bda9e80e046cb5567192ff957e613428b04f7f498c87889bfbe887b2b48f3"
+    }
+  },
+  "import_files": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase2_discovery.py",
+    "tests/agentlab/test_campaign_phase2_discovery.py"
+  ],
+  "native_dispatches": 0,
+  "other_created_files": [
+    "scripts/campaign_phase2_discovery.py",
+    "configs/studies/phase2-20261020/interfaces/protocol.json",
+    "docs/research/phase2-20261020/interfaces/PREFLIGHT.json",
+    "docs/research/phase2-20261020/interfaces/verification/minimal-tests-001.log",
+    "docs/research/phase2-20261020/interfaces/verification/minimal-tests-001.json"
+  ],
+  "paid_requests": 0,
+  "paper": "PAUSED per phase2-actual-results-focus-20261020; no phase2 paper generated",
+  "pushes": 0,
+  "root": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world",
+  "schema_version": "phase2-b-minimal-handoff-v1",
+  "scientific_executions": 0,
+  "shared_state_changes": false,
+  "source_baseline": "P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+  "status": "FROZEN_MINIMAL_INTERFACE_READY",
+  "verification": {
+    "errors": 0,
+    "failures": 0,
+    "full_ci": "NOT_RUN per S0 actual-results-first scope",
+    "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world/docs/research/phase2-20261020/interfaces/verification/minimal-tests-001.json",
+    "skipped": 0,
+    "status": "PASS",
+    "tests_run": 14
+  },
+  "worker_idle": true
+}

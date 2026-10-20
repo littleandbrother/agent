@@ -1,0 +1,311 @@
+{
+  "construction_wall_ns": 239458,
+  "definition": {
+    "domain": {
+      "capacitance_uf": [
+        4.0,
+        12.0
+      ]
+    },
+    "expression": {
+      "args": [
+        {
+          "args": [
+            {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "name": "initial_energy_uj",
+                      "op": "field"
+                    },
+                    {
+                      "args": [
+                        {
+                          "name": "source_power_uw",
+                          "op": "field"
+                        },
+                        {
+                          "name": "source_end_s",
+                          "op": "field"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "add"
+                },
+                {
+                  "args": [
+                    {
+                      "op": "constant",
+                      "value": 0.5
+                    },
+                    {
+                      "args": [
+                        {
+                          "name": "capacitance_uf",
+                          "op": "field"
+                        },
+                        {
+                          "args": [
+                            {
+                              "name": "clamp_v",
+                              "op": "field"
+                            }
+                          ],
+                          "op": "square"
+                        }
+                      ],
+                      "op": "mul"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "min"
+            },
+            {
+              "args": [
+                {
+                  "op": "constant",
+                  "value": 0.5
+                },
+                {
+                  "args": [
+                    {
+                      "name": "capacitance_uf",
+                      "op": "field"
+                    },
+                    {
+                      "args": [
+                        {
+                          "name": "min_v",
+                          "op": "field"
+                        }
+                      ],
+                      "op": "square"
+                    }
+                  ],
+                  "op": "mul"
+                }
+              ],
+              "op": "mul"
+            }
+          ],
+          "op": "sub"
+        },
+        {
+          "name": "service_energy_uj",
+          "op": "field"
+        }
+      ],
+      "op": "sub"
+    },
+    "inputs": [
+      "capacitance_uf",
+      "clamp_v",
+      "initial_energy_uj",
+      "min_v",
+      "service_energy_uj",
+      "source_end_s",
+      "source_power_uw"
+    ],
+    "model_assumptions": "ideal clamp; no leakage; all input precedes service",
+    "origin": "researcher-specified relation, deterministic compiler; no Agent invention",
+    "output_unit": "uJ",
+    "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+    "schema_version": "campaign-observation-expression-v1"
+  },
+  "fresh_process_executions": [
+    {
+      "input_bytes": 212,
+      "input_sha256": "e28553136f9303a534ecb1645aade1f8a76bea6ad89e90f353d4824dcea9bcbb",
+      "process_executions": 1,
+      "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+      "result": {
+        "energy_headroom_uj": -14.0
+      },
+      "wall_ns": 18877042,
+      "world": "low-clamp"
+    },
+    {
+      "input_bytes": 212,
+      "input_sha256": "ad85e07c0b2f46ad86b2da80c9b47211cef63a488b4e281d125c8e5ef8389062",
+      "process_executions": 1,
+      "program_sha256": "42eb6ef7fa88af15c4e92ab12c9032759b54a79b29d88b6374ba00b7dc22cbe9",
+      "result": {
+        "energy_headroom_uj": 8.0
+      },
+      "wall_ns": 18853167,
+      "world": "high-clamp"
+    }
+  ],
+  "human_intervention": "equation and relevant inputs supplied by researcher; not autonomously discovered",
+  "qualification_model_runs": 20,
+  "qualification_rows": [
+    {
+      "capacitance_uf": 4.0,
+      "reference_margin_uj": -14.0,
+      "reference_verdict": "FAIL",
+      "value_uj": -14.0,
+      "verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 5.0,
+      "reference_margin_uj": -10.0,
+      "reference_verdict": "FAIL",
+      "value_uj": -10.0,
+      "verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 6.0,
+      "reference_margin_uj": -6.0,
+      "reference_verdict": "FAIL",
+      "value_uj": -6.0,
+      "verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 7.0,
+      "reference_margin_uj": -2.0,
+      "reference_verdict": "FAIL",
+      "value_uj": -2.0,
+      "verdict": "FAIL",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 7.5,
+      "reference_margin_uj": 0.0,
+      "reference_verdict": "PASS",
+      "value_uj": 0.0,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 8.0,
+      "reference_margin_uj": 2.0,
+      "reference_verdict": "PASS",
+      "value_uj": 2.0,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 9.0,
+      "reference_margin_uj": 5.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 5.5,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 10.0,
+      "reference_margin_uj": 4.999999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 5.0,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 11.0,
+      "reference_margin_uj": 4.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 4.5,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 12.0,
+      "reference_margin_uj": 3.9999999999978684,
+      "reference_verdict": "PASS",
+      "value_uj": 4.0,
+      "verdict": "PASS",
+      "world": "low-clamp"
+    },
+    {
+      "capacitance_uf": 4.0,
+      "reference_margin_uj": 7.999999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 8.0,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 5.0,
+      "reference_margin_uj": 7.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 7.5,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 6.0,
+      "reference_margin_uj": 6.999999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 7.0,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 7.0,
+      "reference_margin_uj": 6.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 6.5,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 7.5,
+      "reference_margin_uj": 6.249999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 6.25,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 8.0,
+      "reference_margin_uj": 5.999999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 6.0,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 9.0,
+      "reference_margin_uj": 5.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 5.5,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 10.0,
+      "reference_margin_uj": 4.999999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 5.0,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 11.0,
+      "reference_margin_uj": 4.499999999997868,
+      "reference_verdict": "PASS",
+      "value_uj": 4.5,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    },
+    {
+      "capacitance_uf": 12.0,
+      "reference_margin_uj": 3.9999999999978684,
+      "reference_verdict": "PASS",
+      "value_uj": 4.0,
+      "verdict": "PASS",
+      "world": "high-clamp"
+    }
+  ],
+  "qualification_solver_steps": 116800,
+  "qualification_wall_ns": 13017208,
+  "status": "PASS"
+}

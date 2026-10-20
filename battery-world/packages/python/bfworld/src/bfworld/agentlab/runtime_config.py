@@ -76,6 +76,34 @@ CMSIS = configured('CMSIS', HOME_ROOT / 'toolchains/stm32l031')
 EDA_PROTOCOL_ROOT = configured('EDA_PROTOCOL_ROOT', Path.home()/'Documents/easyeda-agent')
 GO = configured('GO', RUNTIME_ROOT/'toolchains/go1.27.2/go/bin/go')
 
+# A configured V2 worktree cannot silently attach to the default production home.
+# Clean baseline/integration checkouts retain the original default behavior.
+_SOURCE_PROFILE = REPO.parent / '.bf-development-profile.json'
+DEVELOPMENT_PROFILE = None
+if _SOURCE_PROFILE.exists() or _CONFIG.get('development_profile') or os.environ.get('BF_DEVELOPMENT_PROFILE'):
+    from .environment_profile import validate
+    reference = _CONFIG.get('development_profile')
+    if not isinstance(reference, dict):
+        raise ValueError('DEVELOPMENT_CONFIGURATION_REQUIRED')
+    if _SOURCE_PROFILE.is_file() and json.loads(_SOURCE_PROFILE.read_text()) != reference:
+        raise ValueError('DEVELOPMENT_WORKTREE_PROFILE_MISMATCH')
+    DEVELOPMENT_PROFILE = validate(reference, _CONFIG, os.environ, REPO.parent)
+
+
+def require_capability(name):
+    from .environment_profile import require
+    require(DEVELOPMENT_PROFILE, name)
+
+
+def validate_workbench_root(root):
+    from .environment_profile import workbench_root
+    workbench_root(DEVELOPMENT_PROFILE, root)
+
+
+def validate_native_project(project_uuid):
+    from .environment_profile import project
+    project(DEVELOPMENT_PROFILE, project_uuid)
+
 
 def public_paths():
     """Operator diagnostics omit secret paths and values."""

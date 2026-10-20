@@ -1,0 +1,141 @@
+{
+  "bf_engine_input": {
+    "contact_duration_s": 0.001,
+    "deadline_s": 7,
+    "device": {
+      "boot_delay_s": 0.0,
+      "boot_j": 0.0,
+      "cap_initial_voltage_v": 0,
+      "cap_voltage_max_v": 2.0,
+      "capacitance_f": 5e-05,
+      "esr_ohm": 0.0,
+      "event_latch": "volatile",
+      "harvest_efficiency": 1.0,
+      "id": 301,
+      "idle_power_w": 1e-06,
+      "off_power_w": 1e-06,
+      "off_v": 0.2,
+      "output_v": 1.0,
+      "ready_v": 1.0,
+      "tx_current_a": 0.025,
+      "tx_duration_s": 0.002,
+      "tx_not_before_s": 2
+    },
+    "dt_s": 0.001,
+    "duration_s": 30,
+    "event_s": 2,
+    "model_id": "b-transient-behavior-v1",
+    "partition": "public-development",
+    "schema_version": "campaign-task-v1",
+    "shunts": [],
+    "source_calibration": "SYNTHETIC_DC_CONTRACT_NOT_RF_MEASUREMENT",
+    "source_segments": [
+      {
+        "compliance_v": 2.0,
+        "end_s": 30,
+        "power_w": 2e-05,
+        "start_s": 0
+      }
+    ]
+  },
+  "catalog_declared_data": {
+    "contact_duration_s": 30,
+    "dc_power_w": 2e-05,
+    "idle_power_w": 1e-06,
+    "initial_storage_j": 0,
+    "maximum_data_age_s": 5,
+    "maximum_storage_j": 0.0002,
+    "query_s": 2,
+    "reply_deadline_after_query_s": 5,
+    "reply_energy_j": 5e-05
+  },
+  "claim_boundary": "A digital single-window derivative of proposed C-lite, not the full C0 system, an RF measurement, hardware qualification or heldout transfer result.",
+  "id": "clite-query-window-derived-v1",
+  "initial_design": {
+    "capacitance_f": 5e-05,
+    "tx_not_before_s": 2
+  },
+  "legal_design_space": {
+    "capacitance_f": {
+      "maximum": 0.0001,
+      "minimum": 2.5e-05,
+      "units": "F"
+    },
+    "tx_not_before_s": {
+      "maximum": 7,
+      "minimum": 2,
+      "units": "s"
+    }
+  },
+  "measured_physical_data": [],
+  "mechanism": "Energy arrival before and after a query, cold-start readiness, volatile query capture, earliest-TX scheduling and a fixed causal reply deadline; no additional physical relation is supplied.",
+  "missing_measurements": [
+    "RF field and RF-to-DC efficiency or load-response waveform",
+    "Measured tag current, PMIC cold-start/UVLO and conversion losses",
+    "Real capacitor leakage/ESR and calibrated voltage thresholds",
+    "Actual PHY/CRC reliability, clock uncertainty and temperature dependence"
+  ],
+  "parent_case": "C-lite",
+  "provider_requests": 0,
+  "qualification_required_before_matrix": [
+    "S0 freezes/version-binds this new task and its full public facts before any outcome",
+    "S0 adapts/qualifies query nonce, freshness and ordered query-to-reply receiver gates; the old event-receive label alone is insufficient",
+    "Independently check source integral, complete service and task-specific event order at declared dt; no B preparation solve",
+    "Apply identical task/evaluator/source across arms and count every candidate exposure within the group total"
+  ],
+  "schema_version": "phase3-derived-clite-query-v1",
+  "scientific_executions": 0,
+  "scope_changes": [
+    "First contact window only: 0..30 s from the original [0,0.5] min window",
+    "One tag and one gateway instead of the full ten-tag/two-gateway 60 min C0 system",
+    "Single deterministic nonce/query; no collisions, packet loss or multi-tag scheduling",
+    "DC port power is prescribed; no RF electromagnetic or load-dependent RF conversion claim"
+  ],
+  "selection_reason": "C-lite supplies explicit proposed DC power, storage, idle load, query timing and reply deadline. A bounded single-window event task can be executed digitally without inventing measured RF conversion or waiting for hardware.",
+  "source": {
+    "case_canonical_sha256": "b3771767da0da7731afa942916e6394964186bdd58d91d6f6276badd9ef3c2df",
+    "case_json_pointer": "/cases/4",
+    "catalog_status": "proposal-only",
+    "parameter_status": "All new numeric service profiles are proposed task requirements, not validated capabilities.",
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/two-papers-v0.2-20261019/case_catalog_v0.2.json",
+    "sha256": "eb1aed8426371a5f857018da7cab9987e380083ca7a736f30d164beb51072ebb"
+  },
+  "status": "PREREGISTERED_DIGITAL_DERIVATION_NOT_EXECUTED",
+  "synthetic_ideal_assumptions": {
+    "boot_delay_s": 0.0,
+    "boot_j": 0.0,
+    "cap_voltage_max_v": 2.0,
+    "esr_ohm": 0.0,
+    "event_latch": "volatile",
+    "harvest_efficiency": 1.0,
+    "note": "These values are explicit digital construction choices, not measured/vendor parameters. TX power and duration encode the declared 50 uJ reply cost. No physical boot or RF implementation is qualified.",
+    "off_v": 0.2,
+    "output_v": 1.0,
+    "ready_v": 1.0,
+    "tx_current_a": 0.025,
+    "tx_duration_s": 0.002
+  },
+  "task": {
+    "contact_duration_s": 0.001,
+    "deadline_s": 7,
+    "duration_s": 30,
+    "event_s": 2,
+    "query": {
+      "issued_s": 2,
+      "nonce": "phase3-q-001"
+    },
+    "receiver": {
+      "deadline_s": 7,
+      "deduplicate_same_query": true,
+      "max_data_age_s": 5,
+      "not_before_query": true,
+      "required": [
+        "id",
+        "query_nonce",
+        "query_event_state",
+        "sequence",
+        "crc"
+      ]
+    }
+  }
+}

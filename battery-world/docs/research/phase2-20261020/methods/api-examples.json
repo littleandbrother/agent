@@ -1,0 +1,176 @@
+{
+  "label": "MOCK_ONLY_NOT_A_REAL_HPRIME",
+  "import": "from bfworld.agentlab.campaign20261019 import phase2_methods as m",
+  "tool_schema_call": "m.tool_schema()",
+  "tool_schema_result": {
+    "type": "object",
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hypothesis",
+          "falsifier",
+          "method_text",
+          "changed_artifact"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "bf-phase2-method-proposal-v1"
+          },
+          "changed_artifact": {
+            "const": "H"
+          },
+          "decision": {
+            "const": "propose"
+          },
+          "hypothesis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "falsifier": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "method_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16000,
+            "description": "Method instructions consumed from task entry; not a device submission or acceptance decision."
+          },
+          "changes": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "artifact",
+                "component"
+              ],
+              "properties": {
+                "artifact": {
+                  "const": "H"
+                },
+                "component": {
+                  "enum": [
+                    "global_prompt",
+                    "skills",
+                    "observation_policy",
+                    "context_policy",
+                    "experiment_order",
+                    "organization"
+                  ]
+                }
+              }
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            }
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision",
+          "reason"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "bf-phase2-method-proposal-v1"
+          },
+          "changed_artifact": {
+            "const": "H"
+          },
+          "decision": {
+            "const": "no-update"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        }
+      },
+      {
+        "type": "object",
+        "maxProperties": 0
+      }
+    ]
+  },
+  "validate_call": "m.validate_method(mock_input)",
+  "mock_input": {
+    "changed_artifact": "H",
+    "hypothesis": "MOCK: a toy spelling policy may expose an invalid word.",
+    "falsifier": "MOCK: the revised toy controller never consumes the policy.",
+    "method_text": "MOCK: compare a toy word to its declared alphabet before spelling it."
+  },
+  "validate_result": {
+    "schema_version": "bf-phase2-method-proposal-v1",
+    "decision": "propose",
+    "changed_artifact": "H",
+    "hypothesis": "MOCK: a toy spelling policy may expose an invalid word.",
+    "falsifier": "MOCK: the revised toy controller never consumes the policy.",
+    "method_text": "MOCK: compare a toy word to its declared alphabet before spelling it.",
+    "changes": [
+      {
+        "artifact": "H",
+        "component": "global_prompt"
+      }
+    ],
+    "evidence_refs": [],
+    "method_sha256": "87892cb4432ed82cc18c6785fe6752cba79ddf3471db1f1cefb6b72dfed66513",
+    "impact_scope": "task-entry",
+    "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+  },
+  "impact_calls": [
+    {
+      "input": {
+        "changed_artifact": "H"
+      },
+      "return": "task-entry"
+    },
+    {
+      "input": {
+        "changed_artifact": "D",
+        "changed_fields": [
+          "tx_not_before_s"
+        ]
+      },
+      "return": "full-feedback-response"
+    }
+  ],
+  "empty_input": {},
+  "empty_return": {
+    "schema_version": "bf-phase2-method-proposal-v1",
+    "decision": "no-update",
+    "changed_artifact": "H",
+    "reason": "EMPTY_PROPOSAL",
+    "status": "NO_UPDATE"
+  },
+  "no_update_input": {
+    "decision": "no-update",
+    "reason": "MOCK: insufficient evidence"
+  },
+  "no_update_return": {
+    "schema_version": "bf-phase2-method-proposal-v1",
+    "decision": "no-update",
+    "changed_artifact": "H",
+    "reason": "MOCK: insufficient evidence",
+    "status": "NO_UPDATE"
+  },
+  "scientific_results": "NOT_RUN"
+}

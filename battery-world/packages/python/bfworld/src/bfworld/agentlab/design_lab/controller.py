@@ -12,6 +12,7 @@ from .. import launcher, budget_policy
 from ..runtime_config import PI, NODE
 from ..model_profile import for_owner as model_profile
 from ..store import canonical, identity
+from ..storage import copy_artifact
 from .contracts import sha, sealed
 
 
@@ -167,7 +168,7 @@ def _run(lab,owner,dry_run):
                 process.wait(timeout=5)
             trace=output/'trace.jsonl'
             if trace.is_file():
-                shutil.copyfile(trace,attempt/'trace-sealed.jsonl')
+                copy_artifact(trace,attempt/'trace-sealed.jsonl')
                 receipt['trace_path']=str(attempt/'trace-sealed.jsonl')
                 receipt['trace_sha256']=sha(attempt/'trace-sealed.jsonl')
             receipt['ended']=time.time();sealed(attempt/'receipt.json',receipt)

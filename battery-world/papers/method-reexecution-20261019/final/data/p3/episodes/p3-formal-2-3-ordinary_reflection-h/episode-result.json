@@ -1,0 +1,87 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.02053398,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0472527,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-3-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record.55d43741fcc5",
+        "component_record.event_latch.volatile",
+        "excitation_record.2820ae5862b2",
+        "excitation_record.shunts.0",
+        "model_law.d690d8a89532",
+        "saved_activity.ae3c8933de67",
+        "saved_activity.brownout.0121.captured",
+        "saved_activity.packets.empty",
+        "derived.emax.54.45uJ.spill",
+        "derived.eon.39.2uJ.eoff.16.2uJ",
+        "derived.tx.28.8uJ.2ms",
+        "observation.tx_not_before_at_legal_max"
+      ],
+      "falsifier": "The update is falsified if, run on these same frozen facts (component_record 55d43741, excitation_record 2820ae58, model_law b-transient-behavior-v1, dt 1e-4), the procedure's screen still selects a design whose retained-simulator trace shows packets=[] or a brownout between first capture and tx-complete, or if its derived checklist quantities disagree with the retained trace (saved_activity ae3c8933: first_boot 0.0027 s, capture starts 0.0037 s, energy-threshold brownout 0.0121 s with event_was_captured=true) by more than one dt step. It is also falsified if applying the screen to the retained base design returns it as feasible, or if a deferred-transmission design that the screen rejects is shown by the same simulator to emit exactly one frame with 8 application bytes before min(deadline, first shunt) in one uninterrupted powered session. Falsification is limited to these fits and contradictions; no claim of hardware validation, statistical advantage, transfer, or RSI is made.",
+      "hypothesis": "The retained failure is procedural, not a single bad value. Base H appears to have assumed 'later transmission is monotonically safer' and therefore placed tx_not_before_s at the legal maximum (0.045 s, component_record), but that assumption is contradicted by the acquired physical sources: (a) the reservoir is clamped (emax = C*3.3^2/2 = 54.45 uJ at C = 1e-5 F), so surplus harvest after the first segment is spilled rather than banked, meaning deferral converts available energy into loss, not margin; (b) excitation_record schedules a fixed 40 uJ shunt at 12 ms plus segment end at 6 ms, which drops stored energy below eoff = 16.2 uJ at 12.1 ms (retained brownout, event_was_captured=true), and with event_latch volatile (component_record) that brownout erases the capture taken at 3.7 ms; (c) the contact window is [0, 8 ms), so no later powered session can re-capture, and indeed the retained session emits no packet. I hypothesise that replacing 'defer until enough energy' with an explicit single-session ordering-and-feasibility screen, applied to both boundary values of every latency knob on the legal grid, will select designs whose capture-to-tx-complete chain closes before the earliest interrupting loss event (shunt, segment end, or deadline).",
+      "impact_scope": "task-entry",
+      "method_sha256": "6a05dbd217d9dae48181cb433e74fb1bd58bc4d666e9a39baef9e573d6f934a8",
+      "method_text": "H-update procedure for this task class (procedure only; it consumes facts and emits a screened design assignment, and it does not decide acceptance).\n\nSTEP 0 - Fact intake. Read component_record and excitation_record from the acquired versions; record source hashes and the model id/version. Never re-derive thresholds from datasheet intuition.\n\nSTEP 1 - Derived scalar table (explicit, per candidate design). Compute and write down: eon = C*ready_v^2/2; eoff = C*off_v^2/2; emax = C*cap_voltage_max_v^2/2; P_tx = output_v*tx_current_a; E_tx = P_tx*tx_duration_s; V_drop = esr_ohm*tx_current_a; e_volt_min = C*(output_v+V_drop)^2/2; per-step harvest = efficiency*sum(segment power over step)*dt; contact window [event_s, event_s+contact_duration_s); list of interrupting loss events = shunts (time_s, energy_j) plus segment end times plus deadline_s.\n\nSTEP 2 - Earliest-session check (contact reachability). Predict boot time from the pre-event net source: t_boot ~ eon/(efficiency*P_off_segment - off_power_w), refined on the dt grid; require t_boot + boot_delay_s < end of contact window, else the event can never be captured and the candidate is infeasible.\n\nSTEP 3 - Session-continuity rule (replaces the wait-for-energy heuristic). Read event_latch. If it is volatile, require that event capture and tx-complete occur inside ONE uninterrupted powered interval: the projected interval from max(ready_at, capture time) to tx-complete must contain no step where stored energy crosses below eoff and no shunt step that drives it below eoff. Treat the latch as non-persistent unless the fact explicitly says passive-mechanical. Do not credit any post-brownout session with a retained capture.\n\nSTEP 4 - Ordering constraint on every latency knob. For each candidate value of tx_not_before_s define t_tx_start = max(t_ready, tx_not_before_s, capture time) and t_tx_done = t_tx_start + tx_duration_s, plus a one-dt guard. Require t_tx_done <= min(deadline_s, time of the first shunt or segment-end event that can push energy below eoff). Enumerate the legal grid INCLUDING BOTH BOUNDARIES of each latency knob (minimum and maximum). Do not assume monotonicity in the knob: surplus harvest is spilled once emax is reached, so a longer delay can strictly lose margin. Keep every infeasible candidate in the record with the number that killed it.\n\nSTEP 5 - Power and voltage balance at the TX instant. Require at every TX step: (i) the step budget e >= E_tx_step = P_tx*dt so tx_j is not clipped by stored energy; (ii) loaded voltage sqrt(2e/C) - V_drop >= output_v, equivalently e >= e_volt_min; (iii) post-step stored energy still >= eoff. If net (per-step harvest - idle_power_w*dt - E_tx_step) is negative, additionally require stored margin e - eoff >= deficit*tx_duration_s. If it is positive, prefer the earliest transmission; deferral is then dominated by the spill clamp.\n\nSTEP 6 - Frame and protocol fit (cheap, non-physical). Confirm the emitted body matches required_application_bytes and unique_frames using the model's documented frame layout; treat any mismatch as infeasible before spending a candidate execution.\n\nSTEP 7 - Discriminating run. Only after Steps 1-6 pass, run the retained deterministic simulator with declared dt and check the actual trace against Steps 3-5: first_boot, first capture step, every brownout time and its event_was_captured flag, tx-start and tx-complete times, and packets (count, application_bytes, hex). Predicted values must agree with the trace within one dt step; disagreement means the derivation, not the model, is wrong.\n\nSTEP 8 - Selection among feasible candidates. Rank by robust margin, not by scalar energy: maximise the minimum over TX steps of (e - eoff) and of (loaded_v - output_v), then break ties by earlier tx-complete. Keep the runner-up and its margins in the record as the retained alternative.\n\nSTEP 9 - Honest bookkeeping. Record for each candidate: the hypothesis it was meant to test, the knife-edge quantity, pass/fail, the actual observed numbers, budget consumed, and any unknown. Preserve failed and no-update outcomes verbatim; never delete a failure. Report results as frozen-simulator observations with explicit version ids, without claiming hardware behaviour, statistical superiority, transfer of the method, or recursive self-improvement.\n\nSTEP 10 - Stop rule. If no candidate satisfies Steps 2-6, return no-update with the binding constraint named (which inequality fails and by how much) instead of submitting an unchecked design.\n\nReflection retained in H: the previous approach optimised a proxy ('more stored energy at transmit') in a system where stored energy is clamped and the capture must survive a single volatile session; that proxy is wrong whenever a clamping cap or an exogenous loss event lies between capture and transmit. The replacement makes the coupling an explicit, re-executable constraint rather than an intuition.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-3-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-983aafeb55117ea8",
+  "protocol_sha256": "2a93ec361be10284dbc316ce14aa048f7518dd7471585f44b99c08988f705e8d",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "da9bcd067de4b8ea72507cc4132b0d9f1a5e50ad3ef0fa119248bc26908d2117",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-2-3-ordinary_reflection",
+    "id": "p3-formal-2-3-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "98e7b3a446bcbfe0b5c59851d0266ab9ad47f4a974934c2c935690503109ab9b",
+    "model_submitted": true,
+    "model_tool_calls": 8,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 61.007474415993784,
+  "wall_seconds_total": 61.54040149998036
+}

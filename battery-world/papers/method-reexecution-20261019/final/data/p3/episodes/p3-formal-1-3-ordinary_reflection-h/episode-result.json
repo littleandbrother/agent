@@ -1,0 +1,51 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.01123434,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0264753,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-3-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "decision": "no-update",
+      "reason": "Checked retained sources against the frozen service contract (application_bytes=8, unique_valid_frames=1, deadline_s=0.1, event_s=0). saved_activity (source_sha256 a4c4b294..., model b-transient-behavior-v1, sha d690d8a8...) under component_record (sha eeb8277f...) and excitation_record (sha 219fd490...) shows: boot 0.0129 s, tx-start 0.0139 s, tx-complete 0.0158 s, exactly one packet with application_bytes=8 and hex 010400010101b0260657, packet time 0.0158 s <= 0.1 s deadline, loaded_v 2.582 V >= output_v 1.8 V, and no brownout before tx-complete (the 0.3395 s energy-threshold brownout is post-delivery idle drain, not a task failure). Hence there is no retained failure to explain and no observed symptom that an H update would be a repeatable remedy for; any edit would be speculative overfitting. The recorded current_design is also at the legal boundaries (capacitance_f 2.2e-05 = legal max, tx_not_before_s 0 = legal min): increasing tx_not_before only delays delivery relative to the 0.1 s deadline, and reducing capacitance would lower the pre-transmit energy reserve above the 2.8 V ready threshold without any observed benefit, so there is no plausible regression to guard against either. Residual unknowns (physical calibration, the ideal passive-mechanical latch assumption) are outside H and cannot justify a procedural change. Base method retained; this is not a device submission, hardware claim, or service acceptance decision.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "NO_UPDATE"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-3-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-2a9185715e098b76",
+  "protocol_sha256": "ee2aa5616aa6dcc2d686a5762884d052efb8244ed733eb18285ee6faca96ad8a",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "4d81ef45c0621c06b43d979d6fe15e8af590dd2181d1be9d13c349262c18fde9",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-1-3-ordinary_reflection",
+    "id": "p3-formal-1-3-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "1c554901ec1e0ce8c9dae597dd5eec03df8fd2076608c762722b46c039a94952",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 33.500057500001276,
+  "wall_seconds_total": 33.87997787499626
+}

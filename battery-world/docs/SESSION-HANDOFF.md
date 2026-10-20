@@ -1,3 +1,291 @@
+# 当前交接：阶段四最小入口准备（2026-10-20）
+
+派发phase-4-transfer-and-improver-bf-20261020-001；唯一当前状态phase4_registered_minimal_preparation。归属BFA-060/061/062，原S0/A/B工作区，max3执行槽；Pi必须占空出的槽。阶段三已完成并审查通过，不重跑。下一实际结果O0迁移，O原合同（3秒确认开始/60秒确认停止、确认后10秒、120秒保活、暗段适用）不可改。G1从已见阶段二/三经历只形成一次；三条配对谱系、每臂两H后代、相同选择任务、最终输入须在所有H选定后才暴露。73有限episode预算详见/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/registration.json，准备期间paid/new dispatch关闭；代码/协议冻结后按已有直接人类授权执行，不等待再批。保留H0与A/R失败、原服务/FIFO、所有账本UNKNOWN及Baseline/Demo。
+
+---
+以下为先前交接历史，当前状态以上方为准。
+
+# 当前交接：阶段三工作包完成，待出口审查（2026-10-20）
+
+唯一当前状态：`phase3_work_packages_complete_exit_review_pending`。BFA-057/058/059 complete；A/B已idle（52/51），terminal34822已exit0、140个episode全部封存，不再执行/重派/修复救援本批。付费、新派发和idle租约关闭；first signal只发过一次，最终完成信号 `phase3-BFA057-058-059-b7ccfd8b4416be4d` 已向既有审查会话单发（sent_count=1），回执位于 phase3/completion-signals；不得重发。当前active_feature为空，下一批需新协议和审查派发。
+
+主结论：KEEP_UNCHANGED_BASE_H；新H/fixed H/反思均12/12，请求127/64/117。E5正式7 PASS/5 INCOMPLETE，静态完整等强对照各12 PASS，E4 JSON/table各65请求。保留所有失败、旧第二阶段actual失败与POSTHOC边界；四次跨复位选择仅重用一个历史数字响应。没有新物理测量、硬件资格、全局H迁移、G改变或RSI。
+
+审查入口：[/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/RESULTS.md](/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/RESULTS.md)；机器result.json、source-manifest.json、main-tables.json、ordered-selected-witnesses.json、preservation-final.json、paper-readback.json、storage-final.json。771请求SETTLED、USD5.4478605上界估计、0新UNKNOWN；57新数字科学执行/native0。26定向检查、登记S0的343CI和44文件/11控制通过，漏配profile的原失败留档；不重跑SDK冒烟/科学矩阵/整树哈希或CI，除非后续有具体新变化/故障。
+
+A本地PDF5页/B6页，两遍实际编译及全部页面检查/PDF全文回读/哈希绑定通过；37新文件已导入S0，897083B，原准备13/8文件未变，旧稿/共享官方矢量校徽未改，未commit/push/Overleaf更新。当前可用23.05GB，私有记录58.20MB、provider目录增长43.29MB；临时构建9.55MB已删，不能加到此前实测中央12.26GB净释放。共享现有SDK/环境保留。
+
+阶段四：stage4-selection-freeze.json中两项未执行的within-model digital parameter输入；新协议前不得暴露或执行，既有b-esr-fail/b-no-energy已用，不计unseen。A/R保留已确认失败基线，NO_GO/dark FAIL/FIFO FAIL/NOT_ACCEPTED，不能改原要求以通过。
+
+---
+
+以下为先前交接历史；其中“运行中/论文未完成/等待用户产品取舍”已被上方当前交接替代。
+
+
+Phase3 live handoff (2026-10-20): formal executor is the existing terminal session 34822, running the preregistered 120 formal episodes serially (96 groups, four tasks, n=3). Do not start a second executor or rerun sealed attempts. Both original A/B are idle (revisions44/43); current idle lease is refreshed before formal; refresh after a live status check within one hour. Pilot: 20 actual episodes /16 groups, 112 settled requests, upper USD0.7345845, 1053.34s; one average-energy failure, all other groups service PASS. Formal first task replicate1: E5 INCOMPLETE due domain constraints from other sources (SOURCE_UNIT_UNAVAILABLE), subsequent new proposals hit the valid-proposal cap; failure retained, no production source changed. Other seven conditions PASS. Current finite run continues into volatile-reset. Query receiver's injected software tests (correct token, wrong token, absolute deadline) PASS before first C-lite participant; no new scientific/model calls. Main production phase3.py and runner remain exactly the versions bound before the first actual trial.
+Evidence/control: docs/research/phase-plan-20261019/phase3/{protocol.json,pilot-results.json,formal-repeat-freeze.json,query-gate-verification.json,stage4-selection-freeze.json}. Initial cache ~/.local/share/bf-phase3-20261020/initial-cache.json is the immutable13-entry snapshot. New physical results deduplicate centrally; job histories and two-D allowance stay isolated. First actual signal phase3-first-controlled-6d8f44382058333a was sent ONCE; only final batch completion signal remains due. compare.py aggregates actual groups and matched H results; do not rewrite source-dependent acceptance or rescue failures. Phase3 manuscripts are not yet written; dispatch original A/B only after Pi stops to preserve the registered idle lease/max3 executors. One registered architecture-v2-ci init at final; no more SDK smoke, broad hash/CI loops, environment installs, worktrees or backups. New test data are software fixtures, not empirical or official benchmark evidence. A/R fixed-space NO_GO, dark service FAIL, FIFO FAIL and product NOT_ACCEPTED remain unchanged.
+
+
+Phase3 first prospective controlled group (2026-10-20): actual E5 qualification/consumption/service PASS; actual H proposal -> fresh Hprime and H0 both PASS. Hprime total 11 requests versus H0 5; matched initial cache/information/tool/model alias/fresh entry/total caps PASS, REJECT_PROMOTION and default H unchanged. First four episodes 22 settled requests, upper USD0.1670928, UNKNOWN empty. Evidence: docs/research/phase-plan-20261019/phase3/first-controlled-result.json. Remaining two-replicate pilot and finite formal matrix registered; no old episode retry, no new env/tree/native.
+
+## 2026-10-20 — 阶段三已获派发，直接推进修复版前瞻对照
+
+阶段二实际结果审查通过，原失败/POSTHOC边界和H′拒绝推广保留。派发phase-3-controlled-comparison-bf-20261020-001；原S0/A/B负责BFA-057/058/059。先新身份实时E5/H闭环及fresh H0/H′，共同只读缓存快照、隔离新增缓存、同总预算；两次先导后一次冻结正式2或3重复、最多4个任务。用户已选择保留A/R失败基线，原服务/FIFO有效。新批在运行前冻结具体案例/条件/停止规则；不重建环境/树、不改旧结果，不重复整树哈希/冒烟，完成首组及整批各一次信号。
+
+## 2026-10-20 — 阶段二有限实际工作完成，保留原失败及事后边界
+
+H0 从入口得到 22 µF / 45 ms，46.9 ms 收帧；H′ 得到 9 µF / 3.7 ms，5.6 ms 收帧，两者完整服务均 PASS。H′ 交付后 12.1 ms 才掉电，不能说易失待发送状态跨复位保持。原 H 提案受 S0 宿主操作/额度错误阻断，事后恢复其实际模型文本；原失败保留。H0 已成功、提案加 H′ 更贵，初始缓存一致性未冻结，独立判决 REJECT_PROMOTION_KEEP_EXPERIMENTAL_ARTIFACT，默认 H 不变。
+
+E5 原 episode 因路径语法及无效提案计额度失败，6 条费用与模型修正调用保留。另获授权的 POSTHOC_HOST_ADAPTER_REEVALUATION 使用已生成关系（28.8 µJ 发射能量大于 23 µJ 标称余量），真实消费者选 10→15 µF、45 ms 下限不变，完整服务 FAIL→PASS；静态完整信息 10 µF / 0 ms 也 PASS。只证明事后工程连接，不是原流程自主发现/优势。
+
+四个实际 episode 共25次请求全SETTLED，上界估计USD0.1766922、墙钟348.744秒；Codex介入非零未计价。7次新完整科学执行，5旧控制精确复用，原生/新环境/新工作树/整树备份均0。原75条S0请求未变，生产及历史24条UNKNOWN保留。两篇阶段二本地新稿各4页，两遍编译、全部页面检查与证据读回通过；原稿/样式/校徽未改，未推送。43个不同阶段二用例、2个版本修复回归及登记S0的343项CI/44文件11控制通过；原漏CLI导致的失败日志保留，根仓库全量健康未断言。
+
+用户已确认“保留当前失败基线，先完成第二阶段方法研究”。A/R仍NO_GO、暗区服务FAIL、FIFO FAIL、产品NOT_ACCEPTED，原要求有效，无需等待或重复询问产品取舍。阶段二出口待审查，后续按新登记开展同初始缓存/同总预算/强静态对照，不自动重跑本批。A/B idle，付费派发关闭。
+
+最终实测可用22,142,779,392B（22.14GB）；本批私有记录2,907,596B，清掉4,726,740逻辑字节排版/预览临时文件。中央历史清理实测净释放仍为12.26GB，APFS后台变化不归为本批清理。报告与恢复入口：`/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase2/RESULTS.md`；机器结果、账本读回、源码/论文绑定、构建及存储回执同目录。
+
+## 2026-10-20 — 阶段二下一检查点：真实E5执行
+
+按现有派发收口反馈 phase2-actual-results-focus-20261020，先B最小模块/必要负控→实际SDK→模型观察→取得→独立资格→真实消费者选择D→实际服务，再自动H提案及H0/H′从入口新设计。论文/PDF在取得新结果之后；只修直接阻断接口，不以登记/测试/稿件页数为主进度。5旧控制复用，4登记资格grid实际执行，均保留原始输入/响应与独立结果；尚无阶段二付费Pi运行。
+
+## 2026-10-20 — 第二阶段独立核心方法工作启动
+
+审查派发 `phase-2-core-methods-bf-20261020-001`：阶段一证据审查通过，产品仍 NO_GO / FIFO FAIL / NOT_ACCEPTED，服务取舍待用户。按既有五阶段并行授权，使用不依赖该取舍的已资格化 B 瞬态条件，注册 BFA-054 S0真实观察消费者与执行、BFA-055 A自动H提案和从入口重新设计、BFA-056 B真实E5发现/取得/资格/消费。保留原S0/A/B工作区、依赖、冻结物理/判据与旧证据。
+
+有限清单：1次E5、1次H提案、H0/H′各1次新设计；最多84次供应商请求、4200秒累计episode墙钟、12次新本地案例执行，原生0；准备阶段付费0。峰值900MB、保留500MB、10GB余量，入场可用20.09GB；只压缩保留三份即将更新的旧状态投影（137566字节），没有整树备份。派发、归属、反证、负控、冻结案例和预算见 `/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase2`、phase-state/OWNERSHIP/DISPATCH。真实Pi需空槽、只读来源绑定、用量与后端检查及单独租约。
+
+## 2026-10-20 — 阶段一证据交付，产品未验收（BFA-051/052/053）
+
+真实 Pi 沿用同一 owner/session，显式续接保留传输中断和原费用；7 笔请求全 SETTLED，保守上界 USD 0.082605，缓存费率估计 USD 0.058482888（非发票，Codex 装置/指导/写作费用未定价）。Pi 选出3个 D/program 候选并执行12次新本地案例计算，原生0。外部能量、活动/程序、CRC/接收重放均通过；新记录优先仅在 v2 rank 条件下改善时效，严格 FIFO 失败，12小时暗区采样/恢复/事件失败、绝对时间 UNKNOWN，产品 NOT_ACCEPTED。独立必要电容界不相交，当前固定理想空间 NO_GO；未改服务、物理或检查器使其通过。
+
+登记 S0 的343项CI、56项不同定向测试、44文件/11控制读回通过；A/B native=false 的旧拒绝仍保留。接口 E4/E5 真实模型/消费者实验未运行，H/G优势、RSI、迁移及硬件未测。两稿6/5页，两遍编译、全部页面检查及可移植 Overleaf 编译通过；用户指定 RSI 已推送157439b4，接口30ece15d，远端fetch逐文件核对且checkout干净；云端网页编译未执行。右上角为官方英文横版矢量校徽，左上留空。
+
+中央清理实测窗口净释放12,261,535,744B（12.26GB）；本轮复用环境，未生成整树备份，TeX临时文件和经核对的最终栅格预览已清。17,781笔旧请求、会话/工程/UNKNOWN及原四H结果读回保留，S0仅追加7条结算请求。根/S0未提交，A/B原会话idle，停止新付费/原生派发。有限工作包交付完成；阶段一出口及A/R资源/服务/FIFO取舍待review，不能据此宣称整个五阶段项目完成。
+
+报告与恢复入口：`/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/RESULTS.md`；同目录机器结果 `result.json`、源码 `source-manifest.json`、`preservation-after-papers.json`、`publication/*/published.json`。下一包须按分阶段方案另行登记；旧四H和已完成A/R计算不补跑。
+
+
+## 2026-10-20 — 阶段一恢复集成（BFA-051/052/053）
+
+中央清理已验证，现场可用 21.63 GB，满足 10 GB 加本批 900 MB 峰值。沿用原 S0/A/B 工作区与已验证的 A 21 项、B 25 项结果；A 等待，B 完成论文一，S0 合并并收口 CI，再冻结一个真实 Pi episode（最多 60 请求、3 候选、3600 秒）。本次恢复未产生付费请求或原生派发。旧暂停与失败记录保留，实际付费执行仍须单独的 slot lease、源码绑定、后端/用量预检和空间检查。
+
+每小时审查确认维持阶段一，出口仍需真实 Pi 选择与执行、独立 A/R 服务矩阵及两篇论文集成；不重复派发或重跑有效旧实验。审查记录见 docs/research/phase-plan-20261019/HOURLY-REVIEW.md。
+
+
+## 2026-10-20 — 阶段一安全交接给统一深度清理
+
+已核对原会话直接用户授权，清理单写交由 01a11b01-a75e-75c2-81c3-7d152a24f15a；S0/A/B 停派模型、原生、安装、删除及大批写入。无在途Pi/原生，新增付费0；S0账本仍68条SETTLED。源码/准备/失败与计费全部保留。阶段一未完成：S0控制9通过、实际SDK仅模拟往返；A21/B25定向检查通过，A/B完整CI被native=false拒绝8项，真实Pi及最终服务验收未运行。
+
+本轮字节码缓存清理已结束：5041文件、源码摘要不变，实测操作窗口释放119,869,440B。浏览器缓存仅审查、未改动。接手入口：[统一清理交接](/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/CLEANUP-HANDOFF.md)，精确依赖/产物/恢复顺序在同名JSON。S0仍共享bf-architecture-v2的Pi依赖，退休前需验证保留/重定向；不产生整树备份。
+
+
+## 2026-10-20 — 阶段一新批次启动（BFA-051/052/053）
+
+已确认五阶段方案并核对直接用户授权；原四 H 批次继续封存。维护后 S0 形成共同内容基线 CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a；原 A/B 会话恢复独立 APFS 克隆工作区，两树 5717 共同文件各 SHA 读回通过，仅保留 5.20 MB 增量内容。新增峰值 900 MB，保留10GB；准备 profile 禁止模型/Agent/原生写入。S0 负责共享合同/资源/费用/检查器，A 负责 A/R 服务修订与论文二案例，B 负责 BF E4/E5 与论文一；真实 Pi 待空槽及有限 episode 协议，当前未派发。阶段状态与归属见 docs/research/phase-plan-20261019/phase-state.json、OWNERSHIP.json、DISPATCH.md。原实验、费用、UNKNOWN 保留，未提交。
+
+## 2026-10-19 — BFA-050 参考版式与官方英文校徽完成
+
+按用户所给2608.31100v1.pdf对齐两篇稿件的纸型、页边距、标题、蓝色分隔线、摘要圆角框与章节样式。最后示例指定英文横版，已从学校品牌手册提取同款PDF/SVG矢量校徽，仅置右上角；左上留空。正文至文末逐字节不变，11份原来源/数据/历史导出哈希不变。两篇各3页、两遍编译无警告、6页视觉检查/严格PDF解析/缺图负对照通过。
+
+已同步用户指定Overleaf：RSI 598424af，Agent接口 9df4a9ff；远端fetch逐文件回读和干净checkout通过。云端网页编译未执行。可重建中间产物与候选下载已清，保留共享轻量样式/Logo、最终PDF与少量预览回执。根/S0未提交，原实验/费用/11条UNKNOWN保留，无新付费请求或仿真；active feature已清空。
+
+回执：`/Users/depengsu/Documents/Long-Horizon AI Agent/docs/manuscript-layout-20261019/REPORT.md`；实际空间窗口分列于BFA049 summary和本轮final-space.json，不把即时目录删除量当净释放。后续直接复用S0与已建立Overleaf checkout，继续逐特性声明空间峰值、开发、review和清理。
+
+## 2026-10-19 — BFA-049 第二批精简与Overleaf同步完成
+
+3个已完成工作区、2套闲置依赖环境与未引用缓存已退役。独有源差异319,913字节和接收器两份小型覆盖保留，无整树备份；历史实验/计费/11条UNKNOWN哈希回读不变。整批可用空间 11.408 → 11.825 GB（净增0.417GB；即时操作差值合计1.420GB，含背景波动，勿当作独占分配总和）。343 CI与44文件/11控制通过。两篇稿件已分别推送用户指定Overleaf，远端核验且本地编译通过。
+
+回执：/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/REPORT.md。仅Overleaf两份提交，根/S0源仓库未提交。S0为唯一活动源码；A/B按review.py恢复。用户后续PDF版式与HKUST(GZ) Logo要求另立BFA-050。
+
+## 2026-10-19 — BFA-048 存储精简与受限开发（第一批完成）
+
+实际可用空间 5.94 → 12.03 GB，净增加 6.08 GB。70 个历史波形/轨迹/账本文件原路径完整哈希回读一致；已清理可重建的临时审查副本、字节码和闲置 CI 依赖，恢复清单保留。原始实验、失败、计费与 UNKNOWN 保留；新增模型请求/仿真均为零。
+
+S0 源码已采用独立 APFS 克隆、受限回退复制、流式 zlib 及异常清理，并加入派发前空间检查。343 项 CI 测试 + 14 项存储测试通过，既有产物和保护表回读通过。原生产/V2 服务未升级。当前 active feature 为空。
+
+后续每批先登记整批峰值，保留 10 GB 加峰值，再开发、验证、review 生成物、清理并复测空间。继续使用 S0 开发树；原四次 H0/H1 批次已封闭，不恢复或补跑。下一维护特性逐项检查旧工作区或可完整还原的轨迹/请求存储迁移。详见 docs/storage-slimming-20261019/REPORT.md（根目录）及 S0 docs/architecture/STORAGE.md。
+
+<!-- parallel-campaign-20261019-current -->
+# Current S0 handoff: finite first batch closed
+
+Authoritative integrated source: `workbench/bf-campaign-s0-20261019` on `codex/campaign-s0-20261019`, HEAD 317d40f + frozen original overlay + scoped integration. Local source/report manifest: `docs/research/parallel-campaign-20261019/integrated-v1/manifest.json`. No commit/push. Do not run Git in cloud-backed original metadata or reset/clean old inputs.
+
+A/B chats completed; their 113 owned files integrated with SHA readback. A/R six-hour nominal chain passes; dark-region sampling/recovery and FIFO freshness fail. B has pulse/event positive and negative controls. P1 has two structural intervention counterexamples, independent numerical checks, strong static-sufficient baselines, 16 equal-information packets and measured observation costs. No paid format or observation-selector benefit, no autonomous discovery.
+
+BFA-044 through BFA-047 complete only in finite first-batch scope. Four fresh method owners started in fixed order; H0-r1/H1-r1/H1-r2 delivered after six gates, H0-r2 stopped at the frozen 5GB disk gate after native numerical execution and before validation/release. 68 BF requests all SETTLED, upper bound USD1.142922, no unresolved provider usage. The stop is resource censoring, not a device pass/fail; never resample or resume these owners. H1 remains an experimental artifact, default unchanged, no promotion/advantage/RSI/transfer. Runtime is `/Users/depengsu/.local/share/bf-campaign-20261019-s0`, isolated port8980; no active controller/native jobs remain. Original V2/production ledger, projects, Baseline and original index/source preservation checks PASS.
+
+Final 343 architecture-v2 CI tests plus 34 new tests PASS; 44 saved files/11 controls PASS. Native readback:168 execution references,288 cache outputs,three delivery ZIP/source/version checks PASS. Both three-page LaTeX manuscripts compiled and independently visually inspected. One verification command omitted the required profile and was rejected; its log remains, corrected registered environment passes. Root all-project init timed out on historical cloud discovery; no overall root-health claim.
+
+Report and reproducible entry: `docs/research/parallel-campaign-20261019/RESULTS.md`, `REPRODUCE.md`. Public D/H catalogue: integrated `battery-world/docs/research/parallel-20261019/shared/INTERVENTIONS.md` (12D/6H candidates, not18 new runs). Next independent batch must first provision measured peak storage and freeze censoring rules; A/R dark service/recovery and physical anchors still need qualification. G lineages, unseen selection/final tasks and hardware remain unstarted. Do not change or promote frozen science to manufacture a pass.
+<!-- /parallel-campaign-20261019-current -->
+
+## 2026-10-19 · BFA-043 压电节点数字工程交付
+
+独立立创工程完成10器件真实连线与50×32 mm双层PCB，117走线/6过孔；保存重载后严格DRC通过，DFM留12条警告。90×30 mm梁、夹持、底座、板卡、器件包络及紧固件组成32个有效STEP实体，干涉0，按保存运动轨迹留额外2 mm间隙。nRF52832/S132固件构建通过，Flash7296 B/静态RAM456 B；40条命令在另一目录复建HEX一致。
+
+Lab接入同版电路、PCB、3D装配及设备/统一时间轴/交付入口；8页简报、11页详报、原始计算、可编辑工程和便携重建脚本进入工程包。修复工程实现恢复入口和项目选择名称错位，115件输出摘要及ZIP通过。复用原执行TX-7b59b5be，本轮新增物理求解0。
+
+Pi owner pi-chat-ccbeec4b82a67bb1已IDLE，同版SC-95e4cbe6、NR-0c45b7c7、REL-f392a7b2。93次请求全SETTLED，登记约$1.9116462；Codex原生EDA/CAD与接口核对介入已记录。V2回归343项及44封存文件/11控制通过，Pi检查通过；Baseline6388文件与原会话/工程/费用保护审计通过，原Demo按原配置启动HTTP200。根目录全量检查仍有历史iCloud占位文件错误。
+
+报告：docs/agentlab/architecture-v2/node-engineering-20261019/REPORT.md。下一步按12条板级警告修订，再做目标PGOOD/时序/实际BLE接收与电荷台架、夹持模态及供应商高度核对；参考六门通过保持，样机物理资格待测。BFA-043 complete，PROJECT.active_feature=null；代码本地，未提交或推送。
+
+---
+
+## 2026-10-19 · BFA-042 GitHub发布
+
+按用户授权，将三阶段实现、固定实验配置、原始结果摘要、分析脚本与三页PDF提交到 `codex/bf-architecture-v2`，更新现有PR #3。本地V2回归294项、封存文件44件/控制11项及项目状态通过；本次发布不启动模型或原生求解。原十会话、工程、费用、Baseline与Demo保持。GitHub新提交的CI结果由PR检查显示。
+
+---
+
+## 2026-10-19 · BFA-042 三阶段有限清单完成
+
+原V2压电owner连续两轮真实修订、执行、独立检查与同版交付完成；两轮保留审查，历史采用版保持。4项资料配对结束，直接与委派各1/2正确，委派费用3.58倍。16项组织对照结束：三个可行任务11/12通过、12/12同版交付；可选组实际未委派，固定双专业2/3通过、费用为单主设计者2.83倍。8ms任务公开计龄起点缺失且固定下界冲突，四组单列。全部设计试验14/16完成候选交付，11/16服务通过。
+
+新增699请求全SETTLED，登记$13.097664；121次原生调用对应121个不同输入。两次零调用冷加载失败沿原身份恢复；13次磁盘中断调用、12次迟到失败调用已补入对账，两次对账0新增模型/求解。V2回归294项、44封存文件/11控制、源树/构建/执行/PDF/ZIP绑定及8项报告篡改反例通过。根目录全量检查在旧iCloud占位文件读取处中止，日志单列。原十会话/工程/费用/UNKNOWN、Baseline与Demo保护审计PASS。
+
+当前原压电owner pi-chat-f6463f6b0b663ebc，当前SC-cc423ab076a6ef2bd6767d610dbf20fe98a03451308c68a705e68bb0513ad203，历史采用SC-88d963b80011ebe47dc1f99a2ff88e7fbb65b0464587f118c57314a09734aeb6。PROJECT.active_feature=null，BFA-042 complete。不要重新运行本批run/drive/prepare或重采样；复核只运行REPRODUCE.md的读取命令。
+
+报告：docs/agentlab/architecture-v2/continuous-design-20261018/RESULTS.md；三页PDF、DELIVERIES.md及逐项JSON/CSV齐备。清单已结束，默认仍为单主设计者；下一批只处理来源协议、完整任务判据和空间/在途执行对账。代码未提交或推送。
+
+---
+以下为历史交接。
+
+## 当前执行 · BFA-042 有限清单运行中
+
+原压电 owner 已连续完成两轮修订、执行、独立检查和同版 PDF/工程包；两轮保留审查，服务仍有供电或帧数问题。4 项资料配对已结束：双方各 1/2 正确，委派费用 3.58 倍，不提升为默认。20 项配对/组织试验已完成12项：电容四组均通过；零储能三组通过，固定专业组数值精化检查失败并保留审查。当前正在固定电源调度任务的原注册 trial 上执行。
+
+持久驱动正在运行：`scripts/continuous_design_ops.py drive`；不要并发启动或创建新 owner。注册、dispatch/final 与日志在 `~/.local/share/bf-agent-architecture-v2/continuous-design/`。清单总计 2 原会话循环 + 4 资料 trial + 16 组织 trial，不重采样。所有对照冻结 H-4023ec7a…，运行期间不要修改 Repository/Pi/协议及任务配置；离线复核脚本和报告可整理。
+
+费用与时长按用户授权不设累计上限，每 trial 共用 80 次请求/4 个执行输入。保留 Baseline、Demo、原十会话/工程/费用及 UNKNOWN。结束后运行 verify_continuous_design.py --stage all、analyze_saved.py、preservation，完成结果与状态登记；代码保持本地，未获新提交授权。
+
+---
+
+## 2026-10-18 · BFA-041 GitHub CI通过
+
+反馈执行及CI修复已推送，源码530dc4d的push/PR两套CI均通过。Linux状态测试使用固定环境夹具，PDF使用可配置解释器与固定依赖。两项作业固定Ubuntu24.04。后续按ci-publication-20261018/NEXT.md，先原V2压电主设计者连续两轮实际修订，再验证按需资料工作者和同条件组织比较。本轮0模型调用、0新原生求解，原会话、工程、费用、Baseline及Demo保留。
+
+## 2026-10-18 · BFA-041 CI修复与发布
+
+BFA-040反馈执行和BFA-041 CI修复待推送提交验收。后续优先让原V2压电主设计者在固定任务上完成两轮真实修订，再接按需资料工作者和同条件组织比较。原owner、工程、费用、Baseline和Demo保留；本轮0新模型/原生求解。详见 docs/agentlab/architecture-v2/ci-publication-20261018/REPORT.md、NEXT.md。
+
+## 当前交接 · BFA-040 A/B 完成 · 2026-10-18
+
+- 报告：docs/agentlab/architecture-v2/power-feedback-20261018/RESULTS.md；复现REPRODUCE.md；离线verify_saved.py，0模型/原生执行。
+- 配置node-feedback-v1、执行器piezo-feedback-v1；现有工具从repository_task_definition读取完整ABI、来源、单位、消费者和数值规则。BF_OFF只由供电监控器生成。操作员维护冻结任务、参考准入与检查器。
+- 新参考资格FQ-ae54a1e11eaeebafe6c665a86145c87b62f27a004d2445706ef7231f90259af9。完整证据在 ~/.local/share/bf-agent-architecture-v2/power-feedback/qualification/a8d039b17e6085d35d495363ebfb31de173896041a009f9d9c031beb302242db/；实际V2仓库feedback-qualification/current.json已读回。原生缓存位于qualification/execution-cache/design-lab/repository/feedback-native-cache。
+- 预充参考5帧；零储能17.9385秒启动、1帧，20秒3帧目标FAIL。厂商PMIC/主机C/声明状态电流/数字接收范围，physical=NOT_TESTED。不是Pi设计或组织方式收益的结果。
+- 11控制、272 Repository（20反馈专项）、19 Lab回归通过；两份同版PDF和完整源码/RAW工程包通过摘要核对。16个不同原生输入均完成，无未知作业。新模型调用0；未重跑输入未变的成功求解。
+- 原十Pi会话、工程、费用/UNKNOWN、Demo资产、6388Baseline文件及V2历史状态一致。未恢复Pi或启动原服务。启动前读回当前状态；不要另建Lead或把旧固定供电轨迹当作新程序响应。
+- 全仓库状态检查与基点同样存在BFA-035旧登记冲突（in-progress / active_feature=null），见project-state-check.json；后续先核对其终态。
+- PROJECT.active_feature=null，BFA-040 complete。下一feature先声明范围/反例，再实现按需资料工作者和动态工作范围；实际Agent比较固定任务、模型、初态、资料、执行器和评价协议。原参考owner保持；新适配器候选需显式任务基准及兼容源码。
+- codex/bf-architecture-v2基点dcd7c5448ebef67d102eae5de49938a8142efe3c；本轮未提交/推送。原来无关的未跟踪资料继续保留。不使用harness-creator、pixel-perfect-reference-ui或定时消息。
+
+---
+
+## 2026-10-17 · BFA-038 / BFA-039 GitHub 发布批次
+
+用户已授权发布到 `codex/bf-architecture-v2`。本批次包含任务定义与评估接口、Pi 技能、默认压电与 P08 审查、实验数据、PDF 和复现脚本。20 项保存结果离线复核通过；既有 56 项相关测试、Pi 检查与 Lab init 结果随批次保存。发布不启动模型或原生仿真。下方保留实施时的历史状态。
+
+## 当前交接 · BFA-039 有限先导交付 · 2026-10-17
+
+本轮48任务评估、默认参考/器件探测、P08审查迁移、契约/重放机制及有限方法提案已完成。代码仍在9bcdbad基点的V2未提交工作树；此前BFA-038修改保留。PROJECT.active_feature=null。不要把先导完成写成默认硬件冷启动或RSI已成功。
+
+- 全文：docs/agentlab/architecture-v2/task-evaluation-20261017/01_REPORT.md；48题02_TASKS.md；研究03_EXPERIMENTS.md；案例04_DEFAULT_AND_P08.md；05_REPRODUCE.md。
+- 下载包 /Users/depengsu/Downloads/BF_Task_Study_20261017.zip；在解压目录 python3 scripts/verify_results.py . 做零派发核对。
+- 原默认owner pi-chat-f6463f6b0b663ebc，当前 SC-f922e8e8b0b9da6909a8268623bedfa5ecbb51a46b218fd8412fd984aef14f4d，采用 SC-88d963b80011ebe47dc1f99a2ff88e7fbb65b0464587f118c57314a09734aeb6，release REL-8992233d7155be2a518c3b214dd97d91c21ffe23b9f32d28e8719d2f1cfd710f。名义4帧结果复用；新原生厂商探测0帧。精确原因是启动晚于固定调度。当前IDLE，不要新建Lead。
+- 新P08审查owner pi-chat-468e6062c32232b5，SC-7d474cd25fed8ac3056195d36458749facea261ed665ff3baf64310991b2737f，release REL-ece97f4c4257b540434ab9fa6b54a82acf28fb06a3faa9e16ca8c9efe24528fd。原P08owner pi-chat-e0028698d50802cb未改。
+- 研究owner pi-chat-8a186c7850923a1a，121请求；默认新增33、P08新增13；合计167/$1.3682169全部SETTLED。原有UNKNOWN保留。付费/时间无累计上限授权仍来自用户，不重复询问。
+- Runtime /Users/depengsu/.local/share/bf-agent-architecture-v2/task-evaluation。原始回执不可变。provider.token为私有凭据，禁止输出/入包。public-model-answers仅含最终回答和usage，不含推理正文。
+- 下一工程增量：先统一审查动作权限与设计变量边界；默认案例需要电压驱动固件与PMIC相互响应的执行入口，再让原Pi作新候选。不要用旧VOUT固定回放评价新程序。
+- 下一研究增量：未知特征/新机制、错误拒绝、真实成本、等信息强基线，以及父子改进器独立比较。当前特征由开发者预置，方法只做配置选择；强基线打平。
+- 56相关回归、Pi npm check、architecture-v2-lab ./init.sh通过。原Demo/十会话/工程/费用/UNKNOWN保护核对PASS。禁止重跑原成功且输入未变的仿真；数值校准已按网表摘要缓存。
+- 不使用harness-creator、pixel-perfect-reference-ui或定时消息。没有Git提交/推送授权；本轮保持未提交。
+
+---
+以下为历史交接。
+
+## 2026-10-17 · BFA-038 任务标准定义与连续设计完成
+
+V2 已接入 task-definition-v2 / task-semantics-v1：任务意图与阶段、来源/角色分离、可执行硬约束与设计范围、功能/物理对象/工作关系、七组接口及实际消费者、执行与验收身份、恢复状态及同版报告。标准规范：docs/agentlab/architecture-v2/task-design-20261017/STANDARD-DEFINITIONS.md。
+
+独立压电参考 owner pi-chat-f6463f6b0b663ebc 完成两轮真实 Pi 设计和报告修订，53 请求全部 SETTLED，本地登记 $1.1036151。R6 为 47 µF，R7 为 68 µF，正式调度 2/6/10/14 秒，4 帧有效接收；R7 发送窗口最低 3.15309 V。9 个设计候选/9 次执行，8 次储能+1 次源求解，复用一次完整参考执行和七次源结果，无重复未变求解。Codex 负责平台与独立检查，并反馈报告数值/解释；Pi 作设计和采用决定。
+
+标准化实际回放复用同一 R7 波形：2.2 V PASS，3.2 V 供电 FAIL，接口来源一致性 PASS；59 个内容对象验证，0 新模型调用/原生求解，失败候选可同版交付。R8 接入标准定义并保留 R7 采用身份，工程和账本未改变。260 Repository 检查（其中32标准专项、17任务入口专项）、Pi完整检查、Skill格式、四项固定参考、19 Lab回归、7个预览和6388件Baseline文件核对通过。
+
+原十个会话、工程、费用及 UNKNOWN、P01 Demo 保持。原8768与V2 8870按原配置恢复，当前控制器排空。代码在 codex/bf-architecture-v2 工作树，基点9bcdbad，未提交/推送。标准定义和接口是系统能力；当前新设计验证范围为名义机电源—储能—主机程序—数字接收，后续接目标MCU、具体电源、原生CAD/PCB和装配。
+
+结果：docs/agentlab/architecture-v2/task-design-20261017/standardization-result.json；首批Pi结果result.json；说明RESULTS.md；命令IMPLEMENTATION.md。
+
+### 精确运行身份与下一步
+
+- 新参考项目 PR-8f0bebe6c7a175855fc3641fff6c7632f4549fd1f70cfa0a7b8bc597811b7b94。
+- 采用 R7：SC-5719b733541cdb0e3d275015c423100bf965cbe6584c8265940ea7c5b25ad1eb。
+- 当前 R8：SC-6735f14b84c2d9550c5f3e237fe191cd06bf8e59a4cb5b5964db3bdf246a2661。
+- 标准定义：TD-6af0e8eb4096d678db7322b25f65d60fcec44e735e3f6e9d823238d1ff7aefde；R8 来源为 operator 迁移，设计与报告文字来源为 Pi R7。
+- R8 审查包：REL-68e52215bafd317c9444191b54b16ebca16cecff8c14159648acd69b12ac03a1；task_passed=true，physical=NOT_TESTED，名义参考范围。
+- 新 bf-task-design Skill / bf-product 1.3.1 已加载到运行配置；最新版规则经过确定性验证。下一次付费 Pi 运行与方法配对尚未执行。
+- 原 P01 V2 Lead pi-chat-050766187db5de0d、当前 SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9、采用 SC-4c0da605a4238a3c9d5b5fca8162b7a24e560c8a6a84ef43bcd40339ef771292 均保留，2PASS/2FAIL/4UNEVALUABLE。
+- 状态核对只读数据库；不要为查询创建 Workbench。服务恢复只启动了原服务，未恢复原十篇 Pi。PID可能变化，以active-runtime.json及端口实际监听为准。
+- 继续使用既有项目/owner；不要重复运行 task_design_ops create/start 或 publish_standards.py。后者的不可变发布回执已经存在。
+- 复现标准化回放使用 standards_consumer.py --source-system SC-5719b733541cdb0e3d275015c423100bf965cbe6584c8265940ea7c5b25ad1eb --output <fresh-dir>。只在隔离副本选择检查点；现有003已验证发布后可复现。
+- 原生结果按实际输入/环境复用。改要求只重评；UNKNOWN先对账；已完成未登记只补登记。新能力先固定参考及负例，再由BF真实修订，连续第二轮检验恢复。
+- 下一适配器增量为目标MCU/电源具体器件。服务目标和重要取舍仍由用户确认，设备策略由BF选择。新方法研究固定模型/任务/环境/评价器，另设比较条件。
+- 本批 feature BFA-038 complete，PROJECT.active_feature=null。下一项新增适配器要声明自己的范围和反例。不要使用 harness-creator、pixel-perfect-reference-ui 或定时消息。
+
+---
+以下为历史交接。
+
+## 2026-10-16 · P01 双 PDF 报告与必要交付检查完成
+
+原 Power/Firmware/Lead Pi 已补齐报告并发布 REL-817a555ffd29e711bc65f94d8689fe0f20aebdb662b117db1b6bbf46ebac7d4f。原理图按39器件/172引脚原生网表重排连线，提供完整跨组总图和六张回路附图；固件为5参与者/19条当前源码交互时序，覆盖错误与恢复。简版8页、详版29页；CAD、PCB功能标注、RAW波形/能量核算、专业解释、验收和交接内容齐备。共享 bf-engineering-report Skill、报告工具和 release/close 必检已接入 V2。
+
+211项Repository回归、23项报告检查、37页视觉复核、Skill格式和 ./init.sh architecture-v2-lab 通过。原十会话/工程/费用/UNKNOWN、Demo、Baseline、当前候选/采用及成功作业保留；0新工程作业、0次输入未变的成功仿真重跑。44新模型请求全部SETTLED，本地登记$0.9127182，原三owner现IDLE。工程状态继续2PASS/2FAIL/4UNEVALUABLE，物理未测试。
+
+下载：/Users/depengsu/Downloads/BF_P01_Engineering_Reports_20261016.zip。实施报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/IMPLEMENTATION.md。核对：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/implementation/result.json。本轮未提交Git；后续按用户指定的工程修订继续。以下保留历史。
+
+---
+
+# 当前交接 · V2-P01 两轮完成 · 2026-10-15
+
+- 本次 C–F 的 Power/Firmware 真实消费、连续修订、回归集成与审查交付已完成；三原 owner 均 IDLE，原生队列排空。
+- 原 Lead `pi-chat-050766187db5de0d`；Power `pi-chat-0fe155a873295087`；Firmware `pi-chat-62d401bd5fa78a8d`。后续沿这些身份继续。
+- 当前提交 `SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9`，父 `SC-a1974dece1a65f85d410d4cd5438f1a72aa7db476da793ddc34e8feab7db56e8`；采用 `SC-4c0da605a4238a3c9d5b5fca8162b7a24e560c8a6a84ef43bcd40339ef771292` 保留。
+- 最新第二版检查 `RV-454541ff3ab726d9cc3f69a7fe73d153cad7b6360fc0ed9da19eb65966eb62ef`；发布 `REL-02aae90a976c9447dbd1e936a66d00c4eb911df4a8995bed17ef484bd17d980f`；BF决定 `RETAIN_FOR_REVIEW`。2PASS/2FAIL/4UNEVALUABLE；产品 `REPAIR_REQUIRED`，物理 `NOT_TESTED`。
+- 实际构建 `eng-42f734718d566c30` 和 SPICE `eng-2cf474f68315a9d8` 已完成且输入封存；相同输入继续复用。专业新任务要显式重基，不用 reopen 假装切换基线。
+- 179 Repository /114上下文回归、Pi构建/类型检查、architecture-v2-lab ./init.sh 通过。旧检查器回执和工程失败全部保留，检查器修正追加新记录，未重跑原生作业。
+- 当前代码 `9ec6c22fe9b7af9a5300dfbdaa602113aff9785f` 已加载到 V2 8870/PID92739；原 Demo8768/PID69997保持。最终文档发布可不重启运行服务。
+- 原十论文会话、12,454费用行、原P01六件原生文件、Baseline/profile摘要核对一致。329新请求/$7.074384原登记；缓存估算$4.156926，不替换账本。
+- Draft PR https://github.com/littleandbrother/agent/pull/3 对比 exact3dc8a72，保持Draft，不合并main或切换默认。后续小提交在同分支进行；发布须核对最新HEAD CI。
+- 交付与完整身份见 `docs/agentlab/architecture-v2/v2-p01-20261015/V2-P01-REPORT.md`；audit、cost、preservation、delivery回执同目录。
+- 下一轮优先PWL窗口664/672和人工接通模型，随后PCB/器件/装配。专业数值产物只读入口单独立工单。多Agent并行扩展、十篇迁移与方法比较未展开，RSI收益未测量。
+
+---
+以下为历史交接，版本和PID以本节为准。
+
+# 当前发布交接 · 2026-10-15
+
+Architecture V2 source is validated for the user-authorized GitHub push to codex/bf-architecture-v2. Baseline remote stays at 3dc8a72. No Pi run or unchanged simulation dispatched. Resume C–F from the existing V2 owners after publication; original ten sessions remain preserved.
+
+# 当前交接 · 2026-10-15 Lab 合并
+
+- 用户最新要求：V2 Lab 替换原 Web Lab，保留 Studio；不用 pixel-perfect-reference-ui 或 harness-creator。
+- 已生效：8768/lab#system；原 Studio 8768；独立 V2 后端 8870。原进程 PID 69997，V2 PID 70430。
+- 最新发布 004 的 JS/CSS 已现场读取；server/bridge 与 002 已加载版本相同，无需再次重启。
+- 六页共享候选/采用版本；原生 SVG、横向四轨历史、专业对象树、源绑定预览/三维 CAD/下载、公共 Pi 对话与真实接口定义已核对。
+- 证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-verification-20261015-003/result.json
+- 报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-ui-20261015/REPORT.md
+- 原十个 Pi 会话、工程、账本、UNKNOWN 保留。未恢复原 Pi；无新模型请求、无仿真重跑；未提交 Git。
+- C–F 后续：在独立 V2 原 Lead 继续完整父源树提交修复的真实消费；固定回归与比较协议。不要把当前开发 pilot 当作方法效果实验。
+- `architecture-v2` init profile 是历史执行关闭 A/B gate；当前 Lab 使用 `architecture-v2-lab` scope。
+
+---
+
+以下为历史交接。
+
+## 2026-10-14 Architecture V2 · A/B 完成
+
+已冻结本地标签 bf-p01-demo-20261014（3dc8a72056e85b71998c4160da309474c2cbee1c）及 6,388 文件/5.70GB 私有基线，原两份SQLite一致性备份、十会话/费用/UNKNOWN、P01产物与原未提交修改保持。新工作树 workbench/bf-architecture-v2，分支 codex/bf-architecture-v2，独立运行 /Users/depengsu/.local/share/bf-agent-architecture-v2，8870/PID50755。24项隔离测试、19项实际接口检查PASS，PiSDK/Agent/Harness离线构建和合成消息持久化恢复通过；跨进程原生锁有效。原8768/PID33871及UI摘要不变；0模型调用、0求解、0目标固件构建。报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/AB-REPORT.md；证据 verification-004/result.json；恢复说明 HANDOFF.md。源码修改未提交、未推送。BFA-036 A/B完成，C–F待接续；下一步将冻结的P01已提交候选接入首个System Commit，采用版另存，不伪造专业历史。下方为历史。
+
 ## 2026-10-14 P01 GitHub 源码发布
 
 当前发布分支 codex/bf-design-lab-r0-r2-20261011；说明与可下载包见 release/P01-PREVIEW-BINDING-20261014.md，文件清单见 release/source-manifest-20261014.json。原 P01 会话不恢复，工程及费用保留。后续产品修订按下一项用户指令继续。下方为历史。
@@ -964,3 +1252,89 @@ CAD 和 S132 原输入未变复用；本轮新 SPICE 两次均对应变更输入
 证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-refactor-r0-r2-20261011/battery-world/docs/agentlab/p01-mainline-20261013/round3-fullflow-20261014023256Z/result.json
 
 原 Pi 和单串行 worker 已排空。其余九篇原会话／工程／费用保留；旧门磁不恢复。下一轮按用户确认推进源—SECE—降压—负载对应、PCB DRC 和完整板级／装配接口。
+
+
+## 2026-10-16 · Lab UI A–D 完成
+
+Lab 已在原 8768 页面发布：顶部六页导航、当前页对象栏、可完全收起的详情、语义化版本与任务、当前八门和历史回执分开、指标单位、按范围一致的费用和请求明细、同版原理图/PCB/CAD 预览、横向历史、实际方法/技能与环境记录。当前候选 SC-e8f2f2e5 与采用版 SC-4c0da605 保持区分。
+
+19 项单测、29 项发布检查通过；浏览器完成六页及四种宽度检查。7 份预览与审查包核对通过，6388 件 Baseline 文件保持。原十会话、工程、账本与 V2 设计状态未变；模型请求和工程作业均新增 0，无仿真重跑。未提交或推送。
+
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-improvements-20261015/REPORT.md
+证据：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/lab-improvements-20261015/result.json
+回归：BFWORLD_VERIFY_PROFILE=architecture-v2-lab BF_V2_EVIDENCE=<new-absolute-directory> ./init.sh
+
+后续恢复工程任务时沿已有 V2 候选与 owner 继续；当前 PCB/供能为 FAIL，其他四门缺少条件。此次 UI 发布不改变工程检查或采用记录。
+
+
+## 2026-10-16 · 工程报告第一阶段样稿完成
+
+已从最新 P01 SC-e8f2f2e5 固定快照生成简版 8 页、详版模板 12 页、共用 Skill 草稿、逐页内容映射及 9 项报告 / 2 项工程数据补齐任务。108 件来源 SHA、25 项报告核对、20 页视觉检查及 Skill 格式校验通过；原生 SVG 转换已修正，旧固件事件文件 3 个源码摘要变化纳入 R07。Lab 只读 init profile 19 单测、31 项检查和 6,388 件 Baseline 核对通过。
+
+当前只完成模板阶段。等待用户审定版式，再注册共享 Skill / 导出工具，并由现有 V2 Lead、Power、Firmware Pi 补图、分析及正文。工程候选、采用版、十原会话、账本 / UNKNOWN 与 Demo 保留；0 新模型请求、0 工程作业、0 次已通过且输入未变的仿真重跑。未提交或推送。
+
+样稿包：/Users/depengsu/Downloads/BF_P01_Report_Templates_20261016.zip
+报告：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPORT.md
+核对：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/verification/result.json
+复现：/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/docs/agentlab/architecture-v2/engineering-reports-20261016/REPRODUCE.md
+
+## Phase4 complete — independent exit review pending
+
+BFA-060/061/062 complete: 73 logical cells / 77 actual attempts, 367 SETTLED requests, USD 3.1767228 upper estimate, 5951.639484 s summed episode wall, 25 new digital scientific responses, no native dispatch or new UNKNOWN. Selection30/30 and six methods frozen before final exposure. Final H0 7/9, G0 6/9, G1 8/9; four token-censored cells and two submitted nominal judgment errors retained. One common G1 formation; no stable RSI or default H0 promotion. Original A/R NO_GO/dark FAIL/FIFO FAIL/product NOT_ACCEPTED and physical UNKNOWN stay. Original four host incidents plus approved recoveries fully preserved and costed. Source/payload/cache/live accounting/history readback PASS. Local A8/B7-page English papers compiled, every page visually checked, source/PDF/font import PASS. Correctly configured S0 architecture-v2-ci343 tests and saved44 files/11 controls PASS; first operator invocation missing PI_CODING_AGENT_DIR is preserved, scientific sources unchanged. Prior37 targeted tests plus6 v1.1 data checks are separate. Private evidence39,223,712B/provider growth24,828,490B; paper scratch5,656,847 logical bytes removed; measured central cleanup12,261,535,744B retained as only APFS release credit. No new env/worktree/full-tree backup, commit/push/Overleaf. Paid/new participant dispatch closed; original A/B idle. Result: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/result.json; report: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/RESULTS.md; source manifest: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/source-manifest.json. Next is independent phase4 exit review then separately dispatched phase5 publication/closure.
+
+
+
+## Phase5 final delivery registered
+
+Phase4 exit accepted; BFA-063/064/065 reuse original S0/A/B. Finite candidate-bound engineering handoff, two complete papers/E/F scripts, one detached saved-data acceptance and two previously authorized Overleaf syncs. Reserve10GB plus1.5GB peak; zero new model/science/native design execution under this registration, no new env/worktree/full-tree backup. Original failures/UNKNOWN/costs, defaultH0 and physical UNKNOWN retained. Missing engineering revisions require a separate named finite task before execution. Registration: docs/research/phase-plan-20261019/phase5/registration.json.
+
+
+## Phase5 finite final delivery complete — independent exit review pending
+
+BFA-063/064/065 complete. Unique movable entry: /Users/depengsu/Documents/Long-Horizon AI Agent/deliveries/BF_FINAL_20261020/START-HERE.md. 1,409 manifest files plus3 seal controls,219,069,648 bytes. Same-candidate five engineering groups, actual8/11-page reports, connected native schematic/BOM/PCB and true target C/config/HEX/ELF/MAP preserved;115 original outputs unchanged. New source-bound target control-flow supplement keeps configured timing distinct from unmeasured hardware. Two full English papers A11/B15 pages, all-page visual review and actual compile/font checks PASS; official vector logo and reference-aligned title/abstract preserved. One detached temp-directory stdlib acceptance PASS for engineering/raw CSV/CRC/three figures, F643/E80 inputs and tampered/missing/foreign negative controls; original roots/network blocked in Python, temp copy removed. Existing343-test CI and identical target build/readback reused, no unchanged science rerun. Two explicitly authorized Overleaf commits/pushes and per-file remote readback PASS: RSI0e073932bf26e8d1b381ad39a34760ef418b05fb /interface206c8295a4f4b9b7ef4bbd3d6e431320dc19802f; cloud compile NOT_VERIFIED. Interface first preparation XML C0 parser failure/logs retained, scoped postprocessing repair passed; science and manuscript sources unchanged. Original1,238 SETTLED/USD10.0268025 upper estimates and24 historical UNKNOWN live-readback unchanged. A/R NO_GO/dark FAIL/FIFO FAIL/product NOT_ACCEPTED, physical UNKNOWN, unchanged H0 and no stable RSI remain. Actual isolated central cleanup12,261,535,744B only APFS release credit; available21,552,615,424B, delivery219.07MB; no new env/worktree/whole-tree backup, provider/science/native execution or root/source commit. Original A/B IDLE. Result: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/result.json; source manifest: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/source-manifest.json. Next only independent phase5 exit review and reviewer-owned hourly follow-up closure. No new paid/participant dispatch or automatic next stage.
+
+
+## Five-phase finite campaign accepted — terminal closure 2026-10-20T02:08:43.575585+00:00
+
+Independent review `phase5-final-exit-review-20261020-001` accepted completion `phase5-BFA063-064-065-884c8289a06a146f`. All five finite phases are complete; phase5 BFA-063/064/065 remain complete and are now exit-accepted. Review: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5-exit-review.json. Automation `bf` (BF 五阶段每小时审查) is PAUSED, confirmed by current automation.toml readback. Original A/B remain idle. No sixth phase, new execution, extra completion signal or task dispatch.
+
+Sealed delivery unchanged: /Users/depengsu/Documents/Long-Horizon AI Agent/deliveries/BF_FINAL_20261020/START-HERE.md. Existing 219.07MB package,8/11-page engineering reports,11/15-page papers, saved-data acceptance and two authorized Overleaf remote readbacks retained. Default H0/no established stable RSI; A/R NO_GO/dark/FIFO failures and product NOT_ACCEPTED; target BUILT/hardware NOT_TESTED/12 DFM warnings retained. Original sessions/projects/experiments/failed attempts/UNKNOWN/costs remain. This closure edits state and handoff records only; no application/scientific source or sealed package modification.
+
+
+## 2026-10-20 GitHub publication candidate
+
+The existing S0 implementation, five-stage research results, full paper sources and 8/11-page engineering reports are prepared for codex/bf-architecture-v2. Full sealed engineering/data bundle is delivered as a GitHub Release asset to avoid large immutable blobs in Git history. Local registered343 repository tests,196 campaign tests,14 storage tests and Pi offline build PASS. No paid/native/scientific episodes rerun. Exact remote SHA/CI and upload result belong to the Release publication-receipt.json; this local receipt does not predict remote CI. H0 and all product/physical limitations unchanged.
+
+
+## GitHub portable CI repair · 2026-10-20
+
+The first published SHA exposed an undeclared jsonschema dependency, host-bound test paths/profiles and automatic formatting of two frozen transport sources. Scoped repair adds exact archived reference/failure fixtures and a separate capability-disabled unit registration, leaves production gates and scientific inputs/evaluators unchanged, and preserves the two frozen source files byte-for-byte. All196 campaign tests pass without the private BF environment; Pi dependency/type/browser checks pass. Full Release ZIP upload and digest readback pass. Remote latest-SHA CI and final publication are recorded separately in the Release publication-receipt.json.
+
+
+## Publication CI: complete offline test isolation
+
+Latest remote failure af29849 was confined to author-machine test paths; Pi and paper reproduction already passed. Resolved temporary A/R output, checkout-relative phase3 adapter, exact saved initial cache and temporary interface output now pass all196 campaign tests with original workspace/private runtime access denied. Saved cache/inputs/results remain unchanged; unit path projections are separate. No production model, evaluator, frozen protocol, provider/native execution or manuscript result changed. Final publication receipt records the subsequent exact-SHA remote CI.
+
+
+## ABC finite cycle complete; final exit review pending — 2026-10-20T13:50:33.784060+00:00
+
+BFA-068/069/070 complete on the frozen list:48 model episodes,307 SETTLED requests, conservative fixed-rate upper estimate USD5.5299957; no new usage UNKNOWN. A selected-candidate finite service result remains negative, productNOT_ACCEPTED/physicalNOT_CALIBRATED. B18 has correct decisions and selected service in all arms, two fixed-rule budget stops retained, no refinement accuracy/acquired-byte gain. C24 all four arms6/6, no gain over equal-history H0; formation/validation/first-use27 requests separate from126formal, allC153requests. Frozen H relations and independent D gates remain separate. All48 actual first API payloads,129 frozen source files and307 live billing rows were read back without changes.
+
+Two complete local increments accepted after exact handoff readback and actual S0 two-pass builds: C16pages / B23pages, all-page visual checks, embedded fonts/noType3, shared official vector logo and aligned two-line title/abstract. Old final/shared assets10protectedfiles unchanged; old published/Overleaf sources, failures, billing and UNKNOWN retained. New paper builds add no provider/scientific/native execution, new env/worktree/whole-tree backup, commit or push. Rebuildable paper scratch removed with receipts; physical cleanup credit remains the earlier isolated12,261,535,744B window only. Final usage/readings: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/final-space.json.
+
+Report: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/REPORT.md. Targeted24 new software checks passed; full init.sh not run, no full health claim. Original A/B idle. Paid and scientific dispatch closed; next only independent final exit review and pause the same bf heartbeat. No G, automatic next cycle or publication.
+
+
+## ABC final exit accepted; heartbeat paused — 2026-10-20T13:59:48.449125+00:00
+
+Independent review accepted completion ABC-cycle-complete-v1-3d095785d149c563: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/ABC-cycle-final-exit-v1.json. All finite ABC cores and two complete local paper increments are accepted within their stated negative/digital boundaries. Same bf heartbeat PAUSED, confirmed from live automation.toml; original A/B and reviewer idle. BFA-068/069/070 complete and exit-accepted. No additional experiment, G, RSI, automatic next cycle, publication or acknowledgement message. Sealed science/paper/resource receipts unchanged; final reviewer scratch removed. Current available bytes 16908668928, without crediting background APFS changes as reclaimed space. Final result entry: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/abc-cycle-20261020/reviews/FINAL-RESULTS.md.
+
+
+## Authorized ABC manuscript and whole-project publication — 2026-10-20T22:47:33.069804+08:00
+
+BFA-071 registered for original Overleaf RSI/interface projects, actual browser compilation/alignment inspection and current BF GitHub branch update. Use existing worktrees/environments,350MB peak/180MB retained cap with10GB reserve. New model/science/native execution0. Original ABC results/defaultH0/physical limitations and billingUNKNOWN retained. Registration: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/abc-publication-20261020/registration.json.
+
+
+## 2026-10-20T23:18:27.811967+08:00 BFA-071 publication complete
+
+Latest RSI (16 pages) and agent-interface (23 pages) papers were pushed to their original Overleaf projects and actually compiled online with 0 errors/warnings. Right HKUST(GZ) vector logo, two-line titles and abstract alignment passed. Full current BF implementation plus ABC sources/results was pushed to `codex/bf-architecture-v2` at `a2c8827e54fe401ac57c15fd428f38b6ac2f2756`. Both GitHub CI runs passed (343+196+14+24 Python checks, Pi contracts and fresh-checkout source/result reproduction). Release `https://github.com/littleandbrother/agent/releases/tag/bf-abc-20261020` has the original incremental evidence and both PDFs; all remote bytes were read back and SHA-256 checked before deleting the temporary upload ZIP. No new environments, worktrees, model requests or scientific/native executions. Original failures, billing, UNKNOWN and raw evidence remain. See `docs/abc-publication-20261020/completion.json`. Metadata closure follows as an ordinary commit.

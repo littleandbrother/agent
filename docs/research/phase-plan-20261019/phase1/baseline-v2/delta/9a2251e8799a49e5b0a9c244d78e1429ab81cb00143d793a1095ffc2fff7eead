@@ -1,0 +1,148 @@
+{
+  "actual_models": [
+    "deepseek-flash"
+  ],
+  "cache_aware_estimate_usd": 0.10512315600000001,
+  "candidate_evaluations": 2,
+  "changed_design": true,
+  "current_system": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+  "decision_wall_s": 296.8930208683014,
+  "delivered": true,
+  "error": null,
+  "fresh_initial_input": {
+    "design.json": "157f4a666ebaa1ae000999bc3d052c96b596ba1511681a0a25e79ffff7641a85",
+    "firmware/main.c": "830b94e2c2c82f85a19fb3427512b3bd1f68154c99b13e416b1fe97d42331ee0"
+  },
+  "fresh_owner": true,
+  "goal_sha256": "d204ae8b7beeccee232b97369ee733c8955780425b8904eeaec5cb3125c624ad",
+  "key": "H1-r2",
+  "owner": "pi-chat-61237f7e47a27e54",
+  "qualification": {
+    "gates": {
+      "coupling_numerics": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "converged": true,
+          "load_energy_difference_j": 1.7953727604646044e-08,
+          "maximum_tx_time_difference_s": 0.0010000000000012221,
+          "same_service_result": true,
+          "status": "PASS",
+          "steps_s": [
+            0.001,
+            0.0005
+          ]
+        },
+        "input_fingerprint": "5555217e87a6ff3674b0d191bf950a69cd629ace742295d825126d6e75d8647f",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      },
+      "delivery_version": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "files": 3,
+          "task_definition": "TD-d16ac3a006025185e8247d59991855444ff7bad14e77029e3a50f187c6964da7"
+        },
+        "input_fingerprint": "4d8fe3c7bdd7e3e921f387b067c04a275d9caa840855bc8c094fcc4581d8eb5e",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      },
+      "load_binding": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "current_model": {
+            "id": "declared-host-node-current-v1",
+            "source": {
+              "kind": "declared",
+              "locator": "configs/reference_cases/piezo-feedback/task.json; nominal apparatus current envelope"
+            },
+            "values_a": {
+              "idle": 8e-06,
+              "off": 1e-08,
+              "sample": 0.001,
+              "tx": 0.008
+            }
+          },
+          "load_error_a": 1.4196662883259457e-08,
+          "status": "PASS"
+        },
+        "input_fingerprint": "ae22058adb91ecc778383d52b7787fb17cdb8151bfe8296988788df755e1e8d9",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      },
+      "power_service": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "boots": 1,
+          "completed_tx": 7,
+          "first_powered_s": 0.001,
+          "initial_energy_j": 0.011012499999999998,
+          "initial_state_error_v": 0.0010025501251220703,
+          "load_energy_j": 0.0011391773466255491,
+          "low_supply_sequences": [],
+          "status": "PASS",
+          "unresolved_electrical_j": 0.000783191740554492
+        },
+        "input_fingerprint": "45f705ac173dade9294f8d870b089c27ae4e98cce900d62aad45e67b4b90b960",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      },
+      "receiver_service": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "invalid_frames": [],
+          "minimum_packets": 6,
+          "received_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "status": "PASS"
+        },
+        "input_fingerprint": "e1ffb3460ded25e589b7832a43bed5501408bc455e1c0ef98949570fde868915",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      },
+      "source_model": {
+        "evidence_target": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+        "execution_id": "TX-efafdaa4a6356ca28a6c5b78bcc299aaeee85439bbab6ce4f378666bc1d5d4d3",
+        "findings": {
+          "mechanical_residual_relative": 1.3873744686036359e-06,
+          "peak_tip_m": 0.0015655551911256266,
+          "status": "PASS"
+        },
+        "input_fingerprint": "f3acb04ac37f6e645c3e4ccf4a2fe3bd83771d887f08800bb711b92472f127fe",
+        "scope": "vendor-PMIC-program-feedback",
+        "status": "PASS",
+        "validation_id": "RV-fb553e4879ed46102a4d5fef06555797557b0b4284412d8584372f871903c764"
+      }
+    },
+    "physical": "NOT_TESTED",
+    "product_passed": false,
+    "schema_version": "bf-system-qualification-v1",
+    "scope": "vendor-PMIC-program-feedback",
+    "status": "PASS",
+    "system_commit": "SC-5c3f329603f7bd1f5eed8a6cc116780d3422e7c0020e0ef974466db64a86fb54",
+    "task_definition": "TD-d16ac3a006025185e8247d59991855444ff7bad14e77029e3a50f187c6964da7",
+    "task_passed": true
+  },
+  "requests": 20,
+  "reserved_unsettled_usd": 0,
+  "settled_cost_upper_bound_usd": 0.36166049999999994,
+  "status": "IDLE",
+  "tokens": 1139550,
+  "unknown_or_missing_usage": []
+}

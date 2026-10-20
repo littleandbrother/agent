@@ -1,0 +1,35 @@
+{
+  "schema_version": "bf-o-controls-v1",
+  "case_sha256": "2eabd6028b8e72e7906041641fa543cb44d777561846955d088245bc220808d0",
+  "fixed_periodic": {
+    "candidate": {
+      "schema_version": "bf-o-candidate-v1",
+      "capacitance_f": 0.015,
+      "sample_period_s": 60,
+      "threshold_on_g": 0.05,
+      "threshold_off_g": 0.01,
+      "retry_s": 1,
+      "tx_backoff_s": 0,
+      "cache": "nvm",
+      "program": "periodic_snapshot"
+    },
+    "method_text": "Frozen A-style periodic control: powered 60 s RMS snapshots and immediate FIFO upload; no start/stop confirmation state machine.",
+    "hardware": "Same case-bound A/R hardware and RMS/wake catalog as candidate and rich-state arms."
+  },
+  "rich_state": {
+    "candidate": {
+      "schema_version": "bf-o-candidate-v1",
+      "capacitance_f": 0.015,
+      "sample_period_s": 1,
+      "threshold_on_g": 0.05,
+      "threshold_off_g": 0.01,
+      "retry_s": 1,
+      "tx_backoff_s": 0,
+      "cache": "nvm",
+      "program": "confirmed_events"
+    },
+    "method_text": "Frozen rich event control: powered 1 s RMS observations, continuous held observations for 3 s start/60 s stop, 120 s active keepalive, NVM pending records and FIFO retry.",
+    "hardware": "Same case-bound A/R hardware and RMS/wake catalog as candidate and periodic arms."
+  },
+  "full_O0_executed": false
+}

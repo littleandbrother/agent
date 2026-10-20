@@ -48,6 +48,8 @@ class DesignLab:
             interrupted=list(db.execute("SELECT id,owner FROM design_operations WHERE status='RUNNING'"))
             db.execute("UPDATE design_operations SET status='UNKNOWN',error='Service interrupted; inspect immutable files before resolving, no automatic re-dispatch.' WHERE status='RUNNING'")
         for row in interrupted:self.event(row['owner'],'operation_unknown',{'operation_id':row['id']})
+        from .repository import Repository
+        self.repository=Repository(self)
         if start_worker:threading.Thread(target=self.worker,daemon=True).start()
 
     def event(self,owner,kind,data,db=None):
@@ -150,7 +152,10 @@ class DesignLab:
     def design(self,owner,design_id):
         with self.store.connect() as db:row=db.execute('SELECT value FROM design_snapshots WHERE owner=? AND design_id=?',(owner,design_id)).fetchone()
         if not row:raise PermissionError('DESIGN_NOT_OWNED')
-        stored=json.loads(row['value']);task=self.task_version(owner,stored['task_id'])
+        stored=json.loads(row['value'])
+        if stored.get('schema_version')=='bf-system-commit-v2':
+            return self.repository.system(stored['project_id'],design_id)
+        task=self.task_version(owner,stored['task_id'])
         if task['environment'].get('mode')=='paper-native-P01':
             from .paper_candidate import verify
             return verify(self,owner,stored)
@@ -189,6 +194,8 @@ class DesignLab:
         return value
 
     def run(self,owner,operation_id,design_id):
+        from ..runtime_config import require_capability
+        require_capability('native')
         if self.task(owner)['environment'].get('mode')=='paper-native-P01':
             raise ValueError('PAPER_CANDIDATE_NATIVE_ENTRY_REQUIRED')
         design=self.design(owner,design_id)
@@ -363,6 +370,8 @@ class DesignLab:
 
     def view(self,owner):
         task=self.task(owner)
+        if task['environment'].get('mode')=='design-repository-v2':
+            return self.repository.view(task['environment']['project_id'],owner)
         if task['environment'].get('mode')=='paper-native-P01':
             from .paper_candidate import frozen_view
             return frozen_view(self,owner)
@@ -382,6 +391,9 @@ class DesignLab:
 
     def environment_view(self,owner):
         task=self.task(owner);env=task['environment']
+        if env.get('mode')=='design-repository-v2':
+            return {'environment':env,'baseline':self.repository.profile['baseline'],
+                    'project':self.repository.project(env['project_id'],owner)}
         native=env.get('mode')=='native-coupled-C'
         if native:coupled_c.verify_environment(env)
         from .builder import DEPENDENCIES, VERSION
@@ -513,6 +525,10 @@ class DesignLab:
 
     def handle(self,owner,body,operator=False):
         action=body.get('action')
+        if isinstance(action,str) and action.startswith('repository_'):
+            return self.repository.handle(owner,body,operator)
+        if self.repository.bound(owner) and action in ('configure','configure_paper','freeze','run','adopt','submit','start'):
+            raise ValueError('REPOSITORY_REQUIRES_TYPED_ACTION')
         from . import paper_candidate
         if action=='configure_paper':
             if not operator:raise PermissionError('OPERATOR_REQUIRED')

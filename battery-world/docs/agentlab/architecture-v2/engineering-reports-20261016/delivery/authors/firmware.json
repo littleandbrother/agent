@@ -1,0 +1,294 @@
+{
+  "content": {
+    "constraints": [
+      {
+        "label": "广播间隔",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "APP_ADV_INTERVAL"
+        },
+        "value": "300×0.625 ms = 187.5 ms"
+      },
+      {
+        "label": "策略窗口",
+        "source": {
+          "path": "project-fw-s132/app_policy.h",
+          "symbol": "APP_POLICY_BURST_MS"
+        },
+        "value": "1125 ms / 5000 ms，窗口 6 次事件"
+      },
+      {
+        "label": "连接间隔",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "MIN_CONN_INTERVAL"
+        },
+        "value": "100–200 ms（80/160 单位×1.25 ms）"
+      },
+      {
+        "label": "采样周期",
+        "source": {
+          "path": "project-fw-s132/app_policy.h",
+          "symbol": "sample_period_ms"
+        },
+        "value": "5000 ms，单次一个未决请求"
+      },
+      {
+        "label": "突发上限",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_tick"
+        },
+        "value": "每策略周期至多一次突发"
+      }
+    ],
+    "explanations": [
+      "人工接通后策略才放行射频，上电不会自动开始广播。",
+      "未连接时每个 5000 ms 周期只放行一个 1125 ms 突发，窗口到期即关射频，不是断链。",
+      "连接后按 5000 ms 节拍单发采样，回调用连接纪元与请求号双绑。",
+      "队列满、RDY 未就绪与断线都不推进结果，旧纪元回调一律拒绝。"
+    ],
+    "messages": [
+      {
+        "from": "mcu",
+        "kind": "init",
+        "label": "读 CHIP_ID 校验器件",
+        "source": {
+          "path": "project-fw-s132/ad7156_nrf.h",
+          "symbol": "ad7156_init"
+        },
+        "time": "uart/ble/gatt/services 初始化之后初始化 TWIM0，CHIP_ID 应为 0x88",
+        "to": "cdc"
+      },
+      {
+        "from": "mcu",
+        "kind": "init",
+        "label": "配置广播集与间隔",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "advertising_init"
+        },
+        "time": "ble_adv_fast_interval = APP_ADV_INTERVAL(300×0.625 ms)，fast 超时 0＝常开",
+        "to": "ble"
+      },
+      {
+        "from": "mcu",
+        "kind": "start",
+        "label": "人工接通置 started",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_manual_start"
+        },
+        "time": "人工闭合 J2(buck_en) 后 main() 调用；t_next_adv 前移一个周期（内部状态更新）",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "start",
+        "label": "请求开启广告突发",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "advertising_start"
+        },
+        "time": "app_exec_action(APP_ACT_START_ADV) 调 ble_advertising_start(BLE_ADV_MODE_FAST)",
+        "to": "ble"
+      },
+      {
+        "from": "ble",
+        "kind": "receive",
+        "label": "以 187.5 ms 间隔广播",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "APP_ADV_INTERVAL"
+        },
+        "time": "GAP 300 单位×0.625 ms；窗口内共 APP_POLICY_BURST_EVENTS=6 次事件",
+        "to": "pc"
+      },
+      {
+        "from": "mcu",
+        "kind": "stop",
+        "label": "窗口到期关射频",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "advertising_stop"
+        },
+        "time": "APP_POLICY_BURST_MS(1125 ms) 到期调 sd_ble_gap_adv_stop；关射频不是断开链路",
+        "to": "ble"
+      },
+      {
+        "from": "ble",
+        "kind": "connect",
+        "label": "人工发起连接建立",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "ble_evt_handler"
+        },
+        "time": "BLE_GAP_EVT_CONNECTED；连接间隔 100–200 ms、SLAVE_LATENCY=0",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "connect",
+        "label": "绑定新连接纪元",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_connected"
+        },
+        "time": "conn_epoch++、丢弃旧纪元标签、首个采样立即到期（内部状态更新）",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "sample",
+        "label": "按 5 s 节拍决定采样",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_tick"
+        },
+        "time": "距上次请求≥sample_period_ms(5000) 且无未决请求时返回 APP_ACT_START_SAMPLE",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "sample",
+        "label": "轮询 RDY 后读 12 bit",
+        "source": {
+          "path": "project-fw-s132/ad7156_nrf.c",
+          "symbol": "ad7156_read_sample"
+        },
+        "time": "读 STATUS(0x00) 判 RDY 低有效，再突发读 0x01/0x02 数据对",
+        "to": "cdc"
+      },
+      {
+        "from": "cdc",
+        "kind": "error",
+        "label": "未就绪或 NACK 返回",
+        "source": {
+          "path": "project-fw-s132/ad7156_nrf.h",
+          "symbol": "ad7156_read_sample"
+        },
+        "time": "RDY 超 AD7156_RDY_TIMEOUT_MS(200 ms) 返回 APP_E_NOTRDY，总线 NACK 返回 APP_E_NACK",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "notify",
+        "label": "发送 2 字节小端载荷",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "app_exec_action"
+        },
+        "time": "APP_ACT_NOTIFY：payload_len=2 且 tx_in_flight=0 时 ble_nus_data_send",
+        "to": "ble"
+      },
+      {
+        "from": "ble",
+        "kind": "receive",
+        "label": "PC 解析 CDC 帧",
+        "source": {
+          "path": "receiver/frame.py",
+          "symbol": "decode_frame"
+        },
+        "time": "2 字节小端 12 bit；byte1 高 4 位保留位必须为 0",
+        "to": "pc"
+      },
+      {
+        "from": "ble",
+        "kind": "notify",
+        "label": "通知完成回调",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_notify_complete"
+        },
+        "time": "BLE_GATTS_EVT_HVN_TX_COMPLETE 按排队标签与 conn_handle 结算",
+        "to": "mcu"
+      },
+      {
+        "from": "ble",
+        "kind": "retry",
+        "label": "队列满返回不计数",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_notify_result"
+        },
+        "time": "ble_nus_data_send 返回 NRF_ERROR_RESOURCES → APP_E_BUSBUSY，不记为已发送",
+        "to": "mcu"
+      },
+      {
+        "from": "ble",
+        "kind": "disconnect",
+        "label": "断开或链路超时",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "ble_evt_handler"
+        },
+        "time": "BLE_GAP_EVT_DISCONNECTED；GATTS 超时(CONN_SUP_TIMEOUT 4000 ms)则主动断开",
+        "to": "mcu"
+      },
+      {
+        "from": "mcu",
+        "kind": "disconnect",
+        "label": "断线清理纪元",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_disconnected"
+        },
+        "time": "conn_epoch++、丢弃旧纪元标签、清未决采样（内部状态更新）",
+        "to": "mcu"
+      },
+      {
+        "from": "ble",
+        "kind": "error",
+        "label": "重连后旧回调被拒",
+        "source": {
+          "path": "project-fw-s132/app_policy.c",
+          "symbol": "app_on_notify_complete"
+        },
+        "time": "外来 conn_handle 或旧纪元标签 → 不结算当前连接的在途发送",
+        "to": "mcu"
+      },
+      {
+        "from": "term",
+        "kind": "receive",
+        "label": "终端回显输入",
+        "source": {
+          "path": "project-fw-s132/main.c",
+          "symbol": "uart_event_handle"
+        },
+        "time": "收到 '\\n' 或达到 MTU 上限才转 NUS；回显按 APP_TXK_OTHER 记账",
+        "to": "mcu"
+      }
+    ],
+    "participants": [
+      {
+        "id": "mcu",
+        "label": "MCU/策略"
+      },
+      {
+        "id": "cdc",
+        "label": "AD7156/I2C"
+      },
+      {
+        "id": "ble",
+        "label": "S132/BLE"
+      },
+      {
+        "id": "pc",
+        "label": "PC/解码"
+      },
+      {
+        "id": "term",
+        "label": "UART 终端"
+      }
+    ],
+    "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+    "schema_version": "bf-report-author-content-v1",
+    "scope": "firmware",
+    "system_commit": "SC-e8f2f2e5b6b4709a69cfbe332fca9e76351764aa11e7a988382e31e2a066d4d9"
+  },
+  "owner": "pi-chat-62d401bd5fa78a8d",
+  "report_id": "RP-c8401a0608e390d52ddf40a9564c624da83d96a2bda61fbf8be886b3e26bdb0a",
+  "scope": "firmware",
+  "sha256": "9d8a77cc1f422c565e67b3d6c70c7779c1e40e5683817277bd329fba2717d56a",
+  "source_author": "Pi"
+}

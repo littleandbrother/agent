@@ -1,0 +1,957 @@
+{
+  "scope": "Saved-data arithmetic/readback only; zero new scientific, provider or native execution",
+  "structural_witnesses": [
+    {
+      "pair": "clamp-capacitance",
+      "world": "low-clamp",
+      "current": "PASS",
+      "intervention": "FAIL",
+      "margin_uj": -14.0,
+      "delivered": 0
+    },
+    {
+      "pair": "clamp-capacitance",
+      "world": "high-clamp",
+      "current": "PASS",
+      "intervention": "PASS",
+      "margin_uj": 8.0,
+      "delivered": 1
+    },
+    {
+      "pair": "reset-memory",
+      "world": "volatile",
+      "current": "PASS",
+      "intervention": "FAIL",
+      "margin_uj": null,
+      "delivered": 0
+    },
+    {
+      "pair": "reset-memory",
+      "world": "retained",
+      "current": "PASS",
+      "intervention": "PASS",
+      "margin_uj": null,
+      "delivered": 1
+    }
+  ],
+  "reference_controls": [
+    {
+      "case": "b-pulse-fast",
+      "source_uj": 150.0,
+      "first_receive_ms": 15.8,
+      "service": "PASS",
+      "rail": "PASS"
+    },
+    {
+      "case": "b-pulse-slow",
+      "source_uj": 150.0,
+      "first_receive_ms": 54.800000000000004,
+      "service": "PASS",
+      "rail": "PASS"
+    },
+    {
+      "case": "b-esr-fail",
+      "source_uj": 150.0,
+      "first_receive_ms": null,
+      "service": "FAIL",
+      "rail": "FAIL"
+    },
+    {
+      "case": "b-no-energy",
+      "source_uj": 0.0,
+      "first_receive_ms": null,
+      "service": "FAIL",
+      "rail": "PASS"
+    },
+    {
+      "case": "b-late-energy",
+      "source_uj": 150.0,
+      "first_receive_ms": 105.80000000000001,
+      "service": "FAIL",
+      "rail": "PASS"
+    },
+    {
+      "case": "b-latched-reset",
+      "source_uj": 210.0,
+      "first_receive_ms": 46.900000000000006,
+      "service": "PASS",
+      "rail": "PASS"
+    },
+    {
+      "case": "b-volatile-reset",
+      "source_uj": 210.0,
+      "first_receive_ms": null,
+      "service": "FAIL",
+      "rail": "PASS"
+    }
+  ],
+  "observation_costs": [
+    {
+      "arm": "uninformative",
+      "audit_read_bytes": 4648,
+      "audit_wall_ns": 127708,
+      "cases": 4,
+      "correct": 0,
+      "model_runs": 0,
+      "observation_wall_ns": 161625,
+      "read_bytes": 4648,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 4
+    },
+    {
+      "arm": "mechanism-spec",
+      "audit_read_bytes": 103,
+      "audit_wall_ns": 130334,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 129749,
+      "read_bytes": 103,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "fixed-rich",
+      "audit_read_bytes": 4747,
+      "audit_wall_ns": 127541,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 154041,
+      "read_bytes": 4747,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "full-raw",
+      "audit_read_bytes": 8544,
+      "audit_wall_ns": 119124,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 214208,
+      "read_bytes": 8544,
+      "selector_wall_ns": 0,
+      "solver_steps": 0,
+      "unknown": 0
+    },
+    {
+      "arm": "executable-dynamic",
+      "audit_read_bytes": 8544,
+      "audit_wall_ns": 133874,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 4,
+      "observation_wall_ns": 1752334,
+      "read_bytes": 8544,
+      "selector_wall_ns": 0,
+      "solver_steps": 20600,
+      "unknown": 0
+    },
+    {
+      "arm": "selected",
+      "audit_read_bytes": 103,
+      "audit_wall_ns": 111584,
+      "cases": 4,
+      "correct": 4,
+      "model_runs": 0,
+      "observation_wall_ns": 114459,
+      "read_bytes": 103,
+      "selector_wall_ns": 10207,
+      "solver_steps": 0,
+      "unknown": 0
+    }
+  ],
+  "formal": [
+    {
+      "condition": "average-energy",
+      "PASS": 8,
+      "FAIL": 4,
+      "INCOMPLETE": 0,
+      "requests": 75,
+      "usd": 0.34451309999999996,
+      "wall_s": 937.156022834999
+    },
+    {
+      "condition": "rich-static",
+      "PASS": 12,
+      "FAIL": 0,
+      "INCOMPLETE": 0,
+      "requests": 65,
+      "usd": 0.42671999999999993,
+      "wall_s": 676.4841202530224
+    },
+    {
+      "condition": "complete-raw",
+      "PASS": 12,
+      "FAIL": 0,
+      "INCOMPLETE": 0,
+      "requests": 64,
+      "usd": 0.4231806,
+      "wall_s": 711.1866428759968
+    },
+    {
+      "condition": "executable-response",
+      "PASS": 12,
+      "FAIL": 0,
+      "INCOMPLETE": 0,
+      "requests": 66,
+      "usd": 0.4660749,
+      "wall_s": 718.6453466269741
+    },
+    {
+      "condition": "live-e5",
+      "PASS": 7,
+      "FAIL": 0,
+      "INCOMPLETE": 5,
+      "requests": 80,
+      "usd": 0.7824162,
+      "wall_s": 1373.6686153339979
+    },
+    {
+      "condition": "e4-rich-static-table",
+      "PASS": 12,
+      "FAIL": 0,
+      "INCOMPLETE": 0,
+      "requests": 65,
+      "usd": 0.5145681000000001,
+      "wall_s": 611.431107499986
+    }
+  ],
+  "per_task": {
+    "average-energy": {
+      "b-latched-reset": {
+        "FAIL": 2,
+        "PASS": 1
+      },
+      "b-pulse-fast": {
+        "PASS": 3
+      },
+      "b-volatile-reset": {
+        "FAIL": 2,
+        "PASS": 1
+      },
+      "clite-query-window-derived-v1": {
+        "PASS": 3
+      }
+    },
+    "rich-static": {
+      "b-latched-reset": {
+        "PASS": 3
+      },
+      "b-pulse-fast": {
+        "PASS": 3
+      },
+      "b-volatile-reset": {
+        "PASS": 3
+      },
+      "clite-query-window-derived-v1": {
+        "PASS": 3
+      }
+    },
+    "complete-raw": {
+      "b-latched-reset": {
+        "PASS": 3
+      },
+      "b-pulse-fast": {
+        "PASS": 3
+      },
+      "b-volatile-reset": {
+        "PASS": 3
+      },
+      "clite-query-window-derived-v1": {
+        "PASS": 3
+      }
+    },
+    "executable-response": {
+      "b-latched-reset": {
+        "PASS": 3
+      },
+      "b-pulse-fast": {
+        "PASS": 3
+      },
+      "b-volatile-reset": {
+        "PASS": 3
+      },
+      "clite-query-window-derived-v1": {
+        "PASS": 3
+      }
+    },
+    "live-e5": {
+      "b-latched-reset": {
+        "INCOMPLETE": 2,
+        "PASS": 1
+      },
+      "b-pulse-fast": {
+        "INCOMPLETE": 1,
+        "PASS": 2
+      },
+      "b-volatile-reset": {
+        "INCOMPLETE": 1,
+        "PASS": 2
+      },
+      "clite-query-window-derived-v1": {
+        "INCOMPLETE": 1,
+        "PASS": 2
+      }
+    },
+    "e4-rich-static-table": {
+      "b-latched-reset": {
+        "PASS": 3
+      },
+      "b-pulse-fast": {
+        "PASS": 3
+      },
+      "b-volatile-reset": {
+        "PASS": 3
+      },
+      "clite-query-window-derived-v1": {
+        "PASS": 3
+      }
+    }
+  },
+  "pilot": [
+    {
+      "H_proposal_counts": {},
+      "condition": "live-e5",
+      "mean_group_requests": 5.5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 11,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.0965427,
+      "task_count": 1,
+      "wall_s": 171.08581404101278
+    },
+    {
+      "H_proposal_counts": {
+        "propose": 2
+      },
+      "condition": "proposed_method",
+      "mean_group_requests": 10.5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 21,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.15427049999999998,
+      "task_count": 1,
+      "wall_s": 226.19050328999583
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "complete-raw",
+      "mean_group_requests": 5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 10,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.0529725,
+      "task_count": 1,
+      "wall_s": 77.3414877079922
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "average-energy",
+      "mean_group_requests": 7.5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 1,
+        "NO_VALID_EVENT_DELIVERY": 1
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "FAIL": 1,
+          "PASS": 1
+        }
+      },
+      "requests": 15,
+      "run_count": 2,
+      "service_counts": {
+        "FAIL": 1,
+        "PASS": 1
+      },
+      "settled_upper_usd": 0.0520068,
+      "task_count": 1,
+      "wall_s": 131.08998087498185
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "rich-static",
+      "mean_group_requests": 5.5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 11,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.0602838,
+      "task_count": 1,
+      "wall_s": 75.72869495900522
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "e4-rich-static-table",
+      "mean_group_requests": 6,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 12,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.10582889999999999,
+      "task_count": 1,
+      "wall_s": 114.29101287499361
+    },
+    {
+      "H_proposal_counts": {},
+      "condition": "executable-response",
+      "mean_group_requests": 5,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 10,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.0542895,
+      "task_count": 1,
+      "wall_s": 62.853789915985544
+    },
+    {
+      "H_proposal_counts": {
+        "propose": 2
+      },
+      "condition": "ordinary_reflection",
+      "mean_group_requests": 11,
+      "ordered_event_counts": {
+        "DELIVERED_BEFORE_ANY_RESET": 2
+      },
+      "per_task_counts": {
+        "b-volatile-reset": {
+          "PASS": 2
+        }
+      },
+      "requests": 22,
+      "run_count": 2,
+      "service_counts": {
+        "PASS": 2
+      },
+      "settled_upper_usd": 0.15838979999999997,
+      "task_count": 1,
+      "wall_s": 194.7590617909882
+    }
+  ],
+  "e5": [
+    {
+      "complete_service": "INCOMPLETE",
+      "failed_actions": [
+        "ValueError: V2_ACTION_TYPE_OR_SYNTAX_REJECTED",
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP"
+      ],
+      "group": "p3-formal-1-1-live-e5",
+      "new_physical_measurement": false,
+      "operational_status": "INCOMPLETE_OR_STOPPED",
+      "stage": "formal",
+      "world": "b-pulse-fast"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-2-1-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.0006295829953160137
+      },
+      "source_id": "component_record",
+      "spec_sha256": "83b5b9aad24791dcf51189e4e1175fc10e966161fc76ce167038e02a226fc941",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "1",
+      "world": "b-volatile-reset"
+    },
+    {
+      "complete_service": "INCOMPLETE",
+      "failed_actions": [
+        "ValueError: V2_ACTION_TYPE_OR_SYNTAX_REJECTED",
+        "ValueError: V2_ACTION_TYPE_OR_SYNTAX_REJECTED",
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE",
+        "ValueError: V2_VALID_PROPOSAL_CAP"
+      ],
+      "group": "p3-formal-3-1-live-e5",
+      "new_physical_measurement": false,
+      "operational_status": "INCOMPLETE_OR_STOPPED",
+      "stage": "formal",
+      "world": "b-latched-reset"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-4-1-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.0005352500011213124
+      },
+      "source_id": "excitation_record",
+      "spec_sha256": "48ed5a822aa278a5fbe7bf0ecb4ff81e9467ef4afcdfbd6a43e8e9834a2a91a0",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "W",
+      "world": "clite-query-window-derived-v1"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-1-2-live-e5",
+      "mode": "construction",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.001325000004726462
+      },
+      "source_id": "component_record",
+      "spec_sha256": "836473e1d64a77fee544e94f41fbf33addf784f0732d7091a0f93ead92763c26",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "1",
+      "world": "b-pulse-fast"
+    },
+    {
+      "complete_service": "INCOMPLETE",
+      "failed_actions": [
+        "ValueError: V2_ACTION_TYPE_OR_SYNTAX_REJECTED",
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE"
+      ],
+      "group": "p3-formal-2-2-live-e5",
+      "new_physical_measurement": false,
+      "operational_status": "INCOMPLETE_OR_STOPPED",
+      "stage": "formal",
+      "world": "b-volatile-reset"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-3-2-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.0004836250009248033
+      },
+      "source_id": "component_record",
+      "spec_sha256": "5ade7f593418600d4650080a34885d59b9f5dc350dbce5db32a900e6b0f418ff",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "1",
+      "world": "b-latched-reset"
+    },
+    {
+      "complete_service": "INCOMPLETE",
+      "failed_actions": [
+        "ValueError: V2_ACTION_TYPE_OR_SYNTAX_REJECTED",
+        "ValueError: NO_TYPED_CONSUMER_MATCH",
+        "ValueError: V2_VALID_PROPOSAL_CAP"
+      ],
+      "group": "p3-formal-4-2-live-e5",
+      "new_physical_measurement": false,
+      "operational_status": "INCOMPLETE_OR_STOPPED",
+      "stage": "formal",
+      "world": "clite-query-window-derived-v1"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": false,
+      "failed_actions": [],
+      "group": "p3-formal-1-3-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.0004117920034332201
+      },
+      "source_id": "component_record",
+      "spec_sha256": "89a0bc82d5401b9edb5c46730ba43cc08118278b9a6a3046fafd6ab012fd0a37",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "A",
+      "world": "b-pulse-fast"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-2-3-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.00038912500895094126
+      },
+      "source_id": "component_record",
+      "spec_sha256": "ad5013c8e5dbdeafb1c745149d12961713e667e920a39174f72559f76dc9030a",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "1",
+      "world": "b-volatile-reset"
+    },
+    {
+      "complete_service": "INCOMPLETE",
+      "failed_actions": [
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: V2_VALID_PROPOSAL_CAP",
+        "ValueError: OBSERVATION_UNQUALIFIED:SOURCE_UNIT_UNAVAILABLE"
+      ],
+      "group": "p3-formal-3-3-live-e5",
+      "new_physical_measurement": false,
+      "operational_status": "INCOMPLETE_OR_STOPPED",
+      "stage": "formal",
+      "world": "b-latched-reset"
+    },
+    {
+      "complete_service": "PASS",
+      "design_changed": true,
+      "failed_actions": [],
+      "group": "p3-formal-4-3-live-e5",
+      "mode": "selection",
+      "new_physical_measurement": false,
+      "operational_status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+      "qualification": {
+        "domain_status": "CHECKED_ON_SOURCE",
+        "independent_scalar_value_agrees": true,
+        "prospective": true,
+        "scope": "Declared-source relation under fixed digital apparatus; not novelty, physical measurement or service proof",
+        "status": "EXTERNAL_PASS",
+        "unit_status": "CHECKED_AGAINST_SUPPLIED_MAPPING",
+        "wall_seconds": 0.00041612499626353383
+      },
+      "source_id": "excitation_record",
+      "spec_sha256": "4d22786c7f693b98f93ca5c25c57f51e161ca58866dd699ef07e5e440bb2cff5",
+      "stage": "formal",
+      "typed_observation_consumed": true,
+      "units": "W",
+      "world": "clite-query-window-derived-v1"
+    }
+  ],
+  "e5_failure_groups": {
+    "source_unit": [
+      "p3-formal-1-1-live-e5",
+      "p3-formal-3-1-live-e5",
+      "p3-formal-2-2-live-e5",
+      "p3-formal-3-3-live-e5"
+    ],
+    "typed_consumer": [
+      "p3-formal-4-2-live-e5"
+    ]
+  },
+  "ordered_selections": 4,
+  "ordered_distinct_responses": 1,
+  "O0": [
+    {
+      "arm": "candidate",
+      "poll_s": 1,
+      "matched": 8,
+      "service": "PASS",
+      "self_judgment": "UNKNOWN",
+      "requests": 8,
+      "packets": 18,
+      "execution_key": "ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6"
+    },
+    {
+      "arm": "fixed-periodic",
+      "poll_s": 60,
+      "matched": 0,
+      "service": "FAIL",
+      "self_judgment": "FAIL",
+      "requests": 5,
+      "packets": 348,
+      "execution_key": "60be0b85495ec67f87399c8e7254d309998dcf109d9db5cd1e8914b621275909"
+    },
+    {
+      "arm": "rich-state",
+      "poll_s": 1,
+      "matched": 8,
+      "service": "PASS",
+      "self_judgment": "PASS",
+      "requests": 5,
+      "packets": 18,
+      "execution_key": "ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6"
+    }
+  ],
+  "O_final": [
+    {
+      "lineage": 1,
+      "arm": "H0",
+      "episode": "L1-H0-final-3",
+      "poll_s": 1,
+      "retry_s": 1,
+      "event_passes": 6,
+      "max_error_s": 1.102999999999156,
+      "service": "FAIL"
+    },
+    {
+      "lineage": 1,
+      "arm": "G0",
+      "episode": "L1-G0-final-3",
+      "poll_s": null,
+      "retry_s": null,
+      "event_passes": null,
+      "max_error_s": null,
+      "service": "INCOMPLETE"
+    },
+    {
+      "lineage": 1,
+      "arm": "G1",
+      "episode": "L1-G1-final-3",
+      "poll_s": 0.75,
+      "retry_s": 0.25,
+      "event_passes": 8,
+      "max_error_s": 0.727999999999156,
+      "service": "PASS"
+    },
+    {
+      "lineage": 2,
+      "arm": "H0",
+      "episode": "L2-H0-final-3",
+      "poll_s": 0.75,
+      "retry_s": 5,
+      "event_passes": 8,
+      "max_error_s": 0.727999999999156,
+      "service": "PASS"
+    },
+    {
+      "lineage": 2,
+      "arm": "G0",
+      "episode": "L2-G0-final-3",
+      "poll_s": null,
+      "retry_s": null,
+      "event_passes": null,
+      "max_error_s": null,
+      "service": "INCOMPLETE"
+    },
+    {
+      "lineage": 2,
+      "arm": "G1",
+      "episode": "L2-G1-final-3",
+      "poll_s": null,
+      "retry_s": null,
+      "event_passes": null,
+      "max_error_s": null,
+      "service": "INCOMPLETE"
+    },
+    {
+      "lineage": 3,
+      "arm": "H0",
+      "episode": "L3-H0-final-3",
+      "poll_s": null,
+      "retry_s": null,
+      "event_passes": null,
+      "max_error_s": null,
+      "service": "INCOMPLETE"
+    },
+    {
+      "lineage": 3,
+      "arm": "G0",
+      "episode": "L3-G0-final-3",
+      "poll_s": 1,
+      "retry_s": 0.25,
+      "event_passes": 6,
+      "max_error_s": 1.102999999999156,
+      "service": "FAIL"
+    },
+    {
+      "lineage": 3,
+      "arm": "G1",
+      "episode": "L3-G1-final-3",
+      "poll_s": 0.75,
+      "retry_s": 1,
+      "event_passes": 8,
+      "max_error_s": 0.727999999999156,
+      "service": "PASS"
+    }
+  ],
+  "O_failed_times": [
+    {
+      "episode": "L1-H0-final-3",
+      "time_s": 12077.625,
+      "receive_s": 12078.587878787977,
+      "encoded_stamp_s": 12078.629,
+      "absolute_stamp_error_s": 1.004000000000815
+    },
+    {
+      "episode": "L1-H0-final-3",
+      "time_s": 17043.625,
+      "receive_s": 17044.587878787977,
+      "encoded_stamp_s": 17044.728,
+      "absolute_stamp_error_s": 1.102999999999156
+    },
+    {
+      "episode": "L3-G0-final-3",
+      "time_s": 12077.625,
+      "receive_s": 12078.587878787977,
+      "encoded_stamp_s": 12078.629,
+      "absolute_stamp_error_s": 1.004000000000815
+    },
+    {
+      "episode": "L3-G0-final-3",
+      "time_s": 17043.625,
+      "receive_s": 17044.587878787977,
+      "encoded_stamp_s": 17044.728,
+      "absolute_stamp_error_s": 1.102999999999156
+    }
+  ],
+  "final_arms": [
+    {
+      "arm": "H0",
+      "PASS": 7,
+      "FAIL": 1,
+      "INCOMPLETE": 1
+    },
+    {
+      "arm": "G0",
+      "PASS": 6,
+      "FAIL": 1,
+      "INCOMPLETE": 2
+    },
+    {
+      "arm": "G1",
+      "PASS": 8,
+      "FAIL": 0,
+      "INCOMPLETE": 1
+    }
+  ],
+  "incomplete_O_episodes": [
+    "L1-G0-final-3",
+    "L2-G0-final-3",
+    "L2-G1-final-3",
+    "L3-H0-final-3"
+  ],
+  "accounting": {
+    "original_failed_E5": {
+      "cache_aware_rate_estimate_usd": 0.035886443999999997,
+      "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+      "requests": 6,
+      "settled_charge_upper_bound_usd": 0.0644115,
+      "unknown_or_missing_usage": [],
+      "unsettled_reserved_usd": 0
+    },
+    "controlled_matrix": {
+      "requests": 771,
+      "settled_upper_usd": 5.4478605,
+      "unknown_usage": [],
+      "wall_s": 8914.2819140449
+    },
+    "O_and_procedure_campaign": {
+      "requests": 367,
+      "settled_upper_usd": 3.1767228,
+      "wall_s": 5951.6394840371795
+    },
+    "no_sum_across_subsets": "O0 is included in the 367-request campaign; E4 JSON is the rich-static shared cell. Campaign totals include conditions outside displayed interface rows."
+  },
+  "physical_qualification": "UNKNOWN",
+  "product_acceptance": "NOT_ACCEPTED",
+  "default_H0_changed": false,
+  "new_provider_requests": 0,
+  "new_scientific_executions": 0,
+  "new_native_mutations": 0
+}

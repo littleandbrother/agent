@@ -1,0 +1,353 @@
+{
+  "$defs": {
+    "ast": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "description": "JSON Pointer, e.g. /field_name or /items/0/value. Use / prefix; encode tilde as ~0 and slash in a key as ~1. Bare field names are invalid.",
+              "maxLength": 256,
+              "pattern": "^(?:/(?:[^~]|~[01])*)?$",
+              "type": "string"
+            },
+            "units": {
+              "maxLength": 48,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "units"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "constant": {
+              "type": [
+                "number",
+                "boolean",
+                "string"
+              ]
+            },
+            "units": {
+              "maxLength": 48,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "constant",
+            "units"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "args": {
+              "items": {
+                "$ref": "#/$defs/ast"
+              },
+              "maxItems": 2,
+              "minItems": 1,
+              "type": "array"
+            },
+            "op": {
+              "enum": [
+                "abs",
+                "add",
+                "all",
+                "and",
+                "any",
+                "div",
+                "eq",
+                "ge",
+                "gt",
+                "le",
+                "lt",
+                "max",
+                "mean",
+                "min",
+                "mul",
+                "neg",
+                "not",
+                "or",
+                "sqrt",
+                "sub",
+                "sum"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "args"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "spec": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "not": {
+            "required": [
+              "ast"
+            ]
+          },
+          "properties": {
+            "mode": {
+              "const": "selection"
+            }
+          },
+          "required": [
+            "field"
+          ]
+        },
+        {
+          "not": {
+            "required": [
+              "field"
+            ]
+          },
+          "properties": {
+            "mode": {
+              "const": "construction"
+            }
+          },
+          "required": [
+            "ast"
+          ]
+        }
+      ],
+      "properties": {
+        "ast": {
+          "$ref": "#/$defs/ast"
+        },
+        "domain": {
+          "additionalProperties": false,
+          "properties": {
+            "constraints": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "field": {
+                    "description": "JSON Pointer, e.g. /field_name or /items/0/value. Use / prefix; encode tilde as ~0 and slash in a key as ~1. Bare field names are invalid.",
+                    "maxLength": 256,
+                    "pattern": "^(?:/(?:[^~]|~[01])*)?$",
+                    "type": "string"
+                  },
+                  "lower": {
+                    "type": "number"
+                  },
+                  "units": {
+                    "maxLength": 48,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "upper": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "field",
+                  "lower",
+                  "upper",
+                  "units"
+                ],
+                "type": "object"
+              },
+              "maxItems": 8,
+              "type": "array"
+            },
+            "description": {
+              "maxLength": 2000,
+              "type": "string"
+            }
+          },
+          "required": [
+            "constraints"
+          ],
+          "type": "object"
+        },
+        "field": {
+          "description": "JSON Pointer, e.g. /field_name or /items/0/value. Use / prefix; encode tilde as ~0 and slash in a key as ~1. Bare field names are invalid.",
+          "maxLength": 256,
+          "pattern": "^(?:/(?:[^~]|~[01])*)?$",
+          "type": "string"
+        },
+        "hypothesis": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "selection",
+            "construction"
+          ],
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "phase2-observation-proposal-v1"
+        },
+        "source_id": {
+          "pattern": "^[a-z][a-z0-9_.-]{0,63}$",
+          "type": "string"
+        },
+        "units": {
+          "maxLength": 48,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "hypothesis",
+        "mode",
+        "source_id",
+        "units",
+        "domain"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "source_id"
+            ]
+          },
+          {
+            "required": [
+              "spec"
+            ]
+          },
+          {
+            "required": [
+              "policy"
+            ]
+          }
+        ]
+      },
+      "properties": {
+        "action": {
+          "const": "sources"
+        }
+      }
+    },
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "spec"
+            ]
+          },
+          {
+            "required": [
+              "policy"
+            ]
+          }
+        ]
+      },
+      "properties": {
+        "action": {
+          "const": "acquire"
+        }
+      },
+      "required": [
+        "source_id"
+      ]
+    },
+    {
+      "not": {
+        "required": [
+          "source_id"
+        ]
+      },
+      "properties": {
+        "action": {
+          "enum": [
+            "propose",
+            "submit"
+          ]
+        }
+      },
+      "required": [
+        "spec",
+        "policy"
+      ]
+    }
+  ],
+  "properties": {
+    "action": {
+      "enum": [
+        "sources",
+        "acquire",
+        "propose",
+        "submit"
+      ],
+      "type": "string"
+    },
+    "policy": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "design": {
+            "additionalProperties": false,
+            "properties": {
+              "capacitance_f": {
+                "exclusiveMinimum": 0,
+                "type": "number"
+              },
+              "tx_not_before_s": {
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "capacitance_f",
+              "tx_not_before_s"
+            ],
+            "type": "object"
+          },
+          "equals": {
+            "type": [
+              "number",
+              "boolean",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "equals",
+          "design"
+        ],
+        "type": "object"
+      },
+      "maxItems": 3,
+      "minItems": 1,
+      "type": "array"
+    },
+    "source_id": {
+      "pattern": "^[a-z][a-z0-9_.-]{0,63}$",
+      "type": "string"
+    },
+    "spec": {
+      "$ref": "#/$defs/spec"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "type": "object"
+}

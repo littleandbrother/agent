@@ -1,0 +1,345 @@
+{
+  "schema_version": "bf-abc-C-paper-handoff-v1",
+  "dispatch_id": "BF-ABC-20261020-001",
+  "owner": "campaign-a",
+  "created_utc": "2026-10-20T13:35:17.496753+00:00",
+  "status": "A_OWNED_PAPER_COMPLETE_IDLE_FOR_S0",
+  "handoff_recipient": "S0 only; no message to review chat",
+  "manuscript_root": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+  "entry": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020/main.tex",
+  "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020/main.pdf",
+  "pdf_sha256": "4e9e7cee87d70c2bcafbd5706620fab33886ae2ef36e0c4273cbfef27b2f04fc",
+  "pdf_bytes": 384780,
+  "baseline": "Complete campaign-a final/main.tex and final/body.tex. Old final tree unchanged; not the parent early paper.",
+  "source_manifest": "evidence.json source_files plus29 C_rows result locators and raw hashes",
+  "sealed_C_core_sha256": "b399da66b6b2e1d3d139102cd15d6b6b2583c98156554ee09494f7eacfe28d98",
+  "canonical_style_sha256": "473994c5eb69167576ae0427ed4696e6542d5aadd10497868e38304e7c850872",
+  "canonical_logo_sha256": "25f016add579c729d3447b4fca72b66fa98bd309cc82a9a4971bd61d8837f12e",
+  "canonical_source_directory": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/shared",
+  "layout": {
+    "title_font_size_leading_pt": [
+      17,
+      20
+    ],
+    "title_lines": 2,
+    "author_lines": 1,
+    "date_lines": 1,
+    "logo_width_mm": 42,
+    "logo_position": "upper right; upper left blank",
+    "abstract": "blue frame, reference canonical style"
+  },
+  "page_count": 16,
+  "pages_actually_viewed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "visual_review_details": "paper-qa.json; final pixel identity and final corrected-page reinspection recorded.",
+  "figure": "Single Python/Matplotlib PDF vector, fonttype42; no raster plot layers.",
+  "warnings_final": [
+    "Package epstopdf Warning: Shell escape feature is not enabled. Benign: all image inputs already PDF; no EPS conversion needed."
+  ],
+  "warnings_absent": [
+    "overfull",
+    "underfull",
+    "undefined citations/references",
+    "missing glyphs",
+    "font substitutions",
+    "Type3 fonts"
+  ],
+  "commands": [
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B render_assets.py --verify-sources",
+      "exit_code": 0,
+      "result": "13 sources and29 C result hashes;24 formal counts/gates/costs; consumed frozen-H identities; byte-identical rerender of4 table/CSV/figure files."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B build.py",
+      "exit_code": 0,
+      "result": "Two final pdflatex passes, actual PDF16pages. Earlier local TeX/layout repairs recorded separately."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "/opt/homebrew/bin/pdftoppm -r 96 -png main.pdf .build/pages/page",
+      "exit_code": 0,
+      "result": "16 individual rasters viewed; all final pixels matched those reviewed; final corrections1/10/12 viewed again; raster scratch then removed."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "/opt/homebrew/bin/pdftoppm -f 1 -singlefile -r 125 -png main.pdf first-page",
+      "exit_code": 0,
+      "result": "One retained current first-page preview."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "/opt/homebrew/bin/pdffonts main.pdf",
+      "exit_code": 0,
+      "result": "18 embedded/subset/Unicode fonts,0 Type3."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "/opt/homebrew/bin/pdfimages -list figures/c24-evidence.pdf",
+      "exit_code": 0,
+      "result": "0 raster image layers in scientific figure."
+    },
+    {
+      "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/abc-20261020",
+      "command": "/opt/homebrew/bin/pdftotext -bbox main.pdf .build/layout.html",
+      "exit_code": 0,
+      "result": "16pages;2title lines; no text-bound violation. Scratch then removed."
+    }
+  ],
+  "results": {
+    "formal_arms_order": [
+      "H0",
+      "H0+samehistory",
+      "ordinary",
+      "proposed"
+    ],
+    "C_formal_success": [
+      "6/6",
+      "6/6",
+      "6/6",
+      "6/6"
+    ],
+    "C_formal_requests": [
+      28,
+      26,
+      43,
+      29
+    ],
+    "C_formal_upper_usd": [
+      0.1815672,
+      0.69885,
+      1.1057187,
+      0.7532616
+    ],
+    "frozen_relation_false_on_passing_design": {
+      "ordinary": "6/6",
+      "proposed": "2/6"
+    },
+    "C_formal_only_requests": 126,
+    "C_formal_only_upper_usd": 2.7393975,
+    "C_all_stages_episodes": 29,
+    "C_all_stages_requests": 153,
+    "C_all_stages_upper_usd": 3.4548018,
+    "ABC_global_requests": 307,
+    "ABC_global_upper_usd": 5.5299957,
+    "ABC_costs_are_not_added_to_C_again": true
+  },
+  "retained_manuscript_files": 22,
+  "retained_manuscript_bytes": 903854,
+  "retained_manuscript_cap_bytes": 20000000,
+  "estimated_peak_additional_bytes": 50000000,
+  "free_bytes_at_handoff": 16949301248,
+  "protected_original_files_unchanged": 722,
+  "preserved": [
+    "Old complete final and raw-data reproducer untouched; no final/data copy.",
+    "Original frozen pack/module/specs/H artifacts unchanged.",
+    "Earlier method12/12 ties, more requests, conditional G differences and4old32768-token-censored attempts retained.",
+    "Old and new A/R failures, billing, historical UNKNOWN and unpriced nonzero Codex work retained."
+  ],
+  "additional_work_this_paper": {
+    "participant_model_requests": 0,
+    "Pi_runs": 0,
+    "scientific_executions": 0,
+    "native_solver_jobs": 0,
+    "environments": 0,
+    "worktrees": 0,
+    "whole_tree_backups": 0,
+    "commits": 0,
+    "pushes": 0,
+    "Overleaf_writes": 0
+  },
+  "limitations": [
+    "C is ideal continuously powered time semantics only; no original O energy/RF/keepalive, full A/R product or hardware acceptance.",
+    "D PASS is not H semantic proof; false sufficient/domain relations are not automatically unsoundness.",
+    "One method formation per reflection arm; no independent formation population, statistical significance, G expansion or RSI claim.",
+    "Earlier raw-data reproduction and full CI/init were not rerun; no root health claim.",
+    "Token-rate charges are not invoices; underlying model weights/version and total developer/Codex cost remain UNKNOWN.",
+    "This is an independent paper/derived-view build; canonical raw science remains external. Source-hash readback is not a new science run."
+  ],
+  "next_handoff": "S0 integrate/read back this bounded delivery; no additional model or science execution needed. Shared/root indexes are S0-owned and unchanged here.",
+  "exact_changed_or_new_delivery_files_excluding_this_handoff": [
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/PAPER-CLAIMS.json",
+      "bytes": 2772,
+      "sha256": "c49afe8f5764fe81796355813af3ca9d6769b4f2ced4197ab8919d18bf282a32"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/README.md",
+      "bytes": 5896,
+      "sha256": "82132e26b114fb5fe00109d161b4641107461fd4638543d3501133548d622647"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-admission.json",
+      "bytes": 238125,
+      "sha256": "5732c052d50ab87a5f7a6ff16e775f305ef93f25b7409d7b3d2f8ffb2167bc45"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-build-repairs.json",
+      "bytes": 614,
+      "sha256": "de11dcb18f03f85c78ba614e54eb0cf8be7d6eefa2d463a057fdd5c582eafb7d"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-qa.json",
+      "bytes": 3616,
+      "sha256": "676fc8b68ee0debfac7c5616c871f3db48a317b423df0fa14d7df5ec60128607"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-source-review-refresh.json",
+      "bytes": 793,
+      "sha256": "b769212d678adc17be5c689344ef54754fc166c86aede797c320e7a472204c20"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-storage-readback.json",
+      "bytes": 2927,
+      "sha256": "e67928bfeb6438ab6fbc10cb1d0c5f8b1cceb0ef76b646c247ece75f0731d074"
+    },
+    {
+      "path": "docs/research/abc-cycle-20261020/methods/paper-template-retirement.json",
+      "bytes": 396,
+      "sha256": "ac246e108d57329bad2f6881b912c84c3670b48b900f412933a2d9aac1b1b4fe"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/README.md",
+      "bytes": 2347,
+      "sha256": "005e81672a5c4814e21cdbbbc71a857d14043502453e7008e0aad5d9780602e6"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/assets/hkustgz-english.pdf",
+      "bytes": 11646,
+      "sha256": "25f016add579c729d3447b4fca72b66fa98bd309cc82a9a4971bd61d8837f12e"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/body.tex",
+      "bytes": 45740,
+      "sha256": "4b66d37c34d44cbbd7626f23c2bb7277a45587aba31d91cce861b40dbdff4933"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/build-receipt.json",
+      "bytes": 3386,
+      "sha256": "6b989cb4711644eb2f3b6dab881cd1e391e8c8e8174fb10e3d8816890bfd56a4"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/build.py",
+      "bytes": 1977,
+      "sha256": "217d51353a117c609d341cb012cfcea6488958527af6ce959eac39f97780b3ab"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/c24-section.tex",
+      "bytes": 11362,
+      "sha256": "35917ffb05a56523cea452b40e8e42df8f5bed9a30d8ebf33cb031a12c7f179c"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/evidence.json",
+      "bytes": 100213,
+      "sha256": "08463ead8c1eaf4097f7560800394cb060465c25628d1afc3312feec80b2d45e"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/figures/c24-evidence.pdf",
+      "bytes": 22492,
+      "sha256": "7fa31d4a587c9240ba1a88a1c5ea47ffddc8a9edab20be4190b141c982d1f926"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/first-page.png",
+      "bytes": 284797,
+      "sha256": "3a3534651839785a2ab4af0e01526cb604aa58abaddf3363197e543348cf104d"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/ar.tex",
+      "bytes": 540,
+      "sha256": "2ddca4b7fde42bcd3cf35be73748626a9a8b887fbdcf19ae616cf3e8cbc100a7"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/asset-check.json",
+      "bytes": 5515,
+      "sha256": "57d86ed7d83fe7e4fe65221b7843a89bb1b4d999b14d1b680140ed029d66e36d"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/c-formal.csv",
+      "bytes": 9165,
+      "sha256": "1dd1b0064479a1cd438965593efcf41d90257df32b8ca4e310ed4477f73fdec3"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/c-formal.tex",
+      "bytes": 842,
+      "sha256": "79dff1361e7e22adabef17f7e73dbd6319bc7671219372bf10aa6312384ef519"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/c-stages.tex",
+      "bytes": 916,
+      "sha256": "7809a887f7dcbc1f1033394264ebd89c59e3e1efd2757e396430ca925bed0c11"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/choices.tex",
+      "bytes": 706,
+      "sha256": "3a636b8bfd259aa6084e37e42e1f2574d1ac098452675a3772a53f70eaea3dd0"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/costs.tex",
+      "bytes": 629,
+      "sha256": "27893eccb762b046187ec9e08f8e3ac47359ea741b054deb1a08154d8126e19a"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/final.tex",
+      "bytes": 441,
+      "sha256": "8498f95d9fe700467e353b53ded2c613508ee29c2e65ceda6f7ffcb535090d87"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/generated/methods.tex",
+      "bytes": 556,
+      "sha256": "e938ced4f117228e16d6983a49d68cfa59284ade835bf65d0d42e09519735fcd"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/main.pdf",
+      "bytes": 384780,
+      "sha256": "4e9e7cee87d70c2bcafbd5706620fab33886ae2ef36e0c4273cbfef27b2f04fc"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/main.tex",
+      "bytes": 2028,
+      "sha256": "c0537cc7a9ac6875e98a4c87d0b4f15a244d0dc4d5e183b65805e6fe486c8265"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/render_assets.py",
+      "bytes": 11089,
+      "sha256": "f3460290f9ab7375e18cf6efd0d9645cac4c9db611a66264dd4b4c3ebd6de41a"
+    },
+    {
+      "path": "papers/method-reexecution-20261019/abc-20261020/style/hkustgz-paper.sty",
+      "bytes": 2687,
+      "sha256": "473994c5eb69167576ae0427ed4696e6542d5aadd10497868e38304e7c850872"
+    },
+    {
+      "path": "project/features/BFA-070-abc-method-transfer/feature.yaml",
+      "bytes": 8602,
+      "sha256": "0f655b369d4461125f1b8ea4998bda1e81c687a3dac7d50d9b07c74a8433dda9"
+    },
+    {
+      "path": "project/features/BFA-070-abc-method-transfer/progress.md",
+      "bytes": 1658,
+      "sha256": "34018a0bf355006c44aad88bb4cde158339ea324db52d9122b766958f6715264"
+    },
+    {
+      "path": "project/features/BFA-070-abc-method-transfer/session-handoff.md",
+      "bytes": 1396,
+      "sha256": "eba4f563712c1f3c7a6f3bb7b54931ee7f7d2ce2d5801621c5ae295bcc370d01"
+    }
+  ]
+}

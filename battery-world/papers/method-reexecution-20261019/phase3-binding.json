@@ -1,0 +1,356 @@
+{
+  "schema_version": "bf-phase3-method-paper-binding-v1",
+  "created_at_utc": "2026-10-19T22:18:12.990816+00:00",
+  "primary_data_root": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3",
+  "primary_inputs": {
+    "main-tables.json": {
+      "sha256": "4b05dfa01c7316656427af42a9fe53f2b2aaa5d47f99fff044a86626eed48166",
+      "bytes": 28242
+    },
+    "actual-comparison.json": {
+      "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+      "bytes": 1834131
+    },
+    "protocol.json": {
+      "sha256": "50029d0ed95d2f8abbce61b5767c712c16617debdd7b1a66bf84292ec9bcf880",
+      "bytes": 39626
+    },
+    "formal-repeat-freeze.json": {
+      "sha256": "37bc7dbf6c922033469ad8712e220419d6c5fb045f6617fce32f1e135cc0cac9",
+      "bytes": 1774
+    },
+    "ordered-selected-witnesses.json": {
+      "sha256": "5bc0212a3be71ba2df8ae9f3ff7dfc2cb61139f29fcfab30bfcb06c387150ad7",
+      "bytes": 28364
+    },
+    "ordered-initial-controls.json": {
+      "sha256": "2743c51b613083eade7788e3712997ea34e43c1bedf6ed6e37c3881e97ebb0c2",
+      "bytes": 15349
+    },
+    "stage4-selection-freeze.json": {
+      "sha256": "ff0b8bf550d8e684098f2c8621067d3446f6815b98f3d07ffccbfaecc0bcddc1",
+      "bytes": 2711
+    }
+  },
+  "shared_style_inputs": {
+    "../shared/hkustgz-paper.sty": {
+      "sha256": "473994c5eb69167576ae0427ed4696e6542d5aadd10497868e38304e7c850872",
+      "bytes": 2687
+    },
+    "../shared/assets/hkustgz-english.pdf": {
+      "sha256": "25f016add579c729d3447b4fca72b66fa98bd309cc82a9a4971bd61d8837f12e",
+      "bytes": 11646
+    }
+  },
+  "admission": "../../docs/research/phase3-20261020/methods/paper-final/admission.json",
+  "derived_results": {
+    "formal_methods": {
+      "complete-raw": {
+        "H_proposal_counts": {},
+        "condition": "complete-raw",
+        "mean_group_requests": 5.333333333333333,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 10,
+          "PENDING_EVENT_RETAINED_ACROSS_RESET": 2
+        },
+        "per_task_counts": {
+          "b-latched-reset": {
+            "PASS": 3
+          },
+          "b-pulse-fast": {
+            "PASS": 3
+          },
+          "b-volatile-reset": {
+            "PASS": 3
+          },
+          "clite-query-window-derived-v1": {
+            "PASS": 3
+          }
+        },
+        "requests": 64,
+        "run_count": 12,
+        "service_counts": {
+          "PASS": 12
+        },
+        "settled_upper_usd": 0.42318059999999996,
+        "task_count": 4,
+        "wall_s": 711.1866428759968
+      },
+      "ordinary_reflection": {
+        "H_proposal_counts": {
+          "no-update": 2,
+          "propose": 10
+        },
+        "condition": "ordinary_reflection",
+        "mean_group_requests": 9.75,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 12
+        },
+        "per_task_counts": {
+          "b-latched-reset": {
+            "PASS": 3
+          },
+          "b-pulse-fast": {
+            "PASS": 3
+          },
+          "b-volatile-reset": {
+            "PASS": 3
+          },
+          "clite-query-window-derived-v1": {
+            "PASS": 3
+          }
+        },
+        "requests": 117,
+        "run_count": 12,
+        "service_counts": {
+          "PASS": 12
+        },
+        "settled_upper_usd": 0.8190117,
+        "task_count": 4,
+        "wall_s": 1304.8541925409518
+      },
+      "proposed_method": {
+        "H_proposal_counts": {
+          "propose": 12
+        },
+        "condition": "proposed_method",
+        "mean_group_requests": 10.583333333333334,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 11,
+          "PENDING_EVENT_RETAINED_ACROSS_RESET": 1
+        },
+        "per_task_counts": {
+          "b-latched-reset": {
+            "PASS": 3
+          },
+          "b-pulse-fast": {
+            "PASS": 3
+          },
+          "b-volatile-reset": {
+            "PASS": 3
+          },
+          "clite-query-window-derived-v1": {
+            "PASS": 3
+          }
+        },
+        "requests": 127,
+        "run_count": 12,
+        "service_counts": {
+          "PASS": 12
+        },
+        "settled_upper_usd": 0.9367913999999999,
+        "task_count": 4,
+        "wall_s": 1527.515520624016
+      }
+    },
+    "pilot_methods": {
+      "complete-raw": {
+        "H_proposal_counts": {},
+        "condition": "complete-raw",
+        "mean_group_requests": 5,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 2
+        },
+        "per_task_counts": {
+          "b-volatile-reset": {
+            "PASS": 2
+          }
+        },
+        "requests": 10,
+        "run_count": 2,
+        "service_counts": {
+          "PASS": 2
+        },
+        "settled_upper_usd": 0.0529725,
+        "task_count": 1,
+        "wall_s": 77.3414877079922
+      },
+      "ordinary_reflection": {
+        "H_proposal_counts": {
+          "propose": 2
+        },
+        "condition": "ordinary_reflection",
+        "mean_group_requests": 11,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 2
+        },
+        "per_task_counts": {
+          "b-volatile-reset": {
+            "PASS": 2
+          }
+        },
+        "requests": 22,
+        "run_count": 2,
+        "service_counts": {
+          "PASS": 2
+        },
+        "settled_upper_usd": 0.15838979999999997,
+        "task_count": 1,
+        "wall_s": 194.7590617909882
+      },
+      "proposed_method": {
+        "H_proposal_counts": {
+          "propose": 2
+        },
+        "condition": "proposed_method",
+        "mean_group_requests": 10.5,
+        "ordered_event_counts": {
+          "DELIVERED_BEFORE_ANY_RESET": 2
+        },
+        "per_task_counts": {
+          "b-volatile-reset": {
+            "PASS": 2
+          }
+        },
+        "requests": 21,
+        "run_count": 2,
+        "service_counts": {
+          "PASS": 2
+        },
+        "settled_upper_usd": 0.15427049999999998,
+        "task_count": 1,
+        "wall_s": 226.19050328999583
+      }
+    },
+    "selection": {
+      "condition_decision": "KEEP_UNCHANGED_BASE_H",
+      "default_H_changed": false,
+      "global_transferable_H_proven": false,
+      "mean_group_requests_not_higher": false,
+      "registered_rule": "At phase3 exit: choose any proposed procedure only if more task-level complete-service passes than fixed_h and reflection, no lost task and no higher mean group requests; otherwise retain unchanged H. Freeze all phase3 task IDs as used; stage4 holds out b-esr-fail, b-no-energy and any newly defined external task until separately registered.",
+      "scope": "Phase3 H instantiations are task-local. This selection cannot establish a globally transferred H or a recursively improved G.",
+      "strict_task_vector_dominance_without_a_lost_task": false,
+      "task_order": [
+        "b-pulse-fast",
+        "b-volatile-reset",
+        "b-latched-reset",
+        "clite-query-window-derived-v1"
+      ],
+      "task_success_vectors": {
+        "complete-raw": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "ordinary_reflection": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "proposed_method": [
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "matrix_groups": 112,
+    "formal_groups": 96,
+    "pilot_groups": 16,
+    "episodes": 140,
+    "formal_episodes": 120,
+    "pilot_episodes": 20,
+    "provider_requests": 771,
+    "settled_upper_usd": "5.4478605",
+    "unknown_usage": [],
+    "formal_task_count": 4,
+    "formal_repetitions_per_task": 3,
+    "selected_cross_reset_groups": 4,
+    "distinct_cross_reset_execution_keys": 1,
+    "new_scientific_executions_for_ordered_audit": 0,
+    "deterministic_comparison_records": 107,
+    "deterministic_additional_executions": 0
+  },
+  "claim_boundaries": {
+    "method_benefit": "NOT_ESTABLISHED",
+    "selection": "KEEP_UNCHANGED_BASE_H",
+    "H_scope": "TASK_LOCAL_INSTANTIATION_NOT_GLOBAL_TRANSFER",
+    "G_changed": false,
+    "RSI": "NOT_ESTABLISHED",
+    "physical_qualification": "UNKNOWN",
+    "historical_cross_reset_response_is_new_memory_mechanism": false,
+    "stage4": "TWO_WITHIN_MODEL_PARAMETER_TASKS_FROZEN_NOT_EXECUTED",
+    "b_esr_fail_and_b_no_energy": "HISTORICAL_ALREADY_USED_NOT_UNSEEN",
+    "prior_phase2": "ORIGINAL_FAILURE_AND_POSTHOC_BOUNDARY_PRESERVED",
+    "AR": "NO_GO_FIFO_FAIL_NOT_ACCEPTED"
+  },
+  "new_work": {
+    "provider_requests": 0,
+    "scientific_executions": 0,
+    "native_dispatches": 0,
+    "test_runs": 0,
+    "SDK_smoke_runs": 0,
+    "full_init_runs": 0,
+    "commits": 0,
+    "pushes": 0,
+    "Overleaf_uploads": 0
+  },
+  "paper_inputs": {
+    "phase3-methods.tex": {
+      "sha256": "fef4c410aaa823a90b734a2dfd9a37024ed18f60f338460cb970ef5fc9bdb44f",
+      "bytes": 16104
+    },
+    "phase3-manuscript.tex": {
+      "sha256": "61172bc447332f881056a2e9e4612138457d299600694ed62adae928b9b6a2b5",
+      "bytes": 1407
+    },
+    "render_phase3.py": {
+      "sha256": "3661242c200a451f8d284a72730bdf1296c6c5e03eba149dc2491bfc3d0b030c",
+      "bytes": 29300
+    }
+  },
+  "outputs": {
+    "phase3.pdf": {
+      "sha256": "b61bf30b7683fedf02f12c40c238641115349627b5df56fb261916d6babfb02f",
+      "bytes": 216762
+    },
+    "pages": 5,
+    "compile_status": "SUCCESS_TWO_PASSES_NO_OVERFULL_OR_UNDEFINED_REFERENCES",
+    "visual_status": "PASS_ALL_PAGES",
+    "visual_receipt": {
+      "path": "../../docs/research/phase3-20261020/methods/paper-final/visual-review.json",
+      "sha256": "3d7eb03d25d4c39df8962b750e28c14e8ba5d73d3ca251175522b918da352390",
+      "bytes": 2836
+    }
+  },
+  "pdf_source_date_epoch": 1792448548,
+  "rebuild": {
+    "command": "python -B render_phase3.py build",
+    "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019",
+    "data_override": "--data-root /path/to/the/same/seven/pinned/files",
+    "environment": {
+      "SOURCE_DATE_EPOCH": "1792448548",
+      "FORCE_SOURCE_DATE": "1",
+      "TZ": "UTC"
+    },
+    "scope": "Counts/tables and this new paper only; no scientific or test execution"
+  },
+  "mutable_S0_summaries_not_consumed": [
+    "RESULTS.md",
+    "phase-state.json",
+    "storage-final.json",
+    "paper-readback.json",
+    "result.json"
+  ],
+  "ordered_witness_summary": {
+    "fresh_selected_groups": 4,
+    "distinct_historical_execution_keys": 1,
+    "execution_key": "d706be371e54b235b3f5b030019bbf5aae9f339ad386fd27b7a03c1a8392e795",
+    "all_physical_responses_reused": true,
+    "conditions": {
+      "complete-raw": 2,
+      "proposed_method": 1,
+      "e4-rich-static-table": 1
+    },
+    "capture_first_s": 0.0037,
+    "capture_last_s": 0.0079,
+    "reset_s": 0.0121,
+    "receive_s": 0.0469,
+    "event_identity_scope": "Single event1 in frozen ideal digital state machine",
+    "physical_qualification": "UNKNOWN",
+    "new_scientific_executions_for_audit": 0
+  }
+}

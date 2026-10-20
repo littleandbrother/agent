@@ -1,0 +1,51 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.016728227999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0288081,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-2-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "decision": "no-update",
+      "reason": "Evidence does not justify any procedural H change, so the base method is retained. Observed sources (all acquired this session): component_record sha256 a24551b45f8106fb... -> event_latch=passive-mechanical, ready_v=2.8, off_v=1.8, C fixed in-range; excitation_record sha256 2820ae5862b2dd36... -> one shunt of 4e-5 J at t=0.012 s, source windows 0-0.006 s and 0.03-0.06 s, deadline 0.1 s; model_law sha256 d690d8a89532cb37... -> passive-mechanical branch retains 'captured' across a brownout (the volatile branch is the one that clears it); saved_activity sha256 891890baf3971251... -> the CURRENT design (C=1e-5, tx_not_before=0.045) yields exactly one packet, application_bytes=8, hex 010400010101b0260657, tx-complete at t=0.0469 s, which is <= 0.1 s deadline, and the brownout at t=0.0121 s carries event_was_captured=true and is recovered by the re-boot at t=0.0381 s. Thus the sole retained observation is a SUCCESS, not a failure: there is no retained failure that would motivate a repeatable change to global_prompt, skills, observation_policy, context_policy, experiment_order, or organization. Changing H would be unwarranted over-fitting, and swapping capacitance_f or tx_not_before_s would be a device-parameter edit, which is explicitly not allowed to be packaged as H. Residual, non-failing fragility is recorded but not treated as a justified update: success depends on passive-mechanical latch retention across the t=0.012 s shunt-driven brownout and on tx_not_before at its 0.045 s upper bound; if later retained observations show a brownout occurring before capture or after the latch clears (volatile-style loss), a tx-transient reset, or a tx-complete past the deadline, that would be the falsifier motivating a concrete observation_policy/'replay-against-model_law-before-submit' H update. Until such a retained failure exists, no-update is the correct calibrated choice; the base method stands and no acceptance is claimed.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "NO_UPDATE"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-2-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-73143a420ff82bab",
+  "protocol_sha256": "861472eccdcdbcf167b844bfa7961717ba2caea9c45708cad7645666c8f72cd4",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "f46ece2195fef4b11827e959c158e8f2cd3b16cceeaadc2d64bcde529df45fad",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-3-2-ordinary_reflection",
+    "id": "p3-formal-3-2-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "5c536b05d3794f57cd623cb36738cbb1ea922f211d865b42b519f0e72b94653e",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 46.810016375005944,
+  "wall_seconds_total": 47.06048412498785
+}

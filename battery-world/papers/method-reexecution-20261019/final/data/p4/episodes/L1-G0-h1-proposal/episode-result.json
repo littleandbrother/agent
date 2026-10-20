@@ -1,0 +1,135 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.029779248,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 3,
+    "settled_charge_upper_bound_usd": 0.030193199999999996,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "L1-G0-h1-proposal",
+  "exit_code": 0,
+  "external_result": {
+    "proposal": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "baseline:P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+        "episode:p2-h-proposal-001:INCOMPLETE_OR_STOPPED",
+        "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+        "submit:EPISODE_CANDIDATE_LIMIT",
+        "submit:c8243ab5730535404ecd5a2538812668a808bfeaffb704c75eedfeb7c7cf1d5e",
+        "episode:p3-formal-1-1-ordinary_reflection-h:ACTUAL_PROSPECTIVE_SUBMITTED",
+        "method:8434c18a49cb8ba91e98968435c33f76afaf446179f31ef89312a821e8716419",
+        "episode:p3-formal-1-1-ordinary_reflection-d:ACTUAL_PROSPECTIVE_SUBMITTED",
+        "submit:91bcd9cd8225c26ceb6cbb669f5a4caebbf6390e28345723f5bee6569b498b30",
+        "check:6a751900ba874cc8f246f210fb5a31f0ac182c47e32b5b98e551e8b9be00ab96",
+        "saved_activity:a4c4b29470504b0b06e584167657f796130e0a445e26e0dccfdd0d8c9ff82d9a",
+        "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+        "component_record:eeb8277f7faa548e82ac297fa65a5e17960824ad13ea20586108ba441280b212",
+        "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+        "excitation_record:219fd490420a63f557b84ea703874a297d34b60da9a037024da38ac32ec99af5",
+        "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e"
+      ],
+      "falsifier": "Falsified on the same frozen inputs and model id if any of the following is observed. (a) Budget loss: in a fresh episode whose inspect output lists no check action, executing the updated H still ends without a recorded artifact (any artifact-carrying call returning ACTION_NOT_AVAILABLE_IN_THIS_EPISODE or EPISODE_CANDIDATE_LIMIT), or the updated H needs more than one artifact-carrying call to emit its proposal. (b) Assignment leak: the emitted method_text contains a numeric value for capacitance_f or tx_not_before_s, i.e. a device assignment rather than a derivation rule. (c) Recurrence mismatch: on a world with recorded activity the event-ordered recurrence disagrees with first_boot_s, with the tx-complete time, or with a recorded per-event energy by more than 2 dt ticks, or requires a different calibration constant per world. (d) Misattribution: a recorded achieved delivery (application bytes equal to the requirement, one unique event id, packet time within the recorded deadline) followed only by post-terminal events is again classified as a retained failure and triggers a knob change. (e) No gain: on the same public traces the updated H yields the same endpoints as H0, i.e. no additional recorded proposal and no additional achieved frame, so the update's only effect is prose. In any of (a)-(e) revert to H0 and log the mismatch, the executions actually spent and the actual cost; do not retune the falsifier to keep the update.",
+      "hypothesis": "Diagnosis from the retained traces: the recorded H-side failures are procedural ordering defects of H0, not missing device insight. (1) H0 orders 'actually check it, then submit' unconditionally. In p2-h-proposal-001 the check action did not exist: one check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE, after which submit(proposal), propose(proposal) and submit(no-update) all returned EPISODE_CANDIDATE_LIMIT with one shared digest, and the episode ended INCOMPLETE_OR_STOPPED with no H proposal recorded. So the unavailable check plausibly consumed the single candidate and turned a proposal-only episode into total budget loss; the parallel proposal episode p3-formal-1-1-ordinary_reflection-h, which never called check, did record a proposal (method 8434c18a), so the blocker was the spent execution, not the payload schema. The rejected H also supplied one concrete design point as its method, which the frozen prefix forbids. (2) H0 has no rule separating a defective prediction from a defective design. In p3-formal-1-1-ordinary_reflection-d the written boot predictor missed the same-world recorded boot by about 8 dt ticks, while the threshold-first recurrence (boot at the first recorded tick where stored energy reaches the ready threshold, then deduct the boot energy) reproduces first_boot_s=0.0129 and the recorded post-boot energy 8.1817e-5 J within one tick: the design was sound and the closed-form latency was not, and the episode paid an execution to learn that. (3) The two public worlds share legal ranges but differ in supply segments and latch type, and the point that delivered in one world is not the point recorded as failing in the other, so carrying points or numbers across episodes is unsound. Hypothesis: if H is updated to probe capability and budget before spending anything, read terminality before diagnosing, keep every device fact as an event-ordered dt-grid recurrence calibrated against a same-world recorded observation, attribute mismatch to the recurrence first, and reserve the single artifact-carrying call for the assigned artifact, then a fresh episode ends with exactly one recorded H proposal (or one explicit no-update) at no extra execution cost, and its quantitative predictions agree with the same-world trace within 2 dt ticks. Scope: a procedure claim under the frozen public ideal model only; physical calibration stays UNKNOWN and no acceptance, hardware, statistical, migration or RSI claim is made.",
+      "impact_scope": "task-entry",
+      "method_sha256": "181ab0bd80f63607e9ab84cbb16d845a8174de32c3c869f46fe9eb29a1d9a669",
+      "method_text": "H update v3: capability-probe-first, terminality-first, recurrence-gated procedure. Re-executable from task entry on the frozen public ideal model. It never edits the task, deadline, physics, initial state, source access, evaluator or budget, records UNKNOWN instead of assuming, and claims no acceptance, hardware validity, statistical advantage, migration or RSI.\n\nSTEP 0 - capability and budget probe (spends nothing). Call inspect. Record: the assigned artifact (H method or D candidate), the action list actually offered, the candidate-execution and distinct-design budgets, request/wall/output limits, legal field ranges, service fields, scope string and retained failures. Rule: a call whose action is not offered must never be attempted, because a not-available error is presumed to consume budget (observed: one unavailable check, then three artifact-carrying calls all rejected with the episode candidate limit and no proposal recorded). If the assigned artifact is a method, no design execution belongs to this episode at all; the older 'check it, then submit' ordering is conditional on check being offered.\n\nSTEP 1 - terminality-first reading of retained observations, before any diagnosis. For each retained world mark DELIVERED if some packet matches the recorded byte requirement, carries a unique event id and is timed within the recorded deadline. Mark every event strictly after the last tx-complete as POST-TERMINAL and benign (typical: energy-threshold decay after the source segment ends). Only an absent delivery, or a delivery violating a recorded service field, counts as a retained failure; classify it as deadline miss, no boot, transmit-transient reset, frame-shape (bytes, uniqueness, count) or no capture. A post-terminal event is never a reason to buy an execution or move a knob.\n\nSTEP 2 - acquire, hash-bind, no carryover. Acquire every source the inspect result lists; record each source_sha256, field units and acquisition cost (bytes, native_calls, new_scientific_executions, wall_seconds). Numeric device facts, chosen points and service labels from other episodes or other worlds are never reused: ranges, supply segments, latch type, efficiency, esr, thresholds, deadlines and initial voltage are read only from the current episode's acquired payloads. A needed field that is absent is recorded UNKNOWN, never assumed, and an assumed value never gates a decision.\n\nSTEP 3 - device model as an event-ordered recurrence, not a closed-form latency. On the recorded dt grid, using only acquired fields: thresholds from capacitance and the recorded ready/off/maximum voltages; per-tick charge from segment power times harvest efficiency minus the drain that applies on that tick, with drain switching on the recorded off/idle powers and voltage thresholds; clamp at the maximum-voltage energy so spill cannot fabricate budget. Order: energy accumulates, and the first tick at which stored energy reaches the ready threshold triggers boot; only then is the boot energy deducted and the boot delay added. Capture follows the recorded latch/strobe fields. The transmit starts at the first admissible tick at or after readiness and at or after the recorded transmit floor, with the loaded-voltage guard taken from output voltage plus esr times transmit current rather than from the off threshold; the transmit window deducts its demand net of same-tick harvest and idle drain. Completion latches after the transmit duration. Boot time is a threshold crossing; writing it as (ready energy + boot energy)/power plus delay is the defect that was recorded as an 8-tick miss.\n\nSTEP 4 - calibrate before gating. Before the recurrence may reject or select anything, run it against one recorded same-world observation and report the deltas in boot time, transmit-complete time and recorded per-event energies, tolerance 2 dt ticks. A mismatch is attributed to the recurrence first (re-derive tick order, threshold, drain switch or spill clamp); the recurrence may gate a design only after it matches a same-world trace. If the current world has no recorded observation, the prediction stays UNKNOWN and no inequality may be used to discard a legal design.\n\nSTEP 5 - inequalities and feasible set, symbolic. With matched recurrence outputs, derive the feasible region in the legal fields and log every margin numerically: (i) predicted completion within the recorded deadline; (ii) at the first admissible transmit tick, stored energy minus the loaded-voltage floor plus net harvest and drain credit over the window minus transmit demand is non-negative, so the frame is not reset mid-transmission; (iii) predicted peak stored energy in the frame window at or below the maximum-voltage energy, so no spill distorts the budget; (iv) the frame completes inside one powered session with the completion latch set, so a reset cannot yield a second frame and violate uniqueness; (v) the transmit window lies inside a contiguous powered segment unless (ii) shows the reserve covers the whole window through a gap. Selection rule: prefer the point that maximizes the minimum normalized margin across (i)-(iv), not an extremum of one knob; report an empty feasible set or an UNKNOWN recurrence instead of guessing, and never carry the resulting point into a method text.\n\nSTEP 6 - one spend, on the assigned artifact only. The artifact-carrying call carries exactly the assigned artifact: if a method, one proposal with hypothesis, falsifier and method text, or one explicit no-update; if a design, one legal candidate with a source-bound reason. Change at most one legal field per spent execution and only in the direction a violated inequality demands. Never spend an execution on an action the probe did not offer, never re-diagnose a terminal observation, and never edit the task, physics, evaluator, source access or budget to obtain a pass.\n\nSTEP 7 - record and claim boundary. Preserve verbatim every failed call, unavailable action and UNKNOWN with its error digest, plus the actual cost per call (bytes, native_calls, new_scientific_executions, wall seconds, settled usage, explicitly estimates rather than an invoice). State that qualification, service and acceptance are determined outside the participant; a delivered frame in a retained trace is evidence about that world's ideal model, not about hardware.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "raw_proposal": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "baseline:P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+        "episode:p2-h-proposal-001:INCOMPLETE_OR_STOPPED",
+        "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+        "submit:EPISODE_CANDIDATE_LIMIT",
+        "submit:c8243ab5730535404ecd5a2538812668a808bfeaffb704c75eedfeb7c7cf1d5e",
+        "episode:p3-formal-1-1-ordinary_reflection-h:ACTUAL_PROSPECTIVE_SUBMITTED",
+        "method:8434c18a49cb8ba91e98968435c33f76afaf446179f31ef89312a821e8716419",
+        "episode:p3-formal-1-1-ordinary_reflection-d:ACTUAL_PROSPECTIVE_SUBMITTED",
+        "submit:91bcd9cd8225c26ceb6cbb669f5a4caebbf6390e28345723f5bee6569b498b30",
+        "check:6a751900ba874cc8f246f210fb5a31f0ac182c47e32b5b98e551e8b9be00ab96",
+        "saved_activity:a4c4b29470504b0b06e584167657f796130e0a445e26e0dccfdd0d8c9ff82d9a",
+        "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+        "component_record:eeb8277f7faa548e82ac297fa65a5e17960824ad13ea20586108ba441280b212",
+        "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+        "excitation_record:219fd490420a63f557b84ea703874a297d34b60da9a037024da38ac32ec99af5",
+        "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e"
+      ],
+      "falsifier": "Falsified on the same frozen inputs and model id if any of the following is observed. (a) Budget loss: in a fresh episode whose inspect output lists no check action, executing the updated H still ends without a recorded artifact (any artifact-carrying call returning ACTION_NOT_AVAILABLE_IN_THIS_EPISODE or EPISODE_CANDIDATE_LIMIT), or the updated H needs more than one artifact-carrying call to emit its proposal. (b) Assignment leak: the emitted method_text contains a numeric value for capacitance_f or tx_not_before_s, i.e. a device assignment rather than a derivation rule. (c) Recurrence mismatch: on a world with recorded activity the event-ordered recurrence disagrees with first_boot_s, with the tx-complete time, or with a recorded per-event energy by more than 2 dt ticks, or requires a different calibration constant per world. (d) Misattribution: a recorded achieved delivery (application bytes equal to the requirement, one unique event id, packet time within the recorded deadline) followed only by post-terminal events is again classified as a retained failure and triggers a knob change. (e) No gain: on the same public traces the updated H yields the same endpoints as H0, i.e. no additional recorded proposal and no additional achieved frame, so the update's only effect is prose. In any of (a)-(e) revert to H0 and log the mismatch, the executions actually spent and the actual cost; do not retune the falsifier to keep the update.",
+      "hypothesis": "Diagnosis from the retained traces: the recorded H-side failures are procedural ordering defects of H0, not missing device insight. (1) H0 orders 'actually check it, then submit' unconditionally. In p2-h-proposal-001 the check action did not exist: one check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE, after which submit(proposal), propose(proposal) and submit(no-update) all returned EPISODE_CANDIDATE_LIMIT with one shared digest, and the episode ended INCOMPLETE_OR_STOPPED with no H proposal recorded. So the unavailable check plausibly consumed the single candidate and turned a proposal-only episode into total budget loss; the parallel proposal episode p3-formal-1-1-ordinary_reflection-h, which never called check, did record a proposal (method 8434c18a), so the blocker was the spent execution, not the payload schema. The rejected H also supplied one concrete design point as its method, which the frozen prefix forbids. (2) H0 has no rule separating a defective prediction from a defective design. In p3-formal-1-1-ordinary_reflection-d the written boot predictor missed the same-world recorded boot by about 8 dt ticks, while the threshold-first recurrence (boot at the first recorded tick where stored energy reaches the ready threshold, then deduct the boot energy) reproduces first_boot_s=0.0129 and the recorded post-boot energy 8.1817e-5 J within one tick: the design was sound and the closed-form latency was not, and the episode paid an execution to learn that. (3) The two public worlds share legal ranges but differ in supply segments and latch type, and the point that delivered in one world is not the point recorded as failing in the other, so carrying points or numbers across episodes is unsound. Hypothesis: if H is updated to probe capability and budget before spending anything, read terminality before diagnosing, keep every device fact as an event-ordered dt-grid recurrence calibrated against a same-world recorded observation, attribute mismatch to the recurrence first, and reserve the single artifact-carrying call for the assigned artifact, then a fresh episode ends with exactly one recorded H proposal (or one explicit no-update) at no extra execution cost, and its quantitative predictions agree with the same-world trace within 2 dt ticks. Scope: a procedure claim under the frozen public ideal model only; physical calibration stays UNKNOWN and no acceptance, hardware, statistical, migration or RSI claim is made.",
+      "method_text": "H update v3: capability-probe-first, terminality-first, recurrence-gated procedure. Re-executable from task entry on the frozen public ideal model. It never edits the task, deadline, physics, initial state, source access, evaluator or budget, records UNKNOWN instead of assuming, and claims no acceptance, hardware validity, statistical advantage, migration or RSI.\n\nSTEP 0 - capability and budget probe (spends nothing). Call inspect. Record: the assigned artifact (H method or D candidate), the action list actually offered, the candidate-execution and distinct-design budgets, request/wall/output limits, legal field ranges, service fields, scope string and retained failures. Rule: a call whose action is not offered must never be attempted, because a not-available error is presumed to consume budget (observed: one unavailable check, then three artifact-carrying calls all rejected with the episode candidate limit and no proposal recorded). If the assigned artifact is a method, no design execution belongs to this episode at all; the older 'check it, then submit' ordering is conditional on check being offered.\n\nSTEP 1 - terminality-first reading of retained observations, before any diagnosis. For each retained world mark DELIVERED if some packet matches the recorded byte requirement, carries a unique event id and is timed within the recorded deadline. Mark every event strictly after the last tx-complete as POST-TERMINAL and benign (typical: energy-threshold decay after the source segment ends). Only an absent delivery, or a delivery violating a recorded service field, counts as a retained failure; classify it as deadline miss, no boot, transmit-transient reset, frame-shape (bytes, uniqueness, count) or no capture. A post-terminal event is never a reason to buy an execution or move a knob.\n\nSTEP 2 - acquire, hash-bind, no carryover. Acquire every source the inspect result lists; record each source_sha256, field units and acquisition cost (bytes, native_calls, new_scientific_executions, wall_seconds). Numeric device facts, chosen points and service labels from other episodes or other worlds are never reused: ranges, supply segments, latch type, efficiency, esr, thresholds, deadlines and initial voltage are read only from the current episode's acquired payloads. A needed field that is absent is recorded UNKNOWN, never assumed, and an assumed value never gates a decision.\n\nSTEP 3 - device model as an event-ordered recurrence, not a closed-form latency. On the recorded dt grid, using only acquired fields: thresholds from capacitance and the recorded ready/off/maximum voltages; per-tick charge from segment power times harvest efficiency minus the drain that applies on that tick, with drain switching on the recorded off/idle powers and voltage thresholds; clamp at the maximum-voltage energy so spill cannot fabricate budget. Order: energy accumulates, and the first tick at which stored energy reaches the ready threshold triggers boot; only then is the boot energy deducted and the boot delay added. Capture follows the recorded latch/strobe fields. The transmit starts at the first admissible tick at or after readiness and at or after the recorded transmit floor, with the loaded-voltage guard taken from output voltage plus esr times transmit current rather than from the off threshold; the transmit window deducts its demand net of same-tick harvest and idle drain. Completion latches after the transmit duration. Boot time is a threshold crossing; writing it as (ready energy + boot energy)/power plus delay is the defect that was recorded as an 8-tick miss.\n\nSTEP 4 - calibrate before gating. Before the recurrence may reject or select anything, run it against one recorded same-world observation and report the deltas in boot time, transmit-complete time and recorded per-event energies, tolerance 2 dt ticks. A mismatch is attributed to the recurrence first (re-derive tick order, threshold, drain switch or spill clamp); the recurrence may gate a design only after it matches a same-world trace. If the current world has no recorded observation, the prediction stays UNKNOWN and no inequality may be used to discard a legal design.\n\nSTEP 5 - inequalities and feasible set, symbolic. With matched recurrence outputs, derive the feasible region in the legal fields and log every margin numerically: (i) predicted completion within the recorded deadline; (ii) at the first admissible transmit tick, stored energy minus the loaded-voltage floor plus net harvest and drain credit over the window minus transmit demand is non-negative, so the frame is not reset mid-transmission; (iii) predicted peak stored energy in the frame window at or below the maximum-voltage energy, so no spill distorts the budget; (iv) the frame completes inside one powered session with the completion latch set, so a reset cannot yield a second frame and violate uniqueness; (v) the transmit window lies inside a contiguous powered segment unless (ii) shows the reserve covers the whole window through a gap. Selection rule: prefer the point that maximizes the minimum normalized margin across (i)-(iv), not an extremum of one knob; report an empty feasible set or an UNKNOWN recurrence instead of guessing, and never carry the resulting point into a method text.\n\nSTEP 6 - one spend, on the assigned artifact only. The artifact-carrying call carries exactly the assigned artifact: if a method, one proposal with hypothesis, falsifier and method text, or one explicit no-update; if a design, one legal candidate with a source-bound reason. Change at most one legal field per spent execution and only in the direction a violated inequality demands. Never spend an execution on an action the probe did not offer, never re-diagnose a terminal observation, and never edit the task, physics, evaluator, source access or budget to obtain a pass.\n\nSTEP 7 - record and claim boundary. Preserve verbatim every failed call, unavailable action and UNKNOWN with its error digest, plus the actual cost per call (bytes, native_calls, new_scientific_executions, wall seconds, settled usage, explicitly estimates rather than an invoice). State that qualification, service and acceptance are determined outside the participant; a delivered frame in a retained trace is evidence about that world's ideal model, not about hardware.",
+      "schema_version": "bf-phase2-method-proposal-v1"
+    }
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-e01cbdc2786891be",
+  "protocol_sha256": "f377cd77696293d374f587d8e9a2210bcd2cb8b22305447da93293ea65b23712",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "933b1bcef0f94799ce9637d81d48f669299a1899b8403aa0ab8da178fa5961d4",
+  "spec": {
+    "arm": "G0",
+    "arm_id": "L1-G0",
+    "child": 1,
+    "id": "L1-G0-h1-proposal",
+    "kind": "H",
+    "lineage": 1,
+    "slot": "h1-proposal",
+    "stage": "proposal"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 2,
+    "gateway_chain_tip": "63ffc1b7132320a64d1e0ac86fe17d88e57ef645f79f99ccc2e5ac8ce935b19d",
+    "model_submitted": true,
+    "model_tool_calls": 2,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 68.06624604199897,
+  "wall_seconds_total": 68.58819029101869
+}

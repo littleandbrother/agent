@@ -1,0 +1,130 @@
+{
+  "schema_version": "bf-phase-one-shared-apparatus-v1",
+  "id": "BF-PHASE1-20261020",
+  "feature": "BFA-051-bf-phase1-integration",
+  "recorded_at": "2026-10-19T16:27:28.781846+00:00",
+  "baseline": "CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a",
+  "scope": "Public BF computational apparatus and protocol qualification; real BF/Pi supplies any submitted new D/program.",
+  "fixed": {
+    "supply": "A/R historical source segments and port watts; B archived BF source/storage/ESR/event scenarios, by exact artifact identity",
+    "initial_energy": "Historical zero-voltage starts where specified. No extra source, precharge, RTC power, future truth or unrecorded human action.",
+    "service": "Per-task period, startup, history, event, timestamp, deduplication, recovery and freshness stay fixed. A gap/retention label cannot replace fresh dark samples.",
+    "physical_scope": "Idealized computational F1 assumptions with independently coded checks. Calibration and hardware evidence UNKNOWN.",
+    "formal_evaluation": "Candidate submit only records a decision. Independent final evaluation uses immutable full-system artifacts outside participant endpoint. Old v1 results and checker identities remain sealed."
+  },
+  "service_gates": [
+    {
+      "id": "startup",
+      "meaning": "First fresh valid receive by historical task deadline, at zero declared initial energy."
+    },
+    {
+      "id": "nominal_sampling",
+      "meaning": "New temperature samples within every applicable nominal service window."
+    },
+    {
+      "id": "dark_sampling",
+      "meaning": "New samples in every applicable dark window; historical retention does not satisfy this."
+    },
+    {
+      "id": "history",
+      "meaning": "Persist every retained durable record across reset; count and declare all losses and evictions."
+    },
+    {
+      "id": "gaps",
+      "meaning": "Report a conservatively bracketed unobserved interval; exact unknown outage edges cannot be asserted."
+    },
+    {
+      "id": "time",
+      "meaning": "Bound absolute timestamp error where known; explicit UNKNOWN/interval otherwise, never a silent clock oracle."
+    },
+    {
+      "id": "events",
+      "meaning": "Capture qualifying actual temperature events and their service windows independently of routine history."
+    },
+    {
+      "id": "recovery",
+      "meaning": "Historical pending records received within fixed 120 s after recovery where applicable."
+    },
+    {
+      "id": "deduplication",
+      "meaning": "At most one accepted receive per persistent device/sequence across ACK loss and reset."
+    },
+    {
+      "id": "freshness",
+      "meaning": "New live records received within fixed 10 s where applicable; replayed old records are separate."
+    }
+  ],
+  "protocol_freeze": {
+    "before_paid": [
+      "task, legal variables and physical assumptions",
+      "tool schema+description actually sent by SDK",
+      "tool/world/checker code and input hashes",
+      "episode identity, model alias and accepted reported identity",
+      "finite budgets, original owner/ledger and active slot lease",
+      "input exposure partition and assistance ledger",
+      "independent final evaluator and output locations"
+    ],
+    "tool_schema": "One canonical definition supplies registration, actual model-visible function and gateway validation. SDK wire schema is checked before provider send.",
+    "methods": "A defines executable candidate and bounded program grammar; BF/Pi must choose actual D/program. B freezes equal-information and discovery/acquisition/qualification/consumer protocols. Neither researcher-written expression nor synthetic SDK replay establishes autonomous discovery."
+  },
+  "partitions": {
+    "current": "public-development",
+    "already_exposed": [
+      "All original A/R conditions, prior counterexamples, equal-information packets, four closed H attempts and their outcomes.",
+      "Codex S0/A/B have reviewed current cases, apparatus and failures."
+    ],
+    "selection_set": "NOT_CREATED: freeze before any future method selection, with exposure audit.",
+    "final_set": "NOT_CREATED: separate immutable lineage; no held-out or unseen-transfer claim now.",
+    "invalidations": "Any future task inspected by an optimizer is marked exposed and cannot be reused as untouched final evaluation."
+  },
+  "resources": {
+    "max_active_models_including_Codex_Pi_workers": 3,
+    "schedule": "S0 + A + B preparation. B idle before S0 + A + one Pi episode.",
+    "native_dispatches": 0,
+    "reserve_bytes": 10000000000,
+    "phase_peak_additional_bytes": 900000000,
+    "retained_output_cap_bytes": 500000000,
+    "A_episode": {
+      "max_provider_requests_including_failures": 60,
+      "max_distinct_candidates": 3,
+      "cumulative_wall_seconds": 3600,
+      "peak_additional_bytes": 300000000,
+      "retained_cap_bytes": 220000000,
+      "auto_resample": false
+    },
+    "B_preparation": {
+      "paid_requests": 0,
+      "peak_additional_bytes": 30000000,
+      "retained_cap_bytes": 20000000
+    },
+    "one_source": "Shared installed SDK/CAD Python/TeX reused; no new complete environment or full backup."
+  },
+  "accounting": {
+    "provider": "Existing model_requests ledger preserves every sent, failed, censored, NOT_SENT and UNKNOWN row under new original episode owner. Missing usage blocks a next paid request.",
+    "money": "Report authoritative settled conservative charge separately from pinned cache-aware rate estimate. Estimates are not provider invoices.",
+    "all_costs": [
+      "All parent and child provider requests",
+      "Native compute and independent checks including negative and rejected attempts",
+      "Output storage, wall time, failed startup/transport and resource censoring",
+      "Codex/user task formulation, executable grammar and manual guidance",
+      "Historical acquisition/method construction costs without double charging reused immutable results"
+    ],
+    "Codex_cost_usd": null,
+    "Codex_cost_status": "UNPRICED: no token/billing feed; never count as zero.",
+    "cache_rates_usd_per_million": {
+      "hit": 0.006,
+      "miss": 0.3,
+      "completion": 1.2
+    },
+    "rates_status": "Existing pinned comparison estimates; not independently refreshed invoice rates."
+  },
+  "stop_conditions": [
+    "Input, baseline, actual schema or model identity drifts",
+    "Unknown provider usage or unresolved execution state",
+    "No finite resource/slot authorization or reserve below guard",
+    "Evaluator/hidden truth leaks into participant decision",
+    "Need to change frozen scientific/service semantics",
+    "No legal design: retain failure and auditable bound; human selects any service/resource change"
+  ],
+  "exit": "Old six-hour positive remains valid; each dark/history/gap/time/recovery/dedup/freshness gate has an actual repaired result or an auditable fixed-space limit and concrete human tradeoff; shared protocols and both BF manuscripts synchronized. No H benefit, RSI, unseen transfer or hardware claim from this exit."
+}

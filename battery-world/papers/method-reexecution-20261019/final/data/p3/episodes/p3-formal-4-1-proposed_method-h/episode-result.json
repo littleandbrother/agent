@@ -1,0 +1,79 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.018247392,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0340152,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-1-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:0b7f92448b23b08684725474a3d2f20da537c21c7c2f0ed4b9d2b76d9ada55f3",
+        "excitation_record:34aff72321c37c28bacd3c1ecd5ea4682ce89a70fe0c8eb7fbbabe4a380ef506",
+        "saved_activity:0946fb8933328dc9bc1e36c1110ff734b0bbc5036f76fa2436c0c1b8d0b0d15c",
+        "model_law:d690d8a89532cb37d39a6c47a4e5d2960d025ea5b85a629a4b1f513bb7003a0f",
+        "saved_activity.brownout.2.001.tx-transient",
+        "saved_activity.packets.empty",
+        "model_law.loaded_v-gate-pre-subtraction",
+        "model_law.volatile-reset-clears-capture"
+      ],
+      "falsifier": "Falsified if a run that follows this method on sources of the same structure (single constant source segment, volatile latch, esr 0, requested draw output_v*tx_current*dt, single query, deadline) derives an admissible TX-start interval whose lower end is met yet the frozen transient law records a tx-transient brownout before tx-complete or an empty packet list at the deadline; or if the derived ledger contradicts saved_activity by more than one dt (first_boot_s 1.316, brownout 2.001); or if the method's lower bound excludes a delay that the frozen per-step check would actually pass (heuristic hardened into a false necessity), or admits a delay the frozen law rejects (unsafe sufficiency). Scope is invalidated, and the interval must be re-derived rather than patched, if event_latch is passive-mechanical (capture survives resets, so retry-after-recharge is legal), if shunts are present, if esr != 0 or tx_duration is not an integer multiple of dt (loaded_v gate and step count change), if source_segments vary in time, or if more than one query/frame is permitted. Any such case must be reported as UNKNOWN scope, not as evidence for or against the hypothesis.",
+      "hypothesis": "The retained non-completion (saved_activity: boot@1.316s, capture@2.0s, tx-start@2.0s, brownout@2.001s reason=tx-transient with event_was_captured=true, packets=[]) is not a capacitance-tuning problem. It is a pre-transmission energy-accumulation problem: in model_law b-transient-behavior-v1 the abort test uses loaded_v from stored energy BEFORE that step's TX subtraction and also compares post-subtraction energy to the off threshold, so an N-step frame needs >= N*output_v*tx_current*dt + off-energy stored at TX start, while capacitance only fixes the maximum storable energy C*cap_voltage_max_v^2/2. Combined with excitation_record (single 2e-5 W segment, event 2.0s, contact 0.001s, deadline 7s), component_record (volatile latch, esr 0, output 1.0V, tx_current 0.025A, tx_duration 0.002s) and dt 0.001s, starting TX at the capture instant cannot meet that requirement, and because the latch is volatile a reset erases the capture that the closed contact window can no longer re-supply. Hypothesis: replacing the implicit 'transmit at capture time' heuristic with an explicit, source-bound feasibility calculus (per-step ledger; required stored energy at TX start; harvest-rate budget; latch-continuity branch; admissible TX-start interval with both boundary reasons) executed from task entry lets future runs reject this failing design class from sources alone and only then enumerate candidates, without any new device observation and without treating the heuristic as a feasible-space exclusion.",
+      "impact_scope": "task-entry",
+      "method_sha256": "afc2bb447ae210af8af8ec721fe129f137f97b870d9ae43a454a18760b0d0837",
+      "method_text": "M-PRE-TX-ENERGY-GATE-v1. Consumed from task entry on every run. It fixes reasoning order, demanded observations and checks; it carries no device value and no acceptance claim.\n\n0) Artifact boundary. Device fields (capacitance_f, tx_not_before_s, any other device-record field) are artifact D, not method. Never record a chosen device value as this method. This interface exposes no device check: a computed candidate is UNVERIFIED and must not be reported as accepted, qualified, or hardware-validated.\n\n1) Preserve the failure as data. Read the retained observation source first and copy verbatim: every action with time_s, reason, event_was_captured; the packet list including empty; first_boot_s. Classify each terminal case as completion (a packet exists) or non-completion (empty packet list with a trailing brownout/reset). Keep the empty packet list attached to the design that produced it, permanently, including after any later success.\n\n2) Rebuild the per-step energy ledger from the transient law only. Transcribe the exact intra-step order: (a) harvest = source_power*dt*harvest_efficiency; (b) spill clamp against cap_voltage_max_v; (c) background drain (idle_power if powered else off_power); (d) shunts; (e) boot energy; (f) requested TX draw = output_v*tx_current*min(dt,tx_left); (g) the abort test. State explicitly that (g) compares a loaded voltage formed from energy BEFORE this step's subtraction, and separately compares post-subtraction energy to the off/ready threshold. Consequence to write down symbolically: for N = round(tx_duration/dt) steps the device must hold at TX start at least N*output_v*tx_current*dt of storable energy plus the off-threshold energy (esr 0), so the requirement comes from the requested draw, not from capacitance; capacitance only maps energy to voltage and caps storage at C*cap_voltage_max_v^2/2. Therefore more capacitance cannot create energy, and less capacitance is excluded by spill, not by preference.\n\n3) Locate the capture set and the latch semantics. Capture requires both membership in the delivered contact window and a powered, past-ready device step. From the latch field decide the branch: volatile means a reset before tx-complete destroys the capture and, once the contact window has closed, no re-capture is possible, so any brownout between capture and tx-complete is terminal for that frame; passive-mechanical means capture survives and re-charge-and-retry is a legal path. Record which branch applies and cite the field.\n\n4) Derive the admissible transmission-start interval with both boundary reasons. Lower end: cumulative net harvest from the device initial state up to start time must reach the Step-2 requirement, and the ready threshold must have been crossed inside the contact window so the event is captured at all. Integrate only the actual source segments scaled by efficiency, minus the background drain actually paid. Upper end: start + transmission duration <= deadline, and packet time - event time <= the protocol maximum data age. Spill does not bound the upper end (spill only discards energy). Label each end as a necessary condition of the frozen law versus a sufficient-design heuristic, and never promote a sufficient heuristic to a necessary exclusion. If a candidate start lies outside the interval, mark it UNKNOWN-rejected with the interval as the recorded reason; do not prefer it because it resembles the current design.\n\n5) Experiment order. Only after Steps 1-4, enumerate candidates over the legal device ranges, ordered so that each distinct region of the derived interval is probed once (at minimum one interior point and, when budget allows, one boundary point), and record each candidate's predicted terminal class before any real observation. The delivered heuristic (for example 'start transmitting at the event instant') is the hypothesis under test, not part of the feasible space.\n\n6) Coupled feedback. If only one device point survives, that point is not the method. If a later run observes a terminal class contradicting a predicted class, invalidate the whole derived interval rather than only its numeric bound, re-derive from sources, and report the contradiction. Never edit the task, the checker, or the model law to make a candidate pass.\n\n7) Report per run: cited source ids with hashes, the transcribed intra-step order, the interval with both boundary reasons, candidate(s) with predicted class, observed class or UNKNOWN when not observable in this interface, the retained failure/counterexample list, and all fields left unchanged. No acceptance, hardware, statistical, migration or RSI claim.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-1-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-9edd53630eadb378",
+  "protocol_sha256": "004d3662ae7b9ac9fc214bee0b5fbeb4d3d0a76cb4b195b1b79560eaf779c5a9",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "1c341c2fdd57b2e50e4549c272b0c9098c3110e11dae97267597a40febae3a4e",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-4-1-proposed_method",
+    "id": "p3-formal-4-1-proposed_method-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "cb6307baa082116fda18deccbf994a2a86c981a3eecbd85901b687044cea004c",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 60.55007787499926,
+  "wall_seconds_total": 60.785219915997004
+}

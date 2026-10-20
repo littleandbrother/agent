@@ -1,0 +1,102 @@
+{
+  "schema_version": "bf-phase4-method-preparation-verification-v1",
+  "at": "2026-10-19T22:50:20.366852+00:00",
+  "status": "EIGHT_NEW_CONTRACT_CONTROLS_PASS_ACTUAL_G1_NOT_RUN",
+  "unique_new_test_cases": 8,
+  "test_suite_invocations": 2,
+  "first_invocation": {
+    "status": "7_PASS_1_FALSE_POSITIVE_TEST_SCOPE",
+    "receipt": "targeted-tests-attempt1.json",
+    "log": "targeted-tests-attempt1.log",
+    "retained": true,
+    "reason": "Leakage assertion scanned exclusion metadata saying phase4/O0 are absent; it did not find future content in historical traces. Corrected assertion checks only original participant inputs and entire public traces, without changing history bytes."
+  },
+  "final_invocation": {
+    "command": [
+      "/Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/agentlab",
+      "-p",
+      "test_campaign_phase4_methods.py",
+      "-v"
+    ],
+    "cwd": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/packages/python/bfworld/src"
+    },
+    "exit_code": 0,
+    "wall_s": 0.16414854198228568,
+    "log": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/phase4-20261020/methods/targeted-tests-attempt2.log",
+    "scope": "Eight unique new phase4 pure-contract software/MOCK controls; second run after correcting a false-positive assertion that inspected exclusion metadata instead of historical participant payloads. No empirical retries or original-history changes."
+  },
+  "core_artifacts": [
+    {
+      "path": "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase4_methods.py",
+      "sha256": "252fda7deb96b1d42fa09846375d077e40df83437fc927e0335a9a29e9b91ad6",
+      "bytes": 17541
+    },
+    {
+      "path": "tests/agentlab/test_campaign_phase4_methods.py",
+      "sha256": "3b091d567b80a2fc91b9690d49f67a8fde0ccc43fe43280f9ea2dbbfbf1ee8af",
+      "bytes": 13958
+    },
+    {
+      "path": "configs/studies/phase4-20261020/methods/frozen-parents.json",
+      "sha256": "d535ca972aef4cc061d3100b981d676cd502d0d843cf53d223f39c67c7e95386",
+      "bytes": 1939
+    },
+    {
+      "path": "configs/studies/phase4-20261020/methods/history-sources.json",
+      "sha256": "b0b1edc54d7ae584ab493e306dac3b2636403680f8ebb30c286aabb49a4a3958",
+      "bytes": 5123
+    },
+    {
+      "path": "configs/studies/phase4-20261020/methods/protocol.json",
+      "sha256": "b0305bd7307273c2288f915e8821110d7823d6bb9b72d9630f1757db4ce2abf1",
+      "bytes": 3701
+    },
+    {
+      "path": "configs/studies/phase4-20261020/methods/public-history.json",
+      "sha256": "6732821ef52b8006eebd2d19a2c0b313dac822299f49c8747c9c3abfe59c33db",
+      "bytes": 257661
+    }
+  ],
+  "checks": {
+    "G_only_schema_and_external_model_authorship_gate": "PASS_SOFTWARE_MOCK",
+    "one_common_G1_event_three_conditional_lineage_pairs": "PASS_SOFTWARE_MOCK",
+    "unchanged_phase3_G0_and_H0": "PASS",
+    "history_packet_four_entire_original_public_episodes": "PASS",
+    "history_original_source_files_sha256_readback": 14,
+    "history_same_bytes_hash_and_copy_isolation": "PASS",
+    "selection_PASS_then_error_then_full_requests_then_index": "PASS_SOFTWARE_MOCK",
+    "final_feedback_extra_fields_wrong_tasks_duplicate_tasks_and_unknown_usage_rejected": "PASS_SOFTWARE_MOCK",
+    "invalid_no_update_censored_and_H0_fallback_costs_retained": "PASS_SOFTWARE_MOCK",
+    "G1_request_floor_remainder_and_decimal_wall_USD_conservation": "PASS_SOFTWARE_MOCK",
+    "per_episode_and_all_stage_arm_caps_no_replacement_slots": "PASS_SOFTWARE_MOCK",
+    "protected_prior_files_unchanged": 20
+  },
+  "execution_boundary": {
+    "provider_requests": 0,
+    "new_G1_formation_events": 0,
+    "scientific_executions": 0,
+    "native_dispatches": 0,
+    "SDK_smoke": 0,
+    "full_init": 0,
+    "new_environments": 0,
+    "new_worktrees": 0,
+    "new_workers": 0,
+    "commit_push_or_upload": false
+  },
+  "limitations": [
+    "Model authorship and natural-language semantics are not authenticated by passing a dictionary to a pure checker. S0 must bind real SDK/tool/request/trace evidence and an independent semantic audit.",
+    "Same actual model configuration/tool/information/cache and fresh contexts must be source-bound by S0 before dispatch. A does not create a runner, slot lease, model replacement or live runtime.",
+    "Host-only selection cannot authorize final exposure itself. S0 must seal all six selections before delivering any final task input, and never reselect from final results.",
+    "Only four selected historical episodes are packaged, not all phase2/3 histories. All original histories remain unchanged.",
+    "Pure/MOCK controls are not actual G1/H/D performance, physical qualification, transfer, method improvement, statistics or RSI. No full repository health claim."
+  ]
+}
