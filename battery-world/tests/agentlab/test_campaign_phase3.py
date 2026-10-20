@@ -1,5 +1,6 @@
 """Changed phase3 integration only; no provider calls or new simulations."""
 import copy
+from contextlib import ExitStack
 import importlib.util
 import json
 from pathlib import Path
@@ -12,21 +13,28 @@ import unittest
 
 from bfworld.agentlab.campaign20261019.phase3 import ComparisonStore,ProspectiveHost,qualify,ordered_state
 from bfworld.agentlab.campaign20261019.phase3_interfaces import decode_packet
+from campaign_fixtures import archived_ar_reference, phase3_initial_cache
 
 APP=Path(__file__).resolve().parents[2]
-ROOT=APP.parents[2]
-OUT=Path.home()/'.local/share/bf-phase3-20261020'
-HIST=Path.home()/'.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001'
+ROOT=APP.parent
 spec=importlib.util.spec_from_file_location('phase3_test_runner',APP/'scripts/campaign_phase3.py')
 runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
 adapter=runner.load_module('phase3_test_adapter',ROOT/'docs/research/phase-plan-20261019/phase2/dispatch_adapter_v2.py')
 
 
 class Phase3IntegrationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.resources=ExitStack()
+        cls.addClassCleanup(cls.resources.close)
+        mount=Path(cls.resources.enter_context(tempfile.TemporaryDirectory(prefix='bf-p3-saved-inputs-')))
+        cls.historical=cls.resources.enter_context(archived_ar_reference())
+        cls.initial=phase3_initial_cache(mount)
+
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix='bf-p3-tests-')
         self.root=Path(self.temp.name)
-        self.store=ComparisonStore(APP,self.root,HIST,OUT/'initial-cache.json','one')
+        self.store=ComparisonStore(APP,self.root,self.historical,self.initial,'one')
 
     def tearDown(self):
         self.temp.cleanup()
@@ -52,10 +60,11 @@ class Phase3IntegrationTests(unittest.TestCase):
         self.store.execute('b-volatile-reset',{'capacitance_f':15e-6,'tx_not_before_s':.045})
         with self.assertRaisesRegex(ValueError,'SHARED_GROUP_TWO_D_LIMIT'):
             self.store.execute('b-volatile-reset',{'capacitance_f':22e-6,'tx_not_before_s':.045})
-        other=ComparisonStore(APP,self.root,HIST,OUT/'initial-cache.json','two')
+        other=ComparisonStore(APP,self.root,self.historical,self.initial,'two')
         second=other.execute('b-volatile-reset',d)
         self.assertTrue(first['job_accounting']['new_logical_D_evaluation'])
         self.assertTrue(second['job_accounting']['new_logical_D_evaluation'])
+        self.assertTrue(first['job_accounting']['physical_exact_input_reused'])
         self.assertTrue(second['job_accounting']['physical_exact_input_reused'])
         self.assertEqual(len(json.loads(other.job.read_text())['executed']),1)
 

@@ -1508,3 +1508,8 @@ The existing S0 implementation, five-stage research results, full paper sources 
 ## GitHub portable CI repair · 2026-10-20
 
 The first published SHA exposed an undeclared jsonschema dependency, host-bound test paths/profiles and automatic formatting of two frozen transport sources. Scoped repair adds exact archived reference/failure fixtures and a separate capability-disabled unit registration, leaves production gates and scientific inputs/evaluators unchanged, and preserves the two frozen source files byte-for-byte. All196 campaign tests pass without the private BF environment; Pi dependency/type/browser checks pass. Full Release ZIP upload and digest readback pass. Remote latest-SHA CI and final publication are recorded separately in the Release publication-receipt.json.
+
+
+## Publication CI: complete offline test isolation
+
+Latest remote failure af29849 was confined to author-machine test paths; Pi and paper reproduction already passed. Resolved temporary A/R output, checkout-relative phase3 adapter, exact saved initial cache and temporary interface output now pass all196 campaign tests with original workspace/private runtime access denied. Saved cache/inputs/results remain unchanged; unit path projections are separate. No production model, evaluator, frozen protocol, provider/native execution or manuscript result changed. Final publication receipt records the subsequent exact-SHA remote CI.

@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import copy
 from contextlib import contextmanager
+import hashlib
+import json
 from pathlib import Path
 import shutil
 import tempfile
@@ -43,6 +45,58 @@ def archived_ar_reference():
                     raise ValueError("Unsafe archived reference path")
             saved.extractall(mount)
         yield mount / "reference-run-001"
+
+
+def phase3_initial_cache(mount: Path) -> Path:
+    """Remount saved exact-input responses, keeping originals unchanged.
+
+    Only a test projection of result-path fields and the cache index is written.
+    No result values, input identities or original artifact bytes are changed.
+    """
+    fixtures = ROOT / "tests/fixtures/campaign20261019"
+    metadata = json.loads((fixtures / "phase3-initial-cache.json").read_text())
+    saved = mount / "saved-cache"
+    saved.mkdir()
+    with zipfile.ZipFile(fixtures / metadata["archive"]) as archive:
+        names = {entry["path"] for entry in metadata["files"]}
+        if (set(archive.namelist()) != names
+                or sum(info.file_size for info in archive.infolist()) > 4_000_000):
+            raise ValueError("Unexpected archived cache contents")
+        for entry in metadata["files"]:
+            name = Path(entry["path"])
+            if name.is_absolute() or ".." in name.parts:
+                raise ValueError("Unsafe archived cache path")
+            data = archive.read(entry["path"])
+            if (len(data) != entry["bytes"]
+                    or hashlib.sha256(data).hexdigest() != entry["sha256"]):
+                raise ValueError("Archived cache artifact drift")
+            target = saved / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
+
+    prefix = Path("/Users/depengsu/.local/share")
+
+    def remount(path):
+        return saved / Path(path).relative_to(prefix)
+
+    index = json.loads((saved / "bf-phase3-20261020/initial-cache.json").read_text())
+    projection = mount / "cache-projection"
+    projection.mkdir()
+    for key, entry in index.items():
+        original_result = remount(entry["result_path"])
+        value = json.loads(original_result.read_text())
+        if value.get("raw_path"):
+            value["raw_path"] = str(remount(value["raw_path"]))
+        result = projection / (key + ".json")
+        result.write_text(json.dumps(value, sort_keys=True) + "\n")
+        artifacts = {str(remount(path)): sha for path, sha in entry["artifacts"].items()
+                     if remount(path) != original_result}
+        entry["result_sha256"] = hashlib.sha256(result.read_bytes()).hexdigest()
+        artifacts[str(result)] = entry["result_sha256"]
+        entry.update(result_path=str(result), artifacts=artifacts)
+    initial = projection / "initial-cache.json"
+    initial.write_text(json.dumps(index, sort_keys=True) + "\n")
+    return initial
 
 
 def interface_registration(mount: Path, bf) -> tuple[Path, Path]:

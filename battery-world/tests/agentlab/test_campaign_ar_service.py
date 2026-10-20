@@ -38,6 +38,9 @@ class ARServiceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.resources = ExitStack()
         cls.addClassCleanup(cls.resources.close)
+        runtime = Path(cls.resources.enter_context(
+            tempfile.TemporaryDirectory(prefix="bf-ar-disabled-unit-"))).resolve()
+        cls.resources.enter_context(patch.object(service, "RUNTIME", runtime))
         original_sha = service.sha
 
         def mounted_sha(path):

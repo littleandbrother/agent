@@ -11,7 +11,6 @@ from bfworld.agentlab.campaign20261019 import interfaces as i
 
 PROJECT = Path(__file__).resolve().parents[2]
 PROTOCOL = PROJECT / "configs/studies/parallel-20261019/interfaces/protocol.json"
-RUNTIME = Path.home() / ".local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b"
 
 
 class InterfaceQualification(unittest.TestCase):
@@ -19,7 +18,9 @@ class InterfaceQualification(unittest.TestCase):
     def setUpClass(cls):
         cls.protocol = i.load_protocol(PROTOCOL)
         cls.clamp, cls.memory = cls.protocol["pairs"]
-        RUNTIME.mkdir(parents=True, exist_ok=True)
+        cls.temp = tempfile.TemporaryDirectory(prefix="bf-interface-unit-")
+        cls.addClassCleanup(cls.temp.cleanup)
+        cls.runtime = Path(cls.temp.name).resolve()
 
     def test_both_current_pass_with_identical_realized_trajectories(self):
         for pair in self.protocol["pairs"]:
@@ -136,7 +137,7 @@ class InterfaceQualification(unittest.TestCase):
         pair, world = self.clamp, self.clamp["worlds"][0]
         current = i.evaluate(pair, world, pair["design"])
         base = i.current_facts(pair, current)
-        with tempfile.TemporaryDirectory(prefix="test-observe-", dir=RUNTIME) as folder:
+        with tempfile.TemporaryDirectory(prefix="test-observe-", dir=self.runtime) as folder:
             catalog = i.observation_sources(Path(folder), pair, world, current)
             for operation in catalog:
                 receipt = i.acquire_observation(catalog[operation], base, 100000)
@@ -164,7 +165,7 @@ class InterfaceQualification(unittest.TestCase):
         self.assertEqual(i.select_observation(catalogue, "memory", 200)["status"], "BUDGET_EXHAUSTED")
 
     def test_new_executable_is_human_specified_and_independently_checked(self):
-        with tempfile.TemporaryDirectory(prefix="test-construct-", dir=RUNTIME) as folder:
+        with tempfile.TemporaryDirectory(prefix="test-construct-", dir=self.runtime) as folder:
             result = i.construct_observation(Path(folder), self.clamp)
             self.assertEqual(result["qualification_model_runs"], 20)
             self.assertEqual(len(result["fresh_process_executions"]), 2)
@@ -180,7 +181,7 @@ class InterfaceQualification(unittest.TestCase):
                 i.render_expression(expression)
 
     def test_seal_tamper_is_rejected_before_consuming_results(self):
-        with tempfile.TemporaryDirectory(prefix="test-seal-", dir=RUNTIME) as folder:
+        with tempfile.TemporaryDirectory(prefix="test-seal-", dir=self.runtime) as folder:
             root = Path(folder)
             (root / "result.json").write_text("{}")
             i.write_json(root / "seal.json", {"files": {"result.json": {"sha256": "0" * 64, "bytes": 2}}})
