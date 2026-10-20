@@ -1,0 +1,164 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.011693928,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.021892199999999997,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L1-H0-final-2",
+  "episode": "L1-H0-final-2",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 4e-05,
+      "tx_not_before_s": 6.5
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 4e-05,
+        "tx_not_before_s": 6.5
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 7.9999e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 1.2222420731083537e-20,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.0003,
+        "source_total_error_j": 0.0,
+        "step_count": 30000,
+        "time_resolution_s": 0.001,
+        "totals_j": {
+          "background_j": 3e-05,
+          "boot_j": 0.0,
+          "conversion_j": 0.0,
+          "harvest_j": 0.0003,
+          "shunt_j": 0.0,
+          "source_j": 0.0003,
+          "spill_j": 0.00014000099999987453,
+          "tx_j": 5e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "0bf3acc72d8241a695eae7fa0806d3a20fddd3633f42da6a84f9c047acf58b34",
+      "input_sha256": "eb3ec3826c986033a1df71e3b5671d57d03e2f9c9ed7c8e76a526eb099bbfb3a",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 3.0
+          }
+        ],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "volatile",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 3
+        },
+        "first_valid_receive_s": 6.501,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "cb103fb65de0f9af021d2a5deca2d233be90535c8308fa1be49bf72f2291e5c3",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "phase4-new-full-response",
+      "physical_qualification": "UNKNOWN",
+      "query_service": {
+        "gates": {
+          "freshness": true,
+          "query_before_reply": true,
+          "query_state_capture": true,
+          "single_query_token": true
+        },
+        "protocol": {
+          "deadline_s": 8,
+          "issued_s": 3,
+          "mapping": "Fixed seq=1, key=1, event=1 single digital query; no multiquery/security/RF qualification.",
+          "max_data_age_s": 5,
+          "nonce": "phase4-q-001",
+          "nonce_sequence": 1,
+          "single_query_only": true
+        },
+        "status": "PASS"
+      },
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/0bf3acc72d8241a695eae7fa0806d3a20fddd3633f42da6a84f9c047acf58b34/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "OUTSIDE_RANGE",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 2.223,
+        "first_receive_s": 6.501,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "p4-clite-half-power-query-v1"
+    },
+    "reason": "Design c=40 µF, tx_not_before=6.5 s; only candidate checked (1 of 2 permitted).\n\nSource-bound arithmetic (component_record id 301 + excitation_record p4-clite-half-power-query-v1 + model_law b-transient-behavior-v1, dt=1 ms, no shunts, harvest_efficiency=1): net charge rate = 10 µW − 1 µW background = 9 µW; boot at eon=c·ready_v²/2 = 20 µJ at t=2.223 s, i.e. before the single 1 ms contact at event_s=3 (event_latch is volatile, so boot must precede capture and no brownout may intervene). TX costs output_v·I·t = 50 µJ, charged as 25 µJ per ms step, and the law requires loaded_v ≥ 1 V at step start and post-step e ≥ eoff=0.02c, so TX-start energy must be ≥ 50 µJ+0.02c = 50.8 µJ; at 6.5 s stored energy is 58.5 µJ (< emax=80 µJ), giving loaded_v 1.71 V then 1.29 V and 8.5 µJ ≫ eoff=0.8 µJ, so no tx-transient reset. Feasibility window is c ≥ ~25.3 µF (else 50.8 µJ > 2c) and c ≤ ~54 µF (else boot after the event); 40 µF sits inside with margin.\n\nObserved on the returned check record: boot 2.223 s, capture event_id=1 at 3.0 s, tx-start 6.5 s, tx-complete 6.501 s, exactly 1 received frame hex 012d00010101b026436d = 8-byte body (id 0x012d, event 1, seq 1, key 1, tag 0xB026) + CRC, matching the fixed single-query mapping (issued 3 s, seq=1, key=1, event=1). Event age 3.501 s ≤ max_data_age_s 5; completion 6.501 s ≤ deadline_s 8; energy ledger verdict PASS with max_balance_error_j 1e-20 and no bad steps.\n\nScope limits retained: this is a digital transient result only; source_calibration is SYNTHETIC_DC_CONTRACT_NOT_RF_MEASUREMENT and the returned record's physical_qualification is UNKNOWN, so no RF/hardware, statistical, transfer or self-improvement claim is made. The returned record is an observation, not the host's independent service acceptance label.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-6244684445a87f36",
+  "protocol_sha256": "ea3b485256e1ccd2585a7eaf215b06f8b41f84b4f6a4bb45092628a40ed5220b",
+  "recovery_of": null,
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "be12d2353dfb9b37a090c728eafc13580bb3fb39b3b3ff0611cd4ada46cab941",
+  "spec": {
+    "condition": "H0",
+    "id": "L1-H0-final-2",
+    "kind": "D",
+    "lineage": 1,
+    "slot": "final-2",
+    "stage": "final",
+    "world": "p4-clite-half-power-query-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "920af8c69f5e445323593647046f87cf5729acca4fa9373351cc552b501c2256",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 39.31297662502038,
+  "wall_seconds_total": 39.497411832999205
+}

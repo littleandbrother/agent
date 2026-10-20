@@ -4,12 +4,13 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
-import zlib
+import tempfile
 
 import numpy as np
 
 from ..store import identity
 from ..runtime_config import configured
+from ..storage import copy_artifact, compress_zlib, require_space, zlib_blocks, NATIVE_PEAK_BYTES
 from ..simulation_chain.solver import read_raw, conservative_sample
 from ..simulation_chain.contracts import ChainError
 from .contracts import sealed
@@ -94,6 +95,7 @@ def native(root, cache, content, toolset, budget, duration):
                 if file_hash(location/name) != digest: raise ValueError('FEEDBACK_NATIVE_CACHE_CHANGED')
         else:
             if marker.exists(): raise ValueError('FEEDBACK_NATIVE_UNKNOWN_RECONCILE_REQUIRED')
+            require_space(location, NATIVE_PEAK_BYTES)
             budget()
             sealed(marker, {'key':key, 'tools':pinned})
             (location/'system.cir').write_text(content)
@@ -108,7 +110,7 @@ def native(root, cache, content, toolset, budget, duration):
                 if 'Total elapsed time:' not in log or 'Fatal' in log: raise ValueError('FEEDBACK_NATIVE_INCOMPLETE')
                 raw = location/'system.raw'
                 read_raw(raw,duration)
-                (location/'system.raw.zlib').write_bytes(zlib.compress(raw.read_bytes(),6)); raw.unlink()
+                compress_zlib(raw, location/'system.raw.zlib'); raw.unlink()
                 outputs = {name:file_hash(location/name) for name in ('system.cir','system.log','launcher.log','system.raw.zlib')}
                 sealed(completed, {'key':key, 'status':'SUCCEEDED', 'outputs':outputs})
                 reused = False
@@ -117,17 +119,20 @@ def native(root, cache, content, toolset, budget, duration):
                 raise
     root.mkdir(parents=True,exist_ok=True)
     for name in ('system.cir','system.log','system.raw.zlib'):
-        shutil.copyfile(location/name,root/name)
+        copy_artifact(location/name,root/name)
     return {'key':key,'reused':reused,'raw_sha256':file_hash(root/'system.raw.zlib')}
 
 
 def waveform(root, duration):
     # The independent validator also reads the retained full native waveform.
     # Derived downsampled previews never decide service validity.
-    raw = root/'readback.raw'
-    raw.write_bytes(zlib.decompress((root/'system.raw.zlib').read_bytes()))
-    try: return read_raw(raw,duration)
-    finally: raw.unlink(missing_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.readback-', dir=root) as directory:
+        raw = Path(directory)/'readback.raw'
+        with raw.open('xb') as stream:
+            for block in zlib_blocks(root/'system.raw.zlib'):
+                require_space(root, len(block))
+                stream.write(block)
+        return read_raw(raw,duration)
 
 
 def observe(t, values, grid):

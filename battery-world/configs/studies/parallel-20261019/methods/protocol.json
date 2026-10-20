@@ -1,0 +1,30 @@
+{
+  "H1_origin": "Early development experience: 8ms validity task infeasible under public minimum windows; prior fixed scheduling pilot and wasted reads. This is an operator-proposed H change, not autonomous G.",
+  "automatic_resampling": false,
+  "backend": "DeepSeek official API / deepseek-flash / engineering-reasoning-efficient-v5",
+  "cache_start": "bbb54c974f0c2093d467811abffc990a68e9f4e128fb22090338dfec421b13f0",
+  "formal_holdout": "none; historical T1 is exposed and explicitly demoted to public development",
+  "frozen_before_model_dispatch": true,
+  "information": "same complete public task and sources; no extra H1 facts",
+  "limits": {
+    "candidate_evaluations_per_trial": 4,
+    "decision_wall_s": 1200,
+    "requests_per_trial": 80
+  },
+  "order": [
+    "H0-r1",
+    "H1-r1",
+    "H1-r2",
+    "H0-r2"
+  ],
+  "organization": "single",
+  "partition": "public-development",
+  "prompts": {
+    "H0": "本次为新项目的一次完整设计尝试，从任务入口开始。读取当前任务定义和源码，在允许设计空间内完成至少一项有意义的firmware/main.c修订。实际task_execute、validate、decide，最后task_report、release、close。固定任务、物理装置、检查器和数值协议；保留失败及工具错误；相同且有效的输入复用，不重复求解。共享上限80次模型请求、4次不同候选执行；完成后停止，不追加备选，不生成子任务。",
+    "H1": "本次为新项目的一次完整设计尝试，从任务入口开始。读取当前任务定义和源码，在允许设计空间内完成至少一项有意义的firmware/main.c修订。实际task_execute、validate、decide，最后task_report、release、close。固定任务、物理装置、检查器和数值协议；保留失败及工具错误；相同且有效的输入复用，不重复求解。共享上限80次模型请求、4次不同候选执行；完成后停止，不追加备选，不生成子任务。先建立公开要求、约束与可变文件清单，核对时间基准和采样/发送窗口，在修改前检查可行性。只选择一项有依据的程序修订，说明它影响的反馈依赖，执行并比较修改前后；有失败时保留诊断，只在剩余配额内修正。每个判断引用工具返回的字段与输入版本，达到目标即停止探索并完成交付。"
+  },
+  "replicates": 2,
+  "schema_version": "campaign-method-pilot-v1",
+  "selection": "retain only as development candidate if both paired full confirmations deliver admissible results with no worse failure rate; cost/gain descriptive, no significance or transfer claim",
+  "task": "f6d15845ed51213427bc227a1b03d47d65d6cdf40d1e68eb2af676b263a67c16"
+}

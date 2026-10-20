@@ -1,0 +1,96 @@
+{
+  "claim_boundary": "An actual model-authored H from the retained rejected tool call, externally syntax/semantic reviewed after host-action bug; not a successful original preregistered proposal episode or method benefit.",
+  "impact_scope": "task-entry",
+  "method_sha256": "334d5fbec61adfd09a010d45276b7806cdc3ec68a4331a533833883fde5a3619",
+  "method_text": "H method: frozen-model energy/latency ledger with volatile-latch preservation and banded design selection. Re-executable from task entry; it never edits the checker, the task, or device-physics assumptions, and it records UNKNOWNs instead of assuming them.\n\nSTEP 0 (entry). Call inspect. Read: service (application_bytes=8, event_time_s=0, receive_deadline_s=0.1, unique_valid_frames=1); legal_design_ranges (capacitance_f [4e-6, 22e-6], tx_not_before_s [0, 0.045]); partition/sore (public-development, 'Frozen ideal model only; physical calibration UNKNOWN'); retained_failures. Treat every numerical device fact as frozen.\n\nSTEP 1 (facts). acquire every listed source and record source_sha256 plus the acquisition block (bytes, native_calls, new_scientific_executions, wall_seconds) as actual cost. Do not re-infer numbers from memory of other cases.\n\nSTEP 2 (ledger, all from component_record/excitation_record). E_ready(C)=0.5*C*ready_v^2 with ready_v=2.8 V; E_boot=boot_j=5e-6 J; E_tx=tx_current_a*output_v*tx_duration_s=0.008*1.8*0.002=28.8 uJ; harvest H(t)=harvest_efficiency*sum over source_segments of P*dt (segment 1: 0-6 ms at 16.667 mW -> 90 uJ; segment 2: 30-60 ms at 3.667 mW -> 110 uJ; nothing else); drains: off_power_w=2e-5 W below off_v=1.8 V, idle_power_w=2e-4 W while awake; cap_voltage_max_v=3.3 V. Effective input power inside segment 1 is P_1=0.9*16.667 mW ~ 15 mW.\n\nSTEP 3 (invariant set, derived from observed failure, not from a single knob). I1: no brownout between first event capture and transmit, because event_latch is 'volatile' (saved_activity shows capture at 0.0037-0.0079 s, brownout 'energy-threshold' at 0.0121 s, reboot at 0.0381 s with event_was_captured=false). I2: transmit must start only with rail >= ready_v and finish before receive_deadline_s=0.1 s after the t=0 event. I3: the whole transmit window must lie inside one contiguous source segment, because the 6-30 ms gap has no harvest and the observed hold time after capture was only ~8.4 ms; so 'wait through the gap' and 'wait to a late floor' are rejected by construction.\n\nSTEP 4 (derive bands, no search over a single parameter). t_ready(C)=(E_ready(C)+E_boot)/P_1. I3 gives t_ready+tx_duration_s <= 0.006 s, i.e. t_ready <= 4 ms, i.e. C <= 2*(0.004*0.015-5e-6)/7.84 ~ 1.4e-5 F. I2 under the conservative assumption that the capacitor alone must cover E_tx at ready_v gives 0.5*C*7.84 >= 28.8 uJ, i.e. C >= 7.4e-6 F. Intersect with legal range: feasible band C in [7.4, 14] uF. Latency rule: tx_not_before_s must be <= t_ready(C) so it never adds capture-to-TX latency (a floor above t_ready forces the volatile latch to be held through unharvested time, which is exactly the retained failure); pick the smallest legal floor inside that interval, 0.002 s, as a pre-boot guard only.\n\nSTEP 5 (selection rule: max-min margin inside the band). For each C in the band compute timing margin 4 ms - t_ready(C) and reserve margin 0.5*C*ready_v^2 - E_tx. Balanced selection is capacitance_f=1.0e-5 (t_ready~2.95 ms, reserve 39.2 uJ vs 28.8 uJ = +10.4 uJ, transmit ends ~4.95 ms < 6 ms) with tx_not_before_s=0.002. Band edges are rejected for stated reasons: C=4 uF has reserve 15.7 uJ < 28.8 uJ under the conservative assumption; C=22 uF needs t_ready~6.1 ms, putting the transmit into the dark gap.\n\nSTEP 6 (verification honesty). Attempt one check of the selected legal design. In this episode check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE: record the design as UNVERIFIED/UNKNOWN and do not claim it passes; the ledger arithmetic is the only evidence, and no external acceptance is claimed.\n\nSTEP 7 (submit and retain). Submit exactly one method proposal (changed_artifact=H) and no retry. Preserve verbatim retained_failures (ar_product: fixed_space NO_GO, product NOT_ACCEPTED, strict_FIFO FAIL; current_b_run: 0 received frames, start_voltage 0 V) and preserve this episode's unavailable-check note and any UNKNOWN. Report actual acquisition cost; make no claim about hardware, statistical advantage, method migration, or RSI.",
+  "method_text_sha256": "4ac40be580134dfb98d17baf7f2669fe0e4c60660465cd8d23cfc403e25cbb18",
+  "no_new_paid_proposal_or_model_decision": true,
+  "original_episode_status": "INCOMPLETE_OR_STOPPED",
+  "proposal": {
+    "changed_artifact": "H",
+    "changes": [
+      {
+        "artifact": "H",
+        "component": "skills"
+      },
+      {
+        "artifact": "H",
+        "component": "observation_policy"
+      },
+      {
+        "artifact": "H",
+        "component": "context_policy"
+      },
+      {
+        "artifact": "H",
+        "component": "experiment_order"
+      },
+      {
+        "artifact": "H",
+        "component": "organization"
+      }
+    ],
+    "decision": "propose",
+    "evidence_refs": [
+      "baseline:P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+      "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+      "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e",
+      "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+      "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+      "retained_failures:current_b_run",
+      "retained_failures:ar_product"
+    ],
+    "falsifier": "Falsified if, executed from task entry on the frozen ideal model, the ledger-selected design yields unique_valid_frames=0, or any brownout occurs between first capture and transmit, or the ledger arithmetic is contradicted by the frozen component_record/excitation_record values (e.g. t_ready+tx_duration_s > 6 ms, or 0.5*C*ready_v^2 < tx_current_a*output_v*tx_duration_s at the selected C), or if a legal design outside the derived band (C=4 uF or C=22 uF with floor 0.002 s) is measured to deliver the frame while the selected design does not. It is also falsified if reported as a physical/hardware or statistical result: physical calibration is UNKNOWN and untouched.",
+    "hypothesis": "If H is consumed from task entry, its ledger bounds capacitance to the 7.4-14 uF band and the TX floor to at most t_ready(C), so the selected design (capacitance_f=1.0e-5, tx_not_before_s=0.002) reaches ready_v=2.8 V at ~2.95 ms and completes the 2 ms transmit at ~4.95 ms inside the 0-6 ms high-power segment, staying above brownout from capture to TX (volatile latch preserved) and delivering the single valid 8-byte frame well inside receive_deadline_s=0.1 s. This removes both mechanisms observed in saved_activity: event loss at the 0.0121 s energy-threshold brownout, and the 45 ms TX floor that kept the rail unready through the 6-30 ms dark gap.",
+    "impact_scope": "task-entry",
+    "method_sha256": "4ac40be580134dfb98d17baf7f2669fe0e4c60660465cd8d23cfc403e25cbb18",
+    "method_text": "H method: frozen-model energy/latency ledger with volatile-latch preservation and banded design selection. Re-executable from task entry; it never edits the checker, the task, or device-physics assumptions, and it records UNKNOWNs instead of assuming them.\n\nSTEP 0 (entry). Call inspect. Read: service (application_bytes=8, event_time_s=0, receive_deadline_s=0.1, unique_valid_frames=1); legal_design_ranges (capacitance_f [4e-6, 22e-6], tx_not_before_s [0, 0.045]); partition/sore (public-development, 'Frozen ideal model only; physical calibration UNKNOWN'); retained_failures. Treat every numerical device fact as frozen.\n\nSTEP 1 (facts). acquire every listed source and record source_sha256 plus the acquisition block (bytes, native_calls, new_scientific_executions, wall_seconds) as actual cost. Do not re-infer numbers from memory of other cases.\n\nSTEP 2 (ledger, all from component_record/excitation_record). E_ready(C)=0.5*C*ready_v^2 with ready_v=2.8 V; E_boot=boot_j=5e-6 J; E_tx=tx_current_a*output_v*tx_duration_s=0.008*1.8*0.002=28.8 uJ; harvest H(t)=harvest_efficiency*sum over source_segments of P*dt (segment 1: 0-6 ms at 16.667 mW -> 90 uJ; segment 2: 30-60 ms at 3.667 mW -> 110 uJ; nothing else); drains: off_power_w=2e-5 W below off_v=1.8 V, idle_power_w=2e-4 W while awake; cap_voltage_max_v=3.3 V. Effective input power inside segment 1 is P_1=0.9*16.667 mW ~ 15 mW.\n\nSTEP 3 (invariant set, derived from observed failure, not from a single knob). I1: no brownout between first event capture and transmit, because event_latch is 'volatile' (saved_activity shows capture at 0.0037-0.0079 s, brownout 'energy-threshold' at 0.0121 s, reboot at 0.0381 s with event_was_captured=false). I2: transmit must start only with rail >= ready_v and finish before receive_deadline_s=0.1 s after the t=0 event. I3: the whole transmit window must lie inside one contiguous source segment, because the 6-30 ms gap has no harvest and the observed hold time after capture was only ~8.4 ms; so 'wait through the gap' and 'wait to a late floor' are rejected by construction.\n\nSTEP 4 (derive bands, no search over a single parameter). t_ready(C)=(E_ready(C)+E_boot)/P_1. I3 gives t_ready+tx_duration_s <= 0.006 s, i.e. t_ready <= 4 ms, i.e. C <= 2*(0.004*0.015-5e-6)/7.84 ~ 1.4e-5 F. I2 under the conservative assumption that the capacitor alone must cover E_tx at ready_v gives 0.5*C*7.84 >= 28.8 uJ, i.e. C >= 7.4e-6 F. Intersect with legal range: feasible band C in [7.4, 14] uF. Latency rule: tx_not_before_s must be <= t_ready(C) so it never adds capture-to-TX latency (a floor above t_ready forces the volatile latch to be held through unharvested time, which is exactly the retained failure); pick the smallest legal floor inside that interval, 0.002 s, as a pre-boot guard only.\n\nSTEP 5 (selection rule: max-min margin inside the band). For each C in the band compute timing margin 4 ms - t_ready(C) and reserve margin 0.5*C*ready_v^2 - E_tx. Balanced selection is capacitance_f=1.0e-5 (t_ready~2.95 ms, reserve 39.2 uJ vs 28.8 uJ = +10.4 uJ, transmit ends ~4.95 ms < 6 ms) with tx_not_before_s=0.002. Band edges are rejected for stated reasons: C=4 uF has reserve 15.7 uJ < 28.8 uJ under the conservative assumption; C=22 uF needs t_ready~6.1 ms, putting the transmit into the dark gap.\n\nSTEP 6 (verification honesty). Attempt one check of the selected legal design. In this episode check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE: record the design as UNVERIFIED/UNKNOWN and do not claim it passes; the ledger arithmetic is the only evidence, and no external acceptance is claimed.\n\nSTEP 7 (submit and retain). Submit exactly one method proposal (changed_artifact=H) and no retry. Preserve verbatim retained_failures (ar_product: fixed_space NO_GO, product NOT_ACCEPTED, strict_FIFO FAIL; current_b_run: 0 received frames, start_voltage 0 V) and preserve this episode's unavailable-check note and any UNKNOWN. Report actual acquisition cost; make no claim about hardware, statistical advantage, method migration, or RSI.",
+    "schema_version": "bf-phase2-method-proposal-v1",
+    "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+  },
+  "qualification_kind": "POSTHOC_HOST_ADAPTER_REEVALUATION",
+  "raw_proposal": {
+    "changed_artifact": "H",
+    "changes": [
+      {
+        "artifact": "H",
+        "component": "skills"
+      },
+      {
+        "artifact": "H",
+        "component": "observation_policy"
+      },
+      {
+        "artifact": "H",
+        "component": "context_policy"
+      },
+      {
+        "artifact": "H",
+        "component": "experiment_order"
+      },
+      {
+        "artifact": "H",
+        "component": "organization"
+      }
+    ],
+    "decision": "propose",
+    "evidence_refs": [
+      "baseline:P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+      "component_record:55d43741fcc53d25d3e873dad19114848fe0a14e6d8fcb00c3fc51a244f78bef",
+      "excitation_record:2820ae5862b2dd362e2d50a14a9f45a3bab33939a9746b8ad49dc7090506506e",
+      "saved_activity:ae3c8933de67ab904d0e50842de0cc7b3b677175b156da59e89b44d8952c7b6c",
+      "check:ACTION_NOT_AVAILABLE_IN_THIS_EPISODE",
+      "retained_failures:current_b_run",
+      "retained_failures:ar_product"
+    ],
+    "falsifier": "Falsified if, executed from task entry on the frozen ideal model, the ledger-selected design yields unique_valid_frames=0, or any brownout occurs between first capture and transmit, or the ledger arithmetic is contradicted by the frozen component_record/excitation_record values (e.g. t_ready+tx_duration_s > 6 ms, or 0.5*C*ready_v^2 < tx_current_a*output_v*tx_duration_s at the selected C), or if a legal design outside the derived band (C=4 uF or C=22 uF with floor 0.002 s) is measured to deliver the frame while the selected design does not. It is also falsified if reported as a physical/hardware or statistical result: physical calibration is UNKNOWN and untouched.",
+    "hypothesis": "If H is consumed from task entry, its ledger bounds capacitance to the 7.4-14 uF band and the TX floor to at most t_ready(C), so the selected design (capacitance_f=1.0e-5, tx_not_before_s=0.002) reaches ready_v=2.8 V at ~2.95 ms and completes the 2 ms transmit at ~4.95 ms inside the 0-6 ms high-power segment, staying above brownout from capture to TX (volatile latch preserved) and delivering the single valid 8-byte frame well inside receive_deadline_s=0.1 s. This removes both mechanisms observed in saved_activity: event loss at the 0.0121 s energy-threshold brownout, and the 45 ms TX floor that kept the rail unready through the 6-30 ms dark gap.",
+    "method_text": "H method: frozen-model energy/latency ledger with volatile-latch preservation and banded design selection. Re-executable from task entry; it never edits the checker, the task, or device-physics assumptions, and it records UNKNOWNs instead of assuming them.\n\nSTEP 0 (entry). Call inspect. Read: service (application_bytes=8, event_time_s=0, receive_deadline_s=0.1, unique_valid_frames=1); legal_design_ranges (capacitance_f [4e-6, 22e-6], tx_not_before_s [0, 0.045]); partition/sore (public-development, 'Frozen ideal model only; physical calibration UNKNOWN'); retained_failures. Treat every numerical device fact as frozen.\n\nSTEP 1 (facts). acquire every listed source and record source_sha256 plus the acquisition block (bytes, native_calls, new_scientific_executions, wall_seconds) as actual cost. Do not re-infer numbers from memory of other cases.\n\nSTEP 2 (ledger, all from component_record/excitation_record). E_ready(C)=0.5*C*ready_v^2 with ready_v=2.8 V; E_boot=boot_j=5e-6 J; E_tx=tx_current_a*output_v*tx_duration_s=0.008*1.8*0.002=28.8 uJ; harvest H(t)=harvest_efficiency*sum over source_segments of P*dt (segment 1: 0-6 ms at 16.667 mW -> 90 uJ; segment 2: 30-60 ms at 3.667 mW -> 110 uJ; nothing else); drains: off_power_w=2e-5 W below off_v=1.8 V, idle_power_w=2e-4 W while awake; cap_voltage_max_v=3.3 V. Effective input power inside segment 1 is P_1=0.9*16.667 mW ~ 15 mW.\n\nSTEP 3 (invariant set, derived from observed failure, not from a single knob). I1: no brownout between first event capture and transmit, because event_latch is 'volatile' (saved_activity shows capture at 0.0037-0.0079 s, brownout 'energy-threshold' at 0.0121 s, reboot at 0.0381 s with event_was_captured=false). I2: transmit must start only with rail >= ready_v and finish before receive_deadline_s=0.1 s after the t=0 event. I3: the whole transmit window must lie inside one contiguous source segment, because the 6-30 ms gap has no harvest and the observed hold time after capture was only ~8.4 ms; so 'wait through the gap' and 'wait to a late floor' are rejected by construction.\n\nSTEP 4 (derive bands, no search over a single parameter). t_ready(C)=(E_ready(C)+E_boot)/P_1. I3 gives t_ready+tx_duration_s <= 0.006 s, i.e. t_ready <= 4 ms, i.e. C <= 2*(0.004*0.015-5e-6)/7.84 ~ 1.4e-5 F. I2 under the conservative assumption that the capacitor alone must cover E_tx at ready_v gives 0.5*C*7.84 >= 28.8 uJ, i.e. C >= 7.4e-6 F. Intersect with legal range: feasible band C in [7.4, 14] uF. Latency rule: tx_not_before_s must be <= t_ready(C) so it never adds capture-to-TX latency (a floor above t_ready forces the volatile latch to be held through unharvested time, which is exactly the retained failure); pick the smallest legal floor inside that interval, 0.002 s, as a pre-boot guard only.\n\nSTEP 5 (selection rule: max-min margin inside the band). For each C in the band compute timing margin 4 ms - t_ready(C) and reserve margin 0.5*C*ready_v^2 - E_tx. Balanced selection is capacitance_f=1.0e-5 (t_ready~2.95 ms, reserve 39.2 uJ vs 28.8 uJ = +10.4 uJ, transmit ends ~4.95 ms < 6 ms) with tx_not_before_s=0.002. Band edges are rejected for stated reasons: C=4 uF has reserve 15.7 uJ < 28.8 uJ under the conservative assumption; C=22 uF needs t_ready~6.1 ms, putting the transmit into the dark gap.\n\nSTEP 6 (verification honesty). Attempt one check of the selected legal design. In this episode check returned ACTION_NOT_AVAILABLE_IN_THIS_EPISODE: record the design as UNVERIFIED/UNKNOWN and do not claim it passes; the ledger arithmetic is the only evidence, and no external acceptance is claimed.\n\nSTEP 7 (submit and retain). Submit exactly one method proposal (changed_artifact=H) and no retry. Preserve verbatim retained_failures (ar_product: fixed_space NO_GO, product NOT_ACCEPTED, strict_FIFO FAIL; current_b_run: 0 received frames, start_voltage 0 V) and preserve this episode's unavailable-check note and any UNKNOWN. Report actual acquisition cost; make no claim about hardware, statistical advantage, method migration, or RSI.",
+    "schema_version": "bf-phase2-method-proposal-v1"
+  },
+  "retained": false,
+  "source_model_call_sha256": "9decb4af26cf944fdd95dd75de78f506f9a938c6bd45bf36528240ad8e73662b",
+  "source_owner": "pi-chat-446c85237fde167e",
+  "source_trace_sha256": "d141e8f2be381de16bf08742d54175ed444051c6b8bf628eded8087fff5c7a78",
+  "status": "ELIGIBLE_H_PROPOSAL"
+}

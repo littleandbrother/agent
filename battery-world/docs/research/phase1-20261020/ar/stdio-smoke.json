@@ -1,0 +1,185 @@
+{
+  "schema_version": "bf-ar-stdio-qualification-v1",
+  "status": "PASS",
+  "local_tool_calls": 2,
+  "real_model_requests": 0,
+  "native_calls": 0,
+  "inspect_succeeded": true,
+  "unleased_check_blocked": true,
+  "responses": [
+    {
+      "ok": true,
+      "value": {
+        "kind": "public-facts",
+        "topic": "schema",
+        "facts": {
+          "candidate_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "schema_version",
+              "device",
+              "program"
+            ],
+            "properties": {
+              "schema_version": {
+                "const": "bf-ar-candidate-v1"
+              },
+              "device": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "capacitance_f",
+                  "off_v",
+                  "ready_v"
+                ],
+                "properties": {
+                  "capacitance_f": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1
+                  },
+                  "off_v": {
+                    "type": "number",
+                    "minimum": 2.2,
+                    "exclusiveMaximum": 3.3
+                  },
+                  "ready_v": {
+                    "type": "number",
+                    "exclusiveMinimum": 2.2,
+                    "exclusiveMaximum": 3.3
+                  }
+                }
+              },
+              "program": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "schema_version",
+                  "sample_period_s",
+                  "ack_spacing_s",
+                  "retry_s",
+                  "rank"
+                ],
+                "properties": {
+                  "schema_version": {
+                    "const": "bf-ar-rank-program-v1"
+                  },
+                  "sample_period_s": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 60
+                  },
+                  "ack_spacing_s": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10
+                  },
+                  "retry_s": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3600
+                  },
+                  "rank": {
+                    "$ref": "#/$defs/expression"
+                  }
+                }
+              }
+            },
+            "$defs": {
+              "expression": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "const"
+                    ],
+                    "properties": {
+                      "const": {
+                        "type": "number",
+                        "minimum": -1000000,
+                        "maximum": 1000000
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "field"
+                    ],
+                    "properties": {
+                      "field": {
+                        "enum": [
+                          "seq",
+                          "kind",
+                          "age_known",
+                          "age_s"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "op",
+                      "args"
+                    ],
+                    "properties": {
+                      "op": {
+                        "enum": [
+                          "+",
+                          "-",
+                          "*",
+                          "min",
+                          "max",
+                          "lt",
+                          "le",
+                          "eq",
+                          "if"
+                        ]
+                      },
+                      "args": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "items": {
+                          "$ref": "#/$defs/expression"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "original_candidate": {
+            "schema_version": "bf-ar-candidate-v1",
+            "device": {
+              "capacitance_f": 0.015,
+              "off_v": 2.3,
+              "ready_v": 2.7
+            },
+            "program": {
+              "schema_version": "bf-ar-rank-program-v1",
+              "sample_period_s": 60,
+              "ack_spacing_s": 1,
+              "retry_s": 30,
+              "rank": {
+                "field": "seq"
+              }
+            }
+          }
+        },
+        "final_acceptance": "EXTERNAL_CHECK_REQUIRED"
+      }
+    },
+    {
+      "ok": false,
+      "error": "RuntimeError",
+      "reason": "S0_PI_LEASE_REQUIRED"
+    }
+  ]
+}

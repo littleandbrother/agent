@@ -1,0 +1,76 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.02160702,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.036283499999999996,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-3-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "excitation_record",
+        "model_law",
+        "saved_activity",
+        "b-transient-behavior-v1"
+      ],
+      "falsifier": "Falsified if, after steps 1-6, a candidate whose predicted continuity verdict is 'holds' still shows in the executed trace a brownout between capture and tx-complete, or empty packets / tx-complete after the 0.1s deadline, for a reason not accounted for by the source-bound constraints of steps 2-4. Also falsified if the procedure cannot separate the retained failing schedule from a delivering schedule within the frozen legal ranges and model (continuity chain uninformative), or if the only way to make it work is to encode a specific capacitance_f or tx_not_before_s value into the method, edit the task/evaluator/model, or treat the sufficient screening guide as a necessary exclusion of feasible designs. Any H/D conflation (presenting a device assignment as the method) invalidates the proposal regardless of outcome.",
+      "hypothesis": "The retained failure (saved_activity: boot ~0.0027s, captures 0.0037-0.0079s during the 0-0.008s contact, then brownout 'energy-threshold' at ~0.0121s with event_was_captured=true, reboot at 0.0381s, and packets=[]) is a capture->delivery continuity break, not a missing source: with event_latch=volatile (component_record) a reset clears the captured flag, the 40uJ shunt at 0.012s (excitation_record) drops stored energy below eoff, and tx_not_before_s=0.045 delays any TX past the reset so the contact window is already over. For model b-transient-behavior-v1, deriving the source-bound energy/timing event chain and a single-powered-interval capture->tx-complete test at task entry (method steps 1-4) should let the <=2 executed candidates be aimed at the predicted continuity boundary rather than discovering the reset loss only after an irreversible brownout. This is procedural (H); it assigns no device value and claims no hardware, statistical, migration or RSI result.",
+      "impact_scope": "task-entry",
+      "method_sha256": "4c2bbdafe8376b25938d463176dffdbe262a8a4717e627e14ae534448bd5da57",
+      "method_text": "PROCEDURAL H (consumed from task entry). This method changes only planning/observation/experiment-order. It contains NO device parameter assignment and must not set, hardcode, or recommend capacitance_f or tx_not_before_s; candidate device values remain outputs of the standard search over the frozen legal ranges, recorded as D, not as this H.\n\n0. Scope and separation. Do not modify the checker, task, evaluator, model, thresholds, shunt, or source segments. Keep D decisions out of H: if the procedure would need a device value, that is a D candidate, reported separately, never embedded as the method.\n\n1. Sources and versions on entry. Acquire and record source_id and sha256 for component_record, excitation_record, model_law (model_id b-transient-behavior-v1), saved_activity. Read and keep: event_latch (volatile|passive-mechanical), off/ready/max voltages, boot_j, boot_delay_s, harvest_efficiency, idle_power_w, off_power_w, tx_current_a, tx_duration_s, output_v, esr_ohm; contact_duration_s, event_s, deadline_s, dt_s, source_segments (start/end/power), shunts (time/energy). Retain prior observations (saved_activity) as a counterexample; never overwrite.\n\n2. Build the source-bound energy/timing model symbolically. E(V)=C*V^2/2; eon=C*ready_v^2/2; eoff=C*off_v^2/2; emax=C*max_v^2/2. Harvest per step = sum of segment power_w covering the step * dt_s * harvest_efficiency (compliance is a bound, not an extra source). Background per step = (idle_power_w if powered else off_power_w)*dt_s. Each shunt subtracts min(E, energy_j) at its time. TX demand dE_tx = output_v*tx_current_a*tx_duration_s; per-TX-step feasibility requires sqrt(2E/C) - esr_ohm*tx_current_a >= output_v AND E>=eoff at every TX step, so a sufficient TX start energy is dE_tx + C*off_v^2/2 (with per-step loaded_v check). Integrate harvest vs eon (+boot_j, boot_delay_s) to get boot/ready time as a function of C.\n\n3. Trace the event chain source->capture->reset->delivery. For any candidate predict the ordered chain: first boot; ready_at; capture steps = contact AND t>=ready_at AND powered; every reset (energy-threshold from shunt or idle crossing eoff; tx-transient) annotated with the captured flag at that reset; tx-start; tx-complete; packet. SEPARATE the two claims: (a) service completion = a packet with application_bytes==required_application_bytes (8), t<=deadline_s, and unique frame; (b) pending-state retention = whether captured was still set at a reset. captured-flag-at-brownout is NOT delivery; report both independently.\n\n4. Volatile-continuity invariant, as a SUFFICIENT screening guide (never a necessary exclusion). If event_latch is volatile, capture survives only inside one powered interval because any reset clears captured. Predict delivery is plausible only if some single powered interval contains capture and tx-complete with no reset between them, t>=tx_not_before_s at TX start, per-step TX feasibility satisfied, and tx-complete<=deadline_s. For each candidate compute (i) whether a shunt or idle-drain reset falls between capture and the earliest feasible tx-complete, and (ii) if TX must start after a shunt, whether pre-shunt stored energy minus shunt energy stays >= eoff across the sink. Use this only to rank/aim; mark candidates outside it as predicted-risky/UNKNOWN, not infeasible-excluded.\n\n5. Experiment order within the <=2 executed candidates / <=2 distinct designs budget. (a) First compute the predicted continuity verdict per candidate: holds / breaks-at-shunt / breaks-at-tx-transient / insufficient-energy. (b) Choose the executed candidates to test the sharpest predicted boundary: at least one predicted to hold capture->tx-complete inside one powered interval straddling the shunt, plus at most one contrasting boundary case. (c) Execute. (d) Compare predicted chain against the observed activity/trace events; if a packet is present and <=deadline record delivery; if a brownout occurs between capture and tx-complete record it as a continuity counterexample, do not relabel as success.\n\n6. Guardrails and preservation. Preserve UNKNOWN (physical calibration unknown; ideal digital apparatus only). Preserve every failed observation (empty packets) and any brownout event_was_captured flag as counterexamples; never delete or reinterpret them as success. Do not claim hardware validation, statistical superiority, method migration, or RSI.\n\n7. Re-execution. This method is consumed from task entry every episode and is reproducible from the frozen sources alone; it depends only on the acquired source facts and model_id above.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-3-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-14db89d30986ea3f",
+  "protocol_sha256": "57e43cbfbfb56cd8ad19f2a8e30036d0c8d196315328c3cfdb6397cce85536fd",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "5610092e101f8f1c7c98fcae213410c11d947d0f9af563b754acc8ae84ff9379",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-2-3-proposed_method",
+    "id": "p3-formal-2-3-proposed_method-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "7afdff7775766e232edf4b80af8472dbb9f53cab72250417207c961495024a6a",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 68.05195291699783,
+  "wall_seconds_total": 68.44042045800597
+}

@@ -1,0 +1,19 @@
+{
+  "status": "RESOLVED",
+  "initial_review": {
+    "pages": 8,
+    "pdf_sha256": "0100c6a79096a74c9be3ced23632a21df1e73d91fa7b30f21c6e42009908f7bf",
+    "finding": "Last three references spilled onto a mostly empty eighth page; no content or numeric error identified."
+  },
+  "repair": "Only this manuscript bibliography uses footnotesize, itemsep 1pt, parsep 0pt and parskip 0pt; shared style/logo and scientific files are unchanged.",
+  "rebuild_issue": {
+    "stage": "Page-image count check after successful seven-page compilation",
+    "exception": "AssertionError: len(images) == pages",
+    "cause": "Previous eighth-page PNG remained in the same owned temporary build directory.",
+    "fix": "Renderer now records and removes its own previous page PNGs before generating the current page set."
+  },
+  "final_pages": 7,
+  "final_pdf_sha256": "f857898b4d0c67a120d16ff603d8180c4868687e775b28ea861d9e3e4ac27345",
+  "final_all_page_visual_check": "PASS",
+  "scientific_or_provider_executions": 0
+}

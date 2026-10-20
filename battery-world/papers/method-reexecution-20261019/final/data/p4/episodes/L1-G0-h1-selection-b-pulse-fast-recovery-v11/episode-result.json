@@ -1,0 +1,144 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.017599644,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0310719,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L1-G0-h1-selection-b-pulse-fast",
+  "episode": "L1-G0-h1-selection-b-pulse-fast-recovery-v11",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 2.2e-05,
+      "tx_not_before_s": 0
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 2.2e-05,
+        "tx_not_before_s": 0
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 2.2411999999991982e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 4.552802091491864e-21,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.00015,
+        "source_total_error_j": 0.0,
+        "step_count": 10000,
+        "time_resolution_s": 0.0001,
+        "totals_j": {
+          "background_j": 7.8788e-05,
+          "boot_j": 5e-06,
+          "conversion_j": 1.5000000000000004e-05,
+          "harvest_j": 0.000135,
+          "shunt_j": 0.0,
+          "source_j": 0.00015,
+          "spill_j": 0.0,
+          "tx_j": 2.8799999999999995e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "99adc409371efde1f79c46b151098c0307bc522f479506f7189d5fe570ed4ed4",
+      "input_sha256": "0686ad8a6b9916c71fd1828961593d7eae51b18f4a1a6d35bc639c94343d1155",
+      "job_accounting": {
+        "initial_cache_hit": true,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "passive-mechanical",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 0
+        },
+        "first_valid_receive_s": 0.0158,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "5b6bbaccee92bf694a556d89eacedd51319137a016fd71a16ba2dff998d533a2",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "sealed-historical-exact-input",
+      "physical_qualification": "UNKNOWN",
+      "query_service": null,
+      "raw_path": null,
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "PASS",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 0.0129,
+        "first_receive_s": 0.0158,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "b-pulse-fast"
+    },
+    "reason": "Artifact assigned: one design candidate (fields capacitance_f, tx_not_before_s only). Sources acquired and hash-bound this episode: component_record eeb8277f...b212, excitation_record cc0a3cba...978, model_law d690d8a8...0bd (b-transient-behavior-v1). No numeric fact was carried from another episode/world.\n\nRecurrence (Step 3, event-ordered on the dt=1e-4 grid, not a closed-form latency): h=0.0075*0.9*dt=6.75e-7 J/tick; eon=C*2.8^2/2=8.624e-5; eoff=3.564e-5; emax=C*3.3^2/2=1.1979e-4; off drain 2e-9, idle 2e-8, boot 5e-6 with 1e-3 s delay, tx 1.8*0.008*dt=1.44e-6 J/tick over 20 ticks, loaded-voltage guard sqrt(2e/C)-0.3*0.008 >= 1.8. Threshold crossing predicts boot 0.0129 s, ready 0.0139 s, tx window 0.0139-0.0158 s. Calibration status: excitation_record declares source_calibration UNAVAILABLE and this world has no retained trace, so the prediction was treated as UNKNOWN and used for no rejection — it was verified by an actual check instead.\n\nStep 5 margins, all five inequalities, against the returned observation: (i) completion 0.0158 s vs deadline 0.1 s; (ii) no brownout of reason tx-transient, tx_j=2.88e-5 settled with no reset; (iii) spill_j=0 (peak stored below emax); (iv) single frame, event_id=1, application_bytes=8, uniqueness preserved by the completion latch (done); (v) tx window 0.0139-0.0158 s lies inside the 0-0.02 s powered segment. The only brownout is at 0.3395 s, strictly after tx-complete 0.0158 s, with event_was_captured:false — post-terminal energy-threshold decay, benign, not a failure and not a reason to move a knob.\n\nSelection: C is at the legal maximum 22e-6, which maximizes the minimum normalized margin (it is the only region with zero spill; smaller C both shrinks the post-boot reserve relative to eoff and induces spill after completion). tx_not_before_s=0 because no inequality demands a floor and the completion is already far inside the deadline. Since no inequality is violated, Step 6 forbids a field change; I spent no second candidate check and submitted the checked design unchanged. Observed ledger verdict PASS with max_balance_error_j 1e-20; not a hardware claim.\n\nClaim boundary: retained as UNKNOWN — physical_qualification UNKNOWN, physical_calibration UNKNOWN, no hardware validity, no statistical advantage, no transfer or RSI. This PASS is my judgment on one ideal-model digital transient observation for world b-pulse-fast; independent qualification, complete service and acceptance are determined host-side, outside the participant. No retained failure occurred this episode (no unavailable action was attempted).",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-271b4e7ac0d6c567",
+  "protocol_sha256": "34f04c4b9e057f6f5199c369a2b2a808df5a96d137d834664d530ab4974ff04d",
+  "recovery_of": "L1-G0-h1-selection-b-pulse-fast",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "02014d8dc7626d7a0730f81035574ddab0f867107edfe5530e7b61842a598690",
+  "spec": {
+    "arm": "G0",
+    "arm_id": "L1-G0",
+    "child": 1,
+    "id": "L1-G0-h1-selection-b-pulse-fast-recovery-v11",
+    "kind": "D",
+    "lineage": 1,
+    "recovery_of": "L1-G0-h1-selection-b-pulse-fast",
+    "slot": "h1-b-pulse-fast",
+    "stage": "selection",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "c1d0bc3b848530f7bc75af4add3e81e83ea7c1bbc01ce29ff0dcd56bde7ccb48",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 57.072395291994326,
+  "wall_seconds_total": 57.43312479098677
+}

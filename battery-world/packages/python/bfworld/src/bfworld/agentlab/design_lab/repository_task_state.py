@@ -65,6 +65,22 @@ def state(repo, owner, body):
     actions = ['task_result', 'read', 'validate', 'decide', 'task_report', 'release']
     if cfg.get('review_only'): actions = ['read', 'validate', 'decide', 'task_report', 'release']
     elif task['intent'] != 'audit': actions += ['assign'] if cfg['roles'] else ['task_commit']
+    if cfg['adapter'] == 'piezo-feedback-v1' and task['phase'] == 'node-engineering-realization':
+        from ..store import identity
+        from .repository_node_realization import current, native_bundle
+        realization = current(repo, s)
+        native = native_bundle(repo, s)
+        result['engineering_realization'] = {
+            'id': realization['id'] if realization else None,
+            'native_binding': 'NN-'+identity(native) if native else None,
+            'target_status': realization['target']['status'] if realization else 'NOT_REGISTERED',
+            'artifacts': sorted(realization['outputs']) if realization else [],
+        }
+        # A report or decision does not complete an interrupted realization.
+        # Keep the idempotent consumer available through delivery/recovery.
+        actions.append('task_realize')
+        if not realization and stage in ('DECISION_REQUIRED', 'READY_TO_DELIVER', 'DELIVERED'):
+            stage = 'READY_TO_REALIZE'
     return {**result, 'stage': stage, 'execution_id': execution['id'] if execution else None,
         'execution_status': execution['status'] if execution else 'NATIVE_DOMAIN_PATH',
         'qualification': q, 'interfaces': interfaces, 'report_id': report, 'release_id': release,

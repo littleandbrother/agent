@@ -1,0 +1,591 @@
+diff --git a/battery-world/PROJECT.yaml b/battery-world/PROJECT.yaml
+index 8c2610558217b03ac7a63507259fac2eb5ee05cb..7c52d5f642ea6a07edf0b1efb9eb436788cf4be3 100644
+--- a/battery-world/PROJECT.yaml
++++ b/battery-world/PROJECT.yaml
+@@ -8,7 +8,7 @@
+   and error and expands capability on future scientific design tasks?
+ phase: b2-agent-execution-and-qualification-preparation
+ active_feature: null
+-previous_active_feature: BFA-042-continuous-design-and-organization
++previous_active_feature: BFA-043-node-engineering-realization
+ next_milestone: B2-003-repair-and-blind-transfer
+ contract_version: v1
+ release: 0.1.0-a1
+@@ -74,3 +74,14 @@
+   zero_storage_service_passed: false
+   physical: NOT_TESTED
+   method_comparison: NOT_RUN
++
++engineering_realization_case:
++  feature: BFA-043-node-engineering-realization
++  project: PR-6aef9acbf1aa49919909ed34524cabb6349806c95f32e54ea74bc7b977b53ec4
++  owner: pi-chat-ccbeec4b82a67bb1
++  system: SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec
++  realization: NR-0c45b7c7be3cfbcf86bdb1b20e4702b657350ed0000feec09cc507948a3e6a78
++  release: REL-f392a7b2caaf127e7ce86a12591a3947f438265f8cbedf911dedb90ffe5a9393
++  status: digital-engineering-review-delivered
++  physical: not-tested
++  report: docs/agentlab/architecture-v2/node-engineering-20261019/REPORT.md
+diff --git a/battery-world/apps/agent-studio/architecture-v2/lab.js b/battery-world/apps/agent-studio/architecture-v2/lab.js
+index 640831a81c35e5f5b1d1c5f12762b6658c9b977c..aad2c6e9252652fe57a07de8d5e7657cb77eff8c 100644
+--- a/battery-world/apps/agent-studio/architecture-v2/lab.js
++++ b/battery-world/apps/agent-studio/architecture-v2/lab.js
+@@ -1,7 +1,9 @@
+ /* Lab reads immutable engineering records. Display helpers never award a verdict. */
+ export const gateNames = {source_domain:'源模型与工况',schematic_bom_pins:'原理图、BOM 与引脚',pcb_connectivity_drc:'PCB 连通与 DRC',geometry_fit:'机械与装配',board_firmware_interfaces:'板卡与固件接口',firmware_event_logic:'固件事件行为',power_load_chain:'供能与任务执行',delivery_version:'同版本交付'};
+ export function coreRecords(system) {
+-  return Object.entries(gateNames).map(([id,label])=>({...system.validations?.[id],id,label,target:system.id,status:system.validations?.[id]?.status||'NOT_CHECKED',kind:'core'}));
++  const taskLabels={source_model:'采能源模型',load_binding:'程序与负载',power_service:'供电与任务',receiver_service:'有效数字接收',coupling_numerics:'联合收敛',delivery_version:'同版本交付'};
++  const keys=Object.keys(system.task_definition?.acceptance||gateNames);
++  return keys.map(id=>({...system.validations?.[id],id,label:taskLabels[id]||gateNames[id]||id,target:system.id,status:system.validations?.[id]?.status||'NOT_CHECKED',kind:'core'}));
+ }
+ export function latestInterface(view,system) {
+   return view.validations.filter(v=>v.target===system.id&&v.kind==='power-firmware-interface').at(-1);
+@@ -63,7 +65,7 @@
+ const empty=s=>`<p class="empty">${esc(s)}</p>`;
+ const json=v=>`<pre class="source-box">${esc(JSON.stringify(v,null,2))}</pre>`;
+ const domains={mechanical:['机械与采能','结构、尺寸与源输入'],power:['电源与电路','转换、储能与负载'],firmware:['感知与固件','采样、无线与接收'],assembly:['装配与封装','板卡安装与几何接口']};
+-const headings={system:['系统设计','当前设计、实际变更与工程结论'],runs:['运行记录','按设计轮次查看任务、执行结果与公开决定'],validation:['验证','当前八项检查与接口检查，历史回执单独查看'],environment:['环境','固定软件、实际执行、权限和接口'],harness:['方法与技能','按 Agent 查看加载配置与技能使用'],experiments:['实验与改进','协议、比较结果与方法采用']};
++const headings={system:['系统设计','当前设计、实际变更与工程结论'],runs:['运行记录','按设计轮次查看任务、执行结果与公开决定'],validation:['验证','当前任务检查与接口检查，历史回执单独查看'],environment:['环境','固定软件、实际执行、权限和接口'],harness:['方法与技能','按 Agent 查看加载配置与技能使用'],experiments:['实验与改进','协议、比较结果与方法采用']};
+ const actionNames={commit:'提交专业修订',contract:'修订接口契约',integrate:'形成系统候选',validate:'运行工程检查',review:'独立工程审查',execute:'构建或求解',write:'修改工程文件',delegate:'分配专业任务',assign:'分配专业任务',import:'导入冻结工程',reopen:'恢复专业任务',rebase:'切换任务基准',finish:'提交阶段结论',decide:'作出设计决定',release:'生成同版交付',close:'结束本轮',extract:'提取工程事实',read:'读取工程',state:'读取任务状态',summary:'查看状态摘要',task:'读取任务要求'};
+ const icons={brand:'M2 12h4l2-7 4 14 3-9 2 2h5',menu:'M4 6h16 M4 12h16 M4 18h16',search:'M21 21l-5-5 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',refresh:'M20 7V3m0 4h-4 M4 17v4m0-4h4 M4 9a8 8 0 0 1 13-6l3 4 M20 15a8 8 0 0 1-13 6l-3-4',close:'m6 6 12 12 M6 18 18 6',system:'M6 5v14 M18 5v14 M6 9h12 M6 15h12 M3 3h6v4H3z M15 3h6v4h-6z M3 17h6v4H3z M15 17h6v4h-6z',runs:'M8 5v14l11-7z M3 5v14',validation:'m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6z m-4 9 3 3 5-6',environment:'m12 2 9 5v10l-9 5-9-5V7z M3 7l9 5 9-5 M12 12v10',harness:'M14 6a5 5 0 0 0-7 7L3 17v4h4l4-4a5 5 0 0 0 7-7l-4 4-4-4z',experiments:'M9 3h6 M10 3v7l-6 9c-.6 1 .1 2 1.4 2h13.2c1.3 0 2-1 1.4-2l-6-9V3 M7 16h10',power:'m13 2-9 12h7l-1 8 10-12h-7z',firmware:'M6 6h12v12H6z M9 9h6v6H9z M9 2v4 M15 2v4 M9 18v4 M15 18v4 M2 9h4 M2 15h4 M18 9h4 M18 15h4',mechanical:'m12 3 8 4v10l-8 4-8-4V7z M4 7l8 4 8-4 M12 11v10',assembly:'m12 3 9 5v9l-9 5-9-5V8z M3 8l9 5 9-5 M12 13v9',contract:'M10 7H7a5 5 0 0 0 0 10h3 M14 7h3a5 5 0 0 1 0 10h-3 M8 12h8',release:'M5 5h14v16H5z M8 2h8v6H8z M8 12h8 M8 16h5',arrow:'M5 12h14 m-5-5 5 5-5 5'};
+ const icon=k=>`<svg class="vector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[k]||icons.system}"/></svg>`;
+@@ -95,10 +97,11 @@
+ const methodSkills=()=>[...new Map([...data.skills.skills,...data.methods.flatMap(m=>m.resource_manifest?.skills||[])].map(s=>[s.id,s])).values()];
+ const systemTitle=s=>{
+  if(s.id===project.adopted)return '稳定参考';if(s.origin_design_id&&!s.parent)return '导入的 P01 工程';
+- const paths=changedFiles(s,parentOf(s)).map(f=>f.path),fw=paths.some(p=>p.startsWith('project-fw')),power=paths.some(p=>p.startsWith('project-chain')||p.startsWith('project-spice'));
+- return `${fw&&power?'固件与供能联合修订':fw?'固件修订':power?'供能修订':paths.length?'接口与集成修订':'系统集成'} · v${Math.max(1,data.systems.indexOf(s))}`;
++ const paths=changedFiles(s,parentOf(s)).map(f=>f.path),node=project.requirements?.phase==='node-engineering-realization',fw=paths.some(p=>p.startsWith('project-fw')||(node&&p.startsWith('notes/target/'))),power=paths.some(p=>p.startsWith('project-chain')||p.startsWith('project-spice'));
++ return `${fw&&power?'固件与供能联合修订':fw?'固件修订':power?'供能修订':node?'数字工程修订':paths.length?'接口与集成修订':'系统集成'} · v${Math.max(1,data.systems.indexOf(s))}`;
+ };
+ const systemPurpose=s=>{
++ if(project.requirements?.phase==='node-engineering-realization')return '压电梁与夹持装配、原生电路与PCB、目标固件；沿用同版参考联合计算。';
+  const changes=changedFiles(s,parentOf(s)),fw=changes.filter(c=>c.path.startsWith('project-fw')).length,power=changes.filter(c=>c.path.startsWith('project-chain')||c.path.startsWith('project-spice')).length;
+  return fw||power?[fw?`更新 ${fw} 件固件源文件`:'',power?`更新 ${power} 件供能与负载文件`:''].filter(Boolean).join('，')+'；查看下方检查结果与 BF 决定。':changes.length?`更新 ${changes.length} 件接口或集成文件；工程输入与证据绑定本版。`:'P01 无线传感节点 · 冻结工程与已有验证';
+ };
+@@ -132,16 +135,19 @@
+ const summaryText=g=>{const x=gateInfo(g);return x.metrics.length?x.metrics.map(([k,v])=>k+' '+v).slice(0,2).join(' · '):x.notes.slice(0,2).join('；');};
+ function gateCards(rows,compact=false){return rows.map(g=>`<button class="gate-row ${compact?'compact':''}" ${item('gate',g.id)}><span class="status-dot ${g.status.toLowerCase()}"></span><span><strong>${esc(g.label)}</strong><small>${esc(summaryText(g))}</small></span>${badge(g.status)}<span class="row-arrow">›</span></button>`).join('');}
+ function counts(system=current()) {const rows=coreRecords(system);return ['PASS','FAIL','UNEVALUABLE','RECHECK_REQUIRED','NOT_CHECKED'].map(status=>({status,count:rows.filter(g=>g.status===status).length}));}
+-function summaryStrip(){return `<div class="summary-strip" aria-label="当前八项检查汇总">${counts().filter(x=>x.count||['PASS','FAIL','UNEVALUABLE'].includes(x.status)).map(x=>`<button data-filter="${x.status}"><b>${x.count}</b><span>${labels[x.status]}</span></button>`).join('')}<div><b>8</b><span>当前核心检查</span></div></div>`;}
++function summaryStrip(){return `<div class="summary-strip" aria-label="当前任务检查汇总">${counts().filter(x=>x.count||['PASS','FAIL','UNEVALUABLE'].includes(x.status)).map(x=>`<button data-filter="${x.status}"><b>${x.count}</b><span>${labels[x.status]}</span></button>`).join('')}<div><b>${coreRecords(current()).length}</b><span>当前任务检查</span></div></div>`;}
+ function domainChanges(domain,system=current()) {return changedFiles(system,parentOf(system)).filter(f=>domain==='firmware'?f.path.startsWith('project-fw'):domain==='power'?f.path.startsWith('project-chain')||f.path.startsWith('project-spice'):f.path.includes(domain==='mechanical'?'cad':'assembly'));}
+ function systemPage() {
+  const s=current(),release=latestRelease(s),changes=changedFiles(s,parentOf(s)),contract=data.contracts.find(c=>c.id===s.contracts['power-firmware']),ci=latestInterface(data,s),preview=sourcePreview('cad-top.png');
+  const parent=parentOf(s),decision=designDecision(data,s.id);
++ const node=data.node_realization?.system_id===s.id?data.node_realization:null;
++ const nodeURL='/node-engineering.html?'+new URLSearchParams({project:project.id,owner:project.owner,system:s.id});
++ const engineering=node?`<div class="context-links"><a class="button-primary" href="${esc(nodeURL)}">查看完整设备、运行与交付</a><span>原生原理图 · PCB · 机械装配 · 目标程序 · 双版PDF</span></div>`:'';
+  const overview=`<div class="design-overview"><div><div class="eyebrow">${s.id===project.submitted?'当前工作候选':'历史候选'} · ${id(s.id)}</div><h2>${esc(systemTitle(s))}</h2><p class="design-purpose">${esc(systemPurpose(s))}</p><div class="context-links">${badge(s.digital_status)}<span>物理验证：${labels[s.physical]||s.physical}</span>${parent?objectButton('system',parent.id,'来自 '+systemTitle(parent)):''}</div><dl class="facts inline">${fact('本轮工程变更',changes.filter(c=>!c.path.startsWith('interfaces/')).length+' 个文件')}${fact('选定工程作业',Object.keys(s.jobs).length+' 个')}<div><dt>BF 决定</dt><dd>${decision?objectButton('decision',decision.id,labels[decision.decision]||'查看公开理由'):'尚无决定'}</dd></div></dl><div class="preview-actions"><button data-preview="schematic.svg">${icon('contract')}原理图</button><button data-preview="pcb-combined.svg">${icon('firmware')}PCB</button><button data-cad>${icon('assembly')}3D CAD</button>${release?`<a class="button-primary" href="${archiveURL(release)}" download>下载同版审查包</a>`:''}</div></div>${preview?`<button class="design-preview" data-cad><img src="${previewURL(preview)}" alt="本版机械模型预览"><span>查看三维模型 ↗</span></button>`:''}</div>`;
+  const branches=Object.entries(domains).map(([domain,[title,desc]])=>{const dc=data.domain_commits.find(c=>c.id===s.domain_commits[domain]),diff=domainChanges(domain,s);return `<button class="branch" ${item(dc?'domain':'assets',dc?.id||domain)}>${symbol(domain)}<span><b>${title}</b><small>${dc?`${diff.length} 个工程文件相对父版变化`:'沿用冻结工程资产'} · ${desc}</small><small>${dc?esc(diff.map(f=>f.path.split('/').at(-1)).join('、')||'只更新接口声明，工程文件沿用'):'查看已绑定的文件与检查'}</small></span><span class="row-arrow">›</span></button>`;}).join('');
+  const contractBody=contract?`<button class="contract-focus" ${item('contract',contract.id)}><span>${symbol('contract')}<b>电源 ↔ 固件活动</b></span>${badge(contractVerdict(data,s,contract))}<small>第 ${contract.revision} 版 · ${ci?.result?.checks?.length||0} 项源码与声明核对</small></button><p class="muted">${esc(tr(ci?.result?.scope||'等待实际接口检查'))}</p><div class="contract-parts"><div><b>电源提供</b><p>${esc(contract.provides?.map(tr).join('；'))}</p></div><div><b>固件要求</b><p>${esc(contract.requires?.map(tr).join('；'))}</p></div></div>`:empty('尚未建立电源与固件契约');
+  const changeRows=changes.map(c=>`<div class="change-row"><button class="text-link" data-diff="${esc(c.path)}">${esc(c.path)}</button><small>${c.before&&c.after?'已修改':c.after?'新增':'已移除'}</small></div>`).join('');
+- return `${card('本版设计','',overview)}${summaryStrip()}<div class="grid two">${card('当前工程问题','先看未通过项，再补验证条件',gateCards(coreRecords(s).filter(g=>g.status==='FAIL'),true)||empty('本版没有失败项'),jump('validation',s.id,'查看全部检查'))}${card('专业修订','相对于直接父版本的完整文件差异',branches)}</div><div class="grid two">${card('接口与依赖','',contractBody)}${card('这一版改了什么',parent?'与 '+systemTitle(parent)+' 比较':'冻结导入的完整工程',changeRows||empty('本版没有文件变更'),parent?objectButton('system',parent.id,'查看父版本'):'')}</div>${historyView()}`;
++ return `${card('本版设计','',overview+engineering)}${summaryStrip()}<div class="grid two">${card('当前工程问题','先看未通过项，再补验证条件',gateCards(coreRecords(s).filter(g=>g.status==='FAIL'),true)||empty('本版没有失败项'),jump('validation',s.id,'查看全部检查'))}${card('专业修订','相对于直接父版本的完整文件差异',branches)}</div><div class="grid two">${card('接口与依赖','',contractBody)}${card('这一版改了什么',parent?'与 '+systemTitle(parent)+' 比较':'冻结导入的完整工程',changeRows||empty('本版没有文件变更'),parent?objectButton('system',parent.id,'查看父版本'):'')}</div>${historyView()}`;
+ }
+ function historyView() {
+  const tracks=[['system','系统修订',data.systems],['domain','专业提交',data.domain_commits],['validation','独立检查',data.validations],['release','交付',data.releases]];
+@@ -172,7 +178,7 @@
+ function validationPage() {
+  const rows=coreRecords(current()),filtered=rows.filter(g=>validationFilter==='all'||g.status===validationFilter),ci=latestInterface(data,current()),history=data.validations.filter(v=>v.target===current().id);
+  const links=`<div class="tabs" aria-label="筛选当前核心检查">${[['all','全部'],['FAIL','未通过'],['UNEVALUABLE','缺少条件'],['PASS','通过'],['RECHECK_REQUIRED','需复查']].map(([k,t])=>`<button data-filter="${k}" aria-pressed="${validationFilter===k}">${t}</button>`).join('')}</div>`;
+- return `${summaryStrip()}${card('当前版本 · 八项核心检查','每项只显示本版当前有效结果',gateCards(filtered)||empty('这个筛选下没有检查'),links)}${card('电源与固件接口','实际源码与负载声明的对应关系',ci?`<div class="result-heading"><strong>${ci.result?.checks?.length||0} 项核对</strong>${badge(ci.status)}${objectButton('validation',ci.id,'查看对照与来源')}</div><p class="muted">${esc(tr(ci.result?.scope))}</p>`:empty('尚无本版接口检查'))}<details class="section-details" ${related?.history?'open':''}><summary>本版检查历史 · ${history.length} 条回执</summary><div class="table-wrap"><table><thead><tr><th>检查范围</th><th>结果</th><th>检查器</th><th>回执</th></tr></thead><tbody>${[...history].reverse().map(v=>`<tr><td>${v.kind==='power-firmware-interface'?'电源与固件接口':'独立工程审查'}</td><td>${badge(v.status)}</td><td>${esc(v.result?.checker||v.evaluator?.version||v.evaluator)}</td><td>${objectButton('validation',v.id,'查看回执 '+short(v.id))}</td></tr>`).join('')}</tbody></table></div></details>`;
++ return `${summaryStrip()}${card('当前版本 · 任务检查','每项只显示本版当前有效结果',gateCards(filtered)||empty('这个筛选下没有检查'),links)}${card('电源与固件接口','实际源码与负载声明的对应关系',ci?`<div class="result-heading"><strong>${ci.result?.checks?.length||0} 项核对</strong>${badge(ci.status)}${objectButton('validation',ci.id,'查看对照与来源')}</div><p class="muted">${esc(tr(ci.result?.scope))}</p>`:empty('尚无本版接口检查'))}<details class="section-details" ${related?.history?'open':''}><summary>本版检查历史 · ${history.length} 条回执</summary><div class="table-wrap"><table><thead><tr><th>检查范围</th><th>结果</th><th>检查器</th><th>回执</th></tr></thead><tbody>${[...history].reverse().map(v=>`<tr><td>${v.kind==='power-firmware-interface'?'电源与固件接口':'独立工程审查'}</td><td>${badge(v.status)}</td><td>${esc(v.result?.checker||v.evaluator?.version||v.evaluator)}</td><td>${objectButton('validation',v.id,'查看回执 '+short(v.id))}</td></tr>`).join('')}</tbody></table></div></details>`;
+ }
+ const toolNames={CAD_PYTHON:'机械 CAD · Python / CadQuery',EDA_CLI:'立创 EDA · Connect',EDA_NATIVE_CLI:'立创桌面版',NGSPICE:'电路仿真 · ngspice',ARM_GCC:'目标固件 · ARM GCC',COMSOL:'多物理场 · COMSOL',BLENDER:'渲染 · Blender',NODE:'Agent 运行 · Node.js',GO:'Go 工具链',RENODE:'MCU 仿真 · Renode'};
+ function toolUsage(key) {
+@@ -355,7 +361,7 @@
+ function fitImage(){const s=viewerState,stage=$('.image-stage');if(!s?.width||!stage)return;s.fit=Math.min((stage.clientWidth-32)/s.width,(stage.clientHeight-32)/s.height);s.scale=s.fit;s.x=(stage.clientWidth-s.width*s.scale)/2;s.y=(stage.clientHeight-s.height*s.scale)/2;updateImage();}
+ function zoomImage(factor,cx,cy){const s=viewerState,stage=$('.image-stage');if(!s?.width||!stage)return;cx??=stage.clientWidth/2;cy??=stage.clientHeight/2;const next=Math.max(.02,Math.min(12,s.scale*factor));s.x=cx-(cx-s.x)*next/s.scale;s.y=cy-(cy-s.y)*next/s.scale;s.scale=next;updateImage();}
+ async function locateInImage(){const s=viewerState,q=$('#image-find')?.value.trim();if(!s||!q)return;const status=$('#image-location');if(!/\.svg(?:\?|$)/.test(s.url)&&!s.url.includes('svg')){status.textContent='此预览没有文字索引';return;}if(!s.svg){const r=await fetch(s.url);if(!r.ok)throw Error('图纸读取失败');s.svg=new DOMParser().parseFromString(await r.text(),'image/svg+xml');}const match=[...s.svg.querySelectorAll('text')].find(n=>n.textContent.trim().toLowerCase()===q.toLowerCase());if(!match){status.textContent='图中未找到 '+q;return;}const x=parseFloat(match.getAttribute('x')),y=parseFloat(match.getAttribute('y'));if(!Number.isFinite(x)||!Number.isFinite(y)){status.textContent='已找到文字，当前图元没有定位坐标';return;}const vb=s.svg.documentElement.getAttribute('viewBox')?.split(/[ ,]+/).map(Number)||[0,0,s.width,s.height];const px=(x-vb[0])*s.width/vb[2],py=(y-vb[1])*s.height/vb[3];const stage=$('.image-stage');s.scale=Math.max(s.fit,1);s.x=stage.clientWidth/2-px*s.scale;s.y=stage.clientHeight/2-py*s.scale;updateImage();status.textContent='已定位 '+q;}
+-async function showPreview(name){const p=sourcePreview(name);if(!p){notify('此候选没有来源一致的预览');return;}imageViewer(previewURL(p),p.label||name);}
++async function showPreview(name){const node=data.node_realization?.system_id===current().id,path={'schematic.svg':'native/schematic.svg','pcb-combined.svg':'native/pcb.svg'}[name];if(node&&path){imageViewer(fileURL(path,{realization:'1'}),name==='schematic.svg'?'本版原生原理图':'本版原生PCB');return;}const p=sourcePreview(name);if(!p){notify('此候选没有来源一致的预览');return;}imageViewer(previewURL(p),p.label||name);}
+ async function showFile(path,options={}) {
+  const selected=options.domain?data.domain_commits.find(d=>d.id===options.domain):options.system?data.systems.find(s=>s.id===options.system):current(),ref=options.job?selected.jobs?.[options.job]?.artifacts?.[path]:selected?.files?.[path];
+  if(!ref){notify('文件不在所选版本中');return;}const url=fileURL(path,{...(options.domain?{domain_commit:options.domain}:{}),...(options.system?{system:options.system}:{}),...(options.job?{job:options.job}:{})});
+@@ -368,7 +374,7 @@
+  if(!/\.(c|h|json|py|cir|md|txt|csv)$/i.test(path)){await showFile(path);return;}
+  const [before,after]=await Promise.all([read(parent),read(s)]);modal(path+' · 版本比较',`<div class="diff-view"><section><h3>${esc(parent?systemTitle(parent):'父版')}</h3><pre>${esc(before)}</pre></section><section><h3>${esc(systemTitle(s))}</h3><pre>${esc(after)}</pre></section></div>`);
+ }
+-function showCAD(){const job=Object.entries(current().jobs).find(([,j])=>j.artifacts?.['project-preview-mesh.json']);if(!job){notify('本版没有匹配的 STEP 派生网格');return;}const url='/model-viewer.html?'+new URLSearchParams({repository_project:project.id,repository_owner:project.owner,repository_system:current().id,repository_job:job[0],repository_path:'project-preview-mesh.json',mesh:'1'});modal('CAD · 本版三维模型',`<iframe title="原生 CAD 三维预览" src="${url}"></iframe>`);}
++function showCAD(){const node=data.node_realization?.system_id===current().id,job=Object.entries(current().jobs).find(([,j])=>j.artifacts?.['project-preview-mesh.json']);if(!node&&!job){notify('本版没有匹配的 STEP 派生网格');return;}const url='/model-viewer.html?'+new URLSearchParams({repository_project:project.id,repository_owner:project.owner,repository_system:current().id,...(node?{repository_realization:'1',repository_path:'assembly-mesh.json'}:{repository_job:job[0],repository_path:'project-preview-mesh.json'}),mesh:'1'});modal('CAD · 本版三维模型',`<iframe title="原生 CAD 三维预览" src="${url}"></iframe>`);}
+ function downloadRecord(kind,key){const v=getSelection(kind,key);if(!v)return;const url=URL.createObjectURL(new Blob([JSON.stringify({system_commit:current().id,...v},null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=(v.id||key)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ function showGateReport(key){const g=getSelection('gate',key),info=gateInfo(g);modal(g.label+' · 当前版本检查报告',`<article class="gate-report"><div class="result-heading"><h2>${esc(g.label)}</h2>${badge(g.status)}</div><p>${esc(info.scope)}</p>${notesList(info.notes)}${metricsList(info.metrics)}<dl class="facts">${fact('系统候选',current().id)}${fact('检查回执',g.validation_id||g.reused_from||'冻结基线')}${fact('输入摘要',g.input_fingerprint)}</dl><button data-record-download="gate" data-record-key="${key}">下载这项检查记录</button><details><summary>完整检查数据</summary>${json(g.findings||g)}</details></article>`);}
+ async function refresh() {
+@@ -411,7 +417,7 @@
+ $('#viewer-close').onclick=()=>$('#viewer').close();$('#viewer').addEventListener('close',()=>{viewerState=null;$('#viewer-body').replaceChildren();});
+ $('#candidate-select').onchange=e=>{systemId=e.target.value;selection=null;query='';route(page,null);};
+ $('#search').oninput=e=>{query=e.target.value;render();};$('#search-clear').onclick=()=>{query='';render();$('#search').focus();};
+-$('#project').onchange=async e=>{const index=await req('/api/design-repository/projects');project=index.projects.find(p=>p.id===e.target.value);systemId=null;selection=null;query='';window.history.replaceState(null,'','#system');await refresh();};
++$('#project').onchange=async e=>{const index=await req('/api/design-repository/projects');project=index.projects.find(p=>p.id===e.target.value);systemId=null;selection=null;query='';window.history.replaceState(null,'','?'+new URLSearchParams({project:project.id})+'#system');await refresh();};
+ function navigation(open){shell.classList.toggle('navigation-hidden',!open);$('#navigation').hidden=!open;$('#navigation-toggle').setAttribute('aria-expanded',String(open));$('#navigation-toggle').setAttribute('aria-label',open?'收起对象栏':'展开对象栏');localStorage.setItem('bf-lab-navigation',open?'open':'closed');}
+ $('#navigation-toggle').onclick=()=>navigation($('#navigation').hidden);
+ const resize=$('#navigation-resize');let resizing=false;
+@@ -420,5 +426,5 @@
+ navWidth(Number(localStorage.getItem('bf-lab-nav-width'))||216);navigation(localStorage.getItem('bf-lab-navigation')!=='closed');
+ window.addEventListener('popstate',()=>{selection=null;render(false);});window.addEventListener('hashchange',()=>render(false));
+ document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#search').focus();}if(e.key==='Escape'&&!$('#viewer').open&&!$('#inspector').hidden)inspector(false);if(e.key==='Enter'&&e.target.id==='image-find')locateInImage();});
+-try{const index=await req('/api/design-repository/projects');project=index.projects[0];if(project){try{const saved=JSON.parse(sessionStorage.getItem('bf-lab-context-'+project.id)||'{}');({systemId,selection,usageScope='round',usageOwner='',selectedMethodOwner='',historyFilter='system',historyAll=false,validationFilter='all'}=saved);}catch{}$('#project').innerHTML=index.projects.map(p=>`<option value="${p.id}">${esc(p.title)}</option>`).join('');await refresh();}else $('#content').innerHTML=empty('尚未导入项目');}catch(e){$('#content').innerHTML=empty(e.message);$('#sync').textContent='连接中断';}
+-}
++try{const index=await req('/api/design-repository/projects');project=index.projects.find(p=>p.id===new URLSearchParams(location.search).get('project'))||index.projects[0];if(project){try{const saved=JSON.parse(sessionStorage.getItem('bf-lab-context-'+project.id)||'{}');({systemId,selection,usageScope='round',usageOwner='',selectedMethodOwner='',historyFilter='system',historyAll=false,validationFilter='all'}=saved);}catch{}$('#project').innerHTML=index.projects.map(p=>`<option value="${p.id}">${esc(p.title)}</option>`).join('');$('#project').value=project.id;await refresh();}else $('#content').innerHTML=empty('尚未导入项目');}catch(e){$('#content').innerHTML=empty(e.message);$('#sync').textContent='连接中断';}
++}
+diff --git a/battery-world/apps/agent-studio/model-viewer.js b/battery-world/apps/agent-studio/model-viewer.js
+index 0401919fb9032f11c3418050886297360d170ca7..7de307b84dadfe0545a8d597718f0ba840a3343f 100644
+--- a/battery-world/apps/agent-studio/model-viewer.js
++++ b/battery-world/apps/agent-studio/model-viewer.js
+@@ -24,13 +24,21 @@
+ const observer=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;if(w&&h){renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}});observer.observe(stage);
+ const parameters=new URL(location.href).searchParams;
+ const repositoryProject=parameters.get('repository_project'),repositoryOwner=parameters.get('repository_owner'),repositorySystem=parameters.get('repository_system');
+-const repositoryUrl=repositoryProject&&repositoryOwner&&repositorySystem?'/api/design-repository/file?'+new URLSearchParams({project:repositoryProject,owner:repositoryOwner,system:repositorySystem,job:parameters.get('repository_job')||'',path:parameters.get('repository_path')||''}):null;
++const repositoryUrl=repositoryProject&&repositoryOwner&&repositorySystem?'/api/design-repository/file?'+new URLSearchParams({project:repositoryProject,owner:repositoryOwner,system:repositorySystem,job:parameters.get('repository_job')||'',path:parameters.get('repository_path')||'',...(parameters.get('repository_realization')==='1'?{realization:'1'}:{})}):null;
+ const resultFile=parameters.get('result_file'),resultSession=parameters.get('session'),resultUrl=repositoryUrl||(resultFile&&resultSession?'/api/results/file?'+new URLSearchParams({session:resultSession,id:resultFile}):null);
+ const job=parameters.get('job')||(resultFile?.startsWith('eng-')?resultFile.split('/')[0]:null),reference=parameters.get('case')==='pluck-v1',meshPreview=parameters.get('mesh')==='1';
+ if(/^eng-[a-f0-9]+$/.test(job||''))fetch('/api/engineering/jobs/'+job).then(r=>{if(!r.ok)throw Error('MODEL_METADATA');return r.json()}).then(j=>{partNames=new Map((j.assembly?.payload?.parts||[]).map(p=>[p.id,p.name]));for(const o of $('#part').options)if(partNames.has(o.value))o.textContent=partNames.get(o.value)}).catch(()=>{});
+ if(!reference&&!resultUrl&&!/^eng-[a-f0-9]+$/.test(job||''))$('#notice').textContent='模型编号无效';
+ else if(meshPreview){
+  fetch(resultUrl||'/api/engineering/jobs/'+job+'/artifact?name=project-preview-mesh.json').then(r=>{if(!r.ok)throw Error('MESH_MISSING');return r.json()}).then(m=>{
++ if(Array.isArray(m.parts)){
++  const group=new THREE.Group();group.rotation.x=-Math.PI/2;
++  for(const part of m.parts){
++   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(part.vertices.flat().map(x=>x/1000),3));geometry.setIndex(part.triangles.flat());geometry.computeVertexNormals();
++   const solid=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:part.color,roughness:.6,side:THREE.DoubleSide}));solid.name=part.name;group.add(solid);
++  }
++  loaded({scene:group});$('#notice').textContent=m.parts.length+' 个同版STEP零件';return;
++ }
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(m.vertices.flat().map(x=>x/1000),3));geometry.setIndex(m.triangles.flat());geometry.computeVertexNormals();
+  const solid=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0xb6c6d5,roughness:.6,side:THREE.DoubleSide}));solid.name='STEP 原生实体';const group=new THREE.Group();group.add(solid);group.rotation.x=-Math.PI/2;loaded({scene:group});$('#notice').textContent='精确 STEP 的派生预览 · 非整机验收';$('#inside').disabled=true;$('#explode').disabled=true;
+  }).catch(()=>{$('#notice').textContent='该结果还没有 STEP 派生预览，请下载原生工程'});
+diff --git a/battery-world/docs/PROGRESS.md b/battery-world/docs/PROGRESS.md
+index 5c2823ec6eda0d2dced1d5140f4ae35815ea26bb..ff1d4d6646398004bff29be7a4d95cf162009beb 100644
+--- a/battery-world/docs/PROGRESS.md
++++ b/battery-world/docs/PROGRESS.md
+@@ -1,3 +1,15 @@
++## 2026-10-19 · BFA-043 压电节点数字工程交付
++
++独立立创工程完成10器件真实连线与50×32 mm双层PCB，117走线/6过孔；保存重载后严格DRC通过，DFM留12条警告。90×30 mm梁、夹持、底座、板卡、器件包络及紧固件组成32个有效STEP实体，干涉0，按保存运动轨迹留额外2 mm间隙。nRF52832/S132固件构建通过，Flash7296 B/静态RAM456 B；40条命令在另一目录复建HEX一致。
++
++Lab接入同版电路、PCB、3D装配及设备/统一时间轴/交付入口；8页简报、11页详报、原始计算、可编辑工程和便携重建脚本进入工程包。修复工程实现恢复入口和项目选择名称错位，115件输出摘要及ZIP通过。复用原执行TX-7b59b5be，本轮新增物理求解0。
++
++Pi owner pi-chat-ccbeec4b82a67bb1已IDLE，同版SC-95e4cbe6、NR-0c45b7c7、REL-f392a7b2。93次请求全SETTLED，登记约$1.9116462；Codex原生EDA/CAD与接口核对介入已记录。V2回归343项及44封存文件/11控制通过，Pi检查通过；Baseline6388文件与原会话/工程/费用保护审计通过，原Demo按原配置启动HTTP200。根目录全量检查仍有历史iCloud占位文件错误。
++
++报告：docs/agentlab/architecture-v2/node-engineering-20261019/REPORT.md。下一步按12条板级警告修订，再做目标PGOOD/时序/实际BLE接收与电荷台架、夹持模态及供应商高度核对；参考六门通过保持，样机物理资格待测。BFA-043 complete，PROJECT.active_feature=null；代码本地，未提交或推送。
++
++---
++
+ ## 2026-10-19 · BFA-042 GitHub发布
+ 
+ 按用户授权，将三阶段实现、固定实验配置、原始结果摘要、分析脚本与三页PDF提交到 `codex/bf-architecture-v2`，更新现有PR #3。本地V2回归294项、封存文件44件/控制11项及项目状态通过；本次发布不启动模型或原生求解。原十会话、工程、费用、Baseline与Demo保持。GitHub新提交的CI结果由PR检查显示。
+diff --git a/battery-world/docs/SESSION-HANDOFF.md b/battery-world/docs/SESSION-HANDOFF.md
+index 30359fa742147df3b955b84f9c77bc6f84573eb7..ee811005e2833a861f5c0f0efff37730c4a8c556 100644
+--- a/battery-world/docs/SESSION-HANDOFF.md
++++ b/battery-world/docs/SESSION-HANDOFF.md
+@@ -1,3 +1,15 @@
++## 2026-10-19 · BFA-043 压电节点数字工程交付
++
++独立立创工程完成10器件真实连线与50×32 mm双层PCB，117走线/6过孔；保存重载后严格DRC通过，DFM留12条警告。90×30 mm梁、夹持、底座、板卡、器件包络及紧固件组成32个有效STEP实体，干涉0，按保存运动轨迹留额外2 mm间隙。nRF52832/S132固件构建通过，Flash7296 B/静态RAM456 B；40条命令在另一目录复建HEX一致。
++
++Lab接入同版电路、PCB、3D装配及设备/统一时间轴/交付入口；8页简报、11页详报、原始计算、可编辑工程和便携重建脚本进入工程包。修复工程实现恢复入口和项目选择名称错位，115件输出摘要及ZIP通过。复用原执行TX-7b59b5be，本轮新增物理求解0。
++
++Pi owner pi-chat-ccbeec4b82a67bb1已IDLE，同版SC-95e4cbe6、NR-0c45b7c7、REL-f392a7b2。93次请求全SETTLED，登记约$1.9116462；Codex原生EDA/CAD与接口核对介入已记录。V2回归343项及44封存文件/11控制通过，Pi检查通过；Baseline6388文件与原会话/工程/费用保护审计通过，原Demo按原配置启动HTTP200。根目录全量检查仍有历史iCloud占位文件错误。
++
++报告：docs/agentlab/architecture-v2/node-engineering-20261019/REPORT.md。下一步按12条板级警告修订，再做目标PGOOD/时序/实际BLE接收与电荷台架、夹持模态及供应商高度核对；参考六门通过保持，样机物理资格待测。BFA-043 complete，PROJECT.active_feature=null；代码本地，未提交或推送。
++
++---
++
+ ## 2026-10-19 · BFA-042 GitHub发布
+ 
+ 按用户授权，将三阶段实现、固定实验配置、原始结果摘要、分析脚本与三页PDF提交到 `codex/bf-architecture-v2`，更新现有PR #3。本地V2回归294项、封存文件44件/控制11项及项目状态通过；本次发布不启动模型或原生求解。原十会话、工程、费用、Baseline与Demo保持。GitHub新提交的CI结果由PR检查显示。
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_actions.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_actions.py
+index 47d5398f7fa7dc1fdc076491cfed69b3027b07c4..a256af875661ea2bf34a21d32c3cf2c8ecc1a833 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_actions.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_actions.py
+@@ -377,6 +377,13 @@
+                     'required_engineering_report': report_quality}
+         if system.get('task_definition'):
+             manifest.update(task_definition=system['task_definition'], task_execution=task_execution)
++        from .repository_node_realization import current as node_current
++        node=node_current(repo,system)
++        if system.get('task_definition',{}).get('phase')=='node-engineering-realization' and not node:
++            raise ValueError('REQUIRED_NODE_REALIZATION_MISSING')
++        if node and (not node['native'] or node['target']['status']!='BUILT'):
++            raise ValueError('REQUIRED_NODE_ENGINEERING_ARTIFACTS_MISSING')
++        if node: manifest['node_realization']=node
+         result = object_save(repo, db, 'design_repository_releases', 'REL', manifest, ['project_id', 'target'])
+         archive = repo.root/'releases'/(result['id']+'.zip'); archive.parent.mkdir(exist_ok=True)
+         if not archive.exists():
+@@ -385,6 +392,10 @@
+                 for path in report_quality['outputs']:
+                     z.write(report_folder/path, 'reports/'+path)
+                 z.write(report_folder/'quality.json','reports/quality.json')
++                if node:
++                    for path in node['outputs']:
++                        if path!='handoff.zip': z.write(repo.root/'node-realizations'/node['id']/path,'node/'+path)
++                    z.write(repo.root/'node-realizations'/node['id']/'manifest.json','node/manifest.json')
+                 if task_execution:
+                     for path, ref in task_execution['artifacts'].items():
+                         z.write(repo.root/'blobs'/ref['sha256'], 'execution/'+path)
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_actions.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_actions.py
+index 7c4cfcddb66e5efaeb2530da8d7bb4fe7be683a8..e601fececff27ca37c3e3ef97831afdb306398b9 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_actions.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_actions.py
+@@ -132,7 +132,13 @@
+         project = repo.bound(owner)
+         if project:
+             p=repo.project(project,owner); s=repo.system(project,p['submitted']); task=system_definition(repo,s)
+-            if task: return runtime_spec(task)
++            if task:
++                result=runtime_spec(task)
++                if task['case_adapter']=='piezo-feedback-v1' and task.get('phase')=='node-engineering-realization':
++                    from .repository_node_realization import specification
++                    result['qualified_operations'].append('task_realize')
++                    result['engineering_realization']=specification()
++                return result
+         return schema()
+     if action == 'repository_task_create': return create(repo, owner, body, operator)
+     if action == 'repository_task_define': return revise_definition(repo, owner, body, operator)
+@@ -152,6 +158,9 @@
+     if action == 'repository_task_result':
+         from .repository_task_result import read
+         return read(repo, owner, body)
++    if action == 'repository_task_realize':
++        from .repository_node_realization import realize
++        return realize(repo, owner, body)
+     if action == 'repository_task_report':
+         from .repository_task_reports import prepare
+         return prepare(repo, owner, body, operator)
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_execution.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_execution.py
+index ce6942120825ca7d24d43a80fccffa3b534c4633..a4875d3127d431c96017fb195ec40f0557db5aba 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_execution.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_execution.py
+@@ -45,7 +45,27 @@
+     for row in db.execute('SELECT value FROM design_task_executions WHERE project=? ORDER BY rowid DESC', (system['project_id'],)):
+         value = json.loads(row['value'])
+         if value['execution_key'] == desc['id'] or compatible_descriptor(value['descriptor'], desc, system): return verify(repo, value)
+-    return None
++    # A new engineering phase can inherit a frozen experiment without replaying
++    # it. Follow only sealed ancestry, retaining the original TX/owner identity.
++    seen = set()
++    ancestor = system
++    for _ in range(256):
++        key = (ancestor['project_id'], ancestor['id'])
++        if key in seen: raise ValueError('TASK_EXECUTION_LINEAGE_CYCLE')
++        seen.add(key)
++        origin = ancestor.get('inherited_from')
++        if ancestor.get('parent'):
++            ancestor = repo.system(ancestor['project_id'], ancestor['parent'], db)
++        elif origin:
++            ancestor = repo.system(origin['project_id'], origin['system_id'], db)
++        else: return None
++        if ancestor['project_id'] == system['project_id']: continue
++        for row in db.execute('SELECT value FROM design_task_executions WHERE project=? AND target=? ORDER BY rowid DESC',
++                              (ancestor['project_id'], ancestor['id'])):
++            value = json.loads(row['value'])
++            if value['execution_key'] == desc['id'] or compatible_descriptor(value['descriptor'], desc, system):
++                return verify(repo, value)
++    raise ValueError('TASK_EXECUTION_LINEAGE_LIMIT')
+ 
+ 
+ def compatible_descriptor(old, new, system):
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_state.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_state.py
+index aa38c05e672ee86aaeb52c475bc721b6e4a04a90..711466565f56b63f5ab3c95cd7028530463be681 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_state.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_state.py
+@@ -65,6 +65,22 @@
+     actions = ['task_result', 'read', 'validate', 'decide', 'task_report', 'release']
+     if cfg.get('review_only'): actions = ['read', 'validate', 'decide', 'task_report', 'release']
+     elif task['intent'] != 'audit': actions += ['assign'] if cfg['roles'] else ['task_commit']
++    if cfg['adapter'] == 'piezo-feedback-v1' and task['phase'] == 'node-engineering-realization':
++        from ..store import identity
++        from .repository_node_realization import current, native_bundle
++        realization = current(repo, s)
++        native = native_bundle(repo, s)
++        result['engineering_realization'] = {
++            'id': realization['id'] if realization else None,
++            'native_binding': 'NN-'+identity(native) if native else None,
++            'target_status': realization['target']['status'] if realization else 'NOT_REGISTERED',
++            'artifacts': sorted(realization['outputs']) if realization else [],
++        }
++        # A report or decision does not complete an interrupted realization.
++        # Keep the idempotent consumer available through delivery/recovery.
++        actions.append('task_realize')
++        if not realization and stage in ('DECISION_REQUIRED', 'READY_TO_DELIVER', 'DELIVERED'):
++            stage = 'READY_TO_REALIZE'
+     return {**result, 'stage': stage, 'execution_id': execution['id'] if execution else None,
+         'execution_status': execution['status'] if execution else 'NATIVE_DOMAIN_PATH',
+         'qualification': q, 'interfaces': interfaces, 'report_id': report, 'release_id': release,
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_view.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_view.py
+index 6adfba326975570a28c595a2f35d5553491f9385..740ce108bb9bbbd3cdf91ebdd8c71d1d296abc6b 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_view.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_view.py
+@@ -127,6 +127,8 @@
+     from ..skill_resources import source_bundle
+     skill_catalog=source_bundle()[0]
+     current=repo.system(project,view['project']['submitted'])
++    from .repository_node_realization import current as node_realization
++    node=node_realization(repo,current)
+     pins=Path(repo.profile['runtime_root'])/'tool-pins.json'
+     view.update(updated=time.time(),states=[state(repo,owner,x) for x in owners],events=events,
+                 operations=operations,decisions=decisions,model_requests=requests,skill_activations=activations,
+@@ -136,12 +138,17 @@
+                   'native_project_count':len(repo.profile.get('native_project_uuids',[])),
+                   'port':repo.profile['port'],'shared_native_lock':repo.profile['shared_native_lock']},
+                 previews=[p for system in view['systems'] for p in previews(repo,system)],source_commit=repo.profile['base_commit'],
+-                baseline_frozen=True,original_demo_port=repo.profile['production_port'])
++                node_realization=node,baseline_frozen=True,original_demo_port=repo.profile['production_port'])
+     return view
+ 
+ 
+-def artifact(repo, project, owner, system_id, path, job=None, preview=False, domain_commit=None):
++def artifact(repo, project, owner, system_id, path, job=None, preview=False, domain_commit=None, realization=False):
+     system=repo.system(project,system_id);repo.project(project,owner);name(path)
++    if realization:
++        from .repository_node_realization import current
++        value=current(repo,system)
++        if not value or path not in value['outputs']: raise ValueError('NODE_ARTIFACT_BINDING')
++        return repo.root/'node-realizations'/value['id']/path,path
+     if domain_commit:
+         with repo.store.connect() as db:commit=repo._object(db,'design_domain_commits',domain_commit,project)
+         ref=commit['files'].get(path)
+diff --git a/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py b/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py
+index bad8e520e8b2999f6c1b8c8eaa584ac2f48666b9..7c11ad106dcd8536fbc299298b53c0e7c4c1bd60 100644
+--- a/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py
++++ b/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py
+@@ -371,6 +371,8 @@
+                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
+                 if path in ('/artifact-workspace.js','/artifact-workspace.css','/result-catalog.js','/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
+                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
++                if path in ('/node-engineering.html','/node-engineering.js','/node-engineering.css'):
++                    return self.reply(200,(UI/path[1:]).read_bytes(),{'html':'text/html','js':'text/javascript','css':'text/css'}[path.rsplit('.',1)[1]]+'; charset=utf-8')
+                 actor = self.principal(); owner = actor['owner']
+                 if lab_bridge and path.startswith('/api/design-repository'):
+                     if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_LAB_VIEW')
+@@ -391,7 +393,7 @@
+                     if path=='/api/design-repository/file':
+                         import mimetypes
+                         file,name=artifact(repo,project,target,query.get('system',[''])[0],query.get('path',[''])[0],
+-                           domain_commit=query.get('domain_commit',[None])[0],job=query.get('job',[None])[0],preview=query.get('preview',['0'])[0]=='1')
++                           domain_commit=query.get('domain_commit',[None])[0],job=query.get('job',[None])[0],preview=query.get('preview',['0'])[0]=='1',realization=query.get('realization',['0'])[0]=='1')
+                         kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
+                         if kind in ('text/html','application/javascript'):kind='text/plain'
+                         return self.reply(200,file,kind)
+diff --git a/pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts b/pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts
+index dd08211692d3730c6a8719e0ec651d432f484b59..1e9ba330aee43fbbc7974c327be267e17a3bcdc1 100644
+--- a/pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts
++++ b/pi-bf-aiot/packages/bf-agent/src/extensions/bf-repository.ts
+@@ -52,6 +52,7 @@
+ 						"task_commit",
+ 						"task_execute",
+ 						"task_result",
++						"task_realize",
+ 						"task_report",
+ 						"state",
+ 						"task",
+@@ -104,6 +105,7 @@
+ 									"task_commit",
+ 									"task_execute",
+ 									"task_result",
++									"task_realize",
+ 									"task_report",
+ 									"validate",
+ 									"decide",
+diff --git a/pi-bf-aiot/packages/bf-agent/src/repository-task.ts b/pi-bf-aiot/packages/bf-agent/src/repository-task.ts
+index 7ca83497bcc9ba4bc60acca5d60a3b72ff32885c..bb06fdd720a64f6933db0e994bbd97040483c19d 100644
+--- a/pi-bf-aiot/packages/bf-agent/src/repository-task.ts
++++ b/pi-bf-aiot/packages/bf-agent/src/repository-task.ts
+@@ -46,7 +46,13 @@
+ 		method: "POST",
+ 		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
+ 		body: JSON.stringify(body),
+-		signal: AbortSignal.timeout(body.action === "repository_task_execute" ? 2500000 : 100000),
++		signal: AbortSignal.timeout(
++			body.action === "repository_task_execute"
++				? 2500000
++				: body.action === "repository_task_realize"
++					? 600000
++					: 100000,
++		),
+ 	});
+ 	const value = (await response.json()) as Record<string, unknown>;
+ 	if (!response.ok) throw Error(String(value.error ?? "DESIGN_SERVICE_ERROR"));
+diff --git a/pi-bf-aiot/pi-test.bat b/pi-bf-aiot/pi-test.bat
+index 048a99db8df91ad4440848c4ae7124ef4e978df8..addaccd1dad8750d4a52977acad42b31ab52ca1c 100644
+--- a/pi-bf-aiot/pi-test.bat
++++ b/pi-bf-aiot/pi-test.bat
+@@ -1,14 +1,14 @@
+-@echo off
+-setlocal
+-
+-set "SCRIPT_DIR=%~dp0"
+-set "POWERSHELL_EXE=powershell.exe"
+-
+-where %POWERSHELL_EXE% >nul 2>nul
+-if errorlevel 1 (
+-	>&2 echo powershell.exe not found. Install PowerShell or run pi-test.ps1 directly.
+-	exit /b 1
+-)
+-
+-%POWERSHELL_EXE% -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%pi-test.ps1" %*
+-exit /b %ERRORLEVEL%
++@echo off
++setlocal
++
++set "SCRIPT_DIR=%~dp0"
++set "POWERSHELL_EXE=powershell.exe"
++
++where %POWERSHELL_EXE% >nul 2>nul
++if errorlevel 1 (
++	>&2 echo powershell.exe not found. Install PowerShell or run pi-test.ps1 directly.
++	exit /b 1
++)
++
++%POWERSHELL_EXE% -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%pi-test.ps1" %*
++exit /b %ERRORLEVEL%
+diff --git a/pi-bf-aiot/pi-test.ps1 b/pi-bf-aiot/pi-test.ps1
+index 610aeaeb2715ad662ff2f30e912e7503e22e27fa..d36d958d1c89d2e3d9c74b14ad075ab662762e4e 100644
+--- a/pi-bf-aiot/pi-test.ps1
++++ b/pi-bf-aiot/pi-test.ps1
+@@ -1,71 +1,71 @@
+-$ErrorActionPreference = "Stop"
+-
+-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+-$noEnv = $false
+-$forwardArgs = New-Object System.Collections.Generic.List[string]
+-
+-foreach ($arg in $args) {
+-	if ($arg -eq "--no-env") {
+-		$noEnv = $true
+-	} else {
+-		$forwardArgs.Add($arg)
+-	}
+-}
+-
+-if ($noEnv) {
+-	$envVarsToUnset = @(
+-		"ANTHROPIC_API_KEY",
+-		"ANTHROPIC_OAUTH_TOKEN",
+-		"OPENAI_API_KEY",
+-		"GEMINI_API_KEY",
+-		"GROQ_API_KEY",
+-		"CEREBRAS_API_KEY",
+-		"XAI_API_KEY",
+-		"OPENROUTER_API_KEY",
+-		"ZAI_API_KEY",
+-		"MISTRAL_API_KEY",
+-		"MINIMAX_API_KEY",
+-		"MINIMAX_CN_API_KEY",
+-		"AI_GATEWAY_API_KEY",
+-		"OPENCODE_API_KEY",
+-		"COPILOT_GITHUB_TOKEN",
+-		"GH_TOKEN",
+-		"GITHUB_TOKEN",
+-		"HF_TOKEN",
+-		"GOOGLE_APPLICATION_CREDENTIALS",
+-		"GOOGLE_CLOUD_PROJECT",
+-		"GCLOUD_PROJECT",
+-		"GOOGLE_CLOUD_LOCATION",
+-		"AWS_PROFILE",
+-		"AWS_ACCESS_KEY_ID",
+-		"AWS_SECRET_ACCESS_KEY",
+-		"AWS_SESSION_TOKEN",
+-		"AWS_REGION",
+-		"AWS_DEFAULT_REGION",
+-		"AWS_BEARER_TOKEN_BEDROCK",
+-		"AWS_CONTAINER_CREDENTIALS_RELATIVE_URI",
+-		"AWS_CONTAINER_CREDENTIALS_FULL_URI",
+-		"AWS_WEB_IDENTITY_TOKEN_FILE",
+-		"AZURE_OPENAI_API_KEY",
+-		"AZURE_OPENAI_BASE_URL",
+-		"AZURE_OPENAI_RESOURCE_NAME"
+-	)
+-
+-	foreach ($name in $envVarsToUnset) {
+-		Remove-Item -Path "Env:$name" -ErrorAction SilentlyContinue
+-	}
+-
+-	Write-Host "Running without API keys..."
+-}
+-
+-$tsxBin = Join-Path $scriptDir "node_modules/.bin/tsx.cmd"
+-if (-not (Test-Path -LiteralPath $tsxBin)) {
+-	throw "tsx not found at $tsxBin. Run npm install from the repo root first."
+-}
+-
+-$cliPath = Join-Path $scriptDir "packages/coding-agent/src/cli.ts"
+-& $tsxBin $cliPath @forwardArgs
+-$exitCode = $LASTEXITCODE
+-if ($exitCode -ne 0) {
+-	exit $exitCode
+-}
++$ErrorActionPreference = "Stop"
++
++$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
++$noEnv = $false
++$forwardArgs = New-Object System.Collections.Generic.List[string]
++
++foreach ($arg in $args) {
++	if ($arg -eq "--no-env") {
++		$noEnv = $true
++	} else {
++		$forwardArgs.Add($arg)
++	}
++}
++
++if ($noEnv) {
++	$envVarsToUnset = @(
++		"ANTHROPIC_API_KEY",
++		"ANTHROPIC_OAUTH_TOKEN",
++		"OPENAI_API_KEY",
++		"GEMINI_API_KEY",
++		"GROQ_API_KEY",
++		"CEREBRAS_API_KEY",
++		"XAI_API_KEY",
++		"OPENROUTER_API_KEY",
++		"ZAI_API_KEY",
++		"MISTRAL_API_KEY",
++		"MINIMAX_API_KEY",
++		"MINIMAX_CN_API_KEY",
++		"AI_GATEWAY_API_KEY",
++		"OPENCODE_API_KEY",
++		"COPILOT_GITHUB_TOKEN",
++		"GH_TOKEN",
++		"GITHUB_TOKEN",
++		"HF_TOKEN",
++		"GOOGLE_APPLICATION_CREDENTIALS",
++		"GOOGLE_CLOUD_PROJECT",
++		"GCLOUD_PROJECT",
++		"GOOGLE_CLOUD_LOCATION",
++		"AWS_PROFILE",
++		"AWS_ACCESS_KEY_ID",
++		"AWS_SECRET_ACCESS_KEY",
++		"AWS_SESSION_TOKEN",
++		"AWS_REGION",
++		"AWS_DEFAULT_REGION",
++		"AWS_BEARER_TOKEN_BEDROCK",
++		"AWS_CONTAINER_CREDENTIALS_RELATIVE_URI",
++		"AWS_CONTAINER_CREDENTIALS_FULL_URI",
++		"AWS_WEB_IDENTITY_TOKEN_FILE",
++		"AZURE_OPENAI_API_KEY",
++		"AZURE_OPENAI_BASE_URL",
++		"AZURE_OPENAI_RESOURCE_NAME"
++	)
++
++	foreach ($name in $envVarsToUnset) {
++		Remove-Item -Path "Env:$name" -ErrorAction SilentlyContinue
++	}
++
++	Write-Host "Running without API keys..."
++}
++
++$tsxBin = Join-Path $scriptDir "node_modules/.bin/tsx.cmd"
++if (-not (Test-Path -LiteralPath $tsxBin)) {
++	throw "tsx not found at $tsxBin. Run npm install from the repo root first."
++}
++
++$cliPath = Join-Path $scriptDir "packages/coding-agent/src/cli.ts"
++& $tsxBin $cliPath @forwardArgs
++$exitCode = $LASTEXITCODE
++if ($exitCode -ne 0) {
++	exit $exitCode
++}

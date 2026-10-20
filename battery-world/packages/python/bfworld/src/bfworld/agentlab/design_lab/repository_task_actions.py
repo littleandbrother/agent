@@ -132,7 +132,13 @@ def handle(repo, owner, body, operator=False):
         project = repo.bound(owner)
         if project:
             p=repo.project(project,owner); s=repo.system(project,p['submitted']); task=system_definition(repo,s)
-            if task: return runtime_spec(task)
+            if task:
+                result=runtime_spec(task)
+                if task['case_adapter']=='piezo-feedback-v1' and task.get('phase')=='node-engineering-realization':
+                    from .repository_node_realization import specification
+                    result['qualified_operations'].append('task_realize')
+                    result['engineering_realization']=specification()
+                return result
         return schema()
     if action == 'repository_task_create': return create(repo, owner, body, operator)
     if action == 'repository_task_define': return revise_definition(repo, owner, body, operator)
@@ -152,6 +158,9 @@ def handle(repo, owner, body, operator=False):
     if action == 'repository_task_result':
         from .repository_task_result import read
         return read(repo, owner, body)
+    if action == 'repository_task_realize':
+        from .repository_node_realization import realize
+        return realize(repo, owner, body)
     if action == 'repository_task_report':
         from .repository_task_reports import prepare
         return prepare(repo, owner, body, operator)

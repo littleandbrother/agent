@@ -1,0 +1,110 @@
+{
+  "schema_version": "bf-ar-s0-handoff-requests-v1",
+  "feature": "BFA-052-ar-service-repair",
+  "baseline": "CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a",
+  "contract_sha256": "53c29aba7b95e178ad76594ae9c240c21b91d6af5d8929e5aec8f2a7aa64853b",
+  "preparation_status": "PRESERVED_HISTORICAL_PREPARATION_PI_EXECUTED_EXTERNALLY",
+  "pi_dispatch_authorized_by_this_file": false,
+  "tool_source": "scripts/campaign_ar_service.py",
+  "definition": "tool_definition() -> {name, description, parameters: JSON Schema}",
+  "trusted_callable": "create_handler(output_root, lease=trusted_S0_context) -> handle(args)",
+  "persistent_cli": "campaign_ar_service.py serve --output <trusted new absolute A runtime directory> --lease <S0 lease JSON> --lease-sha256 <trusted SHA256>",
+  "cli_protocol": "One bounded JSON argument per stdin line; one {ok,value} or {ok:false,error,reason} per stdout line. Keep one process for the episode. A new process cannot reopen an old episode directory.",
+  "actions": [
+    "inspect",
+    "check",
+    "submit"
+  ],
+  "public_inspect_topics": [
+    "contract",
+    "schema",
+    "history",
+    "bounds"
+  ],
+  "candidate_schema": "bfworld.agentlab.campaign20261019.ar_service.candidate_schema(); same definition is embedded in tool_definition, and enforced by validate_candidate",
+  "legal_device_variables": [
+    "capacitance_f: 0<C<=1 F",
+    "off_v: 2.2<=off<ready",
+    "ready_v: off<ready<3.3 V"
+  ],
+  "legal_program_variables": [
+    "sample_period_s: integer 1..60",
+    "ack_spacing_s: integer 1..10",
+    "retry_s: integer 1..3600",
+    "rank: bounded executable numeric AST, <=63 nodes and <=8 levels"
+  ],
+  "rank_fields": [
+    "seq",
+    "kind",
+    "age_known",
+    "age_s"
+  ],
+  "rank_operators": [
+    "+",
+    "-",
+    "*",
+    "min",
+    "max",
+    "lt",
+    "le",
+    "eq",
+    "if"
+  ],
+  "parameter_provenance": "Frozen contract records the historical ar.py validator domain, unchanged 3.3 V maximum and source/load assumptions, program timing resolution, and archived official-source receipt hashes. These are model-domain choices, not qualified component inventory.",
+  "clock_scope": "age_s uses only synchronized local time and a synchronized record timestamp. When either is unknown, age_known=0 and age_s=0. No created_s, future source, gateway schedule, evaluator labels, filesystem or shell are available in the program.",
+  "fixed": "Four historical public task inputs; assumed watts/IV/efficiency/costs; zero initial voltage; one source and capacitor; NVM/clock behavior; all service criteria including 12 h dark sampling, 120 s recovery, 10 s fresh reception. No participant-supplied task patch.",
+  "public_facts": "Version/input/candidate hashes, energy ledgers and analytical necessary bounds, per-gate applicability/status, sample/retention/gap/time facts, actual receive delays and backlog deadlines. No next-step recommendations or self-acceptance.",
+  "independent_final_check": "independent_check(bundle, receipt_outside_bundle, expected_seal_sha256=hash_returned_to_S0); CLI verify --bundle ... --receipt ... --expected-seal ...",
+  "independent_final_scope": "Rehash raw/sealed source, reconstruct exact fixed task without producer materializer, Decimal energy plus debit/activity/ESR/program replay, independently decode CRC/receiver/ACK, and recompute service matrix. Compare public facts; save a separate receipt. Computational service FAIL is separate from execution integrity PASS.",
+  "host_lease_fields": [
+    "episode_id",
+    "model",
+    "backend",
+    "provider_ledger",
+    "slot_receipt",
+    "baseline",
+    "maximum_requests",
+    "maximum_candidates",
+    "maximum_wall_s"
+  ],
+  "hard_upper_caps": {
+    "parent_plus_child_requests": 60,
+    "unique_candidate_revisions_including_rejections": 3,
+    "cumulative_wall_s": 3600,
+    "native_dispatches": 0,
+    "estimated_peak_additional_bytes": 300000000,
+    "retained_output_cap_bytes": 220000000,
+    "reserve_bytes": 10000000000
+  },
+  "still_required_from_S0": [
+    "Integrate final paper/data/owned docs and reconcile shared state; A does not edit shared registries.",
+    "Keep newest-first conditional timing repair separate from original FIFO compliance; request human resolution before any changed ordering contract.",
+    "Keep fixed ideal-space NO_GO separate from physical impossibility; any service/apparatus relaxation needs human-approved registration and new qualification.",
+    "Preserve original transport stop, old UNKNOWN snapshot, seven settled charges, old four H attempts and UNPRICED_NONZERO Codex assistance."
+  ],
+  "assistance_boundary": "Prior Codex preparation retained. Actual Pi proposals/checks/selection are bound by the final evidence. Codex external proof and final paper construction/repair remain UNPRICED_NONZERO; no H/G benefit, RSI or physical qualification follows.",
+  "delivery_channel": "S0 pulls these owned files; no cross-chat message or new worker is requested.",
+  "shared_ci_blocker": {
+    "command": "registered A BF environment + PYTHONDONTWRITEBYTECODE=1 BFWORLD_VERIFY_PROFILE=architecture-v2-ci ./init.sh",
+    "exit_code": 1,
+    "tests_run": 343,
+    "passed": 335,
+    "errors": 8,
+    "reason": "registered preparation profile native=false blocks mocked native executor fixtures before their stub is entered",
+    "code_boundary": "shared design_lab/repository_task_execution.py -> require_capability(native), outside campaign-a ownership",
+    "logs": [
+      "architecture-v2-ci.log",
+      "architecture-v2-ci-002.log"
+    ],
+    "request": "Historical evidence retained for shared integration owner; no rerun or runtime/test change requested by this editorial batch.",
+    "historical_preparation_result": true
+  },
+  "targeted_checks": "21 PASS; external original readback PASS; full registered CI remains 335 PASS / 8 ERROR",
+  "resume_requires": "No further A episode requested. New execution requires separate explicit S0/human authority; this handoff authorizes no rerun.",
+  "current_status": "FINAL_PAPER_AND_OWNED_DOCS_DELIVERED_A_IDLE_FOR_S0_INTEGRATION",
+  "pi_episode_result": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/episode-result.json",
+  "external_episode_result": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/external/result.json",
+  "paper_build_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/phase1-20261020/ar/final-pi-20261020/paper-build.json",
+  "source_data_binding": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/docs/research/phase1-20261020/ar/final-pi-20261020/source-data-binding.json",
+  "product_acceptance": "NOT_ACCEPTED"
+}

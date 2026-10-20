@@ -1,0 +1,87 @@
+{
+  "schema_version": "bf-phase3-task-registry-v1",
+  "tasks": {
+    "b-latched-reset": {
+      "legal_design_ranges": {
+        "capacitance_f": [
+          4e-06,
+          2.2e-05
+        ],
+        "tx_not_before_s": [
+          0,
+          0.045
+        ]
+      }
+    },
+    "b-pulse-fast": {
+      "legal_design_ranges": {
+        "capacitance_f": [
+          4e-06,
+          2.2e-05
+        ],
+        "tx_not_before_s": [
+          0,
+          0.045
+        ]
+      }
+    },
+    "b-volatile-reset": {
+      "legal_design_ranges": {
+        "capacitance_f": [
+          4e-06,
+          2.2e-05
+        ],
+        "tx_not_before_s": [
+          0,
+          0.045
+        ]
+      }
+    },
+    "clite-query-window-derived-v1": {
+      "claim_boundary": "A digital single-window derivative of proposed C-lite, not the full C0 system, an RF measurement, hardware qualification or heldout transfer result.",
+      "derived_assets": {
+        "input.json": {
+          "path": "/Users/depengsu/.local/share/bf-phase3-20261020/derived-baseline/input.json",
+          "sha256": "8895f34d3044e7efc89e069983ca94b7a18c0b9045a4f3649557d8a22f77189b"
+        },
+        "observations.json": {
+          "path": "/Users/depengsu/.local/share/bf-phase3-20261020/derived-baseline/observations.json",
+          "sha256": "3dbe0f934ccb815efd09b25a8cbfec0c400750283f5f7a3a3a19496b40b09e14"
+        },
+        "response.json.zlib": {
+          "path": "/Users/depengsu/.local/share/bf-phase3-20261020/derived-baseline/response.json.zlib",
+          "sha256": "f9838d8cb0ff0a444ea7b97006ca9868bc13ac166adfc6ca943c131c14a68749"
+        },
+        "result.json": {
+          "path": "/Users/depengsu/.local/share/bf-phase3-20261020/derived-baseline/result.json",
+          "sha256": "1c28ea142aeb20b2ed850080e7dab1813a93bf7fe3f0e8f4bc46808f867b68e2"
+        }
+      },
+      "legal_design_ranges": {
+        "capacitance_f": [
+          2.5e-05,
+          0.0001
+        ],
+        "tx_not_before_s": [
+          2,
+          7
+        ]
+      },
+      "missing_measurements": [
+        "RF field and RF-to-DC efficiency or load-response waveform",
+        "Measured tag current, PMIC cold-start/UVLO and conversion losses",
+        "Real capacitor leakage/ESR and calibrated voltage thresholds",
+        "Actual PHY/CRC reliability, clock uncertainty and temperature dependence"
+      ],
+      "query_protocol": {
+        "deadline_s": 7,
+        "issued_s": 2,
+        "mapping": "The preregistered single digital query token is encoded by seq=1, key=1, event=1 in the frozen 8-byte BF body. This is a fixed virtual mapping, not a physical nonce protocol or multiquery security claim.",
+        "max_data_age_s": 5,
+        "nonce": "phase3-q-001",
+        "nonce_sequence": 1,
+        "single_query_only": true
+      }
+    }
+  }
+}

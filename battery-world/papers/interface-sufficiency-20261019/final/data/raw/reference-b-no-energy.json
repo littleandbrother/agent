@@ -1,0 +1,62 @@
+{
+  "candidate_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+  "energy": {
+    "bad_steps": [],
+    "final_storage_j": 0.0,
+    "implementation": "independent Decimal ledger and piecewise input integral",
+    "max_balance_error_j": 0.0,
+    "max_port_vi_error_j": 0.0,
+    "max_source_step_error_j": 0.0,
+    "max_voltage_error_v": 0.0,
+    "physical_calibration": "UNKNOWN",
+    "source_integral_j": 0.0,
+    "source_total_error_j": 0.0,
+    "step_count": 10000,
+    "time_resolution_s": 0.0001,
+    "totals_j": {
+      "background_j": 0.0,
+      "boot_j": 0.0,
+      "conversion_j": 0.0,
+      "harvest_j": 0.0,
+      "shunt_j": 0.0,
+      "source_j": 0.0,
+      "spill_j": 0.0,
+      "tx_j": 0.0
+    },
+    "verdict": "PASS"
+  },
+  "expectations": {
+    "event_receive": {
+      "actual": "FAIL",
+      "expected": "FAIL",
+      "matched": true
+    }
+  },
+  "id": "b-no-energy",
+  "input_sha256": "51405c2caff5259cea437701d75e6bc1552a3db3bf8165c0077de9c91d3505ed",
+  "predeclared_control": "PASS",
+  "reference": {
+    "brownouts_before_deadline": 0,
+    "captured_before_reset": false,
+    "datasheet_range_check": "OUTSIDE_RANGE",
+    "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+    "first_boot_s": null,
+    "first_receive_s": null,
+    "max_esr_equation_error_v": 0,
+    "received_frames": 0,
+    "receiver_errors": [],
+    "transient_failed_steps": 0,
+    "verdicts": {
+      "deduplication": "PASS",
+      "event_preserved_after_reset": "FAIL",
+      "event_receive": "FAIL",
+      "independent_energy": "PASS",
+      "independent_receiver": "PASS",
+      "physical_qualification": "UNKNOWN",
+      "transient_voltage": "PASS"
+    }
+  },
+  "schema_version": "campaign-result-v1",
+  "scope": "nominal public-development computation; calibration and hardware UNKNOWN",
+  "task_id": "B-pulse"
+}

@@ -1,0 +1,91 @@
+{
+  "system_id": "SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec",
+  "mapping": [
+    [
+      "供电监控",
+      "PGOOD → P0.11；VDD 由 SAADC 测量",
+      "OFF/复位由硬件 POR/BOR 负责；低压停止服务"
+    ],
+    [
+      "时间",
+      "nRF RTC + APP_TIMER；LFRC 定期校准",
+      "主机离散步长 0.5 ms；目标时钟误差单独核对"
+    ],
+    [
+      "采样",
+      "nRF 内部 TEMP，1/4 °C 原始数值",
+      "参考接收器固定 2500；目标温度值带单位与编码，需接收端匹配"
+    ],
+    [
+      "通信",
+      "S132 单事件 BLE 广播；厂家数据 seq/value/CRC",
+      "参考 TX 4 ms；目标最短广播间隔20 ms、随机延时0..10 ms、超时40 ms。实际电荷和接收待测"
+    ],
+    [
+      "断电",
+      "RAM 状态丢失，重新启动并建立周期",
+      "本轮未引入非易失状态保存"
+    ],
+    [
+      "电流",
+      "参考 OFF/IDLE/SAMPLE/TX 四态声明值",
+      "模块、晶振、温度和无线的实际波形待测后替换"
+    ]
+  ],
+  "target_build": {
+    "allocated_sections": [
+      {
+        "address": 155648,
+        "bytes": 7112,
+        "name": ".text"
+      },
+      {
+        "address": 162760,
+        "bytes": 8,
+        "name": ".sdh_ble_observers"
+      },
+      {
+        "address": 162768,
+        "bytes": 16,
+        "name": ".sdh_stack_observers"
+      },
+      {
+        "address": 162784,
+        "bytes": 8,
+        "name": ".ARM.exidx"
+      },
+      {
+        "address": 536881880,
+        "bytes": 152,
+        "name": ".data"
+      },
+      {
+        "address": 536882032,
+        "bytes": 304,
+        "name": ".bss"
+      }
+    ],
+    "application_flash_origin": 155648,
+    "application_ram_origin": 536881880,
+    "boot_tested": false,
+    "flash_bytes": 7296,
+    "flashed": false,
+    "initial_sp": 536936448,
+    "load_format": "Intel HEX only; ELF PT_LOAD header-alignment prefix is not qualified for direct flashing",
+    "memory_fit": true,
+    "pin_binding_verified": false,
+    "power_model_equivalence_verified": false,
+    "radio_verified": false,
+    "ram_static_bytes": 456,
+    "reserved_heap_bytes": 8192,
+    "reserved_stack_bytes": 8192,
+    "reset_vector": 156349,
+    "scope": "Native SDK target build/map only",
+    "sdk": "17.1.0_ddde560",
+    "softdevice": "S132-7.2.0",
+    "status": "BUILT",
+    "target": "nRF52832-QFAA"
+  },
+  "reference_execution": "TX-7b59b5bebab9cb10d446c76ee3f6866cf3f62078310ae1153c2b4ca17d5075eb",
+  "host_target_equivalence": "OPEN"
+}

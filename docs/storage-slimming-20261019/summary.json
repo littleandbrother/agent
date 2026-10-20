@@ -1,0 +1,60 @@
+{
+  "schema_version": "bf-storage-maintenance-result-v1",
+  "feature": "BFA-048-bounded-storage-development",
+  "completed_at": "2026-10-19T14:31:02.129895+00:00",
+  "scope": "BF project and its local runtimes; not a whole-Mac cleanup",
+  "free_bytes_before": 5941919744,
+  "free_bytes_after": 12026212352,
+  "net_free_increase_bytes": 6084292608,
+  "unit": "decimal GB = 1e9 bytes",
+  "byte_preserving_compaction": {
+    "raw": {
+      "files": 13,
+      "allocated_before": 6437130240,
+      "allocated_after": 4720005120
+    },
+    "trace": {
+      "files": 56,
+      "allocated_before": 2260992000,
+      "allocated_after": 406351872
+    },
+    "database": {
+      "files": 1,
+      "allocated_before": 3448729600,
+      "allocated_after": 1175511040
+    }
+  },
+  "compacted_files": 70,
+  "compacted_bytes_read_back": 12145159951,
+  "deleted_rebuildable_files": 27171,
+  "deleted_allocation_upper_bound": 674213888,
+  "tests": {
+    "architecture_v2_ci": 343,
+    "storage": 14,
+    "saved_files": 44,
+    "saved_controls": 11,
+    "artifact_references": 168,
+    "cache_output_checks": 288,
+    "unique_native_files": 387
+  },
+  "protected_ledgers": "content digests unchanged",
+  "historical_unknown_preserved": 11,
+  "new_model_requests": 0,
+  "new_native_dispatches": 0,
+  "code_deployment": "S0 source tree verified; running production/V2 services not upgraded",
+  "maintenance_tool_bytes": 4560856,
+  "live_endpoints": {
+    "8768": 200,
+    "8870": 200,
+    "8980": 200
+  },
+  "limitations": [
+    "APFS du and st_blocks totals count shared blocks more than once; only filesystem free-space delta is net reclamation.",
+    "Background filesystem activity makes component allocation changes differ from the net delta.",
+    "Broad installer-provenance lookup timed out; installer archives were retained.",
+    "One initial read-only preservation command lacked the source PYTHONPATH; the corrected registered environment passed.",
+    "Root legacy init was previously blocked by cloud-backed discovery; no full root-health claim. S0 architecture-v2-ci plus targeted storage checks passed.",
+    "No physical, new simulation, scientific benefit or method-promotion claim.",
+    "Next large batch still needs its complete peak estimate and at least 10 GB reserve plus that peak."
+  ]
+}

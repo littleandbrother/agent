@@ -1,0 +1,113 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\def\input@path{{../shared/}}
+\makeatother
+\usepackage{hkustgz-paper}
+\title{Frozen-Procedure Transfer in Battery-Free Event Service\\A Paired Digital Study with Censored Outcomes}
+\hypersetup{pdftitle={Frozen-Procedure Transfer in Battery-Free Event Service: A Paired Digital Study with Censored Outcomes},pdfauthor={Development manuscript}}
+\author{Development manuscript}
+\papersubtitle{Phase 4: closed local digital study, 20 October 2026}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Battery-free event service requires powered observation and accurate encoded
+event times as well as energy-feasible delivery. We report a closed digital
+study with 73 logical cells and 77 actual attempts. On the original O0 development
+task, the candidate and a fixed rich-state control choose the same one-second
+program, share one response and pass eight events; a 60-second periodic control
+matches none. Three paired descendant lineages then compare fixed H0, descendants
+of fixed improver G0, and descendants of one model-proposed G1 procedure.
+All 30 effective selection cells pass before six methods are frozen. Across
+27 final cells, H0 has 7 PASS, 1 submitted FAIL and 1 INCOMPLETE; G0 has 6/1/2;
+G1 has 8/0/1. Both reserved digital tasks pass in all 18 cells. The new O waveform
+separates event matching from service: both one-second submissions match eight
+events and pass energy checks but fail encoded-time tolerances, while three
+0.75-second submissions pass. Four token-censored episodes retain their costs
+and denominators. The 8/9 G1 result is descriptive evidence conditional on one
+shared formation event, not stable recursive improvement or a unique mechanism;
+H0 also succeeds at 0.75 s. Physical qualification remains UNKNOWN and prior
+A/R product failures remain unaccepted.
+\end{abstract}
+
+\section{Question and evidence scope}
+A battery-free event application must associate a change in external activity
+with sufficient powered observation, retained state and timely reception.
+Increasing the message count alone need not satisfy the required event semantics.
+Likewise, a successful event predicate cannot establish continuous sensing or
+discharge other reporting obligations. A transfer study therefore needs an
+unchanged task contract, matched hardware, a strong fixed event-state control,
+and separate records of the participant's judgment and the host's evaluation.
+
+O0 first tests the extension of the existing A/R digital energy and receiver apparatus
+to vibration-based start, active keepalive and stop service. The participant
+receives the additional RMS source and declared sampling/wake costs rather
+than supplying an expected-event table. The comparison comprises a free legal
+candidate, an A-style periodic control and a fixed rich-state event control.
+It asks whether the candidate meets the original O service and whether an
+observed result exceeds the strong control. The closed development receipts
+support event-service feasibility within the nominal model, with no advantage
+over rich-state~\cite{o0,first}.
+
+The subsequent comparison asks whether a procedure that generates design
+methods transfers beyond its selection inputs. H denotes the procedure used
+by a fresh design episode; G denotes the procedure that proposes H descendants.
+We compare fixed H0, the descendants of fixed G0, and the descendants of one
+actually proposed G1. Six selected methods are frozen before any final input
+is delivered. Each consuming final episode sees the complete frozen current
+task facts, including its waveform. ``Unexposed'' therefore describes G/H
+formation and selection, not concealment of the task from its final designer.
+
+The evidence comprises the complete actual-cell ledger, final per-event details,
+frozen selection and source-preservation records~\cite{actual,details,selection,preservation}.
+The three descendant-lineage pairs are conditional on a single shared G1
+formation event. They are not three independent G1 training runs. Similarly,
+eight transitions on one O waveform are not eight tasks, and cached responses
+are not repeated physical experiments. We retain submitted failures and
+unsubmitted censored episodes as different outcomes and include both in all
+reported denominators. H0 remains unchanged.
+
+\input{phase4-methods.tex}
+
+\begin{thebibliography}{99}
+\footnotesize\raggedright
+\setlength{\itemsep}{1pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\bibitem{o0} S0. Three registered actual O0 transfer episodes.
+\path{O0-transfer-results.json}, 20 October 2026.
+\bibitem{first} S0. First O0 result and retained claim boundary.
+\path{first-O0-result.json}.
+\bibitem{episodes} S0/Pi. Original O0 candidate, fixed-periodic and rich-state
+\path{episode-result.json} receipts, and candidate gateway check records.
+Exact paths and SHA-256 bindings appear in \path{phase4-binding.json}.
+\bibitem{case} S0/B. Original O0 case, declared digital components and
+versioned event evaluator. \path{o0-task.v1.json} and
+\path{phase4_interfaces.py}; the actual execution versions are source-bound.
+\bibitem{protocol} S0. Finite Phase 4 protocol, version 1.1.
+\path{protocol-v1.1.json}; original O0 results are preserved.
+\bibitem{parents} S0. Actual G/H parent and procedure freezes.
+\path{parent-freeze.json} and \path{G1-freeze.json}.
+\bibitem{selection} S0. Thirty effective selection results and all six frozen
+choices. \path{selection-complete.json}, \path{selected-methods.json} and
+\path{final-selection-freeze.json}.
+\bibitem{actual} S0. Complete 77-attempt and 73-cell record.
+\path{actual-results.json}.
+\bibitem{details} S0. All 27 final cells, encoded event-time details and censored
+response metadata. \path{final-details.json}.
+\bibitem{analysis} S0. Descriptive task/arm counts and complete pipeline costs.
+\path{analysis-summary.json}.
+\bibitem{preservation} S0. Final frozen-source, accounting and history readback.
+\path{preservation-final.json}; manuscript transfer in \path{paper-handoff.json}.
+\bibitem{hold} S0. Historical cache exception and stopped-attempt record.
+\path{host-error-hold.json}.
+\bibitem{amendment} S0/review. Authorized historical-trace reconstruction
+and four explicit recovery links. \path{amendment-registration.json}.
+\bibitem{qualification} S0. Qualification of cache reconstruction and negative
+provenance controls. \path{cache-repair-qualification.json}.
+\bibitem{recovery} S0. Four approved recovery attempts linked to retained host
+incidents. \path{recovery-results.json}.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "bf-o-digital-components-v1",
+  "sampler_id": "proposed-rms-poll-v1",
+  "standby_power_w": 5e-07,
+  "wake_storage_j": 1e-06,
+  "sense_storage_j": 2e-05,
+  "write_storage_j": 5e-06,
+  "cache_capacity_records": 2048,
+  "cache_options": [
+    "nvm",
+    "volatile"
+  ],
+  "physical_qualification": "UNKNOWN",
+  "status": "PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED",
+  "source_notes": {
+    "sense_storage_j": "Reuses the registered A/R 20 uJ storage-side sample impulse as a proposed RMS sampler cost; temperature-load precedent is not qualification of vibration hardware.",
+    "wake_storage_j": "Proposed ideal 1 uJ wake impulse; no independent device power measurement.",
+    "standby_power_w": "Proposed ideal 0.5 uW powered RMS front-end standby; off when the managed rail is off.",
+    "write_storage_j": "Unchanged A/R ideal atomic 5 uJ store impulse; persistence does not supply detection power.",
+    "ar_chain": "Unchanged source port/cold-start/PMIC/boot/ESR/TX parameters and digital AR wire/CRC envelope; no calibrated PV or RF model."
+  }
+}

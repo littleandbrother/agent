@@ -1,0 +1,157 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.011595936,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0239016,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-2-complete-raw-d",
+  "exit_code": 0,
+  "external_result": {
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 6e-05,
+        "tx_not_before_s": 6
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 0.000119999,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 2.4444841462167074e-20,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.0006,
+        "source_total_error_j": 0.0,
+        "step_count": 30000,
+        "time_resolution_s": 0.001,
+        "totals_j": {
+          "background_j": 3e-05,
+          "boot_j": 0.0,
+          "conversion_j": 0.0,
+          "harvest_j": 0.0006,
+          "shunt_j": 0.0,
+          "source_j": 0.0006,
+          "spill_j": 0.00040000100000002904,
+          "tx_j": 5e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_version": "phase3-independent-service-with-ordered-event-v1",
+      "execution_key": "da4e6d4208cd61a99970b511342b4bbf4f8ddf0dcd2b8de9f8b47b3b478daa32",
+      "input_sha256": "09b369b9a7babf4402bf2a50c24458fc2660a71966e421c7d50c4a2018523c8f",
+      "job_accounting": {
+        "another_group_output_not_exposed_before_query": true,
+        "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+        "initial_physical_cache_hit": false,
+        "new_logical_D_evaluation": false,
+        "physical_exact_input_reused": true,
+        "scope": "Physical deduplication does not enlarge the two-D arm budget; new group job histories remain isolated"
+      },
+      "ordered_event_state": {
+        "capture_actions": [
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 2.0
+          }
+        ],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "volatile",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 2
+        },
+        "first_valid_receive_s": 6.001,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "bff9fada5c173d9b281f54666f3b76dd21104c6d6208021e22cd8323a81a1490",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "new-full-feedback-response",
+      "physical_qualification": "UNKNOWN",
+      "query_service": {
+        "gates": {
+          "freshness": true,
+          "query_before_reply": true,
+          "query_state_capture": true,
+          "single_query_token": true
+        },
+        "physical_or_multiquery_nonce_security": "NOT_ESTABLISHED",
+        "protocol": {
+          "deadline_s": 7,
+          "issued_s": 2,
+          "mapping": "The preregistered single digital query token is encoded by seq=1, key=1, event=1 in the frozen 8-byte BF body. This is a fixed virtual mapping, not a physical nonce protocol or multiquery security claim.",
+          "max_data_age_s": 5,
+          "nonce": "phase3-q-001",
+          "nonce_sequence": 1,
+          "single_query_only": true
+        },
+        "status": "PASS"
+      },
+      "raw_path": "/Users/depengsu/.local/share/bf-phase3-20261020/physical-cache/da4e6d4208cd61a99970b511342b4bbf4f8ddf0dcd2b8de9f8b47b3b478daa32/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "OUTSIDE_RANGE",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 1.579,
+        "first_receive_s": 6.001,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "clite-query-window-derived-v1"
+    },
+    "prospective_E5_consumer": false
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-2-complete-raw",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-4eaf7d57071fd242",
+  "protocol_sha256": "72529de0ad017cdd6c3c159494e82883f299eb6054fdfa2809fd89960cbdfbcb",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "2bd25c72cfa6f9ac08d53d5a4f896f5ad27b6ae964692c4ea302c9db0c58c496",
+  "spec": {
+    "condition": "complete-raw",
+    "group": "p3-formal-4-2-complete-raw",
+    "id": "p3-formal-4-2-complete-raw-d",
+    "kind": "D",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 8,
+    "gateway_chain_tip": "09c968ffd0a53f2e88ecfde6e1c9f7ae4c7827ef410e48d043948b3b627df705",
+    "model_submitted": true,
+    "model_tool_calls": 8,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 35.587796583000454,
+  "wall_seconds_total": 36.08716183400247
+}

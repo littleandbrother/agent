@@ -1,0 +1,144 @@
+{
+  "schema_version": "bf-interface-phase1-protocol-v1",
+  "feature": "BFA-053-bf-interface-protocol",
+  "owner": "campaign-b",
+  "baseline": "CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a",
+  "baseline_manifest_sha256": "96ab17e8c1f9913b52a98b2c0103a1db4717582812f98a76385d469009207fbe",
+  "profile_sha256": "f7c0a9a113da6f35290386b1f1e0719c75929eb49a83ececa8b0c31a007ffaa9",
+  "frozen_utc": "2026-10-19T16:16:11.980824+00:00",
+  "inputs": {
+    "docs/research/parallel-20261019/interfaces/data/IF-7412532c4a6ab7a5879e/result.json": {
+      "sha256": "0dbbb9aebe8e33a2f39f4c8f9929cffb6a86a5f6626c9c5846d29767fc72f13d",
+      "bytes": 163499
+    },
+    "docs/research/parallel-20261019/interfaces/data/IF-7412532c4a6ab7a5879e/seal.json": {
+      "sha256": "e826856b524bdaacd4f0ec6da5054931427ce6ba6dd66df67f2be300a4932d34",
+      "bytes": 7193
+    },
+    "docs/research/parallel-20261019/reference/results.json": {
+      "sha256": "faccb863cdd663d635bf793e09d9d2e1835863ae9acf64dacda68ec06389d249",
+      "bytes": 11775
+    },
+    "configs/studies/parallel-20261019/reference/conditions.v1.json": {
+      "sha256": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb",
+      "bytes": 18295
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/interfaces.py": {
+      "sha256": "e6b22090c2fb0006702e7776f49a226ad20e5c0ed63236d99e8afada1b4befd3",
+      "bytes": 46869
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py": {
+      "sha256": "86bdf88573956518ed09783f4f83e161b55b2e37e661e74218842542bb7e986b",
+      "bytes": 5065
+    },
+    "papers/shared/hkustgz-paper.sty": {
+      "sha256": "473994c5eb69167576ae0427ed4696e6542d5aadd10497868e38304e7c850872",
+      "bytes": 2687
+    },
+    "papers/shared/assets/hkustgz-english.pdf": {
+      "sha256": "25f016add579c729d3447b4fca72b66fa98bd309cc82a9a4971bd61d8837f12e",
+      "bytes": 11646
+    }
+  },
+  "partition": "public-development previously exposed; administrative label isolation only, not unseen evaluation",
+  "hypothesis": "Existing counterexamples and equal-information packets can be made into an explicit BF mechanism protocol and executable E4 entry while E5 missing-information discovery has a falsifiable consumer-bound implementation contract.",
+  "paper_claim": "BF mechanism/observation/consumer mapping, rich-static negative controls, frozen E4 protocol and runnable input gate, E5 discovery/qualification/consumption contract. No paid-format or autonomous-discovery benefit claim yet.",
+  "falsifier": "Information differs across nominally equal-info arms, BF mechanisms are only renamed generic examples, static-rich is handicapped, expected labels leak to participants, or researcher-constructed expressions are relabeled Agent discovery.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/bf_interfaces.py",
+    "scripts/campaign_bf_interfaces.py",
+    "tests/agentlab/test_campaign_bf_interfaces.py",
+    "configs/studies/phase1-20261020/interfaces/",
+    "docs/research/phase1-20261020/interfaces/",
+    "papers/interface-sufficiency-20261019/"
+  ],
+  "schema_changes": [
+    "bf-interface-phase1-protocol-v1",
+    "bf-e4-participant-v1",
+    "bf-e4-evaluator-v1",
+    "bf-e4-resource-gate-v1",
+    "bf-e5-implementation-contract-v1"
+  ],
+  "targeted_tests": [
+    "reuse and hash-readback two existing counterexamples and 16 packets",
+    "same facts/schema/tool resources across E4 arms",
+    "rich-static sufficient controls retained",
+    "E5 visible assets vs independent target-label split",
+    "observation sources/units/costs and real consumer dependencies"
+  ],
+  "negative_controls": [
+    "static-rich sufficiency",
+    "uninformative observation",
+    "tampered packet or observation digest",
+    "target label leak",
+    "out-of-domain or unsupported observation"
+  ],
+  "e4": {
+    "case_count": 4,
+    "information_levels": [
+      "current",
+      "bf-rich-static",
+      "complete-raw",
+      "executable-response"
+    ],
+    "formats": [
+      "free-text",
+      "structured"
+    ],
+    "observation_regimes": [
+      "fixed",
+      "active"
+    ],
+    "prepared_inputs": 64,
+    "main_factorial_levels": [
+      "current",
+      "bf-rich-static"
+    ],
+    "additional_strong_baselines": [
+      "complete-raw",
+      "executable-response"
+    ],
+    "same_format_pair_facts_summary_assets_tools_resources": true,
+    "scoring": "future intervention judgment; expected labels evaluator-only",
+    "fixed": "no external observation; local computation of supplied facts allowed",
+    "active": "same initial per-level data and observation API across formats; newly acquired facts/costs separately logged",
+    "paid_execution": "DISABLED; budgets/provider/usage and model lease require a subsequent S0-frozen batch"
+  },
+  "e5": {
+    "scope": "contract and validator only; genuine Agent discovery, independent qualification and real-consumer experiment NOT_RUN",
+    "selection": "Agent chooses from a general legal observation catalogue, no relevant-field/target-observation labels",
+    "construction": "Agent proposes a BF relation and executable observation; no expression supplied in discovery arm",
+    "construction_baseline": "Existing human-specified headroom AST/compiler and researcher-required-field selector retained as baselines",
+    "consumer_requirement": "kernel-registered consumer plus input-observation/execution/independent-service binding; static echo or a self-signed receipt cannot establish use"
+  },
+  "cost_cap": {
+    "paid_requests": 0,
+    "native_dispatches": 0,
+    "estimated_peak_additional_bytes": 30000000,
+    "retained_output_cap_bytes": 20000000,
+    "reserve_bytes": 10000000000,
+    "finite_list": [
+      "two existing structural witness mappings",
+      "one rich-static/complete-data baseline matrix",
+      "one E4 runnable frozen protocol",
+      "one E5 implementation contract",
+      "one manuscript update"
+    ],
+    "whole_batch_peak_bytes": 900000000,
+    "preparation_wall_s": 120,
+    "verification_wall_s": 600,
+    "model": false,
+    "agent": false,
+    "native": false
+  },
+  "output_root": "docs/research/phase1-20261020/interfaces",
+  "runtime_root": "/Users/depengsu/.local/share/bf-phase1-20261020/b",
+  "dependencies": {
+    "python": "/Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "new_environments": false
+  },
+  "claim_boundary": "Public BF development computational evidence only. No hardware, unseen transfer, method benefit, or RSI claim from preparation or a current-task repair. Original ten owners/projects, Baseline, Demo, every experiment/cost/UNKNOWN and four closed H attempts stay preserved.",
+  "stop_condition": "Stop dependent execution on baseline/hash drift, model/backend ambiguity, unavailable usage, insufficient declared reserve, hidden-evaluator access, unknown native state or need to alter frozen task semantics; retain no-go and every failed/charged attempt. A legal-space infeasibility goes to the human as concrete options; independent work continues.",
+  "reproducible_command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/bfworld/src <CAD_PYTHON> -B scripts/campaign_bf_interfaces.py prepare --profile <registered-profile> --output <new-absolute-output>"
+}

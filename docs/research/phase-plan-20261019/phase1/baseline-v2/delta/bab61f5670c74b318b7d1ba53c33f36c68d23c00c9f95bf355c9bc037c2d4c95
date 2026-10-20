@@ -1,0 +1,16 @@
+
+In the executed deterministic controls, fixed-trajectory replay disagrees with the full response on 5 of 6 inputs. The conservative dependency, boundary, and exact-cache results agree on all 6. Only the unchanged input is an initial exact-cache hit. These are synthetic correctness controls; execution counts do not measure wall-time speedup.
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Input & Replay packets & Full packets & Replay valid\\
+\midrule
+unchanged & 4 & 4 & True\\
+less-energy & 4 & 2 & False\\
+higher-load & 4 & 3 & False\\
+threshold-only & 4 & 3 & True\\
+capacity-limit & 4 & 0 & False\\
+arrival-order & 4 & 2 & False\\
+\bottomrule
+\end{tabular}
+\end{center}

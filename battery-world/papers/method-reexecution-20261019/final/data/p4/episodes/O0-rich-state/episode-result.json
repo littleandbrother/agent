@@ -1,0 +1,183 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.040865148,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0497463,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "O0-rich-state",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "cache": "nvm",
+      "capacitance_f": 0.015,
+      "program": "confirmed_events",
+      "retry_s": 1,
+      "sample_period_s": 1,
+      "schema_version": "bf-o-candidate-v1",
+      "threshold_off_g": 0.01,
+      "threshold_on_g": 0.05,
+      "tx_backoff_s": 0
+    },
+    "execution": {
+      "accepted_packets": 18,
+      "case_sha256": "2eabd6028b8e72e7906041641fa543cb44d777561846955d088245bc220808d0",
+      "complete_service": "PASS",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": {
+        "errors": [],
+        "final_storage_j": 0.04636234545454709,
+        "impulse_counts": {
+          "boot": 3,
+          "sense": 18343,
+          "tx": 18,
+          "wake": 18349,
+          "write": 18
+        },
+        "ledger_rows": 11,
+        "source_integral_j": 1.368,
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "aa909e24ed3e0b4a579ad012939ee2dc56492409c4571a0857c08833863d8374",
+      "evaluator_version": "phase4-original-O-event-service-v1",
+      "execution_key": "ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6",
+      "expected_event_count": 8,
+      "false_event_sequences": [],
+      "false_keepalive_sequences": [],
+      "input_sha256": "936d397559a4908e6151d51f292b38e0e881edd592fa576a57220ce4a63fffd0",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "keepalive_gaps": [],
+      "matched_event_count": 8,
+      "origin": "phase4-new-full-response",
+      "per_event": [
+        {
+          "kind": "start",
+          "matched_seq": 1,
+          "reasons": [],
+          "receive_s": 4203.070422535211,
+          "state": 1,
+          "time_s": 4203,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 4,
+          "reasons": [],
+          "receive_s": 4560.070422535211,
+          "state": 0,
+          "time_s": 4560,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 5,
+          "reasons": [],
+          "receive_s": 7803.070422535211,
+          "state": 1,
+          "time_s": 7803,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 8,
+          "reasons": [],
+          "receive_s": 8160.070422535211,
+          "state": 0,
+          "time_s": 8160,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 9,
+          "reasons": [],
+          "receive_s": 11403.587878787977,
+          "state": 1,
+          "time_s": 11403,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 15,
+          "reasons": [],
+          "receive_s": 12060.587878787977,
+          "state": 0,
+          "time_s": 12060,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "start",
+          "matched_seq": 16,
+          "reasons": [],
+          "receive_s": 16803.587878787977,
+          "state": 1,
+          "time_s": 16803,
+          "verdict": "PASS"
+        },
+        {
+          "kind": "stop",
+          "matched_seq": 18,
+          "reasons": [],
+          "receive_s": 16980.587878787977,
+          "state": 0,
+          "time_s": 16980,
+          "verdict": "PASS"
+        }
+      ],
+      "physical_qualification": "UNKNOWN",
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6/response.json.zlib",
+      "reasons": [],
+      "response_sha256": "5de883753e37ba524d34928ee9e03c2c36e477cf3d09d16af6ff25dbe28493bf",
+      "reused": true,
+      "schema_version": "bf-o-service-v1",
+      "verdict": "PASS",
+      "world": "o0-original-service-development-v1"
+    },
+    "reason": "Judged frozen O0 case (case_sha256 2eabd602…, task o0-original-service-development-v1) against bf-o-service-contract-v1. The typed schema pins every field (const), so the frozen control is the sole legal D: C=15 mF, sample 1 s, on>0.05 g / off<0.01 g, retry 1 s, tx_backoff 0, cache nvm, program confirmed_events.\n\nTruth (rms_waveform): four >0.05 g excursions at [4200,4500], [7800,8100], [11400,12000], [16800,16920]. Power budget (ar_hardware 15 mF, ready 2.7 V/off 2.3 V; wake_sample_cache 1 uJ wake+20 uJ sense+5 uJ write) implies 1 s sampling browns out ~8766 s and ~19587 s in the two dark segments (full 10-row energy ledger), but each truth event precedes its brownout.\n\nCheck observation (response_sha256 5de883753e37…, status COMPLETE, first-six-last-six projected): boot 770.07 s/ready 772.07; first start confirmed 4203.07 (3 s of 1 s >0.05 samples), each stop 60 s after low. Exactly 18 records = 8 transitions (4 start + 4 stop) + 10 keepalives; full energy-ledger tx counts 4 (770-7200) + 4 (7200-8766) + 10 (10800-18000) = 18, matching 18 packets, all valid+accepted+ack (receiver first/last six). Keepalive spacing inside each confirmed active interval <=120 s (e.g. 4203->4323->4443->stop 4560 = 117 s); delivery at confirmation (tx_backoff 0) well inside event_delivery_s=10; records<<2048, no evictions; voltage <=3.3 V, e>=off.\n\nRetained limits: middle records 7-12 inferred only from full_count=18, full sample_runs and the complete tx ledger (not directly viewed); physical_qualification=UNKNOWN; source_calibration=UNAVAILABLE; model uses assumed port power. This is my judgment, not host acceptance, and not a complete unprojected trace claim. Every observed O-contract gate (start/stop, keepalive coverage, delivery, powered-ZOH sampling; darkness applicable) is met, so PASS.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-38dccc443d2b4373",
+  "protocol_sha256": "64ad2f9dbde97f46f77bb0b740ef5c46b9d5bb4d213d0f25b0a32cf46bdab9de",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "61372d3cbda1b596d82f331962c204d57e5447e49cb431fe08f052b415ccdfcd",
+  "spec": {
+    "condition": "rich-state",
+    "id": "O0-rich-state",
+    "kind": "D",
+    "stage": "O-transfer",
+    "world": "o0-original-service-development-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 9,
+    "gateway_chain_tip": "ebefbeac08499d085eb8de13eead502a3e8ad3ee44214ce23a09f1de77b1670b",
+    "model_submitted": true,
+    "model_tool_calls": 9,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 85.93302216700977,
+  "wall_seconds_total": 86.47042108300957
+}

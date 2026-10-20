@@ -1,0 +1,166 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.027817752,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0509238,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L2-G0-final-2",
+  "episode": "L2-G0-final-2",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 5e-05,
+      "tx_not_before_s": 6.89
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 5e-05,
+        "tx_not_before_s": 6.89
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 9.9999e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 1.2222420731083537e-20,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.0003,
+        "source_total_error_j": 0.0,
+        "step_count": 30000,
+        "time_resolution_s": 0.001,
+        "totals_j": {
+          "background_j": 3e-05,
+          "boot_j": 0.0,
+          "conversion_j": 0.0,
+          "harvest_j": 0.0003,
+          "shunt_j": 0.0,
+          "source_j": 0.0003,
+          "spill_j": 0.0001200009999998738,
+          "tx_j": 5e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "703a60187d9214bc4272175f9dd6d2122b48927ae25fd825e3a91a90008077a7",
+      "input_sha256": "27857fb430672b5b8103eeb94eb5c6e647ceffcda82103fd059102420c6a028d",
+      "job_accounting": {
+        "initial_cache_hit": false,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [
+          {
+            "action": "capture",
+            "event_id": 1,
+            "time_s": 3.0
+          }
+        ],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "volatile",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 3
+        },
+        "first_valid_receive_s": 6.891,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "c405b25f23b38a4f4538b3ce1a6f34af874d44e2ef1dacc52df091d41560fb1e",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "phase4-new-full-response",
+      "physical_qualification": "UNKNOWN",
+      "query_service": {
+        "gates": {
+          "freshness": true,
+          "query_before_reply": true,
+          "query_state_capture": true,
+          "single_query_token": true
+        },
+        "protocol": {
+          "deadline_s": 8,
+          "issued_s": 3,
+          "mapping": "Fixed seq=1, key=1, event=1 single digital query; no multiquery/security/RF qualification.",
+          "max_data_age_s": 5,
+          "nonce": "phase4-q-001",
+          "nonce_sequence": 1,
+          "single_query_only": true
+        },
+        "status": "PASS"
+      },
+      "raw_path": "/Users/depengsu/.local/share/bf-phase4-20261020/physical-cache/703a60187d9214bc4272175f9dd6d2122b48927ae25fd825e3a91a90008077a7/response.json.zlib",
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "OUTSIDE_RANGE",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 2.778,
+        "first_receive_s": 6.891,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "p4-clite-half-power-query-v1"
+    },
+    "reason": "Sources (sha256): component_record ab8c180b…b823, excitation_record d4c163ab…3481, model_law d690d8a8…3a0f; task p4-clite-half-power-query-v1, model b-transient-behavior-v1, dt 0.001 s, duration 30 s, event_s 3, contact 0.001 s, deadline 8 s, shunts []. Fingerprint: latch=volatile, C_init=0 V, C=5e-5 F, ready 1 V, off 0.2 V, vmax 2 V, boot_j 0, boot_delay 0, esr 0, output_v 1, tx 0.025 A/0.002 s, off=idle=1e-6 W, eta 1, segments [(0,30,1e-5 W)]. Legal fields only: C in [2.5e-5,1e-4], floor in [3,8].\n\nDiscrete mirror (no closed form): net 9e-9 J/tick; E_ready 2.5e-5 J → boot 2.778 s; capture at the single contact tick t=3.0 while powered; with volatile latch one reset kills it, and the model has NO pre-tx energy gate, so tx starts the instant t>=floor. Chosen floor 6.89 → e_start 6.201e-5 J: tick1 tx_j 2.5e-5, e1 3.701e-5; tick2 e_pre 3.7019e-5, loaded_v sqrt(2·3.7019e-5/5e-5)=1.2169 V>=1, post-deduct 1.2019e-5>=eoff 1e-6 → tx-complete.\n\nMargins: (i) deadline 8-6.891=1.109 s. (ii) closed form as literally specified (loaded req = output_v=1, esr 0) = 6.201e-5 - 2.5e-5 - 5e-5 ≈ -1.30e-5 J, NEGATIVE — reported, not hidden; it demands sustaining reserve and full tx energy simultaneously and is unsatisfiable for every deadline-feasible legal design (need e_start>=0.5C+5e-5, i.e. C>=3.34e-5 and t>=8.33 s at C=5e-5), so it is a formula artefact; the mandated discrete reading gives min post-deduction headroom 1.102e-5 J (22% of the 5e-5 J tx demand), confirmed by observed loaded_v 1.2169. (iii) spill 1e-4 - peak e over [3.0,6.891] (6.201e-5) = 3.799e-5 J; ledger spill_j 1.2e-4 accrues only after ~11.1 s = post-terminal decay, recorded, not diagnosed, no knob moved for it.\n\nRejected edges (arithmetic; empirically UNKNOWN, no execution spent): C=2.5e-5 → emax 5e-5 < needed 5.0499e-5, tick2 e=9e-9<eoff 5e-7 → tx-transient reset → volatile latch loss → no frame. C=1e-4 → tick2 loaded_v sqrt(2·3.7019e-5/1e-4)=0.860 V<1 → reset; would need e_start 7.5e-5 → 8.33 s > deadline. Floor 3 → tx at capture tick with e 2.7e-5, tick2 loaded_v 0.283 V → class (c)/(e) failure. Floor 7.9 → deadline margin 0.099 s, inferior maximin.\n\nObserved: 1 frame, 8 application bytes, unique event_id 1, t=6.891<=8, causal capture 3.0<tx, no duplicates. Failures retained: none this episode. UNKNOWN: physical calibration/qualification (source_calibration = SYNTHETIC_DC_CONTRACT_NOT_RF_MEASUREMENT), no fingerprint-matched retained trace, so absolute times are model-derived only (they matched within 1 tick); episode budget block absent from inspect; reference truth and final service evaluation host-side. Cost: 1 inspect, 3 acquires, 1 design check, 1 submit; 1 candidate execution, 1 distinct design.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-67259e4e2e924719",
+  "protocol_sha256": "679d3efb73f63004fe005148190ef5159f221976e8b872ec56bbcb46d886e8c3",
+  "recovery_of": null,
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "4afc99f74f5e3a38b10aaee8a5662cbd60f47b008a9a29a214d924a8d8a17429",
+  "spec": {
+    "arm": "G0",
+    "arm_id": "L2-G0",
+    "condition": "G0",
+    "id": "L2-G0-final-2",
+    "kind": "D",
+    "lineage": 2,
+    "slot": "final-2",
+    "stage": "final",
+    "world": "p4-clite-half-power-query-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "e948af8836baefa8b4d6f9e8d5b1d6a3fa9752d5f9ba3b21789cd7159ce8a89b",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 90.42400141700637,
+  "wall_seconds_total": 90.84604916599346
+}

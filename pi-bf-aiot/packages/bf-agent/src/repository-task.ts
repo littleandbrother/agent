@@ -46,7 +46,13 @@ const api = async (body: Record<string, unknown>): Promise<Record<string, unknow
 		method: "POST",
 		headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
 		body: JSON.stringify(body),
-		signal: AbortSignal.timeout(body.action === "repository_task_execute" ? 2500000 : 100000),
+		signal: AbortSignal.timeout(
+			body.action === "repository_task_execute"
+				? 2500000
+				: body.action === "repository_task_realize"
+					? 600000
+					: 100000,
+		),
 	});
 	const value = (await response.json()) as Record<string, unknown>;
 	if (!response.ok) throw Error(String(value.error ?? "DESIGN_SERVICE_ERROR"));

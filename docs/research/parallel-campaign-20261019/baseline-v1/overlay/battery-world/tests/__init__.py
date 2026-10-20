@@ -1,0 +1,2 @@
+"""Battery World validation tests."""
+

@@ -1,0 +1,758 @@
+{
+  "schema_version": "campaign-reference-protocol-v1",
+  "frozen_utc": "2026-10-19T13:02:32.947345+00:00",
+  "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "source_head": "317d40fef0137d3c1ad1873e53c3e9968b31200a",
+  "coordinator_overlay": {
+    "path": "PROJECT.yaml",
+    "sha256": "fbbe42cb7026278937f7a9c7ca6dac313e3acc8e6501ffb9262b8ea88fc9fb4a",
+    "only_change": "active_feature: null -> BFA-045-ar-b-reference",
+    "baseline_other_5543_files": "SHA256 matched before implementation"
+  },
+  "resource_caps": {
+    "runner_wall_seconds": 120,
+    "verification_wall_seconds": 300,
+    "output_bytes": 500000000,
+    "minimum_free_bytes": 5000000000,
+    "paid_model_requests": 0,
+    "native_eda_writes": 0,
+    "hardware_writes": 0
+  },
+  "task_count": 6,
+  "ar_base": {
+    "schema_version": "campaign-task-v1",
+    "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+    "partition": "public-development",
+    "model_id": "ar-light-behavior-v1",
+    "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+    "duration_s": 3600,
+    "dt_s": 1,
+    "service_start_s": 1800,
+    "source_segments": [
+      {
+        "start_s": 0,
+        "end_s": 3600,
+        "illuminance_lux": 200,
+        "power_w": 9e-05,
+        "voc_v": 3.2,
+        "mpp_ratio": 0.75
+      }
+    ],
+    "source_calibration": "UNAVAILABLE",
+    "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+    "gateway_windows": [
+      [
+        0,
+        3601
+      ]
+    ],
+    "temperature_segments": [
+      [
+        0,
+        3601,
+        22.0
+      ]
+    ],
+    "recovery_at_s": null,
+    "required_sample_period_s": 120,
+    "required_live_receive_delay_s": 10,
+    "required_first_receive_s": 1800,
+    "required_dark_report_period_s": 600,
+    "required_temperature_error_c": 1.0,
+    "max_timestamp_error_s": 60,
+    "device": {
+      "id": 271828,
+      "capacitance_f": 0.015,
+      "cap_voltage_max_v": 3.3,
+      "cap_initial_voltage_v": 0.0,
+      "rated_voltage_v": 5.5,
+      "esr_ohm": 0.3,
+      "ready_v": 2.7,
+      "off_v": 2.3,
+      "output_v": 1.8,
+      "dropout_v": 0.3,
+      "harvest_efficiency": 0.8,
+      "cold_start_voltage_v": 0.38,
+      "cold_start_power_w": 3e-06,
+      "off_power_w": 1e-06,
+      "sleep_power_w": 5e-06,
+      "boot_storage_j": 0.0001,
+      "sense_storage_j": 2e-05,
+      "write_storage_j": 5e-06,
+      "tx_storage_j": 0.00013,
+      "tx_peak_output_a": 0.008,
+      "tx_duration_s": 0.005,
+      "sample_period_s": 60,
+      "boot_delay_s": 2,
+      "upload_period_s": 1,
+      "nvm_capacity_records": 2048,
+      "nvm_persistent": true,
+      "sequence_persistent": true,
+      "clock_persistent": false,
+      "clock_ppm": 20,
+      "receiver_dedup": true,
+      "ack_drop_first_n": 0,
+      "stamp_age_fault_s": 0,
+      "temperature_bias_c": 0.1
+    },
+    "temperature_event": {
+      "threshold_c": 8,
+      "minimum_duration_s": 300,
+      "enabled": false
+    },
+    "service_semantics": {
+      "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+      "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence).",
+      "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+      "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+      "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared."
+    }
+  },
+  "ar_cases": [
+    {
+      "id": "ar-cold",
+      "task_id": "AR-cold",
+      "patch": {},
+      "expected": {
+        "first_receive": "PASS",
+        "live_service": "PASS"
+      }
+    },
+    {
+      "id": "ar-no-source",
+      "task_id": "AR-cold",
+      "patch": {
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 3600,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          }
+        ]
+      },
+      "expected": {
+        "first_receive": "FAIL"
+      }
+    },
+    {
+      "id": "ar-startup-late",
+      "task_id": "AR-cold",
+      "patch": {
+        "device": {
+          "capacitance_f": 0.1
+        }
+      },
+      "expected": {
+        "first_receive": "FAIL"
+      }
+    },
+    {
+      "id": "ar-stale",
+      "task_id": "AR-cold",
+      "patch": {
+        "device": {
+          "stamp_age_fault_s": 121
+        }
+      },
+      "expected": {
+        "first_receive": "FAIL",
+        "freshness": "FAIL"
+      }
+    },
+    {
+      "id": "ar-light-dark",
+      "task_id": "AR-light-dark",
+      "patch": {
+        "duration_s": 21600,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 7200,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 7200,
+            "end_s": 9000,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 9000,
+            "end_s": 10800,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 10800,
+            "end_s": 18000,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 18000,
+            "end_s": 19800,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 19800,
+            "end_s": 21600,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            21601
+          ]
+        ],
+        "temperature_segments": [
+          [
+            0,
+            21601,
+            22.0
+          ]
+        ]
+      },
+      "expected": {
+        "live_service": "PASS",
+        "dark_new_sampling": "PASS"
+      }
+    },
+    {
+      "id": "ar-small-storage",
+      "task_id": "AR-light-dark",
+      "patch": {
+        "duration_s": 21600,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 7200,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 7200,
+            "end_s": 9000,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 9000,
+            "end_s": 10800,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 10800,
+            "end_s": 18000,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 18000,
+            "end_s": 19800,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 19800,
+            "end_s": 21600,
+            "illuminance_lux": 50,
+            "power_w": 2e-05,
+            "voc_v": 2.6,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            21601
+          ]
+        ],
+        "temperature_segments": [
+          [
+            0,
+            21601,
+            22.0
+          ]
+        ],
+        "device": {
+          "capacitance_f": 0.001
+        }
+      },
+      "expected": {
+        "dark_new_sampling": "FAIL",
+        "gap_reporting": "PASS"
+      }
+    },
+    {
+      "id": "ar-history-nvm",
+      "task_id": "AR-history",
+      "patch": {
+        "duration_s": 50400,
+        "required_sample_period_s": 60,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 3600,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 3600,
+            "end_s": 46800,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 46800,
+            "end_s": 50400,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            3600
+          ],
+          [
+            46800,
+            50401
+          ]
+        ],
+        "recovery_at_s": 46800,
+        "temperature_segments": [
+          [
+            0,
+            5000,
+            4
+          ],
+          [
+            5000,
+            5600,
+            12
+          ],
+          [
+            5600,
+            40000,
+            4
+          ],
+          [
+            40000,
+            40900,
+            12
+          ],
+          [
+            40900,
+            50401,
+            4
+          ]
+        ],
+        "temperature_event": {
+          "enabled": true
+        }
+      },
+      "expected": {
+        "history_retention": "PASS",
+        "continuous_new_sampling": "FAIL",
+        "gap_reporting": "PASS",
+        "absolute_time": "UNKNOWN",
+        "temperature_event_coverage": "FAIL",
+        "recovery_upload": "FAIL"
+      }
+    },
+    {
+      "id": "ar-history-volatile",
+      "task_id": "AR-history",
+      "patch": {
+        "duration_s": 50400,
+        "required_sample_period_s": 60,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 3600,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 3600,
+            "end_s": 46800,
+            "illuminance_lux": 0,
+            "power_w": 0,
+            "voc_v": 0,
+            "mpp_ratio": 0.75
+          },
+          {
+            "start_s": 46800,
+            "end_s": 50400,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            3600
+          ],
+          [
+            46800,
+            50401
+          ]
+        ],
+        "recovery_at_s": 46800,
+        "temperature_segments": [
+          [
+            0,
+            5000,
+            4
+          ],
+          [
+            5000,
+            5600,
+            12
+          ],
+          [
+            5600,
+            40000,
+            4
+          ],
+          [
+            40000,
+            40900,
+            12
+          ],
+          [
+            40900,
+            50401,
+            4
+          ]
+        ],
+        "temperature_event": {
+          "enabled": true
+        },
+        "device": {
+          "nvm_persistent": false
+        }
+      },
+      "expected": {
+        "history_retention": "FAIL",
+        "continuous_new_sampling": "FAIL"
+      }
+    },
+    {
+      "id": "ar-upload-dedup",
+      "task_id": "AR-upload",
+      "patch": {
+        "duration_s": 10800,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 10800,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            3600
+          ],
+          [
+            7200,
+            10801
+          ]
+        ],
+        "temperature_segments": [
+          [
+            0,
+            10801,
+            22.0
+          ]
+        ],
+        "recovery_at_s": 7200,
+        "device": {
+          "ack_drop_first_n": 2
+        }
+      },
+      "expected": {
+        "recovery_upload": "PASS",
+        "deduplication": "PASS",
+        "history_retention": "PASS"
+      }
+    },
+    {
+      "id": "ar-upload-naive",
+      "task_id": "AR-upload",
+      "patch": {
+        "duration_s": 10800,
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 10800,
+            "illuminance_lux": 200,
+            "power_w": 9e-05,
+            "voc_v": 3.2,
+            "mpp_ratio": 0.75
+          }
+        ],
+        "gateway_windows": [
+          [
+            0,
+            3600
+          ],
+          [
+            7200,
+            10801
+          ]
+        ],
+        "temperature_segments": [
+          [
+            0,
+            10801,
+            22.0
+          ]
+        ],
+        "recovery_at_s": 7200,
+        "device": {
+          "ack_drop_first_n": 2,
+          "receiver_dedup": false
+        }
+      },
+      "expected": {
+        "deduplication": "FAIL"
+      }
+    }
+  ],
+  "b_base": {
+    "schema_version": "campaign-task-v1",
+    "partition": "public-development",
+    "model_id": "b-transient-behavior-v1",
+    "duration_s": 1,
+    "dt_s": 0.0001,
+    "event_s": 0,
+    "contact_duration_s": 0.008,
+    "deadline_s": 0.1,
+    "source_calibration": "UNAVAILABLE",
+    "source_segments": [
+      {
+        "start_s": 0,
+        "end_s": 0.02,
+        "power_w": 0.0075,
+        "compliance_v": 3.3
+      }
+    ],
+    "device": {
+      "id": 260,
+      "capacitance_f": 2.2e-05,
+      "cap_initial_voltage_v": 0,
+      "cap_voltage_max_v": 3.3,
+      "ready_v": 2.8,
+      "off_v": 1.8,
+      "output_v": 1.8,
+      "esr_ohm": 0.3,
+      "harvest_efficiency": 0.9,
+      "off_power_w": 2e-05,
+      "idle_power_w": 0.0002,
+      "boot_j": 5e-06,
+      "boot_delay_s": 0.001,
+      "tx_current_a": 0.008,
+      "tx_duration_s": 0.002,
+      "event_latch": "passive-mechanical",
+      "tx_not_before_s": 0
+    },
+    "shunts": [],
+    "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware."
+  },
+  "b_cases": [
+    {
+      "id": "b-pulse-fast",
+      "task_id": "B-pulse",
+      "patch": {},
+      "expected": {
+        "event_receive": "PASS"
+      }
+    },
+    {
+      "id": "b-pulse-slow",
+      "task_id": "B-pulse",
+      "patch": {
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 0.08,
+            "power_w": 0.001875,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "expected": {
+        "event_receive": "PASS"
+      }
+    },
+    {
+      "id": "b-esr-fail",
+      "task_id": "B-pulse",
+      "patch": {
+        "device": {
+          "esr_ohm": 150
+        }
+      },
+      "expected": {
+        "event_receive": "FAIL"
+      }
+    },
+    {
+      "id": "b-no-energy",
+      "task_id": "B-pulse",
+      "patch": {
+        "source_segments": []
+      },
+      "expected": {
+        "event_receive": "FAIL"
+      }
+    },
+    {
+      "id": "b-late-energy",
+      "task_id": "B-pulse",
+      "patch": {
+        "source_segments": [
+          {
+            "start_s": 0.09,
+            "end_s": 0.11,
+            "power_w": 0.0075,
+            "compliance_v": 3.3
+          }
+        ]
+      },
+      "expected": {
+        "event_receive": "FAIL"
+      }
+    },
+    {
+      "id": "b-latched-reset",
+      "task_id": "B-event-memory",
+      "patch": {
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ],
+        "device": {
+          "capacitance_f": 1e-05,
+          "tx_not_before_s": 0.045
+        },
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ]
+      },
+      "expected": {
+        "event_receive": "PASS",
+        "event_preserved_after_reset": "PASS"
+      }
+    },
+    {
+      "id": "b-volatile-reset",
+      "task_id": "B-event-memory",
+      "patch": {
+        "source_segments": [
+          {
+            "start_s": 0,
+            "end_s": 0.006,
+            "power_w": 0.016666666666666666,
+            "compliance_v": 3.3
+          },
+          {
+            "start_s": 0.03,
+            "end_s": 0.06,
+            "power_w": 0.003666666666666667,
+            "compliance_v": 3.3
+          }
+        ],
+        "device": {
+          "capacitance_f": 1e-05,
+          "tx_not_before_s": 0.045,
+          "event_latch": "volatile"
+        },
+        "shunts": [
+          {
+            "time_s": 0.012,
+            "energy_j": 4e-05
+          }
+        ]
+      },
+      "expected": {
+        "event_receive": "FAIL",
+        "event_preserved_after_reset": "FAIL"
+      }
+    }
+  ],
+  "qualification": {
+    "calibrated_iv": "UNKNOWN",
+    "aem10941_native_model": "NOT_OBTAINED",
+    "eco260_waveform_model": "NOT_OBTAINED",
+    "temperature_sensor_calibration": "UNKNOWN",
+    "physical_radio": "NOT_TESTED",
+    "claim": "Finite nominal public-development computations only; no product/hardware qualification or Agent/method comparison."
+  },
+  "predeclared_checks": [
+    "independent Decimal energy replay and capacitor voltage",
+    "separate producer and receiver CRC algorithms",
+    "continuous coverage, retention, gaps and time individually",
+    "actual ACK loss creates duplicate arrivals",
+    "B equal-energy ESR and event-latch interventions",
+    "source hash and immutable result seals"
+  ]
+}

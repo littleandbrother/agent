@@ -1,0 +1,97 @@
+\section{The information required by a design consumer}
+\subsection{Current verdicts and legal interventions}
+Let $T$ fix the external service and its evaluator, $w\in\W$ denote a world
+including device laws and state rules, and $d_0$ be a current design. The
+complete nominal verdict is $V_T(w,d)\in\{\mathrm{PASS},\mathrm{FAIL}\}$.
+The representation $R_{d_0}(w)$ is the information legally available at the
+current design. It may contain parameters, records, source definitions or
+traces; it need not be a scalar. A legal intervention $\delta$ produces
+$\delta(d_0)$. Comparisons below use the same $T$ and only interventions
+jointly legal in the compared worlds. A change in the success criterion is
+not a design intervention.
+
+Current-verdict sufficiency requires
+\begin{equation}
+ R_{d_0}(w)=R_{d_0}(w')\ \Longrightarrow\
+ V_T(w,d_0)=V_T(w',d_0).
+ \label{eq:current}
+\end{equation}
+Intervention sufficiency on a declared common domain $\D$ requires the
+stronger implication
+\begin{equation}
+ R_{d_0}(w)=R_{d_0}(w')\ \Longrightarrow\
+ V_T(w,\delta(d_0))=V_T(w',\delta(d_0))
+ \quad\text{for every }\delta\in\D.
+ \label{eq:intervention}
+\end{equation}
+Both are properties of a representation, consumer, world domain and task
+together. A field set sufficient for energy balance need not be sufficient
+for event retention or timestamp accuracy. Nor does either property promise
+that a finite-budget language-model procedure will use the information well.
+
+\begin{proposition}[Elementary factorization condition]
+\label{prop:factorization}
+On a fixed common legal domain, an exact prospective predictor
+$g(R_{d_0}(w),\delta)=V_T(w,\delta(d_0))$ exists if and only if the verdict
+for each $\delta$ is constant on every equivalence class of worlds sharing
+$R_{d_0}$.
+\end{proposition}
+\begin{proof}
+If $g$ exists, identical representations and the same intervention give it
+identical arguments, so their required verdicts must agree. Conversely, if
+the verdict is constant on each class, define $g$ by that class's verdict
+for the requested intervention. Constancy makes the definition independent
+of the representative world. This is an information condition; the proof
+does not establish an efficient implementation or calibrated world model.
+\end{proof}
+
+An interface can return UNKNOWN when its equivalence class contains both
+verdicts. Abstention then differs from an incorrect PASS or FAIL. We also
+distinguish this epistemic answer from INCOMPLETE, the operational outcome
+when an episode supplies no admitted final execution. Physical qualification
+UNKNOWN is a third boundary: it describes absent calibration evidence even
+when the digital verdict is well defined.
+
+\subsection{Refinement and the strong static alternative}
+Acquiring an observation $O$ refines the representation to $(R,O)$. It is
+informationally useful for a particular intervention only if it separates
+worlds whose prospective verdicts were previously ambiguous, or supplies
+another needed input to the consumer. Provenance, domain and unit checks
+establish admissibility of the value. They do not, by themselves, establish
+that the value distinguishes the relevant worlds or changes service.
+
+A complete static model is an important limiting case. If its supplied
+parameters, laws and initial state determine the execution for every legal
+$d$, then executing or reasoning about that model defines an exact $g$ on
+the stated ideal domain. A dynamic response can make a computation easier
+to inspect, and an observation can reduce the information a consumer must
+handle. Neither has an automatic informational advantage over that complete
+static model. A finite-budget comparison must measure any computational or
+operational advantage rather than infer it from the word ``executable.''
+
+This separates three interface families evaluated here. A current trace
+describes one realized behavior. A declarative static model additionally
+specifies how permitted changes affect that behavior. An executable response
+computes candidate-specific consequences. A qualified observation is a
+source-bound intermediate fact delivered through a typed edge. These are
+distinct interfaces, but their useful information can overlap completely.
+The static-grid checks and matched rich-static arm explicitly test that
+overlap~\cite{structural,tables}.
+
+\subsection{Service has several independent predicates}
+The BF service consumer combines energy feasibility, event capture, retained
+state, message validity and timing. An ordered retention witness requires
+the same event to be captured before a reset and first validly received
+afterward. A reset after delivery does not satisfy that witness. Similarly,
+matching an event identifier does not establish a correct encoded event time.
+For a confirmed event at $t^*$, receipt at $t_{\rm rx}$ and encoded stamp
+$\hat t$, an O-style service includes both
+\begin{equation}
+ 0\leq t_{\rm rx}-t^*\leq L,
+ \qquad |\hat t-t^*|\leq\epsilon,
+ \label{eq:time}
+\end{equation}
+in addition to energy and state predicates. The later experiment uses
+$L=10$ s and $\epsilon=1$ s. The receive clock and the encoded stamp are
+different quantities. Passing the first inequality cannot replace checking
+the second~\cite{otask,final}.

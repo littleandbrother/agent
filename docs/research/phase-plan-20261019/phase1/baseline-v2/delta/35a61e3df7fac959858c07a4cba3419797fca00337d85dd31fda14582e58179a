@@ -1,0 +1,127 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-049-retire-workspaces-overleaf",
+  "owner": "campaign-s0",
+  "status": "complete",
+  "started_at": "2026-10-19T14:54:14.609478+00:00",
+  "authority": "Direct user request: retire unused historical workspaces and duplicate environments, retain unique changes/experiments/billing, avoid backup accumulation, measure actual freed space; publish the two current manuscripts to the two user-specified Overleaf projects. Root/source repository commits remain unauthorized; commits/pushes only in the two Overleaf projects.",
+  "hypothesis": "Completed source workspaces and reconstructible environments can be retired after hash-bound preservation while current manuscripts can be published with bounded additional storage.",
+  "paper_claim": "None; manuscript synchronization does not strengthen scientific claims.",
+  "falsifier": "Any unique source, evidence or billing loss, preservation hash drift, incorrect manuscript mapping, remote-history overwrite, credential persistence or unsupported reclaimed-space claim.",
+  "owned_paths": [
+    "PROJECT.yaml",
+    "project/features/BFA-049-retire-workspaces-overleaf/",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019",
+    "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/campaign.git/worktrees",
+    "/Users/depengsu/.local/share/bf-agent-architecture-v2/ci-publication-20261018/clean-source",
+    "/Users/depengsu/.local/share/bf-agent-manuscripts/overleaf",
+    "/Users/depengsu/.local/share/bf-agent-maintenance/publication-20261010-j2xlka4b/source/pi-bf-aiot/node_modules",
+    "/Users/depengsu/.local/share/bf-agent-runtime/reference-cases/literature-rsi-20261008/deployment/p01-mainline-20261013/funded-resume-1791872106979043000/receiver-isolation/previous-receiver/venv",
+    "/Users/depengsu/Library/pnpm/store",
+    "/Users/depengsu/.npm/_npx"
+  ],
+  "schema_changes": [
+    "maintenance receipt only"
+  ],
+  "targeted_tests": [
+    "source inventory against frozen baseline and integrated source",
+    "unique delta preservation and restore readback",
+    "environment exact-version restore inventory",
+    "protected billing/experimental state comparison",
+    "local LaTeX compilation and remote Git HEAD/content readback"
+  ],
+  "negative_controls": [
+    "unique or cloud-placeholder data blocks removal",
+    "unmatched files retained",
+    "remote divergence blocks push",
+    "hash mismatch blocks removal"
+  ],
+  "reproducible_command": "rtk proxy python3 -B docs/storage-slimming-20261019/batch-2/review.py --verify",
+  "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2",
+  "cost_cap": {
+    "paid_requests": 0,
+    "native_solves": 0,
+    "peak_additional_bytes": 300000000,
+    "retained_output_cap_bytes": 100000000,
+    "reserve_bytes": 10000000000
+  },
+  "claim_boundary": "Actual filesystem free-space delta reported separately from directory allocations; local LaTeX success is separate from Overleaf cloud compilation. Preserve original failed/UNKNOWN records.",
+  "stop_condition": "Stop a removal on any unique unpreserved file, open use, dataless content, hash mismatch or frozen state drift; stop upload on identity/auth ambiguity or unexpected remote history.",
+  "completed_at": "2026-10-19T15:14:12.370594+00:00",
+  "results": {
+    "feature": "BFA-049-retire-workspaces-overleaf",
+    "status": "complete",
+    "started_at": "2026-10-19T14:54:14.609478+00:00",
+    "completed_at": "2026-10-19T15:14:12.370594+00:00",
+    "before_available_bytes": 11408089088,
+    "after_available_bytes": 11825012736,
+    "net_available_increase_bytes": 416923648,
+    "sum_operation_before_after_deltas_bytes": 1419681792,
+    "measurement_boundary": "Whole-batch net includes background filesystem activity and retained metadata; per-operation differences are measurements, not additive unique APFS allocation.",
+    "unique_source_delta_bytes": 319913,
+    "unique_receiver_override_bytes": 532,
+    "full_backups_created": 0,
+    "source_workspaces_retired": 3,
+    "installed_environments_retired": 2,
+    "npx_install_caches_retired": 10,
+    "pnpm_unreferenced_packages_removed": 1002,
+    "verification": "343 CI tests; 44 saved files/11 controls; 16445 recoverable source files; 59 restore samples; protected state/cost/UNKNOWN hashes unchanged; three endpoints HTTP200",
+    "model_requests_started": 0,
+    "native_dispatches": 0,
+    "overleaf_projects": [
+      {
+        "label": "rsi",
+        "project_id": "6ad5fb6e87c3ac6782d05b2c",
+        "project_url": "https://www.overleaf.com/project/6ad5fb6e87c3ac6782d05b2c",
+        "before_head": "244bb8966207050299479cf95e42c442e73ef8ca",
+        "published_head": "aeae1c44770029f9cafff94d358ca7ec944a2900",
+        "remote_head_verified": true,
+        "fetched_content_sha256": {
+          "results.tex": "bab61f5670c74b318b7d1ba53c33f36c68d23c00c9f95bf355c9bc037c2d4c95",
+          "main.tex": "2a196eb958a91972b43a2b4a513f8dbf7ca66d0ba14543851f2e6aa573722e85",
+          "paid-results.tex": "3f719bc5b24e8486f84f02804fc4b1d766399798d1af55e7a86204f697b8e061",
+          "example_paper.tex": "5a0a8ad479121e457e2fb83cfe0b58508b3d03002759b60a5ad9815edddb2d57"
+        },
+        "checkout_clean": true,
+        "local_compile": "PASS",
+        "pages": 3,
+        "cloud_compile": "NOT_RUN",
+        "credentials_persisted": false
+      },
+      {
+        "label": "interface",
+        "project_id": "6ad5fbda856b284d5d917ffd",
+        "project_url": "https://www.overleaf.com/project/6ad5fbda856b284d5d917ffd",
+        "before_head": "a188aedf3ec4642ce26f63ee57d36c27e8972cb3",
+        "published_head": "f51db4bcc90c9884bf409309bd1471fda8fffcfd",
+        "remote_head_verified": true,
+        "fetched_content_sha256": {
+          "main.tex": "05692f02e9bca1ab0bb38ac0536404acf07ad66b6ef41ed1d261a1de0ebfad4b",
+          "example_paper.tex": "5a0a8ad479121e457e2fb83cfe0b58508b3d03002759b60a5ad9815edddb2d57"
+        },
+        "checkout_clean": true,
+        "local_compile": "PASS",
+        "pages": 3,
+        "cloud_compile": "NOT_RUN",
+        "credentials_persisted": false
+      }
+    ],
+    "next_authorized_work": "User supplied 2608.31100v1.pdf; apply reference layout and official HKUST(GZ) logo to both manuscripts under a new feature."
+  },
+  "evidence": [
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/REPORT.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/summary.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/verification.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/retirement-readback.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/restore-sampling.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/init.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019/batch-2/overleaf-published.json"
+  ]
+}

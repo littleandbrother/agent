@@ -1,0 +1,1261 @@
+{
+  "O0_task_count": 1,
+  "O0_actual_episodes": 3,
+  "O0_requests": 18,
+  "model_identity_scope": "Existing SDK/config hashes; provider-reported deepseek-flash alias only; pinned weights UNKNOWN",
+  "O0_settled_upper_usd": "0.1579020",
+  "shared_candidate_rich_response": "5de883753e37ba524d34928ee9e03c2c36e477cf3d09d16af6ff25dbe28493bf",
+  "shared_candidate_rich_execution_key": "ff79ef443ba351f263b918cdfdabd431db0fa6d82030b1ed712881a2aa790cc6",
+  "rows": [
+    {
+      "episode": "O0-candidate",
+      "complete_O_event_service": "PASS",
+      "participant_judgment": "UNKNOWN",
+      "wrong_service_judgment": true,
+      "requests": 8,
+      "upper_usd": 0.0760389,
+      "result_path": "/Users/depengsu/.local/share/bf-phase4-20261020/episodes/O0-candidate/episode-result.json",
+      "result_sha256": "8b414582fa8410135f1c514fd9e0f0e087f9a52e0d62a5b56f07d12a4fad3b4d"
+    },
+    {
+      "episode": "O0-fixed-periodic",
+      "complete_O_event_service": "FAIL",
+      "participant_judgment": "FAIL",
+      "wrong_service_judgment": false,
+      "requests": 5,
+      "upper_usd": 0.0321168,
+      "result_path": "/Users/depengsu/.local/share/bf-phase4-20261020/episodes/O0-fixed-periodic/episode-result.json",
+      "result_sha256": "c80a3638301d17c7c3045c292b61f3e6e05d78487abbe2e5698d53afe5543b71"
+    },
+    {
+      "episode": "O0-rich-state",
+      "complete_O_event_service": "PASS",
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": false,
+      "requests": 5,
+      "upper_usd": 0.0497463,
+      "result_path": "/Users/depengsu/.local/share/bf-phase4-20261020/episodes/O0-rich-state/episode-result.json",
+      "result_sha256": "d14a13a4f5d068cdf88e6decab357bec672f4a86f58f881e52de03c91eccc669"
+    }
+  ],
+  "checked_alternatives": [
+    {
+      "tool_number": 8,
+      "candidate": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "response_sha256": "5de883753e37ba524d34928ee9e03c2c36e477cf3d09d16af6ff25dbe28493bf",
+      "first_record": {
+        "kind": "start",
+        "last_sample_s": 4202.070422535211,
+        "observed_s": 4203.070422535211,
+        "seq": 1,
+        "stamp_s": 4203.139042535211,
+        "state": 1,
+        "time_known": true
+      }
+    },
+    {
+      "tool_number": 9,
+      "candidate": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1.5,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "response_sha256": "07e8e4a16d4bb863cb533a6a21ce633612d4d9a6d429cf832ef85d12678ea3b7",
+      "first_record": {
+        "kind": "start",
+        "last_sample_s": 4202.570422535211,
+        "observed_s": 4204.070422535211,
+        "seq": 1,
+        "stamp_s": 4204.139062535211,
+        "state": 1,
+        "time_known": true
+      }
+    }
+  ],
+  "alternative_first_timestamp_error_s": 1.1390625352114512,
+  "participant_reason_verbatim": "输入（全部 acquire）：task=2eabd6…（ar_task+design_space），ar_hardware=5635bb…，photovoltaic_source=76d3ff…，rms_waveform=eb1ab5…，wake_sample_cache=08ddbf…（status=PROPOSED_IDEAL_DIGITAL_NOT_CALIBRATED），model_law=080e8d…。导出常量：C 固定 15 mF（design_space 单值），e_off=39.675 mJ、e_on=54.675 mJ、e_max=81.675 mJ、boot 阈值 54.775 mJ；收获 72/16/0 µW（光源段 0-7200/10800-18000、9000-10800/19800-21600、7200-9000/18000-19800），采样成本 26 µJ（wake 1 + sense 20 + write 5），上电背景 5.5 µW（sleep 5 + standby 0.5）。\n\n设计依据：服务要求“每次 start/stop + 活跃期连续 keepalive + ACK 后才清除待发 + 记录须跨复位存活”，故 program=confirmed_events、cache=nvm（volatile 会在掉电丢失 pending/seq）；阈值直接取服务阈值 on=0.05 / off=0.01（两者均在合法域内且 off<on），严格比较下 0.08>0.05、0.005<0.01，避开“相等即复位计时器”的歧义；tx_backoff_s=0、retry_s=1 s 使确认后同拍发送，投递延迟≈采样滞后；sample_period_s=1 s 使 3 s/60 s 连续窗落在采样栅格上（3/1、60/1 为整数），把确认滞后压到 <1 s。\n\n观察（check #1，candidate_sha256=011736fe…，response 完整度声明为 first-six-last-six 投影，非完整原始轨迹）：770.07 s 首次 boot，772.07 s 就绪并同步；18 条记录 seq 1–18 全为 accepted=true / ack=true / reason=\"live\" / valid=true（无 stale、无 duplicate、无重传）；启动确认 4203.07、停止 4560.07（真值 4203/4560，滞后 0.07 s），7803.07、8160 左右，11403.59、12060.59（真值 11403/12060，滞后 0.59 s），16803.59、16980.59（真值 16803/16980，滞后 0.59 s），全部 ≤1 s；活跃期内 keepalive 间隔恰 120 s，活跃期外无 keepalive；两次掉电 pending_lost=0、restored_active=false，seq 跨复位单调。\n\n保留的失败/未知：check #2（candidate 6d98fe4d…，sample_period=1.5 s）无掉电、9 段连续采样、18 条记录全 live/ACK，但每次确认滞后约 1.07 s（4204.07 对 4203；4561.07 对 4560；16804.07 对 16803；16981.07 对 16980），越过冻结的 event_time_error_s=1，且暗段末能量仅高于 e_off 约 50 µJ；故按其时序闸门记为失败对照，未采用。所选 P=1 s 方案在两次 1800 s 黑暗段各掉电一次（8766.18 s、19587.64 s，末次 reboot 20814.16 s / ready 20816.16 s），暗段内采样中断约 20 min，而合法 O 程序无 gap/中断记录种类，任务 service_semantics.gap 要求的“以最后耐久观测与新同步括起未观测区间”无法发出；两次中断均落在静默暗窗、不与任何已确认活跃区间相交，因此没有漏掉 start/stop 或破坏 keepalive 覆盖。另外 required_first_receive_s=1800 与 required_dark_report_period_s=600 在两种合法程序下都不可达（confirmed_events 在首个确认事件 4203 s 前无记录，而活跃期外发 keepalive 本身判失败；periodic_snapshot 则完全没有 start/stop），源的 source_calibration=UNAVAILABLE、physical_qualification=UNKNOWN（PV/PMIC/振动/standby 均为假定理想）。\n\n结论：事件检测、活跃期 keepalive、live+ACK 投递、nvm 跨复位保留与序号单调在观察到的模型运行内成立；但存在未声明的暗期未观测中断、上述两项 AR 遗留上报项不可达、且物理资格未知，因此我不宣称验收通过，服务判定保留 UNKNOWN。参考真值与最终服务验收、完整响应均在宿主侧，本响应为投影观测，不构成硬件、统计优势、迁移或 RSI 主张。",
+  "participant_reason_scope": "Original model testimony; numerical claims are not silently promoted to author-verified physics.",
+  "host_incident": {
+    "failed": 3,
+    "censored": 1,
+    "requests": 21,
+    "settled_upper_usd": "0.1318473",
+    "attempts": [
+      {
+        "episode": "L1-G0-h1-selection-b-pulse-fast",
+        "status": "INCOMPLETE_OR_STOPPED",
+        "errors": [
+          {
+            "error": "KeyError: 'trace'",
+            "number": 5
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 6
+          }
+        ],
+        "candidates": [
+          {
+            "action": "check",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "submit",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          }
+        ],
+        "submission_file_exists": false,
+        "requests": 5,
+        "settled_upper_usd": 0.0389517,
+        "episode_result_sha256": "b97b1ac5ee49be49dc24cbe1b17f2827a4f82308a2cc0cbeae4c933236c1c050",
+        "gateway_trace_sha256": "2a9c156a2702982a51b3fae9e688117d337c6bb24eb3851d20ab2850bf46d751"
+      },
+      {
+        "episode": "L1-G0-h2-selection-b-pulse-fast",
+        "status": "INCOMPLETE_OR_STOPPED",
+        "errors": [
+          {
+            "error": "KeyError: 'trace'",
+            "number": 5
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 6
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 7
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 8
+          }
+        ],
+        "candidates": [
+          {
+            "action": "check",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "check",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "submit",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "submit",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          }
+        ],
+        "submission_file_exists": false,
+        "requests": 7,
+        "settled_upper_usd": 0.0352728,
+        "episode_result_sha256": "82c2dd72730d51d14baf9ffa99370d1f5f0a73d1d6ac60629dd96e80e6b8e779",
+        "gateway_trace_sha256": "5b3cb961828a875799f1756a10b419f9381373229385eb1219e613a1769946c8"
+      },
+      {
+        "episode": "L1-G1-h1-selection-b-pulse-fast",
+        "status": "INCOMPLETE_OR_STOPPED",
+        "errors": [
+          {
+            "error": "KeyError: 'trace'",
+            "number": 5
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 6
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 7
+          },
+          {
+            "error": "KeyError: 'trace'",
+            "number": 8
+          }
+        ],
+        "candidates": [
+          {
+            "action": "check",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "check",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "submit",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          },
+          {
+            "action": "submit",
+            "candidate": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0
+            }
+          }
+        ],
+        "submission_file_exists": false,
+        "requests": 7,
+        "settled_upper_usd": 0.049752,
+        "episode_result_sha256": "650dd69d8612e79bcaf2a384ec5e7c329edd91cc20dc0028891ea45b291839dd",
+        "gateway_trace_sha256": "172cf94cb633a9109f033b35c245950bd6082ab6928dbfee0bdf2abba518d4e0"
+      },
+      {
+        "episode": "L1-G1-h2-selection-b-pulse-fast",
+        "status": "INCOMPLETE_OR_STOPPED",
+        "errors": [],
+        "candidates": [],
+        "submission_file_exists": false,
+        "requests": 2,
+        "settled_upper_usd": 0.0078708,
+        "episode_result_sha256": "0261ba6b799fe4c1d2d662b39f8a6730d695bec780a2c702a56d934f74f39c82",
+        "gateway_trace_sha256": "0655cda0fdddec3bf189e464372e85826140c7892c9265e04db87b08e6239433"
+      }
+    ]
+  },
+  "closed_analysis": {
+    "status": "CLOSED_DESCRIPTIVE_ANALYSIS",
+    "actual_episodes": 77,
+    "canonical_cells": 73,
+    "actual_results_sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+    "final_details_sha256": "d2fe0035acfa7826c9526efd4118f8cb070b51a125ab8f23f9c210a896c4574d",
+    "stages_all_actual": {
+      "O-transfer": {
+        "episodes": 3,
+        "requests": 18,
+        "settled_upper_usd": "0.1579020",
+        "summed_wall_s": 240.41833379102172
+      },
+      "final": {
+        "episodes": 27,
+        "requests": 130,
+        "settled_upper_usd": "1.337769299999999950",
+        "summed_wall_s": 2781.5980335830827
+      },
+      "formation": {
+        "episodes": 1,
+        "requests": 3,
+        "settled_upper_usd": "0.0269157",
+        "summed_wall_s": 38.72329362499295
+      },
+      "proposal": {
+        "episodes": 12,
+        "requests": 43,
+        "settled_upper_usd": "0.449139899999999997",
+        "summed_wall_s": 862.9457078340929
+      },
+      "selection": {
+        "episodes": 34,
+        "requests": 173,
+        "settled_upper_usd": "1.204995899999999974",
+        "summed_wall_s": 2027.9541152039892
+      }
+    },
+    "G1_formation_cost": {
+      "episodes": 1,
+      "requests": 3,
+      "settled_upper_usd": "0.0269157",
+      "summed_wall_s": 38.72329362499295
+    },
+    "all_12_H_cost": {
+      "episodes": 12,
+      "requests": 43,
+      "settled_upper_usd": "0.449139899999999997",
+      "summed_wall_s": 862.9457078340929
+    },
+    "selection_effective": {
+      "cells": 30,
+      "PASS": 30,
+      "submitted_FAIL": 0,
+      "incomplete": 0,
+      "nominal_service_judgment_disagreements": 0
+    },
+    "final_arms": {
+      "H0": {
+        "cells": 9,
+        "PASS": 7,
+        "submitted_FAIL": 1,
+        "incomplete": 1,
+        "nominal_service_judgment_disagreements": 1,
+        "final_cost": {
+          "episodes": 9,
+          "requests": 45,
+          "settled_upper_usd": "0.341675099999999984",
+          "summed_wall_s": 714.2584961240354
+        },
+        "selection_plus_final_cost": {
+          "episodes": 15,
+          "requests": 76,
+          "settled_upper_usd": "0.515476499999999976",
+          "summed_wall_s": 1032.4506245820085
+        }
+      },
+      "G0": {
+        "cells": 9,
+        "PASS": 6,
+        "submitted_FAIL": 1,
+        "incomplete": 2,
+        "nominal_service_judgment_disagreements": 1,
+        "final_cost": {
+          "episodes": 9,
+          "requests": 40,
+          "settled_upper_usd": "0.480098099999999975",
+          "summed_wall_s": 1013.8718547499739
+        },
+        "full_pipeline_cost_including_incident_and_formation": {
+          "requests": 135,
+          "settled_upper_usd": "1.2585825",
+          "summed_wall_s": 2373.9604895800294
+        },
+        "effective_pipeline_cost_excluding_only_four_host_incidents": {
+          "requests": 123,
+          "settled_upper_usd": "1.1843580"
+        }
+      },
+      "G1": {
+        "cells": 9,
+        "PASS": 8,
+        "submitted_FAIL": 0,
+        "incomplete": 1,
+        "nominal_service_judgment_disagreements": 0,
+        "final_cost": {
+          "episodes": 9,
+          "requests": 45,
+          "settled_upper_usd": "0.515996099999999991",
+          "summed_wall_s": 1053.4676827090734
+        },
+        "full_pipeline_cost_including_incident_and_formation": {
+          "requests": 138,
+          "settled_upper_usd": "1.24476179999999995",
+          "summed_wall_s": 2304.81003608412
+        },
+        "effective_pipeline_cost_excluding_only_four_host_incidents": {
+          "requests": 129,
+          "settled_upper_usd": "1.18713899999999991"
+        }
+      }
+    },
+    "final_tasks": {
+      "p4-bf-stretched-port-window-v1": {
+        "H0": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        },
+        "G0": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        },
+        "G1": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        }
+      },
+      "p4-clite-half-power-query-v1": {
+        "H0": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        },
+        "G0": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        },
+        "G1": {
+          "cells": 3,
+          "PASS": 3,
+          "submitted_FAIL": 0,
+          "incomplete": 0,
+          "nominal_service_judgment_disagreements": 0
+        }
+      },
+      "p4-o-unexposed-waveform-v1": {
+        "H0": {
+          "cells": 3,
+          "PASS": 1,
+          "submitted_FAIL": 1,
+          "incomplete": 1,
+          "nominal_service_judgment_disagreements": 1
+        },
+        "G0": {
+          "cells": 3,
+          "PASS": 0,
+          "submitted_FAIL": 1,
+          "incomplete": 2,
+          "nominal_service_judgment_disagreements": 1
+        },
+        "G1": {
+          "cells": 3,
+          "PASS": 2,
+          "submitted_FAIL": 0,
+          "incomplete": 1,
+          "nominal_service_judgment_disagreements": 0
+        }
+      }
+    },
+    "lineage_groups": {
+      "L1-G0": {
+        "final_requests": 12,
+        "final_usd": 0.14715689999999998,
+        "final_wall_s": 340.92654845898505,
+        "incomplete": 1,
+        "judgment_disagreements": 0,
+        "passes": 2,
+        "submitted_failures": 0
+      },
+      "L1-G1": {
+        "final_requests": 16,
+        "final_usd": 0.200664,
+        "final_wall_s": 383.6325111660408,
+        "incomplete": 0,
+        "judgment_disagreements": 0,
+        "passes": 3,
+        "submitted_failures": 0
+      },
+      "L1-H0": {
+        "final_requests": 15,
+        "final_usd": 0.1046862,
+        "final_wall_s": 208.55445816699648,
+        "incomplete": 0,
+        "judgment_disagreements": 1,
+        "passes": 2,
+        "submitted_failures": 1
+      },
+      "L2-G0": {
+        "final_requests": 14,
+        "final_usd": 0.1797066,
+        "final_wall_s": 359.86150633200305,
+        "incomplete": 1,
+        "judgment_disagreements": 0,
+        "passes": 2,
+        "submitted_failures": 0
+      },
+      "L2-G1": {
+        "final_requests": 13,
+        "final_usd": 0.1283076,
+        "final_wall_s": 313.9287772930402,
+        "incomplete": 1,
+        "judgment_disagreements": 0,
+        "passes": 2,
+        "submitted_failures": 0
+      },
+      "L2-H0": {
+        "final_requests": 17,
+        "final_usd": 0.12855809999999998,
+        "final_wall_s": 252.10021399901598,
+        "incomplete": 0,
+        "judgment_disagreements": 0,
+        "passes": 3,
+        "submitted_failures": 0
+      },
+      "L3-G0": {
+        "final_requests": 14,
+        "final_usd": 0.1532346,
+        "final_wall_s": 313.08379995898576,
+        "incomplete": 0,
+        "judgment_disagreements": 1,
+        "passes": 2,
+        "submitted_failures": 1
+      },
+      "L3-G1": {
+        "final_requests": 16,
+        "final_usd": 0.18702449999999998,
+        "final_wall_s": 355.90639424999245,
+        "incomplete": 0,
+        "judgment_disagreements": 0,
+        "passes": 3,
+        "submitted_failures": 0
+      },
+      "L3-H0": {
+        "final_requests": 13,
+        "final_usd": 0.1084308,
+        "final_wall_s": 253.60382395802299,
+        "incomplete": 1,
+        "judgment_disagreements": 0,
+        "passes": 2,
+        "submitted_failures": 0
+      }
+    },
+    "incomplete_final_cells": [
+      {
+        "episode": "L1-G0-final-3",
+        "last_assistant_metadata": {
+          "content_types": [
+            "thinking"
+          ],
+          "error": null,
+          "stop_reason": "length",
+          "usage": {
+            "cacheRead": 9856,
+            "cacheWrite": 0,
+            "cost": {
+              "cacheRead": 5.9136e-05,
+              "cacheWrite": 0,
+              "input": 0.0053688,
+              "output": 0.0393216,
+              "total": 0.044749536
+            },
+            "input": 17896,
+            "output": 32768,
+            "reasoning": 32768,
+            "totalTokens": 60520
+          }
+        },
+        "response_token_censored": true
+      },
+      {
+        "episode": "L2-G0-final-3",
+        "last_assistant_metadata": {
+          "content_types": [
+            "thinking"
+          ],
+          "error": null,
+          "stop_reason": "length",
+          "usage": {
+            "cacheRead": 6656,
+            "cacheWrite": 0,
+            "cost": {
+              "cacheRead": 3.9936e-05,
+              "cacheWrite": 0,
+              "input": 0.0053625,
+              "output": 0.0393216,
+              "total": 0.044724035999999995
+            },
+            "input": 17875,
+            "output": 32768,
+            "reasoning": 32768,
+            "totalTokens": 57299
+          }
+        },
+        "response_token_censored": true
+      },
+      {
+        "episode": "L2-G1-final-3",
+        "last_assistant_metadata": {
+          "content_types": [
+            "thinking"
+          ],
+          "error": null,
+          "stop_reason": "length",
+          "usage": {
+            "cacheRead": 12160,
+            "cacheWrite": 0,
+            "cost": {
+              "cacheRead": 7.296e-05,
+              "cacheWrite": 0,
+              "input": 0.005385,
+              "output": 0.0393216,
+              "total": 0.044779559999999996
+            },
+            "input": 17950,
+            "output": 32768,
+            "reasoning": 32768,
+            "totalTokens": 62878
+          }
+        },
+        "response_token_censored": true
+      },
+      {
+        "episode": "L3-H0-final-3",
+        "last_assistant_metadata": {
+          "content_types": [
+            "thinking"
+          ],
+          "error": null,
+          "stop_reason": "length",
+          "usage": {
+            "cacheRead": 4480,
+            "cacheWrite": 0,
+            "cost": {
+              "cacheRead": 2.688e-05,
+              "cacheWrite": 0,
+              "input": 0.0053663999999999995,
+              "output": 0.0393216,
+              "total": 0.04471488
+            },
+            "input": 17888,
+            "output": 32768,
+            "reasoning": 32768,
+            "totalTokens": 55136
+          }
+        },
+        "response_token_censored": true
+      }
+    ],
+    "all_final_status_counts": {
+      "ACTUAL_PROSPECTIVE_SUBMITTED": 23,
+      "INCOMPLETE_OR_STOPPED": 4
+    },
+    "all_accounting": {
+      "requests": 367,
+      "settled_upper_usd": 3.1767228,
+      "wall_s": 5951.6394840371795
+    },
+    "host_incident_overhead": {
+      "requests": 21,
+      "settled_upper_usd": 0.1318473,
+      "wall_s": 216.6547333339986
+    },
+    "default_H0_changed": false,
+    "actual_new_scientific_executions": 25,
+    "analysis_new_provider_requests": 0,
+    "analysis_new_scientific_executions": 0,
+    "physical_qualification": "UNKNOWN",
+    "AR_product_acceptance": "NOT_ACCEPTED",
+    "interpretation": "Descriptive results from three descendant-lineage pairs conditional on one G1 formation. No global H or improver promotion; no independent G1-training replication, physical qualification, or demonstrated RSI. Incomplete cells remain in denominators and all cost totals.",
+    "cost_boundary": "All actual requests at fixed registered usage rates, including four original host incidents and four recoveries, unselected children and selection cells, G1 formation and censored calls. Not invoices or full end-to-end costs; Codex assistance and historical acquisition remain unpriced.",
+    "analysis_code_sha256": "08ea12c172e837605cfff0bd114111d1e5bf6e089b03cd35ae4969641955a689"
+  },
+  "final_O_submissions": [
+    {
+      "episode": "L1-H0-final-3",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": "PASS",
+      "execution_key": "d110e439a24ecf1db225a46178809a9705af638eeee8fce24a94b1123f820c99",
+      "service": "FAIL",
+      "O_events": {
+        "accepted_packets": 18,
+        "expected": 8,
+        "keepalive_gaps": [],
+        "matched": 8,
+        "pass_count": 6,
+        "per_event": [
+          {
+            "absolute_stamp_error_s": 0.7650000000003274,
+            "encoded_stamp_s": 4241.14,
+            "kind": "start",
+            "matched_seq": 1,
+            "reasons": [],
+            "receive_s": 4241.070422535211,
+            "state": 1,
+            "time_s": 4240.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.5219999999999345,
+            "encoded_stamp_s": 4589.147,
+            "kind": "stop",
+            "matched_seq": 4,
+            "reasons": [],
+            "receive_s": 4589.070422535211,
+            "state": 0,
+            "time_s": 4588.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.8370000000004438,
+            "encoded_stamp_s": 7863.212,
+            "kind": "start",
+            "matched_seq": 5,
+            "reasons": [],
+            "receive_s": 7863.070422535211,
+            "state": 1,
+            "time_s": 7862.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.5939999999991414,
+            "encoded_stamp_s": 8207.219,
+            "kind": "stop",
+            "matched_seq": 8,
+            "reasons": [],
+            "receive_s": 8207.070422535211,
+            "state": 0,
+            "time_s": 8206.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.24099999999998545,
+            "encoded_stamp_s": 11446.616,
+            "kind": "start",
+            "matched_seq": 9,
+            "reasons": [],
+            "receive_s": 11446.587878787977,
+            "state": 1,
+            "time_s": 11446.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 1.004000000000815,
+            "encoded_stamp_s": 12078.629,
+            "kind": "stop",
+            "matched_seq": 15,
+            "reasons": [
+              "WRONG_EVENT_TIME"
+            ],
+            "receive_s": 12078.587878787977,
+            "state": 0,
+            "time_s": 12077.625,
+            "verdict": "FAIL"
+          },
+          {
+            "absolute_stamp_error_s": 0.3489999999983411,
+            "encoded_stamp_s": 16844.724,
+            "kind": "start",
+            "matched_seq": 16,
+            "reasons": [],
+            "receive_s": 16844.587878787977,
+            "state": 1,
+            "time_s": 16844.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 1.102999999999156,
+            "encoded_stamp_s": 17044.728,
+            "kind": "stop",
+            "matched_seq": 18,
+            "reasons": [
+              "WRONG_EVENT_TIME"
+            ],
+            "receive_s": 17044.587878787977,
+            "state": 0,
+            "time_s": 17043.625,
+            "verdict": "FAIL"
+          }
+        ]
+      },
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": true
+    },
+    {
+      "episode": "L1-G1-final-3",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 0.25,
+        "sample_period_s": 0.75,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": "PASS",
+      "execution_key": "a676a8beb8ec04bd6e9230c81584a9e59965b26e5a67f853da76a010d65b34b2",
+      "service": "PASS",
+      "O_events": {
+        "accepted_packets": 18,
+        "expected": 8,
+        "keepalive_gaps": [],
+        "matched": 8,
+        "pass_count": 8,
+        "per_event": [
+          {
+            "absolute_stamp_error_s": 0.5150000000003274,
+            "encoded_stamp_s": 4240.89,
+            "kind": "start",
+            "matched_seq": 1,
+            "reasons": [],
+            "receive_s": 4240.820422535211,
+            "state": 1,
+            "time_s": 4240.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2719999999999345,
+            "encoded_stamp_s": 4588.897,
+            "kind": "stop",
+            "matched_seq": 4,
+            "reasons": [],
+            "receive_s": 4588.820422535211,
+            "state": 0,
+            "time_s": 4588.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.33700000000044383,
+            "encoded_stamp_s": 7862.712,
+            "kind": "start",
+            "matched_seq": 5,
+            "reasons": [],
+            "receive_s": 7862.570422535211,
+            "state": 1,
+            "time_s": 7862.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.34399999999914144,
+            "encoded_stamp_s": 8206.969,
+            "kind": "stop",
+            "matched_seq": 8,
+            "reasons": [],
+            "receive_s": 8206.820422535211,
+            "state": 0,
+            "time_s": 8206.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.12000000000080036,
+            "encoded_stamp_s": 11446.495,
+            "kind": "start",
+            "matched_seq": 9,
+            "reasons": [],
+            "receive_s": 11446.466666666684,
+            "state": 1,
+            "time_s": 11446.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.3819999999996071,
+            "encoded_stamp_s": 12078.007,
+            "kind": "stop",
+            "matched_seq": 15,
+            "reasons": [],
+            "receive_s": 12077.966666666684,
+            "state": 0,
+            "time_s": 12077.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.727999999999156,
+            "encoded_stamp_s": 16845.103,
+            "kind": "start",
+            "matched_seq": 16,
+            "reasons": [],
+            "receive_s": 16844.96666666668,
+            "state": 1,
+            "time_s": 16844.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2319999999999709,
+            "encoded_stamp_s": 17043.857,
+            "kind": "stop",
+            "matched_seq": 18,
+            "reasons": [],
+            "receive_s": 17043.71666666668,
+            "state": 0,
+            "time_s": 17043.625,
+            "verdict": "PASS"
+          }
+        ]
+      },
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": false
+    },
+    {
+      "episode": "L2-H0-final-3",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 5,
+        "sample_period_s": 0.75,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": "PASS",
+      "execution_key": "745c623b765b8addbd0b40cb7f038f713b49d91ad57c48950eaf1473138d204f",
+      "service": "PASS",
+      "O_events": {
+        "accepted_packets": 18,
+        "expected": 8,
+        "keepalive_gaps": [],
+        "matched": 8,
+        "pass_count": 8,
+        "per_event": [
+          {
+            "absolute_stamp_error_s": 0.5150000000003274,
+            "encoded_stamp_s": 4240.89,
+            "kind": "start",
+            "matched_seq": 1,
+            "reasons": [],
+            "receive_s": 4240.820422535211,
+            "state": 1,
+            "time_s": 4240.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2719999999999345,
+            "encoded_stamp_s": 4588.897,
+            "kind": "stop",
+            "matched_seq": 4,
+            "reasons": [],
+            "receive_s": 4588.820422535211,
+            "state": 0,
+            "time_s": 4588.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.33700000000044383,
+            "encoded_stamp_s": 7862.712,
+            "kind": "start",
+            "matched_seq": 5,
+            "reasons": [],
+            "receive_s": 7862.570422535211,
+            "state": 1,
+            "time_s": 7862.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.34399999999914144,
+            "encoded_stamp_s": 8206.969,
+            "kind": "stop",
+            "matched_seq": 8,
+            "reasons": [],
+            "receive_s": 8206.820422535211,
+            "state": 0,
+            "time_s": 8206.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.12000000000080036,
+            "encoded_stamp_s": 11446.495,
+            "kind": "start",
+            "matched_seq": 9,
+            "reasons": [],
+            "receive_s": 11446.466666666684,
+            "state": 1,
+            "time_s": 11446.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.3819999999996071,
+            "encoded_stamp_s": 12078.007,
+            "kind": "stop",
+            "matched_seq": 15,
+            "reasons": [],
+            "receive_s": 12077.966666666684,
+            "state": 0,
+            "time_s": 12077.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.727999999999156,
+            "encoded_stamp_s": 16845.103,
+            "kind": "start",
+            "matched_seq": 16,
+            "reasons": [],
+            "receive_s": 16844.96666666668,
+            "state": 1,
+            "time_s": 16844.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2319999999999709,
+            "encoded_stamp_s": 17043.857,
+            "kind": "stop",
+            "matched_seq": 18,
+            "reasons": [],
+            "receive_s": 17043.71666666668,
+            "state": 0,
+            "time_s": 17043.625,
+            "verdict": "PASS"
+          }
+        ]
+      },
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": false
+    },
+    {
+      "episode": "L3-G0-final-3",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 0.25,
+        "sample_period_s": 1,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": "PASS",
+      "execution_key": "1c61e55d9499260863de9944bf3999ab42cfb69f5d924691a7ce42aca827fdd6",
+      "service": "FAIL",
+      "O_events": {
+        "accepted_packets": 18,
+        "expected": 8,
+        "keepalive_gaps": [],
+        "matched": 8,
+        "pass_count": 6,
+        "per_event": [
+          {
+            "absolute_stamp_error_s": 0.7650000000003274,
+            "encoded_stamp_s": 4241.14,
+            "kind": "start",
+            "matched_seq": 1,
+            "reasons": [],
+            "receive_s": 4241.070422535211,
+            "state": 1,
+            "time_s": 4240.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.5219999999999345,
+            "encoded_stamp_s": 4589.147,
+            "kind": "stop",
+            "matched_seq": 4,
+            "reasons": [],
+            "receive_s": 4589.070422535211,
+            "state": 0,
+            "time_s": 4588.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.8370000000004438,
+            "encoded_stamp_s": 7863.212,
+            "kind": "start",
+            "matched_seq": 5,
+            "reasons": [],
+            "receive_s": 7863.070422535211,
+            "state": 1,
+            "time_s": 7862.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.5939999999991414,
+            "encoded_stamp_s": 8207.219,
+            "kind": "stop",
+            "matched_seq": 8,
+            "reasons": [],
+            "receive_s": 8207.070422535211,
+            "state": 0,
+            "time_s": 8206.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.24099999999998545,
+            "encoded_stamp_s": 11446.616,
+            "kind": "start",
+            "matched_seq": 9,
+            "reasons": [],
+            "receive_s": 11446.587878787977,
+            "state": 1,
+            "time_s": 11446.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 1.004000000000815,
+            "encoded_stamp_s": 12078.629,
+            "kind": "stop",
+            "matched_seq": 15,
+            "reasons": [
+              "WRONG_EVENT_TIME"
+            ],
+            "receive_s": 12078.587878787977,
+            "state": 0,
+            "time_s": 12077.625,
+            "verdict": "FAIL"
+          },
+          {
+            "absolute_stamp_error_s": 0.3489999999983411,
+            "encoded_stamp_s": 16844.724,
+            "kind": "start",
+            "matched_seq": 16,
+            "reasons": [],
+            "receive_s": 16844.587878787977,
+            "state": 1,
+            "time_s": 16844.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 1.102999999999156,
+            "encoded_stamp_s": 17044.728,
+            "kind": "stop",
+            "matched_seq": 18,
+            "reasons": [
+              "WRONG_EVENT_TIME"
+            ],
+            "receive_s": 17044.587878787977,
+            "state": 0,
+            "time_s": 17043.625,
+            "verdict": "FAIL"
+          }
+        ]
+      },
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": true
+    },
+    {
+      "episode": "L3-G1-final-3",
+      "design": {
+        "cache": "nvm",
+        "capacitance_f": 0.015,
+        "program": "confirmed_events",
+        "retry_s": 1,
+        "sample_period_s": 0.75,
+        "schema_version": "bf-o-candidate-v1",
+        "threshold_off_g": 0.01,
+        "threshold_on_g": 0.05,
+        "tx_backoff_s": 0
+      },
+      "energy": "PASS",
+      "execution_key": "d2812a4f7fa872cc5b49a3186217be5de4466eb022992311fb942bbe6d1573c4",
+      "service": "PASS",
+      "O_events": {
+        "accepted_packets": 18,
+        "expected": 8,
+        "keepalive_gaps": [],
+        "matched": 8,
+        "pass_count": 8,
+        "per_event": [
+          {
+            "absolute_stamp_error_s": 0.5150000000003274,
+            "encoded_stamp_s": 4240.89,
+            "kind": "start",
+            "matched_seq": 1,
+            "reasons": [],
+            "receive_s": 4240.820422535211,
+            "state": 1,
+            "time_s": 4240.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2719999999999345,
+            "encoded_stamp_s": 4588.897,
+            "kind": "stop",
+            "matched_seq": 4,
+            "reasons": [],
+            "receive_s": 4588.820422535211,
+            "state": 0,
+            "time_s": 4588.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.33700000000044383,
+            "encoded_stamp_s": 7862.712,
+            "kind": "start",
+            "matched_seq": 5,
+            "reasons": [],
+            "receive_s": 7862.570422535211,
+            "state": 1,
+            "time_s": 7862.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.34399999999914144,
+            "encoded_stamp_s": 8206.969,
+            "kind": "stop",
+            "matched_seq": 8,
+            "reasons": [],
+            "receive_s": 8206.820422535211,
+            "state": 0,
+            "time_s": 8206.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.12000000000080036,
+            "encoded_stamp_s": 11446.495,
+            "kind": "start",
+            "matched_seq": 9,
+            "reasons": [],
+            "receive_s": 11446.466666666684,
+            "state": 1,
+            "time_s": 11446.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.3819999999996071,
+            "encoded_stamp_s": 12078.007,
+            "kind": "stop",
+            "matched_seq": 15,
+            "reasons": [],
+            "receive_s": 12077.966666666684,
+            "state": 0,
+            "time_s": 12077.625,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.727999999999156,
+            "encoded_stamp_s": 16845.103,
+            "kind": "start",
+            "matched_seq": 16,
+            "reasons": [],
+            "receive_s": 16844.96666666668,
+            "state": 1,
+            "time_s": 16844.375,
+            "verdict": "PASS"
+          },
+          {
+            "absolute_stamp_error_s": 0.2319999999999709,
+            "encoded_stamp_s": 17043.857,
+            "kind": "stop",
+            "matched_seq": 18,
+            "reasons": [],
+            "receive_s": 17043.71666666668,
+            "state": 0,
+            "time_s": 17043.625,
+            "verdict": "PASS"
+          }
+        ]
+      },
+      "participant_judgment": "PASS",
+      "wrong_service_judgment": false
+    }
+  ],
+  "O0_disagreement_scope": "Nominal O-event predicate only; broader reporting/physical UNKNOWN is not a physical self-judgment error.",
+  "selected_methods_file_sha256": "b0fcd9d1242c0b8ff10470f2db6c9cc13bb23097f45075963ba534e6e6fa560f",
+  "selected_methods_canonical_sha256": "baa1d01ffe5a4b35fd74d5f2635f68e3f24c2b84df5b203c3168e7be51b722d5"
+}

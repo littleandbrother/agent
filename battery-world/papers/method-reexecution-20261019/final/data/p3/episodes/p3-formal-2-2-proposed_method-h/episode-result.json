@@ -1,0 +1,91 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.021933504000000003,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0342768,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-2-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:55d43741fcc53d25",
+        "excitation_record:2820ae5862b2dd36",
+        "model_law:d690d8a89532cb37",
+        "saved_activity:ae3c8933de67ab90",
+        "component_record:event_latch.volatile",
+        "model_law:reset.volatile.captured_false",
+        "excitation_record:shunts.0.012.4e-05",
+        "saved_activity:boot.0.0027",
+        "saved_activity:captures.0.0037-0.0079",
+        "saved_activity:brownout.0.0121.captured.true",
+        "saved_activity:boot.0.0381",
+        "saved_activity:brownout.0.2512.captured.false",
+        "saved_activity:packets.empty",
+        "component_record:ready_v.2.8.off_v.1.8.esr.0.3",
+        "excitation_record:contact_end.0.008.deadline.0.1",
+        "inspect:full_public_facts_sha256.49b3e48b"
+      ],
+      "falsifier": "H is falsified (and its scope invalidated) if any of the following is observed: (i) the ledger of Step 1 replayed on the retained base design (C = component_record.capacitance_f, t_nb = component_record.tx_not_before_s) does not reproduce boot 0.0027, brownout 0.0121, boot 0.0381 and packets=[], each within one dt_s step - then the ledger premise H1 is wrong; (ii) both budgeted designs that pass filters (a)-(d) return packets=[] or a frame with t > deadline_s or != 8 application bytes or > 1 unique frame - then H2 is wrong for this task; (iii) any design that fails filter (b) or (c) nonetheless returns a valid frame under model b-transient-behavior-v1 in world b-volatile-reset - then a filter is over-restrictive and must be removed, not patched; (iv) any design excluded only by a monotonicity intuition (larger-C-safer or earlier-TX-safer) that is later shown feasible - the exclusion rule was a sufficient heuristic used as a necessary bound and must be retracted. Scope-invalidation: if event_latch != 'volatile' (e.g. passive-mechanical, whose branch in model_law sets captured without a powered step) or if model_id != 'b-transient-behavior-v1', the latch-continuity filter and the whole ledger are out of scope and the update reverts to no-update.",
+      "hypothesis": "The retained no-packet outcome (saved_activity source_sha256 ae3c8933de67ab90, world b-volatile-reset) is a latch-continuity failure, not a missing-energy failure: component_record.event_latch='volatile', so model_law reset() clears captured on any brownout; the 40 uJ shunt at 0.012 s (excitation_record.shunts[0]) drives e below e_off = 0.5*C*off_v^2 and produces the brownout at 0.0121 with event_was_captured=true, which is before the design's own transmit gate tx_not_before_s=0.045 s; the second boot at 0.0381 occurs after the contact window closes at 0.008 s, so capture cannot recur. Therefore (H1) this class of failure is predictable before spending any candidate execution, from a source-bound energy/timing ledger built only from component_record, excitation_record and model_law; and (H2) a pre-registered necessary-condition filter set (capture-overlap, latch-continuity, transmit voltage/energy floor, service shape+deadline) retains at least one legal design in legal_design_ranges that yields exactly one 8-byte frame at t <= deadline_s within the 2-distinct-design budget, without excluding any design on a merely sufficient heuristic. H2 is a statement about this frozen model only; nothing here is a claim about hardware, calibration, or an advantage over any other search.",
+      "impact_scope": "task-entry",
+      "method_sha256": "56d9e35d5a8de0fafc49df9b151fb1524687c622038babaf17a999f18e510163",
+      "method_text": "PROCEDURAL H, consumed from task entry. It changes only how candidates are derived, ordered and audited; it changes no device parameter, no task constant, no evaluator, and it declares no acceptance. Any concrete (capacitance_f, tx_not_before_s) pair is a separate D decision owned by the design role and must itself be re-audited here from task entry with complete feedback; a D edit is never to be reported as this H.\n\nStep 0 - Source capture. Re-acquire component_record, excitation_record, model_law and the retained saved_activity, keeping each source_sha256. Every number used below must be present in those payloads or derived from them. Do not carry a number from memory, from this text, or from another condition.\n\nStep 1 - Source-bound energy/timing ledger, per candidate (C, t_nb), over excitation_record.dt_s and duration_s: e_on = 0.5*C*ready_v^2, e_off = 0.5*C*off_v^2, e_max = 0.5*C*cap_voltage_max_v^2, all from component_record. Per step: add the power of the segment containing the step times dt_s times harvest_efficiency; spill above e_max is lost; subtract idle_power_w when powered else off_power_w; subtract any shunt of that step as min(e, energy_j); on the off->powered transition subtract boot_j once and set ready_at = t + boot_delay_s. Contact is event_s <= t < event_s + contact_duration_s. Transmit: from t >= t_nb, when captured and not done, set tx_left = tx_duration_s and per step compute loaded_v = sqrt(2e/C) - esr_ohm*tx_current_a from the pre-draw energy, draw min(e, output_v*tx_current_a*dt), and reset if loaded_v < output_v or e_after < e_off; the packet is emitted when tx_left reaches zero.\n\nStep 2 - Necessary-condition filters, each read off the model_law equations rather than off a design intuition. (a) capture-overlap: with event_latch = 'volatile' a capture requires powered and t >= ready_at inside the contact window, so a candidate whose first_ready >= event_s + contact_duration_s can never set captured inside the window and is excluded. (b) latch-continuity: reset() in model_law sets captured = False whenever event_latch = 'volatile', so no reset (energy-threshold or tx-transient) may lie inside [first capture, tx-complete]; choosing a t_nb that places transmit after a reset the ledger already shows is infeasible, not a risk to trade against buffered energy. (c) transmit floor: the demand output_v*tx_current_a*tx_duration_s must be available at t_nb from stored plus harvested energy while every transmit step satisfies loaded_v >= output_v and e_after >= e_off; the esr term means the voltage floor binds before the energy total does. (d) service: exactly one packet, 8 application bytes, packet time <= deadline_s. These four are necessary given this model and are NOT sufficient: designs that pass are still model-run, and no design may be excluded by a merely sufficient heuristic - in particular not by 'larger C is safer' (C raises e_on, e_off and e_max together) and not by 'earlier TX is safer' (t_nb interacts with the shunt at 0.012 s and with both source segments). Every exclusion must be reported with the ledger row that witnesses it.\n\nStep 3 - Budgeted order. Budget is 2 candidate executions / 2 distinct designs, so rank surviving designs by the worst ledger margin over [first capture, tx-complete], min of (e - e_off) and of (loaded_v - output_v); execute the best margin first and the second best next; never re-execute the retained base design; never exceed two distinct designs. If only one survives, execute that one and report the empty branch; if none survives, return no-update with the witnessing rows instead of dispatching an unfiltered design.\n\nStep 4 - Paired observation policy. For each execution record two separate verdicts: SERVICE = packet count, application_bytes, unique-frame count, packet time versus deadline; RETENTION = the event_captured value carried into each reset and whether a tx-start ever follows a capture. A brownout with event_was_captured=true and no later packet is a retention failure and never a service completion; empty packets with no reset is UNKNOWN, not success. Keep raw timestamps and both verdicts side by side.\n\nStep 5 - Preserve failures and unknowns. Keep the retained base record verbatim (component_record.event_latch = 'volatile'; saved_activity ae3c8933: boot 0.0027, captures 0.0037..0.0079, brownout 0.0121 with event_was_captured=true, boot 0.0381, brownout 0.2512 with event_was_captured=false, packets empty) and keep the physical-calibration UNKNOWN. This procedure predicts only inside model b-transient-behavior-v1 and claims nothing about hardware, statistics, transfer or RSI.\n\nStep 6 - Reproducibility gate before dispatch. Replay Step 1 on the retained base design (C = component_record.capacitance_f = 1e-5 F, t_nb = component_record.tx_not_before_s = 0.045 s) and require reproduction of the retained boot at 0.0027, brownout at 0.0121, boot at 0.0381 and zero packets within one dt_s step. A ledger that fails to reproduce a retained observation is not used to filter or order anything.\n\nStep 7 - Feedback coupling for any coupled D change. C affects e_on, e_off, e_max, loaded_v and every step row downstream; t_nb affects the transmit gate and every row after it; nothing else is touched. All rows depending on a changed input must be recomputed and re-attached, and only then may the resulting D be dispatched. Host-side independent service decides the outcome; this proposal does not.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-2-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-55d8a232b712097d",
+  "protocol_sha256": "bd0a91286317cde4b3a934e7f9ad9913aec88617b83fbc3e90fe5c0f05710417",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "9aa8f7a5962d97b0449ca5befa144204673396ae0cc6e2693172a94e93e6e2e8",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-2-2-proposed_method",
+    "id": "p3-formal-2-2-proposed_method-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "9f4ff6eb256515f9211e52308dc3d9811303c95296b1ddb95bfd39d907357a2c",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 66.17508879199158,
+  "wall_seconds_total": 66.63397329200234
+}

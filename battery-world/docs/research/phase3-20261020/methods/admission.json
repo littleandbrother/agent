@@ -1,0 +1,105 @@
+{
+  "schema_version": "bf-phase3-methods-minimal-admission-v1",
+  "at_utc": "2026-10-19T19:32:25.852012+00:00",
+  "dispatch_id": "phase-3-controlled-comparison-bf-20261020-001",
+  "feature": "BFA-058-phase3-method-comparison",
+  "authority": {
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase-state.json": {
+      "sha256": "4e299b06d667e41025a2b8ad3307e9711986721361d67d1c1a876d59c8922fd0",
+      "bytes": 11781
+    },
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/OWNERSHIP.json": {
+      "sha256": "87f6bca480f0b428537f501d0bd18a0ae100ec8a9116b98357b01be68e5efde0",
+      "bytes": 11927
+    },
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/project/features/BFA-058-phase3-method-comparison/feature.yaml": {
+      "sha256": "22c71bc5e29dc64bf1b8ee331c609abbdaa09293bd86d72b2779178ec24feea5",
+      "bytes": 3412
+    },
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/admission.json": {
+      "sha256": "f511c1e16c192ce0575e2b524c61c9120a236b3396fa0c5426aec976d16db64a",
+      "bytes": 235
+    }
+  },
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_methods.py",
+    "scripts/campaign_phase3_methods.py",
+    "tests/agentlab/test_campaign_phase3_methods.py",
+    "configs/studies/phase3-20261020/methods/",
+    "docs/research/phase3-20261020/methods/",
+    "papers/method-reexecution-20261019/phase3-methods.tex",
+    "papers/method-reexecution-20261019/phase3-manuscript.tex",
+    "papers/method-reexecution-20261019/phase3.pdf",
+    "papers/method-reexecution-20261019/phase3-binding.json",
+    "papers/method-reexecution-20261019/render_phase3.py"
+  ],
+  "hypothesis": "Dependency-correct recomputation and candidate method selection improve or appropriately reject under same total budget.",
+  "paper_claim": "Dependency-correct recomputation and candidate method selection improve or appropriately reject under same total budget.",
+  "falsifier": "Frozen trajectory accepted after coupled change, false cross-reset retention, extra method budget, or failed service promoted.",
+  "schema_changes": [
+    "additive phase3 conditions, corrected ordered-state evaluator, shared-cache snapshot/isolated overlays, prospective v2 host, matched-total-budget receipts"
+  ],
+  "targeted_tests": "Only the new test_campaign_phase3_methods.py contract tests; no prior tests or full init",
+  "negative_controls": [
+    "malformed syntax before valid proposal cap",
+    "H/D action separation",
+    "postdelivery reset is not pending state retention",
+    "tampered/missing source",
+    "changed input cannot reuse stale trajectory"
+  ],
+  "reproducible_command": "rtk proxy /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B scripts/campaign_phase3_methods.py conditions",
+  "claim_boundary": "Public development pilot and finite controlled digital BF comparison, with task-level and run-level separation. Not hardware qualification, original failed-episode success, transfer or RSI.",
+  "stop_condition": "Frozen scientific drift, unknown usage/model identity, cost/time/request/storage cap, hidden label leakage, changed fixed semantics or unusable source. Preserve every request/failure/no-update.",
+  "available_bytes": 21996122112,
+  "phase_reserve_plus_peak_bytes": 10900000000,
+  "worker_peak_cap_bytes": 5000000,
+  "worker_retained_cap_bytes": 1000000,
+  "profile": {
+    "path": "/Users/depengsu/.local/share/bf-phase1-20261020/a/profile.json",
+    "sha256": "6fdc30a590cf243da037b359304c58915b48ce4dd66b7c6f7b8e5b2dc3a0d29e",
+    "bytes": 4465,
+    "capabilities": {
+      "model": false,
+      "native": false,
+      "agent": false
+    }
+  },
+  "protected_critical_files_only": {
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase2_methods.py": {
+      "sha256": "f89b6af3e91136f18ed1bed58fdae20b2e811fc393aa28acec351441b2df5edf",
+      "bytes": 14913
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/reexecution.py": {
+      "sha256": "0da34a20f8daf1505910f89f18426d8deeb28203733c9cd57fc3acdbd99c09f8",
+      "bytes": 3521
+    },
+    "papers/method-reexecution-20261019/main.tex": {
+      "sha256": "0bb12d29c6560cab292308b5c8688d5a32782ea82ee6efd626cea3f0a9494d23",
+      "bytes": 7341
+    },
+    "papers/method-reexecution-20261019/main.pdf": {
+      "sha256": "6da2fa74902d1776eaf5f19379bb6ff12d28c8c0ef0746fdf141713dadb54b7c",
+      "bytes": 283476
+    },
+    "papers/method-reexecution-20261019/phase2-manuscript.tex": {
+      "sha256": "ecc38a66c8c58d0dab392da36733504e348e719dabd9752a445b1c90ebc8ff8d",
+      "bytes": 1339
+    },
+    "papers/method-reexecution-20261019/phase2-methods.tex": {
+      "sha256": "430da4ed425cfa2e756c23c91d4407b02b9bc966e86ed079c50b19727f4f0b1a",
+      "bytes": 11359
+    },
+    "papers/method-reexecution-20261019/phase2.pdf": {
+      "sha256": "446f3e66b1f39a1fe342df0f39c7f8da5f7ac7f182d1ce6e990515438c1a49a5",
+      "bytes": 208904
+    },
+    "papers/method-reexecution-20261019/phase2-binding.json": {
+      "sha256": "63f56f224441d2df4de368324913e5bd3b54bdcf72732c6ba63d294908b45b5d",
+      "bytes": 12765
+    }
+  },
+  "root_feature_copy_is_S0_authority": true,
+  "new_model_requests": 0,
+  "new_scientific_executions": 0,
+  "native_dispatches": 0
+}

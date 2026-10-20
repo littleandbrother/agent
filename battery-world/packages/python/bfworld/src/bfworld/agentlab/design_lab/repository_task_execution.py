@@ -45,7 +45,27 @@ def current_execution(repo, system, db=None):
     for row in db.execute('SELECT value FROM design_task_executions WHERE project=? ORDER BY rowid DESC', (system['project_id'],)):
         value = json.loads(row['value'])
         if value['execution_key'] == desc['id'] or compatible_descriptor(value['descriptor'], desc, system): return verify(repo, value)
-    return None
+    # A new engineering phase can inherit a frozen experiment without replaying
+    # it. Follow only sealed ancestry, retaining the original TX/owner identity.
+    seen = set()
+    ancestor = system
+    for _ in range(256):
+        key = (ancestor['project_id'], ancestor['id'])
+        if key in seen: raise ValueError('TASK_EXECUTION_LINEAGE_CYCLE')
+        seen.add(key)
+        origin = ancestor.get('inherited_from')
+        if ancestor.get('parent'):
+            ancestor = repo.system(ancestor['project_id'], ancestor['parent'], db)
+        elif origin:
+            ancestor = repo.system(origin['project_id'], origin['system_id'], db)
+        else: return None
+        if ancestor['project_id'] == system['project_id']: continue
+        for row in db.execute('SELECT value FROM design_task_executions WHERE project=? AND target=? ORDER BY rowid DESC',
+                              (ancestor['project_id'], ancestor['id'])):
+            value = json.loads(row['value'])
+            if value['execution_key'] == desc['id'] or compatible_descriptor(value['descriptor'], desc, system):
+                return verify(repo, value)
+    raise ValueError('TASK_EXECUTION_LINEAGE_LIMIT')
 
 
 def compatible_descriptor(old, new, system):

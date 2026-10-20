@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy,pathlib; m=runpy.run_path("reproduce.py"); m["verify_manifest"](pathlib.Path.cwd())
+                                                            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "reproduce.py", line 44, in verify_manifest
+    raise ValueError('FILE_DIGEST_MISMATCH:' + name)
+ValueError: FILE_DIGEST_MISMATCH:engineering/piezo-node/native/bom.csv

@@ -1,0 +1,109 @@
+test_repository_archives (unittest.loader._FailedTest.test_repository_archives) ... ERROR
+test_other_tools_owner_and_malformed_ids_are_not_compacted (test_repository_context.RepositoryContext.test_other_tools_owner_and_malformed_ids_are_not_compacted) ... ok
+test_real_user_instructions_are_never_classified_as_generated_state (test_repository_context.RepositoryContext.test_real_user_instructions_are_never_classified_as_generated_state) ... ok
+test_repeated_old_reads_do_not_spill_the_new_complete_source_tree (test_repository_context.RepositoryContext.test_repeated_old_reads_do_not_spill_the_new_complete_source_tree) ... ok
+test_superseded_generated_restores_make_room_for_current_source (test_repository_context.RepositoryContext.test_superseded_generated_restores_make_room_for_current_source) ... ok
+test_declaration_only_second_candidate_is_not_design_revision (test_repository_cycle_audit.CycleAuditTests.test_declaration_only_second_candidate_is_not_design_revision) ... ok
+test_missing_decision_or_same_version_release_is_rejected (test_repository_cycle_audit.CycleAuditTests.test_missing_decision_or_same_version_release_is_rejected) ... ok
+test_old_base_review_fork_does_not_replace_requested_root (test_repository_cycle_audit.CycleAuditTests.test_old_base_review_fork_does_not_replace_requested_root) ... ok
+test_wrong_root_and_missing_independent_result_are_rejected (test_repository_cycle_audit.CycleAuditTests.test_wrong_root_and_missing_independent_result_are_rejected) ... ok
+test_repository_execution (unittest.loader._FailedTest.test_repository_execution) ... ERROR
+test_repository_integration (unittest.loader._FailedTest.test_repository_integration) ... ERROR
+test_repository_revision (unittest.loader._FailedTest.test_repository_revision) ... ERROR
+
+======================================================================
+ERROR: test_repository_archives (unittest.loader._FailedTest.test_repository_archives)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_repository_archives
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_archives.py", line 4, in <module>
+    from test_repository_integration import IntegrationCase
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_integration.py", line 6, in <module>
+    from test_design_repository import RepositoryCase, OWNER, OTHER
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_design_repository.py", line 10, in <module>
+    from bfworld.agentlab.design_lab.service import DesignLab
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/service.py", line 16, in <module>
+    from ..runtime_config import RUNTIME_ROOT
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/runtime_config.py", line 87, in <module>
+    raise ValueError('DEVELOPMENT_CONFIGURATION_REQUIRED')
+ValueError: DEVELOPMENT_CONFIGURATION_REQUIRED
+
+
+======================================================================
+ERROR: test_repository_execution (unittest.loader._FailedTest.test_repository_execution)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_repository_execution
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_execution.py", line 3, in <module>
+    from test_repository_integration import IntegrationCase, SOURCES
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_integration.py", line 6, in <module>
+    from test_design_repository import RepositoryCase, OWNER, OTHER
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_design_repository.py", line 10, in <module>
+    from bfworld.agentlab.design_lab.service import DesignLab
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/service.py", line 16, in <module>
+    from ..runtime_config import RUNTIME_ROOT
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/runtime_config.py", line 87, in <module>
+    raise ValueError('DEVELOPMENT_CONFIGURATION_REQUIRED')
+ValueError: DEVELOPMENT_CONFIGURATION_REQUIRED
+
+
+======================================================================
+ERROR: test_repository_integration (unittest.loader._FailedTest.test_repository_integration)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_repository_integration
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_integration.py", line 6, in <module>
+    from test_design_repository import RepositoryCase, OWNER, OTHER
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_design_repository.py", line 10, in <module>
+    from bfworld.agentlab.design_lab.service import DesignLab
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/service.py", line 16, in <module>
+    from ..runtime_config import RUNTIME_ROOT
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/runtime_config.py", line 87, in <module>
+    raise ValueError('DEVELOPMENT_CONFIGURATION_REQUIRED')
+ValueError: DEVELOPMENT_CONFIGURATION_REQUIRED
+
+
+======================================================================
+ERROR: test_repository_revision (unittest.loader._FailedTest.test_repository_revision)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_repository_revision
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 426, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 367, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_revision.py", line 7, in <module>
+    from test_repository_execution import ExecutionCase
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_execution.py", line 3, in <module>
+    from test_repository_integration import IntegrationCase, SOURCES
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_repository_integration.py", line 6, in <module>
+    from test_design_repository import RepositoryCase, OWNER, OTHER
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/tests/agentlab/test_design_repository.py", line 10, in <module>
+    from bfworld.agentlab.design_lab.service import DesignLab
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/design_lab/service.py", line 16, in <module>
+    from ..runtime_config import RUNTIME_ROOT
+  File "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/battery-world/packages/python/bfworld/src/bfworld/agentlab/runtime_config.py", line 87, in <module>
+    raise ValueError('DEVELOPMENT_CONFIGURATION_REQUIRED')
+ValueError: DEVELOPMENT_CONFIGURATION_REQUIRED
+
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.289s
+
+FAILED (errors=4)

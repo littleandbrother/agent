@@ -1,0 +1,118 @@
+{
+  "generated_at": "2026-10-19T14:31:02.129895+00:00",
+  "system": {
+    "os": "macOS 27.0.1",
+    "build": "26A434",
+    "arch": "Apple Silicon (arm64) / Apple M4",
+    "user": "depengsu",
+    "home": "/Users/depengsu",
+    "disk_total": "494.38 GB",
+    "disk_used": "482.36 GB",
+    "disk_free": "12.03 GB",
+    "filesystem": "APFS",
+    "purgeable": "",
+    "disk_name": "Macintosh HD",
+    "disks": [
+      {
+        "name": "Macintosh HD",
+        "total": "460.4 GB",
+        "used": "454.9 GB",
+        "free": "5.5 GB"
+      }
+    ]
+  },
+  "top5": [
+    {
+      "rank": 1,
+      "tier": "yellow",
+      "size": "33.65 GB",
+      "type": "BF 历史数据 / APFS 分配上限",
+      "name": "参考案例",
+      "path": "/Users/depengsu/.local/share/bf-agent-runtime/reference-cases",
+      "note": "可能包含共享数据块，不能作为可释放量；独有证据保留。"
+    },
+    {
+      "rank": 2,
+      "tier": "yellow",
+      "size": "24.77 GB",
+      "type": "BF 历史数据 / APFS 分配上限",
+      "name": "V2 workbench",
+      "path": "/Users/depengsu/.local/share/bf-agent-architecture-v2/workbench",
+      "note": "可能包含共享数据块，不能作为可释放量；独有证据保留。"
+    },
+    {
+      "rank": 3,
+      "tier": "yellow",
+      "size": "9.44 GB",
+      "type": "BF 历史数据 / APFS 分配上限",
+      "name": "项目工作区",
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench",
+      "note": "可能包含共享数据块，不能作为可释放量；独有证据保留。"
+    },
+    {
+      "rank": 4,
+      "tier": "yellow",
+      "size": "9.42 GB",
+      "type": "BF 历史数据 / APFS 分配上限",
+      "name": "原生产 workbench",
+      "path": "/Users/depengsu/.local/share/bf-agent-runtime/workbench",
+      "note": "可能包含共享数据块，不能作为可释放量；独有证据保留。"
+    },
+    {
+      "rank": 5,
+      "tier": "yellow",
+      "size": "8.55 GB",
+      "type": "BF 历史数据 / APFS 分配上限",
+      "name": "S0 运行目录",
+      "path": "/Users/depengsu/.local/share/bf-campaign-20261019-s0",
+      "note": "可能包含共享数据块，不能作为可释放量；独有证据保留。"
+    }
+  ],
+  "green": [
+    {
+      "name": "本批已经处理完成",
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/storage-slimming-20261019",
+      "size_estimate": "实际净增加 6.08 GB",
+      "kill_processes": [],
+      "trash_paths": [],
+      "commands": [],
+      "note": "70 个历史文件无损压缩；可重建依赖与临时克隆清理完成。"
+    }
+  ],
+  "yellow": [
+    {
+      "name": "历史工作区 / 中间产物 / 安装包",
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench",
+      "size": "见目录统计上限",
+      "content_profile": "科学历史、云占位、独有改动和可重建内容混合",
+      "why_manual": "必须先核对引用、差异和恢复来源",
+      "disposal": "按单一维护特性逐项核对；默认保留未确认独有证据",
+      "risk": "整目录删除会丢失未发布改动或历史证据"
+    }
+  ],
+  "red": [
+    {
+      "name": "冻结基线、失败、计费与 UNKNOWN",
+      "path": "/Users/depengsu/.local/share/bf-agent-runtime",
+      "size": "不单独相加",
+      "why_keep": "必须维持可追溯性；本批原始字节校验通过",
+      "indirect_release": "只做已验证的无损压缩与共享",
+      "auto_reclaim": "本批保留全部账本记录"
+    }
+  ],
+  "denied": [],
+  "summary": {
+    "overview": "本项目第一批精简完成：可用空间 5.94 GB → 12.03 GB，实际净增加 6.08 GB。本报告为静态审查页面，不启用删除服务。目录统计包含 APFS 共享块，不可相加。",
+    "priority": [
+      "已执行：70 个文件无损压缩，临时审查副本与闲置 CI 依赖清理",
+      "待核对：历史工作区、内容寻址存储迁移、SDK 安装包",
+      "保留：原始实验、失败、计费、UNKNOWN 与冻结基线"
+    ],
+    "long_term": [
+      "每批先声明峰值，保留 10 GB 加完整批次峰值",
+      "开发后 review 生成物，清理并实测空间后再推进",
+      "复用登记依赖环境，独立 APFS 克隆替代全量复制",
+      "检查细节、代码部署边界和完整证据请看同目录 REPORT.md"
+    ]
+  }
+}

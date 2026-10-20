@@ -1,0 +1,56 @@
+{
+  "schema_version": "campaign-shared-exposure-v1",
+  "mechanisms": [
+    {
+      "mechanism": "solar storage, darkness, NVM and gateway queue",
+      "exposed_to": [
+        "S0",
+        "campaign-a"
+      ],
+      "partition": "public-development",
+      "papers": [
+        "P1",
+        "P2"
+      ]
+    },
+    {
+      "mechanism": "pulse transient and reset event memory",
+      "exposed_to": [
+        "S0",
+        "campaign-a",
+        "campaign-b"
+      ],
+      "partition": "public-development",
+      "papers": [
+        "P1",
+        "P2"
+      ]
+    },
+    {
+      "mechanism": "unexcited saturation/clamp and legal capacitance change",
+      "exposed_to": [
+        "S0",
+        "campaign-b"
+      ],
+      "partition": "public-development",
+      "papers": [
+        "P1",
+        "P2"
+      ]
+    },
+    {
+      "mechanism": "qualified piezo feedback, firmware timing, historical T1/T2",
+      "exposed_to": [
+        "S0"
+      ],
+      "partition": "public-development",
+      "papers": [
+        "P1",
+        "P2"
+      ]
+    }
+  ],
+  "selection_set": "NOT_CREATED",
+  "formal_test_set": "NOT_CREATED",
+  "rule": "Mechanism exposure is shared across papers; none of these tasks may later be labeled unseen."
+}

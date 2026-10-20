@@ -1,0 +1,86 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.015124824,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0317958,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-pilot-1-2-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record.event_latch",
+        "component_record.ready_v",
+        "component_record.off_v",
+        "component_record.cap_voltage_max_v",
+        "component_record.tx_duration_s",
+        "component_record.esr_ohm",
+        "excitation_record.shunts.0",
+        "excitation_record.source_segments.0",
+        "excitation_record.contact_duration_s",
+        "saved_activity.activity.44",
+        "saved_activity.activity.45",
+        "saved_activity.activity.46",
+        "saved_activity.packets",
+        "model_law.reset",
+        "model_law.simulate_b"
+      ],
+      "falsifier": "Falsified if, re-executing from these same four acquired sources, the ledger-derived TX-start window is empty across the whole legal capacitance_f range (no start energy satisfiable given eoff + E_tx <= e <= emax and the 0-0.006 s / 0.03-0.06 s source segments), or if every observed valid 8-byte frame is reachable only after a volatile reset with event_was_captured=true (i.e. only by retention across reset), or if the earliest energy-sufficient start yields no packet while some later start does, or if the procedure needs a value not present in component_record / excitation_record / model_law, or if a delivered frame is counted as evidence that the latch retains pending state after the next reset. Also falsified if packets are observed with application_bytes != 8 or more than one distinct frame by deadline_s=0.1 s.",
+      "hypothesis": "The retained no-packet failure (saved_activity: capture 0.0037-0.0079 s, brownout 'energy-threshold' at 0.0121 s with event_was_captured=true, second boot 0.0381 s after the contact window closed at 0.008 s, packets=[], under component_record.event_latch='volatile') is a procedural error, not a limit of the legal design space: the prior procedure timed transmission by a late heuristic instead of by the volatile capture-lifetime bound plus a source-bound energy ledger. If H is changed so that every run (a) derives eon/eoff/emax/E_tx/background/harvest/shunt from component_record, excitation_record and model_law, (b) treats capture as dead at the first post-capture reset, and (c) chooses the earliest energy-sufficient TX start inside [max(ready_at,capture), first post-capture reset - tx_duration_s], then a re-execution can produce one 8-byte application frame before the first post-capture reset, with task, model_law and evaluator unchanged and no device assignment carried in the method text. This is a procedural H only; D edits (capacitance_f, tx_not_before_s) remain separate and this H claims no hardware validation, no statistical advantage, no migration or RSI.",
+      "impact_scope": "task-entry",
+      "method_sha256": "7447b5ceecf1abe884eb9e1a3cdbdbd91aa2f7616f157680fa9d2b884134bf3c",
+      "method_text": "Procedural H consumed from task entry. It changes reasoning and observation order only. It is NOT a device assignment, NOT an acceptance decision, and it does not edit the task, model_law, evaluator, or legal ranges.\n\nStep 0 - keep D and H separate. A device edit D sets numeric design fields (capacitance_f, tx_not_before_s) inside the legal ranges. This H emits no parameter values, no device, and no service label. Every event below is traced source -> capture -> reset -> delivery; a completed transmission is not evidence that pending state survives a later reset.\n\nStep 1 - build the source-bound energy ledger before touching any design, from the actually acquired sources:\n  eon = 0.5*C*ready_v^2 ; eoff = 0.5*C*off_v^2 ; emax = 0.5*C*cap_voltage_max_v^2  (component_record, for the C under test)\n  E_boot = boot_j ; E_tx = output_v*tx_current_a*tx_duration_s\n  background per step = (idle_power_w if powered else off_power_w)*dt  (dt from excitation_record)\n  harvest per step = sum over source_segments overlapping the step of power_w*harvest_efficiency\n  subtract every shunts[*].energy_j at its time_s; spill above emax is loss, not stored energy.\nCompute the minimum stored energy at TX start e_min_start such that all TX steps finish with e >= eoff AND loaded_v = sqrt(2*e/C) - esr_ohm*tx_current_a >= output_v. Record e_min_start as an interval [e_min_start, emax], not a single 'best late' time. With the acquired component_record this is eoff + E_tx plus an esr/tx_current correction; derive it each run, do not hard-code it.\n\nStep 2 - bound capture lifetime by the latch fact. Read event_latch. If it is 'volatile', capture ends at the FIRST reset after capture; a reset for any reason (energy-threshold or tx-transient) discards the event. From the ledger compute the earliest post-capture reset time (driven by shunts, source gaps, background, boot_j, and any TX-started-but-unaffordable transient) and keep it as a hard upper bound on tx-complete. If it is 'passive-mechanical', do not import the volatile bound; state which branch was taken. UNKNOWN latch value => stop and report UNKNOWN.\n\nStep 3 - derive the admissible TX-start window instead of a heuristic:\n  lo = max(ready_at, first capture step, earliest step with e >= e_min_start)\n  hi = min(first post-capture reset time, deadline_s) - tx_duration_s\nPrefer the earliest energy-sufficient start. A heuristic that 'wait for the later source segment' (or for any specific late time) may be sufficient in one world but must not be used to exclude a feasible earlier window: sufficiency is not a necessary-feasibility exclusion.\n\nStep 4 - if lo > hi, return UNKNOWN / no candidate; never submit a candidate whose only success path assumes capture retention across a reset. Preserve the failed activity and the falsifying trace side by side rather than overwriting them.\n\nStep 5 - re-execute and check complete responses per candidate: (a) packets exist with application_bytes == required_application_bytes (8) and exactly unique_frames=1 distinct frame; (b) tx-complete occurs before the first post-capture reset; (c) no brownout with event_was_captured=true lies between capture and tx-complete; (d) final delivery time is within deadline_s. If ledger prediction and the model_law simulation disagree, the simulation is authoritative for observation and both are retained as a counterexample.\n\nStep 6 - scope and honesty. This H is validated only against the frozen public-development packet (full_public_facts_sha256 49b3e48b...). Physical calibration stays UNKNOWN. Do not claim hardware behavior, statistical advantage, method migration, or RSI from these traces, and do not treat a passing trace as external service acceptance.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-pilot-1-2-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-d980b0b1a789c76c",
+  "protocol_sha256": "322e699a0b00ae8588f7eef65f923208e54e4f262bb7d163fe0ae0c5e3707777",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "d804bf675c62af91aba15f0e1b986669d467c5732b88023125ee8949e7758544",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-pilot-1-2-proposed_method",
+    "id": "p3-pilot-1-2-proposed_method-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "pilot",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "6e57409ab880c7a5da7cd7925ff0c7a9de93e0c72d7dbf82f65a9d937230b330",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 42.61133920800057,
+  "wall_seconds_total": 42.882677540997975
+}

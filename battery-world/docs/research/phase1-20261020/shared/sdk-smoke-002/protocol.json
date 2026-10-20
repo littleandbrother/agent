@@ -1,0 +1,64 @@
+{
+  "allowed_reported_models": [
+    "deepseek-flash"
+  ],
+  "bound_files": {
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/phase1-20261020/shared/sdk-smoke-002/harness/dist/phase1/episode.js": "c031afc7b29a1f34c06f44800434c7175a1331a73d36151f1f4b0923adf8f76e"
+  },
+  "candidate_actions": [
+    "check"
+  ],
+  "candidate_fields": [
+    "candidate"
+  ],
+  "id": "phase1-sdk-software-rehearsal",
+  "limits": {
+    "candidates": 3,
+    "max_output_tokens": 32768,
+    "model_request_bytes": 512000,
+    "model_requests": 3,
+    "model_response_bytes": 64000000,
+    "output_bytes": 5000000,
+    "peak_remaining_bytes": 0,
+    "reserve_bytes": 0,
+    "tool_calls": 5,
+    "tool_response_bytes": 96000,
+    "wall_seconds": 60
+  },
+  "mode": "fixture",
+  "owner": "fixture-owner",
+  "provider_database": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/phase1-20261020/shared/sdk-smoke-002/fixture-ledger.sqlite",
+  "provider_service": "http://127.0.0.1:64631",
+  "tool": {
+    "canonical": "{\"description\":\"Read the BF software fixture. It is not an experiment or physical evidence.\",\"name\":\"bf_phase1\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"action\":{\"enum\":[\"inspect\",\"check\",\"submit\"]},\"candidate\":{\"additionalProperties\":false,\"properties\":{\"capacitance_f\":{\"minimum\":1e-06,\"type\":\"number\"}},\"type\":\"object\"}},\"required\":[\"action\"],\"type\":\"object\"}}",
+    "description": "Read the BF software fixture. It is not an experiment or physical evidence.",
+    "name": "bf_phase1",
+    "parameters": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "inspect",
+            "check",
+            "submit"
+          ]
+        },
+        "candidate": {
+          "additionalProperties": false,
+          "properties": {
+            "capacitance_f": {
+              "minimum": 1e-06,
+              "type": "number"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "sha256": "54b706621e03da4f0b6fc484118599324296070bf67a00d115fec32ae9a531a2"
+  }
+}

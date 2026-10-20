@@ -1,5 +1,18 @@
 # BF-AIoT Agent
 
+## 2026-10-20 五阶段研究与工程交付
+
+当前 V2 实现、Power/Firmware 协作与联合执行、五阶段实验、两篇完整论文及工程接手资料已集中到本分支。
+
+- [完整交付入口](deliveries/BF_FINAL_20261020/START-HERE.md) · [完整封存工程包下载](https://github.com/littleandbrother/agent/releases/tag/bf-five-phase-20261020)
+- [8页工程简报](release/evidence/five-phase-20261020/brief.pdf) · [11页工程详报](release/evidence/five-phase-20261020/detailed.pdf)
+- [方法与 RSI 论文](battery-world/papers/method-reexecution-20261019/final/main.pdf) · [BF 接口充分性论文](battery-world/papers/interface-sufficiency-20261019/final/interface-sufficiency.pdf)
+- [五阶段结果与审查](docs/research/phase-plan-20261019/HOURLY-REVIEW.md) · [发布说明与复现命令](release/BF-FIVE-PHASE-20261020.md)
+
+默认继续采用 H0，本批尚未确立稳定 RSI 收益。A/R 保留 NO_GO、暗区与 FIFO 失败结论；压电节点已完成数字验证和目标构建，实物测试尚未完成，12项 DFM 警告保留。原 P01 Demo、原会话、失败和费用历史保留。
+
+下方为早期检查点的历史说明。
+
 当前 BF-AIoT Agent 与设计工作台的源码快照（2026-10-10）。工作台围绕同一产品任务组织设计、工具执行、交付物和验证证据；Pi 负责 Agent 执行，Harness 与科学环境分别保留身份和版本。
 
 ## 2026-10-10 开发检查点

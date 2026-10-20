@@ -1,0 +1,235 @@
+{
+  "schema_version": "campaign-interface-protocol-v1",
+  "feature": "BFA-046-interface-interventions",
+  "owner": "campaign-b",
+  "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "head": "317d40fef0137d3c1ad1873e53c3e9968b31200a",
+  "frozen_utc": "2026-10-19T13:00:47.330164+00:00",
+  "partition": "public-development",
+  "formal_test": "NOT_CREATED",
+  "hypothesis": "Current-task success and identical current observed trajectories need not imply sufficiency for a jointly legal design intervention.",
+  "paper_claim": "Two structural computational witnesses, with independent numerical/event checks, sufficient static controls, equal-information format packets, and audited observation preparation.",
+  "falsifier": [
+    "Current verdicts differ",
+    "Current representations differ",
+    "A patch is not jointly legal",
+    "Only amplitude rescaling of an old mechanism",
+    "Independent solvers disagree",
+    "Text and structured arms expose different facts or summaries"
+  ],
+  "pairs": [
+    {
+      "id": "clamp-capacitance",
+      "mechanism": "unexcited upper voltage clamp; capacitance modification changes the storage energy ceiling",
+      "worlds": [
+        {
+          "name": "low-clamp",
+          "kind": "clamp",
+          "clamp_v": 3.0
+        },
+        {
+          "name": "high-clamp",
+          "kind": "clamp",
+          "clamp_v": 5.0
+        }
+      ],
+      "task": {
+        "source_power_uw": 20.0,
+        "source_end_s": 2.0,
+        "consume_at_s": 2.5,
+        "service_energy_uj": 30.0,
+        "min_v": 1.0,
+        "horizon_s": 3.0,
+        "initial_energy_uj": 0.0
+      },
+      "design": {
+        "capacitance_uf": 10.0
+      },
+      "patch": {
+        "capacitance_uf": 4.0
+      },
+      "legal_domain": {
+        "capacitance_uf": [
+          4.0,
+          12.0
+        ]
+      },
+      "numeric_steps_s": [
+        0.001,
+        0.0005
+      ],
+      "static_grid_capacitance_uf": [
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        7.5,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0
+      ]
+    },
+    {
+      "id": "reset-memory",
+      "mechanism": "pending event retained or lost on power reset, with unchanged external event and TX windows",
+      "worlds": [
+        {
+          "name": "volatile",
+          "kind": "memory",
+          "retains_pending": false
+        },
+        {
+          "name": "retained",
+          "kind": "memory",
+          "retains_pending": true
+        }
+      ],
+      "task": {
+        "event_at_s": 1.0,
+        "tx_at_s": 4.0,
+        "deadline_s": 5.0,
+        "horizon_s": 5.0,
+        "event_id": "event-1",
+        "delivery_goal": 1
+      },
+      "design": {
+        "power_off_intervals": []
+      },
+      "patch": {
+        "power_off_intervals": [
+          [
+            2.0,
+            3.0
+          ]
+        ]
+      },
+      "legal_domain": {
+        "max_intervals": 1,
+        "start_min_s": 1.25,
+        "end_max_s": 3.75,
+        "min_duration_s": 0.25
+      },
+      "numeric_steps_s": [
+        0.001,
+        0.0005
+      ],
+      "static_grid_intervals": [
+        [],
+        [
+          [
+            1.25,
+            1.5
+          ]
+        ],
+        [
+          [
+            2.0,
+            3.0
+          ]
+        ],
+        [
+          [
+            3.0,
+            3.75
+          ]
+        ]
+      ]
+    }
+  ],
+  "negative_control": {
+    "id": "additive-static-sufficient",
+    "initial_energy_uj": 5.0,
+    "input_energy_uj": 40.0,
+    "design_service_cost_uj": 30.0,
+    "legal_service_cost_uj": [
+      10.0,
+      50.0
+    ],
+    "patch_service_cost_uj": 50.0,
+    "assumptions": [
+      "all input before service",
+      "no saturation",
+      "no leakage",
+      "no intervening workload",
+      "one required delivery"
+    ]
+  },
+  "fixed_information": {
+    "levels": [
+      "current",
+      "sufficient"
+    ],
+    "formats": [
+      "free-text",
+      "structured"
+    ],
+    "same_facts_and_summary": true,
+    "no_tools": true,
+    "consumer": "deterministic parser and analytic decision; NOT a model-format effect"
+  },
+  "active_information": {
+    "same_initial_current_packet": true,
+    "legal_observations": [
+      "uninformative",
+      "mechanism-spec",
+      "fixed-rich",
+      "full-raw",
+      "executable-dynamic"
+    ],
+    "strong_baselines_preserved": true,
+    "selector": "developer-supplied required facts, rank actual file byte estimates then observation ID; no verdict access"
+  },
+  "construction": {
+    "origin": "researcher-specified AST compiled by deterministic builder; NOT autonomous Agent discovery",
+    "independent_validation": "generated expression vs separate integration/event interpreter on public legal-domain grid",
+    "new_executable_artifact": true
+  },
+  "schema_changes": [
+    "campaign-interface-protocol-v1",
+    "campaign-interface-result-v1",
+    "campaign-observation-audit-v1",
+    "campaign-equal-information-v1",
+    "campaign-observation-expression-v1"
+  ],
+  "targeted_tests": [
+    "both current successes and identical current trajectories",
+    "joint legality and divergent intervention",
+    "analytic vs numeric and independent event parser",
+    "sufficient static controls",
+    "equal facts and summaries across formats",
+    "illegal interventions",
+    "tampered hashes",
+    "uninformative returns UNKNOWN",
+    "construction audit and budget exhaustion"
+  ],
+  "negative_controls": [
+    "additive static sufficiency",
+    "enriched static model sufficiency",
+    "uninformative current replay",
+    "illegal patch",
+    "tampered hash",
+    "insufficient observation byte budget"
+  ],
+  "cost_cap": {
+    "paid_model_requests": 0,
+    "native_dispatches": 0,
+    "output_bytes": 500000000,
+    "runner_wall_s": 120,
+    "verification_wall_s": 600,
+    "finite_suite_only": true,
+    "stop_free_bytes": 5000000000
+  },
+  "claim_boundary": "Public development, ideal clamped energy buffer and ideal reset state machine. Independent implementations share assumptions; neither physical calibration nor hardware, Agent efficacy, unseen generalization, format benefit or autonomous observation discovery.",
+  "stop_condition": [
+    "baseline or protected input drift",
+    "reference disagreement",
+    "out-of-domain model",
+    "hidden evaluator exposure",
+    "free space below 5 GB",
+    "out-of-scope source edit required"
+  ],
+  "reproduce": "PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_interfaces.py --output <new-absolute-directory>",
+  "runtime_root": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/b"
+}

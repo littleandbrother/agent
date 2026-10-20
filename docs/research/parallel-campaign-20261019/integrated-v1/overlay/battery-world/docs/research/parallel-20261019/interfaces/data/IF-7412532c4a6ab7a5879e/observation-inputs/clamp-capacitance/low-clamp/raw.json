@@ -1,0 +1,103 @@
+{
+  "current": {
+    "delivered_count": 1,
+    "delivered_energy_uj": 30.0,
+    "final_energy_uj": 10.0,
+    "input_energy_uj": 40.0,
+    "service_margin_uj": 5.0,
+    "spill_energy_uj": 0.0,
+    "trace": [
+      {
+        "energy_uj": 0.0,
+        "event": "initial",
+        "time_s": 0.0,
+        "voltage_v": 0.0
+      },
+      {
+        "energy_uj": 40.0,
+        "event": "harvest-ended",
+        "time_s": 2.0,
+        "voltage_v": 2.8284271247
+      },
+      {
+        "energy_uj": 40.0,
+        "event": "before-service",
+        "time_s": 2.5,
+        "voltage_v": 2.8284271247
+      },
+      {
+        "energy_uj": 10.0,
+        "event": "after-service",
+        "time_s": 2.5,
+        "voltage_v": 1.4142135624
+      },
+      {
+        "energy_uj": 10.0,
+        "event": "end",
+        "time_s": 3.0,
+        "voltage_v": 1.4142135624
+      }
+    ],
+    "verdict": "PASS"
+  },
+  "evidence_type": "ideal-model-definition; not calibrated or measured",
+  "law": "dE/dt=P until E=C*Vclamp^2/2; service stops at C*Vmin^2/2",
+  "pair": {
+    "design": {
+      "capacitance_uf": 10.0
+    },
+    "id": "clamp-capacitance",
+    "legal_domain": {
+      "capacitance_uf": [
+        4.0,
+        12.0
+      ]
+    },
+    "mechanism": "unexcited upper voltage clamp; capacitance modification changes the storage energy ceiling",
+    "numeric_steps_s": [
+      0.001,
+      0.0005
+    ],
+    "patch": {
+      "capacitance_uf": 4.0
+    },
+    "static_grid_capacitance_uf": [
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      7.5,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0
+    ],
+    "task": {
+      "consume_at_s": 2.5,
+      "horizon_s": 3.0,
+      "initial_energy_uj": 0.0,
+      "min_v": 1.0,
+      "service_energy_uj": 30.0,
+      "source_end_s": 2.0,
+      "source_power_uw": 20.0
+    },
+    "worlds": [
+      {
+        "clamp_v": 3.0,
+        "kind": "clamp",
+        "name": "low-clamp"
+      },
+      {
+        "clamp_v": 5.0,
+        "kind": "clamp",
+        "name": "high-clamp"
+      }
+    ]
+  },
+  "world": {
+    "clamp_v": 3.0,
+    "kind": "clamp",
+    "name": "low-clamp"
+  }
+}

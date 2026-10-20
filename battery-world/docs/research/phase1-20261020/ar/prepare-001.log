@@ -1,0 +1,314 @@
+{
+  "artifact": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/prepare-001",
+  "execution_integrity": "PASS",
+  "cases": {
+    "ar-cold": {
+      "checker_id": "ar-service-independent-v2",
+      "execution_integrity": "PASS",
+      "all_applicable_computational_services": "PASS",
+      "gates": {
+        "independent_energy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_receiver": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_activity_program": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "first_fresh_receive": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "continuous_new_sampling": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "dark_new_sampling": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "history_retention": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "gap_reporting": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "absolute_time": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "recovery_upload": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "deduplication": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "fresh_receive_delay": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_accuracy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_events": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "physical_qualification": {
+          "status": "UNKNOWN",
+          "applicable": true
+        }
+      },
+      "sample_count": 48,
+      "first_boot_s": 771,
+      "first_fresh_receive_s": 773,
+      "brownouts": 0,
+      "late_fresh_sequences": [],
+      "backlog_at_recovery": 0,
+      "late_recovery_records": 0,
+      "known_timestamp_error_s": 0.05639999999993961
+    },
+    "ar-light-dark": {
+      "checker_id": "ar-service-independent-v2",
+      "execution_integrity": "PASS",
+      "all_applicable_computational_services": "PASS",
+      "gates": {
+        "independent_energy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_receiver": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_activity_program": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "first_fresh_receive": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "continuous_new_sampling": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "dark_new_sampling": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "history_retention": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "gap_reporting": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "absolute_time": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "recovery_upload": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "deduplication": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "fresh_receive_delay": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_accuracy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_events": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "physical_qualification": {
+          "status": "UNKNOWN",
+          "applicable": true
+        }
+      },
+      "sample_count": 348,
+      "first_boot_s": 771,
+      "first_fresh_receive_s": 773,
+      "brownouts": 0,
+      "late_fresh_sequences": [],
+      "backlog_at_recovery": 0,
+      "late_recovery_records": 0,
+      "known_timestamp_error_s": 0.41639999999824795
+    },
+    "ar-history-nvm": {
+      "checker_id": "ar-service-independent-v2",
+      "execution_integrity": "PASS",
+      "all_applicable_computational_services": "FAIL",
+      "gates": {
+        "independent_energy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_receiver": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_activity_program": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "first_fresh_receive": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "continuous_new_sampling": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "dark_new_sampling": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "history_retention": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "gap_reporting": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "absolute_time": {
+          "status": "UNKNOWN",
+          "applicable": true
+        },
+        "recovery_upload": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "deduplication": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "fresh_receive_delay": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "temperature_accuracy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_events": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "physical_qualification": {
+          "status": "UNKNOWN",
+          "applicable": true
+        }
+      },
+      "sample_count": 168,
+      "first_boot_s": 771,
+      "first_fresh_receive_s": 773,
+      "brownouts": 1,
+      "late_fresh_sequences": [
+        123,
+        124
+      ],
+      "backlog_at_recovery": 73,
+      "late_recovery_records": 73,
+      "known_timestamp_error_s": 0.14279999999962456
+    },
+    "ar-upload-dedup": {
+      "checker_id": "ar-service-independent-v2",
+      "execution_integrity": "PASS",
+      "all_applicable_computational_services": "FAIL",
+      "gates": {
+        "independent_energy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_receiver": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "independent_activity_program": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "first_fresh_receive": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "continuous_new_sampling": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "dark_new_sampling": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "history_retention": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "gap_reporting": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "absolute_time": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "recovery_upload": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "deduplication": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "fresh_receive_delay": {
+          "status": "FAIL",
+          "applicable": true
+        },
+        "temperature_accuracy": {
+          "status": "PASS",
+          "applicable": true
+        },
+        "temperature_events": {
+          "status": "NOT_APPLICABLE",
+          "applicable": false
+        },
+        "physical_qualification": {
+          "status": "UNKNOWN",
+          "applicable": true
+        }
+      },
+      "sample_count": 168,
+      "first_boot_s": 771,
+      "first_fresh_receive_s": 773,
+      "brownouts": 0,
+      "late_fresh_sequences": [
+        109
+      ],
+      "backlog_at_recovery": 60,
+      "late_recovery_records": 0,
+      "known_timestamp_error_s": 0.2003999999997177
+    }
+  },
+  "new_simulations": 0,
+  "paid_requests": 0,
+  "native_calls": 0
+}

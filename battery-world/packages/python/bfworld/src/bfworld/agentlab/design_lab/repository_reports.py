@@ -91,7 +91,9 @@ def prepare(repo, owner, body):
             if file_hash(src) != record['sha256']: raise ValueError('REPORT_SOURCE_CHANGED')
             dest = root/'input'/record['local_path']; dest.parent.mkdir(parents=True, exist_ok=True)
             if dest.exists() and file_hash(dest) != record['sha256']: raise ValueError('REPORT_INPUT_CHANGED')
-            if not dest.exists(): shutil.copyfile(src, dest); dest.chmod(0o400)
+            if not dest.exists():
+                from ..storage import copy_artifact
+                copy_artifact(src, dest, record['sha256']); dest.chmod(0o400)
         sealed(root/'input/report-input.json', value)
         from .report_assets import fact_pack
         sealed(root/'facts.json', fact_pack(root/'input'))

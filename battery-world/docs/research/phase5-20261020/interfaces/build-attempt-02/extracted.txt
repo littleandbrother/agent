@@ -1,0 +1,798 @@
+    When Battery-Free Interfaces Support Design Changes
+     Information, Qualified Observations and Event-Time
+                            Service
+
+                                        Development manuscript
+
+                          Complete source-bound digital study, 20 October 2026
+
+
+
+
+                                                Abstract
+     Battery-free design decisions depend on when energy becomes usable, which state survives a reset
+     and what a receiver must learn. A representation that explains one successful trajectory can
+     omit the mechanism activated by the next legal design change. We formalize this distinction as
+     current-verdict versus intervention sufficiency, give an elementary factorization condition, and
+     exhibit ideal storage-clamp and reset-memory counterexamples. We then implement a bounded
+     route from acquired source data through independently qualified, typed observations to actual
+     design consumers. A matched comparison uses four fixed digital tasks and three formal repetitions
+     per condition. Average-energy inputs yield 8/12 complete-service passes; rich-static, complete-
+     input, executable-response and equal-information table inputs each yield 12/12. Prospective live
+     observation yields seven completed chains and five incomplete groups, retaining all twelve in the
+     denominator. Six completions select supplied fields and one constructs a relation; none supplies a
+     physical measurement. A secondary event-service study separates event matching from timestamp
+     accuracy: two one-second designs match all eight events and pass energy yet fail encoded-time
+     bounds at 1.004 and 1.103 s. Three 0.75-second designs pass; four other episodes terminate without
+     a submission. These results identify information and admission boundaries without demonstrating
+     superiority over complete static information. Physical qualification remains UNKNOWN, and
+     prior product failures remain unaccepted.
+
+
+
+
+1   Introduction
+A battery-free device must turn an intermittent supply into a particular service: capture an external event,
+preserve the relevant state, and deliver the required information at the required time. Having enough energy
+in total does not specify whether a rail becomes ready before a deadline, whether a transmit pulse causes a
+reset, or whether the event is still pending when the device recovers. The interface presented to a designer
+determines which of these relations can be evaluated before a legal change is made.
+The distinction matters even when the current service succeeds. Two worlds can produce the same present
+voltage and event traces while having different unexcited storage clamps. Reducing capacitance activates
+those clamps and separates their outcomes. Two pending-event memories can likewise behave identically until
+a reset is introduced. These examples do not imply that static descriptions are intrinsically inadequate. A
+static description of the relevant laws, parameters, initial state and legal intervention domain can already
+answer the prospective question [4, 5].
+An observation interface offers another route: acquire a source, select or construct a relation, qualify its
+domain and units, and feed the result into a design consumer. That route has an operational burden of its
+
+
+                                                     1
+own. A useful equation with an invalid path can fail admission; a correctly computed Boolean can fail to
+match a numeric consumer branch. A qualified observation can also leave the final design unchanged, or
+support a design that complete static information already permits. Source acquisition, typed consumption,
+service success and incremental benefit therefore require distinct evidence [6, 7, 12].
+We study these distinctions with sealed, executable digital BF cases. The first part states the information
+requirement and instantiates two structural counterexamples. The second implements the acquisition-to-
+consumer route and compares it against average-energy, rich-static, complete-input and executable interfaces
+under matched budgets. The main formal comparison has four fixed tasks and three repetitions per condition.
+Its strongest negative result is central: rich-static information already obtains 12/12 complete-service passes,
+whereas live observation completes seven chains and leaves five groups incomplete. The equal-information
+serialization comparison gives the same 12/12 service and 65 requests in both arms [11, 12].
+A secondary vibration-event study tests a different service boundary. Correct event matching and energy
+accounting do not ensure correct encoded event times. Two designs fail one-second timestamp tolerances even
+though their messages arrive promptly. We retain these submitted failures separately from four token-censored
+episodes with no design submission [18].
+The contribution is a connected account of what information must distinguish, how an observation must reach
+a real consumer, and where successful digital checks stop supporting the claim. It includes the theoretical
+condition, mechanism witnesses, strong static controls, actual failed and completed observation chains,
+and portable saved-data reconstruction. It supplies no claim of priority over general sufficient-statistic or
+abstraction theory, no advantage over the successful complete static controls, and no hardware qualification.
+The study concerns public development apparatus rather than an official benchmark or a population of unseen
+physical devices.
+
+2     Related Work
+Intermittent systems research addresses the consistency of execution across power failures. Alpaca organizes
+a program into tasks, privatizes shared data and commits task effects so interrupted execution can restart
+without exposing partial updates [1]. This establishes a concrete recovery mechanism; it does not make a
+current energy summary sufficient for a different capacitor or establish that an event reached its receiver. Our
+retained-state witnesses use an idealized latch and do not implement or evaluate Alpaca.
+Curricle specifies intermittent idempotence requirements through a type system and information-flow qualifiers,
+checking programs against those requirements [2]. Its program-level consistency question complements our
+admission question: whether an observation has declared units and domain, is independently qualified on the
+supplied source, and reaches a compatible design consumer. Passing these interface checks does not prove
+intermittent idempotence, arbitrary program correctness or physical validity.
+Counterexample-guided abstraction refinement (CEGAR) refines an abstraction when an abstract counterex-
+ample is spurious in the concrete system [3]. Our formulation shares the use of distinguishability to explain
+missing information. Its role is narrower: two legal digital worlds with the same representation require
+different verdicts after a specified intervention. Proposition 1 is an elementary factorization condition, not
+a new general theory of abstraction or a CEGAR algorithm. We supply neither a general model checker
+nor an automated refinement guarantee. The empirical contribution is the source-bound comparison among
+complete static information, executable feedback and qualified live observations, including failed chains and
+receiver-side service conditions.
+
+3     The information required by a design consumer
+
+3.1    Current verdicts and legal interventions
+Let T fix the external service and its evaluator, w ∈ W denote a world including device laws and state rules,
+and d0 be a current design. The complete nominal verdict is VT (w, d) ∈ {PASS, FAIL}. The representation
+Rd0 (w) is the information legally available at the current design. It may contain parameters, records, source
+
+
+                                                       2
+definitions or traces; it need not be a scalar. A legal intervention δ produces δ(d0 ). Comparisons below use
+the same T and only interventions jointly legal in the compared worlds. A change in the success criterion is
+not a design intervention.
+Current-verdict sufficiency requires
+
+                                Rd0 (w) = Rd0 (w′ ) =⇒ VT (w, d0 ) = VT (w′ , d0 ).                                (1)
+
+Intervention sufficiency on a declared common domain D requires the stronger implication
+
+                    Rd0 (w) = Rd0 (w′ ) =⇒ VT (w, δ(d0 )) = VT (w′ , δ(d0 ))    for every δ ∈ D.                   (2)
+
+Both are properties of a representation, consumer, world domain and task together. A field set sufficient for
+energy balance need not be sufficient for event retention or timestamp accuracy. Nor does either property
+promise that a finite-budget language-model procedure will use the information well.
+Proposition 1 (Elementary factorization condition). On a fixed common legal domain, an exact prospective
+predictor g(Rd0 (w), δ) = VT (w, δ(d0 )) exists if and only if the verdict for each δ is constant on every equivalence
+class of worlds sharing Rd0 .
+
+Proof. If g exists, identical representations and the same intervention give it identical arguments, so their
+required verdicts must agree. Conversely, if the verdict is constant on each class, define g by that class’s
+verdict for the requested intervention. Constancy makes the definition independent of the representative
+world. This is an information condition; the proof does not establish an efficient implementation or calibrated
+world model.
+
+An interface can return UNKNOWN when its equivalence class contains both verdicts. Abstention then
+differs from an incorrect PASS or FAIL. We also distinguish this epistemic answer from INCOMPLETE, the
+operational outcome when an episode supplies no admitted final execution. Physical qualification UNKNOWN
+is a third boundary: it describes absent calibration evidence even when the digital verdict is well defined.
+
+3.2   Refinement and the strong static alternative
+Acquiring an observation O refines the representation to (R, O). It is informationally useful for a particular
+intervention only if it separates worlds whose prospective verdicts were previously ambiguous, or supplies
+another needed input to the consumer. Provenance, domain and unit checks establish admissibility of the
+value. They do not, by themselves, establish that the value distinguishes the relevant worlds or changes
+service.
+A complete static model is an important limiting case. If its supplied parameters, laws and initial state
+determine the execution for every legal d, then executing or reasoning about that model defines an exact g on
+the stated ideal domain. A dynamic response can make a computation easier to inspect, and an observation
+can reduce the information a consumer must handle. Neither has an automatic informational advantage over
+that complete static model. A finite-budget comparison must measure any computational or operational
+advantage rather than infer it from the word “executable.”
+This separates three interface families evaluated here. A current trace describes one realized behavior. A
+declarative static model additionally specifies how permitted changes affect that behavior. An executable
+response computes candidate-specific consequences. A qualified observation is a source-bound intermediate
+fact delivered through a typed edge. These are distinct interfaces, but their useful information can overlap
+completely. The static-grid checks and matched rich-static arm explicitly test that overlap [4, 12].
+
+3.3   Service has several independent predicates
+The BF service consumer combines energy feasibility, event capture, retained state, message validity and
+timing. An ordered retention witness requires the same event to be captured before a reset and first validly
+received afterward. A reset after delivery does not satisfy that witness. Similarly, matching an event identifier
+
+
+                                                          3
+does not establish a correct encoded event time. For a confirmed event at t∗ , receipt at trx and encoded stamp
+t̂, an O-style service includes both
+
+                                      0 ≤ trx − t∗ ≤ L,      |t̂ − t∗ | ≤ ϵ,                                (3)
+
+in addition to energy and state predicates. The later experiment uses L = 10 s and ϵ = 1 s. The receive
+clock and the encoded stamp are different quantities. Passing the first inequality cannot replace checking the
+second [17, 18].
+
+4     Mechanism counterexamples and their sufficient conditions
+
+4.1    An unexcited storage clamp: E2
+Two ideal worlds receive 20 µW for 2 s and face a 30 µJ service transaction at 2.5 s. Both start with zero
+stored energy, use C = 10 µF and must retain the energy
+                                                   √      associated with a 1 V minimum rail. Their clamps
+are 3 V and 5 V. The current maximum voltage is 8 = 2.828 V, so neither clamp activates. Their complete
+current observed event and rail traces coincide and both services pass.
+The common legal change sets C = 4 µF within the declared [4, 12] µF domain. At 3 V, only 18 µJ can be
+stored; 22 µJ spills and only 16 µJ is available above the 1 V reserve. Service fails with a −14 µJ margin. At
+5 V, all 40 µJ is retained and the margin is 8 µJ, so service passes. The task, source, requested transaction
+and common change are identical. Thus the current trace does not distinguish a mechanism needed for the
+prospective verdict [4].
+An enriched static description resolves the ambiguity. Under the exact assumptions that all input precedes
+service, the capacitor is ideal and there is no leakage or intervening workload, define
+                                                            2          2
+                                                              
+                                                        CVmax       CVmin
+                            M (C) = min E0 + Pin tin ,           −        − Eservice .                 (4)
+                                                          2           2
+
+Service passes exactly when M (C) ≥ 0. The first term is the stored energy after the source ends; the next
+is the required residual energy. With no other transaction between those times, their difference is exactly
+the budget available to service. The sufficient object is the functional M (·) and its parameters on the legal
+domain, not merely its value at the current C. Both worlds have the same current margin. A current scalar
+margin alone therefore retains the counterexample.
+
+4.2    An unexcited reset transition: E3
+The second pair captures event 1 at 1 s and attempts its single transmission at 4 s, before a 5 s deadline. A
+volatile pending memory and a retained pending memory both deliver in the current uninterrupted execution.
+The same legal change inserts a power outage from 2 to 3 s. Volatile memory clears the pending event and
+delivers none; retained memory delivers one. External event timing and the transmission schedule remain
+fixed. This witness changes a state transition rather than scaling an energy total [4].
+The sufficient static state description must state capture, reset and send semantics and their order. If pending
+state survives each intervening reset, and the scheduled send can execute after restoration, the captured event
+remains available. If the only pending copy is cleared and no recapture is possible before sending, it does not.
+These are conditions of the ideal machine, not a claim that an arbitrary nonvolatile device has free writes,
+atomic persistence or a qualified energy budget.
+The saved analytic and numerical clamp implementations and the separate memory interpreter agree on
+eight current/intervention cases at both 1 ms and 0.5 ms settings: sixteen resolution-specific comparisons.
+Maximum reported energy discrepancy is 2.84 × 10−12 µJ. The enriched static model agrees on all 28 exposed
+grid points, and an additive static control agrees on five service costs spanning PASS and FAIL. Removing the
+unexcited clamp or reset-retention fact restores aliasing in these encodings. These checks establish software
+consistency under common ideal assumptions, not independent physical truth or universal necessity of a
+particular field name [4].
+
+
+                                                       4
+Table 1: E2–E3 structural witnesses: both worlds pass before a common legal intervention, then separate.
+These are two exposed ideal pairs, not statistical repetitions.
+                      Mechanism        World         Current      Changed    Changed events
+                      Clamp            low-clamp      PASS          FAIL                 0
+                      Clamp            high-clamp     PASS          PASS                 1
+                      Reset memory     volatile       PASS          FAIL                 0
+                      Reset memory     retained       PASS          PASS                 1
+
+
+4.3    Connecting the witnesses to transient BF behavior
+Seven separate saved BF controls exercise source timing, startup, loaded rail, reset and reception (Table 2).
+Their transient model uses ready/off thresholds, boot energy, finite TX current and duration, and the
+loaded-rail relation                          p
+                                      Vload = 2E/C − ITX RESR .                                          (5)
+A failed energy or rail gate can reset the program and clear volatile pending state. The causal path is load to
+stored energy and loaded rail, then reset and program behavior. The source is prescribed, so no load-dependent
+source feedback is established [5].
+
+
+Table 2: Seven saved digital BF reference controls. First reception after 100 ms fails the deadline; a passing
+rail gate without a received event is insufficient. Physical qualification is UNKNOWN throughout.
+                            Control          Input (µJ)       RX (ms)   Service   Rail
+                            Fast pulse              150          15.8   PASS      PASS
+                            Slow pulse              150          54.8   PASS      PASS
+                            High ESR                150             –   FAIL      FAIL
+                            No energy                 0             –   FAIL      PASS
+                            Late pulse              150         105.8   FAIL      PASS
+                            Latched reset           210          46.9   PASS      PASS
+                            Volatile reset          210             –   FAIL      PASS
+
+
+Fast, slow and late pulses each supply 150 µJ, yet their first receptions differ; the late one misses the 100 ms
+deadline. A 150 Ω ESR control prevents reception despite the same source integral. The no-energy control
+passes its rail check vacuously and fails service. The reset pair supplies 210 µJ with the same 40 µJ shunt
+and postponed transmission, but pending-event survival differs. Its retained mechanism is an explicitly ideal
+passive mechanical latch able to capture without stored electrical energy. It is not a model of a qualified
+commercial contact device or a powered NVM write.
+All seven agree with their predeclared control expectations, including the intended failures. That agreement is
+different from seven service passes. The full input laws and source calibration limits accompany the saved
+data; physical qualification remains UNKNOWN for every control. These transient examples connect the
+structural issue to BF operation without turning the two ideal witness models into a complete physical node.
+
+5     From a missing relation to an executed consumer
+
+5.1    A bounded observation language and external qualification
+The observation interface makes the information path explicit (Figure 1). The participant can list and acquire
+permitted sources, propose either a selected field or a constructed relation, and submit a typed design policy.
+A proposal states the source identifier, JSON Pointer paths, units, applicability domain and intended relation.
+Selecting a supplied field and constructing a new expression are recorded as different operations. Neither
+label alone establishes a new physical fact or a novel scientific relation [6, 9].
+
+
+
+
+                                                          5
+                     Acquire source               Propose observation          External qualification
+                    bytes, unit map,               field or bounded                source, units,
+                      source hash                      expression                  legal domain
+
+
+
+                     Independent                      Execute full
+                                                                                    Typed consumer
+                     service check                    design input
+                                                                                     original condi-
+                    PASS, FAIL or                    input and exe-
+                                                                                      tional policy
+                     no execution                    cution identity
+
+
+Figure 1: The observation-to-consumer chain. Rejection can stop the chain before any final service execution.
+Every attempted action and its cost remain recorded. A source-bound value or a consumed observation alone
+is not service or benefit evidence.
+
+
+Construction uses a bounded JSON abstract syntax tree rather than arbitrary Python. The interpreter admits
+at most 64 nodes, depth eight, an 8 MB JSON source and 32,768 vector elements. A construction must
+contain a source field and an allowed operator. Unit dimensions must agree across operations; the declared
+output unit must match the root, and declared numeric domain constraints are checked against source values.
+Missing fields, unsupported domains and invalid arithmetic lead to rejection or UNKNOWN. These limits
+bound interpretation; they do not calibrate the supplied source.
+Authority is outside the proposer. The host binds the original source bytes, proposal code and input,
+provider/run identity and actual accounting. An independent interpreter checks the source relation. A
+proposer cannot qualify its own output by supplying an authority record or a success label. The consumer
+receives only an admitted observation and the original policy, then chooses among at most three strictly
+typed equality branches. Boolean true and a numeric duration are different values. The complete selected
+input, observation edge and actual execution identity are preserved before the separate service verdict is
+read [6, 8, 9].
+This design distinguishes acquisition from consumption. Echoing a value in a report is insufficient. A valid
+consumption receipt shows how that value entered the executed design. It still does not establish causal
+necessity: the same design might be chosen with complete static inputs, and an observation can be consumed
+without changing the design. A claimed benefit would require a separately frozen comparison of alternatives
+with the same task and allowance.
+
+5.2   A concrete constructed relation and its actual consequence
+An earlier actual E5 attempt acquired component, excitation and saved-activity records, then constructed an
+energy comparison. Its first proposal omitted the leading slash required by JSON Pointer. The original host
+counted that invalid proposal against the one-proposal limit; the model’s already generated correction was then
+rejected at the cap. The live attempt remains rejected: no qualified observation, no real consumer execution,
+and no proposed-design scientific execution. Its six SETTLED requests and USD 0.0644115 upper-bound rate
+estimate remain charged [7].
+A separately authorized record labeled POSTHOC_HOST_ADAPTER_REEVALUATION later evaluates that existing
+corrected call. It makes no new model request and does not replace the failed live attempt. The model’s
+retained relation is
+
+                                          ETX = ITX ∆tTX Vout = 28.8 µJ,                                   (6)
+                                                         2        2
+                                       Ereserve = 21 C(Vready − Voff ) = 23.0 µJ,                          (7)
+                                             b = [ETX > Ereserve ] = true.                                 (8)
+
+The supplied record uses 8 mA, 2 ms, 1.8 V output, 10 µF capacitance and 2.8/1.8 V ready/off thresholds.
+The source-bound domain allows 4–22 µF and 0–45 ms earliest TX, with TX current fixed at the record’s value.
+A separate Decimal interpreter agrees on the Boolean and verifies source dependence over legal capacitance
+
+
+
+                                                           6
+values. The qualification criterion was revised post hoc from a paired-world-specific test to dependence across
+legal design values. That intervention and its scope remain explicit [8].
+Before an admitted observation, the consumer keeps UNKNOWN and the original 10 µF, 45 ms design.
+Qualified Boolean true selects the model’s original 15 µF, 45 ms branch. The actual full service changes from
+FAIL with no received frame to PASS with first reception at 46.9 ms. Both energy ledgers pass, so the energy
+flag alone cannot explain service. The selected design avoids a pre-deadline brownout; it does not demonstrate
+retention of a pending event across one. A complete static-information design already passes at 10 µF and 0
+ms, receiving at 5.6 ms. The unused false branch’s service is not established by these receipts [8].
+The relation is therefore a concrete derived fact that reaches a real design consumer and has an executed
+engineering consequence. It is not prospective live-E5 success, a physical measurement, proof that capacitance
+must increase, or an advantage over complete static information. Its energy inequality omits startup work,
+losses and event order and cannot serve as a complete service evaluator. Later adapter-v2 regression records
+reject malformed syntax before charging the valid-proposal counter, while bounding syntax rejections and
+retaining a one-valid-proposal limit. Those new-version checks preserve the original failure [9].
+
+6     Matched digital experiment
+
+6.1    Tasks, outcome and strong controls
+The main comparison uses four fixed tasks. Pulse-fast is a static-sufficient control. Volatile-reset and
+latched-reset use the transient BF apparatus with different pending-state semantics. Their legal design
+variables are capacitance and earliest permitted transmission, under frozen task-specific ranges. Complete
+service uses independent energy and receiver checks plus the registered ordered-event analysis. PASS denotes
+admitted complete service, FAIL an admitted final design that fails it, and INCOMPLETE no admitted final
+execution [10, 11].
+The fourth task is a preregistered C-lite single-query derivative. It supplies 20 µW ideal DC for 30 s, 1 µW
+idle load, zero initial energy and a 50 µJ reply. A query at 2 s must receive its matching reply by 7 s with
+maximum data age 5 s. Capacitance is 25–100 µF at an ideal 2 V ceiling; ESR, boot energy and boot delay
+are zero and harvest efficiency is one. Gates require query issuance, capture, matching token, causal order,
+deadline and freshness. The fixed token value 1 represents one virtual query, not a secure multi-query protocol
+or an RF environment. These are explicit synthetic assumptions [15].
+Average-energy begins with the coarse source integral and average power. Rich-static and complete-input supply
+all input records and the full model definition. They have the same available facts in this registered comparison,
+making their tie an admissible control. The saved condition name for complete-input is complete-raw; it does
+not mean that the participant receives the full coupled physical trace. That trace is host-side audit material.
+Executable-response adds candidate-specific public energy ledgers, activity and packets. Live E5 begins
+coarse and actually acquires permitted records, proposes a field or relation, obtains external qualification and
+submits a typed consumer policy. No target expression, required-field list or answer-bearing relevance label is
+prefilled [10, 12].
+E4 changes only the rich-static initial serialization, comparing JSON with a typed JSON-Pointer table. The
+table preserves nested containers, types and empty values. All twelve formal pairs have saved receipts of
+identical decoded initial packets and tools. Later source responses use common JSON in both arms. This
+is an initial-serialization comparison rather than a representation intervention across the whole interactive
+trajectory.
+
+6.2    Repetitions, resource parity and cache exposure
+Two pilot repetitions on volatile-reset precede the formal comparison. The registered one-time instability rule
+selects three formal repetitions, then freezes that count. Pilots remain separate development evidence. The
+full eight-condition matrix contains 112 unique groups and 140 actual episodes: 96 formal groups and 16 pilot
+groups. Parent method proposals account for additional episodes in two conditions. This paper displays six
+
+
+                                                        7
+interface conditions, covering 72 formal and 12 pilot groups. Rich-static is also E4 JSON, and complete-input
+is also the fixed-method cell; these shared cells are counted once [10, 11].
+Within each compared task, the scientific laws, service evaluator, legal design domain, reported model alias,
+initial cache and total resource caps remain fixed. Information access varies as declared by the condition.
+Each group has 24 provider requests, 40 tool calls, 1,200 s and at most two distinct design exposures, counting
+checks, response queries and confirmation. Acquisition, qualification and consumption do not add a free
+E5 budget. A parent proposal, when present, has an eight-request, 400 s sublimit within the group. The
+campaign caps are 3,000 requests, USD 200 in settled conservative estimates and 134,400 summed episode
+seconds. Failed groups are not automatically retried or replaced.
+Every group starts from one immutable cache containing twelve exact-input responses and one registered
+derivative baseline. Private overlays isolate new job histories. A cache hit still consumes logical design
+exposure; it does not reveal another group’s output before a query or enlarge the two-design cap. The records’
+term “physical cache” denotes the underlying digital execution cache and supplies no laboratory evidence.
+Fresh participant entries and the common cache identity are retained per group. The model is reported as
+deepseek-flash; this alias does not establish a pinned weight identity [11].
+
+6.3    Preparation and negative controls
+The structural preparation separately exports 64 inputs across four cases, four information levels, two formats
+and two observation regimes. Thirty-two format pairs preserve decoded facts, assets, tools and resource
+limits. These are preparation checks, distinct from actual model trials. Fixed parser checks abstain on all
+four current-only cases and correctly judge all four sufficient-information cases in both supplied serializations.
+They do not measure language-model comprehension [4, 6].
+Negative controls retain the enriched static solution, complete raw model, uninformative observation, exhausted
+acquisition budget, illegal design changes and tampered source binding. A researcher-specified required-field
+selector and a researcher-supplied headroom expression are construction baselines, not autonomous discoveries.
+Preparation outcomes are not substituted for later live completion, and software validation of a consumer
+edge is not promoted to hardware acceptance.
+
+7     Results: complete static information remains a strong control
+
+7.1    The complete-service comparison
+Table 3 reports every formal group. Average-energy yields 8 PASS and 4 FAIL. Rich-static, complete-input,
+executable-response and E4 table each yield 12 PASS. Live E5 yields 7 PASS and 5 INCOMPLETE; it has no
+admitted final service FAIL. Its completion rate is 7/12, not a conditional 7/7. Missing final executions and
+submitted service failures remain different outcomes with the same full denominator.
+
+Table 3: Formal matched interface comparison: four fixed tasks, three repetitions per task, twelve groups per
+arm. P/F/I are PASS, submitted FAIL and INCOMPLETE. Every incomplete group and its requests remain
+included.
+                        Condition                P    F       I   Requests   Requests/group
+                        Average energy            8   4       0        75            6.2500
+                        Rich static / E4 JSON    12   0       0        65            5.4167
+                        Complete input           12   0       0        64            5.3333
+                        Executable response      12   0       0        66            5.5000
+                        Live observation (E5)     7   0       5        80            6.6667
+                        E4 typed table           12   0       0        65            5.4167
+
+
+The coarse arm’s observed deficit occurs in the two reset tasks, each with one PASS and two FAIL. Pulse-fast
+and the C-lite derivative each have three PASS. Every strong arm passes all three repetitions on each task
+(Table 4). This finite result is consistent with the value of supplied timing and state information beyond the
+
+
+                                                          8
+Table 4: Formal P/F/I out of three per task. Each strong arm separately denotes rich static, complete input,
+executable response and E4 table; none has an omitted failure.
+                      Fixed task                Average energy   Live E5    Each strong arm
+                      Pulse-fast                    3/0/0        2/0/1            3/0/0
+                      Volatile reset                1/2/0        2/0/1            3/0/0
+                      Latched reset                 1/2/0        1/0/2            3/0/0
+                      C-lite query derivative       3/0/0        2/0/1            3/0/0
+
+
+coarse energy summary. It establishes no service advantage for executable-response over rich-static information.
+The saturated controls also do not prove equivalence on harder or previously unused tasks.
+The two pilot repetitions are not pooled with the formal twelve. On their single volatile-reset input, average-
+energy has one PASS and one FAIL; each other displayed arm has two PASS. E5’s two pilot completions
+include one selection and one construction. These are the development observations preceding the one-time
+formal-repeat freeze, not additional formal successes or independent tasks [12, 10].
+
+7.2   What the seven prospective E5 chains did
+Every formal E5 completion contains an actual prospective proposal, external source qualification and a typed
+observation consumed by the design policy. Six select existing fields and one constructs a relation. Five use
+component records and two excitation records. Six change the initial design and one does not. All seven final
+designs pass independent service, and all seven deliver before any reset. Their successes therefore establish
+neither pending-state survival across a reset nor the necessity of the acquired observation. New physical
+measurements number zero [12, 11].
+
+
+Table 5: Disposition of all twelve formal E5 groups. Repeated rejected actions are not additional groups;
+absent executions are retained as INCOMPLETE.
+                          Disposition                        Groups        Final service
+                          Qualified selection, consumed            6         PASS
+                          Qualified construction, consumed         1         PASS
+                          Source-unit binding rejected             4     INCOMPLETE
+                          No typed consumer match                  1     INCOMPLETE
+
+Four incomplete groups retain SOURCE_UNIT_UNAVAILABLE in their original gateway records. The code
+identifies a submitted source/field/domain unit-binding problem; it does not imply that a physical quantity
+does not exist. In the pulse-fast example, the selected packet field /packets/0/application_bytes is unit-
+mapped in the acquired saved-activity source, while the declared domain also references deadline, TX-duration
+and readiness fields absent from that source’s unit map. A latched-reset proposal selects a packet field from
+the model-law source, whose mapped fields describe model identity and Python definition. The original generic
+error does not name the first rejected term. We diagnose the source-local mismatch from saved proposals and
+logs; no repaired proposal is evaluated [13].
+The fifth incomplete group records NO_TYPED_CONSUMER_MATCH on the C-lite derivative. Its equality expression
+outputs a Boolean while the consumer branches match numeric durations 0.002 and 0.001. A value can
+therefore be syntactically meaningful yet fail to enter the intended design edge. Other syntax and valid-
+proposal-cap errors remain charged actions inside these groups, not extra independent trials or free rescue
+attempts. Table 5 counts groups once.
+The rejected original E5 attempt and its separately authorized post-hoc adapter chain remain outside these
+twelve formal groups. The post-hoc record demonstrates engineering linkage of an already generated relation.
+The seven later formal completions demonstrate prospective operation under a different registered protocol.
+Relabeling the former as a successful live discovery would erase both its original admission failure and the
+host intervention [7, 8].
+
+
+                                                        9
+7.3   Equal information and acquisition overhead
+E4 gives identical complete-service and request totals: JSON and the typed table each pass 12/12 using 65
+provider requests, or 5.4167 per group. The retained USD and wall receipts differ (Table 6), but this small
+comparison isolates neither all latency determinants nor the representation of later acquisitions. It supplies
+no observed service or request advantage and no causal format-speed or format-cost conclusion [12].
+
+
+Table 6: E4 equal-information initial serialization. Later acquisitions use common JSON. Cost and summed
+group wall time are descriptive; neither establishes a format advantage.
+                            Initial packet   PASS     Requests           USD      Wall (s)
+                            JSON             12/12            65     0.4267200       676.5
+                            Typed table      12/12            65     0.5145681       611.4
+
+
+
+Table 7: Finite observation selection on four exposed cases. Read and audit bytes are Python payloads, not disk
+I/O. Host timings are single historical measurements, not latency benchmarks; selected and mechanism-spec
+contain the same facts.
+                   Observation            Correct    Read B        Audit B   Wall ms     Model runs
+                   uninformative             0/4       4648           4648       0.289           0
+                   mechanism-spec            4/4        103            103       0.260           0
+                   fixed-rich                4/4       4747           4747       0.282           0
+                   full-raw                  4/4       8544           8544       0.333           0
+                   executable-dynamic        4/4       8544           8544       1.886           4
+                   selected                  4/4        103            103       0.236           0
+
+
+The earlier finite observation selector chooses the smallest eligible source using researcher-supplied required-
+field metadata, without service outcomes. It reads the same 103 bytes and facts as the fixed mechanism-spec
+baseline; both correctly judge four cases. Rich-static, complete raw and an executable response also correctly
+judge all four. The historical timings in Table 7 include acquisition and source audit, plus selection when
+used. They are single-host payload measurements with uncontrolled cache state, not storage-I/O or monetary
+measurements. Thus lower payload volume relative to a full model is not an independent selection-algorithm
+gain [4].
+A deterministic compiler also constructs the researcher-specified headroom observation. Its saved outputs of
+−14 and 8 µJ agree with twenty exposed clamp-grid checks and two fresh-process executions. Construction
+took 0.239 ms, reference qualification 13.017 ms and the two fresh processes 37.730 ms combined in those
+retained receipts. Because the equation and relevant fields were supplied by a researcher, this is executable
+construction machinery, not an autonomous discovery.
+
+7.4   Service success versus an ordered retention witness
+Four formal participant groups select a pending-event-across-reset result: two complete-input groups, one
+proposed-method group and one E4 table group. They make four fresh choices but reuse one distinct historical
+digital execution key. All select 10 µF and earliest TX at 45 ms. The same event is captured from 3.7 to 7.9
+ms, a brownout occurs at 12.1 ms, and first valid reception follows at 46.9 ms. The fixed ideal passive latch
+provides the retention mechanism [14].
+All twelve rich-static, all twelve executable-response and all seven successful E5 groups instead deliver before
+any reset. Their complete service passes are valid for their tasks but are not evidence for the stronger
+ordered-retention property. Conversely, four selections of one response are not four independent physical
+experiments or four newly invented retention mechanisms. The ordered audit creates zero new scientific
+executions and retains physical qualification UNKNOWN.
+
+
+
+
+                                                        10
+8     Event-time service exposes another interface boundary
+
+8.1    The original O service and its strong fixed control
+The O study extends the digital apparatus to vibration start, active keepalive and stop service. O0 is
+a 21,600 s task with zero initial capacitor energy, C = 15 mF and a prescribed source associated with
+a 15 cm2 photovoltaic area. Its six intervals have nominal light levels 200/0/50/200/0/50 lux at bound-
+aries 0/120/150/180/300/330/360 min. The corresponding electrical inputs are separately prescribed as
+90/0/20/90/0/20 µW; the 3500 K label is metadata and lux is not converted into watts. RMS vibration is
+0.08 g in the four declared activity intervals and 0.005 g otherwise. These inputs are uncalibrated digital
+assumptions [17].
+Start requires RMS continuously above 0.05 g for 3 s; stop requires RMS continuously below 0.01 g for 60 s.
+Equality resets confirmation. The confirmation instant is the event time. Each start and stop must arrive
+within 10 s and carry an encoded timestamp within 1 s; active keepalive gaps must not exceed 120 s and idle
+false events fail. The first dark interval contains one required active interval, so darkness cannot simply be
+excluded from service.
+The inherited ideal energy path has 0.8 harvest efficiency, 0.38 V/ 3 µW cold-start gates, 2.7/2.3 V ready/off
+thresholds, 3.3 V maximum capacitor voltage, 5.5 V rating and 0.3 Ω ESR. It supplies 1.8 V with 0.3 V
+dropout, 1/5 µW off/sleep power, 100 µJ boot and 130 µJ atomic TX transactions. Added RMS costs are
+0.5 µW standby, 1 µJ wake, 20 µJ per successful sample and 5 µJ per committed write. The write is not
+charged at every poll. These proposed costs do not qualify a vibration sensor, PMIC, clock, NVM or RF
+receiver.
+O0 compares a free legal candidate, a fixed 60 s periodic snapshot control and a fixed rich-state start/stop
+machine. They share the same task, source, hardware and event evaluator. The candidate and rich-state
+control submit the same one-second, NVM, confirmed_events program with the same thresholds, one-second
+retry and zero backoff. They share an exact execution key and response, match eight events, deliver 18
+accepted packets and pass the nominal O predicate. The periodic control delivers 348 accepted packets and
+passes energy, but matches no required event. It fails service [16].
+
+
+Table 8: Original O0 development task. Candidate and rich-state control share one exact design and response.
+Self-judgment is scoped separately from the host O event predicate.
+                   Arm              Poll (s)   Matched/8    Host O   Self-judgment   Requests
+                   candidate              1          8/8    PASS     UNKNOWN               8
+                   fixed-periodic        60          0/8    FAIL       FAIL                5
+                   rich-state             1          8/8    PASS       PASS                5
+
+
+The candidate checks one-second sampling, then 1.5-second sampling, and ultimately submits the former. In
+the retained 1.5-second alternative, the first start is observed at 4204.070423 s and stamped 4204.139063 s
+against truth 4203 s. The stamp error 1.139063 s exceeds tolerance even though energy and delivery can
+appear adequate. This checked alternative is preserved in the same episode’s exposure and cost history, not
+treated as a later repair to its accepted design [16].
+The candidate’s own judgment is UNKNOWN. Its original explanation concerns unobserved dark intervals after
+brownout, absent gap-report messages, inherited A/R first-report and dark-report metadata, and unavailable
+source/hardware calibration. In particular, inherited metadata calls for reception by 1800 s and dark reporting
+every 600 s, while the first confirmed O event is later. The host’s O predicate asks a narrower event-service
+question and returns PASS. Its saved disagreement flag is nominal to that predicate. This is not evidence
+of a mistaken physical-acceptance judgment. Neither the flag nor O PASS discharges inherited reporting
+obligations. The observed brownouts near 8766.18 and 19587.64 s occur after required active intervals; success
+on this waveform does not establish uninterrupted six-hour sensing [16, 17].
+
+
+
+
+                                                       11
+8.2   A frozen new waveform and complete denominators
+A secondary closed comparison freezes six descendant design procedures before any final input. Fixed H0 is
+unchanged; G0 is a fixed procedure improver; G1 is one actually proposed improver. Three paired descendant
+lineages are conditional on that single G1 formation, not three independent G1 training runs. Thirty effective
+selection cells pass before freezing. Each final design episode then sees the complete current task, including its
+waveform. “Unexposed” describes formation and selection, not concealment of the waveform from the final
+designer [19].
+Each arm has nine final cells: three lineage contexts on each of two reserved digital tasks and a new O
+waveform. Both digital tasks pass in all eighteen cells. The complete 27-cell totals are H0 7/1/1, G0 6/1/2 and
+G1 8/0/1 in PASS/submitted-FAIL/INCOMPLETE order. The O rows account for all differences (Tables 9
+and 10). G1’s 8/9 is descriptive conditional evidence, not a stable improvement claim or a reason to replace
+H0 [18, 21].
+
+Table 9: Complete 27-cell transfer denominator. Both reserved digital tasks pass in all 18 cells; O contributes
+the submitted failures and four incomplete episodes.
+                            Procedure arm       PASS      Submitted FAIL        INCOMPLETE
+                            H0                     7                        1                     1
+                            G0                     6                        1                     2
+                            G1                     8                        0                     1
+
+
+
+Table 10: All nine new-O final cells. Every submitted row matches eight events, receives 18 packets and passes
+energy. Events P/8 counts individually passing events. Dashes denote no submission.
+                Lineage/arm      Poll (s)   Retry (s)     Events P/8       Max error (s)              Service
+                L1-H0                  1            1               6/8               1.103        FAIL
+                L1-G0                  –            –                 –                   –    INCOMPLETE
+                L1-G1               0.75         0.25               8/8               0.728        PASS
+                L2-H0               0.75            5               8/8               0.728        PASS
+                L2-G0                  –            –                 –                   –    INCOMPLETE
+                L2-G1                  –            –                 –                   –    INCOMPLETE
+                L3-H0                  –            –                 –                   –    INCOMPLETE
+                L3-G0                  1         0.25               6/8               1.103        FAIL
+                L3-G1               0.75            1               8/8               0.728        PASS
+
+All five submitted new-O designs pass energy, match all eight events and receive 18 accepted packets. Three
+designs sampled at 0.75 s pass complete service, with maximum encoded-time error 0.728 s. The two one-second
+submissions each pass six individual event checks and fail two stops with WRONG_EVENT_TIME. Their retry
+values differ, and their execution keys are distinct.
+
+Table 11: The same two failed stop times occur in both one-second submissions. Error uses encoded event
+time, not receive time. Their distinct execution keys and different retry values remain preserved.
+                            Confirmation (s)     Reception (s)        Encoded (s)       Error (s)
+                                    12077.625           12078.588         12078.629           1.004
+                                    17043.625           17044.588         17044.728           1.103
+
+Both failed stop receptions occur less than one second after confirmation, but the encoded stamps are 1.004
+and 1.103 s late (Table 11). Thus a correct match, prompt arrival, empty final queue and passing energy ledger
+cannot substitute for the encoded-time predicate. Detection and encoding must be checked together: for
+detection instant tdet , |t̂ − t∗ | ≤ |tdet − t∗ | + |t̂ − tdet |. The saved comparison does not isolate sampling phase
+from encoded clock behavior causally. Retry periods also vary, and one passing 0.75 s design belongs to H0.
+This is an observed design association, not a single-factor sampling ablation or an exclusive G1 mechanism.
+
+
+                                                             12
+Four O episodes have no submission: L1-G0, L2-G0, L2-G1 and L3-H0. Each last SDK assistant response
+reports stop reason length, 32,768 output tokens and 32,768 reasoning tokens, with thinking content and
+no final design or judgment. These are last-response counters, not the whole episode’s token total or two
+additive token budgets. The outcomes remain INCOMPLETE; they are neither hardware failures nor energy
+FAILs. All requests, costs and nine O slots remain in the denominator, with no automatic retry [18].
+The two submitted failures self-report PASS and therefore disagree with the nominal event predicate within
+the submitted scope. This differs from O0’s broader UNKNOWN judgment. Missing submissions have no
+self-judgment and cannot be counted as zero-error successes.
+
+9     Discussion and limitations
+
+9.1    What changes when information is sufficient
+The structural witnesses establish a precise failure of the current representation: identical present behavior
+can coexist with distinct responses to the same legal change. The enriched static controls show that the failure
+is not a universal static-versus-dynamic divide. Once the relevant law and state transition are supplied, the
+ideal tasks admit static prospective judgments. The matched comparison then tests actual finite-budget use,
+where the complete static arms already saturate service.
+Live acquisition introduces more than information content. Source identity, source-local unit maps, domains,
+typed policy branches, proposal caps and final submission all become operational gates. The seven prospective
+E5 completions establish that this route can reach an actual consumer. Its five incomplete groups expose
+the cost of failing before execution. A compiler accepting a relation, an independent scalar agreement, a
+changed design and complete service are useful but different observations. None is automatically evidence of a
+necessary new fact or benefit over a sufficient static baseline.
+The O result further narrows what the consumer must check. A representation containing only matched
+counts and energy PASS would omit the distinction that separates the two one-second failures from complete
+event service. Adding receive delay alone would still miss the encoded-time failure. The relevant interface
+must expose the predicate’s actual operands. This is a concrete consumer-specific information requirement,
+not a blanket request for a larger trace.
+
+9.2    Limits on generalization and acceptance
+The four main tasks are fixed public development inputs with three formal repetitions, not a random sample
+of task families. Pilot evidence and formal evidence remain separate. The same reported model alias is used,
+but pinned weight identity is UNKNOWN. Source and evaluator hashes support execution identity; they
+cannot recover unavailable weight identity or establish an invoice audit. The current study does not estimate
+statistical significance, format equivalence, general interface superiority or stable recursive improvement.
+The ideal clamp and memory models share assumptions across their independent implementations. The
+transient source is prescribed, the passive latch is ideal, and the C-lite source has no measured RF conversion
+or load response. O adds proposed RMS costs and a modeled clock, not measured sensor, PMIC, NVM
+or PHY behavior. Range consistency, conservation checks, software correctness and physical qualification
+therefore remain distinct. A digital PASS does not qualify source spectra, startup transients, leakage, clock
+uncertainty, write persistence or radio reliability.
+Original A/R dark-report and strict FIFO failures remain preserved, with product status NOT_ACCEPTED. O
+event success neither erases those obligations nor accepts a complete product [22]. Likewise, avoiding a reset
+is not retaining state through one, and matching an event is not encoding its time correctly. These scope
+distinctions prevent an attractive sub-result from answering a broader untested question.
+
+9.3    Accounting and retained host interventions
+The full matched campaign records 771 SETTLED requests, USD 5.4478605 in conservative rate estimates and
+8914.281914 summed episode seconds. It includes the two method-proposal conditions outside the six displayed
+
+
+                                                      13
+interface rows. E4 JSON is already the rich-static cell and is never added again. The secondary O/procedure
+campaign records 77 actual attempts for 73 logical cells, 367 SETTLED requests, USD 3.1767228 and
+5951.639484 summed episode seconds. Its original O0 cost is a subset, not an additional campaign [11, 19, 21].
+Four original selection host incidents are retained: three raise a missing historical-trace key and a fourth is
+censored by the hold. A registered continuation reconstructs the already sealed historical trace and links
+four named recovery attempts, preserving the original failures and valid earlier results. These infrastructure
+incidents are not negative G0/G1 scientific outcomes. Their 21 requests and USD 0.1318473 remain included
+in the 367-request total; they must not be added twice or silently removed [20].
+All reported dollars are settled fixed-rate or conservative provider estimates, not invoice amounts. Historical
+UNKNOWN billing remains UNKNOWN in the coordinator’s separate ledger. Codex assistance, historical
+acquisition and full end-to-end research cost are not priced by these episode sums. No hardware build or
+acceptance cost is inferred from them. Preparing this paper adds zero provider requests, scientific executions
+or native design mutations.
+
+10    Saved-data reproducibility and implementation handoff
+The accompanying E_reproduce.py uses only the Python standard library. Given –data-root data and
+–output generated, it verifies the portable input manifest and rebuilds E-series CSVs, all eleven numerical
+tables, counts, timestamp differences and preservation checks. It reads only package-relative saved files.
+Absolute paths inside historical records are archival strings and are never opened as fallback inputs. Missing
+or tampered data fails the check rather than dropping a group. No archived scientific Python is imported,
+and no simulator, observation qualifier, consumer or evaluator is rerun.
+The package includes a data dictionary, claim-to-evidence index, case/observation implementation handoff and
+a model/version, exposure, intervention and cost index. Original syntax failures, post-hoc labels, incomplete
+groups, old UNKNOWN records’ accounting boundary and product failures remain explicit. The shared
+official HKUST(GZ) style and vector mark are copied unchanged. Installed TeX and Poppler build and
+render the standalone manuscript; the document receipt records two-pass compilation, embedded fonts and
+actual per-page visual inspection. Saved-data reconstruction and document validation do not constitute a
+new scientific replication, fresh hardware test or external submission review.
+
+11    Conclusion
+An interface supports a legal design change when it distinguishes the world differences relevant to that
+consumer’s prospective verdict. Current success need not provide that information, while complete static
+laws can. In the matched digital comparison, strong static and executable inputs each pass all twelve formal
+groups; prospective observation completes seven and leaves five incomplete. Actual typed consumption is
+demonstrated, but an advantage over complete static information is not. The event-time study shows a further
+boundary: correct matching and energy can coexist with wrong encoded timestamps. The resulting evidence
+supports explicit information, admission and service predicates, with failures, costs and UNKNOWN retained.
+Physical qualification remains UNKNOWN, the original product remains NOT_ACCEPTED, and default H0
+remains unchanged.
+
+References
+ [1] Kiwan Maeng, Alexei Colin and Brandon Lucia. Alpaca: Intermittent Execution without Checkpoints. Proceedings of the
+     ACM on Programming Languages 1, OOPSLA, Article 96, 2017. doi:10.1145/3133920.
+ [2] Milijana Surbatovich, Naomi Spargo, Limin Jia and Brandon Lucia. Technical Report: A Type System for Safe
+     Intermittent Computing. Carnegie Mellon University, 2023. Long version of the PLDI 2023 Curricle paper.
+     doi:10.1184/R1/22583920. Published paper: doi:10.1145/3591250.
+ [3] Edmund Clarke, Orna Grumberg, Somesh Jha, Yuan Lu and Helmut Veith. Counterexample-guided Abstraction
+     Refinement. Computer Aided Verification, LNCS 1855, pp. 154–169, 2000. doi:10.1007/10722167_15.
+ [4] B. Structural witnesses, independent numerical checks, static controls and acquisition receipts. Dataset
+     structural-results, run IF-7412532c4a6ab7a5879e, 19 October 2026.
+
+
+
+                                                          14
+ [5] B. BF mechanism map and seven saved transient controls. Datasets p1-mechanisms and reference-b-*, 20 October 2026.
+ [6] B. Discovery-to-consumer contract and strong baseline definitions. Datasets p1-e5-contract and p1-baselines.
+ [7] S0. Original rejected live observation episode and retained public trace. Datasets p2-original_result, p2-original_trace
+     and p2-provider_costs.
+ [8] S0. Separately authorized post-hoc qualification, typed consumer and service evaluation. Datasets p2-posthoc_plan,
+     p2-qualification, p2-consumer and p2-service.
+ [9] S0/B. Versioned observation schema and two targeted adapter regressions. Datasets p2-adapter_e5_schema and
+     p2-adapter_regression.
+[10] S0. Matched digital comparison protocol and one-time repeat freeze. Datasets p3-protocol and
+     p3-formal-repeat-freeze, protocol phase3-bf-matched-v1.
+[11] S0. Complete 112-group, 140-episode saved comparison. Dataset p3-actual-comparison, schema
+     bf-phase3-actual-comparison-v1.
+[12] S0. Authoritative formal/pilot tables, E4 parity receipts and E5 audit. Dataset p3-main-tables.
+[13] S0. Original gateway records for all five incomplete formal E5 groups. Datasets p3-failure-gateway-1 through
+     p3-failure-gateway-5.
+[14] S0. Ordered initial controls and four actual selected witnesses. Datasets p3-ordered-initial-controls and
+     p3-ordered-selected-witnesses.
+[15] B/S0. Frozen single-query derivative and condition definitions. Datasets p3-provenance-derived-case and
+     p3-provenance-conditions.
+[16] S0. Original O0 candidate and two fixed controls. Datasets o0-O0-candidate, o0-O0-fixed-periodic, o0-O0-rich-state
+     and o0-candidate-gateway.
+[17] S0/B. Frozen O task, declared costs and versioned event evaluator. Datasets p4-o0-task.v1 and p4-phase4_interfaces.
+[18] S0. All 27 final cells, complete encoded-event details and last-response censoring metadata. Dataset p4-final-details.
+[19] S0. Complete 77-attempt/73-cell record, frozen methods and selection. Datasets p4-actual-results,
+     p4-final-selection-freeze, p4-selected-methods and p4-G1-freeze.
+[20] S0. Preserved host incidents, registered repair and four approved recoveries. Datasets p4-host-error-hold,
+     p4-amendment-registration, p4-cache-repair-qualification and p4-recovery-results.
+[21] S0. Closed-study analysis and source preservation. Datasets p4-analysis-summary, p4-preservation-final and
+     p4-accepted-result.
+[22] S0. Preserved original A/R service and strict FIFO failure. Dataset ar-preserved-result; product status NOT_ACCEPTED.
+
+
+
+
+                                                            15
+

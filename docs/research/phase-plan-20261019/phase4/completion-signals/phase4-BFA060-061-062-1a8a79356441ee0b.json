@@ -1,0 +1,23 @@
+{
+  "schema_version": "bf-phase4-completion-signal-v1",
+  "id": "phase4-BFA060-061-062-1a8a79356441ee0b",
+  "status": "SENT",
+  "sent_count": 1,
+  "prepared_at": "2026-10-20T01:17:34.654764+00:00",
+  "target_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+  "work_package": "phase-4-transfer-and-improver-bf-20261020-001",
+  "result_sha256": "1a8a79356441ee0be3ad4a1625f9134b38481d13db3405c7f5176892cd5805db",
+  "manifest_sha256": "fc3cee720089cbd08263b3abc6a422a405e733e7a9aeab21a3cb49587224d077",
+  "authorization": {
+    "source_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "user_message_id": "01a15568-19b2-7f81-bd50-59657e6ae141",
+    "turn_id": "01a15568-1954-76b1-b6b6-82f0b3fbfff9",
+    "verified_direct_user_text": "修改定时任务，在原有的基础上 让总管在完成他的任务时候向这个session发送完成信号，避免空闲时间过多。"
+  },
+  "message": "[BF_COMPLETE] 阶段四有限工作包完成，独立退出复核待处理。completion_id=phase4-BFA060-061-062-1a8a79356441ee0b；dispatch=phase-4-transfer-and-improver-bf-20261020-001。此信号只发一次，阶段四没有推进阶段五或启动新实验。\n\n权威结果 /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/result.json，SHA-256 1a8a79356441ee0be3ad4a1625f9134b38481d13db3405c7f5176892cd5805db；报告 /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/RESULTS.md，SHA-256 775525a18287ed18bb3a814d8cae720d63008afc062cca11d0b4e854e8b5b4f2；有限来源清单 /Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/source-manifest.json，SHA-256 fc3cee720089cbd08263b3abc6a422a405e733e7a9aeab21a3cb49587224d077（661 个文件绑定）。全部原始/恢复尝试、成本、SDK/任务派生、冻结父子关系、源响应均保留。\n\n73 canonical cells / 77 actual attempts 全闭合；367 SETTLED requests，费用上界估计 USD 3.1767228，累计 episode wall 5951.6394840371795s，25 新数字科学响应，native 0，new UNKNOWN 0。30/30 effective selection PASS，6 个 H 在任一 final 输入给参与者之前一起冻结。27 final：H0 7 PASS/1 submitted FAIL/1 token-censored；G0 6/1/2；G1 8/0/1。两类数字任务18/18 PASS；O 为 H0 1/1/1、G0 0/1/2、G1 2/0/1。四个非提交均在32768输出/推理token处 length 截断，无补跑，完整保留分母和费用。两个提交FAIL均能量PASS、8事件匹配、18包，但各有两个编码时间戳超差；三条.75s采样PASS含一条H0，不是G1独有机制。\n\n一次G1 formation、全部12H、淘汰siblings、selection、failed/censored/confirmation全部计费；三谱系条件于一次共同G1，不是3次G1训练复制。全实际管线 G0 135req/USD1.2585825，G1 138/USD1.2447618；仅扣四个原host incident后为G0 123/USD1.1843580，G1 129/USD1.1871390；H0 selection+final76/USD0.5154765。Provider-reported deepseek-flash alias/frozen-rate usage estimate，不是发票、固定权重身份或含Codex与历史acquisition的端到端成本。\n\n获批amendment phase4-cache-trace-amendment-20261020-001 的四个原host incident仍计入全成本（21req/USD0.1318473），四次命名恢复20req/USD0.1182666，各fresh/exact原payload、初始cache和原budget。G/H没重建，5个原有效selection复用；6项existing-data qualification PASS，无额外科学重跑。V1协议/components和两份V1源字节保留，V1.1只补历史CSV绑定读取，冻结科学语义、G/H、任务不变。preservation-final.json核对77尝试/367当前ledger行/30used response keys PASS；原S0 871行前缀及四个保护DB表前缀不变，24旧UNKNOWN保留。15 UNKNOWN_PUBLIC_SOURCE是5个H各3个工具错误（含L3-G0-h2），不是未知计费。\n\n两篇本地英文稿实际编译并逐页检查、S0精确导入/正文/字体/首页复核PASS：A8页 PDF SHA e6be17735085ecb003856bda24e8a7ae5b537b91ce36aefda1770ab5e4c560ce；B7页 f857898b4d0c67a120d16ff603d8180c4868687e775b28ea861d9e3e4ac27345，路径见paper-readback.json。官方英文横版HKUST(GZ)矢量logo/共享style在三工作区字节不变。原A/B目前idle。正确显式开发profile下最终S0 architecture-v2-ci 343 tests、saved44 files/11controls PASS（final-integration.json），零模型/native/科学执行；首个操作员调用漏PI_CODING_AGENT_DIR导致导入环境拒绝，原49-entry失败日志保留，仅补现有home/pi-config映射后同命令通过，无源改动。37此前定点单测与6修复数据检查单列，不冒充380 CI。\n\nstorage-final.json：private实际记录39,223,712B，现有provider工作目录增长24,828,490B；纸稿/根首页临时内容删除5,656,847逻辑bytes，不额外当APFS释放。当前available23,660,961,792B，先前中央清理实测净释放12,261,535,744B。没有新env/worktree/整树备份；仅两份必要V1源版本和原失败凭据保留。\n\nH0默认不变；有限8/9不证明稳定RSI或全局H提升。Final D按设计看到完整冻结当前任务，unexposed指G/H formation和selection未见。原A/R NO_GO、dark FAIL、strict FIFO FAIL、product NOT_ACCEPTED、physical UNKNOWN保持；O独立门槛不覆盖全部继承A/R要求。阶段四local-only，0commit/0push/0Overleaf更新，paid/new participant dispatch已关闭。请按原五阶段计划独立复核阶段四退出，再决定后续阶段五发布/闭合派工。",
+  "sent_at": "2026-10-20T01:18:28.140603+00:00",
+  "tool_result": {
+    "threadId": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "isError": false
+  }
+}

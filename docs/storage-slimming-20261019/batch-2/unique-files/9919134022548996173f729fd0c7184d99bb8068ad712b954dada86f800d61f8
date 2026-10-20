@@ -1,0 +1,56 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-041-ci-feedback-publication",
+  "owner": "bf-agent-coordinator",
+  "status": "in-progress",
+  "authority": "2026-10-18 user requests GitHub push, repair failed CI and next-stage analysis",
+  "objective": "Publish BFA-040 and fix the actual Linux CI report-runtime failure; verify the exact pushed source and both branch/PR workflows.",
+  "hypothesis": "An explicit PDF runtime contract with pinned CI dependencies removes the workstation dependency while preserving local rendering and sealed feedback evidence.",
+  "paper_claim": "Engineering portability and publication regression only.",
+  "falsifier": "Clean source cannot render real task PDFs, either pushed-SHA workflow fails, qualification changes physical results, or protected runtime state is modified.",
+  "owned_paths": [
+    "../.github/workflows/bf-v2-regression.yml",
+    "packages/python/bfworld/src/bfworld/agentlab/design_lab/report_runtime.py",
+    "packages/python/bfworld/src/bfworld/agentlab/design_lab/repository_task_reports.py",
+    "packages/python/bfworld/src/bfworld/agentlab/design_lab/report_assets.py",
+    "tests/agentlab/test_repository_report_runtime.py",
+    "tests/agentlab/test_repository_feedback.py",
+    "tests/agentlab/test_repository_feedback_portable.py",
+    "project/features/BFA-041-ci-feedback-publication/",
+    "project/features/BFA-035-dot-integration-pilot/feature.yaml",
+    "PROJECT.yaml",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "docs/agentlab/architecture-v2/ci-publication-20261018/",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "configs/ci/requirements-v2.txt",
+    "init.sh"
+  ],
+  "schema_changes": [],
+  "targeted_tests": [
+    "real PDF and archive in isolated source checkout",
+    "runtime override/current interpreter/local compatibility fallback",
+    "portable C supervisor semantics and macOS sandbox controls",
+    "existing Python Repository and Pi build/type/browser checks",
+    "sealed feedback artifact readback and qualified exact-input reuse"
+  ],
+  "negative_controls": [
+    "explicit invalid interpreter",
+    "missing PDF dependencies",
+    "powered program requests OFF",
+    "brownout interrupt and restart",
+    "tampered sealed evidence"
+  ],
+  "reproducible_command": "GitHub BF V2 regression at exact pushed SHA; local portable tests and saved feedback verification",
+  "output_artifact": "docs/agentlab/architecture-v2/ci-publication-20261018/",
+  "cost_cap": "0 model calls; 0 new native solves; reuse completed native inputs",
+  "claim_boundary": "CI, PDF execution portability and source publication; next-stage Agent work is analysis only.",
+  "stop_condition": "Any protected state drift, unknown native operation or mismatched source/evidence stops publication.",
+  "prior_ci": {
+    "run": 38998125754,
+    "commit": "dcd7c5448ebef67d102eae5de49938a8142efe3c",
+    "failure": "Three report tests invoke a hardcoded Codex Python path absent on Ubuntu."
+  }
+}

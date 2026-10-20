@@ -12,6 +12,7 @@ import time
 import zipfile
 
 from ..store import canonical, identity
+from ..storage import copy_artifact
 from .contracts import sealed
 
 MODE = 'design-repository-v2'
@@ -149,7 +150,7 @@ class Repository:
         key='B-'+digest;dest=self.root/'blobs'/digest
         dest.parent.mkdir(exist_ok=True)
         if not dest.exists():
-            with dest.open('xb') as f: f.write(path.read_bytes())
+            copy_artifact(path, dest, digest)
             dest.chmod(0o400)
         elif file_hash(dest)!=digest: raise ValueError('REPOSITORY_BLOB_CHANGED')
         media=mimetypes.guess_type(str(path))[0] or 'application/octet-stream'

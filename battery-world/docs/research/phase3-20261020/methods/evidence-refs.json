@@ -1,0 +1,141 @@
+{
+  "schema_version": "bf-phase3-existing-method-evidence-v1",
+  "visibility": "HOST_ONLY_NEVER_ATTACH_TO_PARTICIPANT_CONDITION_INPUT",
+  "no_new_scientific_execution": true,
+  "sources": {
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/results.csv": {
+      "sha256": "d0eccf0e43e3e1c334ffd36398130c58ace957887a64fad2a78c8d27956b458f",
+      "bytes": 242
+    },
+    "/Users/depengsu/.local/share/bf-phase2-20261020/feedback-scope-negative-control.json": {
+      "sha256": "9e1ec84533a0483b52aabef2d2a092e33e0c347bde7748e4fcb5bea412dd381c",
+      "bytes": 574
+    },
+    "/Users/depengsu/.local/share/bf-phase2-20261020/ordered-state-audit.json": {
+      "sha256": "872534645161e8628eb3e1e621b8d0b3a9c9ce7e12e385099bf0fb3c89a6c360",
+      "bytes": 2036
+    }
+  },
+  "controls": {
+    "f1a-unchanged": {
+      "source": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/results.csv",
+      "row": {
+        "case": "unchanged",
+        "replay_packets": "4",
+        "full_packets": "4",
+        "replay_admissible": "True",
+        "matches_full": "True"
+      },
+      "interpretation": "Exact unchanged-input positive replay control; not evidence for changed-input reuse."
+    },
+    "f1a-threshold-mismatch": {
+      "source": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019/battery-world/papers/method-reexecution-20261019/results.csv",
+      "row": {
+        "case": "threshold-only",
+        "replay_packets": "4",
+        "full_packets": "3",
+        "replay_admissible": "True",
+        "matches_full": "False"
+      },
+      "interpretation": "Historical replay_admissible=True coexists with mismatched packet count; old acceptance label is not current service qualification."
+    },
+    "bf-complete-feedback-negative-control": {
+      "source": "/Users/depengsu/.local/share/bf-phase2-20261020/feedback-scope-negative-control.json",
+      "result": {
+        "changed_key": "e5ab381c07d97921b879f3798d788721859d83d167db7b4050e31625cec1b5cc",
+        "changed_load_or_timing_scope": "full-feedback-response",
+        "changed_timing_service": "PASS",
+        "exact_input_cache_hits": 2,
+        "new_scientific_executions": 0,
+        "old_design_service": "FAIL",
+        "old_key": "dd64bda012da9a2a31c9a1a29a7bcf2183297adccdd0d613a6a492d827ba1c30",
+        "scope": "Registered public development control; not an Agent-generated observation or H proposal",
+        "stale_response_reuse_would_misclassify": true,
+        "status": "PASS",
+        "total_new_scientific_executions": 4
+      },
+      "interpretation": "A changed D uses the matching full response, not the old failing design response. Existing exact-input entries read; no new case."
+    },
+    "bf-ordered-state": {
+      "source": "/Users/depengsu/.local/share/bf-phase2-20261020/ordered-state-audit.json",
+      "result": {
+        "cases": {
+          "p2-h0-design-001": {
+            "design": {
+              "capacitance_f": 2.2e-05,
+              "tx_not_before_s": 0.045
+            },
+            "event_latch_unchanged": "volatile",
+            "first_receive_s": 0.046900000000000004,
+            "legacy_event_preserved_after_reset_label": "FAIL",
+            "ordered_interpretation": "EVENT_DELIVERED_BEFORE_ANY_RESET",
+            "pending_state_retained_across_reset": "NOT_ESTABLISHED_BY_SUCCESSFUL_RUN",
+            "physical_qualification": "UNKNOWN",
+            "raw_sha256": "910c55c5bbc6647eef94699948f901e3da8be9fafe67753876e4ff7955bbd7f7",
+            "resets_after_delivery_before_deadline": [],
+            "resets_before_first_delivery": [],
+            "tx_completes_s": [
+              0.046900000000000004
+            ],
+            "tx_starts_s": [
+              0.045000000000000005
+            ]
+          },
+          "p2-hprime-design-001": {
+            "design": {
+              "capacitance_f": 9e-06,
+              "tx_not_before_s": 0.0037
+            },
+            "event_latch_unchanged": "volatile",
+            "first_receive_s": 0.0056,
+            "legacy_event_preserved_after_reset_label": "PASS",
+            "ordered_interpretation": "EVENT_DELIVERED_BEFORE_ANY_RESET",
+            "pending_state_retained_across_reset": "NOT_ESTABLISHED_BY_SUCCESSFUL_RUN",
+            "physical_qualification": "UNKNOWN",
+            "raw_sha256": "d0ee89fe918ca38fe3363e06f3afedc066711c4097e59c52572e185c56036776",
+            "resets_after_delivery_before_deadline": [
+              {
+                "action": "brownout",
+                "event_was_captured": true,
+                "reason": "energy-threshold",
+                "time_s": 0.012100000000000001
+              }
+            ],
+            "resets_before_first_delivery": [],
+            "tx_completes_s": [
+              0.0056
+            ],
+            "tx_starts_s": [
+              0.0037
+            ]
+          }
+        },
+        "frozen_checker_changed": false,
+        "legacy_label_limitation": "reference_b uses success-and-any-reset for event_preserved_after_reset; it does not establish that pending state persisted through a reset. Successful early delivery must be distinguished from reset retention.",
+        "new_scientific_executions": 0,
+        "status": "PASS"
+      },
+      "interpretation": "Both successful deliveries precede all resets; Hprime post-delivery brownout is not a pending-state retention witness. Volatile latch unchanged."
+    }
+  },
+  "raw_responses": {
+    "p2-h0-design-001": {
+      "path": "/Users/depengsu/.local/share/bf-phase2-20261020/cases/a624c266666e7b8db4f07147f88ae9b51db5d32189fe194c58ea0ad0bf9a1356/response.json.zlib",
+      "compressed_file": {
+        "sha256": "910c55c5bbc6647eef94699948f901e3da8be9fafe67753876e4ff7955bbd7f7",
+        "bytes": 250202
+      },
+      "ordered_audit_raw_sha256": "910c55c5bbc6647eef94699948f901e3da8be9fafe67753876e4ff7955bbd7f7",
+      "hash_boundary": "Compressed file bytes and the ordered-audit raw-response identity are distinct encodings; no new decompression or scientific evaluation was run here."
+    },
+    "p2-hprime-design-001": {
+      "path": "/Users/depengsu/.local/share/bf-phase2-20261020/cases/a73ac6d51c919fa694b9a6ed5457b0f89bf1bed3ac1894a5cd64394f575a46a2/response.json.zlib",
+      "compressed_file": {
+        "sha256": "d0ee89fe918ca38fe3363e06f3afedc066711c4097e59c52572e185c56036776",
+        "bytes": 245305
+      },
+      "ordered_audit_raw_sha256": "d0ee89fe918ca38fe3363e06f3afedc066711c4097e59c52572e185c56036776",
+      "hash_boundary": "Compressed file bytes and the ordered-audit raw-response identity are distinct encodings; no new decompression or scientific evaluation was run here."
+    }
+  }
+}

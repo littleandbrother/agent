@@ -1,0 +1,62 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-045-ar-b-reference",
+  "owner": "campaign-a",
+  "status": "complete",
+  "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "authority": "Direct user authorization in 01a11b01-a75e-75c2-81c3-7d152a24f15a verified by S0; finite first batch only; no commit/push.",
+  "hypothesis": "An explicit single-light-source A/R service chain and a separate transient B model can be qualified with independent energy, event and receiver checks before an Agent is attached.",
+  "paper_claim": "One source-bound A/R computational candidate; B public positive/negative qualification and declared physical-anchor limits.",
+  "falsifier": "Independent integration or receiver disagrees; darkness is relabeled N/A; retention is counted as continued sensing; lux is converted to watts without an IV assumption; a nominal device is presented as measured.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py",
+    "scripts/campaign_reference.py",
+    "tests/agentlab/test_campaign_reference.py",
+    "configs/studies/parallel-20261019/reference/",
+    "docs/research/parallel-20261019/reference/"
+  ],
+  "schema_changes": [
+    "campaign-task-v1",
+    "campaign-result-v1"
+  ],
+  "targeted_tests": [
+    "zero-storage startup and valid digital temperature reception",
+    "darkness and finite storage",
+    "history retention vs continued sensing",
+    "recovery upload and deduplication",
+    "B cold pulse and volatile event-loss controls",
+    "independent energy/event readback"
+  ],
+  "negative_controls": [
+    "no source energy",
+    "startup too late",
+    "stale sample",
+    "volatile event lost on reset",
+    "duplicate upload",
+    "unavailable calibration -> UNKNOWN"
+  ],
+  "reproducible_command": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_reference.py --verify-run /Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001",
+  "output_artifact": "docs/research/parallel-20261019/reference/",
+  "cost_cap": "Existing unlimited cumulative money/time authorization retained. This executor performs a finite deterministic development list, zero paid model requests, zero native EDA/hardware writes, <= 500 MB outputs. Paid work is dispatched by S0 after a model-session slot is free.",
+  "claim_boundary": "Public development computational evidence; datasheet bounds are not calibrated device models. No hardware, unseen-mechanism generalization or Agent benefit claim.",
+  "stop_condition": "Stop on baseline/content drift, reference disagreement, unavailable model domain, hidden evaluator exposure, < 5 GB free, unknown native state or need for an out-of-scope source edit. Return the exact blocker; retain failures.",
+  "completed_at": "2026-10-19T13:28:07.139722+00:00",
+  "results": {
+    "run_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+    "cases": 17,
+    "targeted_tests": 12,
+    "physical_qualification": "UNKNOWN",
+    "service": "A/R nominal 6h PASS; 12h darkness continuous sensing/recovery FAIL; FIFO freshness FAIL",
+    "new_paid_requests": 0,
+    "new_native_dispatches": 0,
+    "sealed_files": 81,
+    "reproduce": "rtk proxy env PYTHONPATH=packages/python/bfworld/src python3 scripts/campaign_reference.py --verify-run /Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001"
+  },
+  "limitations": "A/R nominal 6h PASS; 12h darkness continuous sensing/recovery FAIL; FIFO freshness FAIL",
+  "evidence": [
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/parallel-campaign-20261019/integration-a.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-targeted-tests.log",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/parallel-20261019/shared/integrated-init.log"
+  ]
+}

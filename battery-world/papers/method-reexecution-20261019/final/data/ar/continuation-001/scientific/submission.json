@@ -1,0 +1,23 @@
+{
+  "bounds": null,
+  "candidate_artifact": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/scientific/candidate-002",
+  "candidate_sha256": "1b93b92330b10f757ce981526e66965ab27092d4f0d06d4d47f33298bca6b76e",
+  "conclusion": "candidate",
+  "final_acceptance": "EXTERNAL_CHECK_REQUIRED",
+  "host_lease": {
+    "backend": "http://127.0.0.1:8980",
+    "baseline": "CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a",
+    "episode_id": "method-study-phase1-ar-20261020-001",
+    "maximum_candidates": 3,
+    "maximum_requests": 60,
+    "maximum_wall_s": 3197,
+    "model": "deepseek-flash",
+    "provider_ledger": "/Users/depengsu/.local/share/bf-campaign-20261019-s0/workbench/state/workbench.sqlite",
+    "slot_receipt": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/slot-lease.json"
+  },
+  "rationale": "结论：提交 candidate-002（C=0.015 F, off_v=2.3 V, ready_v=2.7 V; sample_period_s=60, ack_spacing_s=1, retry_s=30, rank=0-seq）作为部分修复候选；AR-history-NVM 在冻结合法空间内为有依据的 no-go。\n\n一、事实版本。contract bf-ar-service-contract-v1 (sha256 53c29aba...) / checker ar-service-independent-v2 / world ar-service-program-v2；四任务常数、源段、零预充初态、服务期限与检查器均未改动。history 封存基线读数：ar-upload-dedup FAIL(fresh_receive_delay, late_fresh_sequences=[109])，ar-history-nvm FAIL×4 且 absolute_time UNKNOWN。bounds(Codex 辅助构造的必要界，非我自主发现)：startup C<=0.0528099173553719，暗区需 C>=0.07724793388429751 且已用 ready->3.3 的乐观口径，bounds_overlap=false。\n\n二、实际 check（3/3 候选，全部保留，含被拒绝者）。候选 A (retry_s=2)：cold/light-dark/upload-dedup 全 PASS；history FAIL，样本 106、late_recovery 10。候选 B (retry_s=30，仅改 rank)：同样三案全 PASS；history FAIL，样本 168、late_recovery 73，且 fresh_receive_delay 由 FAIL->PASS。候选 C (retry_s=8)：三案全 PASS；history 样本 129、late_recovery 34。用量：本次可见调用 8 次(4 inspect + 3 check + 1 submit)，另有传输截断前的 2 次费用按外部记录保留；3 个 case 重算使用供应商请求合计 12 次 case-run、native 0、付费模型 0、wall≈7.7 s。A、C 的偏科结果不隐藏。\n\n三、修复点。upload-dedup 的 fresh_receive_delay 根因是执行优先级：ack_spacing_s 下界 1 s 使 60 条积压最少需 60 s，任何 FIFO 顺序下新样本都无法 10 s 内送达；原 rank=seq 又叠加 retry_s=30 的空等。改为 rank=0-seq（最小分优先，稳定按 seq）使新记录先行，而 ACK 后擦除、pending 移除与 (device,sequence) 去重语义不变：check 显示 dedup PASS、recovery_upload PASS（积压 60 条仍在 120 s 内清空）、无 late_fresh_sequences。选 B 而非 A/C：B 只改 rank 一项，保持 baseline 的 168 个 history 样本与暗区占空，不把采集能量烧在无网关时的空转重试；A 虽把 late_recovery 降到 10，却使暗区样本 168->106，属用必需采样换上传，故拒绝。\n\n四、保留的失败与人类取舍。AR-history-NVM 仍 FAIL(continuous_new_sampling, dark_new_sampling, recovery_upload, temperature_events)，absolute_time UNKNOWN。必要界冲突：按期首收(<=1800 s)要求 C<=0.0528 F，且仍能启动时可用储能至多 0.1278*(1-4.84/ready_v^2)≈0.071 J(ready_v->3.3)；而 43200 s 暗区按 60 s 采样+600 s 报表需 >=0.234 J，即 C>=0.0772 F；两者互斥。recovery_upload 的 120 s 又要求 C 很小（约 <=0.004 F：零预充下从 0 充到 ready 需 ≈0.055 J / 69 uW ≈ 790 s），与暗区、启动三方互斥。这是冻结物理与期限的必然结果，不是程序可修；我未放宽期限/物理，也未加预充、第二电源或唤醒型掉电采样器。需人类裁决的打开方式(任一，但不由我自选)：(a) 允许预充/第二电源/上电时计；(b) 放宽 required_first_receive_s 或暗区占空要求；(c) 放宽 recovery_upload 的 120 s。\n\n五、需外部确认的语义张力。合同 upload 段写 oldest-first，而 10 s live 延迟在 ack_spacing>=1 s 与积压并存时只有靠 v2 rank 钩子让新记录抢先才可满足。B 的做法是新记录先行、积压随后按序清空（已测 120 s 内清完，去重与 ACK 后擦除不变）；若评审坚持严格 FIFO，则应放宽 live 延迟或 ack_spacing 下界，而非由我改语义。\n\n六、边界。submit 不等于通过，独立验收在外部执行；physical_qualification 仍 UNKNOWN。未做硬件合格、方法优势、迁移或 RSI 声明；bounds/inspect 属 Codex 提供的事实与构造界，D 与程序由我提出并承担后果。",
+  "schema_version": "bf-ar-participant-submission-v1",
+  "tool_calls": 4,
+  "unique_revisions": 3,
+  "wall_s": 118.93465766699228
+}

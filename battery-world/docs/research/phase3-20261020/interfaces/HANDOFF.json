@@ -1,0 +1,136 @@
+{
+  "accounting_boundary": "Every condition/task/replicate has one shared total including acquisition, observation proposal, qualification, consumption and confirmation. S0 enforces this externally; pure packet projection does not execute or enforce a live budget.",
+  "api": {
+    "average_energy": "S0-owned coarse energy summary, no relation target or relevance labels; always paired with identical common task/legal space",
+    "common": "S0-owned public mapping containing at least task and legal_design_space; include common units, assumptions and source identity as appropriate",
+    "decode_packet": "(text, representation) -> exact decoded JSON object; duplicate paths/keys, nonfinite values and malformed structure rejected",
+    "encode_packet": "(packet, representation='json'|'table') -> string",
+    "example": "packet = project_condition(public_facts, 'rich-static', common=common, average_energy=average_energy, tool_catalog=tool_catalog); js = encode_packet(packet, 'json'); table = encode_packet(packet, 'table'); validate_equal_information(js, table)",
+    "project_condition": "(public_facts: dict, condition_id: str, *, common: dict, average_energy: dict, tool_catalog: dict) -> packet",
+    "public_facts": "All host-authorized public records/laws/waveforms/current traces/assumptions. Private evaluation metadata is rejected, never silently stripped. Strong arms retain this mapping without deletion.",
+    "tool_catalog": "Logical role keys design, model_response, observation map to S0's actual frozen host tool JSON. design is common; response only executable-response; observation only live-e5. Missing required role is rejected.",
+    "validate_conditions": "(loaded_conditions_json) -> validation receipt; no filesystem or execution",
+    "validate_equal_information": "(json_text, table_text) -> hashes/permissions/budget parity receipt or ValueError; not a model-format result"
+  },
+  "commits": 0,
+  "condition_ids": [
+    "average-energy",
+    "rich-static",
+    "complete-raw",
+    "executable-response",
+    "live-e5"
+  ],
+  "derived_case": {
+    "id": "clite-query-window-derived-v1",
+    "measured_physical_data": [],
+    "missing_measurements": [
+      "RF field and RF-to-DC efficiency or load-response waveform",
+      "Measured tag current, PMIC cold-start/UVLO and conversion losses",
+      "Real capacitor leakage/ESR and calibrated voltage thresholds",
+      "Actual PHY/CRC reliability, clock uncertainty and temperature dependence"
+    ],
+    "original_b_latched_rule": "Require capture < reset < first delivery with pending state present across reset; successful early delivery and the old generic label cannot establish retention.",
+    "parent_case": "C-lite",
+    "scope": "One tag, first 30 s contact window; query at 2 s, reply by 7 s, 20 uW prescribed DC, 50 uJ reply, 1 uW idle, storage <=200 uJ, empty initial storage; no target relation supplied",
+    "service_qualification": "NOT_EXECUTED; S0 must wire/version and independently qualify nonce, freshness and query-before-reply. Old event-receive label alone is not the full derived service.",
+    "source": {
+      "case_canonical_sha256": "b3771767da0da7731afa942916e6394964186bdd58d91d6f6276badd9ef3c2df",
+      "case_json_pointer": "/cases/4",
+      "catalog_status": "proposal-only",
+      "parameter_status": "All new numeric service profiles are proposed task requirements, not validated capabilities.",
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/two-papers-v0.2-20261019/case_catalog_v0.2.json",
+      "sha256": "eb1aed8426371a5f857018da7cab9987e380083ca7a736f30d164beb51072ebb"
+    },
+    "synthetic_parameters_and_engine_input": "configs/studies/phase3-20261020/interfaces/derived-case.json"
+  },
+  "dispatch_id": "phase-3-controlled-comparison-bf-20261020-001",
+  "e4": {
+    "base": "rich-static",
+    "independent_arm_ids": [
+      "e4-rich-static-json",
+      "e4-rich-static-table"
+    ],
+    "rule": "Create one packet and serialize it twice. Both decode to the exact same complete object, including facts, tool definitions, common task/domain and budget. No added summary or answer fields.",
+    "serialization": "Typed JSON Pointer Markdown table with explicit object/array structure; retains booleans, numbers, nulls, empty containers, arrays and escaped text."
+  },
+  "feature": "BFA-059-phase3-interface-comparison",
+  "files": {
+    "configs/studies/phase3-20261020/interfaces/conditions.json": {
+      "bytes": 7210,
+      "sha256": "70a39abba2e3999c5c7dab694833effefa69e37b023a85efd2c6b06d66bb3d33"
+    },
+    "configs/studies/phase3-20261020/interfaces/derived-case.json": {
+      "bytes": 5194,
+      "sha256": "6a6b526a1e2ae657e67c8af9944a9d458189b15d4f343392632d7ef12dfb8ff9"
+    },
+    "docs/research/phase3-20261020/interfaces/PREFLIGHT.json": {
+      "bytes": 1054,
+      "sha256": "3e0cba563c66c50d569348855d1d9cc15220521561fac2b320dd874ab404e090"
+    },
+    "docs/research/phase3-20261020/interfaces/minimal-tests-001.json": {
+      "bytes": 1068,
+      "sha256": "4e7ff19dbdc59b464ab03ae8d6aeba469f0d19c25c5ff13c83950265d89c630d"
+    },
+    "docs/research/phase3-20261020/interfaces/minimal-tests-001.log": {
+      "bytes": 1849,
+      "sha256": "f8033277ae82052284aa8c628836d032965c894a9a26a856916d5bdc8e7b3ba9"
+    },
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_interfaces.py": {
+      "bytes": 11528,
+      "sha256": "a804c27a0595f9429c4b0308727c7a0bbf446e2ca2c680cf622824d745c7f2c1"
+    },
+    "tests/agentlab/test_campaign_phase3_interfaces.py": {
+      "bytes": 7625,
+      "sha256": "4462b2c5c295c94164113f0f48a170038ee545ea81beb475bfc756444d384ffe"
+    }
+  },
+  "four_task_matrix": [
+    "b-pulse-fast",
+    "b-volatile-reset",
+    "b-latched-reset",
+    "clite-query-window-derived-v1"
+  ],
+  "group_budget": {
+    "candidate_executions": 2,
+    "distinct_designs": 2,
+    "native_dispatches": 0,
+    "provider_requests": 24,
+    "wall_s": 1200
+  },
+  "import_files": [
+    "configs/studies/phase3-20261020/interfaces/conditions.json",
+    "configs/studies/phase3-20261020/interfaces/derived-case.json",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase3_interfaces.py",
+    "tests/agentlab/test_campaign_phase3_interfaces.py"
+  ],
+  "native_dispatches": 0,
+  "new_environments": 0,
+  "new_workers": 0,
+  "new_worktrees": 0,
+  "old_phase1_2_changed": false,
+  "paid_requests": 0,
+  "phase3_pdf": "NOT_CREATED per dispatch",
+  "pushes": 0,
+  "remaining_S0": [
+    "Bind integrated phase3 source, exact task/evaluator and common initial cache snapshot with isolated per-arm overlays",
+    "Supply the public source records, coarse summary and actual tool-role mapping; externally enforce budget including E5 stages",
+    "Register and qualify new digital C-lite query/nonce/freshness gates before any fourth-task outcome; all original C0/hardware claims remain out of scope",
+    "After actual runs, return task/run-level receipts for later result tables and phase3 manuscript"
+  ],
+  "root": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019/battery-world",
+  "schema_version": "phase3-b-interface-minimal-handoff-v1",
+  "scientific_executions": 0,
+  "shared_state_written": false,
+  "status": "FROZEN_MINIMAL_CONDITIONS_READY_FOR_S0_HOST",
+  "strong_baseline_boundary": "rich-static and complete-raw both preserve every supplied public fact. They may be information-equivalent; do not remove fields from static to manufacture a gap. Executable-response adds only the registered response tool. live-e5 starts from the same coarse information as average-energy and acquires facts under its total budget.",
+  "verification": {
+    "all_qualifications": "Pure data/source/serialization only; no actual host/SDK admission or scientific service result",
+    "errors": 0,
+    "failures": 0,
+    "full_ci": "NOT_RERUN",
+    "repeated_old_simulations": 0,
+    "status": "PASS",
+    "tests_run": 10
+  },
+  "worker_idle": true
+}

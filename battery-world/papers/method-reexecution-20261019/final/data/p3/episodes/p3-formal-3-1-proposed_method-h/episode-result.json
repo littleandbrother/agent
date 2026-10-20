@@ -1,0 +1,81 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.021842928,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0414492,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-1-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:a24551b4",
+        "excitation_record:2820ae58",
+        "saved_activity:891890ba",
+        "model_law:d690d8a8",
+        "full_public_facts_sha256:da2ee1b2",
+        "world:b-latched-reset"
+      ],
+      "falsifier": "Invalidate the update if any re-execution shows: (a) the energy ledger contradicts the frozen trace, e.g. the base capacitance shows no e_off crossing after the 0.012 s shunt while still powered, or a design that reached C*(3.3^2-1.8^2)/2 > 4e-5 J by 0.012 s still browns out there; or (b) the selected candidate's only path to a packet still runs through a reset with event_was_captured=true and no contact afterwards; or (c) the procedure consumes more than 2 distinct designs / 2 candidate_executions, or edits device parameters, the task, or the evaluator from this H channel, or presents a device assignment as the method; or (d) any recorded verdict claims service acceptance, harness behaviour, statistical superiority, migration or RSI, or drops the saved_activity counterexample or the UNKNOWN label. Scope is also invalidated if re-acquiring any source changes a sha that M1 binds, or if external rejection of the retention-independent candidate is explained by a cause inside the legal range, which would show the screen sufficient but not necessary.",
+      "hypothesis": "Using only source-bound values and the frozen model (b-transient-behavior-v1), a procedure that (i) derives the storage contradiction e_off + shunt > C*cap_voltage_max^2/2 at the base capacitance, (ii) reports packet-emission time vs deadline, any reset lying between capture and tx-complete, and dependence on pending latch state as three separate verdicts, and (iii) spends at most 2 distinct designs, yields a candidate whose simulated tx-complete is within deadline_s=0.1 and whose packet path does not rely on the passive-mechanical latch surviving the 0.012 s shunt-induced reset, while the base trace is kept verbatim as a retention-dependent counterexample and post-reset acceptance stays UNKNOWN. This is a procedural H claim only; it asserts no device values, no hardware behaviour, no statistical advantage, no migration or RSI.",
+      "impact_scope": "task-entry",
+      "method_sha256": "12f6f997067b53cc499d5adff4b92a0d069f0db81463ca029436798695db2e42",
+      "method_text": "M0 Scope. Procedural H update consumed from task entry. It contains no device assignment: capacitance_f and tx_not_before_s stay unset here and are chosen by the later D step that consumes this procedure. No acceptance, hardware, statistics, migration or RSI claim is made here. A D edit (device parameters) and this H edit (procedure) are kept in separate channels; no D is submitted through this interface.\n\nM1 Entry binding (context_policy). At task entry, before any candidate is evaluated, bind every task-specific value to its acquired source_id and source_sha256 and to full_public_facts_sha256 da2ee1b2. Values used below come only from component_record a24551b4 (id 260: off/ready/max 1.8/2.8/3.3 V, boot_j 5e-6 J, boot_delay_s 1e-3, esr 0.3 ohm, harvest_efficiency 0.9, idle 2e-4 W, off 2e-5 W, tx 8e-3 A for 2e-3 s at 1.8 V, tx_not_before 0.045 s, event_latch passive-mechanical), excitation_record 2820ae58 (segments [0,0.006) 1.6667e-2 W and [0.03,0.06) 3.6667e-3 W, gap [0.006,0.03) with zero source; one shunt 4e-5 J at 0.012 s; contact 0-0.008 s; deadline 0.1 s; dt 1e-4 s), model_law d690d8a8, saved_activity 891890ba. If any source is re-acquired with a different sha, discard this derivation and rebuild it; do not carry numbers across.\n\nM2 Event trace (observation_policy). For each candidate write the chain explicitly: rectified source segment -> storage C*V^2/2 with cap_voltage_max spill -> background drain (idle_power_w when powered, off_power_w otherwise) -> shunt rows -> boot/ready gate (boot_j, boot_delay_s, ready_v) -> capture -> reset (energy-threshold or tx-transient) -> tx window (tx_not_before_s, tx_duration_s, tx_current_a, output_v, esr drop) -> packet time vs deadline_s and required_application_bytes=8 with unique frame count 1. Emit three verdicts that must never be merged: (a) did the model emit a packet, and its time_s vs 0.1 s; (b) which reset, if any, lies between capture and tx-complete; (c) does success depend on pending state surviving that reset, i.e. on the event_latch field. Record that under the model_law passive-mechanical branch captured is asserted for every t >= event_s even while powered=0 and before the first boot, so the repeated capture rows at 0.0037..0.0079 s are a latched-state log, not repeated captures.\n\nM3 Source-bound energy ledger (skills). Total harvested = sum power_w*(end_s-start_s)*harvest_efficiency = (0.006*1.6667e-2 + 0.030*3.6667e-3)*0.9 = 1.89e-4 J. The single shunt of 4e-5 J at 0.012 s falls inside the zero-source gap, so it can only be paid from charge stored before it. The model caps storage at C*3.3^2/2 and drops power at C*1.8^2/2, so shunt ride-through is possible only if C*(3.3^2-1.8^2)/2 > 4e-5 J (C > 1.046e-5 F) and only if that level actually accumulated by 0.012 s (harvest before 0.006 s is 9e-5 J minus boot_j and drain). At C=1e-5 F the ride-through energy is 3.825e-5 J < 4e-5 J, so e_off + shunt = 5.62e-5 J > e_max = 5.445e-5 J and a brownout between capture and tx is unavoidable at any charge level; saved_activity matches at 0.0121 s with event_was_captured=true. Treat this as a sufficiency screen for retention-independent delivery only. It is not a necessary feasibility bound, it does not exclude designs from legal_design_ranges, and it is not by itself grounds to call a design failing.\n\nM4 Timing ledger. tx needs output_v*tx_current_a*tx_duration_s = 2.88e-5 J, must start at t >= tx_not_before_s and >= ready_at, and must complete by deadline 0.1 s, so start <= 0.098 s; tx_not_before_s is capped at 0.045 s by the legal range. Contact lasts only 0-0.008 s, so any post-contact delivery is latch-dependent by construction and must be labelled so. Per tx step also check the loaded-voltage test sqrt(2e/C) - esr*tx_current_a >= output_v and post-step energy >= e_off, and report the numeric margin, not a bare pass.\n\nM5 Search order (experiment_order). Budget is <=2 distinct designs and <=2 candidate_executions. Order: (1) reproduce the base design trace and keep it as the counterexample record; (2) derive the M3 and M4 ledgers; (3) evaluate at most one further candidate selected by the M3/M4 screen from the legal ranges, not by copying any value out of this text; (4) if the base trace already satisfies the screen, keep it and spend no further execution. No re-selection after seeing a service label; every candidate gets its full trace in the feedback ledger, no partial records.\n\nM6 UNKNOWN and counterexample preservation. Retain: physical calibration is UNKNOWN (packet scope line); the event latch is an ideal passive-mechanical assumption per model_law and explicitly 'not free NVM'; therefore whether any post-reset delivery is accepted is UNKNOWN from these sources, and a retention-dependent success may be reported only as 'the frozen model emitted a packet at time_s', never as service completion. Retain the base counterexample verbatim (shunt 0.012 s, brownout 0.0121 s with event_was_captured=true, boot 0.0381 s, tx-start 0.045 s, tx-complete 0.0469 s, packet 010400010101b0260657) even if a later candidate avoids it. If no candidate in the legal range can be shown to satisfy the M3 ledger from the acquired sources, record no-update instead of inventing parameter values.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-1-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-ac5ef379ea2afa59",
+  "protocol_sha256": "9df03f37a093e4e9025bbcaed0daf5893765ac6b7ba5416b540e46fb8fb16dd5",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "23de14f25837d9e993b924eaa990879e98daf80490357816bbfb613b13f20e9b",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-3-1-proposed_method",
+    "id": "p3-formal-3-1-proposed_method-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "d0263a54a6f845d045e41334d06a0066543266921e7a4f312602603c534e0831",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 65.1533705000038,
+  "wall_seconds_total": 65.55380374999368
+}

@@ -1,0 +1,946 @@
+{
+  "b_reference": {
+    "base": {
+      "contact_duration_s": 0.008,
+      "deadline_s": 0.1,
+      "device": {
+        "boot_delay_s": 0.001,
+        "boot_j": 5e-06,
+        "cap_initial_voltage_v": 0,
+        "cap_voltage_max_v": 3.3,
+        "capacitance_f": 2.2e-05,
+        "esr_ohm": 0.3,
+        "event_latch": "passive-mechanical",
+        "harvest_efficiency": 0.9,
+        "id": 260,
+        "idle_power_w": 0.0002,
+        "off_power_w": 2e-05,
+        "off_v": 1.8,
+        "output_v": 1.8,
+        "ready_v": 2.8,
+        "tx_current_a": 0.008,
+        "tx_duration_s": 0.002,
+        "tx_not_before_s": 0
+      },
+      "dt_s": 0.0001,
+      "duration_s": 1,
+      "event_latch_scope": "An ideal passive mechanical bistable latch captures press at zero stored energy and persists through reset; no free powered digital NVM write is assumed. No release energy is supplied. Not a model of ECO260 integrated contact hardware.",
+      "event_s": 0,
+      "model_id": "b-transient-behavior-v1",
+      "partition": "public-development",
+      "schema_version": "campaign-task-v1",
+      "shunts": [],
+      "source_calibration": "UNAVAILABLE",
+      "source_segments": [
+        {
+          "compliance_v": 3.3,
+          "end_s": 0.02,
+          "power_w": 0.0075,
+          "start_s": 0
+        }
+      ]
+    },
+    "case_patches": [
+      {
+        "expected": {
+          "event_receive": "PASS"
+        },
+        "id": "b-pulse-fast",
+        "patch": {},
+        "task_id": "B-pulse"
+      },
+      {
+        "expected": {
+          "event_receive": "PASS"
+        },
+        "id": "b-pulse-slow",
+        "patch": {
+          "source_segments": [
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.08,
+              "power_w": 0.001875,
+              "start_s": 0
+            }
+          ]
+        },
+        "task_id": "B-pulse"
+      },
+      {
+        "expected": {
+          "event_receive": "FAIL"
+        },
+        "id": "b-esr-fail",
+        "patch": {
+          "device": {
+            "esr_ohm": 150
+          }
+        },
+        "task_id": "B-pulse"
+      },
+      {
+        "expected": {
+          "event_receive": "FAIL"
+        },
+        "id": "b-no-energy",
+        "patch": {
+          "source_segments": []
+        },
+        "task_id": "B-pulse"
+      },
+      {
+        "expected": {
+          "event_receive": "FAIL"
+        },
+        "id": "b-late-energy",
+        "patch": {
+          "source_segments": [
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.11,
+              "power_w": 0.0075,
+              "start_s": 0.09
+            }
+          ]
+        },
+        "task_id": "B-pulse"
+      },
+      {
+        "expected": {
+          "event_preserved_after_reset": "PASS",
+          "event_receive": "PASS"
+        },
+        "id": "b-latched-reset",
+        "patch": {
+          "device": {
+            "capacitance_f": 1e-05,
+            "tx_not_before_s": 0.045
+          },
+          "shunts": [
+            {
+              "energy_j": 4e-05,
+              "time_s": 0.012
+            }
+          ],
+          "source_segments": [
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.006,
+              "power_w": 0.016666666666666666,
+              "start_s": 0
+            },
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.06,
+              "power_w": 0.003666666666666667,
+              "start_s": 0.03
+            }
+          ]
+        },
+        "task_id": "B-event-memory"
+      },
+      {
+        "expected": {
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "FAIL"
+        },
+        "id": "b-volatile-reset",
+        "patch": {
+          "device": {
+            "capacitance_f": 1e-05,
+            "event_latch": "volatile",
+            "tx_not_before_s": 0.045
+          },
+          "shunts": [
+            {
+              "energy_j": 4e-05,
+              "time_s": 0.012
+            }
+          ],
+          "source_segments": [
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.006,
+              "power_w": 0.016666666666666666,
+              "start_s": 0
+            },
+            {
+              "compliance_v": 3.3,
+              "end_s": 0.06,
+              "power_w": 0.003666666666666667,
+              "start_s": 0.03
+            }
+          ]
+        },
+        "task_id": "B-event-memory"
+      }
+    ],
+    "consumer_source": "campaign20261019/b.py:simulate_b",
+    "control_scope": "predeclared_control PASS is expected-control agreement, not service PASS",
+    "feedback_scope": "load -> stored energy/loaded rail -> reset -> program; prescribed source has no source-response feedback",
+    "mechanisms": [
+      {
+        "boundary": "fast/slow both pass; late reception at 0.1058 s misses 0.1 s",
+        "cases": [
+          "b-pulse-fast",
+          "b-pulse-slow",
+          "b-late-energy"
+        ],
+        "relation": "same 150 uJ, different source order and deadline access"
+      },
+      {
+        "boundary": "no-energy voltage gate is vacuous; event service fails",
+        "cases": [
+          "b-pulse-fast",
+          "b-esr-fail",
+          "b-no-energy"
+        ],
+        "relation": "ready/off energy thresholds, boot cost and ESR*TX-current droop"
+      },
+      {
+        "boundary": "passive mechanical latch is an explicit ideal assumption",
+        "cases": [
+          "b-latched-reset",
+          "b-volatile-reset"
+        ],
+        "relation": "same 210 uJ and shunt, different event retention through reset"
+      }
+    ],
+    "physical_qualification": "UNKNOWN",
+    "saved_outcomes": [
+      {
+        "first_receive_s": 0.0158,
+        "id": "b-pulse-fast",
+        "predeclared_control": "PASS",
+        "source_j": 0.00015,
+        "task_id": "B-pulse",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      {
+        "first_receive_s": 0.0548,
+        "id": "b-pulse-slow",
+        "predeclared_control": "PASS",
+        "source_j": 0.00015,
+        "task_id": "B-pulse",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      {
+        "first_receive_s": null,
+        "id": "b-esr-fail",
+        "predeclared_control": "PASS",
+        "source_j": 0.00015,
+        "task_id": "B-pulse",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "FAIL",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "FAIL"
+        }
+      },
+      {
+        "first_receive_s": null,
+        "id": "b-no-energy",
+        "predeclared_control": "PASS",
+        "source_j": 0.0,
+        "task_id": "B-pulse",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "FAIL",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      {
+        "first_receive_s": 0.1058,
+        "id": "b-late-energy",
+        "predeclared_control": "PASS",
+        "source_j": 0.00015,
+        "task_id": "B-pulse",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "FAIL",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      {
+        "first_receive_s": 0.046900000000000004,
+        "id": "b-latched-reset",
+        "predeclared_control": "PASS",
+        "source_j": 0.00021,
+        "task_id": "B-event-memory",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "PASS",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      {
+        "first_receive_s": null,
+        "id": "b-volatile-reset",
+        "predeclared_control": "PASS",
+        "source_j": 0.00021,
+        "task_id": "B-event-memory",
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "FAIL",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      }
+    ]
+  },
+  "claim_boundary": "BF-specific computational mechanisms; no extra physical solve, discovery or hardware result",
+  "schema_version": "bf-mechanism-map-v1",
+  "solver_reexecutions": 0,
+  "structural_witnesses": [
+    {
+      "bf_mechanism": "storage saturation before a timed service",
+      "boundary": "ideal transaction; no MCU boot or calibrated PMIC",
+      "causal_chain": "capacitance -> energy ceiling -> spill -> usable reserve -> service",
+      "consumer": "service-energy transaction with minimum-rail reserve",
+      "missing_current_information": "unexcited upper rail clamp",
+      "observable_relation": "energy headroom over the legal capacitance domain",
+      "pair": "clamp-capacitance",
+      "saved_cases": [
+        {
+          "current": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 5.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "capacitance_uf": 10.0,
+            "consume_at_s": 2.5,
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "current_verdict": "PASS",
+            "horizon_s": 3.0,
+            "initial_energy_uj": 0.0,
+            "kind": "clamp",
+            "legal_domain": {
+              "capacitance_uf": [
+                4.0,
+                12.0
+              ]
+            },
+            "min_v": 1.0,
+            "proposed_change": {
+              "capacitance_uf": 4.0
+            },
+            "service_energy_uj": 30.0,
+            "source_end_s": 2.0,
+            "source_power_uw": 20.0
+          },
+          "current_representation_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+          "intervention": {
+            "delivered_count": 0,
+            "delivered_energy_uj": 16.0,
+            "final_energy_uj": 2.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": -14.0,
+            "spill_energy_uj": 22.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 18.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 3.0
+              },
+              {
+                "energy_uj": 18.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 3.0
+              },
+              {
+                "energy_uj": 2.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.0
+              },
+              {
+                "energy_uj": 2.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.0
+              }
+            ],
+            "verdict": "FAIL"
+          },
+          "world": "low-clamp"
+        },
+        {
+          "current": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 5.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "capacitance_uf": 10.0,
+            "consume_at_s": 2.5,
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 2.8284271247
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 1.4142135624
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 1.4142135624
+              }
+            ],
+            "current_verdict": "PASS",
+            "horizon_s": 3.0,
+            "initial_energy_uj": 0.0,
+            "kind": "clamp",
+            "legal_domain": {
+              "capacitance_uf": [
+                4.0,
+                12.0
+              ]
+            },
+            "min_v": 1.0,
+            "proposed_change": {
+              "capacitance_uf": 4.0
+            },
+            "service_energy_uj": 30.0,
+            "source_end_s": 2.0,
+            "source_power_uw": 20.0
+          },
+          "current_representation_sha256": "cffd6aabfbcde3fd122b3c0ef2e18fd7b023a363bcb98607d521da66994c7bb2",
+          "intervention": {
+            "delivered_count": 1,
+            "delivered_energy_uj": 30.0,
+            "final_energy_uj": 10.0,
+            "input_energy_uj": 40.0,
+            "service_margin_uj": 8.0,
+            "spill_energy_uj": 0.0,
+            "trace": [
+              {
+                "energy_uj": 0.0,
+                "event": "initial",
+                "time_s": 0.0,
+                "voltage_v": 0.0
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "harvest-ended",
+                "time_s": 2.0,
+                "voltage_v": 4.472135955
+              },
+              {
+                "energy_uj": 40.0,
+                "event": "before-service",
+                "time_s": 2.5,
+                "voltage_v": 4.472135955
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "after-service",
+                "time_s": 2.5,
+                "voltage_v": 2.2360679775
+              },
+              {
+                "energy_uj": 10.0,
+                "event": "end",
+                "time_s": 3.0,
+                "voltage_v": 2.2360679775
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "world": "high-clamp"
+        }
+      ]
+    },
+    {
+      "bf_mechanism": "pending event through power loss",
+      "boundary": "forced gate and ideal retention; no free powered NVM write",
+      "causal_chain": "outage -> reset -> volatile/retained pending -> later TX",
+      "consumer": "event-program transmit condition",
+      "missing_current_information": "reset retention when no reset has occurred",
+      "observable_relation": "event continuity under a legal power schedule",
+      "pair": "reset-memory",
+      "saved_cases": [
+        {
+          "current": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "current_verdict": "PASS",
+            "deadline_s": 5.0,
+            "delivery_goal": 1,
+            "event_at_s": 1.0,
+            "event_id": "event-1",
+            "horizon_s": 5.0,
+            "kind": "memory",
+            "legal_domain": {
+              "end_max_s": 3.75,
+              "max_intervals": 1,
+              "min_duration_s": 0.25,
+              "start_min_s": 1.25
+            },
+            "power_off_intervals": [],
+            "proposed_change": {
+              "power_off_intervals": [
+                [
+                  2.0,
+                  3.0
+                ]
+              ]
+            },
+            "tx_at_s": 4.0
+          },
+          "current_representation_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+          "intervention": {
+            "delivered_count": 0,
+            "received": [],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "down",
+                "pending": null,
+                "powered": false,
+                "received": [],
+                "time_s": 2.0
+              },
+              {
+                "event": "up",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 3.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "FAIL"
+          },
+          "world": "volatile"
+        },
+        {
+          "current": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "current_representation": {
+            "current_delivered_count": 1,
+            "current_trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "current_verdict": "PASS",
+            "deadline_s": 5.0,
+            "delivery_goal": 1,
+            "event_at_s": 1.0,
+            "event_id": "event-1",
+            "horizon_s": 5.0,
+            "kind": "memory",
+            "legal_domain": {
+              "end_max_s": 3.75,
+              "max_intervals": 1,
+              "min_duration_s": 0.25,
+              "start_min_s": 1.25
+            },
+            "power_off_intervals": [],
+            "proposed_change": {
+              "power_off_intervals": [
+                [
+                  2.0,
+                  3.0
+                ]
+              ]
+            },
+            "tx_at_s": 4.0
+          },
+          "current_representation_sha256": "5b5cd1ed16b3dcefe1152938c1235bff204ced467e77e0e9f15f5667e8ec924f",
+          "intervention": {
+            "delivered_count": 1,
+            "received": [
+              "event-1"
+            ],
+            "trace": [
+              {
+                "event": "initial",
+                "pending": null,
+                "powered": true,
+                "received": [],
+                "time_s": 0.0
+              },
+              {
+                "event": "capture",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 1.0
+              },
+              {
+                "event": "down",
+                "pending": "event-1",
+                "powered": false,
+                "received": [],
+                "time_s": 2.0
+              },
+              {
+                "event": "up",
+                "pending": "event-1",
+                "powered": true,
+                "received": [],
+                "time_s": 3.0
+              },
+              {
+                "event": "send",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 4.0
+              },
+              {
+                "event": "end",
+                "pending": null,
+                "powered": true,
+                "received": [
+                  "event-1"
+                ],
+                "time_s": 5.0
+              }
+            ],
+            "verdict": "PASS"
+          },
+          "world": "retained"
+        }
+      ]
+    }
+  ]
+}

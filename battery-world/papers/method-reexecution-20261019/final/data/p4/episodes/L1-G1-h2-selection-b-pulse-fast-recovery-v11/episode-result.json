@@ -1,0 +1,144 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.012207108,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.025604099999999998,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "adapter_revision": "1.1",
+  "canonical_episode_id": "L1-G1-h2-selection-b-pulse-fast",
+  "episode": "L1-G1-h2-selection-b-pulse-fast-recovery-v11",
+  "exit_code": 0,
+  "external_result": {
+    "candidate": {
+      "capacitance_f": 2.2e-05,
+      "tx_not_before_s": 0
+    },
+    "execution": {
+      "complete_service": "PASS",
+      "design": {
+        "capacitance_f": 2.2e-05,
+        "tx_not_before_s": 0
+      },
+      "energy": {
+        "bad_steps": [],
+        "final_storage_j": 2.2411999999991982e-05,
+        "implementation": "independent Decimal ledger and piecewise input integral",
+        "max_balance_error_j": 1e-20,
+        "max_port_vi_error_j": 0.0,
+        "max_source_step_error_j": 4.552802091491864e-21,
+        "max_voltage_error_v": 0.0,
+        "physical_calibration": "UNKNOWN",
+        "source_integral_j": 0.00015,
+        "source_total_error_j": 0.0,
+        "step_count": 10000,
+        "time_resolution_s": 0.0001,
+        "totals_j": {
+          "background_j": 7.8788e-05,
+          "boot_j": 5e-06,
+          "conversion_j": 1.5000000000000004e-05,
+          "harvest_j": 0.000135,
+          "shunt_j": 0.0,
+          "source_j": 0.00015,
+          "spill_j": 0.0,
+          "tx_j": 2.8799999999999995e-05
+        },
+        "verdict": "PASS"
+      },
+      "evaluator_sha256": "8b31b31938313989e8e7576ec1a558f46a7df3eab12d28f5e5cb25cc93aa915d",
+      "evaluator_version": "phase4-fixed-transient-and-single-query-v1",
+      "execution_key": "99adc409371efde1f79c46b151098c0307bc522f479506f7189d5fe570ed4ed4",
+      "input_sha256": "0686ad8a6b9916c71fd1828961593d7eae51b18f4a1a6d35bc639c94343d1155",
+      "job_accounting": {
+        "initial_cache_hit": true,
+        "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+        "new_logical_D_exposure": false,
+        "other_group_history_exposed": false
+      },
+      "ordered_event_state": {
+        "capture_actions": [],
+        "classification": "DELIVERED_BEFORE_ANY_RESET",
+        "event_origin": {
+          "mechanism": "passive-mechanical",
+          "receiver_event_id_matches": true,
+          "task_event_id": 1,
+          "time_s": 0
+        },
+        "first_valid_receive_s": 0.0158,
+        "legacy_label": "FAIL",
+        "lineage_scope": "Single event_id=1 in frozen ideal digital state machine; no hardware memory witness",
+        "pending_event_retained_across_reset": false,
+        "physical_qualification": "UNKNOWN",
+        "resets_after_delivery_before_deadline": [],
+        "resets_before_first_delivery": [],
+        "source_binding_sha256": "5b6bbaccee92bf694a556d89eacedd51319137a016fd71a16ba2dff998d533a2",
+        "version": "ordered-event-provenance-v1"
+      },
+      "origin": "sealed-historical-exact-input",
+      "physical_qualification": "UNKNOWN",
+      "query_service": null,
+      "raw_path": null,
+      "reference": {
+        "brownouts_before_deadline": 0,
+        "captured_before_reset": false,
+        "datasheet_range_check": "PASS",
+        "datasheet_scope": "Range consistency only. Synthetic port waveform and efficiency are uncalibrated; no ECO260 load-response qualification.",
+        "first_boot_s": 0.0129,
+        "first_receive_s": 0.0158,
+        "max_esr_equation_error_v": 0.0,
+        "received_frames": 1,
+        "receiver_errors": [],
+        "transient_failed_steps": 0,
+        "verdicts": {
+          "deduplication": "PASS",
+          "event_preserved_after_reset": "FAIL",
+          "event_receive": "PASS",
+          "independent_energy": "PASS",
+          "independent_receiver": "PASS",
+          "physical_qualification": "UNKNOWN",
+          "transient_voltage": "PASS"
+        }
+      },
+      "reused": true,
+      "world": "b-pulse-fast"
+    },
+    "reason": "Submitted candidate = current in-force design, retained under STEP 4.1 (no knob change). Sources read this episode: component_record eeb8277f7faa548e82ac297fa65a5e17960824ad13ea20586108ba441280b212, excitation_record cc0a3cba7c9eb50d252a99020c76a2b2f5fdee66cb951dd7f7bf8366b40e1978, model_law d690d8a89532cb37d39a6c47a4e5d2960d025ea5b85a629a4b1f513bb7003a0f. World class read from THIS run: event_latch=passive-mechanical, so hold inequality (iv) recorded NOT_BINDING; one segment [0,0.020) s at 0.0075 W; shunts=[]; dt=1e-4. Ledger (C=22e-6): E_on=8.624e-5, E_off=3.564e-5, E_max=1.1979e-4, E_floor=0.5*C*(1.8+0.3*0.008)^2=3.5734e-5, step=(0.0075*0.9-2e-5)*1e-4=6.73e-7 => n_boot=ceil(E_on/step)=129, predicted t_boot=0.0129, t_ready=0.0139, t_txstart=max(0.0139,0)=0.0139, t_txdone=0.0159. Observed check (one execution): first_boot_s=0.0129 (0 ticks deviation), tx-start 0.0139, tx-complete 0.0158, one packet 8 application_bytes, event_id=1, loaded_v=2.5817 V, energy_ledger verdict PASS, spill_j=0, shunt_j=0, received_frames=1. Margins: (i) 0.0158<=0.1 => +0.0842 s; (ii) E(t_ready)=8.8367e-5, E_credit=0.9*0.0075*0.002-2e-4*0.002=1.31e-5, E_tx=2.88e-5, residual 8.8367e-5-3.5734e-5+1.31e-5-2.88e-5=+3.69e-5 J, min E during tx 7.2667e-5>=E_floor; (iii) peak 8.8367e-5<=E_max margin +3.14e-5 J. STEP 1: ACHIEVED packet (A=8 bytes, single event id, inside deadline); no deadline-miss, no-boot/threshold, tx-transient-loss or frame-shape class present, so the design is retained and the second candidate was not spent (budget used: 1 distinct candidate, 1 check, 3 source acquisitions). Retained mismatch, verbatim: tx-complete 0.0158 vs predicted 0.0159 = 1 dt tick deviation, classified TRANSCRIPTION/ARITHMETIC (tx-start tick already consumes one dt of tx_left; completion = t_txstart + (ceil(tx_duration/dt)-1)*dt); design kept, no revert. Retained UNKNOWNs: physical_qualification=UNKNOWN, physical_calibration=UNKNOWN, source_calibration=UNAVAILABLE; the ideal-model ledger is not calibration and no hardware claim is made. The brownout at 0.3395 s (event_was_captured=false) is strictly post-terminal, recorded as benign decay, never a knob trigger. Retained verbatim from earlier episodes: ar_product {fixed_space NO_GO, product NOT_ACCEPTED, strict_FIFO FAIL}; current_b_run {received_frames 0, start_voltage_v 0}; p2's two EPISODE_CANDIDATE_LIMIT rejections of one identical H payload plus its misrouted-submission note; p2 check ACTION_NOT_AVAILABLE_IN_THIS_EPISODE = UNKNOWN (never pass, never fail); p3 check physical_qualification=UNKNOWN; p3's recorded gate miss (ceil((E_on+boot_j)/step) predicted a later boot than recorded) retained as TRANSCRIPTION, not a revert trigger. Complete service and reference truth remain host-side; this record is an observation, not an acceptance label, and no statistical, migration or RSI claim is made.",
+    "service_judgment": "PASS",
+    "wrong_service_judgment": false
+  },
+  "fresh_task_entry": true,
+  "initial_cache_sha256": "86dec98d6eb4244321c81315e0b235a7d516de87a858fd528d07a0716cfeabca",
+  "native_dispatches": 0,
+  "owner": "pi-chat-25e8d5fbd8ba7363",
+  "protocol_sha256": "7812b7fbf78c5201d88c18e1cf23e3cddbb905f38a8e2a9a26097c998ef47064",
+  "recovery_of": "L1-G1-h2-selection-b-pulse-fast",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "8b0beac19a51e936928e1b73acc789be2519befec94aba7aaa389c72eb62a134",
+  "spec": {
+    "arm": "G1",
+    "arm_id": "L1-G1",
+    "child": 2,
+    "id": "L1-G1-h2-selection-b-pulse-fast-recovery-v11",
+    "kind": "D",
+    "lineage": 1,
+    "recovery_of": "L1-G1-h2-selection-b-pulse-fast",
+    "slot": "h2-b-pulse-fast",
+    "stage": "selection",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "8df73684be3c46fcd060ee1cd05151fa4fcdc119b6e616441d237aefcbebefcf",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 36.79867879199446,
+  "wall_seconds_total": 37.27350333298091
+}

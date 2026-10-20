@@ -1,0 +1,161 @@
+\section{A/R: a battery-free entry to device and method changes}
+\label{sec:phase1-ar}
+The A/R case places an indoor-light-powered temperature and history tag on a
+transport container. Its public apparatus couples assumed photovoltaic port
+power, one capacitor, regulator thresholds, sensing and persistent writes,
+program activity, and a digital receiving endpoint. Source power is specified
+in watts; illuminance is metadata rather than a conversion to harvested power.
+All runs start with zero stored energy. The source, ideal storage and write
+models, and storage-side energy costs are uncalibrated computational assumptions.
+
+\subsection{The retained reference and legal intervention}
+We re-read the sealed reference without rerunning an unchanged design.
+All 81 sealed files and 17 original positive and negative conditions passed
+their original independent consumer. A phase-one consumer retains those
+outcomes and adds explicit gate applicability and maximum inter-sample spacing.
+The six-hour profile has 348 samples and its first fresh reception at 773~s.
+In the twelve-hour dark history profile, storage retains all 170 records,
+including 168 temperature samples across the whole profile. Yet 648 of the
+720 historical dark-window bins contain no new sample. The recorded gap is
+delivered, but absolute time after reset remains unknown; all 73 queued records
+miss the recovery deadline and one of two required temperature events is missed.
+
+\begin{table}[ht]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Profile & Samples & New sampling & Retention & Recovery & Fresh delay\\
+\midrule
+Six hours & 348 & Pass & Pass & N/A & Pass\\
+Twelve-hour dark & 168 & Fail & Pass & Fail & Fail\\
+Gateway recovery & 168 & Pass & Pass & Pass & Fail\\
+\bottomrule
+\end{tabular}
+\caption{Independent readback of the original A/R device, before the Pi
+revisions. Recovery allows 120~s; fresh reception allows 10~s for each new
+online sample. N/A denotes an unexercised gate. Samples count the whole
+profile; hardware qualification is unknown for every row.}
+\label{tab:phase1-ar}
+\end{table}
+
+The original gateway-recovery profile separates backlog completion from
+timeliness: its 60 queued records are acknowledged within 82~s, and two repeated
+arrivals cause no duplicate acceptance, but one new sample waits 30~s. Preserved
+history, eventual upload, new sensing, and timely reception need separate evidence.
+
+The frozen phase-one device space permits capacitance and the existing threshold
+domain, with maximum voltage 3.3~V and all source and load assumptions fixed.
+The participant can change sample, ACK and retry timing and supply a bounded
+numeric program that ranks pending records. This program observes sequence,
+record kind, and age only when synchronized local time and the record timestamp
+support it. It cannot observe true creation time after clock loss, future supply,
+or evaluator labels. Its expression is executed by the queue consumer;
+submission alone cannot create an acceptance receipt. The frozen task also
+requires the oldest unacknowledged record first. This ordering requirement
+must be checked separately from the rank interface's syntactic legality.
+
+\subsection{One actual episode with an explicit continuation}
+S0 dispatched Pi under owner \texttt{pi-chat-cf4b6cb2ebe9b771}. The provider
+reported \texttt{deepseek-flash}; this alias does not independently pin weights
+or a model version. The initial segment stopped before a device submission when
+SSE framing exceeded the host's 2~MB response envelope. It had made two provider
+requests and four inspection calls. The initially unresolved second request
+later settled. Its failure and original UNKNOWN accounting snapshot remain saved.
+
+The explicit \texttt{continuation-001} resumed the same session, preserving its
+eight original messages and four tool results. It retained the original deadline
+and cumulative caps of 60 requests, three candidates and 3,600~s; the response
+envelope alone increased to 64~MiB. This is one continued episode, not an
+independent resample or a fresh method condition. The saved session prefix,
+model tool arguments, candidate JSON, source manifests, seals and settled
+provider rows are bound in the accompanying paper data. Hash readback distinguishes
+canonical JSON content hashes from file byte hashes, and the independent energy
+proof script from the service checker. Both checker identities match their
+respective receipts; all 68 original and 77 continuation bound files match.
+
+Pi checked three adaptive device revisions, each on the same four public
+profiles: twelve new local case simulations and zero native dispatches. All use
+$C=0.015$~F, off/ready thresholds 2.3/2.7~V, a 60~s sample period, 1~s ACK
+spacing, and $\mathrm{rank}=0-\mathrm{seq}$. The lowest score is selected, so
+this expression sends the newest pending record first. Retry intervals are
+2, 30 and 8~s, respectively. Pi submitted candidate~002, preserving both rejected
+alternatives (Table~\ref{tab:phase1-pi}). Its choice changes the executed queue
+program relative to the original device; this is a $D$ intervention.
+
+\input{phase1-pi-results.tex}
+
+\subsection{Conditional rank repair and the unresolved FIFO requirement}
+The independent consumer passes energy, actual activity/program replay, CRC and
+receiver checks for all twelve case executions. Under the rank interface, all
+three candidates pass applicable computational service gates in the cold,
+six-hour light/dark, and gateway recovery/deduplication profiles. In the gateway
+case they retain 168 samples, acknowledge the 60-record backlog within 120~s,
+and accept no duplicate from two repeated arrivals. Each of the 90 eligible new
+online samples is received without an extra simulation-step delay. This changes
+the fresh-delay gate from the original FAIL to PASS under the rank policy.
+
+\textbf{This conditional timing repair is not compliant with the frozen FIFO
+requirement.} Independent pending-record replay finds strict ordering violations
+for all three candidates in both the history and gateway profiles. For the
+submitted candidate, the gateway profile's first witness occurs at 833~s:
+record~2 is selected while record~1 is still the oldest unacknowledged record.
+The rank hook permits that choice, but the original task text does not.
+The contract is unchanged and product acceptance remains \texttt{NOT\_ACCEPTED}.
+A human must resolve this semantic conflict before any revised ordering contract
+and its results can be accepted.
+
+All three history profiles still fail continuous new sampling, dark new sampling,
+120~s recovery upload and temperature-event coverage; absolute time after reset
+remains UNKNOWN. Their whole-profile sample counts are 106, 168 and 129, not
+counts of samples taken entirely within darkness. Faster retries reduce the
+remaining late backlog while consuming energy that could support sensing.
+The selected candidate retains 170 records, including 168 samples, and reports
+the gap, but all 73 recovery backlog records are late and one of two events is
+missed. Its fresh-delay gate passes only for the 78 eligible samples actually
+created during online service; it does not fill the missing dark observations.
+
+\subsection{A necessary bound and the D/H/G claim boundary}
+Pi had access to Codex-provided necessary inequalities, including a stronger
+sleep-plus-sensing dark bound. The final external proof independently uses the
+weaker sleep-only bound below, without calling that analytical tool. Granting
+all optimistic startup energy and omitting boot, sensing and transmission costs,
+startup by 1,800~s at the legal ready-voltage infimum of 2.2~V requires
+\[
+C \leq \frac{2(90\cdot0.8-1)\,10^{-6}\cdot1800}{2.2^2}
+  = 0.05281\ \mathrm{F}.
+\]
+In the fixed legal apparatus, the program cannot request power-off. Its fixed
+ESR cannot cause a transmission dropout above the smallest off threshold, and
+an ordinary brownout cannot recharge to a higher ready threshold in zero light.
+Continuous dark sampling therefore needs power between its first and last
+required samples. Grant full charge at dark entry and 122~s total edge slack
+(one 60~s interval plus a 1~s step at each end). Even charging only 5~$\mu$W
+sleep power requires
+\[
+C \geq \frac{(43200-122)\cdot5\,10^{-6}}
+                   {(3.3^2-2.2^2)/2}
+  = 0.07120\ \mathrm{F} > 0.05281\ \mathrm{F}.
+\]
+These disjoint necessary bounds establish a no-go only in the frozen ideal
+single-capacitor, fixed-sleep legal space. They are not physical impossibility
+or a participant discovery. Optimistic necessary limits suggest a cold deadline
+of at least 2,426.93~s (40.45~min), a dark duration of at most 32,072~s (8.91~h),
+or sleep power below about 3.7084~$\mu$W. None is a sufficient design. Any changed
+service or apparatus needs a new human-approved contract and qualification.
+
+The episode totals seven SETTLED provider requests, including the two from the
+stopped segment. Their charge upper bound is USD~0.082605 and the cache-aware
+rate estimate is USD~0.058482888; neither is an invoice. No provider usage is
+unresolved at final readback. Codex apparatus, checker and repair assistance
+remains \texttt{UNPRICED\_NONZERO}, so the full end-to-end cost is unknown.
+The earlier four $H$ attempts, their 68 settled requests, all failures and all
+historical UNKNOWN records remain separate and unchanged.
+
+The actual episode supplies a device-level conditional rank repair and a
+negative service result. A proposed $H$ rule could check joint startup/dark
+feasibility and distinguish backlog completion from fresh delay, but no fresh
+$H_0/H_1$ comparison or retained update is reported for A/R. A procedure that
+proposes and selects that rule would change $G$ and need controlled lineages
+and future tasks. Method benefit, recursive self-improvement and held-out
+transfer are untested here; hardware qualification remains UNKNOWN.

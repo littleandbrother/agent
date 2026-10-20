@@ -1,0 +1,589 @@
+{
+  "schema_version": "bf-ar-service-contract-v1",
+  "feature": "BFA-052-ar-service-repair",
+  "baseline": "CB2-61f3ff75e94647915c87b3746c3bc5e12a374409efe0642e6d3e3980fa2a672a",
+  "head": "317d40fef0137d3c1ad1873e53c3e9968b31200a",
+  "frozen_at": "2026-10-19T16:21:40.511564+00:00",
+  "partition": "public-development",
+  "source_conditions": {
+    "path": "configs/studies/parallel-20261019/reference/conditions.v1.json",
+    "sha256": "19757a1c9aa8a889dbb7258276121d3621c0faa7d468aa47ff95ac9a1a201fdb"
+  },
+  "baseline_manifest": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/baseline-v2/manifest.json",
+    "sha256": "96ab17e8c1f9913b52a98b2c0103a1db4717582812f98a76385d469009207fbe"
+  },
+  "preparation_profile_reference": {
+    "path": "/Users/depengsu/.local/share/bf-phase1-20261020/a/profile.json",
+    "sha256": "6fdc30a590cf243da037b359304c58915b48ce4dd66b7c6f7b8e5b2dc3a0d29e"
+  },
+  "historical_raw": {
+    "path": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001",
+    "seal_sha256": "a805ffe673e154897b3381996cf35a54c0eb13e424ce8f4b8429bd38c4d7bdc0",
+    "candidate_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+    "read_only": true,
+    "new_simulations": 0
+  },
+  "tasks": {
+    "ar-cold": {
+      "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "device": {
+        "ack_drop_first_n": 0,
+        "boot_delay_s": 2,
+        "boot_storage_j": 0.0001,
+        "cap_initial_voltage_v": 0.0,
+        "cap_voltage_max_v": 3.3,
+        "capacitance_f": 0.015,
+        "clock_persistent": false,
+        "clock_ppm": 20,
+        "cold_start_power_w": 3e-06,
+        "cold_start_voltage_v": 0.38,
+        "dropout_v": 0.3,
+        "esr_ohm": 0.3,
+        "harvest_efficiency": 0.8,
+        "id": 271828,
+        "nvm_capacity_records": 2048,
+        "nvm_persistent": true,
+        "off_power_w": 1e-06,
+        "off_v": 2.3,
+        "output_v": 1.8,
+        "rated_voltage_v": 5.5,
+        "ready_v": 2.7,
+        "receiver_dedup": true,
+        "sample_period_s": 60,
+        "sense_storage_j": 2e-05,
+        "sequence_persistent": true,
+        "sleep_power_w": 5e-06,
+        "stamp_age_fault_s": 0,
+        "temperature_bias_c": 0.1,
+        "tx_duration_s": 0.005,
+        "tx_peak_output_a": 0.008,
+        "tx_storage_j": 0.00013,
+        "upload_period_s": 1,
+        "write_storage_j": 5e-06
+      },
+      "dt_s": 1,
+      "duration_s": 3600,
+      "gateway_windows": [
+        [
+          0,
+          3601
+        ]
+      ],
+      "id": "ar-cold",
+      "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+      "max_timestamp_error_s": 60,
+      "model_id": "ar-light-behavior-v1",
+      "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+      "partition": "public-development",
+      "recovery_at_s": null,
+      "required_dark_report_period_s": 600,
+      "required_first_receive_s": 1800,
+      "required_live_receive_delay_s": 10,
+      "required_sample_period_s": 120,
+      "required_temperature_error_c": 1.0,
+      "schema_version": "campaign-task-v1",
+      "service_semantics": {
+        "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+        "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+        "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared.",
+        "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+        "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence)."
+      },
+      "service_start_s": 1800,
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "source_calibration": "UNAVAILABLE",
+      "source_segments": [
+        {
+          "end_s": 3600,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 0,
+          "voc_v": 3.2
+        }
+      ],
+      "task_id": "AR-cold",
+      "temperature_event": {
+        "enabled": false,
+        "minimum_duration_s": 300,
+        "threshold_c": 8
+      },
+      "temperature_segments": [
+        [
+          0,
+          3601,
+          22.0
+        ]
+      ]
+    },
+    "ar-light-dark": {
+      "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "device": {
+        "ack_drop_first_n": 0,
+        "boot_delay_s": 2,
+        "boot_storage_j": 0.0001,
+        "cap_initial_voltage_v": 0.0,
+        "cap_voltage_max_v": 3.3,
+        "capacitance_f": 0.015,
+        "clock_persistent": false,
+        "clock_ppm": 20,
+        "cold_start_power_w": 3e-06,
+        "cold_start_voltage_v": 0.38,
+        "dropout_v": 0.3,
+        "esr_ohm": 0.3,
+        "harvest_efficiency": 0.8,
+        "id": 271828,
+        "nvm_capacity_records": 2048,
+        "nvm_persistent": true,
+        "off_power_w": 1e-06,
+        "off_v": 2.3,
+        "output_v": 1.8,
+        "rated_voltage_v": 5.5,
+        "ready_v": 2.7,
+        "receiver_dedup": true,
+        "sample_period_s": 60,
+        "sense_storage_j": 2e-05,
+        "sequence_persistent": true,
+        "sleep_power_w": 5e-06,
+        "stamp_age_fault_s": 0,
+        "temperature_bias_c": 0.1,
+        "tx_duration_s": 0.005,
+        "tx_peak_output_a": 0.008,
+        "tx_storage_j": 0.00013,
+        "upload_period_s": 1,
+        "write_storage_j": 5e-06
+      },
+      "dt_s": 1,
+      "duration_s": 21600,
+      "gateway_windows": [
+        [
+          0,
+          21601
+        ]
+      ],
+      "id": "ar-light-dark",
+      "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+      "max_timestamp_error_s": 60,
+      "model_id": "ar-light-behavior-v1",
+      "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+      "partition": "public-development",
+      "recovery_at_s": null,
+      "required_dark_report_period_s": 600,
+      "required_first_receive_s": 1800,
+      "required_live_receive_delay_s": 10,
+      "required_sample_period_s": 120,
+      "required_temperature_error_c": 1.0,
+      "schema_version": "campaign-task-v1",
+      "service_semantics": {
+        "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+        "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+        "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared.",
+        "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+        "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence)."
+      },
+      "service_start_s": 1800,
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "source_calibration": "UNAVAILABLE",
+      "source_segments": [
+        {
+          "end_s": 7200,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 0,
+          "voc_v": 3.2
+        },
+        {
+          "end_s": 9000,
+          "illuminance_lux": 0,
+          "mpp_ratio": 0.75,
+          "power_w": 0,
+          "start_s": 7200,
+          "voc_v": 0
+        },
+        {
+          "end_s": 10800,
+          "illuminance_lux": 50,
+          "mpp_ratio": 0.75,
+          "power_w": 2e-05,
+          "start_s": 9000,
+          "voc_v": 2.6
+        },
+        {
+          "end_s": 18000,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 10800,
+          "voc_v": 3.2
+        },
+        {
+          "end_s": 19800,
+          "illuminance_lux": 0,
+          "mpp_ratio": 0.75,
+          "power_w": 0,
+          "start_s": 18000,
+          "voc_v": 0
+        },
+        {
+          "end_s": 21600,
+          "illuminance_lux": 50,
+          "mpp_ratio": 0.75,
+          "power_w": 2e-05,
+          "start_s": 19800,
+          "voc_v": 2.6
+        }
+      ],
+      "task_id": "AR-light-dark",
+      "temperature_event": {
+        "enabled": false,
+        "minimum_duration_s": 300,
+        "threshold_c": 8
+      },
+      "temperature_segments": [
+        [
+          0,
+          21601,
+          22.0
+        ]
+      ]
+    },
+    "ar-history-nvm": {
+      "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "device": {
+        "ack_drop_first_n": 0,
+        "boot_delay_s": 2,
+        "boot_storage_j": 0.0001,
+        "cap_initial_voltage_v": 0.0,
+        "cap_voltage_max_v": 3.3,
+        "capacitance_f": 0.015,
+        "clock_persistent": false,
+        "clock_ppm": 20,
+        "cold_start_power_w": 3e-06,
+        "cold_start_voltage_v": 0.38,
+        "dropout_v": 0.3,
+        "esr_ohm": 0.3,
+        "harvest_efficiency": 0.8,
+        "id": 271828,
+        "nvm_capacity_records": 2048,
+        "nvm_persistent": true,
+        "off_power_w": 1e-06,
+        "off_v": 2.3,
+        "output_v": 1.8,
+        "rated_voltage_v": 5.5,
+        "ready_v": 2.7,
+        "receiver_dedup": true,
+        "sample_period_s": 60,
+        "sense_storage_j": 2e-05,
+        "sequence_persistent": true,
+        "sleep_power_w": 5e-06,
+        "stamp_age_fault_s": 0,
+        "temperature_bias_c": 0.1,
+        "tx_duration_s": 0.005,
+        "tx_peak_output_a": 0.008,
+        "tx_storage_j": 0.00013,
+        "upload_period_s": 1,
+        "write_storage_j": 5e-06
+      },
+      "dt_s": 1,
+      "duration_s": 50400,
+      "gateway_windows": [
+        [
+          0,
+          3600
+        ],
+        [
+          46800,
+          50401
+        ]
+      ],
+      "id": "ar-history-nvm",
+      "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+      "max_timestamp_error_s": 60,
+      "model_id": "ar-light-behavior-v1",
+      "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+      "partition": "public-development",
+      "recovery_at_s": 46800,
+      "required_dark_report_period_s": 600,
+      "required_first_receive_s": 1800,
+      "required_live_receive_delay_s": 10,
+      "required_sample_period_s": 60,
+      "required_temperature_error_c": 1.0,
+      "schema_version": "campaign-task-v1",
+      "service_semantics": {
+        "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+        "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+        "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared.",
+        "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+        "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence)."
+      },
+      "service_start_s": 1800,
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "source_calibration": "UNAVAILABLE",
+      "source_segments": [
+        {
+          "end_s": 3600,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 0,
+          "voc_v": 3.2
+        },
+        {
+          "end_s": 46800,
+          "illuminance_lux": 0,
+          "mpp_ratio": 0.75,
+          "power_w": 0,
+          "start_s": 3600,
+          "voc_v": 0
+        },
+        {
+          "end_s": 50400,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 46800,
+          "voc_v": 3.2
+        }
+      ],
+      "task_id": "AR-history",
+      "temperature_event": {
+        "enabled": true,
+        "minimum_duration_s": 300,
+        "threshold_c": 8
+      },
+      "temperature_segments": [
+        [
+          0,
+          5000,
+          4
+        ],
+        [
+          5000,
+          5600,
+          12
+        ],
+        [
+          5600,
+          40000,
+          4
+        ],
+        [
+          40000,
+          40900,
+          12
+        ],
+        [
+          40900,
+          50401,
+          4
+        ]
+      ]
+    },
+    "ar-upload-dedup": {
+      "baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "device": {
+        "ack_drop_first_n": 2,
+        "boot_delay_s": 2,
+        "boot_storage_j": 0.0001,
+        "cap_initial_voltage_v": 0.0,
+        "cap_voltage_max_v": 3.3,
+        "capacitance_f": 0.015,
+        "clock_persistent": false,
+        "clock_ppm": 20,
+        "cold_start_power_w": 3e-06,
+        "cold_start_voltage_v": 0.38,
+        "dropout_v": 0.3,
+        "esr_ohm": 0.3,
+        "harvest_efficiency": 0.8,
+        "id": 271828,
+        "nvm_capacity_records": 2048,
+        "nvm_persistent": true,
+        "off_power_w": 1e-06,
+        "off_v": 2.3,
+        "output_v": 1.8,
+        "rated_voltage_v": 5.5,
+        "ready_v": 2.7,
+        "receiver_dedup": true,
+        "sample_period_s": 60,
+        "sense_storage_j": 2e-05,
+        "sequence_persistent": true,
+        "sleep_power_w": 5e-06,
+        "stamp_age_fault_s": 0,
+        "temperature_bias_c": 0.1,
+        "tx_duration_s": 0.005,
+        "tx_peak_output_a": 0.008,
+        "tx_storage_j": 0.00013,
+        "upload_period_s": 1,
+        "write_storage_j": 5e-06
+      },
+      "dt_s": 1,
+      "duration_s": 10800,
+      "gateway_windows": [
+        [
+          0,
+          3600
+        ],
+        [
+          7200,
+          10801
+        ]
+      ],
+      "id": "ar-upload-dedup",
+      "iv_model": "Explicit assumed power at an assumed 0.75 Voc operating point. Lux is metadata, never an input to a watts conversion. No source response outside these points.",
+      "max_timestamp_error_s": 60,
+      "model_id": "ar-light-behavior-v1",
+      "model_scope": "assumed port power, ideal capacitor, ideal atomic NVM, assumed regulator/load, deterministic digital receiver; no calibrated IV or hardware",
+      "partition": "public-development",
+      "recovery_at_s": 7200,
+      "required_dark_report_period_s": 600,
+      "required_first_receive_s": 1800,
+      "required_live_receive_delay_s": 10,
+      "required_sample_period_s": 120,
+      "required_temperature_error_c": 1.0,
+      "schema_version": "campaign-task-v1",
+      "service_semantics": {
+        "gap": "After reset report an unobserved interval bracketed by last durable observation and fresh synchronization, without claiming exact outage times.",
+        "history": "Every durable record must survive a reset; sample retention and continuous new sampling have separate gates.",
+        "priority": "Abnormal event records have priority over routine samples on capacity exhaustion; every eviction is counted and declared.",
+        "time": "No powered RTC after brownout; records without synchronization have an interval and UNKNOWN absolute time.",
+        "upload": "Oldest unacknowledged first, remove from pending only after ACK; receiver key=(device,sequence)."
+      },
+      "service_start_s": 1800,
+      "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+      "source_calibration": "UNAVAILABLE",
+      "source_segments": [
+        {
+          "end_s": 10800,
+          "illuminance_lux": 200,
+          "mpp_ratio": 0.75,
+          "power_w": 9e-05,
+          "start_s": 0,
+          "voc_v": 3.2
+        }
+      ],
+      "task_id": "AR-upload",
+      "temperature_event": {
+        "enabled": false,
+        "minimum_duration_s": 300,
+        "threshold_c": 8
+      },
+      "temperature_segments": [
+        [
+          0,
+          10801,
+          22.0
+        ]
+      ]
+    }
+  },
+  "required_recovery_upload_delay_s": 120,
+  "candidate_schema_version": "bf-ar-candidate-v1",
+  "program_schema_version": "bf-ar-rank-program-v1",
+  "world_id": "ar-service-program-v2",
+  "checker_id": "ar-service-independent-v2",
+  "legal_design_space": {
+    "device": {
+      "capacitance_f": {
+        "exclusiveMinimum": 0,
+        "maximum": 1,
+        "unit": "F",
+        "source": "ar.py validate: 0<C<=1; ideal one-capacitor model, not qualified component stock"
+      },
+      "off_v": {
+        "minimum": 2.2,
+        "exclusiveMaximum": 3.3,
+        "unit": "V",
+        "source": "ar.py validate lower threshold bound; output/dropout guard still applies"
+      },
+      "ready_v": {
+        "exclusiveMinimum": 2.2,
+        "exclusiveMaximum": 3.3,
+        "unit": "V",
+        "source": "ar.py validate: off<ready<cap_voltage_max; original maximum 3.3 V fixed"
+      }
+    },
+    "program": {
+      "sample_period_s": {
+        "minimum": 1,
+        "maximum": 60,
+        "type": "integer",
+        "source": "1 s integration; history task requires at most 60 s; no skipped-service waiver"
+      },
+      "ack_spacing_s": {
+        "minimum": 1,
+        "maximum": 10,
+        "type": "integer",
+        "source": "explicit program timing choice at 1 s resolution; all energy costs fixed"
+      },
+      "retry_s": {
+        "minimum": 1,
+        "maximum": 3600,
+        "type": "integer",
+        "source": "explicit retry timing choice within 1 h public run; energy is debited for every attempt"
+      },
+      "rank": {
+        "source": "bounded executable numeric AST; BF/Pi supplies the expression; minimum score wins, stable sequence tie break",
+        "max_nodes": 63,
+        "max_depth": 8,
+        "fields": [
+          "seq",
+          "kind",
+          "age_known",
+          "age_s"
+        ],
+        "operators": {
+          "+": 2,
+          "-": 2,
+          "*": 2,
+          "min": 2,
+          "max": 2,
+          "lt": 2,
+          "le": 2,
+          "eq": 2,
+          "if": 3
+        },
+        "constants": {
+          "minimum": -1000000,
+          "maximum": 1000000
+        },
+        "clock_basis": "age_s=max(0,local synchronized time-record timestamp) only when both are synchronized; otherwise 0 and age_known=0. No true created_s, future source, gateway schedule or evaluator fields."
+      }
+    }
+  },
+  "fixed_parameters": {
+    "source": "all source segments, watts, IV assumptions, efficiency, horizons, gateway, temperature truth and service criteria are exact historical task inputs",
+    "initial_energy": "zero capacitor voltage; no precharge, second source, powered timekeeper or extra human action",
+    "device": "all keys except capacitance_f/off_v/ready_v are fixed; sample and ACK cadence are set only by the executable program",
+    "model_limits": "ideal capacitor/NVM and nominal storage-side energy impulses, 1 s chronology; no calibrated hardware, regulator switching or RF model"
+  },
+  "program_change_scope": "only rank and timing are new v2 execution hooks; wire encoding, energy debits, persistence, thresholds and public receiver remain v1 semantics",
+  "acceptance": "Each service gate is independent and applicability explicit; retention/gaps never substitute for new sampling or absolute time. Participant submit is not acceptance. External checker reads immutable artifacts and saves a separate receipt.",
+  "resource_caps": {
+    "estimated_peak_additional_bytes": 300000000,
+    "retained_output_cap_bytes": 220000000,
+    "reserve_bytes": 10000000000,
+    "whole_phase_pre_batch_minimum_free_bytes": 10900000000,
+    "maximum_candidates": 3,
+    "maximum_requests": 60,
+    "maximum_wall_s": 3600,
+    "maximum_candidate_json_bytes": 16384,
+    "maximum_case_output_bytes": 64000000,
+    "native_dispatches": 0,
+    "paid_preparation_requests": 0
+  },
+  "parameter_provenance": [
+    {
+      "path": "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+      "sha256": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+      "scope": "existing physical/digital behavior and validator domain"
+    },
+    {
+      "path": "docs/research/parallel-20261019/reference/sources/receipts.json",
+      "sha256": "d33f14f3fbdb28835b5600ac832d60d941f5f65ad0ba5d7a0fd54f1d16270aac",
+      "scope": "archived official documents; not measurements or component qualification"
+    }
+  ],
+  "claim_boundary": "Nominal public-development computation. Codex implements tools/checker and records assistance; BF/Pi must author actual D/program and reasoning after S0 lease. No H benefit, transfer, RSI or hardware claim."
+}

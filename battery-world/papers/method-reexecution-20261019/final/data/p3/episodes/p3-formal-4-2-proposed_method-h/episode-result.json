@@ -1,0 +1,80 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.020961599999999997,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.036955199999999994,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-4-2-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "saved_activity:0946fb89",
+        "component_record:0b7f9244",
+        "excitation_record:34aff723",
+        "model_law:d690d8a8",
+        "full_public_facts:a893ed78"
+      ],
+      "falsifier": "Falsified if any design point that the procedure derives as satisfying the per-step inequalities with non-negative stated margin still yields packets=[] or a brownout whose reason is 'tx-transient' (accounting error or an unmodeled phenomenon at that point). Also falsified if an executed point with strictly negative derived margin nevertheless emits a valid 8-byte packet, which would show the derived inequalities are not necessary. Scope is invalidated if the model_id/model_law or component_record version changes (different sha256), if event_latch becomes passive-mechanical (capture then no longer requires being powered at the contact step), or if event_s, contact_duration_s, dt_s, source power, off/idle power, ready_v, output_v, tx_current_a or tx_duration_s differ from the acquired payloads, since all numeric thresholds are re-derived from those inputs. Over-exclusion is demonstrated (and the update must be withdrawn) if the procedure excludes a whole region as infeasible while a point inside it still produces a valid packet. UNKNOWN/failed outcomes are retained verbatim, never converted into a success claim.",
+      "hypothesis": "The retained base failure is a device-level energy-budget failure at the transmit step, not a capture or timing failure, and it is repairable by an eval-derived procedure rather than by a guessed parameter. Mechanism readable from the acquired sources: with the volatile latch, capture requires being powered at the single contact step t=2.000; the recorded law spends output_v*tx_current*dt=25 uJ in each 1 ms step and resets ('tx-transient') whenever sqrt(2*E_before/c)-esr*I < output_v or E_after < eoff. At the base point the pre-transmit store is only ~38 uJ, so the second step collapses to ~0.72 V. Hypothesis: the necessary pre-transmit store is E*(c)=max(n*tx_j+eoff, (n-1)*tx_j+eon) with n=ceil(tx_duration/dt)=2, and a design point is deliverable iff emax>=E*, eon<=E_avail(contact), and completion<=deadline with data age<=max_data_age_s; therefore a procedural derivation over the legal grid (not a fixed assignment) recovers a non-empty window containing the unchanged capacitance. Scope is the frozen ideal digital BF apparatus with synthetic waveforms; physical calibration, real latch persistence and any datasheet energy claim remain UNKNOWN and are not asserted.",
+      "impact_scope": "task-entry",
+      "method_sha256": "ac593e3fb067f6ab40b16b149814f31bcf82f9578aa1d950107c36c4bd4910ef",
+      "method_text": "SCOPE AND ROLES. This is a procedural (H) update only, consumed from task entry, for the frozen ideal digital BF apparatus (world clite-query-window-derived-v1, partition public-development). The component record describes synthetic waveform assumptions; physical calibration, real latch persistence and databook energy claims are UNKNOWN and are never asserted here. This interface has no device check: no acceptance is claimed, and no device assignment is presented as the method. Separate the two artifacts explicitly: D = the device record and its legal parameters (capacitance_f in [2.5e-5,1e-4], tx_not_before_s in [2,7]) plus anything the host executes; H = method, observation policy, experiment order, context policy. The update below changes H only. Any coupled D change must be executed by the host and fed back COMPLETELY (full per-step trace fields stored_j, voltage_v, loaded_v, tx_j, spill_j, background_j, powered, contact, event_captured; full activity list; full packets list; the executed parameter pair; the source version hashes); no partial or summarized feedback is accepted as evidence.\n\nSOURCE-BOUND READING (do this before proposing anything). Build every quantity from the acquired payloads only, using the recorded model law as the authority for ordering: per step, e += power_w*dt*harvest_efficiency; spill = max(0, e - c*cap_voltage_max_v^2/2); e -= min(e, (idle_power_w if powered else off_power_w)*dt); then resets; then boot when not powered and e >= eon = c*ready_v^2/2; then, only if powered and t >= ready_at, capture when the contact interval holds, and the transmit branch when captured and t >= tx_not_before_s. Note ordering consequences: the transmit branch can fire on the SAME step as capture, the per-step debit is output_v*tx_current_a*min(dt, tx_left), and the loaded-voltage test uses the pre-debit store. Contact is the single step satisfying event_s <= t < event_s + contact_duration_s (here one step, because contact_duration_s equals dt_s). Resets come in exactly two families, 'energy-threshold' and 'tx-transient'; with a volatile latch a reset clears the capture flag and after a completed transmit the flag is also cleared. Therefore report service completion (a frame actually emitted) separately from any statement about pending-state retention: holding the captured flag while powered is retention-while-powered only, and is NOT evidence that the pending state survives a reset.\n\nFAILURE LOCALIZATION (applied to the retained observation). Boot at 1.316 s equals 25 uJ / 0.019 uJ per ms, so the recorded law and the recorded activity agree; capture at 2.000 s and a transmit start on the same step follow from tx_not_before_s = 2 <= t; the first debit of 25 uJ leaves about 13 uJ, giving loaded_v about 0.72 V < output_v on the next step; the reset reason recorded is 'tx-transient', which is emitted ONLY inside the transmit branch. Conclusion for this run: capture and timing were satisfied and the deficit is stored energy at the transmit step. Keep this as the standing localization; if a later run instead shows 'energy-threshold' or a missed contact step, the localization changes and the derivation below must be redone rather than patched.\n\nDERIVATION PROCEDURE (re-executable, no parameter values supplied by the condition). Step 1: re-derive by direct stepping the recorded recurrence at the recorded dt_s, for each candidate parameter pair, rather than trusting a closed form. Step 2: use the closed-form bookkeeping only as a cross-check and as margin accounting, with n = ceil(tx_duration_s/dt_s), tx_j = output_v*tx_current_a*dt_s, eon = c*ready_v^2/2, eoff = c*off_v^2/2, emax = c*cap_voltage_max_v^2/2, giving the necessary pre-transmit store E*(c) = max(n*tx_j + eoff, (n-1)*tx_j + eon), the necessary capture condition eon <= E_avail(contact step) computed from the recorded source power, harvest efficiency and off power including the spill cap, and the completion and data-age tests completion <= deadline_s and completion - event_s <= max_data_age_s. Step 3: apply only these model-derived inequalities, each with an explicit fractional margin (require loaded_v >= output_v*(1+m), post-debit store >= eoff*(1+m), completion <= deadline_s - n*dt_s) and record the margin, so that a thin but positive margin is visible instead of being rounded into success. Two anti-over-exclusion rules are mandatory: (a) never exclude any grid point on a heuristic such as 'large capacitance is impractical' or 'a capacitor must be at least the full transmit energy'; the recorded inequalities are the only exclusions, and they typically bound an interval, not a point; (b) never treat a sufficient rule as necessary, i.e. a point that fails the closed form but steps the recurrence to an emitted frame counts as feasible evidence and must be recorded as a counterexample to the closed form.\n\nSELECTION AND EXECUTION ORDER (budget-aware). Enumerate the legal grid (capacitance_f in [2.5e-5,1e-4], tx_not_before_s in [2,7] on the dt_s grid), keep points passing Step 3 with positive margin, rank by the minimum normalized margin, and pick the top-ranked point. Spend at most one candidate execution on it (recorded budget: 2 distinct designs / 2 candidate executions), then: if it emits exactly one valid frame of required_application_bytes with unique_frames satisfied and the deadline and max-data-age tests passing, record service completion and stop. If it does not, retain the returned trace, activity and packets verbatim as a counterexample, do not silently edit parameters, and either spend the one remaining execution on the next-ranked point from the same derived set or explicitly return no-update. No automatic retry, no re-seeding, no change to the model, task, evaluator or physical assumptions. Any claim beyond the observed single run (hardware behavior, statistical advantage, transfer to another task, recursive self-improvement) is out of scope and must be reported as UNKNOWN.\n\nOBSERVATION POLICY. Retained artifacts contain actions but not per-step energies, so conclusions must cite the model law plus an executed trace, never the action log alone. Persist, per candidate: the executed pair, the derived E*, eon, eoff, emax, margins, the derived feasible set before execution, the full trace and packets, and an explicit UNKNOWN label wherever an input or a version hash is missing or changed. If a source version hash differs from the referenced ones, stop and re-derive from the new payload instead of reusing any number.\n\nCONTEXT POLICY. Carry this procedure from task entry so that the localization, the derived set and the margins are available before any parameter is touched; after any coupled D execution, require complete feedback as stated above before the next decision, and if feedback is incomplete, return no-update rather than inferring the missing fields.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-4-2-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-257493ffd38af88f",
+  "protocol_sha256": "c3c36119edfc9e3e1643f6ab1912b9ace6364c0aa56478e4ceacdf0a2930ecdf",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "ebeeff448a26d6e10484fb85df7b78978ebd168a7759c0b35d31850b1c872b46",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-4-2-proposed_method",
+    "id": "p3-formal-4-2-proposed_method-h",
+    "kind": "H",
+    "replicate": 2,
+    "stage": "formal",
+    "world": "clite-query-window-derived-v1"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "4b94a13457fd7b4fd6b37ea7ad220ee133272d893747810b062a67b867b223e0",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 72.25993087499228,
+  "wall_seconds_total": 72.67574925000372
+}

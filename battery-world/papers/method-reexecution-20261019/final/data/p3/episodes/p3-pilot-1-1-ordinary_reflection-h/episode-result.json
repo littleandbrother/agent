@@ -1,0 +1,83 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.017310983999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0366162,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-pilot-1-1-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "skills"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "component_record.event_latch",
+        "excitation_record",
+        "excitation_record.shunts:0",
+        "excitation_record.source_segments:1",
+        "saved_activity",
+        "saved_activity.activity:44",
+        "saved_activity.activity:46",
+        "saved_activity.packets",
+        "model_law",
+        "model_law.loaded_v",
+        "model_law.spill_j"
+      ],
+      "falsifier": "The update is falsified if, on the same frozen task, sources and budget, a candidate that passes the gate with the stated margins (energy margin >= the declared safety factor at every step of the retention interval, loaded-voltage margin >= the declared mV floor at the final tx step, no spill loss counted as usable energy) still yields no valid 8-byte frame, or suffers a brownout anywhere in the declared retention interval; or if a candidate that violates a declared inequality (and was therefore rejected) nonetheless yields a valid frame inside the deadline. It is also falsified if the gate's margin ordering inverts against observed outcomes, or if the two budgeted candidates fail with a signature traceable to a term the gate did not model (e.g. spill, boot cost, ready delay, per-step load re-test) - that shows the screening is incomplete rather than the apparatus being unmodelled.",
+      "hypothesis": "The retained base failure is a screening defect in H, not a missing parameter value: the base run captured the event (contact 0-0.008 s, captures 0.0037-0.0079 s) and then lost it via a brownout at 0.0121 s whose own record carries event_was_captured=true, with zero packets; the post-event power window at 0.0381 s shows event_captured=false. Under a volatile latch this is irreversible loss, so any procedure that selects a design without first debiting every shunt and dark-gap drain inside the interval [first capture, tx-complete] cannot distinguish feasible from infeasible designs. Hypothesis: adding an explicit, closed-form feasibility gate (retention interval + per-step loaded-voltage test + running energy debit + stated safety margin) to H before any candidate execution is spent makes predicted feasibility agree with the observed transient behaviour on this frozen apparatus, and makes failures diagnosable by named term instead of by re-tuning parameters.",
+      "impact_scope": "task-entry",
+      "method_sha256": "4e2c786eb36e57bb44249700b4806613881e481bcec847bc0ee823c5aa27d1be",
+      "method_text": "PROCEDURE H: feasibility-gated candidate selection for the frozen battery-free task (v2).\n\nScope and hard limits. Use only the frozen sources (component_record, excitation_record, saved_activity, model_law) and the frozen legal ranges capacitance_f in [4e-6, 2.2e-5], tx_not_before_s in [0, 0.045]. Do not modify the task, the excitation, the model law or any acceptance rule; do not assert acceptance - only host-side service decides. Budget: at most 2 candidate executions / 2 distinct designs; never silently retry; unknown, failure and no-update outcomes are recorded as observed, with actual costs.\n\nStep 1 - read the retention semantics before choosing anything. From component_record.event_latch decide the latch class. If the latch is volatile, state explicitly: a capture is retained only while the device stays powered, so the design must hold power continuously from the first capture through tx-complete; any energy-threshold or tx-transient brownout in that interval destroys the event and the contact window (event_s .. event_s + contact_duration_s) may already be closed, making the loss unrecoverable. Check saved_activity for brownout rows with event_was_captured=true and for empty packets; treat those as latch-loss evidence, not as a low-energy tweak.\n\nStep 2 - transcribe the discrete evaluation order from model_law as an explicit ledger, one row per dt step, in this order: harvest_j = source_w*dt*harvest_efficiency; spill_j = max(0, e - emax); background_j = min(e, idle_power_w*dt while powered else off_power_w*dt); shunt_j = min(e, sum of shunt energy in the step); then, per step, eoff-crossing test (brownout), eon-crossing test (boot, minus boot_j, ready_at = t + boot_delay_s), contact test only when powered and t >= ready_at, tx-start only when captured and t >= tx_not_before_s, and inside tx the per-step load test loaded_v = sqrt(2e/C) - esr_ohm*tx_current_a must stay >= output_v with requested = output_v*tx_current_a*min(dt, tx_left) debited each step, re-tested against the remaining energy, and the step also fails if e < eoff. Note that emax = C*cap_voltage_max_v^2/2 caps useful storage, so harvest beyond emax is not bankable energy.\n\nStep 3 - write the feasibility conditions as closed-form inequalities in the design parameters alone, before any execution: (a) first power-on time from the first source segment versus the contact window; (b) capture existence: does [boot + boot_delay_s, contact end] intersect a powered interval; (c) retention interval: cumulative energy over [first capture, tx-complete] after debiting all harvest, all shunts inside that interval, all background drain, any boot_j, and the full tx demand (output_v*tx_current_a*tx_duration_s), never below eoff and never below the per-step load-test energy floor C*(output_v + esr_ohm*tx_current_a)^2/2 evaluated with the energy already spent; (d) last-step margin: the same loaded-voltage test at the final tx step with the energy remaining then; (e) completion time <= deadline_s with exactly one 8-byte frame; (f) rule out designs whose first power-on lands after the contact window, since with a volatile latch no later power window can ever produce the frame.\n\nStep 4 - rank, do not tune. For each legal candidate compute each inequality's normalized margin (available/required), take the minimum, and require a declared safety factor before accepting a candidate (declare it in the record, e.g. >=1.2x on energy and >=50 mV on loaded voltage). Reject any candidate whose binding constraint sits within the noise of the model. Prefer the candidate whose binding constraint is not the retention interval if a choice exists, since the retention term is the one the base run got wrong.\n\nStep 5 - spend the budget deliberately. With at most 2 designs, use the two experiments to discriminate rather than to nudge: one design that maximises retention margin (largest stored energy at capture relative to the full post-capture debit set), and one that minimises the retention interval (earliest legal tx start after capture completes). Do not re-run the base design. Record both outcomes, including no packet, with the observed brownout reasons and the trace terms that dominated.\n\nStep 6 - diagnose by term, not by retreat. If a candidate fails, compare the observed per-step start_j/stored_j/harvest_j/spill_j/background_j/shunt_j/tx_j against the ledger prediction at the same step. A mismatch identifies a missing or misordered term; fix that term in the ledger and record it as an unknown. Do not edit the model, task or evaluator, and do not fabricate an acceptance claim. If the two candidates fail with the same signature, report no-update for this cycle rather than emitting a third guess.\n\nStep 7 - reporting discipline. Report hypothesis, ledger inequalities with declared margins, the chosen design parameters, the actual observed outcome and cost, and the explicit unknowns (e.g. physical calibration, behaviour outside the frozen source segments). Do not claim hardware validity, statistical advantage, transfer of the method or recursive self-improvement; this is a one-shot procedural revision on a fixed task, and the parameter choice itself is a later design decision, not part of this H.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-pilot-1-1-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-cc61a17066604620",
+  "protocol_sha256": "6cd80075b7ef1b8d23379dc6032a889c9e4be8c272ec956de4cc00643939768b",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "681a824b2dae3a6033807d208aed8af29df3b64d92199cb557e3bd8681a37ac7",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-pilot-1-1-ordinary_reflection",
+    "id": "p3-pilot-1-1-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "pilot",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 8,
+    "gateway_chain_tip": "3092936af876952bb818412079545b16b82d49b7a6d6e5805c18176be46b90ff",
+    "model_submitted": true,
+    "model_tool_calls": 8,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 47.77290454199829,
+  "wall_seconds_total": 47.925702207998256
+}

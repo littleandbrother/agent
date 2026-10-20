@@ -1,0 +1,76 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.025930608000000004,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.04215,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-1-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:eeb8277f",
+        "excitation_record:219fd490",
+        "saved_activity:a4c4b294",
+        "model_law:d690d8a8",
+        "inspect:316a9b36fd6faf9b880"
+      ],
+      "falsifier": "Re-executed under the same four sources with model b-transient-behavior-v1, the update is refuted by any of: (F1) a legal design at or inside the UNKNOWN band (e.g. C=4.0e-6 or 4.1e-6 with some legal tx_not_before_s) that emits a packet with application_bytes=8 and time_s<0.1 s and no prior reset('tx-transient'), because that breaks the necessary store bound or shows a mis-transcribed constant; (F2) an execution whose trace disagrees with the reproduced retained ledger at the current design (first_boot_s not 0.0129 s, or post-boot energy not 8.1817e-5 J), which invalidates the derivation base; (F3) a design satisfying every constraint I label feasible/binding-clear yet emitting no packet, or emitting it after 0.1 s, or resetting before completion, which shows the store/loaded_v constraints were not the only binding ones; (F4) a retained trace in which capture is recorded only while powered inside [0,0.008), contradicting the latch-based capture path, which voids the assumption-conditional scope; (F5) any case where reporting the post-delivery brownout (0.3395 s, reason 'energy-threshold', event_was_captured false) as separate from completion is shown to misclassify an externally-verified outcome. Acceptance and all service verdicts remain external; no hardware, statistical, migration or RSI claim is made.",
+      "hypothesis": "Scope: frozen ideal digital apparatus; physical calibration UNKNOWN; no device value is claimed correct and no service label exists in this condition. On the four acquired sources, the binding constraints for one 8-byte frame in this task are the source-bound store/transmit energy ledger in the model's own step order and the per-step loaded_v/eoff admissibility, not the latency budget: emax=5.445*C caps storage, tx draws 2.88e-5 J over 20 steps, at most 1.35e-5 J can arrive during tx, and the final tx step still needs e>=1.62432*C, giving the NECESSARY bound C>=4.0045e-6 whose margin over the legal minimum 4e-6 is ~1.7e-8 J, far below one harvest step (6.75e-7 J), so C in ~[4.0e-6,4.2e-6] must be recorded UNKNOWN rather than feasible or excluded. The 0.1 s deadline is slack (worst case 0.0129+0.001+0.002=0.0159 s), and contact-window coincidence [0,0.008) is NOT a necessary condition, because at maximal C the device cannot be powered-and-ready inside it and delivery instead depends on the model's ideal passive-mechanical latch, which must be carried as an assumption with its volatile-latch counterfactual (~[4.01e-6,1.20e-5], which would exclude maximal C) filed as UNKNOWN. A procedure that derives this ledger from sources, tags every claim necessary/sufficient/assumption/UNKNOWN, keeps completion separate from later pending-state resets, and never promotes a sufficient heuristic to a necessary feasible-space exclusion will classify designs and revisions without inventing capability; it edits procedure only, no device parameter.",
+      "impact_scope": "task-entry",
+      "method_sha256": "707c1419c2e7840ce78bf1148b98ede623000aecbe58fd58640265102830d09b",
+      "method_text": "M0 Scope. This is a procedure (H) consumed from task entry. It asserts no device assignment. Every constant below must be re-derived from the acquired sources (component_record, excitation_record, model_law, saved_activity) at task entry, not copied as a 'correct value'. Service verdicts (acceptance, labels) are external and are never inferred from a raw trace; physical calibration is UNKNOWN (frozen ideal digital apparatus).\n\nM1 Classify the artifact before acting. D = any change of capacitance_f or tx_not_before_s inside legal_design_ranges. H = any change to how facts are captured, ordered or interpreted. A step that would change device parameters is D: it needs its own complete feedback (budget: 2 candidate executions, 2 distinct designs) and is not evidence for H. Never present a D edit as a method.\n\nM2 Energy ledger from the model law, per dt=1e-4 s step, in the model's actual order (harvest -> spill -> background -> shunt -> boot -> latch -> tx):\n  harvest 0.0075 W * 0.9 * 1e-4 = 6.75e-7 J while 0<=t0<0.02 s (source_segments[0]); 0 after.\n  background 2e-9 J unpowered, 2e-8 J powered.\n  store limits eon=3.92*C, eoff=1.62*C, emax=5.445*C (from 2.8/1.8/3.3 V, 0.5*C*V^2).\n  boot costs 5e-6 J, requires e>=eon while unpowered, then ready_at=t+1e-3 s; boot is guarded by 'not done'.\n  tx consumes 1.8 V*0.008 A*1e-4 = 1.44e-6 J per step for 2e-3 s = 20 steps = 2.88e-5 J; each step requires loaded_v=sqrt(2e/C)-0.3*0.008 >= 1.8 V, i.e. e>=1.62432*C, and e>=eoff after the step, else reset('tx-transient').\n\nM3 Build constraints of the correct kind; label each as necessary, sufficient, assumption or UNKNOWN.\n (a) Necessary store condition for any completing frame: storage holds at most emax=5.445*C; tx must draw 2.88e-5 J; at most 1.35e-5 J (20*6.75e-7) can arrive during tx and only if the whole tx falls inside [0,0.02); the last tx step still needs e>=1.62432*C. Hence 3.82068*C >= 1.53e-5, i.e. C >= 4.0045e-6. The legal minimum 4e-6 is cut only by ~1.7e-8 J, which is far below one harvest step (6.75e-7 J), so ordering/discretisation dominates and any C in roughly [4.0e-6, 4.2e-6] must be recorded UNKNOWN until executed. This bound is necessary only; satisfying it is not a feasibility certificate.\n (b) Latency is slack, not binding: worst case at maximal C is ceil(3.92*22e-6/6.73e-7)=129 unpowered steps = 0.0129 s, +1e-3 boot delay +2e-3 tx = 0.0159 s, far inside deadline_s=0.1. Do not compute 'delivery budget vs contact_duration_s' as a constraint.\n (c) Capture path: contact window is t in [0,0.008). At maximal C the device cannot be powered-and-ready inside it (0.0129+0.001 > 0.008), so delivery can only come through the model's passive-mechanical latch, which sets captured for every t>=event_s while 'not done', powered or not, at zero joule cost. Carry this as a model assumption (model_law docstring: 'ideal passive mechanical memory assumption, not free NVM'), not as established device capability, and keep the counterfactual: if capture required power (volatile latch) then ready_at<=0.008 needs <=70 unpowered steps -> 4.711e-5 J >= 3.92*C -> C<=1.20e-5, so combined with (a) the feasible set would be about [4.01e-6,1.20e-5], excluding the current maximal C. File that window as UNKNOWN until the latch physics is resolved.\n (d) Do not promote a sufficient heuristic ('larger capacitance is always safer', 'average source power vs frame energy') to a necessary feasible-space exclusion, and do not use a necessary bound as a feasibility certificate. Report both directions of error.\n\nM4 Separate completion from retention. A packet record with application_bytes=8 and time_s inside the deadline is a candidate service completion whose verdict is external. Any later reset (e.g. the retained brownout at 0.3395 s, reason 'energy-threshold', event_was_captured false) is a pending-state observation reported separately: it does not retroactively invalidate a frame already recorded, and it does not establish that the latch re-arms. Note two scope limits of the model: 'not done' guards boot and captured is cleared on completion, so at most one frame exists per run and unique_frames=1 is satisfied by construction while a second event in the same run is undeliverable; and off_v/ready_v thresholds, not the source, decide when the trace ends.\n\nM5 Re-executable order within this task's budget (2 candidate executions, 2 distinct designs):\n 1. Re-derive the M2 constants from sources and reproduce the retained trace at the current design (check: 129 steps -> 0.0129 s; 129*6.73e-7-5e-6 = 8.1817e-5 J post-boot). A mismatch is a transcription error: stop and record UNKNOWN rather than revising parameters.\n 2. Execution 1 resolves the UNKNOWN band of M3(a) at a boundary design; execution 2 confirms an interior design that should satisfy every constraint. Concrete values are a D decision that this method does not fix.\n 3. Require full traces: per-step stored_j, voltage_v, loaded_v, source_w, spill_j, background_j, tx_j, plus actions with times, packets, and each reset with reason. Feed every outcome back completely, including failures and UNKNOWN; a D change without its full feedback is not usable as H evidence, and no automatic retry on unknown, failure or no-update.\n\nM6 Report each claim as {derived from source X; necessary | sufficient | assumption | UNKNOWN}, keep counterexamples, and state that hardware behaviour, statistical advantage, migration and RSI are not claimed.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-1-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-989e5e7e75b3d206",
+  "protocol_sha256": "16ea8486702f041b840b61973e782ffc38bdddd216ccd96dd6749e7f8d082d0a",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "bc0e8402e55d5cff92547b3fb21d87519c570c2def8203d4a57c4201e6910f65",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-1-1-proposed_method",
+    "id": "p3-formal-1-1-proposed_method-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "996f742e819175cb10d831d69c4db8ca6d33ddc62159d0f04a0247844b3bdb2d",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 86.72528183300165,
+  "wall_seconds_total": 87.1913705420011
+}

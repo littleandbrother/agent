@@ -8,7 +8,7 @@ central_scientific_question: >-
   and error and expands capability on future scientific design tasks?
 phase: b2-agent-execution-and-qualification-preparation
 active_feature: null
-previous_active_feature: BFA-042-continuous-design-and-organization
+previous_active_feature: BFA-063-phase5-final-delivery
 next_milestone: B2-003-repair-and-blind-transfer
 contract_version: v1
 release: 0.1.0-a1
@@ -74,3 +74,126 @@ qualified_feedback_reference:
   zero_storage_service_passed: false
   physical: NOT_TESTED
   method_comparison: NOT_RUN
+
+engineering_realization_case:
+  feature: BFA-043-node-engineering-realization
+  project: PR-6aef9acbf1aa49919909ed34524cabb6349806c95f32e54ea74bc7b977b53ec4
+  owner: pi-chat-ccbeec4b82a67bb1
+  system: SC-95e4cbe6fb523e1a9d4fa041a7a4c3dff354a9b398eed96f7243535b02f285ec
+  realization: NR-0c45b7c7be3cfbcf86bdb1b20e4702b657350ed0000feec09cc507948a3e6a78
+  release: REL-f392a7b2caaf127e7ce86a12591a3947f438265f8cbedf911dedb90ffe5a9393
+  status: digital-engineering-review-delivered
+  physical: not-tested
+  report: docs/agentlab/architecture-v2/node-engineering-20261019/REPORT.md
+
+parallel_campaign_20261019:
+  status: finite-first-batch-closed
+  source_baseline: CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c
+  integrated_manifest: ../../../docs/research/parallel-campaign-20261019/integrated-v1/manifest.json
+  report: ../../../docs/research/parallel-campaign-20261019/RESULTS.md
+  method_attempts: 4
+  method_deliveries: 3
+  resource_censored: [H0-r2]
+  method_decision: NO_PROMOTION_RESOURCE_CENSORED
+  physical: NOT_TESTED
+  transfer: NOT_TESTED
+  recursive_improvement: NOT_RUN
+
+storage_maintenance_20261019:
+  feature: BFA-048-bounded-storage-development
+  status: first-batch-complete
+  report: ../../../docs/storage-slimming-20261019/REPORT.md
+  policy: docs/architecture/STORAGE.md
+  net_free_increase_bytes: 6084292608
+  verification: 343 CI tests plus 14 storage tests; evidence hashes and ledgers preserved
+  future_batch_gate: 10 GB reserve plus full estimated peak
+
+bf_phase1_20261020:
+  status: evidence-complete-exit-review-pending
+  features: [BFA-051, BFA-052, BFA-053]
+  report: ../../../docs/research/phase-plan-20261019/phase1/RESULTS.md
+  fixed_legal_space: NO_GO
+  product_accepted: false
+  conditional_rank_repair: true
+  strict_FIFO: FAIL
+  new_settled_provider_requests: 7
+  new_local_case_simulations: 12
+  new_native_dispatches: 0
+  e4_live_trial: NOT_RUN
+  e5_real_consumer: NOT_RUN
+  physical: NOT_TESTED
+  method_benefit: NOT_TESTED
+  recursive_improvement: NOT_TESTED
+
+bf_phase3_20261020:
+  status: finite-work-packages-complete-exit-review-pending
+  features: [BFA-057, BFA-058, BFA-059]
+  report: ../../../docs/research/phase-plan-20261019/phase3/RESULTS.md
+  result: ../../../docs/research/phase-plan-20261019/phase3/result.json
+  actual_episodes: 140
+  formal_fixed_tasks: 4
+  formal_repetitions: 3
+  new_settled_provider_requests: 771
+  settled_provider_upper_usd: 5.4478605
+  new_UNKNOWN: 0
+  new_local_scientific_executions: 57
+  new_native_dispatches: 0
+  H_selection: KEEP_UNCHANGED_BASE_H
+  E5_formal: [7_PASS, 5_INCOMPLETE]
+  physical: NOT_TESTED
+  recursive_improvement: NOT_PROVEN
+  paid_and_new_dispatch: CLOSED
+  next_gate: independent-phase3-exit-review-then-separate-phase4-protocol
+
+bf_phase4_exit_20261020:
+  status: finite-work-packages-complete-exit-review-pending
+  features: [BFA-060, BFA-061, BFA-062]
+  report: ../../../docs/research/phase-plan-20261019/phase4/RESULTS.md
+  result: ../../../docs/research/phase-plan-20261019/phase4/result.json
+  actual_attempts: 77
+  canonical_cells: 73
+  provider_requests: 367
+  settled_upper_usd: 3.1767228
+  new_UNKNOWN: 0
+  new_digital_scientific_responses: 25
+  native_dispatches: 0
+  final_PASS_H0_G0_G1: [7, 6, 8]
+  final_denominator_per_arm: 9
+  default_H0_changed: false
+  registered_S0_ci_tests: 343
+  physical: UNKNOWN
+  recursive_improvement: NOT_ESTABLISHED
+  original_product_acceptance: NOT_ACCEPTED
+  local_paper_pages_A_B: [8, 7]
+  phase4_Overleaf_updates: 0
+  paid_and_new_participant_dispatch: CLOSED
+  next_gate: independent-phase4-exit-review-then-separate-phase5-dispatch
+
+phase5_final_delivery:
+  status: complete-exit-accepted
+  features: [BFA-063, BFA-064, BFA-065]
+  dispatch: phase-5-final-delivery-bf-20261020-001
+  model_science_native: 0
+  entry: ../../../deliveries/BF_FINAL_20261020/START-HERE.md
+  result: ../../../docs/research/phase-plan-20261019/phase5/result.json
+  papers_pages_A_B: [11, 15]
+  detached_acceptance: PASS
+  Overleaf_remote_readback: PASS
+  Overleaf_cloud_compile: NOT_VERIFIED
+  physical: UNKNOWN
+  product: NOT_ACCEPTED
+  H0_changed: false
+  new_dispatch_allowed: false
+  exit_review: ACCEPTED
+  all_five_phases_complete: true
+  hourly_review: PAUSED
+  next_phase: null
+
+github_publication_candidate_20261020:
+  feature: BFA-066-github-campaign-publication
+  status: source-and-saved-data-verified
+  branch: codex/bf-architecture-v2
+  release: https://github.com/littleandbrother/agent/releases/tag/bf-five-phase-20261020
+  local_verification: ../release/evidence/five-phase-20261020/local-verification.json
+  remote_receipt: GitHub Release publication-receipt.json
+  new_scientific_executions: 0

@@ -1,0 +1,72 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-050-reference-paper-layout",
+  "owner": "campaign-s0",
+  "status": "complete",
+  "started_at": "2026-10-19T15:14:49.369147+00:00",
+  "authority": "Direct user request: match supplied 2608.31100v1.pdf LaTeX layout, remove top-left logo, replace top-right with official high-resolution HKUST(GZ) horizontal bilingual logo, align titles and abstracts. Ongoing authorization to update both specified Overleaf projects. Latest user logo image supersedes the bilingual mark with the English-only horizontal official combination logo.",
+  "hypothesis": "A common compact LaTeX style can reproduce the supplied paper layout with only the requested branding change, preserving all manuscript body text and scientific claims.",
+  "paper_claim": "None; typography/branding only.",
+  "falsifier": "Missing/altered body prose, unintended scientific claim change, wrong logo/layout, overflow/clipping, failed build, wrong remote project or unbounded generated output.",
+  "owned_paths": [
+    "PROJECT.yaml",
+    "project/features/BFA-050-reference-paper-layout/",
+    "papers/interface-sufficiency-20261019/",
+    "papers/method-reexecution-20261019/",
+    "papers/shared/",
+    "docs/PROGRESS.md",
+    "docs/SESSION-HANDOFF.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/manuscript-layout-20261019",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/feature_list.json",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/progress.md",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/session-handoff.md",
+    "/Users/depengsu/.local/share/bf-agent-manuscripts/overleaf"
+  ],
+  "schema_changes": [
+    "none"
+  ],
+  "targeted_tests": [
+    "local LaTeX builds",
+    "title/abstract/page geometry comparison with source PDF",
+    "all-page visual inspection",
+    "body-text and table-value preservation",
+    "remote HEAD and dependency hash readback",
+    "generated-output review and cleanup"
+  ],
+  "negative_controls": [
+    "no reference institutions or logos retained",
+    "missing logo fails compilation",
+    "new overflow or missing body text blocks publication"
+  ],
+  "reproducible_command": "rtk proxy python3 -B docs/manuscript-layout-20261019/build_review.py --render; then the same command with --overleaf",
+  "output_artifact": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/manuscript-layout-20261019",
+  "cost_cap": {
+    "paid_requests": 0,
+    "native_solves": 0,
+    "estimated_peak_additional_bytes": 100000000,
+    "retained_output_cap_bytes": 20000000,
+    "reserve_bytes": 10000000000
+  },
+  "claim_boundary": "Style alignment only; the manuscripts remain public development drafts with their existing limitations. Local compilation and Overleaf synchronization are separate from cloud compilation.",
+  "stop_condition": "Stop on content loss, wrong marks, source/remote drift or capacity below reserved peak.",
+  "completed_at": "2026-10-19T15:41:01.756298+00:00",
+  "result": "Both three-page manuscripts reference-aligned; official PDF/SVG vector logo installed; body byte exact; local and Overleaf source builds pass; pushed and fetched with clean checkouts.",
+  "evidence": [
+    "build.json",
+    "overleaf-build.json",
+    "review.json",
+    "negative-control.json",
+    "published.json",
+    "cleanup.json",
+    "REPORT.md"
+  ],
+  "overleaf_heads": {
+    "rsi": "598424af92ca50e7c0fcdab89e92e6f0bf7be22d",
+    "interface": "9df4a9ff4ed73be039b49a6369ae16012bfd6530"
+  },
+  "limitations": [
+    "Heading font is portable TeX Gyre Adventor rather than Byte Sans.",
+    "Overleaf cloud browser compilation not performed."
+  ],
+  "next_handoff": "Reuse S0 and the two existing Overleaf checkouts; no new clones or environments. Preserve the closed campaign and all cost/UNKNOWN history."
+}

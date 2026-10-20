@@ -14,6 +14,7 @@ from .. import budget_policy, launcher
 from ..model_profile import for_owner
 from ..runtime_config import PI, NODE, require_capability, DEVELOPMENT_PROFILE
 from ..store import canonical, identity
+from ..storage import copy_artifact
 from .contracts import sealed, sha
 from .repository_actions import task, materialize
 
@@ -193,7 +194,7 @@ def run(repo,owner,goal,dry_run,purpose='design'):
                 os.killpg(proc.pid,signal.SIGKILL);proc.wait(timeout=5)
         ingest(repo,owner,receipt)
         trace=output/'trace.jsonl'
-        if trace.exists():shutil.copyfile(trace,attempt/'trace-sealed.jsonl');receipt['trace_sha256']=sha(attempt/'trace-sealed.jsonl')
+        if trace.exists():copy_artifact(trace,attempt/'trace-sealed.jsonl');receipt['trace_sha256']=sha(attempt/'trace-sealed.jsonl')
         receipt['ended']=time.time();sealed(attempt/'receipt.json',receipt)
         launcher.write_session_receipt(output/'receipt.json',receipt)
         app.conversations.processes.pop(owner,None);app.conversations.starting.discard(owner)

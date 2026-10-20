@@ -1,0 +1,91 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.0176574,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0355326,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-3-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record:event_latch",
+        "component_record:tx_duration_s",
+        "component_record:ready_v",
+        "component_record:off_v",
+        "excitation_record:shunts.0",
+        "excitation_record:source_segments.1",
+        "saved_activity:activity.1",
+        "saved_activity:activity.43",
+        "saved_activity:activity.44",
+        "saved_activity:activity.45",
+        "saved_activity:activity.46",
+        "saved_activity:activity.47",
+        "saved_activity:packets.0",
+        "model_law:simulate_b.reset",
+        "model_law:simulate_b.tx_gate",
+        "model_law:simulate_b.boot_threshold"
+      ],
+      "falsifier": "Falsified if a re-execution of this task entry under the H shows any of: (a) a delivered-frame count or success claim derived from capture/event_captured rows rather than from packets/tx-complete rows; (b) the claim that tx_not_before_s=0.045 is required for energy sufficiency, i.e. the ledger asserts no earlier delivery is possible although its own bound only fixes earliest start = max(ready_at, first powered capture with retention, tx_not_before_s); (c) a ledger-bound prediction that contradicts a trace row in the same run (bound says no delivery yet a tx-complete row exists, or bound says delivery but packets is empty) and the discrepancy is not recorded as a finding; (d) any acceptance, hardware, statistical, transfer or RSI claim made from these public-development facts; (e) the ledger's conclusions change when only absent inputs (service labels, physical calibration) are added or removed, showing it depends on facts it does not have; (f) an H edit that drops a retained counterexample (43 captures vs 1 packet; brownout at 0.0121 with event_was_captured=true; hex length 10 bytes vs application_bytes 8).",
+      "hypothesis": "A source-bound event ledger that separates pending capture from delivery evidence, and that derives energy/timing bounds only from component_record+excitation_record+model_law, will stop two repeatable errors visible in the retained trace: (i) treating latch/retained capture as a delivered frame (saved_activity records 43 capture actions but exactly 1 packets entry), and (ii) promoting the tx_not_before_s=0.045 start gate to a necessary feasibility constraint, when model_law gates tx on (powered and captured and t>=tx_not_before_s) and the energy condition is separate (e >= tx energy while staying above off_v). Expected procedural effect: each of the 2 allowed candidate designs is spent on an observation that discriminates between competing explanations, instead of re-confirming the already-recorded trace, and every acceptance-side question (frame validity, service success) stays labelled UNKNOWN because no service labels are supplied.",
+      "impact_scope": "task-entry",
+      "method_sha256": "2d6e2fff4384156a06da1d7226034f75576a3199b0e6f18e274253c8db633924",
+      "method_text": "H-METHOD: source-bound event ledger, consumed from task entry, before any design choice or experiment.\n\n0) Entry duty. Read only the registered sources by id and record their source_sha256/parent_sha256: component_record, excitation_record, saved_activity, model_law. Anything not present in those sources - physical calibration, independent-service acceptance, valid-frame labels, statistical properties - is UNKNOWN and may not be inferred from a nominal-looking trace. Do not edit task, excitation, evaluator or model assumptions to make a candidate pass.\n\n1) Distinguish a device edit (D) from a procedural edit (H). A D edit changes capacitance_f / tx_not_before_s inside legal_design_ranges and is a device assignment, not this method. This H changes only how facts are captured, attributed, ordered and carried forward. Never encode a specific chosen parameter value as the method.\n\n2) Build one attribution row per observation, tracing source -> capture -> reset -> delivery -> evidence, with the responsible field name and observation id:\n - SOURCE: which source_segments entry covers the step (start_s <= t0 < end_s), power_w, source_j = power_w*dt_s, harvest_j = source_j*harvest_efficiency, conversion_j = source_j - harvest_j.\n - STORAGE: start_j/stored_j, spill_j = max(0, e - emax) with emax = 0.5*C*cap_voltage_max_v^2, background_j with idle_power_w while powered else off_power_w, boot_j = min(e, boot_j) when crossing eon = 0.5*C*ready_v^2.\n - CAPTURE (pending, not delivery): contact = event_s <= t < event_s+contact_duration_s. Any capture action / event_captured=1 is pending state. Under event_latch=passive-mechanical the model sets captured after event_s and does not clear it on reset; under volatile it clears on reset. Record which rule is active for this run and never generalise retention across the two.\n - RESET: boot and brownout rows. reset() always clears powered and tx_left; it clears captured only under volatile. A brownout row with event_was_captured=true is evidence of retention only, never of delivery, and the brownout must stay in the ledger as a retained failure event with its reason (energy-threshold vs tx-transient).\n - DELIVERY: the only delivery evidence is an entry in packets produced by tx-complete, with time_s, loaded_v, application_bytes and hex. Count frames from packets, never from capture actions. Compare packet time_s to deadline_s, packet count to unique_frames, and raw hex byte length to required_application_bytes; report any mismatch as an explicit UNKNOWN conflict (current trace: 10 raw bytes vs application_bytes=8), not as pass or fail.\n\n3) Derive necessary (never exhaustive) source-bound constraints from acquired fields only:\n - thresholds: eon = 0.5*C*ready_v^2, eoff = 0.5*C*off_v^2, emax = 0.5*C*cap_voltage_max_v^2;\n - tx step condition from model_law: sqrt(2e/C) - esr_ohm*tx_current_a >= output_v, i.e. e >= 0.5*C*(output_v + esr_ohm*tx_current_a)^2, and e >= eoff, held for tx_duration_s while consuming about output_v*tx_current_a*tx_duration_s;\n - shunt budget: shunt energy_j summed over powered intervals (the 0.012 s shunt is charged after background draw, so its effect depends on stored energy at that step, not on design intent);\n - source budget per window: sum over windows of power_w*(end_s-start_s)*harvest_efficiency, with spill and conversion losses subtracted;\n - earliest legal start = max(ready_at after a boot, the first step where the device is powered and captured holds and t >= tx_not_before_s); delivery requires earliest legal start + tx_duration_s <= deadline_s.\n tx_not_before_s is a start gate in model_law, not an energy requirement. A gate later than the energy-sufficient time is a conservative heuristic and must not be written as 'earlier delivery is impossible'; and a single nominal trace must not be used to exclude other regions of legal_design_ranges.\n\n4) Experiment order under the stated budget (2 candidate designs): first use the ledger to name the binding constraint of the current design, then state which single observation would separate two competing explanations of the retained failure; spend a candidate only on that separation. Never spend a candidate to re-confirm an already-recorded trace. If a candidate is not executed, or a diagnostic is not observable, record UNKNOWN and keep the budget unspent rather than inferring success.\n\n5) Claim labels and carry-forward: every claim cites an observation id plus source hash and is labelled SOURCE / STORAGE / CAPTURE-PENDING / DELIVERY / UNKNOWN. Carry the counterexamples and every UNKNOWN across updates: 43 capture actions vs 1 packet (capture is not delivery), brownout at 0.0121 with event_was_captured=true followed by re-boot at 0.0381 (retention, not completion), tx-complete at 0.0469 with loaded_v about 2.565 V (one observed completion, not an acceptance result), and the hex/application_bytes length conflict. An update that silently drops one of these is rejected.\n\n6) Scope of the retention and timing statements: valid only while model_id = b-transient-behavior-v1, dt_s within [1e-7, 1e-3], off_v < ready_v <= cap_voltage_max_v, and event_latch is the one actually recorded. If event_latch is volatile the 0.012 s shunt erases pending state and every retention conclusion above must be dropped rather than adapted; if shunts differ in size or position, or the source segments change, the derived bounds must be recomputed from excitation_record before reuse. Do not claim hardware behaviour, statistical advantage, method transfer or RSI from this public-development run.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-3-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-26dfa5a072f8d1df",
+  "protocol_sha256": "9c3654bc662bafbe856205720e01e9a7bea83c618a5724f2f86afe8db6a31cf4",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "226b553f36813db9ad1f5c4d7fb7f577b39bab0984a161f91b1838810dd6770a",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-3-3-proposed_method",
+    "id": "p3-formal-3-3-proposed_method-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "908dfa0df1eeace6c8efb27bac0fa4a5b32c952b92c9d4a99ba82af8d95297b1",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 52.857702541019535,
+  "wall_seconds_total": 53.40554345899727
+}

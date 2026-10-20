@@ -371,6 +371,8 @@ def handler(workbench,paper_sessions=None):
                     return self.reply(200,(UI/'vendor/three'/rel).read_bytes(),'text/javascript; charset=utf-8')
                 if path in ('/artifact-workspace.js','/artifact-workspace.css','/result-catalog.js','/panorama.js','/panorama.css','/console.css','/research.js','/research.css','/product-graph.js','/product-deliverables.js','/product-deliverables-view.js','/product-workspace.js','/product-workspace.css','/product-results.js','/product-results.css','/reference-case.js','/studio.js','/studio.css','/studio-model.js','/product-evidence.js','/product-evidence.css','/engineering-workspace-model.js','/engineering-workspace.js','/engineering-workspace.css'):
                     return self.reply(200,(UI/path[1:]).read_bytes(),('text/javascript' if path.endswith('.js') else 'text/css')+'; charset=utf-8')
+                if path in ('/node-engineering.html','/node-engineering.js','/node-engineering.css'):
+                    return self.reply(200,(UI/path[1:]).read_bytes(),{'html':'text/html','js':'text/javascript','css':'text/css'}[path.rsplit('.',1)[1]]+'; charset=utf-8')
                 actor = self.principal(); owner = actor['owner']
                 if lab_bridge and path.startswith('/api/design-repository'):
                     if actor['role']!='operator':raise PermissionError('OPERATOR_ONLY_LAB_VIEW')
@@ -391,7 +393,7 @@ def handler(workbench,paper_sessions=None):
                     if path=='/api/design-repository/file':
                         import mimetypes
                         file,name=artifact(repo,project,target,query.get('system',[''])[0],query.get('path',[''])[0],
-                           domain_commit=query.get('domain_commit',[None])[0],job=query.get('job',[None])[0],preview=query.get('preview',['0'])[0]=='1')
+                           domain_commit=query.get('domain_commit',[None])[0],job=query.get('job',[None])[0],preview=query.get('preview',['0'])[0]=='1',realization=query.get('realization',['0'])[0]=='1')
                         kind=mimetypes.guess_type(name)[0] or 'application/octet-stream'
                         if kind in ('text/html','application/javascript'):kind='text/plain'
                         return self.reply(200,file,kind)

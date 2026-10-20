@@ -8,6 +8,7 @@ import time
 import numpy as np
 
 from ..store import canonical
+from ..storage import copy_artifact
 from .contracts import sealed
 from .repository import file_hash
 from . import feedback_native as physics, feedback_program as application
@@ -51,7 +52,7 @@ def couple(root, binary, design, scenario, tools, cache, step, budget):
         (folder/'provisional-events.json').write_text(canonical({'converged':False,'events':events}))
         if delta_i <= NUMERICS['current_tolerance_a'] and (delta_v is None or delta_v <= NUMERICS['voltage_tolerance_v']):
             for name in ('system.cir','system.log','system.raw.zlib'):
-                shutil.copyfile(folder/name,root/name)
+                copy_artifact(folder/name,root/name)
             shutil.copyfile(folder/'application/program.csv',root/'program.csv')
             (root/'load.json').write_text(canonical(pairs))
             (root/'events.json').write_text(canonical(events))

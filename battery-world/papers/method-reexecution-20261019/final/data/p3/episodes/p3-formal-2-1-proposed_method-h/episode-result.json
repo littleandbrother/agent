@@ -1,0 +1,88 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.0184788,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 5,
+    "settled_charge_upper_bound_usd": 0.0344724,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-2-1-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "global_prompt"
+        },
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record",
+        "component_record:event_latch",
+        "excitation_record",
+        "excitation_record:shunts0",
+        "excitation_record:source_segments",
+        "saved_activity",
+        "saved_activity:activity44",
+        "saved_activity:activity45",
+        "saved_activity:activity46",
+        "saved_activity:packets",
+        "model_law",
+        "inspect:current_design",
+        "inspect:legal_design_ranges"
+      ],
+      "falsifier": "Any one of: (1) a design that satisfies all four logged necessary conditions (deadline; reset-free retention interval when volatile and tx_not_before exceeds the first powered capture instant, or tx_not_before at/below that instant; per-step sqrt(2e/C)-esr*tx_current >= output_v with post-step e >= eoff and total tx energy output_v*tx_current*tx_duration_s; first boot + boot_delay inside the contact window) still produces zero packets under the frozen model law; (2) re-reading the retained trace shows a capture surviving a reset in a volatile-latch world (i.e. the ordering boot 0.0027 -> captures -> brownout 0.0121 event_was_captured=true -> reboot 0.0381 -> brownout 0.2512 with no re-capture does not in fact force 'retention required'), which would invalidate the retention-first diagnosis and its scope; (3) the ledger misclassifies a design that does emit a frame, or the two candidate designs chosen to discriminate the routes turn out to be indistinguishable on the four conditions (not informative rather than wrong); (4) the procedure can only be made to 'work' by relaxing a derived inequality or by treating a D parameter edit as the method. Any of these invalidates the claim that retention-classification-first, not energy-sufficiency-first, is what explains and repairs the failure.",
+      "hypothesis": "The retained zero-packet outcome is a pending-state-retention failure, not an energy or tx-power shortfall: with component_record.event_latch='volatile', the capture sequence (0.0037-0.0079 s, inside the 0-0.008 s contact) is destroyed by the 0.0121 s brownout whose own record says event_was_captured=true, and re-capture is structurally impossible because the contact window closes long before the device can be powered again (reboot 0.0381 s). Hence a procedure that classifies retention mode from task entry and requires a reset-free capture-to-tx-complete interval whenever the latch is volatile will change the next design proposal: candidates stop being screened by the sufficient heuristic 'the late harvest at ~0.045 s is large enough', and instead come from two distinct feasibility routes (retention-free transmission initiated at the first powered capture instant, or a reservoir sized to survive the 0.012 s shunt), each carrying a pre-registered packet prediction. Falsifiable, re-executable, and silent about hardware, performance statistics, transfer or RSI.",
+      "impact_scope": "task-entry",
+      "method_sha256": "f3fbf7f28c72bea673426ef15e511dcf8c409ffb18f85d4da9dab1c13a2c333d",
+      "method_text": "METHOD (H, consumed from task entry; procedural only - no device assignment, no acceptance decision, no D check).\n\n0. Scope. Frozen ideal digital apparatus, model 'b-transient-behavior-v1'. Physical calibration is UNKNOWN and stays UNKNOWN. Nothing below asserts hardware behaviour, a performance or statistical advantage, method transfer, or RSI. This is one bounded public-development forward trial in a fresh session. Track D (device values/assignment) and H (procedure) as separate objects: a D edit is never recorded as an H change, and an H change is never smuggled in as a parameter value.\n\n1. Classify retention mode before any energy reasoning. Read component_record.event_latch. If 'volatile', treat a captured event as pending state that any reset destroys; if 'passive-mechanical', treat capture as durable. Also read cap_initial_voltage_v, cap_voltage_max_v, ready_v, off_v, harvest_efficiency, boot_j, boot_delay_s, idle_power_w, off_power_w, output_v, esr_ohm, tx_current_a, tx_duration_s, tx_not_before_s. Never infer durability from a successful boot or from capture rows appearing in a trace.\n\n2. Build a source-bound energy and timing ledger from excitation_record (dt_s, duration_s, source_segments, shunts, event_s, contact_duration_s, deadline_s) plus the model law, per step: source_j = sum(power_w of segments with start_s <= t0 < end_s)*dt; harvest_j = source_j*harvest_efficiency; emax/eon/eoff = C*(cap_voltage_max_v^2, ready_v^2, off_v^2)/2; background_j = (idle_power_w if powered else off_power_w)*dt; shunt_j = sum(energy_j whose time_s falls in the step); boot_j on the boot step; tx_j = min(e, output_v*tx_current_a*min(dt, tx_left)). Transitions that govern retention: reset iff powered and e < eoff (reason 'energy-threshold' or 'tx-transient'), and a reset clears captured iff the latch is volatile; capture requires powered and t >= ready_at and event_s <= t < event_s+contact_duration_s; tx-start requires captured and t >= tx_not_before_s.\n\n3. Keep two ledgers strictly separate. (i) Service completion: exactly one 8-byte-body frame with tx-complete strictly before deadline_s and with no reset in between. (ii) Pending-state retention: does 'captured' survive from the capture instant to tx-start? A trace full of capture rows is not service completion; a frame is not evidence that the latch retained anything across a reset; a brownout row with event_was_captured=true is a loss, not a retention.\n\n4. Trace the event end to end from its source: event at event_s -> earliest powered capture instant (lower-bounded by first boot + boot_delay_s, and it must land inside the contact window) -> every reset before tx-complete, each tagged with its event_was_captured -> whether re-capture is even possible after that reset (it needs contact still open AND powered AND past ready_at in the same step) -> tx-start/tx-complete. Say explicitly when re-capture is structurally impossible because the contact window closed before the device could be powered again; that is a retention failure, not an energy shortfall.\n\n5. Prune only by necessary conditions read off the model law, each logged with the inequality that rejected the design:\n (a) deadline: t_tx_complete <= deadline_s;\n (b) retention: if the latch is volatile and tx_not_before_s exceeds the first powered capture instant, then [capture, tx-complete] must contain no step with e < eoff, which forces reservoir capacity to cover the largest shunt plus background over the refill gap: emax_effective - shunt_energy - background*gap >= eoff at that shunt time;\n (c) tx electrical: for every tx step, pre-step sqrt(2e/C) - esr_ohm*tx_current_a >= output_v and post-step e >= eoff; total tx energy = output_v*tx_current_a*tx_duration_s;\n (d) capture existence: first boot + boot_delay_s must still fall inside the contact window, else no capture can exist at all.\n A sufficient energy heuristic ('the late harvest near the deadline is large enough, so wait for it') is NOT a feasibility exclusion: log it as a heuristic and never prune with it. Conversely (b) is necessary, not sufficient - it ignores whether the tank is actually full at the shunt time and ignores boot_j, so a design passing (a)-(d) is an unverified candidate, never an accepted design.\n\n6. Experiment order under the stated budget (2 candidate executions, 2 distinct designs; contract: no automatic retry; unknown, failed and no-update are retained). Step A costs no execution: replay the retained saved_activity trace against the ledger to localise the first violated condition. Step B, when a candidate run is to be spent, choose designs that discriminate the surviving hypotheses (retention-window relaxation vs shunt-survival capacity) rather than two neighbouring values on a single axis; write the predicted packet count (0 or 1) or UNKNOWN before the run; treat a prediction mismatch as information about the ledger, never as a licence to relax it. If runs are exhausted with a live ambiguity, return no-update rather than a guess.\n\n7. Output contract per trial: retention mode; which ledger is predicted to fail; predicted packets (0/1) or UNKNOWN; the inequality that decided it; whether a reset intervenes between capture and tx-complete; and, for any downstream D value, the complete predicted activity and packet feedback. Coupled D changes are reported as D with full feedback and are never counted as this H.\n\n8. Preservation. Keep the retained counterexample standing: boot 0.0027 s, captures 0.0037-0.0079 s inside the 0-0.008 s contact, brownout 0.0121 s 'energy-threshold' with event_was_captured true, reboot 0.0381 s, brownout 0.2512 s with no capture, packets empty - the counterexample to 'capture is durable'. Keep UNKNOWN for every prediction not executed and for all physical-calibration questions. Report actual costs observed (the three source acquisitions cost zero scientific executions); this is public-development repair, not method migration or RSI.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-2-1-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-849610724e6f956d",
+  "protocol_sha256": "124e7f1dd02bad05cbe8b60235403ebadb80614123be2aa318175a6422eafb9b",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "586a97372063b792ceb46eafbc764a72a4c0990a3969277395632cedea28abaf",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-2-1-proposed_method",
+    "id": "p3-formal-2-1-proposed_method-h",
+    "kind": "H",
+    "replicate": 1,
+    "stage": "formal",
+    "world": "b-volatile-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "a1537e01c09cf07cb0ff4ced86cfd468bee17855d462d66fda58cedcc5949399",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 54.264480583005934,
+  "wall_seconds_total": 54.48153225000715
+}

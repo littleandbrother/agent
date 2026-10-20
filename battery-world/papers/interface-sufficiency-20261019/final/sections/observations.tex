@@ -1,0 +1,112 @@
+\section{From a missing relation to an executed consumer}
+\subsection{A bounded observation language and external qualification}
+The observation interface makes the information path explicit
+(Figure~\ref{fig:chain}). The participant can list and acquire permitted
+sources, propose either a selected field or a constructed relation, and
+submit a typed design policy. A proposal states the source identifier,
+JSON Pointer paths, units, applicability domain and intended relation.
+Selecting a supplied field and constructing a new expression are recorded
+as different operations. Neither label alone establishes a new physical
+fact or a novel scientific relation~\cite{contract,adapter}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=8mm and 7mm,
+  box/.style={draw=paperblue,rounded corners=2pt,align=center,text width=3.25cm,
+              minimum height=10mm,font=\footnotesize},
+  edge/.style={-{Latex[length=2mm]},draw=paperblue}]
+\node[box] (source) {Acquire source\\bytes, unit map, source hash};
+\node[box,right=of source] (proposal) {Propose observation\\field or bounded expression};
+\node[box,right=of proposal] (qualify) {External qualification\\source, units, legal domain};
+\node[box,below=of qualify] (consumer) {Typed consumer\\original conditional policy};
+\node[box,left=of consumer] (execution) {Execute full design input\\input and execution identity};
+\node[box,left=of execution] (verdict) {Independent service check\\PASS, FAIL or no execution};
+\draw[edge] (source)--(proposal);
+\draw[edge] (proposal)--(qualify);
+\draw[edge] (qualify)--(consumer);
+\draw[edge] (consumer)--(execution);
+\draw[edge] (execution)--(verdict);
+\end{tikzpicture}
+\caption{The observation-to-consumer chain. Rejection can stop the chain
+before any final service execution. Every attempted action and its cost remain
+recorded. A source-bound value or a consumed observation alone is not service
+or benefit evidence.}
+\label{fig:chain}
+\end{figure}
+
+Construction uses a bounded JSON abstract syntax tree rather than arbitrary
+Python. The interpreter admits at most 64 nodes, depth eight, an 8 MB JSON
+source and 32,768 vector elements. A construction must contain a source
+field and an allowed operator. Unit dimensions must agree across operations;
+the declared output unit must match the root, and declared numeric domain
+constraints are checked against source values. Missing fields, unsupported
+domains and invalid arithmetic lead to rejection or UNKNOWN. These limits
+bound interpretation; they do not calibrate the supplied source.
+
+Authority is outside the proposer. The host binds the original source bytes,
+proposal code and input, provider/run identity and actual accounting. An
+independent interpreter checks the source relation. A proposer cannot
+qualify its own output by supplying an authority record or a success label.
+The consumer receives only an admitted observation and the original policy,
+then chooses among at most three strictly typed equality branches. Boolean
+true and a numeric duration are different values. The complete selected
+input, observation edge and actual execution identity are preserved before
+the separate service verdict is read~\cite{contract,posthoc,adapter}.
+
+This design distinguishes acquisition from consumption. Echoing a value in
+a report is insufficient. A valid consumption receipt shows how that value
+entered the executed design. It still does not establish causal necessity:
+the same design might be chosen with complete static inputs, and an
+observation can be consumed without changing the design. A claimed benefit
+would require a separately frozen comparison of alternatives with the same
+task and allowance.
+
+\subsection{A concrete constructed relation and its actual consequence}
+An earlier actual E5 attempt acquired component, excitation and saved-activity
+records, then constructed an energy comparison. Its first proposal omitted
+the leading slash required by JSON Pointer. The original host counted that
+invalid proposal against the one-proposal limit; the model's already generated
+correction was then rejected at the cap. The live attempt remains rejected:
+no qualified observation, no real consumer execution, and no proposed-design
+scientific execution. Its six SETTLED requests and USD~0.0644115 upper-bound
+rate estimate remain charged~\cite{original}.
+
+A separately authorized record labeled
+\path{POSTHOC_HOST_ADAPTER_REEVALUATION} later evaluates that existing
+corrected call. It makes no new model request and does not replace the
+failed live attempt. The model's retained relation is
+\begin{align}
+ E_{\rm TX}&=I_{\rm TX}\Delta t_{\rm TX}V_{\rm out}=28.8~\mu\mathrm J,\\
+ E_{\rm reserve}&=\tfrac12 C(V_{\rm ready}^2-V_{\rm off}^2)=23.0~\mu\mathrm J,\\
+ b&=[E_{\rm TX}>E_{\rm reserve}]=\mathrm{true}.
+\end{align}
+The supplied record uses 8 mA, 2 ms, 1.8 V output, $10~\mu$F capacitance
+and 2.8/1.8 V ready/off thresholds. The source-bound domain allows
+$4$--$22~\mu$F and $0$--$45$ ms earliest TX, with TX current fixed at
+the record's value. A separate Decimal interpreter agrees on the Boolean
+and verifies source dependence over legal capacitance values. The
+qualification criterion was revised post hoc from a paired-world-specific
+test to dependence across legal design values. That intervention and its
+scope remain explicit~\cite{posthoc}.
+
+Before an admitted observation, the consumer keeps UNKNOWN and the original
+$10~\mu$F, 45 ms design. Qualified Boolean true selects the model's
+original $15~\mu$F, 45 ms branch. The actual full service changes from
+FAIL with no received frame to PASS with first reception at 46.9 ms. Both
+energy ledgers pass, so the energy flag alone cannot explain service. The
+selected design avoids a pre-deadline brownout; it does not demonstrate
+retention of a pending event across one. A complete static-information
+design already passes at $10~\mu$F and 0 ms, receiving at 5.6 ms.
+The unused false branch's service is not established by these
+receipts~\cite{posthoc}.
+
+The relation is therefore a concrete derived fact that reaches a real
+design consumer and has an executed engineering consequence. It is not
+prospective live-E5 success, a physical measurement, proof that capacitance
+must increase, or an advantage over complete static information. Its
+energy inequality omits startup work, losses and event order and cannot
+serve as a complete service evaluator. Later adapter-v2 regression records
+reject malformed syntax before charging the valid-proposal counter, while
+bounding syntax rejections and retaining a one-valid-proposal limit. Those
+new-version checks preserve the original failure~\cite{adapter}.
+\FloatBarrier

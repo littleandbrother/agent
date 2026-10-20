@@ -1,0 +1,148 @@
+[
+  {
+    "max_tokens": 32768,
+    "messages": [
+      {
+        "content": "你是无电池系统设计者 BF Pi。依据冻结的服务、供能、初态与合法设计范围，自行检查事实、选择实验、修订并提交设备与程序。工具给出事实；独立服务验收在外部。不得改变检查器、任务或器件物理假设来通过。保留失败、未知和实际费用。当前任务修复不等于方法迁移或 RSI。公开理由简洁并引用输入与观察版本。\nThis is a zero-provider SDK rehearsal, not a research trial.\n\n<cwd>\n/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/phase1-20261020/shared/sdk-smoke-003/participant\n</cwd>",
+        "role": "system"
+      },
+      {
+        "content": [
+          {
+            "text": "Exercise the software fixture tool.",
+            "type": "text"
+          }
+        ],
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "reasoning_effort": "high",
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "thinking": {
+      "type": "enabled"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Read the BF software fixture. It is not an experiment or physical evidence.",
+          "name": "bf_phase1",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "enum": [
+                  "inspect",
+                  "check",
+                  "submit"
+                ]
+              },
+              "candidate": {
+                "additionalProperties": false,
+                "properties": {
+                  "capacitance_f": {
+                    "minimum": 1e-06,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "strict": false
+        },
+        "type": "function"
+      }
+    ]
+  },
+  {
+    "max_tokens": 32768,
+    "messages": [
+      {
+        "content": "你是无电池系统设计者 BF Pi。依据冻结的服务、供能、初态与合法设计范围，自行检查事实、选择实验、修订并提交设备与程序。工具给出事实；独立服务验收在外部。不得改变检查器、任务或器件物理假设来通过。保留失败、未知和实际费用。当前任务修复不等于方法迁移或 RSI。公开理由简洁并引用输入与观察版本。\nThis is a zero-provider SDK rehearsal, not a research trial.\n\n<cwd>\n/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/docs/research/phase1-20261020/shared/sdk-smoke-003/participant\n</cwd>",
+        "role": "system"
+      },
+      {
+        "content": [
+          {
+            "text": "Exercise the software fixture tool.",
+            "type": "text"
+          }
+        ],
+        "role": "user"
+      },
+      {
+        "content": null,
+        "reasoning_content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"action\":\"inspect\"}",
+              "name": "bf_phase1"
+            },
+            "id": "fixture-inspect",
+            "type": "function"
+          }
+        ]
+      },
+      {
+        "content": "{\"consumer\":\"actual Pi SDK tool result\",\"observation_id\":\"fixture-supply-storage-program-receive\",\"scope\":\"Synthetic software fixture; no experiment performed\",\"stored_j\":0.01}",
+        "role": "tool",
+        "tool_call_id": "fixture-inspect"
+      }
+    ],
+    "model": "deepseek-flash",
+    "reasoning_effort": "high",
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "thinking": {
+      "type": "enabled"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Read the BF software fixture. It is not an experiment or physical evidence.",
+          "name": "bf_phase1",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "enum": [
+                  "inspect",
+                  "check",
+                  "submit"
+                ]
+              },
+              "candidate": {
+                "additionalProperties": false,
+                "properties": {
+                  "capacitance_f": {
+                    "minimum": 1e-06,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "strict": false
+        },
+        "type": "function"
+      }
+    ]
+  }
+]

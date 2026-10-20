@@ -1,0 +1,85 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.020537388,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 6,
+    "settled_charge_upper_bound_usd": 0.0352515,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-1-3-proposed_method-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        },
+        {
+          "artifact": "H",
+          "component": "context_policy"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "component_record.sha256:eeb8277f",
+        "excitation_record.sha256:219fd490",
+        "model_law.sha256:d690d8a8",
+        "saved_activity.sha256:a4c4b294",
+        "saved_activity.activity",
+        "saved_activity.packets.0.loaded_v",
+        "component_record.event_latch",
+        "component_record.ready_v",
+        "component_record.boot_j",
+        "excitation_record.source_segments.0",
+        "excitation_record.dt_s",
+        "model_law.simulate_b.boot",
+        "model_law.simulate_b.loaded_v",
+        "full_public_facts_sha256:316a9b36"
+      ],
+      "falsifier": "入口重算若给出空可行集合（对 [4e-6,2.2e-5] 每个 C，或者 ready_at>=event_s+contact_duration_s、或者某个 tx tick 上 loaded_v<output_v 或 e<eoff、或者完成 tick>deadline_s），或按 M3 执行区间内部首个候选后 trace 中不存在 contact=1∧powered=1∧ready_at<=t<event_s+contact_duration_s 的 capture 动作，或该候选 packets/time_s>deadline_s 或 application_bytes!=8：则本 H 提案被推翻，回退 no-update 并原样保留该反例。",
+      "hypothesis": "保留观察 saved_activity(sha a4c4b294) 的 activity 只有 boot@0.0129/tx-start@0.0139/tx-complete@0.0158/brownout@0.3395，没有 capture 动作：该帧是在 0-0.008s 接触窗结束后才上电产生的，其 captured 位仅由 model_law(b-transient-behavior-v1, sha d690d8a8) 顶部那条 passive-mechanical 赋值置位，即完成依赖一个物理 UNKNOWN 的机械保持假设，而不是任何“上电且在接触窗内捕获”的观察。假设：以同一来源(component_record sha eeb8277f, excitation_record sha 219fd490, model_law)做源约束推导，可行 C 集合非空——eon=C*ready_v^2/2、eoff=C*off_v^2/2、emax=C*cap_voltage_max_v^2/2、每步收获=power_w*dt*harvest_efficiency(=6.75e-7J)、boot 需 e>=eon 后减 min(e,boot_j)、ready_at=t_boot+boot_delay_s、tx 需 20 个 dt 每步 loaded_v=sqrt(2e/C)-esr_ohm*tx_current_a>=output_v 且 e>=eoff、完成 tick<=deadline_s；据此预测存在 C 使 capture 与 tx-complete 都在上电且接触窗内发生（算术例：C≈10e-6F → t_boot≈0.0059s、ready≈0.0069s、capture≈0.0070s、tx-complete≈0.0090s<=0.1s，末态 e≈2.56e-5J > max(eoff, C*1.8024^2/2)≈1.62e-5J；预测可行区间约 6e-6F~12e-6F，上界来自 ready_at 逼近 event_s+contact_duration_s）。",
+      "impact_scope": "task-entry",
+      "method_sha256": "b3e8f340516f7e0ef5ef42ead4d0af02efc78a7e184c17c475b06c2d36110a94",
+      "method_text": "【H 方法：源绑定的“捕获溯源 + 能时窗约束”程序；从任务入口消费；不是设备提交，也不作验收声明】\n\nM0 事实绑定。只从 component_record、excitation_record、model_law、saved_activity 与 service 字段取值，记录各自的 sha 与 full_public_facts_sha256。声明作用域：b-transient-behavior-v1 下的模型条件结论，物理标定 UNKNOWN；禁止把任何 run 说成硬件成功、统计优势、迁移或 RSI。\n\nM1 捕获溯源（先于任何成功判断）。逐条 action 标注来源：(a) CERTIFIED-CAPTURE 仅当存在 trace tick 满足 contact=1 ∧ powered=1 ∧ t>=ready_at ∧ t<event_s+contact_duration_s 且伴随 capture 动作；(b) RETENTION-CONDITIONAL 当 captured 位由 event_s<=t 的 passive-mechanical 赋值给出而当时未上电或接触窗已结束（saved_activity 即此类：boot 在接触窗结束之后，无 capture 动作）；(c) 其余为 UNKNOWN。DELIVERY 单独定义为 packets 中 application_bytes==8 且 time_s<=deadline_s，并且必须同时报出它属于 (a) 还是 (b)。服务完成与“待处理状态保持”的断言分开书写，不得互相替代。\n\nM2 源约束推导（只做可行性的必要计算，不用充分启发式排除）。按 dt_s 步进记账：每步 e += power_w*dt_s*harvest_efficiency（excition 段 [0,0.02) 7.5mW → 6.75e-7J/步），溢出去 emax=C*cap_voltage_max_v^2/2，未上电扣 off_power_w*dt_s、上电扣 idle_power_w*dt_s；not powered 且 e>=eon=C*ready_v^2/2 时 boot，减 min(e,boot_j)，ready_at=t_boot+boot_delay_s；contact={t: event_s<=t<event_s+contact_duration_s}；tx 需 tx_duration_s/dt_s 个连续 tick，每 tick loaded_v=sqrt(2e/C)-esr_ohm*tx_current_a>=output_v 且 e>=eoff=C*off_v^2/2，且完成 tick<=deadline_s。输出 (i) powered-contact-capture 的时间窗、(ii) 满足它的 C 区间、(iii) 区间内的能量裕度（末态 e 与 max(eoff, C*(output_v+esr_ohm*tx_current_a)^2/2) 之差）、(iv) 边界 C 值。若某 C 仅靠 M1(b) 才“完成”，它在分类上不是 CERTIFIED，只能记 UNKNOWN。\n\nM3 试验顺序（2 个候选预算）。第一候选取 M2 区间内部、能量裕度最大的 C（并保持 tx_not_before_s 使 tx 起点不晚于接触窗内捕获点）；第二候选取 M2 上边界附近（ready_at 逼近 event_s+contact_duration_s）用于检验约束边界，而不是重跑一个纯保持型设计。候选是 M2 的算术预测，必须现场重算；不得把任何 C/tx_not_before_s 数值当作方法本体或外部送达的分配；本 H 通道没有 D 校验，设计是否被接受由外部独立服务判定。\n\nM4 记录与报告。每次 run 保留完整 activity/trace/packet 与实际费用（wall_s、执行次数）。报告三元结论 DELIVERED-CERTIFIED / DELIVERED-RETENTION-CONDITIONAL / FAILED / UNKNOWN，并列出反例：saved_activity 的保持型完成（无 capture 动作）、以及推导出的低 C 溢流受限边界（例如 C≈4e-6F 时 emax=2.18e-5J 仅略高于 2ms tx 的 2.88e-5J 需求，末态 e 落到 loaded_v/eoff 阈值附近——此为推导预测，执行前记 UNKNOWN）。不得把保持型完成改写成成功，不得丢弃失败/UNKNOWN。\n\nM5 停止与作用域失效。若 M2 可行集合为空，或 M3 首候选未出现 M1(a) 捕获，或在同一来源版本下 packet.time_s>deadline_s，则本 H 视为被推翻，返回 no-update。若 model_id/dt_s、event_latch、source_segments、阈值或 ESR/harvest_efficiency 版本变化，或出现物理标定数据，则区间数值作用域失效，必须从新来源重算，不得迁移旧数字。",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-1-3-proposed_method",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-b0c67bcfdcbe2024",
+  "protocol_sha256": "773620434a28232963944639ead9265ef5cbda0bbaba88c42cd99a8c9f90edc0",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "944906ff053917d73b62cda17156aef37d667f2ba68f459ac39c2358d4b6e9f8",
+  "spec": {
+    "condition": "proposed_method",
+    "group": "p3-formal-1-3-proposed_method",
+    "id": "p3-formal-1-3-proposed_method-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-pulse-fast"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 7,
+    "gateway_chain_tip": "6ba4122cc7c14fa16018ae0d7bbe641627a0991f8e38fcc214c64d6b0b1cb461",
+    "model_submitted": true,
+    "model_tool_calls": 7,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 68.71663824999996,
+  "wall_seconds_total": 69.2710376670002
+}

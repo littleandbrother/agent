@@ -127,6 +127,8 @@ def projection(repo, project, owner):
     from ..skill_resources import source_bundle
     skill_catalog=source_bundle()[0]
     current=repo.system(project,view['project']['submitted'])
+    from .repository_node_realization import current as node_realization
+    node=node_realization(repo,current)
     pins=Path(repo.profile['runtime_root'])/'tool-pins.json'
     view.update(updated=time.time(),states=[state(repo,owner,x) for x in owners],events=events,
                 operations=operations,decisions=decisions,model_requests=requests,skill_activations=activations,
@@ -136,12 +138,17 @@ def projection(repo, project, owner):
                   'native_project_count':len(repo.profile.get('native_project_uuids',[])),
                   'port':repo.profile['port'],'shared_native_lock':repo.profile['shared_native_lock']},
                 previews=[p for system in view['systems'] for p in previews(repo,system)],source_commit=repo.profile['base_commit'],
-                baseline_frozen=True,original_demo_port=repo.profile['production_port'])
+                node_realization=node,baseline_frozen=True,original_demo_port=repo.profile['production_port'])
     return view
 
 
-def artifact(repo, project, owner, system_id, path, job=None, preview=False, domain_commit=None):
+def artifact(repo, project, owner, system_id, path, job=None, preview=False, domain_commit=None, realization=False):
     system=repo.system(project,system_id);repo.project(project,owner);name(path)
+    if realization:
+        from .repository_node_realization import current
+        value=current(repo,system)
+        if not value or path not in value['outputs']: raise ValueError('NODE_ARTIFACT_BINDING')
+        return repo.root/'node-realizations'/value['id']/path,path
     if domain_commit:
         with repo.store.connect() as db:commit=repo._object(db,'design_domain_commits',domain_commit,project)
         ref=commit['files'].get(path)

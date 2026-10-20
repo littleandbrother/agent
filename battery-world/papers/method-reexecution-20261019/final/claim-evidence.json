@@ -1,0 +1,745 @@
+{
+  "schema_version": "bf-methods-claim-evidence-v2",
+  "claims": [
+    {
+      "id": "F1-controls",
+      "manuscript_section": "4.1",
+      "claim": "Six saved deterministic controls; all valid strategies match full, frozen trajectory differs on five changed cases.",
+      "claim_boundary": "Public qualification only; no simulator speedup",
+      "evidence": [
+        {
+          "path": "data/early/f1a-controls.json",
+          "sha256": "90a9492925a5ca6dd54f0a0b26cceba4df54bc6e967f758521562bfe4c8c8260",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F1"
+    },
+    {
+      "id": "F4-initial",
+      "manuscript_section": "4.1",
+      "claim": "Three of four original prompt attempts deliver; final H0 is resource censored; 68 requests retained.",
+      "claim_boundary": "Operator-authored prompt, exposed task, no promotion",
+      "evidence": [
+        {
+          "path": "data/early/paid-audit.json",
+          "sha256": "5ab212aefd92cd245a44d5477a1d39c5940fce6498d6048d6dc241b0fe627d8d",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F4-recovery",
+      "manuscript_section": "4.2-4.3",
+      "claim": "Actual nine-request method proposal fails; posthoc recovered model method remains experimental.",
+      "claim_boundary": "Posthoc use is not a successful original submission",
+      "evidence": [
+        {
+          "path": "data/p2/p2-h-proposal-001/episode-result.json",
+          "sha256": "f6beb8b3f990972270c5731df0dc4aaabc2b40d2fe27a870dfb21b7eeaafea65",
+          "field": "status",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/status"
+          ]
+        },
+        {
+          "path": "data/p2/method-retain-or-reject.json",
+          "sha256": "a99f4a48a8c27dbd3cc94cd318546d2527d465beface9d9e1f52966754fea615",
+          "field": "automatic_H_text_source",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/automatic_H_text_source"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F4-confirmation",
+      "manuscript_section": "4.3",
+      "claim": "Independent promotion rejects initial-cache parity; base and revised designs both pass.",
+      "claim_boundary": "Descriptive one-pair device outcomes; over-restrictive method not validated",
+      "evidence": [
+        {
+          "path": "data/p2/method-retain-or-reject.json",
+          "sha256": "a99f4a48a8c27dbd3cc94cd318546d2527d465beface9d9e1f52966754fea615",
+          "field": "gate",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/gate"
+          ]
+        },
+        {
+          "path": "data/p2/method-external-registry.json",
+          "sha256": "4c9d1153612a163b6fa0b6911125084850b21eee43339a1fd97fadb1a561d23e",
+          "field": "records",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/records"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F4-ordered",
+      "manuscript_section": "4.3",
+      "claim": "Revised reception precedes its reset; neither successful entry shows pending state crossing reset.",
+      "claim_boundary": "Legacy labels retained, interpreted by actual time order",
+      "evidence": [
+        {
+          "path": "data/p2/ordered-state-audit.json",
+          "sha256": "872534645161e8628eb3e1e621b8d0b3a9c9ce7e12e385099bf0fb3c89a6c360",
+          "field": "cases",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/cases"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F4-prospective",
+      "manuscript_section": "5.1-5.2",
+      "claim": "Formal fixed H, ordinary reflection and typed procedure each pass 12/12, using 64/117/127 requests.",
+      "claim_boundary": "Four fixed public tasks times three repetitions, not population rates",
+      "evidence": [
+        {
+          "path": "data/p3/actual-comparison.json",
+          "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+          "field": "groups",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/groups"
+          ]
+        },
+        {
+          "path": "data/p3/formal-repeat-freeze.json",
+          "sha256": "37bc7dbf6c922033469ad8712e220419d6c5fb045f6617fce32f1e135cc0cac9",
+          "field": "formal_repetitions",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/formal_repetitions"
+          ]
+        },
+        {
+          "path": "data/p3/main-tables.json",
+          "sha256": "4b05dfa01c7316656427af42a9fe53f2b2aaa5d47f99fff044a86626eed48166",
+          "field": "selection",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/selection"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F1-actual-responses",
+      "manuscript_section": "5.3",
+      "claim": "107 admitted responses: 91 changed and 16 unchanged; valid strategies share full-feedback key.",
+      "claim_boundary": "Five missing responses retained; no smaller-scope benefit",
+      "evidence": [
+        {
+          "path": "data/p3/actual-comparison.json",
+          "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+          "field": "deterministic_controls",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/deterministic_controls"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F1"
+    },
+    {
+      "id": "F4-reset-reuse",
+      "manuscript_section": "5.3",
+      "claim": "Four fresh cross-reset choices reuse one historical ideal response.",
+      "claim_boundary": "No new memory mechanism, physical replication or hardware qualification",
+      "evidence": [
+        {
+          "path": "data/p3/actual-comparison.json",
+          "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+          "field": "groups.*.ordered_event_state",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/groups/p3-formal-1-1-average-energy/ordered_event_state",
+            "/groups/p3-formal-1-1-complete-raw/ordered_event_state",
+            "/groups/p3-formal-1-1-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-1-1-executable-response/ordered_event_state",
+            "/groups/p3-formal-1-1-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-1-1-proposed_method/ordered_event_state",
+            "/groups/p3-formal-1-1-rich-static/ordered_event_state",
+            "/groups/p3-formal-1-2-average-energy/ordered_event_state",
+            "/groups/p3-formal-1-2-complete-raw/ordered_event_state",
+            "/groups/p3-formal-1-2-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-1-2-executable-response/ordered_event_state",
+            "/groups/p3-formal-1-2-live-e5/ordered_event_state",
+            "/groups/p3-formal-1-2-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-1-2-proposed_method/ordered_event_state",
+            "/groups/p3-formal-1-2-rich-static/ordered_event_state",
+            "/groups/p3-formal-1-3-average-energy/ordered_event_state",
+            "/groups/p3-formal-1-3-complete-raw/ordered_event_state",
+            "/groups/p3-formal-1-3-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-1-3-executable-response/ordered_event_state",
+            "/groups/p3-formal-1-3-live-e5/ordered_event_state",
+            "/groups/p3-formal-1-3-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-1-3-proposed_method/ordered_event_state",
+            "/groups/p3-formal-1-3-rich-static/ordered_event_state",
+            "/groups/p3-formal-2-1-average-energy/ordered_event_state",
+            "/groups/p3-formal-2-1-complete-raw/ordered_event_state",
+            "/groups/p3-formal-2-1-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-2-1-executable-response/ordered_event_state",
+            "/groups/p3-formal-2-1-live-e5/ordered_event_state",
+            "/groups/p3-formal-2-1-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-2-1-proposed_method/ordered_event_state",
+            "/groups/p3-formal-2-1-rich-static/ordered_event_state",
+            "/groups/p3-formal-2-2-average-energy/ordered_event_state",
+            "/groups/p3-formal-2-2-complete-raw/ordered_event_state",
+            "/groups/p3-formal-2-2-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-2-2-executable-response/ordered_event_state",
+            "/groups/p3-formal-2-2-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-2-2-proposed_method/ordered_event_state",
+            "/groups/p3-formal-2-2-rich-static/ordered_event_state",
+            "/groups/p3-formal-2-3-average-energy/ordered_event_state",
+            "/groups/p3-formal-2-3-complete-raw/ordered_event_state",
+            "/groups/p3-formal-2-3-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-2-3-executable-response/ordered_event_state",
+            "/groups/p3-formal-2-3-live-e5/ordered_event_state",
+            "/groups/p3-formal-2-3-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-2-3-proposed_method/ordered_event_state",
+            "/groups/p3-formal-2-3-rich-static/ordered_event_state",
+            "/groups/p3-formal-3-1-average-energy/ordered_event_state",
+            "/groups/p3-formal-3-1-complete-raw/ordered_event_state",
+            "/groups/p3-formal-3-1-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-3-1-executable-response/ordered_event_state",
+            "/groups/p3-formal-3-1-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-3-1-proposed_method/ordered_event_state",
+            "/groups/p3-formal-3-1-rich-static/ordered_event_state",
+            "/groups/p3-formal-3-2-average-energy/ordered_event_state",
+            "/groups/p3-formal-3-2-complete-raw/ordered_event_state",
+            "/groups/p3-formal-3-2-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-3-2-executable-response/ordered_event_state",
+            "/groups/p3-formal-3-2-live-e5/ordered_event_state",
+            "/groups/p3-formal-3-2-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-3-2-proposed_method/ordered_event_state",
+            "/groups/p3-formal-3-2-rich-static/ordered_event_state",
+            "/groups/p3-formal-3-3-average-energy/ordered_event_state",
+            "/groups/p3-formal-3-3-complete-raw/ordered_event_state",
+            "/groups/p3-formal-3-3-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-3-3-executable-response/ordered_event_state",
+            "/groups/p3-formal-3-3-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-3-3-proposed_method/ordered_event_state",
+            "/groups/p3-formal-3-3-rich-static/ordered_event_state",
+            "/groups/p3-formal-4-1-average-energy/ordered_event_state",
+            "/groups/p3-formal-4-1-complete-raw/ordered_event_state",
+            "/groups/p3-formal-4-1-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-4-1-executable-response/ordered_event_state",
+            "/groups/p3-formal-4-1-live-e5/ordered_event_state",
+            "/groups/p3-formal-4-1-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-4-1-proposed_method/ordered_event_state",
+            "/groups/p3-formal-4-1-rich-static/ordered_event_state",
+            "/groups/p3-formal-4-2-average-energy/ordered_event_state",
+            "/groups/p3-formal-4-2-complete-raw/ordered_event_state",
+            "/groups/p3-formal-4-2-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-4-2-executable-response/ordered_event_state",
+            "/groups/p3-formal-4-2-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-4-2-proposed_method/ordered_event_state",
+            "/groups/p3-formal-4-2-rich-static/ordered_event_state",
+            "/groups/p3-formal-4-3-average-energy/ordered_event_state",
+            "/groups/p3-formal-4-3-complete-raw/ordered_event_state",
+            "/groups/p3-formal-4-3-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-formal-4-3-executable-response/ordered_event_state",
+            "/groups/p3-formal-4-3-live-e5/ordered_event_state",
+            "/groups/p3-formal-4-3-ordinary_reflection/ordered_event_state",
+            "/groups/p3-formal-4-3-proposed_method/ordered_event_state",
+            "/groups/p3-formal-4-3-rich-static/ordered_event_state",
+            "/groups/p3-pilot-1-1-average-energy/ordered_event_state",
+            "/groups/p3-pilot-1-1-complete-raw/ordered_event_state",
+            "/groups/p3-pilot-1-1-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-pilot-1-1-executable-response/ordered_event_state",
+            "/groups/p3-pilot-1-1-live-e5/ordered_event_state",
+            "/groups/p3-pilot-1-1-ordinary_reflection/ordered_event_state",
+            "/groups/p3-pilot-1-1-proposed_method/ordered_event_state",
+            "/groups/p3-pilot-1-1-rich-static/ordered_event_state",
+            "/groups/p3-pilot-1-2-average-energy/ordered_event_state",
+            "/groups/p3-pilot-1-2-complete-raw/ordered_event_state",
+            "/groups/p3-pilot-1-2-e4-rich-static-table/ordered_event_state",
+            "/groups/p3-pilot-1-2-executable-response/ordered_event_state",
+            "/groups/p3-pilot-1-2-live-e5/ordered_event_state",
+            "/groups/p3-pilot-1-2-ordinary_reflection/ordered_event_state",
+            "/groups/p3-pilot-1-2-proposed_method/ordered_event_state",
+            "/groups/p3-pilot-1-2-rich-static/ordered_event_state"
+          ]
+        },
+        {
+          "path": "data/p3/ordered-selected-witnesses.json",
+          "sha256": "5bc0212a3be71ba2df8ae9f3ff7dfc2cb61139f29fcfab30bfcb06c387150ad7",
+          "field": "saved witnesses",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/witnesses"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F4"
+    },
+    {
+      "id": "F5-history",
+      "manuscript_section": "6.1",
+      "claim": "Both proposers use one exact 75,955-byte packet from four public episodes; O0/final inputs excluded.",
+      "claim_boundary": "Model exposure is not the larger host history",
+      "evidence": [
+        {
+          "path": "data/p4/config/model-history.json",
+          "sha256": "7e7f379d80746d0572f6ef75214129a4c08292a4dfe8270b4d9f953308318cf9",
+          "field": "episodes",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/episodes"
+          ]
+        },
+        {
+          "path": "data/p4/config/public-history.json",
+          "sha256": "6732821ef52b8006eebd2d19a2c0b313dac822299f49c8747c9c3abfe59c33db",
+          "field": "host history",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/episodes"
+          ]
+        },
+        {
+          "path": "data/p4/config/frozen-parents.json",
+          "sha256": "d535ca972aef4cc061d3100b981d676cd502d0d843cf53d223f39c67c7e95386",
+          "field": "H0/G0",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/H0",
+            "/G0"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5"
+    },
+    {
+      "id": "F5-formation",
+      "manuscript_section": "6.1",
+      "claim": "One actual G1 formation generates twelve descendants through three conditional paired lineages.",
+      "claim_boundary": "One formation, no independent G1 training replications or weight update",
+      "evidence": [
+        {
+          "path": "data/p4/G1-freeze.json",
+          "sha256": "6361b64193815004c81c92b85c438253dd60ef5ad6462de0b70c88ba82855c29",
+          "field": "actual_formation_event_count",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/actual_formation_event_count"
+          ]
+        },
+        {
+          "path": "data/p4/G1-formation-accounting.json",
+          "sha256": "585a7d2333a0c6ef1f232253ef38e048c6ef352a67e42744245c520d6ada9506",
+          "field": "allocations",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/allocations"
+          ]
+        },
+        {
+          "path": "data/p4/actual-results.json",
+          "sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5"
+    },
+    {
+      "id": "F5-selection",
+      "manuscript_section": "6.2",
+      "claim": "All 30 effective selections pass; six choices are frozen before final inputs.",
+      "claim_boundary": "Rank uses effective cells; full costs retain every sibling and incident",
+      "evidence": [
+        {
+          "path": "data/p4/selection-complete.json",
+          "sha256": "43760f0bf439528f97b60348442ea2d5920ef61aae96b59543f65294ddf7a769",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        },
+        {
+          "path": "data/p4/final-selection-freeze.json",
+          "sha256": "3da13cb8d8e4ffbeff14eb3ea98769fb70458825228263187dbe252db6c2ea90",
+          "field": "all_final_episodes_not_started",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/all_final_episodes_not_started"
+          ]
+        },
+        {
+          "path": "data/p4/selected-methods.json",
+          "sha256": "b0fcd9d1242c0b8ff10470f2db6c9cc13bb23097f45075963ba534e6e6fa560f",
+          "field": "six choices",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/L1-G0",
+            "/L1-G1",
+            "/L2-G0",
+            "/L2-G1",
+            "/L3-G0",
+            "/L3-G1"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5/choices"
+    },
+    {
+      "id": "F5-amendment",
+      "manuscript_section": "6.2",
+      "claim": "77 actual attempts resolve 73 cells; four original incidents plus four recoveries remain.",
+      "claim_boundary": "Bounded loader/provenance repair, no semantic tuning",
+      "evidence": [
+        {
+          "path": "data/p4/actual-results.json",
+          "sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+          "field": "rows/canonical_rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows",
+            "/canonical_rows"
+          ]
+        },
+        {
+          "path": "data/p4/amendment-registration.json",
+          "sha256": "e2574b90b503d41088ae0e2e96e77430983d7ef425ee15f7494f3756f8e17a3b",
+          "field": "amendment",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/amendment_id",
+            "/scope",
+            "/preservation",
+            "/falsifier",
+            "/caps"
+          ]
+        },
+        {
+          "path": "data/p4/cache-repair-qualification.json",
+          "sha256": "a9d981dc8a8cf0e8dfa6fbbfd4c3431886bdc6d6dff9780b2eb1eec7fca93c58",
+          "field": "saved checks",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/checks"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5"
+    },
+    {
+      "id": "F5-final",
+      "manuscript_section": "6.3",
+      "claim": "Final H0 7/9, G0 6/9, G1 8/9; four censored entries retained; digital derivatives 18/18.",
+      "claim_boundary": "Descriptive conditional result; no stable RSI",
+      "evidence": [
+        {
+          "path": "data/p4/actual-results.json",
+          "sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+          "field": "canonical_rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/canonical_rows"
+          ]
+        },
+        {
+          "path": "data/p4/final-details.json",
+          "sha256": "d2fe0035acfa7826c9526efd4118f8cb070b51a125ab8f23f9c210a896c4574d",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        },
+        {
+          "path": "data/p4/analysis-summary.json",
+          "sha256": "44b8ed61f5e3ac3abbad313d6ca7cf632ea6dec88b4447ff12b343c418f8f3cf",
+          "field": "incomplete_final_cells",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/incomplete_final_cells"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5/final"
+    },
+    {
+      "id": "F5-O0",
+      "manuscript_section": "6.3",
+      "claim": "Initial O0 candidate and rich-state control both pass; candidate has wrong nominal UNKNOWN judgment.",
+      "claim_boundary": "No advantage over rich state; nominal O is not full A/R service",
+      "evidence": [
+        {
+          "path": "data/p4/actual-results.json",
+          "sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+          "field": "O-transfer rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows/74",
+            "/rows/75",
+            "/rows/76"
+          ]
+        },
+        {
+          "path": "data/p4/O0-transfer-results.json",
+          "sha256": "82c39c7c45101287afcab29519280c5bf82c97a61ef05d1a0484eeb43da714fc",
+          "field": "transfer",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5/O0_transfer"
+    },
+    {
+      "id": "F5-cost",
+      "manuscript_section": "6.4",
+      "claim": "Full G0/G1 cost includes all proposals, siblings, formation allocation, selection, incidents, recoveries and final entries.",
+      "claim_boundary": "Final-only costs are not improvement cost; estimates not invoices",
+      "evidence": [
+        {
+          "path": "data/p4/actual-results.json",
+          "sha256": "c32c23d8b55313d634a27290f33c33c3620754659686dc21042a068c6ee718ec",
+          "field": "rows.*.usage",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows/0/usage",
+            "/rows/1/usage",
+            "/rows/2/usage",
+            "/rows/3/usage",
+            "/rows/4/usage",
+            "/rows/5/usage",
+            "/rows/6/usage",
+            "/rows/7/usage",
+            "/rows/8/usage",
+            "/rows/9/usage",
+            "/rows/10/usage",
+            "/rows/11/usage",
+            "/rows/12/usage",
+            "/rows/13/usage",
+            "/rows/14/usage",
+            "/rows/15/usage",
+            "/rows/16/usage",
+            "/rows/17/usage",
+            "/rows/18/usage",
+            "/rows/19/usage",
+            "/rows/20/usage",
+            "/rows/21/usage",
+            "/rows/22/usage",
+            "/rows/23/usage",
+            "/rows/24/usage",
+            "/rows/25/usage",
+            "/rows/26/usage",
+            "/rows/27/usage",
+            "/rows/28/usage",
+            "/rows/29/usage",
+            "/rows/30/usage",
+            "/rows/31/usage",
+            "/rows/32/usage",
+            "/rows/33/usage",
+            "/rows/34/usage",
+            "/rows/35/usage",
+            "/rows/36/usage",
+            "/rows/37/usage",
+            "/rows/38/usage",
+            "/rows/39/usage",
+            "/rows/40/usage",
+            "/rows/41/usage",
+            "/rows/42/usage",
+            "/rows/43/usage",
+            "/rows/44/usage",
+            "/rows/45/usage",
+            "/rows/46/usage",
+            "/rows/47/usage",
+            "/rows/48/usage",
+            "/rows/49/usage",
+            "/rows/50/usage",
+            "/rows/51/usage",
+            "/rows/52/usage",
+            "/rows/53/usage",
+            "/rows/54/usage",
+            "/rows/55/usage",
+            "/rows/56/usage",
+            "/rows/57/usage",
+            "/rows/58/usage",
+            "/rows/59/usage",
+            "/rows/60/usage",
+            "/rows/61/usage",
+            "/rows/62/usage",
+            "/rows/63/usage",
+            "/rows/64/usage",
+            "/rows/65/usage",
+            "/rows/66/usage",
+            "/rows/67/usage",
+            "/rows/68/usage",
+            "/rows/69/usage",
+            "/rows/70/usage",
+            "/rows/71/usage",
+            "/rows/72/usage",
+            "/rows/73/usage",
+            "/rows/74/usage",
+            "/rows/75/usage",
+            "/rows/76/usage"
+          ]
+        },
+        {
+          "path": "data/p4/G1-formation-accounting.json",
+          "sha256": "585a7d2333a0c6ef1f232253ef38e048c6ef352a67e42744245c520d6ada9506",
+          "field": "allocations",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/allocations"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F5/arm_costs"
+    },
+    {
+      "id": "F6-AR",
+      "manuscript_section": "7",
+      "claim": "Selected A/R candidate 002 is dark FAIL, FIFO FAIL, fixed-space NO_GO and NOT_ACCEPTED.",
+      "claim_boundary": "Conditional rank timing repair; physical UNKNOWN; no foreign engineering assets",
+      "evidence": [
+        {
+          "path": "data/ar/continuation-001/external/result.json",
+          "sha256": "df264b73a9b46dd426cc63f7eb13e6315b16845a5cede5974235fcacbfa6c098",
+          "field": "candidates",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/candidates"
+          ]
+        },
+        {
+          "path": "data/ar/continuation-001/external/ordering-policy-audit.json",
+          "sha256": "6ba68cee2184c0330192ce175bfa73bbc5d8904adb9bfd338abfbdf594013f6e",
+          "field": "cases.candidate-002",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/cases/candidate-002"
+          ]
+        },
+        {
+          "path": "data/ar/external-fixed-space-bound.json",
+          "sha256": "a45f363ce31407cad7364f7f4a27eed22a0687633a086b32cd6726ecd6739c6f",
+          "field": "numeric_decimal",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/numeric_decimal"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F6"
+    },
+    {
+      "id": "cost-finite",
+      "manuscript_section": "8",
+      "claim": "1238 unique finite requests, all SETTLED, upper estimate USD10.0268025; shared cells counted once.",
+      "claim_boundary": "Token-rate estimate, not invoice or full end-to-end cost",
+      "evidence": [
+        {
+          "path": "data/billing/campaign-requests.json",
+          "sha256": "01e31e8a1869848b361f354e852c5f7cfab5222b9838e03f40848549e2b1dd29",
+          "field": "rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/rows"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#costs"
+    },
+    {
+      "id": "cost-unknown",
+      "manuscript_section": "8",
+      "claim": "24 historical UNKNOWN rows remain outside the finite denominator; Codex assistance is unpriced and nonzero.",
+      "claim_boundary": "No unknown row is assigned zero cost; end-to-end UNKNOWN",
+      "evidence": [
+        {
+          "path": "data/billing/historical-UNKNOWN.json",
+          "sha256": "23f8f09f5dd2404f13c0ae0a49397317a673cf804a22485394a1470842a19962",
+          "field": "source identities and rows",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            ""
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#costs"
+    },
+    {
+      "id": "F2-F3-boundary",
+      "manuscript_section": "2,10",
+      "claim": "Fresh task entries are audited; no decision-span or organization ablation was performed.",
+      "claim_boundary": "No local-suffix or multi-Agent speedup",
+      "evidence": [
+        {
+          "path": "data/p3/actual-comparison.json",
+          "sha256": "007f40af661391c6f9feeca7fcc3f28327ffc6eebcd9298cae3d9d323c4276e6",
+          "field": "matched_methods.*.H_reexecution_controls",
+          "selector_kind": "RFC6901-json-pointers",
+          "json_pointers": [
+            "/matched_methods/0/H_reexecution_controls",
+            "/matched_methods/1/H_reexecution_controls",
+            "/matched_methods/2/H_reexecution_controls",
+            "/matched_methods/3/H_reexecution_controls",
+            "/matched_methods/4/H_reexecution_controls",
+            "/matched_methods/5/H_reexecution_controls",
+            "/matched_methods/6/H_reexecution_controls",
+            "/matched_methods/7/H_reexecution_controls",
+            "/matched_methods/8/H_reexecution_controls",
+            "/matched_methods/9/H_reexecution_controls",
+            "/matched_methods/10/H_reexecution_controls",
+            "/matched_methods/11/H_reexecution_controls",
+            "/matched_methods/12/H_reexecution_controls",
+            "/matched_methods/13/H_reexecution_controls",
+            "/matched_methods/14/H_reexecution_controls",
+            "/matched_methods/15/H_reexecution_controls",
+            "/matched_methods/16/H_reexecution_controls",
+            "/matched_methods/17/H_reexecution_controls",
+            "/matched_methods/18/H_reexecution_controls",
+            "/matched_methods/19/H_reexecution_controls",
+            "/matched_methods/20/H_reexecution_controls",
+            "/matched_methods/21/H_reexecution_controls",
+            "/matched_methods/22/H_reexecution_controls",
+            "/matched_methods/23/H_reexecution_controls",
+            "/matched_methods/24/H_reexecution_controls",
+            "/matched_methods/25/H_reexecution_controls",
+            "/matched_methods/26/H_reexecution_controls",
+            "/matched_methods/27/H_reexecution_controls"
+          ]
+        }
+      ],
+      "reproduced_output": "generated/analysis.json#F2,F3"
+    }
+  ],
+  "selector_policy": "field is a human label; json_pointers are validated RFC6901 selectors. Empty pointer selects the complete JSON document. Wildcard labels expand only existing fields, preserving missing-response cases.",
+  "saved_data_only": true,
+  "default_H0_changed": false,
+  "stable_RSI": false,
+  "physical_qualification": "UNKNOWN"
+}

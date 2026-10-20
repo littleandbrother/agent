@@ -377,6 +377,13 @@ def release(repo, owner, body, operator=False):
                     'required_engineering_report': report_quality}
         if system.get('task_definition'):
             manifest.update(task_definition=system['task_definition'], task_execution=task_execution)
+        from .repository_node_realization import current as node_current
+        node=node_current(repo,system)
+        if system.get('task_definition',{}).get('phase')=='node-engineering-realization' and not node:
+            raise ValueError('REQUIRED_NODE_REALIZATION_MISSING')
+        if node and (not node['native'] or node['target']['status']!='BUILT'):
+            raise ValueError('REQUIRED_NODE_ENGINEERING_ARTIFACTS_MISSING')
+        if node: manifest['node_realization']=node
         result = object_save(repo, db, 'design_repository_releases', 'REL', manifest, ['project_id', 'target'])
         archive = repo.root/'releases'/(result['id']+'.zip'); archive.parent.mkdir(exist_ok=True)
         if not archive.exists():
@@ -385,6 +392,10 @@ def release(repo, owner, body, operator=False):
                 for path in report_quality['outputs']:
                     z.write(report_folder/path, 'reports/'+path)
                 z.write(report_folder/'quality.json','reports/quality.json')
+                if node:
+                    for path in node['outputs']:
+                        if path!='handoff.zip': z.write(repo.root/'node-realizations'/node['id']/path,'node/'+path)
+                    z.write(repo.root/'node-realizations'/node['id']/'manifest.json','node/manifest.json')
                 if task_execution:
                     for path, ref in task_execution['artifacts'].items():
                         z.write(repo.root/'blobs'/ref['sha256'], 'execution/'+path)

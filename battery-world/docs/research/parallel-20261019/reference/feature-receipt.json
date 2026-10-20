@@ -1,0 +1,97 @@
+{
+  "schema_version": "battery-world-feature-v1",
+  "id": "BFA-045-ar-b-reference",
+  "owner": "campaign-a",
+  "executor_status": "finite-computational-reference-package-complete",
+  "shared_status_writer": "campaign-s0",
+  "status_update_requested": "complete, scoped to public nominal reference controls; physical qualification UNKNOWN",
+  "source_baseline": "CB-6f1c798155bb7ca2352d362d57a7e2032dc79379450a723ea3cff2751ce5318c",
+  "hypothesis": "An explicit single-light-source A/R service chain and a separate transient B model can be qualified with independent energy, event and receiver checks before an Agent is attached.",
+  "paper_claim": "One source-bound A/R computational candidate; B public positive/negative qualification and declared physical-anchor limits.",
+  "falsifier": "Independent integration/receiver disagreement; darkness relabeled N/A; retention counted as sensing; lux converted without IV assumption; nominal called measured.",
+  "owned_paths": [
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+    "packages/python/bfworld/src/bfworld/agentlab/campaign20261019/b.py",
+    "scripts/campaign_reference.py",
+    "tests/agentlab/test_campaign_reference.py",
+    "configs/studies/parallel-20261019/reference/",
+    "docs/research/parallel-20261019/reference/"
+  ],
+  "schema_changes": [
+    "campaign-task-v1 local files",
+    "campaign-result-v1 local files",
+    "no shared-schema modification"
+  ],
+  "tests": {
+    "targeted_tests": 12,
+    "targeted_status": "PASS",
+    "repository_tests": 343,
+    "repository_status": "PASS",
+    "saved_legacy_files": 44,
+    "saved_legacy_controls": 11,
+    "legacy_status": "PASS",
+    "new_sealed_files": 81,
+    "new_reference_cases": 17,
+    "new_reference_status": "PASS",
+    "portable_candidate_cases": 2,
+    "portable_status": "byte-identical"
+  },
+  "negative_controls": [
+    "ar-no-source",
+    "ar-startup-late",
+    "ar-stale",
+    "ar-small-storage",
+    "ar-history-nvm",
+    "ar-history-volatile",
+    "ar-upload-naive",
+    "b-esr-fail",
+    "b-no-energy",
+    "b-late-energy",
+    "b-volatile-reset"
+  ],
+  "unexpected_failure_preserved": {
+    "kind": "first-fresh-receive checker implementation error",
+    "path": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/verification-001/stale-failure",
+    "corrected_without_input_or_requirement_change": true
+  },
+  "reproducible_command": "rtk proxy env PYTHONPATH=packages/python/bfworld/src PYTHONDONTWRITEBYTECODE=1 /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python scripts/campaign_reference.py --verify-run /Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001",
+  "output_artifact": "/Users/depengsu/.local/share/bf-agent-architecture-v2/parallel-campaign-20261019/a/reference-run-001",
+  "seal_sha256": "a805ffe673e154897b3381996cf35a54c0eb13e424ce8f4b8429bd38c4d7bdc0",
+  "candidate_id": "CR-f7d7d4fc3b1d830ea36f96ea11671e927de9f55748d842d10385b7f693cf0183",
+  "cost_cap": {
+    "hardware_writes": 0,
+    "minimum_free_bytes": 5000000000,
+    "native_eda_writes": 0,
+    "output_bytes": 500000000,
+    "paid_model_requests": 0,
+    "runner_wall_seconds": 120,
+    "verification_wall_seconds": 300
+  },
+  "actual_resources": {
+    "elapsed_s": 3.6347861670074053,
+    "hardware_writes": 0,
+    "native_eda_calls": 0,
+    "original_owner_resume": false,
+    "paid_model_requests": 0
+  },
+  "claim_boundary": "nominal public-development computation; calibration and hardware UNKNOWN",
+  "limitations": {
+    "aem10941_native_model": "NOT_OBTAINED",
+    "calibrated_iv": "UNKNOWN",
+    "claim": "Finite nominal public-development computations only; no product/hardware qualification or Agent/method comparison.",
+    "eco260_waveform_model": "NOT_OBTAINED",
+    "physical_radio": "NOT_TESTED",
+    "temperature_sensor_calibration": "UNKNOWN"
+  },
+  "known_service_failures": [
+    "AR-history continuous sensing, one temperature event and recovery upload fail; retention passes",
+    "AR-upload FIFO delays one new sample by 30 s (>10 s) despite history uploaded within82 s",
+    "all physical calibration/validation UNKNOWN",
+    "local campaign artifacts are not platform-registered RunBundles"
+  ],
+  "stop_condition": "finite list completed; no native/paid/Agent expansion; shared integration and status owned by S0",
+  "handoff": "docs/research/parallel-20261019/reference/HANDOFF.md",
+  "commit_created": false,
+  "pushed": false,
+  "unavailable_calibration_control": "All 17 physical_qualification gates UNKNOWN; never upgraded by numerical agreement."
+}

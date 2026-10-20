@@ -1,0 +1,83 @@
+{
+  "accounting": {
+    "cache_aware_rate_estimate_usd": 0.01549476,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "requests": 4,
+    "settled_charge_upper_bound_usd": 0.0265962,
+    "unknown_or_missing_usage": [],
+    "unsettled_reserved_usd": 0
+  },
+  "episode": "p3-formal-3-3-ordinary_reflection-h",
+  "exit_code": 0,
+  "external_result": {
+    "method": {
+      "changed_artifact": "H",
+      "changes": [
+        {
+          "artifact": "H",
+          "component": "observation_policy"
+        },
+        {
+          "artifact": "H",
+          "component": "experiment_order"
+        }
+      ],
+      "decision": "propose",
+      "evidence_refs": [
+        "saved_activity",
+        "component_record",
+        "excitation_record",
+        "model_law",
+        "saved_activity.activity.44",
+        "saved_activity.activity.45",
+        "saved_activity.activity.46",
+        "saved_activity.activity.47",
+        "saved_activity.packets.0.time_s",
+        "saved_activity.packets.0.loaded_v",
+        "saved_activity.packets.0.application_bytes",
+        "component_record.event_latch",
+        "component_record.ready_v",
+        "component_record.off_v",
+        "excitation_record.shunts.0",
+        "excitation_record.deadline_s"
+      ],
+      "falsifier": "Update is falsified if (a) applying Step 1 to the retained saved_activity trace yields no reset between contact end and tx-complete, so latch dependence is already absent and the added observation rule carries no information for this task; or (b) the single remaining one-parameter legal-range probe preserves pass status with margins that worsen monotonically and locates no flip point across the tested step, so the experiment-order change bought no usable discrimination and H should revert to base; or (c) the Step 2 margin rule classifies as 'not demonstrated' every legal candidate that already emits a frame, including the retained incumbent (packet 0.0469 s, loaded_v 2.565 V), proving the rule is over-restrictive rather than informative.",
+      "hypothesis": "The retained base observation (saved_activity, sha 891890ba...) already shows a packet at 0.0469 s with 8 application bytes and loaded_v 2.565 V (deadline 0.1 s, thresholds 2.8/1.8 V), but that delivery is not latch-independent evidence: contact ends at 0.008 s, a recorded shunt at 0.012 s browns the device out at 0.0121 s with event_was_captured=true, the device reboots at 0.0381 s, and tx runs 0.045-0.0469 s with no contact in that window. So the passing trace is only passing under the component_record event_latch=passive-mechanical assumption and under the two excitation segments actually sampled, and the base procedure does not seem to record that dependence, the remaining deadline slack, or the worst-case loaded-voltage headroom before accepting a design sitting at the upper edge of the legal tx_not_before range. Hypothesis: an audit-first observation policy (mark latch dependence whenever a reset occurs between contact end and tx-complete; record deadline margin and worst loaded-voltage/energy margin per packet) combined with an experiment order that spends the remaining distinct-design execution on a single-parameter margin probe inside the legal ranges, instead of accepting the first passing trace, will either bound the safe region with a measured flip point or return an explicit no-pass/unknown at the recorded cost, rather than converting one sample into a robustness claim.",
+      "impact_scope": "task-entry",
+      "method_sha256": "5a9f539709262b3c4435252e3a95629e77732bccd2c529730c0341863327eb16",
+      "method_text": "Frozen scope: the task (one contact window of contact_duration_s, unique 8-byte frame, deadline deadline_s), the component/excitation facts, the transient model and the legal ranges are inputs I do not edit. This is a procedure for auditing and ordering experiments; it is not a device assignment, not an acceptance decision, and it makes no claim about physical hardware, statistical superiority over other procedures, transfer to other tasks, or recursive self-improvement.\n\nStep 1 - retention audit (observation_policy). From the current candidate's simulated trace, enumerate every reset/brownout event. If any reset occurs after the contact window ends and before tx-complete, record 'delivery depends on retained event state' and attach the component event_latch value as the stated assumption. Do not report a packet that traversed such a reset as latch-independent evidence. Also record whether contact overlapped the powered window at all, so a packet produced only by latch retention is never confused with one produced during contact.\n\nStep 2 - margin accounting (observation_policy). For every packet record, without retuning parameters: (i) time margin = deadline_s - packet time; (ii) worst loaded-voltage margin = minimum loaded_v over tx steps minus the brownout/output reference voltage; (iii) worst energy margin = minimum stored energy over tx steps minus the reset-threshold energy; (iv) capture-to-tx gap. Classify a candidate 'not demonstrated' if packet time leaves less margin than one tx_duration plus one boot_delay, or if the worst loaded-voltage margin is non-positive. Keep the quantities, not just the verdict.\n\nStep 3 - spend the remaining distinct design on information (experiment_order). Use the remaining candidate execution for a one-parameter sensitivity probe of the accepted candidate inside the legal ranges, stepping in the direction that reduces the margin identified in Step 2, one minimal legal step at a time. For each probe record: pass/no-pass, packet time, worst loaded-voltage and energy margins, and which Step 1 assumption became load-bearing. Do not spend the slot re-running the incumbent unchanged; there is no information in an identical trace.\n\nStep 4 - selection rule. Recommend the incumbent only if it passed Steps 1-2 and the probe either preserved pass through the tested step or located a flip point that lies outside the incumbent in the direction the frozen excitation actually visits. If the probe shows the incumbent already sits at the edge in a direction the excitation visits, or if no legal candidate passes, report no-pass/unknown with the failed trace and its cost instead of a compliant-device claim.\n\nStep 5 - cost and unknown ledger. Retain every executed candidate, its trace identity, the actual execution/time cost, and the explicit unknowns (latch dependence, excitation segments not sampled) alongside the revision. Never drop a failed or unknown observation when updating H.\n\nRepeatability: the same trace and the same frozen facts must produce the same audit verdict and the same probe direction; the verdict is stored as a checkable record, so an independent run can reproduce the classification without re-deriving it.",
+      "schema_version": "bf-phase2-method-proposal-v1",
+      "status": "PROPOSED_REQUIRES_EXTERNAL_SEMANTIC_AND_EXECUTION_AUDIT"
+    },
+    "retained": "PENDING_FRESH_DESIGN"
+  },
+  "fresh_task_entry": true,
+  "group": "p3-formal-3-3-ordinary_reflection",
+  "initial_cache_sha256": "53b3e07f055fb2394e09f58817b92b0ab1533a150d9360594bfd5e0093d160eb",
+  "owner": "pi-chat-d9b104ce350e25a1",
+  "protocol_sha256": "11384530660952c5d0ae9fac4c4609e20e7548abb34ad5ae6b02818583210ad2",
+  "reported_models": [
+    "deepseek-flash"
+  ],
+  "sandbox_sha256": "b72382871785c6b1aacff8af535076bf6b091bb0c24e1cedd0dc64da8d33400a",
+  "spec": {
+    "condition": "ordinary_reflection",
+    "group": "p3-formal-3-3-ordinary_reflection",
+    "id": "p3-formal-3-3-ordinary_reflection-h",
+    "kind": "H",
+    "replicate": 3,
+    "stage": "formal",
+    "world": "b-latched-reset"
+  },
+  "status": "ACTUAL_PROSPECTIVE_SUBMITTED",
+  "timed_out": false,
+  "trace_audit": {
+    "executed_inputs": 6,
+    "gateway_chain_tip": "44b6b87ca2d10b45041b3b78d005c7cbc9284b329c1780bc64fa1d92c4ba5afc",
+    "model_submitted": true,
+    "model_tool_calls": 6,
+    "unmatched_executed_inputs": []
+  },
+  "wall_seconds": 50.975212083983934,
+  "wall_seconds_total": 51.351494458998786
+}

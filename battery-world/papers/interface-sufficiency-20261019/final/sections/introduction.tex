@@ -1,0 +1,53 @@
+\section{Introduction}
+A battery-free device must turn an intermittent supply into a particular
+service: capture an external event, preserve the relevant state, and deliver
+the required information at the required time. Having enough energy in total
+does not specify whether a rail becomes ready before a deadline, whether a
+transmit pulse causes a reset, or whether the event is still pending when the
+device recovers. The interface presented to a designer determines which of
+these relations can be evaluated before a legal change is made.
+
+The distinction matters even when the current service succeeds. Two worlds
+can produce the same present voltage and event traces while having different
+unexcited storage clamps. Reducing capacitance activates those clamps and
+separates their outcomes. Two pending-event memories can likewise behave
+identically until a reset is introduced. These examples do not imply that
+static descriptions are intrinsically inadequate. A static description of the
+relevant laws, parameters, initial state and legal intervention domain can
+already answer the prospective question~\cite{structural,mechanisms}.
+
+An observation interface offers another route: acquire a source, select or
+construct a relation, qualify its domain and units, and feed the result into
+a design consumer. That route has an operational burden of its own. A useful
+equation with an invalid path can fail admission; a correctly computed Boolean
+can fail to match a numeric consumer branch. A qualified observation can also
+leave the final design unchanged, or support a design that complete static
+information already permits. Source acquisition, typed consumption, service
+success and incremental benefit therefore require distinct evidence~\cite{contract,original,tables}.
+
+We study these distinctions with sealed, executable digital BF cases. The
+first part states the information requirement and instantiates two structural
+counterexamples. The second implements the acquisition-to-consumer route and
+compares it against average-energy, rich-static, complete-input and executable
+interfaces under matched budgets. The main formal comparison has four fixed
+tasks and three repetitions per condition. Its strongest negative result is
+central: rich-static information already obtains 12/12 complete-service passes,
+whereas live observation completes seven chains and leaves five groups
+incomplete. The equal-information serialization comparison gives the same
+12/12 service and 65 requests in both arms~\cite{comparison,tables}.
+
+A secondary vibration-event study tests a different service boundary. Correct
+event matching and energy accounting do not ensure correct encoded event
+times. Two designs fail one-second timestamp tolerances even though their
+messages arrive promptly. We retain these submitted failures separately from
+four token-censored episodes with no design submission~\cite{final}.
+
+The contribution is a connected account of what information must distinguish,
+how an observation must reach a real consumer, and where successful digital
+checks stop supporting the claim. It includes the theoretical condition,
+mechanism witnesses, strong static controls, actual failed and completed
+observation chains, and portable saved-data reconstruction. It supplies no
+claim of priority over general sufficient-statistic or abstraction theory,
+no advantage over the successful complete static controls, and no hardware
+qualification. The study concerns public development apparatus rather than
+an official benchmark or a population of unseen physical devices.

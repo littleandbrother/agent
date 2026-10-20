@@ -1,0 +1,674 @@
+{
+  "schema_version": "bf-five-phase-state-v1",
+  "plan": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/BF_双论文与产品主线_分阶段执行方案.md",
+  "current_phase": 5,
+  "status": "all_five_phases_complete_exit_accepted",
+  "goal": "Complete finite engineering/paper handoff and detached saved-data reproduction",
+  "started_at": "2026-10-19T16:06:57.347647+00:00",
+  "baseline": "P2-f7ac8bfc4d5f262ff2736e25298d0c4bddd43b2f2064ae0c48b3bdb42b612977",
+  "owners": {
+    "S0": {
+      "thread": "01a1542b-bdb1-7013-87eb-e8abd5b0cf54",
+      "feature": "BFA-063-phase5-final-delivery",
+      "status": "in-progress",
+      "completion_scope": "finite_phase5_final_delivery"
+    },
+    "A": {
+      "thread": "01a1543b-639a-7a40-b906-afd6b5de612e",
+      "feature": "BFA-064-phase5-method-paper",
+      "status": "in-progress",
+      "workspace": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-a-20261019",
+      "profile": "/Users/depengsu/.local/share/bf-phase1-20261020/a/profile.json",
+      "hold_ack": "idle:52",
+      "completion_scope": "finite_phase5_final_delivery"
+    },
+    "B": {
+      "thread": "01a1543c-0ef3-7760-b27d-049b42ba71e8",
+      "feature": "BFA-065-phase5-interface-paper",
+      "status": "in-progress",
+      "workspace": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-b-20261019",
+      "profile": "/Users/depengsu/.local/share/bf-phase1-20261020/b/profile.json",
+      "hold_ack": "idle:51",
+      "completion_scope": "finite_phase5_final_delivery"
+    }
+  },
+  "finite_work_packages": [
+    "BFA-063-phase5-final-delivery",
+    "BFA-064-phase5-method-paper",
+    "BFA-065-phase5-interface-paper"
+  ],
+  "model_schedule": "S0 + original A/B preparation (three model executors). Workers idle before Pi; Pi episodes dispatched serially by S0, at most three executors total.",
+  "storage": {
+    "before_available_bytes": 11703070720,
+    "reserve_bytes": 10000000000,
+    "phase_peak_additional_bytes": 900000000,
+    "retained_output_cap_bytes": 500000000,
+    "after_workspace_available_bytes": 11638886400,
+    "handoff_snapshot_available_bytes": 9534709760,
+    "resume_available_bytes": 21627142144,
+    "cleanup_actual_net_increase_bytes": 12261535744,
+    "final_available_bytes": 23052652544,
+    "phase2_admission_available_bytes": 20093980672,
+    "phase2_private_logical_bytes": 2907596,
+    "phase2_scratch_removed_logical_bytes": 4726740,
+    "phase3_admission_available_bytes": 21963874304,
+    "phase3_private_logical_bytes": 58202626,
+    "phase3_provider_workbench_logical_growth_bytes": 43290453,
+    "phase3_scratch_removed_logical_bytes": 9548636
+  },
+  "evidence": [
+    "../parallel-campaign-20261019/RESULTS.md",
+    "phase1/baseline-v2/manifest.json",
+    "phase1/baseline-v2/workspaces.json",
+    "phase1/baseline-v2/readback.json",
+    "../../storage-deep-clean-20261020/REPORT.md",
+    "HOURLY-REVIEW.md",
+    "phase1/RESULTS.md",
+    "phase1/result.json",
+    "phase1/hash-readback-final.json",
+    "phase1/preservation-after-papers.json",
+    "phase2/RESULTS.md",
+    "phase2/result.json",
+    "phase2/preservation-final.json",
+    "phase2/paper-readback.json",
+    "phase2/storage-final.json",
+    "phase3/RESULTS.md",
+    "phase3/result.json",
+    "phase3/preservation-final.json",
+    "phase3/paper-readback.json",
+    "phase3/storage-final.json",
+    "phase3/source-manifest.json"
+  ],
+  "blockers": [],
+  "next_phase": {
+    "number": null,
+    "status": "all_five_phases_complete"
+  },
+  "updated_at": "2026-10-20T02:08:43.575585+00:00",
+  "shared_contract": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/configs/studies/phase1-20261020/shared/apparatus.v1.json",
+  "sdk_path_qualification": "PASS mock SDK -> actual custom tool -> next SDK request; zero provider calls",
+  "cleanup_handoff": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/CLEANUP-HANDOFF.md",
+  "new_dispatch_allowed": false,
+  "hold_confirmed": {
+    "A": "idle:57",
+    "B": "idle:59"
+  },
+  "transitions": [
+    {
+      "at": "2026-10-19T17:39:32.641410+00:00",
+      "from": "phase1_held_for_central_storage_cleanup",
+      "to": "phase1_resumed_integration",
+      "reason": "Central storage cleanup verified; same owners and accepted artifacts reused",
+      "free_bytes": 21627142144,
+      "review": "HOURLY-REVIEW.md"
+    },
+    {
+      "at": "2026-10-19T18:21:21.101366+00:00",
+      "from": "phase1_data_ready_manuscript_finalization",
+      "to": "phase1_work_packages_complete_exit_review_pending",
+      "reason": "Actual continued Pi design and independent no-go/FIFO review accepted; both manuscripts compiled/reviewed/pushed; product service decision and phase exit review remain pending."
+    },
+    {
+      "at": "2026-10-19T19:21:44.380916+00:00",
+      "from": "phase2_actual_results_ready",
+      "to": "phase2_work_packages_complete_exit_review_pending",
+      "reason": "All four finite actual episodes sealed; independent H rejection and posthoc E5 consumer/service, papers and registered integration complete. User confirmed preserving A/R failed baseline."
+    },
+    {
+      "at": "2026-10-19T22:34:26.166470+00:00",
+      "from": "phase3_actual_results_verified_local_papers_in_progress",
+      "to": "phase3_work_packages_complete_exit_review_pending",
+      "reason": "All preregistered actual groups sealed, source/accounting preservation PASS, one registered final CI passed, A/B local manuscripts imported after idle and final scratch cleaned. No promotion of H or product acceptance."
+    },
+    {
+      "at": "2026-10-20T01:15:53.142005+00:00",
+      "from": "phase4_actuals_verified_local_papers_in_progress",
+      "to": "phase4_work_packages_complete_exit_review_pending",
+      "reason": "All finite actual, source/accounting, paper/PDF and registered S0 verification gates closed; no scientific or product promotion."
+    },
+    {
+      "at": "2026-10-20T01:24:51.934266+00:00",
+      "from": "phase4_work_packages_complete_exit_review_pending",
+      "to": "phase5_final_delivery_in_progress",
+      "reason": "Phase4 exit accepted; original authorized five-phase final delivery dispatched."
+    }
+  ],
+  "paid_dispatch_allowed": false,
+  "integration_verification": {
+    "registered_ci_tests": 343,
+    "targeted_unique_tests": 56,
+    "saved_files": 44,
+    "saved_controls": 11,
+    "status": "PASS",
+    "new_paid_requests_before_episode": 0,
+    "native_dispatches": 0
+  },
+  "actual_ar_attempt": {
+    "owner": "pi-chat-cf4b6cb2ebe9b771",
+    "result": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/episode-result.json",
+    "classification": "COMPLETED_EXPLICIT_SAME_CONTEXT_CONTINUATION_AFTER_RETAINED_TRANSPORT_CENSOR",
+    "requests": 7,
+    "settled_charge_upper_bound_usd": 0.082605,
+    "unresolved_usage": [],
+    "continuation_protocol": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/protocol.json",
+    "context_qualification": "Original 8 messages and four tool results preserved in actual SDK next request; zero paid mock qualification",
+    "continuation_result": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/episode-result.json",
+    "independent_result": "/Users/depengsu/.local/share/bf-phase1-20261020/a/ar-service/pi-episode-001/continuation-001/external/result.json",
+    "cache_aware_estimate_usd": 0.058482888,
+    "candidates": 3,
+    "new_local_case_simulations": 12,
+    "product_acceptance": "NOT_ACCEPTED",
+    "ordering": "Strict FIFO violated; v2 rank hook only",
+    "fixed_space": "NO_GO",
+    "original_attempt_classification": "TRANSPORT_RESOURCE_CENSORED_BEFORE_DESIGN_SUBMISSION",
+    "hash_readback": "phase1/hash-readback-final.json",
+    "provider_identity_scope": "Provider-reported deepseek-flash alias only; no independently pinned weights"
+  },
+  "phase1_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/result.json",
+  "phase1_report": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/RESULTS.md",
+  "paper_publication": {
+    "rsi": {
+      "head": "157439b4738812c7f405641a6fc9de27f3d7485a",
+      "url": "https://www.overleaf.com/project/6ad5fb6e87c3ac6782d05b2c",
+      "local_portable_build": "PASS",
+      "cloud_compile": "NOT_RUN"
+    },
+    "interface": {
+      "head": "30ece15dc99e579a5b63920f01ca9a94fa7835de",
+      "url": "https://www.overleaf.com/project/6ad5fbda856b284d5d917ffd",
+      "local_portable_build": "PASS",
+      "cloud_compile": "NOT_RUN"
+    }
+  },
+  "completion_reporting": {
+    "target_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "prefix": "[BF_COMPLETE]",
+    "dedupe": "work_package + evidence identity",
+    "signal_directory": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/completion-signals",
+    "authorization": {
+      "source_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+      "user_message_id": "01a15568-19b2-7f81-bd50-59657e6ae141",
+      "turn_id": "01a15568-1954-76b1-b6b6-82f0b3fbfff9",
+      "verified_direct_user_text": "修改定时任务，在原有的基础上 让总管在完成他的任务时候向这个session发送完成信号，避免空闲时间过多。"
+    },
+    "hourly_review": "unchanged; review owner already updated existing automation",
+    "last_signal_id": "phase4-BFA060-061-062-1a8a79356441ee0b",
+    "last_signal_status": "sent",
+    "dispatch_record": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/DISPATCH.md",
+    "last_signal_sent_at": "2026-10-20T01:18:28.140603+00:00",
+    "last_signal_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/completion-signals/phase4-BFA060-061-062-1a8a79356441ee0b.json",
+    "final_batch_signal_status": "sent_once_phase4_exit_review_pending",
+    "final_batch_evidence_identity": "1a8a79356441ee0b",
+    "previous_phase_completion": {
+      "id": "phase3-BFA057-058-059-b7ccfd8b4416be4d",
+      "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/completion-signals/phase3-BFA057-058-059-b7ccfd8b4416be4d.json",
+      "status": "sent"
+    }
+  },
+  "phase1_closed_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase1/result.json",
+  "dispatch_id": "phase-5-final-delivery-bf-20261020-001",
+  "phase1_product_exit": {
+    "status": "CONFIRMED_KEEP_FAILED_BASELINE_AT_USER_DIRECTION",
+    "fixed_space": "NO_GO",
+    "strict_FIFO": "FAIL",
+    "product": "NOT_ACCEPTED",
+    "original_contract_retained": true,
+    "reviewer": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "awaiting_user_choice": false
+  },
+  "phase2_cases": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/configs/studies/phase2-20261020/shared/case-registry.json",
+  "current_checkpoint": "Final independent review accepted all five finite phases; sealed engineering/two-paper delivery retained unchanged. Default H0, no stable RSI, A/R product NOT_ACCEPTED and hardware UNKNOWN retained.",
+  "next_execution": "NONE; finite five-phase campaign complete, hourly review PAUSED. Further work requires a new human request.",
+  "phase2_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase2/result.json",
+  "phase2_actual_results": "/Users/depengsu/.local/share/bf-phase2-20261020/actual-results.json",
+  "AR_product_decision": {
+    "status": "CONFIRMED_KEEP_FAILED_BASELINE",
+    "choice": "保留当前失败基线，先完成第二阶段方法研究",
+    "source_thread": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "received_at": "2026-10-19T19:21:44.380916+00:00",
+    "fixed_space": "NO_GO",
+    "dark_service": "FAIL",
+    "strict_FIFO": "FAIL",
+    "product_acceptance": "NOT_ACCEPTED",
+    "original_service_and_FIFO_requirements_unchanged": true,
+    "awaiting_user_choice": false
+  },
+  "phase2_verification": {
+    "status": "PASS",
+    "at": "2026-10-19T19:19:41.198879+00:00",
+    "scope": "Registered S0 architecture-v2-ci; not root-wide or worker profile health",
+    "results": [
+      {
+        "command": [
+          "rtk",
+          "proxy",
+          "/opt/homebrew/opt/python@3.14/bin/python3.14",
+          "-B",
+          "-m",
+          "unittest",
+          "test_campaign_phase2_methods.Phase2MethodProposalTests.test_cli_process_schema_and_d_only_rejection"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 0.2141294999892125
+      },
+      {
+        "command": [
+          "rtk",
+          "proxy",
+          "bash",
+          "./init.sh"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 15.30555158299103
+      }
+    ],
+    "phase2_unique_tests": 43,
+    "original_targeted_passes": 42,
+    "one_failed_CLI_case_repaired_by_import": "PASS",
+    "original_failure_log": "final-integration-ci.log",
+    "new_provider_requests": 0,
+    "new_scientific_executions": 0,
+    "registered_ci_tests": 343,
+    "saved_files": 44,
+    "saved_controls": 11
+  },
+  "phase2_actual_summary": {
+    "provider_requests": 25,
+    "settled_upper_usd": 0.1766922,
+    "unresolved_usage": [],
+    "new_scientific_executions": 7,
+    "native_dispatches": 0,
+    "H0": "PASS",
+    "Hprime": "PASS",
+    "method_retained": false,
+    "original_E5_success": false,
+    "posthoc_E5_service": "PASS",
+    "static_complete_service": "PASS"
+  },
+  "phase2_review": {
+    "status": "ACCEPTED_WITH_ORIGINAL_FAILURE_AND_POSTHOC_BOUNDARIES",
+    "signal_id": "phase2-BFA054-055-056-4dc8450bc84fc90a"
+  },
+  "phase3_formal_repetitions": 3,
+  "phase3_pilot_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/pilot-results.json",
+  "phase3_protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/protocol.json",
+  "phase4_selection_freeze": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/stage4-selection-freeze.json",
+  "phase3_live_status": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/live-status.json",
+  "phase3_final_registered_integration": {
+    "status": "PASS",
+    "command": [
+      "rtk",
+      "proxy",
+      "bash",
+      "./init.sh"
+    ],
+    "verification_profile": "architecture-v2-ci",
+    "environment_profile": "/Users/depengsu/.local/share/bf-campaign-20261019-s0/profile.json",
+    "environment_profile_sha256": "ce8ec8cc62d8ef559c5281a83c5cd5044348d716f16b9f9e069cdde4e86aa8e6",
+    "exit_code": 0,
+    "wall_seconds": 15.264199416997144,
+    "scope": "Registered S0 architecture-v2-ci; no root-wide or worker health claim",
+    "new_provider_requests": 0,
+    "new_scientific_executions": 0,
+    "log_sha256": "ec382b1b14af306172e11dc28fc5c0d8e854060af8bc35d9c6d865d0b3ada916",
+    "test_count": [
+      343
+    ],
+    "prior_environment_failure": "final-integration-attempt1.json",
+    "log_tail": "copedWorkTests.test_fixed_scopes_submit_then_three_way_merge) ... ok\ntest_frozen_policy_and_no_worker_in_single (test_repository_work.ScopedWorkTests.test_frozen_policy_and_no_worker_in_single) ... ok\ntest_one_depth_read_only_base_and_source_hash (test_repository_work.ScopedWorkTests.test_one_depth_read_only_base_and_source_hash) ... ok\ntest_shared_request_guard_counts_lead_and_worker (test_repository_work.ScopedWorkTests.test_shared_request_guard_counts_lead_and_worker) ... ok\ntest_solver_releases_database_writer_and_recovery_reuses (test_repository_work.ScopedWorkTests.test_solver_releases_database_writer_and_recovery_reuses) ... ok\ntest_source_cannot_submit_engineering_patch (test_repository_work.ScopedWorkTests.test_source_cannot_submit_engineering_patch) ... ok\ntest_source_pair_requires_parent_to_wait_for_worker (test_repository_work.ScopedWorkTests.test_source_pair_requires_parent_to_wait_for_worker) ... ok\ntest_stale_overlapping_proposal_is_rejected (test_repository_work.ScopedWorkTests.test_stale_overlapping_proposal_is_rejected) ... ok\ntest_trace_lock_defers_without_aborting_but_tamper_fails (test_repository_work.ScopedWorkTests.test_trace_lock_defers_without_aborting_but_tamper_fails) ... ok\n\n----------------------------------------------------------------------\nRan 343 tests in 14.204s\n\nOK\n{\"status\": \"PASS\", \"files\": 44, \"controls\": 11, \"qualification\": \"FQ-ae54a1e11eaeebafe6c665a86145c87b62f27a004d2445706ef7231f90259af9\", \"model_calls\": 0, \"native_dispatches\": 0}\n"
+  },
+  "phase3_actual_summary": {
+    "formal_tasks": 4,
+    "formal_repetitions": 3,
+    "formal_groups": 96,
+    "pilot_groups": 16,
+    "actual_episodes": 140,
+    "provider_requests": 771,
+    "settled_upper_usd": 5.4478605,
+    "UNKNOWN": 0,
+    "new_scientific_executions": 57,
+    "default_H_changed": false,
+    "selected_cross_reset_groups": 4,
+    "distinct_cached_cross_reset_physical_points": 1
+  },
+  "phase3_preservation": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/preservation-final.json",
+  "phase_advanced": false,
+  "phase3_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/result.json",
+  "phase3_report": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/RESULTS.md",
+  "phase3_paper_readback": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-readback.json",
+  "phase3_storage_final": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/storage-final.json",
+  "phase3_source_manifest": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/source-manifest.json",
+  "phase3_verification": {
+    "status": "PASS",
+    "targeted_unique_tests": 26,
+    "registered_ci_tests": 343,
+    "saved_files": 44,
+    "saved_controls": 11,
+    "scope": "S0 architecture-v2-ci only; original profile omission failure retained",
+    "preservation": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/preservation-final.json",
+    "paper_readback": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-readback.json"
+  },
+  "phase3_papers": {
+    "A": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/method-reexecution-20261019/phase3.pdf",
+      "pdf_sha256": "b61bf30b7683fedf02f12c40c238641115349627b5df56fb261916d6babfb02f",
+      "pdf_bytes": 216762,
+      "pages": 5,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-import-a.json",
+      "import_receipt_sha256": "d6a2b644b4572ae71059f184eaaa6dd78c64765425f92864b111379c5ecf41e8"
+    },
+    "B": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/interface-sufficiency-20261019/phase3.pdf",
+      "pdf_sha256": "c19f7a9ece1b08c1f992318a83d333539336a66b08ce5fcb55c8559edb2963df",
+      "pdf_bytes": 270729,
+      "pages": 6,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase3/paper-import-b.json",
+      "import_receipt_sha256": "617474f5157d1eb0746aa1157dc8ca57473973ada02b39f66ba5258f95b0d379"
+    }
+  },
+  "phase3_publication": {
+    "local_only": true,
+    "commits": 0,
+    "pushes": 0,
+    "Overleaf_updates": 0
+  },
+  "phase3_review": {
+    "status": "ACCEPTED_WITH_NEGATIVE_RESULTS_AND_CLAIM_BOUNDARIES",
+    "signal_id": "phase3-BFA057-058-059-b7ccfd8b4416be4d",
+    "dispatch": "phase-4-transfer-and-improver-bf-20261020-001"
+  },
+  "phase4_registration": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/registration.json",
+  "phase4_budgets": {
+    "max_active_models": 3,
+    "new_environments": 0,
+    "new_worktrees": 0,
+    "native_dispatches": 0,
+    "reserve_bytes": 10000000000,
+    "peak_additional_bytes": 900000000,
+    "private_retained_cap_bytes": 500000000,
+    "provider_workbench_growth_cap_bytes": 150000000,
+    "max_actual_episodes": 73,
+    "max_provider_requests": 860,
+    "max_settled_upper_usd": 100,
+    "max_summed_episode_wall_s": 54400,
+    "max_new_scientific_executions": 150,
+    "G1_formation": {
+      "episodes": 1,
+      "requests": 8,
+      "wall_s": 400
+    },
+    "G_lineage_arm": {
+      "lineages": 3,
+      "arms": [
+        "G0",
+        "G1"
+      ],
+      "descendants_per_arm": 2,
+      "total_requests_including_allocated_formation": 120,
+      "total_wall_s_including_allocated_formation": 6600,
+      "settled_upper_usd_including_allocated_formation": 10,
+      "H_proposal_requests": 8,
+      "H_proposal_wall_s": 400
+    },
+    "D_episode": {
+      "requests": 12,
+      "wall_s": 800,
+      "distinct_D": 2,
+      "tool_calls": 40
+    },
+    "O_initial_transfer_episode": {
+      "count": 3,
+      "requests": 24,
+      "wall_s": 1200,
+      "distinct_D": 2,
+      "tool_calls": 40
+    },
+    "finite_episode_counts": {
+      "O_initial_transfer_and_two_controls": 3,
+      "G1_formation": 1,
+      "H_descendant_proposals": 12,
+      "selection_D_for_descendants": 24,
+      "selection_H0_controls": 6,
+      "final_test_D_for_selected_G0_G1_descendants": 18,
+      "final_test_H0_controls": 9
+    }
+  },
+  "phase4_actual_progress": {
+    "at_utc": "2026-10-20T00:51:40.726123+00:00",
+    "closed_actual_attempts": 77,
+    "effective_canonical_cells": 73,
+    "selection_cells_closed": 30,
+    "final_cells_closed": 27,
+    "accounting": {
+      "requests": 367,
+      "settled_upper_usd": 3.1767228,
+      "wall_s": 5951.6394840371795
+    },
+    "default_H0_changed": false,
+    "all_six_selected_before_final": true,
+    "selection_freeze_sha256": "3da13cb8d8e4ffbeff14eb3ea98769fb70458825228263187dbe252db6c2ea90"
+  },
+  "phase4_host_error_hold": {
+    "at_utc": "2026-10-19T23:30:59.331414+00:00",
+    "reason": "Repeated KeyError trace in check/submit on selection b-pulse-fast; stop dependent paid dispatch pending read-only diagnosis. Preserve all actual attempts and charges; do not interpret apparatus errors as method inferiority.",
+    "observed_episodes": [
+      "L1-G0-h1-selection-b-pulse-fast",
+      "L1-G0-h2-selection-b-pulse-fast",
+      "L1-G1-h1-selection-b-pulse-fast"
+    ],
+    "retry_allowed": false,
+    "participant_source_changes_allowed": false
+  },
+  "phase4_amendment": {
+    "id": "phase4-cache-trace-amendment-20261020-001",
+    "protocol": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/protocol-v1.1.json",
+    "protocol_sha256": "3cef0dc62d20f85c13dd2e471401cdf1ccd64a01772e440f54a85f390c38cab3",
+    "qualification": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/cache-repair-qualification.json",
+    "qualification_status": "PASS",
+    "permitted_recovery_attempts": {
+      "L1-G0-h1-selection-b-pulse-fast": "L1-G0-h1-selection-b-pulse-fast-recovery-v11",
+      "L1-G0-h2-selection-b-pulse-fast": "L1-G0-h2-selection-b-pulse-fast-recovery-v11",
+      "L1-G1-h1-selection-b-pulse-fast": "L1-G1-h1-selection-b-pulse-fast-recovery-v11",
+      "L1-G1-h2-selection-b-pulse-fast": "L1-G1-h2-selection-b-pulse-fast-recovery-v11"
+    },
+    "global_caps": {
+      "actual_episodes": 77,
+      "requests": 860,
+      "summed_episode_wall_s": 54400,
+      "settled_upper_usd": 100,
+      "new_scientific_executions": 150,
+      "recovery_episode_requests": 12,
+      "recovery_episode_wall_s": 800,
+      "recovery_distinct_D": 2
+    },
+    "frozen_methods_unchanged": true
+  },
+  "new_execution_allowed": false,
+  "phase4_actual_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/actual-results.json",
+  "phase4_preservation": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/preservation-final.json",
+  "phase4_paper_handoff": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-handoff.json",
+  "phase4_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/result.json",
+  "phase4_report": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/RESULTS.md",
+  "phase4_source_manifest": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/source-manifest.json",
+  "phase4_verification": {
+    "prior_targeted_unique_tests": 37,
+    "v11_existing_data_repair_checks": 6,
+    "registered_S0_ci_tests": 343,
+    "saved_files": 44,
+    "saved_controls": 11,
+    "registered_scope": "S0 architecture-v2-ci only; initial operator environment failure preserved",
+    "actual_attempts": 77,
+    "canonical_cells": 73,
+    "provider_requests": 367,
+    "preservation": "PASS; original host faults and 24 historical UNKNOWN retained",
+    "paper_review": "A 8 / B 7 pages, actual builds and every-page worker plus S0 first-page visual/PDF/source/font readback PASS",
+    "new_participant_dispatch_for_finalization": 0,
+    "receipts": [
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/preservation-final.json",
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/final-integration.json",
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-readback.json",
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/storage-final.json"
+    ]
+  },
+  "phase4_papers": {
+    "A": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/method-reexecution-20261019/phase4.pdf",
+      "pdf_sha256": "e6be17735085ecb003856bda24e8a7ae5b537b91ce36aefda1770ab5e4c560ce",
+      "pdf_bytes": 359656,
+      "pages": 8,
+      "worker_all_pages_visually_reviewed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "S0_visually_reviewed_pages": [
+        1
+      ],
+      "all_fonts_embedded": true,
+      "font_entries": 18,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-import-a.json",
+      "import_receipt_sha256": "e461339dc6203a8bc0a304d309a0f6d9520d944fa5eba57ac0ced3929fdef99f",
+      "S0_visual_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-visual-a.json",
+      "S0_visual_receipt_sha256": "66035dfbee800d793629c1e965169d5b8b809bea1e2bdc65f524cfcb021416fd"
+    },
+    "B": {
+      "pdf": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/papers/interface-sufficiency-20261019/phase4.pdf",
+      "pdf_sha256": "f857898b4d0c67a120d16ff603d8180c4868687e775b28ea861d9e3e4ac27345",
+      "pdf_bytes": 294421,
+      "pages": 7,
+      "worker_all_pages_visually_reviewed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "S0_visually_reviewed_pages": [
+        1
+      ],
+      "all_fonts_embedded": true,
+      "font_entries": 10,
+      "import_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-import-b.json",
+      "import_receipt_sha256": "a1e8e84f9dcaaf225f03ceaebe0090e1edd8392bbd41c68bda86659d4404fb06",
+      "S0_visual_receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/paper-visual-b.json",
+      "S0_visual_receipt_sha256": "2287f0e01d3faa628f860e26a5f96e7c3ee131d722a22dbd38c5465ec7203859"
+    }
+  },
+  "phase4_storage_final": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/storage-final.json",
+  "phase4_publication": {
+    "local_only": true,
+    "commits": 0,
+    "pushes": 0,
+    "Overleaf_updates": 0
+  },
+  "phase4_review": {
+    "status": "ACCEPTED",
+    "review_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "dispatch_id": "phase-5-final-delivery-bf-20261020-001",
+    "H_decision": "KEEP_UNCHANGED_BASE_H"
+  },
+  "phase4_completion_signal": {
+    "id": "phase4-BFA060-061-062-1a8a79356441ee0b",
+    "status": "SENT",
+    "sent_count": 1,
+    "target_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase4/completion-signals/phase4-BFA060-061-062-1a8a79356441ee0b.json"
+  },
+  "phase5_registration": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/registration.json",
+  "phase5_progress": {
+    "engineering": "complete_saved_same_candidate_five_groups; hardware_unverified",
+    "papers": "A11/B15 complete; originals A/B idle",
+    "publication": "Both authorized Overleaf pushed and exact remote readback PASS; cloud compile unverified",
+    "detached_acceptance": "PASS_1409_FILES_E80_F643_TAMPER_REJECTED",
+    "new_execution": 0,
+    "exit_review": "ACCEPTED",
+    "hourly_review": "PAUSED_CONFIRMED_BY_LIVE_TOML"
+  },
+  "phase5_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/result.json",
+  "phase5_report": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/RESULTS.md",
+  "phase5_source_manifest": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/source-manifest.json",
+  "phase5_delivery": "/Users/depengsu/Documents/Long-Horizon AI Agent/deliveries/BF_FINAL_20261020/START-HERE.md",
+  "phase5_storage": {
+    "schema_version": "bf-phase5-storage-final-v1",
+    "at": "2026-10-20T02:01:08.959604+00:00",
+    "delivery_files": 1412,
+    "delivery_logical_bytes": 219069648,
+    "delivery_cap_bytes": 750000000,
+    "available_bytes": 21552615424,
+    "admission_available_bytes": 23690231808,
+    "reserve_bytes": 10000000000,
+    "peak_admission_reserve_bytes": 1500000000,
+    "central_cleanup_actual_APFS_release_bytes": 12261535744,
+    "central_cleanup_measurement": "docs/storage-deep-clean-20261020/summary.json; isolated cleanup window, not logical deleted size or background delta",
+    "temporary_acceptance_copy_removed_bytes": 219067091,
+    "temporary_acceptance_outputs_removed_bytes": 503304,
+    "temporary_logical_removals_not_added_to_APFS_credit": true,
+    "no_new_environments_worktrees_or_whole_tree_backups": true,
+    "worker_retained_owned_bytes": {
+      "a": 14489335,
+      "b": 5515150
+    }
+  },
+  "phase5_publication": {
+    "rsi": {
+      "status": "PASS",
+      "project": "6ad5fb6e87c3ac6782d05b2c",
+      "head": "0e073932bf26e8d1b381ad39a34760ef418b05fb",
+      "remote_head": "0e073932bf26e8d1b381ad39a34760ef418b05fb",
+      "branch": "main",
+      "readback_files": 14,
+      "remote_tree_readback": "PASS",
+      "local_compile": "PASS_SAME_LAYOUT_AS_REVIEWED_PDF",
+      "cloud_compile_verified": false,
+      "root_or_source_repositories_committed": false,
+      "at": "2026-10-20T01:54:36.177687+00:00"
+    },
+    "interface": {
+      "status": "PASS",
+      "project": "6ad5fbda856b284d5d917ffd",
+      "head": "206c8295a4f4b9b7ef4bbd3d6e431320dc19802f",
+      "remote_head": "206c8295a4f4b9b7ef4bbd3d6e431320dc19802f",
+      "branch": "main",
+      "readback_files": 26,
+      "remote_tree_readback": "PASS",
+      "local_compile": "PASS_SAME_LAYOUT_AS_REVIEWED_PDF",
+      "cloud_compile_verified": false,
+      "root_or_source_repositories_committed": false,
+      "at": "2026-10-20T01:58:24.215384+00:00"
+    }
+  },
+  "phase5_completion_signal": {
+    "id": "phase5-BFA063-064-065-884c8289a06a146f",
+    "status": "SENT",
+    "sent_count": 1,
+    "target_thread_id": "01a11b01-a75e-75c2-81c3-7d152a24f15a",
+    "receipt": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5/completion-signals/phase5-BFA063-064-065-884c8289a06a146f.json"
+  },
+  "phase5_owners": {
+    "campaign-a": "IDLE",
+    "campaign-b": "IDLE",
+    "campaign-s0": "IDLE_AFTER_TERMINAL_STATE_WRITE"
+  },
+  "phase5_review": {
+    "id": "phase5-final-exit-review-20261020-001",
+    "status": "ACCEPTED",
+    "judgment": "PHASE5_FINITE_EXIT_ACCEPTED_ALL_FIVE_PHASES_COMPLETE",
+    "review": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/phase-plan-20261019/phase5-exit-review.json",
+    "review_sha256": "4c9124b1157f87d40d01ffe052cc434144f10f3c7ca7e99a88d1b7eed3ca41d8",
+    "at": "2026-10-20T10:07:15.140191+08:00",
+    "automation": {
+      "id": "bf",
+      "status": "PAUSED",
+      "live_toml_readback": true
+    },
+    "no_new_dispatch": true
+  },
+  "all_five_phases_complete": true
+}

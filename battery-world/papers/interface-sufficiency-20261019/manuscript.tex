@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage[hidelinks]{hyperref}
+\makeatletter
+\def\input@path{{../shared/}}
+\makeatother
+\usepackage{hkustgz-paper}
+\title{Current Verdicts and Legal-Intervention\\Sufficiency in Battery-Free Design}
+\hypersetup{pdftitle={Current Verdicts and Legal-Intervention Sufficiency in Battery-Free Design},pdfauthor={Development manuscript}}
+\author{Development manuscript}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Battery-free nodes must acquire energy in time, store usable energy, start above rail thresholds and preserve events until reception. We distinguish a representation that judges a current service from one that supports legal design interventions. Two exposed structural pairs isolate storage saturation and reset retention; saved transient examples connect them to startup, ESR and deadline constraints. Rich static, complete raw and executable-model baselines remain available. A frozen input protocol and discovery-to-consumer contract prepare subsequent Agent experiments. Agent benefit, format benefit, physical qualification and autonomous observation discovery remain separate untested claims.
+\end{abstract}
+\section{Problem}
+A fixed BF task $T$ and world $w$ define a service verdict $V(w,d,T)$. A representation $R(w,d)$ is current-verdict sufficient on a declared domain if equality of representations implies equality of current verdicts. For a public legal intervention set $\mathcal D$, intervention sufficiency requires the same implication after every jointly legal change $\delta\in\mathcal D$ is applied to both designs. The second property need not follow from the first. A passing present trajectory can leave an upper clamp or reset transition unexcited; changing capacitance or power schedule can activate it while the task stays fixed.
+
+The BF question is whether the available description supports the chain from source timing and stored energy through startup, program state and receiving service under a proposed change. The structural witnesses isolate ideal energy-service and event-state guards; the separate transient reference checks receiver events against a deadline. Neither is a calibrated hardware model. This is a question about the information needed by a specific consumer: a static model containing the relevant state laws and parameters can already be intervention sufficient on its declared domain. Acquiring observations is useful only when missing information and its acquisition, qualification and use can be justified.
+\input{phase1-mechanisms.tex}
+\section{Observation acquisition}
+Observations add facts at measured acquisition and qualification cost. We distinguish selection of developer-defined observations from constructing executable observations. A static sufficient statistic or a complete executable model may provide all necessary information.
+\section{Implementation}
+The frozen protocol specifies ideal clamped energy and reset-state models, legal D changes, separate reference implementations and negative controls. Phase one reads and audits the saved results, adds BF mechanism mappings and participant input gates, and freezes a later Agent discovery contract. It changes no existing physical or task semantics and reruns no historical solve.
+\section{E2--E5: public development results}
+% BEGIN GENERATED RESULTS
+\subsection{E2--E3: two unexcited mechanisms}
+Run \texttt{IF-7412532c4a6ab7a5879e} contains two public development pairs, not statistical replications or unseen tests. Each pair has identical current observed event/rail traces and two passing current tasks. The identical legal D change then yields FAIL/PASS.
+
+For the clamp pair, a fixed 20 $\mu$W source supplies 40 $\mu$J before a 30 $\mu$J service transaction at 2.5 s, with a 1 V service reserve. Both systems use 10 $\mu$F initially. Their ideal clamps are 3 V and 5 V. The initial maximum rail voltage is $\sqrt{8}=2.828$ V, so neither clamp activates and the entire current trajectory coincides. Changing only capacitance to 4 $\mu$F is legal in the common $[4,12]$ $\mu$F domain. The 3 V clamp now spills 22 $\mu$J and makes only 16 $\mu$J available above reserve; it fails the fixed service. The 5 V clamp spills zero and delivers 30 $\mu$J; it passes. The post-change margins are $-14$ and $8$ $\mu$J. These are ideal energy transactions, not measured PMIC startup or MCU current.
+
+For the reset pair, an event is captured at 1 s and must be transmitted once at 4 s, by a 5 s deadline. The external event and transmission time stay fixed. Without a power reset, volatile and retained pending memories both deliver the event. A common D change inserts an outage from 2 to 3 s: volatile pending memory is cleared and delivers zero events; retained pending memory delivers one. This changes a state transition rather than rescaling an old energy/window template.
+
+The analytic clamp implementation agrees with projected time integration; the ordered memory machine agrees with a separate event-program parser and tick interpreter. Both 1 ms and 0.5 ms settings agree on all eight current/intervention cases. Maximum energy discrepancy is $2.84\times 10^{-12}$ $\mu$J. These implementations share ideal assumptions, so agreement is numerical/software evidence only.
+
+Deleting the unexcited clamp threshold or reset-retention information restores aliasing in this encoding. It does not establish universal necessity of a field name or complete device-level E3 validation. Indeed an enriched \emph{static} model is sufficient on the declared ideal domain. It passes all 28 exposed legal-grid checks (20 clamp, eight memory), and a purely additive static control agrees with independent packet accounting on five service-cost values, including passing and failing designs. The clamp statistic is
+\[
+ M(C)=\min(E_0+P_{\mathrm{in}}t_{\mathrm{in}},CV_{\max}^2/2)-CV_{\min}^2/2-E_{\mathrm{service}}.
+\]
+Its sufficiency follows here from all input preceding service, an ideal cap, and no leakage or intervening workload. Those assumptions bound the claim.
+
+\subsection{E4: executable equal-information preparation}
+At each information level the prose and JSON packets contain identical facts and an identical summary (eight parity checks across 16 packet files). In fixed-information use no additional tool or read is legal. In active-observation use all arms start with the same current packet and share the same legal observations. Table~\ref{tab:packets} reports deterministic parse-and-judge checks on the proposed intervention. Abstentions are not counted as errors. This constrained prose serialization is preparation, not a test of model comprehension or unconstrained writing.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrr}
+\toprule
+Information & Format & Correct & Unknown \\
+\midrule
+current & free-text & 0/4 & 4/4 \\
+current & structured & 0/4 & 4/4 \\
+sufficient & free-text & 4/4 & 0/4 \\
+sufficient & structured & 4/4 & 0/4 \\
+\bottomrule
+\end{tabular}
+\caption{Fixed-information parser/decision checks; no model calls. Model-format benefit is NOT\_RUN.}
+\label{tab:packets}
+\end{table}
+
+\subsection{E5-1: measured finite observation selection}
+The selector receives researcher-supplied required-field metadata, not outcomes, and chooses the smallest eligible source by actual file-size estimate. Table~\ref{tab:costs} totals four public cases. Bytes are payload bytes returned to Python, separately counting source readback for audit; they are not storage-device I/O or monetary fees. Wall time includes acquisition, source audit, and selector where used. Source-export setup is retained in the raw data. These are single host measurements with uncontrolled OS cache, not a latency benchmark.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{lrrrrr}
+\toprule
+Observation & Correct & Read B & Audit B & Wall ms & Model runs \\
+\midrule
+uninformative & 0/4 & 4648 & 4648 & 0.289 & 0 \\
+mechanism-spec & 4/4 & 103 & 103 & 0.260 & 0 \\
+fixed-rich & 4/4 & 4747 & 4747 & 0.282 & 0 \\
+full-raw & 4/4 & 8544 & 8544 & 0.333 & 0 \\
+executable-dynamic & 4/4 & 8544 & 8544 & 1.886 & 4 \\
+selected & 4/4 & 103 & 103 & 0.236 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{Observation acquisition and audit costs. Uninformative returns UNKNOWN on all four.}
+\label{tab:costs}
+\end{table}
+
+Fixed-rich, complete raw information, and an executable dynamic response all judge four of four correctly. The selected observation reads exactly the same facts and bytes as the fixed minimal mechanism-spec baseline. This batch supplies no independent algorithmic selection gain and does not weaken those strong baselines. A zero-byte acquisition budget abstains; three illegal changes and a tampered source binding are rejected.
+
+\subsection{E5-2: executable construction preparation}
+A deterministic compiler turns a researcher-specified headroom expression into a new standalone Python observation, with source hash, input schema and applicability domain. Its values $-14$ and $8$ $\mu$J agree with independent integration on all 20 exposed clamp-grid points and in two fresh-process executions. Construction took 0.239 ms; reference qualification took 13.017 ms (20 model runs); the two fresh processes took 37.730 ms combined. The equation and relevant inputs were manually supplied. This validates executable construction and audit machinery, not autonomous discovery or held-out usefulness.
+
+\paragraph{Evidence binding.}
+The frozen protocol, raw result, packet files, generated program and costs accompany \texttt{IF-7412532c4a6ab7a5879e}. Data source: \path{docs/research/parallel-20261019/interfaces/data/IF-7412532c4a6ab7a5879e/result.json}. Entry point: \path{scripts/campaign_interfaces.py}; manuscript tables: \path{papers/interface-sufficiency-20261019/render_results.py}. Paid model requests and native dispatches are zero. Historical successful product solves were not rerun. The old three scaled families and the refinement/fixed-rich tie remain separate development negatives.
+% END GENERATED RESULTS
+\input{phase1-protocol.tex}
+\section{Boundaries and threats}
+All examples are exposed public development mechanisms. Two implementations of the same ideal equations check implementation consistency, not device reality. Fixed-rich, full raw information, executable dynamic models, and sufficient static controls remain valid baselines. No novelty priority is claimed without a literature audit. Historical three-family refinement tied the fixed-rich baseline and remains a separate development result.
+\end{document}
