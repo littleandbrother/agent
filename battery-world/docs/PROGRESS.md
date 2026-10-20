@@ -1532,3 +1532,8 @@ Independent review accepted completion ABC-cycle-complete-v1-3d095785d149c563: /
 ## Authorized ABC manuscript and whole-project publication — 2026-10-20T22:47:33.069804+08:00
 
 BFA-071 registered for original Overleaf RSI/interface projects, actual browser compilation/alignment inspection and current BF GitHub branch update. Use existing worktrees/environments,350MB peak/180MB retained cap with10GB reserve. New model/science/native execution0. Original ABC results/defaultH0/physical limitations and billingUNKNOWN retained. Registration: /Users/depengsu/Documents/Long-Horizon AI Agent/docs/abc-publication-20261020/registration.json.
+
+
+## 2026-10-20T23:18:27.811967+08:00 BFA-071 publication complete
+
+Latest RSI (16 pages) and agent-interface (23 pages) papers were pushed to their original Overleaf projects and actually compiled online with 0 errors/warnings. Right HKUST(GZ) vector logo, two-line titles and abstract alignment passed. Full current BF implementation plus ABC sources/results was pushed to `codex/bf-architecture-v2` at `a2c8827e54fe401ac57c15fd428f38b6ac2f2756`. Both GitHub CI runs passed (343+196+14+24 Python checks, Pi contracts and fresh-checkout source/result reproduction). Release `https://github.com/littleandbrother/agent/releases/tag/bf-abc-20261020` has the original incremental evidence and both PDFs; all remote bytes were read back and SHA-256 checked before deleting the temporary upload ZIP. No new environments, worktrees, model requests or scientific/native executions. Original failures, billing, UNKNOWN and raw evidence remain. See `docs/abc-publication-20261020/completion.json`. Metadata closure follows as an ordinary commit.
