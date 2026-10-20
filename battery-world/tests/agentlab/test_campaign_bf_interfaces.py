@@ -9,13 +9,11 @@ from pathlib import Path
 from unittest.mock import patch
 
 from bfworld.agentlab.campaign20261019 import bf_interfaces as bf
+from campaign_fixtures import interface_registration
 
 
-PROFILE = Path("/Users/depengsu/.local/share/bf-phase1-20261020/b/profile.json")
-# Preparation is intentionally tied to B's frozen, capability-disabled profile.
-# An integration checkout imports the same module but must pass that registered
-# source root rather than impersonating B from its own physical checkout.
-ROOT = Path(json.loads(PROFILE.read_text())["source_root"]) / "battery-world"
+ROOT = Path(__file__).resolve().parents[2]
+PROFILE: Path
 
 
 def synthetic_discovery() -> tuple[dict, dict]:
@@ -60,7 +58,11 @@ def synthetic_discovery() -> tuple[dict, dict]:
 class BFInterfaceProtocolTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # All generated test artifacts stay inside this feature's owned subtree.
+        global ROOT, PROFILE
+        cls.fixture = tempfile.TemporaryDirectory(prefix="bf-e4-unit-")
+        cls.addClassCleanup(cls.fixture.cleanup)
+        ROOT, PROFILE = interface_registration(Path(cls.fixture.name), bf)
+        # A separate disabled unit-test owner exercises the unchanged gate.
         cls.scratch = tempfile.TemporaryDirectory(prefix=".test-", dir=ROOT / bf.OUTPUT)
         cls.output = Path(cls.scratch.name) / "bundle"
         # A single preparation cannot silently re-run any historical model.

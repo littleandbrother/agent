@@ -4,6 +4,7 @@ Toy queue expressions below qualify program consumption. They are never
 supplied as a proposed D for the fixed product task or attributed to BF/Pi.
 """
 import copy
+from contextlib import ExitStack
 import importlib.util
 import json
 from pathlib import Path
@@ -12,6 +13,7 @@ import unittest
 from unittest.mock import patch
 
 from bfworld.agentlab.campaign20261019 import ar, ar_service as world
+from campaign_fixtures import archived_ar_reference, published_path, RECORDED_WORKSPACE
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("campaign_ar_service_test", ROOT / "scripts/campaign_ar_service.py")
@@ -34,7 +36,25 @@ def toy():
 class ARServiceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.historical = service.verify_historical()
+        cls.resources = ExitStack()
+        cls.addClassCleanup(cls.resources.close)
+        original_sha = service.sha
+
+        def mounted_sha(path):
+            path = Path(path)
+            if (path.is_relative_to(RECORDED_WORKSPACE)
+                    and not path.is_relative_to(ROOT.parent)):
+                path = published_path(path)
+            return original_sha(path)
+
+        # Frozen metadata keeps the recorded path; its exact bytes are checked
+        # against the published artifact, even when the old home still exists.
+        cls.resources.enter_context(patch.object(service, "sha", side_effect=mounted_sha))
+        historical = copy.deepcopy(service.load_contract())
+        historical["historical_raw"]["path"] = str(
+            cls.resources.enter_context(archived_ar_reference()))
+        with patch.object(service, "load_contract", return_value=historical):
+            cls.historical = service.verify_historical()
         task, cls.candidate = toy()
         cls.task = world.apply_candidate(task, cls.candidate)
         cls.raw = world.simulate_ar(cls.task)

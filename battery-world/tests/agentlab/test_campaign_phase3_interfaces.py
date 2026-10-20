@@ -4,6 +4,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
+from campaign_fixtures import published_path
 
 from bfworld.agentlab.campaign20261019 import phase3_interfaces as p
 
@@ -114,7 +115,7 @@ class Phase3InterfaceTests(unittest.TestCase):
 
     def test_derived_case_catalog_binding_and_digital_boundary(self):
         case = json.loads((CONFIG / "derived-case.json").read_bytes())
-        source = Path(case["source"]["path"])
+        source = published_path(case["source"]["path"])
         self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), case["source"]["sha256"])
         catalog = json.loads(source.read_bytes())
         parent = next(x for x in catalog["cases"] if x["id"] == "C-lite")

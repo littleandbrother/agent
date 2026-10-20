@@ -1503,3 +1503,8 @@ Sealed delivery unchanged: /Users/depengsu/Documents/Long-Horizon AI Agent/deliv
 ## 2026-10-20 GitHub publication candidate
 
 The existing S0 implementation, five-stage research results, full paper sources and 8/11-page engineering reports are prepared for codex/bf-architecture-v2. Full sealed engineering/data bundle is delivered as a GitHub Release asset to avoid large immutable blobs in Git history. Local registered343 repository tests,196 campaign tests,14 storage tests and Pi offline build PASS. No paid/native/scientific episodes rerun. Exact remote SHA/CI and upload result belong to the Release publication-receipt.json; this local receipt does not predict remote CI. H0 and all product/physical limitations unchanged.
+
+
+## GitHub portable CI repair · 2026-10-20
+
+The first published SHA exposed an undeclared jsonschema dependency, host-bound test paths/profiles and automatic formatting of two frozen transport sources. Scoped repair adds exact archived reference/failure fixtures and a separate capability-disabled unit registration, leaves production gates and scientific inputs/evaluators unchanged, and preserves the two frozen source files byte-for-byte. All196 campaign tests pass without the private BF environment; Pi dependency/type/browser checks pass. Full Release ZIP upload and digest readback pass. Remote latest-SHA CI and final publication are recorded separately in the Release publication-receipt.json.

@@ -38,3 +38,7 @@ python3 -B battery-world/papers/interface-sufficiency-20261019/final/E_reproduce
 A/R 保留固定空间 NO_GO、暗区/FIFO FAIL 和产品 NOT_ACCEPTED。独立压电节点的数字验证与目标构建成立；实物制造、装配、电流、启动和 RF 未测，12项 DFM 警告保留。工程通过、模型内结果、物理资格和 Agent 方法收益分别报告。
 
 本次发布复用已通过且输入未变的科学/原生结果；新增工作仅为源码与保存数据验证、打包和 GitHub 发布。十个原 Pi 会话、工程、费用、UNKNOWN、Baseline、Demo 和原失败记录保留。
+
+## 发布兼容性修复
+
+首个推送暴露的本机测试路径、缺失依赖和冻结脚本被格式化的问题已作定向修复。历史输入与失败以7.2MB只读测试夹具提供，测试使用独立且禁用执行能力的身份；没有修改生产资源门禁或科学判据。196项研究流程测试已在不依赖私有BF配置的环境通过，Pi类型、依赖与浏览器检查通过。详见[修复记录](evidence/five-phase-20261020/portable-ci-verification.json)。
