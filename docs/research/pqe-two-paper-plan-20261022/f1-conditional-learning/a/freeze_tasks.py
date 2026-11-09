@@ -1,0 +1,83 @@
+"""Freeze exact-input F1 prospective tasks. No predictor or consumer execution."""
+from copy import deepcopy
+from pathlib import Path
+import hashlib
+import json
+from datetime import datetime,timezone
+from bfworld.agentlab.pqe20261022 import pilot as p, adapter
+from bfworld.agentlab.pqe20261022.executor import identity
+
+ROOT=Path('/Users/depengsu/Documents/Long-Horizon AI Agent')
+PLAN=ROOT/'docs/research/pqe-two-paper-plan-20261022'
+A=PLAN/'f1-conditional-learning/a'
+RULES=A/'TASK-RULES.json'
+
+def rd(path):return json.loads(path.read_text())
+def bind(path):
+ b=path.read_bytes();return {'path':str(path),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+def wr(path,value):
+ with path.open('x') as h:json.dump(value,h,ensure_ascii=False,indent=2,allow_nan=False);h.write('\n')
+
+def add_motion(out,start,angles,speeds):
+ t=start
+ for a,b,speed in zip(angles,angles[1:],speeds):
+  duration=abs(b-a)/speed
+  out.append({'start_s':t,'end_s':t+duration,'start_deg':a,'end_deg':b})
+  t+=duration
+ return t
+
+rules=rd(RULES)
+base_ref=PLAN/'dynamic-decision-m2/a/host/tasks.json'
+base=rd(base_ref)['DOOR-M2-START-TX-20261023-v1']
+original=rd(PLAN/'executable-select-m4/shared/protocol.json')['apparatus_source']
+assert adapter.source_identity()==original
+(A/'host').mkdir(exist_ok=False);(A/'public').mkdir(exist_ok=False)
+tasks={};entries=[]
+for spec in rules['roles']:
+ task=deepcopy(base)
+ task.update(task_id=spec['task_key'],family_id='F1-DOOR-PROSPECTIVE-20261023',
+  description='Record every stable opening and closing in this prescribed24-hour trajectory, using the unchanged service and all legal design-domain actions.',
+  exposure='Prospective F1 task; excluded from formation/H3 context. Used for this package repair/adoption, not post-adoption independent final test.',
+  allowed_for_learning=False,
+  initial_design=deepcopy(spec['initial_design']))
+ task['material_sources'].pop('m2_lineage',None)
+ task['material_sources']['f1_instance']='Deterministic constructed instance frozen before formation. Host generation/qualification receipt is separate; no repair reference.'
+ task['motion']=[];task['gateway_windows']=[[0,task['duration_s']]]
+ if 'conditioning' in spec:
+  c=spec['conditioning'];add_motion(task['motion'],c['start_s'],c['angles_deg'],c['speeds_deg_s'])
+ for start in spec['starts_s']:
+  end=add_motion(task['motion'],start,spec['open_angles_deg'],spec['open_speeds_deg_s'])
+  add_motion(task['motion'],end+spec['open_hold_s'],spec['close_angles_deg'],spec['close_speeds_deg_s'])
+ assert task['initial']==base['initial']
+ for key in ('components','sensor','service','geometry','design_domain','integration'):
+  assert task[key]==base[key],key
+ adapter.validate_design(task,task['initial_design'])
+ assert task['motion']==sorted(task['motion'],key=lambda x:x['start_s'])
+ for s in task['motion']:
+  assert 0<=s['start_s']<s['end_s']<=task['duration_s']
+  assert max(s['start_deg'],s['end_deg'])<=90 and min(s['start_deg'],s['end_deg'])>=0
+  assert abs((s['end_deg']-s['start_deg'])/(s['end_s']-s['start_s']))<=120+1e-8
+ for left,right in zip(task['motion'],task['motion'][1:]):
+  assert left['end_s']<=right['start_s'] and left['end_deg']==right['start_deg']
+ public_path=A/'public'/('task-'+spec['id'].split('-')[1]+'-input.json')
+ packet={'task':p.public_task(task),'initial_design':task['initial_design'],'initial_problem':task['initial_problem']}
+ assert 'initial_design' not in packet['task'] and 'allowed_for_learning' not in packet['task']
+ wr(public_path,packet);tasks[task['task_id']]=task
+ entries.append({'id':spec['id'],'status':'FROZEN_PENDING_QUALIFICATION','task_id':task['task_id'],'task_key':task['task_id'],
+ 'task_canonical_sha256':identity(task),'public_task_canonical_sha256':identity(packet['task']),
+ 'public_input':bind(public_path),'initial_design_sha256':identity(task['initial_design']),
+ 'mechanism':spec['mechanism'],'qualification_candidate_limit':1,'fallback':'NONE'})
+wr(A/'host/tasks.json',tasks)
+for entry in entries:entry['task']=bind(A/'host/tasks.json')
+source_root=Path(adapter.__file__).parent
+freeze={'schema':'f1-A-prequalification-task-freeze-v1','package':rules['package'],'at_utc':datetime.now(timezone.utc).isoformat(),
+ 'status':'TASKS_FROZEN_NO_NUMERICAL_EXECUTION_YET','isolation':rules['isolation'],'rules':bind(RULES),'generator':bind(Path(__file__)),
+ 'base_task_file':bind(base_ref),'tasks':entries,'apparatus_source':adapter.source_identity(),'public_task_source':bind(source_root/'pilot.py'),
+ 'qualification_rule':rules['qualification_rule'],'new_cheap_or_full_or_model_calls_so_far':0,'no_method_performance_observed':True}
+wr(A/'TASK-FREEZE.json',freeze)
+wr(A/'INTERFACE.json',{'schema':'f1-A-task-interface-v1','status':freeze['status'],'task_freeze':bind(A/'TASK-FREEZE.json'),
+ 'final_manifest':str(A/'TASK-MANIFEST.json'),'entry_shape':'id/status/task_key/task_canonical_sha256/task binding/public_input binding/initial_public_result binding; public_task generated by frozen p.public_task',
+ 'qualified_results':'qualification/<id>/01/{decision,raw,assessment,public-result,readback}.json; S0 reuses exact saved input, never reruns qualification.',
+ 'isolation':'Task details and qualification output only A/S0 until formations and H3 frozen; no B message/shared history update.',
+ 'declared_qualification_inputs':2,'max_seconds_each':120,'A_outer_full_input_cap':4,'A_outer_wall_cap_s':480,'new_cheap_model_native_calls':0})
+print(json.dumps({'status':freeze['status'],'tasks':len(tasks),'freeze':bind(A/'TASK-FREEZE.json'),'source':adapter.source_identity(),'new_science_calls':0}))

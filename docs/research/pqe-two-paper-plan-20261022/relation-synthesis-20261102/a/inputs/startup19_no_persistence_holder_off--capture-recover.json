@@ -1,0 +1,484 @@
+{
+  "design_name": "startup19_no_persistence_holder_off",
+  "condition_id": "capture-recover",
+  "task": {
+    "schema_version": "codebt-door-task-v1",
+    "task_id": "PARTIAL-ANCESTOR-20261026-M2r:capture-recover",
+    "family_id": "PARTIAL-ANCESTOR-20261026-M2r",
+    "condition_id": "capture-recover",
+    "duration_s": 86400.0,
+    "description": "Finite constructed cold-contact and powered recovery handoff qualification; no physical claim.",
+    "allowed_for_learning": false,
+    "exposure": "Common prospective conditions, no outcome selection.",
+    "initial": {
+      "angle_deg": 0.0,
+      "capacitor_v": 0.0,
+      "event_counter": 0,
+      "logical_state": 0,
+      "mechanical_stored_j": 0.0,
+      "queue": []
+    },
+    "components": {
+      "boot_a": 0.001,
+      "boot_s": 0.002,
+      "idle_a": 2e-06,
+      "leakage_ohm": 100000000.0,
+      "max_v": 3.3,
+      "tx_a": 0.015,
+      "tx_s": 0.006,
+      "write_a": 0.003,
+      "write_s": 0.002,
+      "provenance": "Original constructed DOOR load assumptions; not calibrated hardware."
+    },
+    "sensor": {
+      "open_deg": 80.0,
+      "closed_deg": 10.0,
+      "bounce_offsets_s": [
+        0.0,
+        0.012,
+        0.024,
+        0.036,
+        0.048
+      ]
+    },
+    "service": {
+      "closed_deg": 10.0,
+      "open_deg": 80.0,
+      "stable_s": 0.06,
+      "receive_deadline_s": 2.0,
+      "handle_force_max_n": 0.5,
+      "require_event_order": true,
+      "require_no_spurious_event_ids": true,
+      "initial_state_event": false,
+      "target_loss_rate": 0.01,
+      "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+      "device_absolute_time": "Unavailable; sequence and direction frame only."
+    },
+    "motion": [
+      {
+        "start_s": 73.0,
+        "end_s": 73.6,
+        "start_deg": 0.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 73.6,
+        "end_s": 74.05,
+        "start_deg": 70.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 74.05,
+        "end_s": 74.5,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 74.5,
+        "end_s": 74.95,
+        "start_deg": 70.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 74.95,
+        "end_s": 75.4,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 75.4,
+        "end_s": 75.85000000000001,
+        "start_deg": 70.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 75.85000000000001,
+        "end_s": 76.30000000000001,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 76.30000000000001,
+        "end_s": 76.75000000000001,
+        "start_deg": 70.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 76.75000000000001,
+        "end_s": 77.20000000000002,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 77.20000000000002,
+        "end_s": 77.38000000000002,
+        "start_deg": 70.0,
+        "end_deg": 90.0
+      },
+      {
+        "start_s": 77.56000000000003,
+        "end_s": 78.26000000000003,
+        "start_deg": 90.0,
+        "end_deg": 11.0
+      },
+      {
+        "start_s": 1198.26,
+        "end_s": 1198.28,
+        "start_deg": 11.0,
+        "end_deg": 9.0
+      },
+      {
+        "start_s": 1198.3999999999999,
+        "end_s": 1199.0060606060606,
+        "start_deg": 9.0,
+        "end_deg": 81.0
+      },
+      {
+        "start_s": 1199.1660606060607,
+        "end_s": 1199.7160606060606,
+        "start_deg": 81.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 1199.7160606060606,
+        "end_s": 1200.1660606060607,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      },
+      {
+        "start_s": 1200.1660606060607,
+        "end_s": 1200.6160606060607,
+        "start_deg": 70.0,
+        "end_deg": 20.0
+      },
+      {
+        "start_s": 1200.6160606060607,
+        "end_s": 1201.0660606060608,
+        "start_deg": 20.0,
+        "end_deg": 70.0
+      }
+    ],
+    "gateway_windows": [
+      [
+        0.0,
+        86400.0
+      ]
+    ],
+    "required_delivery_present": true,
+    "geometry": {
+      "door_height_m": 0.6,
+      "door_width_m": 0.45,
+      "handle_radius_m": 0.4,
+      "installation_envelope_mm": [
+        60,
+        35,
+        20
+      ]
+    },
+    "design_domain": {
+      "brownout_v": {
+        "kind": "number",
+        "min": 1.8,
+        "max": 2.0
+      },
+      "capacitance_f": {
+        "kind": "number",
+        "min": 1e-05,
+        "max": 0.001
+      },
+      "debounce_s": {
+        "kind": "number",
+        "min": 0.0,
+        "max": 0.5
+      },
+      "esr_ohm": {
+        "kind": "number",
+        "min": 0.1,
+        "max": 100.0
+      },
+      "mechanism": {
+        "kind": "mechanism",
+        "editable": {
+          "stroke_m": [
+            0.006,
+            0.0085
+          ],
+          "cam_base_radius_m": [
+            0.006,
+            0.008
+          ]
+        }
+      },
+      "persistent_queue": {
+        "kind": "boolean"
+      },
+      "retry_s": {
+        "kind": "number",
+        "min": 0.01,
+        "max": 1.0
+      },
+      "startup_v": {
+        "kind": "number",
+        "min": 1.9,
+        "max": 3.2
+      },
+      "tx_gate_v": {
+        "kind": "number",
+        "min": 1.8,
+        "max": 3.3
+      },
+      "firmware_policy": {
+        "kind": "enum",
+        "values": [
+          "fixed_retry_v1",
+          "voltage_history_backoff_v1"
+        ]
+      },
+      "backoff_max_s": {
+        "kind": "number",
+        "min": 0.01,
+        "max": 1.0
+      },
+      "tx_reserve_v": {
+        "kind": "number",
+        "min": 0.0,
+        "max": 0.2
+      },
+      "holding_component": {
+        "kind": "enum",
+        "values": [
+          "off",
+          "lp_fifo"
+        ]
+      },
+      "holding_capacity": {
+        "kind": "integer",
+        "min": 1,
+        "max": 4
+      },
+      "holding_overflow": {
+        "kind": "enum",
+        "values": [
+          "drop_new",
+          "overwrite_oldest"
+        ]
+      },
+      "read_source": {
+        "kind": "enum",
+        "values": [
+          "contact_only",
+          "holding_then_contact"
+        ]
+      },
+      "clear_after": {
+        "kind": "enum",
+        "values": [
+          "early",
+          "save",
+          "ack",
+          "never"
+        ]
+      }
+    },
+    "initial_design": {
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "debounce_s": 0.07,
+      "esr_ohm": 5.0,
+      "mechanism": {},
+      "persistent_queue": false,
+      "retry_s": 0.1,
+      "startup_v": 3.2,
+      "tx_gate_v": 2.2,
+      "firmware_policy": "fixed_retry_v1",
+      "backoff_max_s": 1.0,
+      "tx_reserve_v": 0.025,
+      "holding_component": "off",
+      "holding_capacity": 2,
+      "holding_overflow": "drop_new",
+      "read_source": "contact_only",
+      "clear_after": "never"
+    },
+    "integration": {
+      "dt_s": 0.001,
+      "allowed_dt_s": [
+        0.001,
+        0.0005
+      ],
+      "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+    },
+    "selection_rule": {
+      "profile": "M2",
+      "role": "capture-recover",
+      "cold_pause_s": 1120.0,
+      "pulse_start_s": 1198.26,
+      "closed_dwell_s": 0.12,
+      "pulse_open_dwell_s": 0.16,
+      "source_path": "same original continuous cam source",
+      "is_isolated_holdout": false,
+      "expression_amendment": {
+        "version": "M2r-rate-interior-v1",
+        "rate_cap_deg_s": 118.8,
+        "original_task_sha256": "65cf8bd0ca3d0ec74de6db5d26309b2692fedf02831329d8d70a481d06c144bd",
+        "rules": "same angle order and idle gaps; only speed-excess segments lengthened; gateway offsets from first pulse anchor retained"
+      }
+    },
+    "qualification_claim": "Declared constructed model; physical qualification UNKNOWN.",
+    "initial_problem": {
+      "active_variables": [
+        "brownout_v",
+        "capacitance_f",
+        "debounce_s",
+        "esr_ohm",
+        "mechanism",
+        "persistent_queue",
+        "retry_s",
+        "startup_v",
+        "tx_gate_v",
+        "firmware_policy",
+        "backoff_max_s",
+        "tx_reserve_v",
+        "holding_component",
+        "holding_capacity",
+        "holding_overflow",
+        "read_source",
+        "clear_after"
+      ],
+      "groups": [
+        [
+          "brownout_v",
+          "capacitance_f",
+          "debounce_s",
+          "esr_ohm",
+          "mechanism",
+          "persistent_queue",
+          "retry_s",
+          "startup_v",
+          "tx_gate_v",
+          "firmware_policy",
+          "backoff_max_s",
+          "tx_reserve_v",
+          "holding_component",
+          "holding_capacity",
+          "holding_overflow",
+          "read_source",
+          "clear_after"
+        ]
+      ],
+      "fixed_choices": {},
+      "assumptions": [
+        "Original service/components/source/domain are fixed; new finite prescribed motion with zero initial energy."
+      ],
+      "local_objective": "Meet all original service requirements in the common new family."
+    }
+  },
+  "parent_design": {
+    "brownout_v": 1.8,
+    "capacitance_f": 0.001,
+    "debounce_s": 0.07,
+    "esr_ohm": 5.0,
+    "mechanism": {},
+    "persistent_queue": false,
+    "retry_s": 0.1,
+    "startup_v": 3.2,
+    "tx_gate_v": 2.2,
+    "firmware_policy": "fixed_retry_v1",
+    "backoff_max_s": 1.0,
+    "tx_reserve_v": 0.025,
+    "holding_component": "off",
+    "holding_capacity": 2,
+    "holding_overflow": "drop_new",
+    "read_source": "contact_only",
+    "clear_after": "never"
+  },
+  "problem": {
+    "active_variables": [
+      "brownout_v",
+      "capacitance_f",
+      "debounce_s",
+      "esr_ohm",
+      "mechanism",
+      "persistent_queue",
+      "retry_s",
+      "startup_v",
+      "tx_gate_v",
+      "firmware_policy",
+      "backoff_max_s",
+      "tx_reserve_v",
+      "holding_component",
+      "holding_capacity",
+      "holding_overflow",
+      "read_source",
+      "clear_after"
+    ],
+    "groups": [
+      [
+        "brownout_v",
+        "capacitance_f",
+        "debounce_s",
+        "esr_ohm",
+        "mechanism",
+        "persistent_queue",
+        "retry_s",
+        "startup_v",
+        "tx_gate_v",
+        "firmware_policy",
+        "backoff_max_s",
+        "tx_reserve_v",
+        "holding_component",
+        "holding_capacity",
+        "holding_overflow",
+        "read_source",
+        "clear_after"
+      ]
+    ],
+    "fixed_choices": {},
+    "assumptions": [
+      "Original service/components/source/domain are fixed; new finite prescribed motion with zero initial energy."
+    ],
+    "local_objective": "Meet all original service requirements in the common new family."
+  },
+  "design": {
+    "brownout_v": 1.8,
+    "capacitance_f": 0.001,
+    "debounce_s": 0.07,
+    "esr_ohm": 5.0,
+    "mechanism": {},
+    "persistent_queue": false,
+    "retry_s": 0.1,
+    "startup_v": 1.9,
+    "tx_gate_v": 2.2,
+    "firmware_policy": "fixed_retry_v1",
+    "backoff_max_s": 1.0,
+    "tx_reserve_v": 0.025,
+    "holding_component": "off",
+    "holding_capacity": 2,
+    "holding_overflow": "drop_new",
+    "read_source": "contact_only",
+    "clear_after": "never"
+  },
+  "decision": {
+    "actual_input": {
+      "operation": "edit",
+      "design_patch": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": false,
+        "retry_s": 0.1,
+        "startup_v": 1.9,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "off",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      }
+    }
+  }
+}

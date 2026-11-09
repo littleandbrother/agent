@@ -1,0 +1,1048 @@
+{
+  "instruction": "Real accountable BF design-method callback. Return validated JSON actions, not executable code outside the loaded H. Return exactly one JSON object using the supplied site contract. No Markdown. No filesystem, shell, native tools, credentials or hidden evaluator. Only supplied public facts and declared PUBLIC_TOOLS are available. Public paging references resolve through public_object. No update, uncertainty, scoped rejection and supported stop are valid. Do not change science, permissions, quotas, accounting or adoption.",
+  "request": {
+    "site": "strong_generic_free_joint_design",
+    "task_family": [
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Three smooth complete warm cycles with ample stable endpoint holds and uninterrupted link; complex holder enabling is optional, never required by task construction.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 90,
+            "end_s": 62.5,
+            "start_deg": 0,
+            "start_s": 61.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 64.5,
+            "start_deg": 90,
+            "start_s": 63.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 67.5,
+            "start_deg": 0,
+            "start_s": 66.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 69.5,
+            "start_deg": 90,
+            "start_s": 68.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 72.5,
+            "start_deg": 0,
+            "start_s": 71.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 74.5,
+            "start_deg": 90,
+            "start_s": 73.0
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:local-repair-control",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      },
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Widely separated complete cycles and split-speed strokes change when mechanical work reaches the store relative to stable contact events; continuous link isolates source/event timing.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 74,
+            "end_s": 74.1,
+            "start_deg": 0,
+            "start_s": 73.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 74.28,
+            "start_deg": 74,
+            "start_s": 74.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 75.42999999999999,
+            "start_deg": 90,
+            "start_s": 74.47999999999999
+          },
+          {
+            "end_deg": 0,
+            "end_s": 75.61,
+            "start_deg": 16,
+            "start_s": 75.42999999999999
+          },
+          {
+            "end_deg": 74,
+            "end_s": 212.1,
+            "start_deg": 0,
+            "start_s": 211.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 212.28,
+            "start_deg": 74,
+            "start_s": 212.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 213.42999999999998,
+            "start_deg": 90,
+            "start_s": 212.48
+          },
+          {
+            "end_deg": 0,
+            "end_s": 213.60999999999999,
+            "start_deg": 16,
+            "start_s": 213.42999999999998
+          },
+          {
+            "end_deg": 74,
+            "end_s": 51018.1,
+            "start_deg": 0,
+            "start_s": 51017.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 51018.28,
+            "start_deg": 74,
+            "start_s": 51018.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 51019.42999999999,
+            "start_deg": 90,
+            "start_s": 51018.479999999996
+          },
+          {
+            "end_deg": 0,
+            "end_s": 51019.60999999999,
+            "start_deg": 16,
+            "start_s": 51019.42999999999
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:cold-contact-challenge",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      },
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Three complete strokes with a finite 0.9s gateway outage around each opening; the unchanged two-second delivery deadline applies and no future gateway observation is added.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            95.9
+          ],
+          [
+            96.8,
+            101.9
+          ],
+          [
+            102.8,
+            43019.9
+          ],
+          [
+            43020.8,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 90,
+            "end_s": 96.25,
+            "start_deg": 0,
+            "start_s": 95.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 97.85,
+            "start_deg": 90,
+            "start_s": 96.6
+          },
+          {
+            "end_deg": 90,
+            "end_s": 102.25,
+            "start_deg": 0,
+            "start_s": 101.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 103.85,
+            "start_deg": 90,
+            "start_s": 102.6
+          },
+          {
+            "end_deg": 90,
+            "end_s": 43020.25,
+            "start_deg": 0,
+            "start_s": 43019.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 43021.85,
+            "start_deg": 90,
+            "start_s": 43020.6
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:link-recovery-challenge",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      }
+    ],
+    "current_nodes": [
+      {
+        "id": "node-72f3730cc55524c426b82e76",
+        "design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 5.0,
+          "mechanism": {},
+          "persistent_queue": false,
+          "retry_s": 0.1,
+          "startup_v": 2.2,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.025,
+          "holding_component": "off",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "contact_only",
+          "clear_after": "never"
+        },
+        "parent_id": null,
+        "slot": 0,
+        "observations": {
+          "statuses": [
+            "PASS",
+            "FAIL",
+            "FAIL"
+          ],
+          "stage_counts": {
+            "capture": 24,
+            "save": 24,
+            "tx": 21,
+            "receive": 10,
+            "ack": 18,
+            "clear": 0
+          },
+          "received_count": 10,
+          "model_valid": true
+        }
+      }
+    ],
+    "initial_results": {
+      "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+      "section": "",
+      "type": "dict",
+      "count": 6,
+      "read": {
+        "name": "public_object",
+        "arguments": {
+          "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+          "section": "",
+          "offset": 0
+        }
+      },
+      "summary": {
+        "design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 5.0,
+          "mechanism": {},
+          "persistent_queue": false,
+          "retry_s": 0.1,
+          "startup_v": 2.2,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.025,
+          "holding_component": "off",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "contact_only",
+          "clear_after": "never"
+        },
+        "results": {
+          "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+          "section": "/results",
+          "type": "list",
+          "count": 3,
+          "read": {
+            "name": "public_object",
+            "arguments": {
+              "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results",
+              "offset": 0
+            }
+          }
+        },
+        "model_valid": true,
+        "execution_status": "COMPLETE",
+        "public_check": {
+          "verdict": "FAIL"
+        },
+        "usage": {
+          "full_inputs": 3,
+          "full_wall_s": 4.175973583012819,
+          "logical_inputs": 3,
+          "cache_reuses": 0
+        }
+      }
+    },
+    "own_evaluated_results": [],
+    "public_page_history": [
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results",
+        "offset": 0,
+        "next_offset": null,
+        "type": "list",
+        "total": 3,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "last_feedback": null,
+    "site_contract": {
+      "outputs": [
+        {
+          "design": "complete legal design object",
+          "parent_id": "optional evaluated node id"
+        },
+        {
+          "final_design": "explicit already evaluated full design object"
+        },
+        {
+          "tool_calls": [
+            {
+              "name": "public_object",
+              "arguments": {
+                "object_id": "pub-64hex",
+                "section": "RFC6901",
+                "offset": 0
+              }
+            }
+          ]
+        }
+      ],
+      "candidate_slots_excluding_initial": 6,
+      "public_reads": 64,
+      "freedom": "Any legal whole-design edits or restarts. Every evaluated failed ancestor remains available. Initial observations do not use candidate slots.",
+      "semantics": "Absent stage is UNKNOWN. Numeric seq is not globally unique. Read pages remain verbatim in public_page_history across all queries. No filesystem, private reference or code execution."
+    },
+    "remaining": {
+      "design_slots": 6,
+      "logical_condition_evaluations": 18,
+      "provider_requests": 11,
+      "public_reads": 63,
+      "output_tokens": 130448,
+      "usd": 4.997465,
+      "wall_s": 894.5021399999969
+    },
+    "public_paging": {
+      "version": "M3-public-objects-v1",
+      "tool": "public_object",
+      "row_cap": 6,
+      "byte_cap": 1800,
+      "section_syntax": "RFC6901 JSON pointer",
+      "rule": "Every referenced original public field is readable. Scalar facts, unknowns and validity conditions are factual summaries; no recommended actions. Pages may refer to a large row; read its section.",
+      "history": "All read pages retained inline, including previous design queries."
+    },
+    "PUBLIC_TOOLS": [
+      {
+        "name": "public_object",
+        "arguments": {
+          "object_id": "pub-...",
+          "section": "",
+          "offset": 0
+        }
+      }
+    ],
+    "max_output_tokens": 32768
+  },
+  "max_output_tokens": 32768
+}

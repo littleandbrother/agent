@@ -1,0 +1,119 @@
+{
+  "task_sha256": "53abc16a5b057ac9c2e025f293e76903558e5ffbb21b2e90aadf8cca76c3778d",
+  "parent_design_sha256": "72f3730cc55524c426b82e7626ce1ce9f2a169f548ca05a1d59dca9d9a1f5e11",
+  "actual_design": {
+    "brownout_v": 1.8,
+    "capacitance_f": 0.00068,
+    "debounce_s": 0.07,
+    "esr_ohm": 5.0,
+    "mechanism": {},
+    "persistent_queue": true,
+    "retry_s": 0.1,
+    "startup_v": 1.9,
+    "tx_gate_v": 2.2,
+    "firmware_policy": "fixed_retry_v1",
+    "backoff_max_s": 1.0,
+    "tx_reserve_v": 0.025,
+    "holding_component": "off",
+    "holding_capacity": 2,
+    "holding_overflow": "drop_new",
+    "read_source": "contact_only",
+    "clear_after": "never"
+  },
+  "problem": {
+    "active_variables": [
+      "brownout_v",
+      "capacitance_f",
+      "debounce_s",
+      "esr_ohm",
+      "mechanism",
+      "persistent_queue",
+      "retry_s",
+      "startup_v",
+      "tx_gate_v",
+      "firmware_policy",
+      "backoff_max_s",
+      "tx_reserve_v",
+      "holding_component",
+      "holding_capacity",
+      "holding_overflow",
+      "read_source",
+      "clear_after"
+    ],
+    "groups": [
+      [
+        "brownout_v",
+        "capacitance_f",
+        "debounce_s",
+        "esr_ohm",
+        "mechanism",
+        "persistent_queue",
+        "retry_s",
+        "startup_v",
+        "tx_gate_v",
+        "firmware_policy",
+        "backoff_max_s",
+        "tx_reserve_v",
+        "holding_component",
+        "holding_capacity",
+        "holding_overflow",
+        "read_source",
+        "clear_after"
+      ]
+    ],
+    "fixed_choices": {},
+    "assumptions": [
+      "Original continuous cam source, loads, dimensions, service, legal domain and existing firmware/holder contracts are fixed."
+    ],
+    "local_objective": "Meet all original service requirements in the common new family."
+  },
+  "decision": {
+    "actual_input": {
+      "operation": "edit",
+      "design_patch": {
+        "capacitance_f": 0.00068,
+        "persistent_queue": true,
+        "startup_v": 1.9
+      },
+      "problem_patch": {
+        "active_variables": [
+          "brownout_v",
+          "capacitance_f",
+          "debounce_s",
+          "esr_ohm",
+          "mechanism",
+          "persistent_queue",
+          "retry_s",
+          "startup_v",
+          "tx_gate_v",
+          "firmware_policy",
+          "backoff_max_s",
+          "tx_reserve_v",
+          "holding_component",
+          "holding_capacity",
+          "holding_overflow",
+          "read_source",
+          "clear_after"
+        ]
+      },
+      "dt_s": 0.001
+    }
+  },
+  "sources": {
+    "door_model.py": "eabc8a422ece68b36bcaf0d194a2332f1941a5bc24d541dd7d4ff1dac96e3d53",
+    "door_program.py": "f5e05fde4534a09f61364cf6a7f37660781ca7fc497a008e488962b7358e8cc2",
+    "engineering.py": "b21abc3fdd35768afb475cddc96a887123e6a0f2380e5289bcbd24505d51acec",
+    "executor.py": "36803b22b9495e8cd9050b61795b95876f0ef801f7c0e7057444bdae8247b2b0",
+    "evaluator.py": "5ca8799028fb2af212f62207bd00a868d3518aec37b2739f5a78121d3817cde3",
+    "adapter.py": "fce8c5ff1dbc93b54cac1992224f24ee88b7f436e5042522ba0cb2b559990caf",
+    "public_projection.py": "903a91072488a3121ecae832470a6da96922a96d2101f994ed5e60b1ad44f40a",
+    "bold/consumer.py": "02b00d2e058bdfd0d2b2fc08ae600bfdd47a46b85fc784e44e24c5d2d5e22477",
+    "bold/firmware.py": "87f6663877c09dda8732f02ec4f50b99067db37738d6f82dac8a5aa431fad95f",
+    "codebt/adapter.py": "ac60fff5f9986e86c3b82412a78567a444f427ba930a4d889293b407bbed89d4",
+    "codebt/consumer.py": "3b15295b9cfdbaf7761c578d557a8414de56e57064a9a48baf48d5dfa2a4270b",
+    "codebt/holding.py": "ce32fc759d4c76c7897dbb209e22b9279f490226ab1552631cdbce87532f9916",
+    "codebt/task.py": "dee526d67740590716f93566c0356ca4d176098185e01dd994e7c78ffc20d0c1",
+    "codebt/facts.py": "600570608da0d49bacf0533fa457dd3c4fa91aacb661a10f4bb6cca16da86237",
+    "codebt/bounds.py": "d123b269a95e7c24f6db263eacd6b9a258ad41ee8c653417d6de5c0dd6761ca5"
+  }
+}

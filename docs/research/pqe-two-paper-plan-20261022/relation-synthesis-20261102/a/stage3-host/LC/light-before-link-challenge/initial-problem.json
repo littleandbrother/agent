@@ -1,0 +1,39 @@
+{
+  "active_variables": [
+    "area_cm2",
+    "capacitance_f",
+    "esr_ohm",
+    "startup_v",
+    "brownout_v",
+    "persistent_records",
+    "nvm_capacity_records",
+    "sample_period_s",
+    "ack_spacing_s",
+    "retry_s"
+  ],
+  "groups": [
+    [
+      "area_cm2",
+      "capacitance_f",
+      "esr_ohm",
+      "startup_v",
+      "brownout_v"
+    ],
+    [
+      "persistent_records",
+      "nvm_capacity_records"
+    ],
+    [
+      "sample_period_s",
+      "ack_spacing_s",
+      "retry_s"
+    ]
+  ],
+  "fixed_choices": {},
+  "assumptions": [
+    "Original 24h service and spatial/optical hard bounds remain fixed.",
+    "The declared finite development action box changes real supply/activity/record/receive behavior.",
+    "A sampling gap or unknown-time record is not valid continuous history."
+  ],
+  "local_objective": "Meet every applicable frozen LC-PV service; report scope of any remaining failure."
+}

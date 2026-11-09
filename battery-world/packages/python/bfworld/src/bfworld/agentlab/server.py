@@ -924,10 +924,14 @@ def main():
     # Bind experiment attempts to loaded code, not only a mutable checkout.
     import hashlib, marshal, os, sys
     from . import provider as provider_module
+    from . import recovery as recovery_module, historical_usage
     receipt={'pid':os.getpid(),'started':time.time(),'python':sys.version,'port':args.port,
         'provider_file':str(Path(provider_module.__file__).resolve()),
         'provider_source_sha256':hashlib.sha256(Path(provider_module.__file__).read_bytes()).hexdigest(),
         'provider_code_sha256':hashlib.sha256(marshal.dumps(provider_module.Provider.complete.__code__)).hexdigest(),
+        'recovery_source_sha256':hashlib.sha256(Path(recovery_module.__file__).read_bytes()).hexdigest(),
+        'recovery_guard_code_sha256':hashlib.sha256(marshal.dumps(recovery_module.Recovery.unknown_blockers.__code__)).hexdigest(),
+        'historical_usage_source_sha256':hashlib.sha256(Path(historical_usage.__file__).read_bytes()).hexdigest(),
         'server_source_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'authorized_study_stream_seconds':1200,'default_stream_seconds':provider_module.STREAM_SECONDS,
         'keepalive_forwarded':True}

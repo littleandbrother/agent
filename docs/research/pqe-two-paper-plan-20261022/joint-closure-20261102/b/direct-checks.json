@@ -1,0 +1,1069 @@
+{
+  "schema": "BFA101-B-direct-checks-v1",
+  "at": "2026-11-02T13:53:57.070124+00:00",
+  "software_cases": 8,
+  "PASS": 8,
+  "FAIL": 0,
+  "cases": [
+    {
+      "name": "same_parent_joint_recalculation",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "joint_patch": {
+          "capacity": 8.0,
+          "rate": 3.0
+        },
+        "actual_candidate_numeric_product": 24.0
+      },
+      "wall_s": 0.004295541992178187
+    },
+    {
+      "name": "update_preserves_actual_parent_and_model_freedom",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "current_parent": "parent-7e612b82f1a6f7539fe1ee98",
+        "archive_size": 3,
+        "automatic_restart": false
+      },
+      "wall_s": 0.004830833000596613
+    },
+    {
+      "name": "conflict_and_candidate_evidence_invalidation",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "conflicts": [
+          {
+            "field": "capacity",
+            "kind": "INCOMPATIBLE_BOUNDS",
+            "sources": [
+              {
+                "field": "capacity",
+                "relation": ">=",
+                "value": 12.0
+              },
+              {
+                "field": "capacity",
+                "relation": "<=",
+                "value": 4.0
+              }
+            ]
+          },
+          {
+            "field": "capacity",
+            "kind": "INCOMPATIBLE_BOUNDS",
+            "sources": [
+              {
+                "field": "capacity",
+                "relation": ">=",
+                "value": 12.0
+              },
+              {
+                "field": "capacity",
+                "relation": "<=",
+                "value": 4.0
+              }
+            ]
+          }
+        ],
+        "candidate_old_evidence_invalidated": true
+      },
+      "wall_s": 0.0025997909833677113
+    },
+    {
+      "name": "inactive_fields_and_authority",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "inactive_normalization": {
+          "holding_capacity": 2
+        },
+        "unauthorized_RTC_rejected": true
+      },
+      "wall_s": 0.00028658300288952887
+    },
+    {
+      "name": "candidate_fact_companion_recheck",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "actual_chain": [
+          {
+            "design": {
+              "capacity": 2.0,
+              "rate": 5.0,
+              "durable": false,
+              "producer": true,
+              "reader": false,
+              "clear": "never"
+            },
+            "facts_sha256": "6af72bf12b5c0d9a8aa7ef8de416f22aa23c21c094c2dd7ed2913395739583f9",
+            "changed_obligations": [
+              {
+                "id": "9dd7123746b045df82786dbf461d516f3d085fcd11f97b4ef5973b3e466a8e7f",
+                "kind": "CONSUMPTION",
+                "subject": "record",
+                "holds": false,
+                "applicable": true,
+                "dependencies": [
+                  "reader"
+                ],
+                "source_refs": [
+                  "SOFTWARE_FIXTURE:consumer"
+                ],
+                "predicate": {
+                  "fixture": "producer must have reader"
+                },
+                "source_check": {
+                  "kind": "CONSUMPTION",
+                  "subject": "record",
+                  "holds": false,
+                  "applicable": true,
+                  "dependencies": [
+                    "reader"
+                  ],
+                  "predicate": {
+                    "fixture": "producer must have reader"
+                  },
+                  "refs": [
+                    "SOFTWARE_FIXTURE:consumer"
+                  ]
+                },
+                "status": "UNMET_STATIC_COMPANION",
+                "physical_service": "UNKNOWN"
+              },
+              {
+                "id": "0767079a15dfc6ae8a87b9f772d863e2705a9ac131d1f82af63f1bac569d33d6",
+                "kind": "DYNAMIC_ENERGY",
+                "subject": "load",
+                "holds": null,
+                "applicable": true,
+                "dependencies": [
+                  "capacity",
+                  "rate",
+                  "producer",
+                  "reader"
+                ],
+                "source_refs": [
+                  "SOFTWARE_FIXTURE:energy"
+                ],
+                "predicate": {
+                  "fixture": "requires full observation"
+                },
+                "source_check": {
+                  "kind": "DYNAMIC_ENERGY",
+                  "subject": "load",
+                  "holds": null,
+                  "applicable": true,
+                  "dependencies": [
+                    "capacity",
+                    "rate",
+                    "producer",
+                    "reader"
+                  ],
+                  "predicate": {
+                    "fixture": "requires full observation"
+                  },
+                  "refs": [
+                    "SOFTWARE_FIXTURE:energy"
+                  ]
+                },
+                "status": "UNKNOWN",
+                "physical_service": "UNKNOWN"
+              }
+            ],
+            "transition": null
+          },
+          {
+            "design": {
+              "capacity": 2.0,
+              "rate": 5.0,
+              "durable": false,
+              "producer": true,
+              "reader": true,
+              "clear": "never"
+            },
+            "facts_sha256": "f58f0a5ef5cccbbb7c0f8e65dd0323313076e38daa4901cf7008157b41a963d8",
+            "changed_obligations": [
+              {
+                "id": "9dd7123746b045df82786dbf461d516f3d085fcd11f97b4ef5973b3e466a8e7f",
+                "kind": "CONSUMPTION",
+                "subject": "record",
+                "holds": true,
+                "applicable": true,
+                "dependencies": [
+                  "reader"
+                ],
+                "source_refs": [
+                  "SOFTWARE_FIXTURE:consumer"
+                ],
+                "predicate": {
+                  "fixture": "producer must have reader"
+                },
+                "source_check": {
+                  "kind": "CONSUMPTION",
+                  "subject": "record",
+                  "holds": true,
+                  "applicable": true,
+                  "dependencies": [
+                    "reader"
+                  ],
+                  "predicate": {
+                    "fixture": "producer must have reader"
+                  },
+                  "refs": [
+                    "SOFTWARE_FIXTURE:consumer"
+                  ]
+                },
+                "status": "SUPPORTED_STATIC_CONTRACT",
+                "physical_service": "UNKNOWN"
+              },
+              {
+                "id": "0767079a15dfc6ae8a87b9f772d863e2705a9ac131d1f82af63f1bac569d33d6",
+                "kind": "DYNAMIC_ENERGY",
+                "subject": "load",
+                "holds": null,
+                "applicable": true,
+                "dependencies": [
+                  "capacity",
+                  "rate",
+                  "producer",
+                  "reader"
+                ],
+                "source_refs": [
+                  "SOFTWARE_FIXTURE:energy"
+                ],
+                "predicate": {
+                  "fixture": "requires full observation"
+                },
+                "source_check": {
+                  "kind": "DYNAMIC_ENERGY",
+                  "subject": "load",
+                  "holds": null,
+                  "applicable": true,
+                  "dependencies": [
+                    "capacity",
+                    "rate",
+                    "producer",
+                    "reader"
+                  ],
+                  "predicate": {
+                    "fixture": "requires full observation"
+                  },
+                  "refs": [
+                    "SOFTWARE_FIXTURE:energy"
+                  ]
+                },
+                "status": "UNKNOWN",
+                "physical_service": "UNKNOWN"
+              }
+            ],
+            "transition": {
+              "consumed_actual_obligation": {
+                "id": "9dd7123746b045df82786dbf461d516f3d085fcd11f97b4ef5973b3e466a8e7f",
+                "kind": "CONSUMPTION",
+                "subject": "record",
+                "holds": false,
+                "applicable": true,
+                "dependencies": [
+                  "reader"
+                ],
+                "source_refs": [
+                  "SOFTWARE_FIXTURE:consumer"
+                ],
+                "predicate": {
+                  "fixture": "producer must have reader"
+                },
+                "source_check": {
+                  "kind": "CONSUMPTION",
+                  "subject": "record",
+                  "holds": false,
+                  "applicable": true,
+                  "dependencies": [
+                    "reader"
+                  ],
+                  "predicate": {
+                    "fixture": "producer must have reader"
+                  },
+                  "refs": [
+                    "SOFTWARE_FIXTURE:consumer"
+                  ]
+                },
+                "status": "UNMET_STATIC_COMPANION",
+                "physical_service": "UNKNOWN"
+              },
+              "patch": {
+                "reader": true
+              },
+              "kind": "CANDIDATE_FACTS_TO_COMPANION_RECHECK",
+              "depth": 1,
+              "dynamic_service_satisfied": false
+            }
+          }
+        ],
+        "clear_guarantee_fixture": {
+          "early": false,
+          "save": true,
+          "ack": true
+        },
+        "attempts": [
+          {
+            "target": "9dd7123746b045df82786dbf461d516f3d085fcd11f97b4ef5973b3e466a8e7f",
+            "patch": {
+              "reader": true
+            },
+            "facts_sha256": "f58f0a5ef5cccbbb7c0f8e65dd0323313076e38daa4901cf7008157b41a963d8",
+            "improved_static_support": true
+          }
+        ]
+      },
+      "wall_s": 0.00226791700697504
+    },
+    {
+      "name": "unknown_permitted_probe_not_static_PASS",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "unknowns": 1,
+        "conditional_candidate_returned": true,
+        "no_dispatch": true
+      },
+      "wall_s": 0.004241290997015312
+    },
+    {
+      "name": "common_joint_layer_only_recursion_cut",
+      "status": "PASS",
+      "details": {
+        "fixture_only": true,
+        "common_pool_sha256": "cf36ac3c931934f35328cc88b36ae5400c8e62c0daf3d4d79d39aeb62b93f379",
+        "identical_archive": true
+      },
+      "wall_s": 0.00739512502332218
+    },
+    {
+      "name": "actual_A_interfaces_two_public_prefixes",
+      "status": "PASS",
+      "details": {
+        "actual_A_source": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py",
+        "prefixes": [
+          {
+            "prefix": "identity-progress",
+            "common_pool_equal": true,
+            "candidate_counts": [
+              2,
+              2
+            ],
+            "joint_patches": [
+              {
+                "esr_ohm": 0.1,
+                "startup_v": 1.9
+              }
+            ]
+          },
+          {
+            "prefix": "saved-undelivered",
+            "common_pool_equal": true,
+            "candidate_counts": [
+              2,
+              3
+            ],
+            "joint_patches": [
+              {
+                "capacitance_f": 0.000130162425986256,
+                "esr_ohm": 0.1,
+                "startup_v": 1.9
+              }
+            ]
+          }
+        ],
+        "LC_hardware_variables_active": true,
+        "LC_joint_patches": [
+          {
+            "capacitance_f": 0.013499999999999998
+          }
+        ],
+        "full_consumers": 0
+      },
+      "wall_s": 3.9123142920143437
+    }
+  ],
+  "actual_resource_events": [
+    {
+      "kind": "structural",
+      "key": "c047ce83fbeb4bf94cd84c68378fbe462f0d71d4af12f3ad214b13ba2568483a",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_miss",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": true
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "c047ce83fbeb4bf94cd84c68378fbe462f0d71d4af12f3ad214b13ba2568483a",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "000ac5b349ade4ab5193cc2c590a26ca29f94b4a5a24240ef1464aff440df6cb",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "8a9ad4d4c36c9fd9a490ef881e8d7180bd32ed780b8ce3f7c199241efe2cf335",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "8a9ad4d4c36c9fd9a490ef881e8d7180bd32ed780b8ce3f7c199241efe2cf335",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "bda84920a9cdf505a2312cd061e70db17a3eed4dc1a83e7379ee3e0766690614",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "5462e0751b19ad63d4014251581506fcb89bbbd41db849203ab0fe88a85c20c4",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_miss",
+      "key": "c9bc4628ecc1e4ad4c4d1de30cedface12917ebf0cd9af11119890db3cd0b5f0",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": true
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "5462e0751b19ad63d4014251581506fcb89bbbd41db849203ab0fe88a85c20c4",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "c9bc4628ecc1e4ad4c4d1de30cedface12917ebf0cd9af11119890db3cd0b5f0",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "de40e73cdddc77add9959f6218e3e6c1da263d5d961b39510741855cb84fdee8",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "c047ce83fbeb4bf94cd84c68378fbe462f0d71d4af12f3ad214b13ba2568483a",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "c047ce83fbeb4bf94cd84c68378fbe462f0d71d4af12f3ad214b13ba2568483a",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "000ac5b349ade4ab5193cc2c590a26ca29f94b4a5a24240ef1464aff440df6cb",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "8a9ad4d4c36c9fd9a490ef881e8d7180bd32ed780b8ce3f7c199241efe2cf335",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "8a9ad4d4c36c9fd9a490ef881e8d7180bd32ed780b8ce3f7c199241efe2cf335",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "bda84920a9cdf505a2312cd061e70db17a3eed4dc1a83e7379ee3e0766690614",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "5462e0751b19ad63d4014251581506fcb89bbbd41db849203ab0fe88a85c20c4",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "c9bc4628ecc1e4ad4c4d1de30cedface12917ebf0cd9af11119890db3cd0b5f0",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "5462e0751b19ad63d4014251581506fcb89bbbd41db849203ab0fe88a85c20c4",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "c9bc4628ecc1e4ad4c4d1de30cedface12917ebf0cd9af11119890db3cd0b5f0",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "de40e73cdddc77add9959f6218e3e6c1da263d5d961b39510741855cb84fdee8",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d962601d1571f161553890f7291a9c0f01ae52ce69f9557ed988c4fb24f071d8",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d962601d1571f161553890f7291a9c0f01ae52ce69f9557ed988c4fb24f071d8",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "70365db0b9661cfe9f2af478f33ab771da40423fc9772417a51e9e88a1644159",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "aea0a73760af9835e93b730c4ca3a21441c876ecb33c031907f98d1c430366bd",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "aea0a73760af9835e93b730c4ca3a21441c876ecb33c031907f98d1c430366bd",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "6ad9bdb6718f9f4d9f463540a74e2ac46a9753de75abb920922f740858560d50",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "3f636e222c435868a822ebb4e1e9cf7c72e42ea9fa632d6bb5eee4f0f3e30612",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "3f636e222c435868a822ebb4e1e9cf7c72e42ea9fa632d6bb5eee4f0f3e30612",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "301f3285677bae2fb1c905322b24807f765e5ae45dee1f5062759ed096d9a132",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d962601d1571f161553890f7291a9c0f01ae52ce69f9557ed988c4fb24f071d8",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d962601d1571f161553890f7291a9c0f01ae52ce69f9557ed988c4fb24f071d8",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "70365db0b9661cfe9f2af478f33ab771da40423fc9772417a51e9e88a1644159",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "aea0a73760af9835e93b730c4ca3a21441c876ecb33c031907f98d1c430366bd",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "aea0a73760af9835e93b730c4ca3a21441c876ecb33c031907f98d1c430366bd",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "6ad9bdb6718f9f4d9f463540a74e2ac46a9753de75abb920922f740858560d50",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "3f636e222c435868a822ebb4e1e9cf7c72e42ea9fa632d6bb5eee4f0f3e30612",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "3f636e222c435868a822ebb4e1e9cf7c72e42ea9fa632d6bb5eee4f0f3e30612",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "memo_hit",
+      "key": "301f3285677bae2fb1c905322b24807f765e5ae45dee1f5062759ed096d9a132",
+      "details": {
+        "operation": "all",
+        "family": "DOOR"
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "42f4aed6c7af08b6b307e518a75889f844b8a92da3d6a46dc98202c76b6abf7e",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "23b1cc5eb8b2a64480d21ffda83dd4549cc407b70f07d47c33f2d708a9b9bd62",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "23b1cc5eb8b2a64480d21ffda83dd4549cc407b70f07d47c33f2d708a9b9bd62",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "50825fca8cff02f8ef72d014a85d8c7ed7e15583ccd424d696c5f07d939882e9",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "b92e76a4035691d19c535bb425730413f3c7c8676e2c5915976ccbb87b9b4a4b",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "e70877fba85f1d425df2a50d8ee3305d36b7f5c19d49ea96f4b55436d77cc5f0",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "e70877fba85f1d425df2a50d8ee3305d36b7f5c19d49ea96f4b55436d77cc5f0",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "244a42c2e24174a4ab9c313402231b177009c57354b5d895e168b155a044dabe",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d223da9b3832b2cb1259a7dc167d9bb399fafd9f37c057f2db2a7a1bdccedb90",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "d223da9b3832b2cb1259a7dc167d9bb399fafd9f37c057f2db2a7a1bdccedb90",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "ce348d3eb85b8f34b53d56b35d045f946a33e7f5ff083b4095249ace38fbedd0",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "88fb9509195fd515177927fb112f80e48bea88f56f35f127626473facf2d86f4",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "88fb9509195fd515177927fb112f80e48bea88f56f35f127626473facf2d86f4",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "e68ec3299211241bc3a5316e019cd70d1cfe8b0c1f0420b16615249360c125b4",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    }
+  ],
+  "full_consumers": 0,
+  "provider_calls": 0,
+  "forbidden_full_attempts": [],
+  "cheap_numeric_inputs": 11,
+  "actual_geometry_misses": 2,
+  "cheap_total_cap": 24,
+  "cheap_total_charged": 13,
+  "software_fixture_cases_are_not_science": true,
+  "wall_s": 3.9389710830000695,
+  "PYTHONDONTWRITEBYTECODE": "1"
+}

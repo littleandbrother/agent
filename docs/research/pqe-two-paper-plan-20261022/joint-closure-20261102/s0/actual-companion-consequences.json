@@ -1,0 +1,1459 @@
+{
+  "at": "2026-11-02T13:58:15.420380+00:00",
+  "status": "COMPLETE",
+  "source": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/direct-prefix-generations.json.gz",
+    "sha256": "05c7b08eabb2375606ad6c194f8ab3aaa47756b31acc89bd4ea8298b2023b43e"
+  },
+  "candidate_id": "candidate-523b61309028a5a4eb0027d8",
+  "closure_chain": [
+    {
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.0001,
+        "debounce_s": 0.07,
+        "esr_ohm": 49.80630328737728,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.06260880708217582,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "facts_sha256": "e46e91191dbf7e2569980587156309cf6d716c2c9350934cf2d5ddd80c92f9cb",
+      "changed_obligations": [
+        {
+          "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+          "kind": "CONSUMPTION",
+          "subject": "holding_record",
+          "holds": false,
+          "applicable": true,
+          "dependencies": [
+            "holding_component",
+            "read_source"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+          ],
+          "predicate": {
+            "any_enabled_reader_for": "holding_record",
+            "from_fact_ids": [
+              "holder.production",
+              "program.read"
+            ]
+          },
+          "source_check": {
+            "kind": "CONSUMPTION",
+            "subject": "holding_record",
+            "holds": false,
+            "predicate": {
+              "any_enabled_reader_for": "holding_record",
+              "from_fact_ids": [
+                "holder.production",
+                "program.read"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "holding_component",
+              "read_source"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+              "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+            ]
+          },
+          "status": "UNMET_STATIC_COMPANION",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "10868f59f96460d9b2132a9ab6b339f9b9b3c060e4e32652f50b264624e80fc7",
+          "kind": "RESET_IDENTITY",
+          "subject": "holding_record",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "holding_component",
+            "persistent_queue",
+            "read_source"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.holding:read_commit",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance"
+          ],
+          "predicate": {
+            "committed_identity_survives_reset": "sequence_identity",
+            "from_fact_ids": [
+              "holder.production",
+              "program.identity"
+            ]
+          },
+          "source_check": {
+            "kind": "RESET_IDENTITY",
+            "subject": "holding_record",
+            "holds": true,
+            "predicate": {
+              "committed_identity_survives_reset": "sequence_identity",
+              "from_fact_ids": [
+                "holder.production",
+                "program.identity"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "holding_component",
+              "persistent_queue",
+              "read_source"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+              "bfworld.agentlab.pqe20261024debt.holding:read_commit",
+              "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+          "kind": "DYNAMIC_CAPACITY",
+          "subject": "holding_record",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "clear_after",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+          ],
+          "predicate": {
+            "observed_within_declared_limit": "holder.capacity",
+            "from_fact_ids": [
+              "holder.capacity"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_CAPACITY",
+            "subject": "holding_record",
+            "holds": null,
+            "predicate": {
+              "observed_within_declared_limit": "holder.capacity",
+              "from_fact_ids": [
+                "holder.capacity"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "clear_after",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "a70014d0ba7696f84222d0ff3e1fee3589329378b039f4e08671708bd070a0a8",
+          "kind": "DYNAMIC_TIMING",
+          "subject": "holding_record",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "capacitance_f",
+            "esr_ohm",
+            "holding_component",
+            "mechanism"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/power_loss"
+          ],
+          "predicate": {
+            "observed_within_declared_limit": "holder.retention",
+            "from_fact_ids": [
+              "holder.retention"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_TIMING",
+            "subject": "holding_record",
+            "holds": null,
+            "predicate": {
+              "observed_within_declared_limit": "holder.retention",
+              "from_fact_ids": [
+                "holder.retention"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "capacitance_f",
+              "esr_ohm",
+              "holding_component",
+              "mechanism"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:advance/power_loss"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "49a667eb95943786a1fd8965d694b5351ecb10e599a0350a0724f58f1ade3734",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:voltage_coverage",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "voltage_coverage",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:voltage_coverage",
+            "holds": null,
+            "predicate": {
+              "observed": "voltage_coverage",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "5f19944fc366a046d03c644d346a854a006cb6fb3131f2786d7c558bd5e0c176",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:energy_closure",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "energy_closure",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:energy_closure",
+            "holds": null,
+            "predicate": {
+              "observed": "energy_closure",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "65eafe8e7f0c84c8ec47ed9db3d4ff62506279af597c76c07bd3df0be3ae9c0f",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:identity_recovery",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "identity_recovery",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:identity_recovery",
+            "holds": null,
+            "predicate": {
+              "observed": "identity_recovery",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "3d8f2a5a8f4196bb68a7badf32aad0a9e625f272484db3728df1429c7c8852b0",
+          "kind": "PAID_LOAD",
+          "subject": "holder:monitor",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+          ],
+          "predicate": {
+            "operation_load_in_shared_supply": "holder:monitor",
+            "from_fact_ids": [
+              "supply.connection"
+            ]
+          },
+          "source_check": {
+            "kind": "PAID_LOAD",
+            "subject": "holder:monitor",
+            "holds": true,
+            "predicate": {
+              "operation_load_in_shared_supply": "holder:monitor",
+              "from_fact_ids": [
+                "supply.connection"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "29488f8129093c089e35e0a1b21d6ad63cf54636a56f03ef8e564f6abd7b317b",
+          "kind": "PAID_LOAD",
+          "subject": "holder:capture",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+          ],
+          "predicate": {
+            "operation_load_in_shared_supply": "holder:capture",
+            "from_fact_ids": [
+              "supply.connection"
+            ]
+          },
+          "source_check": {
+            "kind": "PAID_LOAD",
+            "subject": "holder:capture",
+            "holds": true,
+            "predicate": {
+              "operation_load_in_shared_supply": "holder:capture",
+              "from_fact_ids": [
+                "supply.connection"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        }
+      ],
+      "transition": null
+    },
+    {
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.0001,
+        "debounce_s": 0.07,
+        "esr_ohm": 49.80630328737728,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.06260880708217582,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "never"
+      },
+      "facts_sha256": "46dbfa3f2415a673be2a59ec3723e4815b311ccc8bf66a8623a9f16a1bc7f0fd",
+      "changed_obligations": [
+        {
+          "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+          "kind": "CONSUMPTION",
+          "subject": "holding_record",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "holding_component",
+            "read_source"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+          ],
+          "predicate": {
+            "any_enabled_reader_for": "holding_record",
+            "from_fact_ids": [
+              "holder.production",
+              "program.read"
+            ]
+          },
+          "source_check": {
+            "kind": "CONSUMPTION",
+            "subject": "holding_record",
+            "holds": true,
+            "predicate": {
+              "any_enabled_reader_for": "holding_record",
+              "from_fact_ids": [
+                "holder.production",
+                "program.read"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "holding_component",
+              "read_source"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+              "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "10868f59f96460d9b2132a9ab6b339f9b9b3c060e4e32652f50b264624e80fc7",
+          "kind": "RESET_IDENTITY",
+          "subject": "holding_record",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "holding_component",
+            "persistent_queue",
+            "read_source"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.holding:read_commit",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance"
+          ],
+          "predicate": {
+            "committed_identity_survives_reset": "sequence_identity",
+            "from_fact_ids": [
+              "holder.production",
+              "program.identity"
+            ]
+          },
+          "source_check": {
+            "kind": "RESET_IDENTITY",
+            "subject": "holding_record",
+            "holds": true,
+            "predicate": {
+              "committed_identity_survives_reset": "sequence_identity",
+              "from_fact_ids": [
+                "holder.production",
+                "program.identity"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "holding_component",
+              "persistent_queue",
+              "read_source"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+              "bfworld.agentlab.pqe20261024debt.holding:read_commit",
+              "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+          "kind": "DYNAMIC_CAPACITY",
+          "subject": "holding_record",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "clear_after",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+          ],
+          "predicate": {
+            "observed_within_declared_limit": "holder.capacity",
+            "from_fact_ids": [
+              "holder.capacity"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_CAPACITY",
+            "subject": "holding_record",
+            "holds": null,
+            "predicate": {
+              "observed_within_declared_limit": "holder.capacity",
+              "from_fact_ids": [
+                "holder.capacity"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "clear_after",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "a70014d0ba7696f84222d0ff3e1fee3589329378b039f4e08671708bd070a0a8",
+          "kind": "DYNAMIC_TIMING",
+          "subject": "holding_record",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "capacitance_f",
+            "esr_ohm",
+            "holding_component",
+            "mechanism"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/power_loss"
+          ],
+          "predicate": {
+            "observed_within_declared_limit": "holder.retention",
+            "from_fact_ids": [
+              "holder.retention"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_TIMING",
+            "subject": "holding_record",
+            "holds": null,
+            "predicate": {
+              "observed_within_declared_limit": "holder.retention",
+              "from_fact_ids": [
+                "holder.retention"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "capacitance_f",
+              "esr_ohm",
+              "holding_component",
+              "mechanism"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:advance/power_loss"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "49a667eb95943786a1fd8965d694b5351ecb10e599a0350a0724f58f1ade3734",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:voltage_coverage",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "voltage_coverage",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:voltage_coverage",
+            "holds": null,
+            "predicate": {
+              "observed": "voltage_coverage",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "5f19944fc366a046d03c644d346a854a006cb6fb3131f2786d7c558bd5e0c176",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:energy_closure",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "energy_closure",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:energy_closure",
+            "holds": null,
+            "predicate": {
+              "observed": "energy_closure",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "65eafe8e7f0c84c8ec47ed9db3d4ff62506279af597c76c07bd3df0be3ae9c0f",
+          "kind": "DYNAMIC_EVIDENCE",
+          "subject": "current_design:identity_recovery",
+          "holds": null,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+          ],
+          "predicate": {
+            "observed": "identity_recovery",
+            "from_fact_ids": [
+              "dynamic.coverage"
+            ]
+          },
+          "source_check": {
+            "kind": "DYNAMIC_EVIDENCE",
+            "subject": "current_design:identity_recovery",
+            "holds": null,
+            "predicate": {
+              "observed": "identity_recovery",
+              "from_fact_ids": [
+                "dynamic.coverage"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.consumer:execute_design"
+            ]
+          },
+          "status": "UNKNOWN",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "3d8f2a5a8f4196bb68a7badf32aad0a9e625f272484db3728df1429c7c8852b0",
+          "kind": "PAID_LOAD",
+          "subject": "holder:monitor",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+          ],
+          "predicate": {
+            "operation_load_in_shared_supply": "holder:monitor",
+            "from_fact_ids": [
+              "supply.connection"
+            ]
+          },
+          "source_check": {
+            "kind": "PAID_LOAD",
+            "subject": "holder:monitor",
+            "holds": true,
+            "predicate": {
+              "operation_load_in_shared_supply": "holder:monitor",
+              "from_fact_ids": [
+                "supply.connection"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "29488f8129093c089e35e0a1b21d6ad63cf54636a56f03ef8e564f6abd7b317b",
+          "kind": "PAID_LOAD",
+          "subject": "holder:capture",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+          ],
+          "predicate": {
+            "operation_load_in_shared_supply": "holder:capture",
+            "from_fact_ids": [
+              "supply.connection"
+            ]
+          },
+          "source_check": {
+            "kind": "PAID_LOAD",
+            "subject": "holder:capture",
+            "holds": true,
+            "predicate": {
+              "operation_load_in_shared_supply": "holder:capture",
+              "from_fact_ids": [
+                "supply.connection"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        },
+        {
+          "id": "b401b4caecb297af3853e65111ca1806805c87cf1aff2d17d5929ed6f527b10e",
+          "kind": "PAID_LOAD",
+          "subject": "mcu_holder_io:read",
+          "holds": true,
+          "applicable": true,
+          "dependencies": [
+            "backoff_max_s",
+            "brownout_v",
+            "capacitance_f",
+            "clear_after",
+            "debounce_s",
+            "esr_ohm",
+            "firmware_policy",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow",
+            "mechanism",
+            "persistent_queue",
+            "read_source",
+            "retry_s",
+            "startup_v",
+            "tx_gate_v",
+            "tx_reserve_v"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+            "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+          ],
+          "predicate": {
+            "operation_load_in_shared_supply": "mcu_holder_io:read",
+            "from_fact_ids": [
+              "supply.connection"
+            ]
+          },
+          "source_check": {
+            "kind": "PAID_LOAD",
+            "subject": "mcu_holder_io:read",
+            "holds": true,
+            "predicate": {
+              "operation_load_in_shared_supply": "mcu_holder_io:read",
+              "from_fact_ids": [
+                "supply.connection"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "backoff_max_s",
+              "brownout_v",
+              "capacitance_f",
+              "clear_after",
+              "debounce_s",
+              "esr_ohm",
+              "firmware_policy",
+              "holding_capacity",
+              "holding_component",
+              "holding_overflow",
+              "mechanism",
+              "persistent_queue",
+              "read_source",
+              "retry_s",
+              "startup_v",
+              "tx_gate_v",
+              "tx_reserve_v"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled",
+              "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled/_midpoint_step"
+            ]
+          },
+          "status": "SUPPORTED_STATIC_CONTRACT",
+          "physical_service": "UNKNOWN"
+        }
+      ],
+      "transition": {
+        "consumed_actual_obligation": {
+          "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+          "kind": "CONSUMPTION",
+          "subject": "holding_record",
+          "holds": false,
+          "applicable": true,
+          "dependencies": [
+            "holding_component",
+            "read_source"
+          ],
+          "source_refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+          ],
+          "predicate": {
+            "any_enabled_reader_for": "holding_record",
+            "from_fact_ids": [
+              "holder.production",
+              "program.read"
+            ]
+          },
+          "source_check": {
+            "kind": "CONSUMPTION",
+            "subject": "holding_record",
+            "holds": false,
+            "predicate": {
+              "any_enabled_reader_for": "holding_record",
+              "from_fact_ids": [
+                "holder.production",
+                "program.read"
+              ]
+            },
+            "applicable": true,
+            "hard_refuted": false,
+            "dependencies": [
+              "holding_component",
+              "read_source"
+            ],
+            "refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+              "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+            ]
+          },
+          "status": "UNMET_STATIC_COMPANION",
+          "physical_service": "UNKNOWN"
+        },
+        "patch": {
+          "read_source": "holding_then_contact"
+        },
+        "kind": "CANDIDATE_FACTS_TO_COMPANION_RECHECK",
+        "depth": 1,
+        "dynamic_service_satisfied": false
+      }
+    }
+  ],
+  "results": [
+    {
+      "label": "before-companion",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.0001,
+        "debounce_s": 0.07,
+        "esr_ohm": 49.80630328737728,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.06260880708217582,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "statuses": [
+        "FAIL",
+        "FAIL",
+        "FAIL"
+      ],
+      "public_check": {
+        "verdict": "FAIL"
+      },
+      "usage": {
+        "full_inputs": 3,
+        "full_wall_s": 9.36829770798795,
+        "logical_inputs": 3,
+        "cache_reuses": 0
+      },
+      "result": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/before-companion/result.json.gz",
+        "sha256": "0117ad43cedd28c4218c25e05eb5e6effe60a6b5b93445da0776bcea32af4982"
+      },
+      "update": {
+        "schema": "same-parent-joint-and-recursive-proposals-v1:update",
+        "parent_id": "parent-d7cb2d242a47fc6da373440f",
+        "actual_design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 49.80630328737728,
+          "mechanism": {},
+          "persistent_queue": true,
+          "retry_s": 0.1,
+          "startup_v": 2.0655172527035646,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.06260880708217582,
+          "holding_component": "lp_fifo",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "contact_only",
+          "clear_after": "never"
+        },
+        "statuses": [
+          "FAIL",
+          "FAIL",
+          "FAIL"
+        ],
+        "generated_candidate_adopted_exact": null,
+        "free_or_modified_model_proposal": true,
+        "previous_parent_retained": true,
+        "automatic_restart": false,
+        "archive_size": 2,
+        "full_service_PASS": false
+      }
+    },
+    {
+      "label": "after-companion",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.0001,
+        "debounce_s": 0.07,
+        "esr_ohm": 49.80630328737728,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.06260880708217582,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "never"
+      },
+      "statuses": [
+        "FAIL",
+        "FAIL",
+        "FAIL"
+      ],
+      "public_check": {
+        "verdict": "FAIL"
+      },
+      "usage": {
+        "full_inputs": 3,
+        "full_wall_s": 9.810276625037659,
+        "logical_inputs": 3,
+        "cache_reuses": 0
+      },
+      "result": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/after-companion/result.json.gz",
+        "sha256": "9294bbde87a2dc58fab553eedcffd2b7c3ed57f03183c65e94b4da073eda6786"
+      },
+      "update": {
+        "schema": "same-parent-joint-and-recursive-proposals-v1:update",
+        "parent_id": "parent-e294d1492dcc4f0014d681f2",
+        "actual_design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 49.80630328737728,
+          "mechanism": {},
+          "persistent_queue": true,
+          "retry_s": 0.1,
+          "startup_v": 2.0655172527035646,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.06260880708217582,
+          "holding_component": "lp_fifo",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "holding_then_contact",
+          "clear_after": "never"
+        },
+        "statuses": [
+          "FAIL",
+          "FAIL",
+          "FAIL"
+        ],
+        "generated_candidate_adopted_exact": null,
+        "free_or_modified_model_proposal": true,
+        "previous_parent_retained": true,
+        "automatic_restart": false,
+        "archive_size": 3,
+        "full_service_PASS": false
+      }
+    }
+  ],
+  "next_action": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/after-companion/next-generation.json.gz",
+    "sha256": "9d70b63a2f4f9bd88dd79fd81fa07d5e6a4ac88b43fd3927ea256a0254ba3457"
+  },
+  "changed_after_actual_Update": true,
+  "real_model_selected": false,
+  "scope": "Developer-selected existing B-generated candidate; actual facts, companion edit, original full consequences, Update and next Generate. No real-model mechanism benefit credited."
+}

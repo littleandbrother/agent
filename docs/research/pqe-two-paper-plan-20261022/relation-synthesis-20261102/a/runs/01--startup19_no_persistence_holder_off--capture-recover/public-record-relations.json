@@ -1,0 +1,287 @@
+{
+  "schema": "codebt-public-record-relations-v2",
+  "result_ref": "2cda58e3ca9b4314f126846f35e07b890da8524c43e3c0075d79d3b09156b7a4",
+  "scope": {
+    "public_input_only": true,
+    "no_hidden_truth": true,
+    "no_observer_identity": true,
+    "absence_is_not_loss": true,
+    "device_seq_is_not_globally_unique": true,
+    "execution_status": "COMPLETE"
+  },
+  "events": [
+    {
+      "id": "#/facts/activity/0",
+      "stage": "boot",
+      "source_ref": "#/facts/activity/0",
+      "time_s": 73.5990000000031,
+      "observed_mcu_resets": 0
+    },
+    {
+      "id": "#/facts/activity/1",
+      "stage": "boot_ready",
+      "source_ref": "#/facts/activity/1",
+      "time_s": 73.60100000000311,
+      "observed_mcu_resets": 0
+    },
+    {
+      "id": "#/facts/activity/2",
+      "stage": "capture",
+      "source_ref": "#/facts/activity/2",
+      "time_s": 77.40800000002129,
+      "observed_mcu_resets": 0,
+      "direction": 1
+    },
+    {
+      "id": "#/facts/activity/3",
+      "stage": "save",
+      "source_ref": "#/facts/activity/3",
+      "time_s": 77.4100000000213,
+      "observed_mcu_resets": 0,
+      "durable": false,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/5",
+      "stage": "tx",
+      "source_ref": "#/facts/activity/5",
+      "time_s": 77.41600000002133,
+      "observed_mcu_resets": 0,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/7",
+      "stage": "ack",
+      "source_ref": "#/facts/activity/7",
+      "time_s": 77.41800000002134,
+      "observed_mcu_resets": 0,
+      "durable": false,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/8",
+      "stage": "mcu_reset",
+      "source_ref": "#/facts/activity/8",
+      "time_s": 818.8032512747019,
+      "observed_mcu_resets": 0,
+      "reason": "IDLE_UVLO"
+    },
+    {
+      "id": "#/facts/activity/9",
+      "stage": "boot",
+      "source_ref": "#/facts/activity/9",
+      "time_s": 1198.4869999999935,
+      "observed_mcu_resets": 1
+    },
+    {
+      "id": "#/facts/activity/10",
+      "stage": "boot_ready",
+      "source_ref": "#/facts/activity/10",
+      "time_s": 1198.4889999999934,
+      "observed_mcu_resets": 1
+    },
+    {
+      "id": "#/facts/activity/11",
+      "stage": "capture",
+      "source_ref": "#/facts/activity/11",
+      "time_s": 1199.1159999999786,
+      "observed_mcu_resets": 1,
+      "direction": 1
+    },
+    {
+      "id": "#/facts/activity/12",
+      "stage": "save",
+      "source_ref": "#/facts/activity/12",
+      "time_s": 1199.1179999999786,
+      "observed_mcu_resets": 1,
+      "durable": false,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/14",
+      "stage": "tx",
+      "source_ref": "#/facts/activity/14",
+      "time_s": 1199.1239999999784,
+      "observed_mcu_resets": 1,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/16",
+      "stage": "ack",
+      "source_ref": "#/facts/activity/16",
+      "time_s": 1199.1259999999784,
+      "observed_mcu_resets": 1,
+      "durable": false,
+      "record": {
+        "seq": 1,
+        "direction": 1
+      }
+    },
+    {
+      "id": "#/facts/activity/17",
+      "stage": "mcu_reset",
+      "source_ref": "#/facts/activity/17",
+      "time_s": 1941.6322001076387,
+      "observed_mcu_resets": 1,
+      "reason": "IDLE_UVLO"
+    },
+    {
+      "id": "#/facts/receiver_records/0",
+      "stage": "recv",
+      "source_ref": "#/facts/receiver_records/0",
+      "time_s": 77.41600000002133,
+      "observed_mcu_resets": 0,
+      "mcu_reset_relation_status": "OBSERVED",
+      "seq": 1,
+      "direction": 1
+    }
+  ],
+  "records": [
+    {
+      "id": "#/facts/activity/3",
+      "seq": 1,
+      "direction": 1,
+      "durable": false,
+      "record_key": {
+        "assigned_seq": 1,
+        "direction": 1,
+        "status": "OBSERVED"
+      },
+      "observed_mcu_resets_at_save": 0,
+      "stages": {
+        "save": [
+          "#/facts/activity/3"
+        ],
+        "capture": [
+          "#/facts/activity/2"
+        ],
+        "tx": [
+          "#/facts/activity/5"
+        ],
+        "ack": [
+          "#/facts/activity/7"
+        ],
+        "recv": [
+          "#/facts/receiver_records/0"
+        ]
+      },
+      "identity_scope": "Public SAVE occurrence; numeric seq may be reused after reset."
+    },
+    {
+      "id": "#/facts/activity/12",
+      "seq": 1,
+      "direction": 1,
+      "durable": false,
+      "record_key": {
+        "assigned_seq": 1,
+        "direction": 1,
+        "status": "OBSERVED"
+      },
+      "observed_mcu_resets_at_save": 1,
+      "stages": {
+        "save": [
+          "#/facts/activity/12"
+        ],
+        "capture": [
+          "#/facts/activity/11"
+        ],
+        "tx": [
+          "#/facts/activity/14"
+        ],
+        "ack": [
+          "#/facts/activity/16"
+        ]
+      },
+      "identity_scope": "Public SAVE occurrence; numeric seq may be reused after reset."
+    }
+  ],
+  "holder_records": [],
+  "relations": [
+    {
+      "from": "#/facts/activity/2",
+      "to": "#/facts/activity/3",
+      "relation": "capture_to_save",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/2",
+        "#/facts/activity/3"
+      ]
+    },
+    {
+      "from": "#/facts/activity/3",
+      "to": "#/facts/activity/5",
+      "relation": "tx",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/3",
+        "#/facts/activity/5"
+      ]
+    },
+    {
+      "from": "#/facts/activity/3",
+      "to": "#/facts/activity/7",
+      "relation": "ack",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/3",
+        "#/facts/activity/7"
+      ]
+    },
+    {
+      "from": "#/facts/activity/11",
+      "to": "#/facts/activity/12",
+      "relation": "capture_to_save",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/11",
+        "#/facts/activity/12"
+      ]
+    },
+    {
+      "from": "#/facts/activity/12",
+      "to": "#/facts/activity/14",
+      "relation": "tx",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/12",
+        "#/facts/activity/14"
+      ]
+    },
+    {
+      "from": "#/facts/activity/12",
+      "to": "#/facts/activity/16",
+      "relation": "ack",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/12",
+        "#/facts/activity/16"
+      ]
+    },
+    {
+      "from": "#/facts/activity/3",
+      "to": "#/facts/receiver_records/0",
+      "relation": "gateway_accepted_independent_of_ack",
+      "status": "OBSERVED",
+      "source_refs": [
+        "#/facts/activity/3",
+        "#/facts/receiver_records/0"
+      ]
+    }
+  ],
+  "unknowns": []
+}

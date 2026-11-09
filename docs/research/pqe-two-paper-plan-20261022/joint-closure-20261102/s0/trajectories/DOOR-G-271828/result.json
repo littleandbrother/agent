@@ -1,0 +1,198 @@
+{
+  "schema": "joint-closure-real-model-trajectory-v1",
+  "ident": "DOOR-G-271828",
+  "family": "DOOR",
+  "condition": "G",
+  "repeat_identifier": 271828,
+  "backend_seed_supported": false,
+  "status": "COMPLETE",
+  "termination": "FIRST_WHOLE_SERVICE_PASS",
+  "fatal": null,
+  "last_feedback": {
+    "status": "EVALUATED",
+    "slot": 1,
+    "statuses": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "public_check": {
+      "verdict": "PASS"
+    }
+  },
+  "first_all_service_PASS_design_slot": 1,
+  "first_all_service_PASS_logical_inputs": 3,
+  "logical_evaluated_designs": 1,
+  "history": [
+    {
+      "slot": 1,
+      "parent_id": "initial",
+      "design": {
+        "backoff_max_s": 1,
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "clear_after": "never",
+        "debounce_s": 0.07,
+        "esr_ohm": 0.1,
+        "firmware_policy": "fixed_retry_v1",
+        "holding_capacity": 2,
+        "holding_component": "off",
+        "holding_overflow": "drop_new",
+        "mechanism": {},
+        "persistent_queue": true,
+        "read_source": "contact_only",
+        "retry_s": 1,
+        "startup_v": 2.2,
+        "tx_gate_v": 2.2,
+        "tx_reserve_v": 0.025
+      },
+      "raw_proposal": {
+        "backoff_max_s": 1,
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "clear_after": "never",
+        "debounce_s": 0.07,
+        "esr_ohm": 0.1,
+        "firmware_policy": "fixed_retry_v1",
+        "holding_capacity": 2,
+        "holding_component": "off",
+        "holding_overflow": "drop_new",
+        "mechanism": {},
+        "persistent_queue": true,
+        "read_source": "contact_only",
+        "retry_s": 1,
+        "startup_v": 2.2,
+        "tx_gate_v": 2.2,
+        "tx_reserve_v": 0.025
+      },
+      "result": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/candidate-1.json.gz",
+        "sha256": "136f5d2a648a24e237b234706cc57d1676d59eafba888dd9fa2a09ac82ef2b28"
+      },
+      "statuses": [
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "public_check": {
+        "verdict": "PASS"
+      },
+      "model_valid": true,
+      "usage": {
+        "full_inputs": 0,
+        "full_wall_s": 0.0,
+        "logical_inputs": 3,
+        "cache_reuses": 3
+      },
+      "selected_method_candidate_id": null,
+      "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+      "closure_chain": [],
+      "derivations": [],
+      "complexity": {
+        "changes": {
+          "capacitance_f": {
+            "before": 0.0001,
+            "after": 0.001
+          },
+          "esr_ohm": {
+            "before": 5.0,
+            "after": 0.1
+          },
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "retry_s": {
+            "before": 0.1,
+            "after": 1
+          }
+        },
+        "changed_field_count": 4,
+        "added_components": [],
+        "capacitance_f": 0.001,
+        "pv_area_cm2": null,
+        "scope": "Actual unweighted fields/components; no synthetic aggregate burden score."
+      }
+    }
+  ],
+  "final": {
+    "design": {
+      "backoff_max_s": 1,
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "clear_after": "never",
+      "debounce_s": 0.07,
+      "esr_ohm": 0.1,
+      "firmware_policy": "fixed_retry_v1",
+      "holding_capacity": 2,
+      "holding_component": "off",
+      "holding_overflow": "drop_new",
+      "mechanism": {},
+      "persistent_queue": true,
+      "read_source": "contact_only",
+      "retry_s": 1,
+      "startup_v": 2.2,
+      "tx_gate_v": 2.2,
+      "tx_reserve_v": 0.025
+    },
+    "public_check": {
+      "verdict": "PASS"
+    }
+  },
+  "new_resources": {
+    "full_attempts": 0,
+    "full_wall_s": 0.0,
+    "logical_inputs": 3,
+    "cache_reuses": 3,
+    "cheap_numeric": 0
+  },
+  "wall_s": 44.776817000005394,
+  "method_strategy_cost": null,
+  "model_ledger": {
+    "requests": 4,
+    "unknown_or_missing_usage": [],
+    "settled_charge_upper_bound_usd": 0.0260643,
+    "unsettled_reserved_usd": 0,
+    "cache_aware_rate_estimate_usd": 0.0260643,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "rows": [
+      {
+        "id": "llm-692d6164813c4ae09807",
+        "status": "SETTLED",
+        "reserved": 0.0556773,
+        "charged": 0.005605199999999999,
+        "usage": "{\"completion_tokens\":884,\"completion_tokens_details\":{\"reasoning_tokens\":750},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":15148,\"prompt_tokens\":15148,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":16032}",
+        "response_hash": "6b9b9225ea779ae0adae279c4bf63d0e70d0315d6cece930d8b3ac170efc7bb5",
+        "error": null
+      },
+      {
+        "id": "llm-58f0bb1737032bf92471",
+        "status": "SETTLED",
+        "reserved": 0.055712399999999995,
+        "charged": 0.005322899999999999,
+        "usage": "{\"completion_tokens\":636,\"completion_tokens_details\":{\"reasoning_tokens\":571},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":15199,\"prompt_tokens\":15199,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":15835}",
+        "response_hash": "742ee0c63c2a9be14344bf19d0a56651164400fc3aa37e344147f21963063599",
+        "error": null
+      },
+      {
+        "id": "llm-b25a45f6126113339f26",
+        "status": "SETTLED",
+        "reserved": 0.056113199999999995,
+        "charged": 0.0075453,
+        "usage": "{\"completion_tokens\":2373,\"completion_tokens_details\":{\"reasoning_tokens\":2239},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":15659,\"prompt_tokens\":15659,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":18032}",
+        "response_hash": "ec197e74c1e71061e9c96dbbdda82d65afa158c7edd77f5c6e8dc298c1c60f57",
+        "error": null
+      },
+      {
+        "id": "llm-910f4e1f95b79a4d9e0a",
+        "status": "SETTLED",
+        "reserved": 0.05611289999999999,
+        "charged": 0.007590899999999999,
+        "usage": "{\"completion_tokens\":2411,\"completion_tokens_details\":{\"reasoning_tokens\":2273},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":15659,\"prompt_tokens\":15659,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":18070}",
+        "response_hash": "68949982cb584ce2ec69ecb1b466b6fd92b162dbc058b212bf9db2622db28f7e",
+        "error": null
+      }
+    ]
+  },
+  "method_identity": "actual accounted deepseek/deepseek-flash Pi model; thinking high; underlying weights unreported"
+}

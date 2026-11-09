@@ -1,0 +1,3646 @@
+{
+  "schema": "BFA101-B-final-method-cost-readback-v1",
+  "at": "2026-11-02T14:18:38.720745+00:00",
+  "package": "BF-PQE-JOINT-CLOSURE-20261102-001",
+  "owner": "campaign-b",
+  "status": "PASS_READBACK_WITH_MATERIAL_CALCULATOR_ACCESS_LIMITATION",
+  "status_scope": "PASS certifies this read-only readback is complete and saved evidence/accounting bindings are consistent. It does NOT certify full compliance with the registered callable-calculator condition.",
+  "registered_comparison_validation": "QUALIFIED_BY_MATERIAL_INTERFACE_FAILURE_F05",
+  "unqualified_same_callable_calculator_claim": "NOT_SUPPORTED",
+  "summary": "Observed12 first-design all-service PASS outcomes, zero selected recursive candidates, complete costs and closed credentials are verified. Six requested calculate operations were rejected by the frozen inherited public_object-only normalizer. Report must retain that substantive protocol limitation; do not repair or rerun under this completed package.",
+  "findings": [
+    {
+      "id": "F01",
+      "status": "PASS",
+      "topic": "Source freeze",
+      "finding": "All 74 frozen source hashes match the current files, including actual method, provider and normalizer dependencies. No source changed during this readback.",
+      "mismatches": []
+    },
+    {
+      "id": "F02",
+      "status": "PASS_WITH_WEIGHT_IDENTITY_LIMIT",
+      "topic": "Same actual model",
+      "finding": "All21 saved wire requests use deepseek-flash, thinking enabled/high, temperature0.2, max32768, streaming; all callbacks report the same API identity and known usage. Exact underlying weights and backend seed support remain unreported/unsupported.",
+      "unique_wire_configurations": [
+        {
+          "max_tokens": 32768,
+          "model": "deepseek-flash",
+          "reasoning_effort": "high",
+          "stream": true,
+          "temperature": 0.2,
+          "thinking": {
+            "type": "enabled"
+          }
+        }
+      ],
+      "raw_public_answer_hash_mismatches": []
+    },
+    {
+      "id": "F03",
+      "status": "PASS_WITH_EXPOSURE_LIMIT",
+      "topic": "Common task/history/tool declarations",
+      "finding": "All21 actual input projections share identical instruction, common development history, common38-design history and PUBLIC_TOOLS hashes; task projection is identical within each family. Prior successful complete designs are exposed to every condition. This is seen development diagnosis, not blind transfer.",
+      "actual_projection_hashes": {
+        "common_development_history": [
+          "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35"
+        ],
+        "common_design_history": [
+          "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a"
+        ],
+        "PUBLIC_TOOLS": [
+          "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13"
+        ],
+        "instruction": [
+          "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c"
+        ],
+        "task_DOOR": [
+          "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816"
+        ],
+        "task_LC": [
+          "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a"
+        ]
+      },
+      "common_history_rows": 38
+    },
+    {
+      "id": "F04",
+      "status": "PASS_CODE_CUT_NO_FORMAL_TRIGGER",
+      "topic": "J/C only recursive switch",
+      "finding": "The host passes the same Strategy with only recursive=False/True; all4 actual paired initial common pools are exactly equal. All4 C formal proposal logs have zero recursive attempts and no extra recursive candidate. None of the12 selected designs exactly adopts an offered method candidate.",
+      "paired_initial_pools": [
+        {
+          "family": "DOOR",
+          "repeat": 314159,
+          "common_pool_equal": true,
+          "common_pool_sha256": "fed3c3eeea5ac745a4665906ddd6ea907b988f23e5c87a3752f2dcdd61d318fc",
+          "candidate_counts": [
+            1,
+            1
+          ],
+          "recursive_attempts": 0,
+          "automatic_candidate_selected": null
+        },
+        {
+          "family": "DOOR",
+          "repeat": 271828,
+          "common_pool_equal": true,
+          "common_pool_sha256": "df14b796447879bde95136a375062d9a83df59bdab4c044827de25f14f949924",
+          "candidate_counts": [
+            1,
+            1
+          ],
+          "recursive_attempts": 0,
+          "automatic_candidate_selected": null
+        },
+        {
+          "family": "LC",
+          "repeat": 314159,
+          "common_pool_equal": true,
+          "common_pool_sha256": "b177e351fa796ecf26a2082a36f935ad7e620c5670796af683566c4a9b047ddc",
+          "candidate_counts": [
+            2,
+            2
+          ],
+          "recursive_attempts": 0,
+          "automatic_candidate_selected": null
+        },
+        {
+          "family": "LC",
+          "repeat": 271828,
+          "common_pool_equal": true,
+          "common_pool_sha256": "4f646be53e90841e10ff322643e3b612af07248e098c674fcff981a408659f6c",
+          "candidate_counts": [
+            2,
+            2
+          ],
+          "recursive_attempts": 0,
+          "automatic_candidate_selected": null
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "status": "MATERIAL_PROTOCOL_FINDING",
+      "topic": "Declared calculator path blocked by frozen output normalizer",
+      "finding": "The host advertises candidate_facts and calculate, but inherited model_format._validate_tools only permits public_object. Four paid callbacks containing six calculate calls were rejected as TOOL_NOT_ALLOWED before reaching the host. One mixed batch also withheld its public_object read. The model-issued candidate_facts path would likewise be rejected by this whitelist, though none was observed. Shared tool declarations are identical, but actual callable calculator access required by the work order is not established. Automatic J calculations did run, so this gap must not be presented as a fully realized common-calculator comparison.",
+      "normalizer": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/codebt-zeroapi/s0/model_format.py",
+      "normalizer_sha256": "d1fb83797a713cc5a0ab3ae1d5fd0d5b5acd244329e02439e1d2feea5ba1a5d2",
+      "blocked_calculate_calls": 6,
+      "affected_callbacks": [
+        {
+          "episode": "DOOR-G+J-271828",
+          "callback": "01",
+          "error": "TOOL_NOT_ALLOWED",
+          "requested_tool_names": [
+            "public_object",
+            "calculate",
+            "calculate",
+            "calculate"
+          ],
+          "raw_sha256": "05cc1f2465f408463d65e73045cb3f8cfeea3884c4493861715759966fe11ecc",
+          "callback_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/callback-result.json",
+          "raw_public_output": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/pi-public.jsonl.gz"
+        },
+        {
+          "episode": "DOOR-G+J-314159",
+          "callback": "01",
+          "error": "TOOL_NOT_ALLOWED",
+          "requested_tool_names": [
+            "calculate"
+          ],
+          "raw_sha256": "ecd33f206c1b0cb99dd486cf10c804f53b1dceb637f0f6ecce66d48cad16c650",
+          "callback_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/callback-result.json",
+          "raw_public_output": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/pi-public.jsonl.gz"
+        },
+        {
+          "episode": "LC-G+J-314159",
+          "callback": "02",
+          "error": "TOOL_NOT_ALLOWED",
+          "requested_tool_names": [
+            "calculate"
+          ],
+          "raw_sha256": "9daf14c2ea32a64c217ad015ba740f07e1d98f380c1de2377daaec80707f3542",
+          "callback_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/callback-result.json",
+          "raw_public_output": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/pi-public.jsonl.gz"
+        },
+        {
+          "episode": "LC-G-271828",
+          "callback": "01",
+          "error": "TOOL_NOT_ALLOWED",
+          "requested_tool_names": [
+            "calculate"
+          ],
+          "raw_sha256": "c1eca2c9b73001247639d74d2530938f61a215d9ba9d6183e6756fa3239cb53a",
+          "callback_result": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/callback-result.json",
+          "raw_public_output": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/pi-public.jsonl.gz"
+        }
+      ],
+      "host_calculation_requests": 24,
+      "host_calculation_request_interpretation": "24 exactly equals 8 method strategies x3; no model-issued calculate reached the host.",
+      "disposition": "Preserve all outcomes/costs; correct the report claim and limitation. No fix, new probe, paid retry or matrix rerun was performed or authorized by this readback."
+    },
+    {
+      "id": "F06",
+      "status": "PASS_OBSERVED_OUTCOMES_NO_CREDIT_TO_C",
+      "topic": "Actual selection and outcome",
+      "finding": "12/12 trajectories completed; each first actually evaluated whole design passed all3 original conditions. Final actual model design equals executed raw proposal in all12. All origins are FREE_OR_MODIFIED_MODEL_PROPOSAL, selected method IDs are null, formal selected-companion list is empty. The reports correctly avoid assigning ordinary J/free success or lower request count to recursive service benefit.",
+      "trajectory_actions": [
+        {
+          "ident": "DOOR-G+J+C-271828",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "DOOR-G+J+C-314159",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 3,
+          "reuse": 0
+        },
+        {
+          "ident": "DOOR-G+J-271828",
+          "actions": 2,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "DOOR-G+J-314159",
+          "actions": 2,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "DOOR-G-271828",
+          "actions": 3,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "DOOR-G-314159",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "LC-G+J+C-271828",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "LC-G+J+C-314159",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 3,
+          "reuse": 0
+        },
+        {
+          "ident": "LC-G+J-271828",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "LC-G+J-314159",
+          "actions": 2,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "LC-G-271828",
+          "actions": 2,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        },
+        {
+          "ident": "LC-G-314159",
+          "actions": 1,
+          "last_model_design_equals_executed_raw_proposal": true,
+          "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+          "selected_method_candidate_id": null,
+          "closure_chain_length": 0,
+          "member_statuses": [
+            "PASS",
+            "PASS",
+            "PASS"
+          ],
+          "logical_evaluated_designs": 1,
+          "first_pass": 1,
+          "logical_inputs": 3,
+          "new_full": 0,
+          "reuse": 3
+        }
+      ]
+    },
+    {
+      "id": "F07",
+      "status": "PASS_NEGATIVE_DYNAMIC_EVIDENCE_RETAINED",
+      "topic": "Development companion chain",
+      "finding": "Actual candidate facts show holder consumption false->true after read_source companion. Developer-selected before/after complete executions both failed all3. Update and next Generate are saved, but real_model_selected=False. Two old-prefix J candidates passed all3; C used the exact same J candidates. This is software/path availability, not model autonomy or recursive advantage.",
+      "actual_companion_candidate": "candidate-523b61309028a5a4eb0027d8",
+      "results": [
+        {
+          "label": "before-companion",
+          "statuses": [
+            "FAIL",
+            "FAIL",
+            "FAIL"
+          ],
+          "usage": {
+            "full_inputs": 3,
+            "full_wall_s": 9.36829770798795,
+            "logical_inputs": 3,
+            "cache_reuses": 0
+          }
+        },
+        {
+          "label": "after-companion",
+          "statuses": [
+            "FAIL",
+            "FAIL",
+            "FAIL"
+          ],
+          "usage": {
+            "full_inputs": 3,
+            "full_wall_s": 9.810276625037659,
+            "logical_inputs": 3,
+            "cache_reuses": 0
+          }
+        }
+      ],
+      "next_generate_parent": "parent-e294d1492dcc4f0014d681f2",
+      "next_generate_candidates": 3,
+      "real_model_selected": false
+    },
+    {
+      "id": "F08",
+      "status": "PASS",
+      "topic": "Exact cache/logical accounting",
+      "finding": "All54 logical rows bind the actual selected design, exact task hash and frozen consumer sources; all reused source byte hashes match.18 new full +36 reused =54 logical; development18 and formal36. Each formal exact hit still consumes one design/3 logical condition slots. Initial references are separate and not new design slots.",
+      "phase_execution_counts": {
+        "development_new": 12,
+        "development_reuse": 6,
+        "comparison_reuse": 30,
+        "comparison_new": 6
+      },
+      "binding_errors": [],
+      "full_wall_s": 56.30064708305872
+    },
+    {
+      "id": "F09",
+      "status": "PASS",
+      "topic": "Live model ledger and complete usage",
+      "finding": "Read-only live SQLite rows and21 callback IDs match. All21 are SETTLED with usage; totals match postflight and per-episode closeouts. Reasoning tokens are part of completion, not additional total tokens. USD is pinned local estimate/upper bound, not an invoice.",
+      "usage": {
+        "prompt_tokens": 375381,
+        "completion_tokens": 73299,
+        "total_tokens": 448680,
+        "reasoning_tokens": 69907
+      },
+      "usd": 0.2005731,
+      "new_missing_usage": 0
+    },
+    {
+      "id": "F10",
+      "status": "PASS",
+      "topic": "Original liabilities/history",
+      "finding": "Original2026 full request rows and original historical_usage_exceptions hash remain byte-equivalent under the same canonical serialization. Both historical UNKNOWN rows remain unchanged, with null usage and full combined reservation USD0.3686529; no old retry or quota revival.",
+      "live_ledger": {
+        "database": "/Users/depengsu/.local/share/bf-campaign-20261019-s0/workbench/state/workbench.sqlite",
+        "connection": "mode=ro; PRAGMA query_only=ON",
+        "new_requests": 21,
+        "new_statuses": {
+          "SETTLED": 21
+        },
+        "usage": {
+          "prompt_tokens": 375381,
+          "completion_tokens": 73299,
+          "total_tokens": 448680,
+          "reasoning_tokens": 69907
+        },
+        "settled_estimate_upper_bound_usd": 0.2005731,
+        "callback_ids_equal_new_rows": true,
+        "old_count": 2026,
+        "old_rows_sha256": "b0444d830678188ec69d1cc963b121cde9cb1d47cb16b6f370df4e8dcc56147d",
+        "old_hash_matches": true,
+        "original_authorizations_sha256": "cb0214f2f1f77a6a9029e7857be76670b026f911a683e7a0c97a16f7f9090cd1",
+        "authorization_hash_matches": true,
+        "original_unknown_rows_equal": true,
+        "original_unknown_ids": [
+          "llm-16cd5bfe95e06e92fd6d",
+          "llm-1de4d60d9bc93d257392"
+        ],
+        "original_unknown_null_usage": true,
+        "original_unknown_reserved_usd": 0.3686529,
+        "original_unknown_reservations_unchanged": true,
+        "active_new_credentials": [],
+        "active_new_grants": [],
+        "owner_count": 12,
+        "model_budget_scope": null
+      }
+    },
+    {
+      "id": "F11",
+      "status": "PASS",
+      "topic": "Owner caps and independent costs",
+      "finding": "120 is the package allocation A24/B24/S072. Actual charged counts A6/B13/S025 total44. Frozen apparatus enforces S0 hard72; no budget transfer or hot source change. Separate method API-call/strategy-wall counters are saved and do not claim zero automatic computation cost.",
+      "allocation": {
+        "A_software": 6,
+        "B_software": 8,
+        "S0_software": 10,
+        "A_cheap": 24,
+        "B_cheap": 24,
+        "S0_cheap": 72,
+        "S0_only_full_and_provider": true
+      },
+      "actual_cheap_by_owner": {
+        "A": 6,
+        "B": 13,
+        "S0": 25
+      },
+      "actual_cheap_total": 44,
+      "method_costs": {
+        "DOOR-G+J+C-271828": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 5,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 0.1060409169876948,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "DOOR-G+J+C-314159": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 5,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 0.103936083993176,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "DOOR-G+J-271828": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 5,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 0.1726858739857562,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "DOOR-G+J-314159": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 5,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 0.18526020797435194,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "LC-G+J+C-271828": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 4,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 1.7066148329759017,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "LC-G+J+C-314159": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 4,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 2.051103874022374,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "LC-G+J-271828": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 4,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 1.815737666998757,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        },
+        "LC-G+J-314159": {
+          "fact_api_calls": 3,
+          "calc_api_calls": 3,
+          "exact_strategy_cache_hits": 0,
+          "structural_validations": 4,
+          "proposals": 1,
+          "updates": 1,
+          "strategy_wall_s": 2.0996535000158474,
+          "full_dispatches": 0,
+          "model_dispatches": 0
+        }
+      },
+      "host_fact_tool_cost": {
+        "fact_requests": 26,
+        "calculation_requests": 24,
+        "memo_hits": 34,
+        "actual_api_calls": 16,
+        "wall_s": 4.8077681661525276
+      },
+      "software": {
+        "A": {
+          "cases": 6,
+          "PASS": 2,
+          "FAIL": 4
+        },
+        "B": {
+          "cases": 8,
+          "PASS": 8,
+          "FAIL": 0
+        },
+        "S0": {
+          "cases": 10,
+          "PASS": 8,
+          "FAIL": 2
+        }
+      },
+      "registered_case_total": 24,
+      "case_reruns": 0
+    },
+    {
+      "id": "F12",
+      "status": "PASS_PRESERVED_FAILURES_WITH_TOOL_LIMITATION",
+      "topic": "Failures and refusals",
+      "finding": "A4 original failures, S02 harness failures and B pre-case parse error remain. Post-execution reporting table-name error is retained. Four model format/whitelist errors and two already-evaluated-final refusals are also saved and fully billed. They are not additional scientific FAIL cases. No25th software case or experiment rerun occurred in this readback.",
+      "normalizations": {
+        "OK": 17,
+        "FORMAT_ERROR": 4
+      },
+      "saved_model_rejections": [
+        {
+          "ident": "DOOR-G+J-271828",
+          "status": "FORMAT_REJECTED",
+          "required": "design, offered candidate_id, or evaluated final_design",
+          "original": {
+            "status": "FORMAT_ERROR",
+            "error": "TOOL_NOT_ALLOWED"
+          }
+        },
+        {
+          "ident": "DOOR-G+J-314159",
+          "status": "FORMAT_REJECTED",
+          "required": "design, offered candidate_id, or evaluated final_design",
+          "original": {
+            "status": "FORMAT_ERROR",
+            "error": "TOOL_NOT_ALLOWED"
+          }
+        },
+        {
+          "ident": "DOOR-G-271828",
+          "status": "FINAL_REJECTED",
+          "reason": "'ee1015cb27941c93507a47df9b34f170c3137154cedb8db417a4abdb5b46d425'"
+        },
+        {
+          "ident": "DOOR-G-271828",
+          "status": "FINAL_REJECTED",
+          "reason": "'ee1015cb27941c93507a47df9b34f170c3137154cedb8db417a4abdb5b46d425'"
+        },
+        {
+          "ident": "LC-G+J-314159",
+          "status": "FORMAT_REJECTED",
+          "required": "design, offered candidate_id, or evaluated final_design",
+          "original": {
+            "status": "FORMAT_ERROR",
+            "error": "TOOL_NOT_ALLOWED"
+          }
+        },
+        {
+          "ident": "LC-G-271828",
+          "status": "FORMAT_REJECTED",
+          "required": "design, offered candidate_id, or evaluated final_design",
+          "original": {
+            "status": "FORMAT_ERROR",
+            "error": "TOOL_NOT_ALLOWED"
+          }
+        }
+      ],
+      "pre_case_parse_failures": 1,
+      "post_execution_report_launch_failure": {
+        "stage": "post-execution read-only reporting",
+        "error": "sqlite3.OperationalError: no such table: authorizations",
+        "cause": "The preflight label authorizations_rows_sha256 binds historical_usage_exceptions, not a table named authorizations.",
+        "correction": "Use the existing exact historical_usage_exceptions table, as the original verifier and actual schema specify.",
+        "scientific_or_model_dispatch": 0,
+        "formal_sources_or_results_changed": false,
+        "original_failure_preserved": true,
+        "software_case_reruns": 0
+      }
+    },
+    {
+      "id": "F13",
+      "status": "PASS",
+      "topic": "Credential/service closure",
+      "finding": "Live database has12 registered new owners, zero live new principals/grants, restored original model budget scope; all episode closeouts record credentials closed. Package-started service PID is not live and close receipt says stopped.",
+      "active_new_credentials": [],
+      "active_new_grants": [],
+      "scope_matches_original": true,
+      "package_service_pid": 11694,
+      "package_service_pid_live": false,
+      "service_close": {
+        "at": "2026-11-02T14:08:45.764261+00:00",
+        "started_by_package": true,
+        "package_process_stopped": true,
+        "reused_service_left_running": false
+      },
+      "runtime_close": {
+        "at": "2026-11-02T14:08:45.753825+00:00",
+        "prior_scope_restored": null,
+        "owners": [
+          "pi-chat-1ef539a1238768d4",
+          "pi-chat-6d46b658427dc9ad",
+          "pi-chat-3041263c9f14b33f",
+          "pi-chat-c41ebee77473768e",
+          "pi-chat-ab87b9751667ab18",
+          "pi-chat-4208538ece166e7e",
+          "pi-chat-ff48f144afe861c2",
+          "pi-chat-120c7be994c74f68",
+          "pi-chat-f641545220fcccb2",
+          "pi-chat-a7978f5a38bf9cc2",
+          "pi-chat-962bbd9fdf93626b",
+          "pi-chat-e7422f258e265ff2"
+        ],
+        "history_rows_deleted": 0,
+        "old_unknowns_unchanged": true
+      }
+    }
+  ],
+  "limits": [
+    "Underlying model weights unreported; repetition IDs are not model seeds.",
+    "All tasks/history previously exposed and successful legal designs shared; no blind-transfer/statistical/optimality/hardware/RSI claim.",
+    "No formal recursive duty was proposed, selected or executed; no dynamic model mechanism sample or independent C gain.",
+    "The developer-selected static companion chain stayed full-service FAIL before and after.",
+    "Declared common calculator access was blocked by the actual parser. Raw outcome/cost validity does not erase that implementation gap.",
+    "Public method bundles may be paged references; code/API availability does not prove every fact or proposal was read by the model.",
+    "Only saved outputs, current source hashes and read-only ledger state were inspected; no whole-repository init/health certification."
+  ],
+  "readback_resources": {
+    "new_software_cases": 0,
+    "new_analytic_or_geometry_inputs": 0,
+    "new_full_inputs": 0,
+    "new_model_requests": 0,
+    "new_provider_usd": 0,
+    "database_mutations": 0,
+    "frozen_source_mutations": 0,
+    "output_files_written": 1,
+    "output_path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/final-method-cost-readback.json",
+    "read_only_hash_and_aggregation_work_is_not_scientific_dispatch": true
+  },
+  "readback_inspection_errors_retained": [
+    {
+      "error": "rg absent s0/comparison.py",
+      "resolution": "Read actual frozen run_comparison.py; no file mutation or scientific execution."
+    },
+    {
+      "error": "KeyError: enabled on paged method_layer",
+      "resolution": "Inspected actual projected keys, method bundles and frozen host construction; no rerun."
+    },
+    {
+      "error": "KeyError on original M2r development task ID",
+      "resolution": "Loaded registered original public failed-prefix task contracts in addition to formal task manifest; all54 bindings then read back with zero mismatches."
+    }
+  ],
+  "read_only_database_evidence": {
+    "database": "/Users/depengsu/.local/share/bf-campaign-20261019-s0/workbench/state/workbench.sqlite",
+    "connection": "mode=ro; PRAGMA query_only=ON",
+    "new_requests": 21,
+    "new_statuses": {
+      "SETTLED": 21
+    },
+    "usage": {
+      "prompt_tokens": 375381,
+      "completion_tokens": 73299,
+      "total_tokens": 448680,
+      "reasoning_tokens": 69907
+    },
+    "settled_estimate_upper_bound_usd": 0.2005731,
+    "callback_ids_equal_new_rows": true,
+    "old_count": 2026,
+    "old_rows_sha256": "b0444d830678188ec69d1cc963b121cde9cb1d47cb16b6f370df4e8dcc56147d",
+    "old_hash_matches": true,
+    "original_authorizations_sha256": "cb0214f2f1f77a6a9029e7857be76670b026f911a683e7a0c97a16f7f9090cd1",
+    "authorization_hash_matches": true,
+    "original_unknown_rows_equal": true,
+    "original_unknown_ids": [
+      "llm-16cd5bfe95e06e92fd6d",
+      "llm-1de4d60d9bc93d257392"
+    ],
+    "original_unknown_null_usage": true,
+    "original_unknown_reserved_usd": 0.3686529,
+    "original_unknown_reservations_unchanged": true,
+    "active_new_credentials": [],
+    "active_new_grants": [],
+    "owner_count": 12,
+    "model_budget_scope": null
+  },
+  "actual_callbacks": [
+    {
+      "episode": "DOOR-G+J+C-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-b3bc6e12ad18ead9826e"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J+C",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J+C-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-863e7e840b893695935d"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J+C",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J+C-314159",
+      "callback": "02",
+      "request_ids": [
+        "llm-2c1ee218594dba9633c2"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J+C",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-f3445d7888b304e98939"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "FORMAT_ERROR",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J-271828",
+      "callback": "02",
+      "request_ids": [
+        "llm-16fc7e7376aa2b39f385"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-2fd2846e1c3387466d78"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "FORMAT_ERROR",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G+J-314159",
+      "callback": "02",
+      "request_ids": [
+        "llm-1ce6dfc659ae386c24cd"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "DOOR-G-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-692d6164813c4ae09807"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "DOOR-G-271828",
+      "callback": "02",
+      "request_ids": [
+        "llm-58f0bb1737032bf92471"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "DOOR-G-271828",
+      "callback": "03",
+      "request_ids": [
+        "llm-b25a45f6126113339f26"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "DOOR-G-271828",
+      "callback": "04",
+      "request_ids": [
+        "llm-910f4e1f95b79a4d9e0a"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "DOOR-G-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-82af40ca1187442d5eed"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "5be2bb4ef80547a792dee788d3ca555b76076b0b8af1120fdbf200c6b5fa9816",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "LC-G+J+C-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-55f129b7457259ea1c27"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J+C",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G+J+C-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-367a810093e2a3155204"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J+C",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G+J-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-52ee78f59ff8af7db104"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G+J-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-ac8cd521c9d2ec845219"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G+J-314159",
+      "callback": "02",
+      "request_ids": [
+        "llm-3b8b2bd6fca5aa3388ef"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "FORMAT_ERROR",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G+J-314159",
+      "callback": "03",
+      "request_ids": [
+        "llm-72d757ed84a0a2917df8"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G+J",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "public_object_ref"
+    },
+    {
+      "episode": "LC-G-271828",
+      "callback": "01",
+      "request_ids": [
+        "llm-8a521010c38c400a1f9b"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "FORMAT_ERROR",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "LC-G-271828",
+      "callback": "02",
+      "request_ids": [
+        "llm-ce5eb9de7ba27bec6efb"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    },
+    {
+      "episode": "LC-G-314159",
+      "callback": "01",
+      "request_ids": [
+        "llm-c1c59b950ed34c5af3a9"
+      ],
+      "usage_status": "KNOWN",
+      "model_identity": "deepseek/deepseek-flash;profile=engineering-reasoning-active-context-v4;thinking=enabled/high;upstream-weights=unreported",
+      "normalization": "OK",
+      "wire_config": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "reasoning_effort": "high",
+        "temperature": 0.2,
+        "max_tokens": 32768,
+        "stream": true
+      },
+      "condition": "G",
+      "instruction_sha256": "5d3c0a1211000528945533375a34243bfc945a1b870f5498240ea8fd409bf34c",
+      "shared_development_history_projection_sha256": "fdc01c0c43675d29873725353123a669d63754c76d0c7f7bddd5b5a6c5facc35",
+      "shared_design_history_sha256": "9136c442571d6798ca55ffd7c211faf5ac7dea911e25456e8dc57640fd9d4d5a",
+      "task_family_sha256": "041e4c8baadbad7d592b8d0c868f1cb83ff0597f2f1c73076790cb3f1e2b3e3a",
+      "public_tools_sha256": "3cac1cc04622e678a5496ffc2e6fd21d351278f2a76e63aba7860f5958507a13",
+      "method_layer_projection": "inline"
+    }
+  ],
+  "episode_closeouts": [
+    {
+      "ident": "DOOR-G+J+C-271828",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.008027699999999999,
+        "output_tokens": 2574,
+        "wall_s": 17.04482412498328,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-b3bc6e12ad18ead9826e"
+      ]
+    },
+    {
+      "ident": "DOOR-G+J+C-314159",
+      "budget": {
+        "model_requests": 2,
+        "tool_calls": 7,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.023147099999999997,
+        "output_tokens": 10281,
+        "wall_s": 68.49468545801938,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-863e7e840b893695935d",
+        "llm-2c1ee218594dba9633c2"
+      ]
+    },
+    {
+      "ident": "DOOR-G+J-271828",
+      "budget": {
+        "model_requests": 2,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.020606099999999995,
+        "output_tokens": 8930,
+        "wall_s": 54.49953991698567,
+        "nonread_actions": 2
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-f3445d7888b304e98939",
+        "llm-16fc7e7376aa2b39f385"
+      ]
+    },
+    {
+      "ident": "DOOR-G+J-314159",
+      "budget": {
+        "model_requests": 2,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.0144345,
+        "output_tokens": 3781,
+        "wall_s": 27.345062624983257,
+        "nonread_actions": 2
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-2fd2846e1c3387466d78",
+        "llm-1ce6dfc659ae386c24cd"
+      ]
+    },
+    {
+      "ident": "DOOR-G-271828",
+      "budget": {
+        "model_requests": 4,
+        "tool_calls": 1,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.0260643,
+        "output_tokens": 6304,
+        "wall_s": 44.77428170799976,
+        "nonread_actions": 3
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-692d6164813c4ae09807",
+        "llm-58f0bb1737032bf92471",
+        "llm-b25a45f6126113339f26",
+        "llm-910f4e1f95b79a4d9e0a"
+      ]
+    },
+    {
+      "ident": "DOOR-G-314159",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.010912799999999999,
+        "output_tokens": 5307,
+        "wall_s": 34.78171191702131,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-82af40ca1187442d5eed"
+      ]
+    },
+    {
+      "ident": "LC-G+J+C-271828",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.0128442,
+        "output_tokens": 5747,
+        "wall_s": 43.63621679099742,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-55f129b7457259ea1c27"
+      ]
+    },
+    {
+      "ident": "LC-G+J+C-314159",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.0147798,
+        "output_tokens": 7360,
+        "wall_s": 70.93989679199876,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-367a810093e2a3155204"
+      ]
+    },
+    {
+      "ident": "LC-G+J-271828",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.008133,
+        "output_tokens": 1829,
+        "wall_s": 18.851717333018314,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-52ee78f59ff8af7db104"
+      ]
+    },
+    {
+      "ident": "LC-G+J-314159",
+      "budget": {
+        "model_requests": 3,
+        "tool_calls": 6,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.0346254,
+        "output_tokens": 12603,
+        "wall_s": 90.48623441698146,
+        "nonread_actions": 2
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-ac8cd521c9d2ec845219",
+        "llm-3b8b2bd6fca5aa3388ef",
+        "llm-72d757ed84a0a2917df8"
+      ]
+    },
+    {
+      "ident": "LC-G-271828",
+      "budget": {
+        "model_requests": 2,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.017118599999999998,
+        "output_tokens": 4985,
+        "wall_s": 35.587160167022375,
+        "nonread_actions": 2
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-8a521010c38c400a1f9b",
+        "llm-ce5eb9de7ba27bec6efb"
+      ]
+    },
+    {
+      "ident": "LC-G-314159",
+      "budget": {
+        "model_requests": 1,
+        "tool_calls": 0,
+        "numerical_inputs": 3,
+        "candidates": 1,
+        "spent_usd": 0.009879599999999999,
+        "output_tokens": 3598,
+        "wall_s": 26.94391795800766,
+        "nonread_actions": 1
+      },
+      "fatal": null,
+      "credentials_closed": true,
+      "request_ids": [
+        "llm-c1c59b950ed34c5af3a9"
+      ]
+    }
+  ],
+  "report_snapshot_at_readback": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/REPORT.md",
+    "sha256": "bb5a0af5ad4f5dee0eb362a9e94f7c34937dd23dcd8faa5c417a327d1ebf5d38",
+    "bytes": 7002,
+    "check_kind": "content_read"
+  },
+  "checked_refs": [
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/codebt-zeroapi/s0/model_format.py",
+      "sha256": "d1fb83797a713cc5a0ab3ae1d5fd0d5b5acd244329e02439e1d2feea5ba1a5d2",
+      "bytes": 5024,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/REPORT.md",
+      "sha256": "bb5a0af5ad4f5dee0eb362a9e94f7c34937dd23dcd8faa5c417a327d1ebf5d38",
+      "bytes": 7002,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/HANDOFF.json",
+      "sha256": "81ec24f314d1111453a49377f2a8310c4831c4bf97e5f6672fdcfebf615ef2cd",
+      "bytes": 4243,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/checks-20261102T134742440214Z.json",
+      "sha256": "25c28d1388b9cc7cdfe1230c820bec4b7808ff73664fc346f5a547169d5e7f2f",
+      "bytes": 15588,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py",
+      "sha256": "c8fee4a3ae85f301c9e600d42aad968d4e195e9cc1c14ece800f07facc07e6b3",
+      "bytes": 35489,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/HANDOFF.json",
+      "sha256": "6eb28940d63d95c3cb9c0bca632a6796f0d05317cde21477cf4df5e040011d4b",
+      "bytes": 6776,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/direct-checks.json",
+      "sha256": "8f53bf35e7220cb9c62db9a556e5ff354c080e1697e8f4b19584ffeb4ce9ea32",
+      "bytes": 29999,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/joint_strategy.py",
+      "sha256": "360e598f7f770d16b268630c8ed553da3b846b1dd255266877c09008aa2944c4",
+      "bytes": 28550,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/launch-failure-001.json",
+      "sha256": "c1cda935594b211b7798864e6b82b515bbb1ed942c58293fa6ebd057fae566a0",
+      "bytes": 1124,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/DIRECT-CHECKS.md",
+      "sha256": "fb388e594aee0f87b38e7c3d24312621eeb6a9812f83e23eaaf0560a5a942cfa",
+      "bytes": 1984,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/actual-companion-consequences.json",
+      "sha256": "47296c15d4db69062958aef1a534ec7f560b554d45eadd27e8fa61dba8ce9916",
+      "bytes": 47114,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/apparatus.py",
+      "sha256": "c67650517ba2d615c1934a7858fdd8f322706999f9d6fa15ab92a400c53a72c0",
+      "bytes": 6766,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/common.py",
+      "sha256": "575b631749c0c6e50eb40d97a87b921d821aa801e62e0918a12a1a0f1e0d637b",
+      "bytes": 3388,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/comparison-result.json",
+      "sha256": "8be171ceacc8cc592ea30443653fae309f3717e45d08024852911cc3bdbfc263",
+      "bytes": 78961,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/comparison-started.json",
+      "sha256": "2e51312c6a029093c43b10efe131ab7ebb1bd78476578d33852e32f741cc9af7",
+      "bytes": 298,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development-results.json",
+      "sha256": "7609a9ad9a4ef28d4ade2059d41eeebd826d0b6e950f386593952349433ada65",
+      "bytes": 8837,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/after-companion/next-generation.json.gz",
+      "sha256": "9d70b63a2f4f9bd88dd79fd81fa07d5e6a4ac88b43fd3927ea256a0254ba3457",
+      "bytes": 157856,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/after-companion/result.json.gz",
+      "sha256": "9294bbde87a2dc58fab553eedcffd2b7c3ed57f03183c65e94b4da073eda6786",
+      "bytes": 595159,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/before-companion/result.json.gz",
+      "sha256": "0117ad43cedd28c4218c25e05eb5e6effe60a6b5b93445da0776bcea32af4982",
+      "bytes": 530751,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/identity-progress/C/result.json.gz",
+      "sha256": "d89cd996e302d1e33aef73b320e4c98c2a94b29e203e583173884f00abc28b88",
+      "bytes": 112308,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/identity-progress/J/result.json.gz",
+      "sha256": "971343dbaa14cbc42b787faf0a59f51787bfebf7b677cf02d21d007fc09211e8",
+      "bytes": 112222,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/saved-undelivered/C/result.json.gz",
+      "sha256": "5b492e37b460093b8aeaf515a2ba67ec976eea985426f8779320bdf896280d00",
+      "bytes": 114747,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/development/saved-undelivered/J/result.json.gz",
+      "sha256": "b6917e01f94a35ba9a29b2cf8da79377156bdc73eaa7dddfcbc8f3c1b3d3e116",
+      "bytes": 114666,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/direct-checks.json",
+      "sha256": "27eaf956e7e08bb8a3b7dcc259c6c563f9e55b540ae0e82cd91d28146ce0128c",
+      "bytes": 14508,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-271828/callbacks/01/callback-result.json",
+      "sha256": "96198118ae88629c7225e67b5c9ae5d283ffcc9650480bfecabc4409c49abf69",
+      "bytes": 1652,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-271828/callbacks/01/input-public.json.gz",
+      "sha256": "db04079417c7e01300f0965651134bcefe2cca0a0d497b50ac9896e1216896f0",
+      "bytes": 10357,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "771342b841543aab24a41c4749f96d549fa3802ed57dbb9d7557ef2d128a63a2",
+      "bytes": 446,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "b44300fe9dc94f13f2b9a3766972ed0640ae7de02daddaadbb7e1c2713ccf653",
+      "bytes": 9386,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-271828/closeout.json",
+      "sha256": "e0b1968c063cfe149752c6fdc3778cd92d3a4448687b348ad058cf40ff4f6c35",
+      "bytes": 1256,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/01/callback-result.json",
+      "sha256": "17549f859eab2c290b3f4a240a910014ddb93a13304413c6dc49bb5d587b5a58",
+      "bytes": 2824,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/01/input-public.json.gz",
+      "sha256": "8705062b60cdb3379ad8247d075eb5be5cc8d3c3e204fe76a8f5a578c03ebd90",
+      "bytes": 10373,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "8927776a8d940ca080b10be71e37982c95d72878ed273803e6eb397ce9a82299",
+      "bytes": 498,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "1ab3d7f722462f6f70cdc236e7480348456e49d6a743f9dbbd9f4b8938c84414",
+      "bytes": 9407,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/02/callback-result.json",
+      "sha256": "7d0d0bedb848112ab63f69d5666abb5af314bcc39888c8bc0bbdb17a2a0c0885",
+      "bytes": 1675,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/02/input-public.json.gz",
+      "sha256": "91d8f0b1e5cd9f6ea5a6943524969bc01eb1d1304f34b92788f12ba0958e053a",
+      "bytes": 11798,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "63b6297f4c3d629908b99c03c002c9c2719d1ce026e139e805e61684bb685f9c",
+      "bytes": 464,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/callbacks/02/wire-public.json.gz",
+      "sha256": "f28163cd7da46ea835d2eadc5b236a11aea262f0d803b81c60597db864a9fc76",
+      "bytes": 10291,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J+C-314159/closeout.json",
+      "sha256": "327b8f49e6581f10c4b7766a73b73dcf9babc2e6bd32ea9b042b36b28f12fc59",
+      "bytes": 1778,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/callback-result.json",
+      "sha256": "9ae44ba6ff9599e0d1370ba207d68a91ee37e96b836cd76df8ecd25e349c8c9f",
+      "bytes": 1181,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/input-public.json.gz",
+      "sha256": "3bfd827e2ae190bdc16b6fc1066d7e5b0c68c38dad26f18b9574047262d42e3e",
+      "bytes": 10355,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "c58922cf108a509d2a038407778c9a493049123982558772beb1320deffeeec5",
+      "bytes": 621,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "1a5e92f06362a4352986c0219f4b6ae7a07a96565b52079e0ae0c97273bc0525",
+      "bytes": 9387,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/02/callback-result.json",
+      "sha256": "3a7c3e00e1e541b627ab72976e9d257f7e8c27abde8ffd8c1ce0343bdc381aaa",
+      "bytes": 1616,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/02/input-public.json.gz",
+      "sha256": "7850ad34b32797c63a23fd8b1ff8a8713b744d00334d8e364a111d1fc4fdd11c",
+      "bytes": 10446,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "c19af53efd7016d8c689da42a69a2cc4d29e16554ff3f5a2d4c2bbfd7a4f3b7b",
+      "bytes": 433,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/callbacks/02/wire-public.json.gz",
+      "sha256": "60fb73b94acfa3b865231701ec8ce9cacfe783863d59e9e648acdeb121a64211",
+      "bytes": 9476,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-271828/closeout.json",
+      "sha256": "81b4a2946f7e1ec0d972c18e9cc69fb2239d83f306bda2667fa558e9fec8d295",
+      "bytes": 1777,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/callback-result.json",
+      "sha256": "70671827a229079cde1aef68a547c6fc97dca76554992139f8c8272f9bb55acb",
+      "bytes": 1181,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/input-public.json.gz",
+      "sha256": "37cfe6151e57a361c246d57cbce91c3b885210e491347361e3c0cf52a3cc9325",
+      "bytes": 10370,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "be21dcc75f8b3aa24b9d6b80515c7696ad693579b1896dce1374e255eeaf0236",
+      "bytes": 473,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "a9e5f3f947e9cc98a4ffc7a435637011dcd3a34c1e8a88fef74e0e6f737b4e21",
+      "bytes": 9403,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/02/callback-result.json",
+      "sha256": "5c17c40ac7bfd52717dce9a04847bf353a47d27136d74442f96a5b329b9b28bd",
+      "bytes": 1628,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/02/input-public.json.gz",
+      "sha256": "e6fa9f0c112e5d6de76ce81639ca756912ad41b1b88a3f01686fa20f2288f532",
+      "bytes": 10463,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "87b61d0e3bcd95d913eae1c3460bd0c136ad834d42cd6bfbbd6620f0af8e8e64",
+      "bytes": 433,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/callbacks/02/wire-public.json.gz",
+      "sha256": "499f97ecf021b10fc99def691f52cdb0801c728ec6f2e4adcb2d14737aa614c2",
+      "bytes": 9494,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G+J-314159/closeout.json",
+      "sha256": "8a274d8646bf73feff697ae7335f47c64dc148fa7d5e078f694fbb0b0f5a3bc7",
+      "bytes": 1766,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/01/callback-result.json",
+      "sha256": "302ed761c4678e7db56546f38a1d048062d2e776647209a22cfaad76846b2a7f",
+      "bytes": 1628,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/01/input-public.json.gz",
+      "sha256": "283c7927fa9f222c4c68396ca9fec53415173b242e30d999d052640f3656b44d",
+      "bytes": 9627,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "9d96bef5d4c86b534299512545aab4a057e6bcf29a2d17b5f3a37e8d8315f6ad",
+      "bytes": 437,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "052307625c12b90062e6f4242ca200b72d862f1a0d6d779c5cbb58e04b076136",
+      "bytes": 8796,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/02/callback-result.json",
+      "sha256": "34f2322032b3f4357c475b9abad34b997d027da3f969b41b482d52268fad3850",
+      "bytes": 1370,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/02/input-public.json.gz",
+      "sha256": "b52d91f36ebd77d5c4dce2070e4671ec69fb3e47196fcce9098d1bd663cd190e",
+      "bytes": 9706,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "6f9ca549b125f75dd6701f5d495ddd6313db145ebced8b0611ba7a0e05703872",
+      "bytes": 336,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/02/wire-public.json.gz",
+      "sha256": "c1618cb59e98182ba78f220dbb4d6ee21ebde5e0dacca66904d7ac4ffb259f7f",
+      "bytes": 8874,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/03/callback-result.json",
+      "sha256": "1006b3cafa7f310d073929751393c16570d6dd30b54307d55cb0cfcf0908d52b",
+      "bytes": 1622,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/03/input-public.json.gz",
+      "sha256": "bae9899dec669d11520beb76b838a315f3c4cea3d583cbeab26178db83466edb",
+      "bytes": 9933,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/03/pi-public.jsonl.gz",
+      "sha256": "81e2b01aa8fd4fe052f368d2881f9222c52985b179176a744848b22b684b84dc",
+      "bytes": 437,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/03/wire-public.json.gz",
+      "sha256": "0528bf7a935ff6fbb427c5db3908bd907b4accc9ef2ed5e14dfe67e05373e2e4",
+      "bytes": 9009,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/04/callback-result.json",
+      "sha256": "a26ae08a69bd5acc89efdfed173b511ff94b374f344f8a3564e5492eba6b51d5",
+      "bytes": 1655,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/04/input-public.json.gz",
+      "sha256": "34246a52c59e33e13af1cef00c298f3c79954eb71cde249dbeb1fa8557a4defb",
+      "bytes": 9935,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/04/pi-public.jsonl.gz",
+      "sha256": "d7d8b4b8d991c35784e681f8bfbf3853280677d00b8fb7750467e243f683bc92",
+      "bytes": 446,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/callbacks/04/wire-public.json.gz",
+      "sha256": "b2bdb4e4276f4d82a2c28d0d3224705b17d950dee59f386583a218c484fc7edb",
+      "bytes": 9013,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-271828/closeout.json",
+      "sha256": "a59c7b7b750979a1309d6a51a5439f5c897512c5dccbd90a873b0fabcdad3c2d",
+      "bytes": 2856,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-314159/callbacks/01/callback-result.json",
+      "sha256": "4a5d8491d706bb0e3b996b558b017192b319cd31de3a09ffef88d73a3528d99f",
+      "bytes": 1652,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-314159/callbacks/01/input-public.json.gz",
+      "sha256": "b473a43dd0f3f2c788d445811ceb7ba4bcb63425213186a6d08e51b3f13fef6d",
+      "bytes": 9627,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "8ec92fcb3cf9b55c096c707358802840af48c48450c3da892e98781a539a4d66",
+      "bytes": 446,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "b07ac961fba2753bae3cd617ea416c40cda8c0db519c8f61f8afc4d99934be1a",
+      "bytes": 8795,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/DOOR-G-314159/closeout.json",
+      "sha256": "b6ad63180e6591d7a4c5afe6b50641844636cc3a55f8def08cf714a23c6daba1",
+      "bytes": 1246,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-271828/callbacks/01/callback-result.json",
+      "sha256": "258b5ca7f946165bf722661acc15384a09322b1bd94d82363f62d14881db1e92",
+      "bytes": 1420,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-271828/callbacks/01/input-public.json.gz",
+      "sha256": "f779b1de8b2995a10ce4e043b762e5b0bfbf9bf1c5f20e9034e840285d350a21",
+      "bytes": 11420,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "2b2ae2efe39b91f8719607fd8eda1c55e5fdca01d1b7d7d1dd00e4b2c1924204",
+      "bytes": 353,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "eaa67761b10f627c458d4957e4f05e4412f239610dea432754cf40d0aa80d7d0",
+      "bytes": 10443,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-271828/closeout.json",
+      "sha256": "0a2ee464881f8655e062b8afeca89145426fe2bd30a10be55b5967e48a45fd51",
+      "bytes": 1212,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-314159/callbacks/01/callback-result.json",
+      "sha256": "ce5abf7f2910b434c5e1b4a80dafcf4e9d71c5b2fbe51f5d7c6932e5e8c4d71b",
+      "bytes": 1420,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-314159/callbacks/01/input-public.json.gz",
+      "sha256": "e21785f3c455bc5e13a0fb8ccfe5fdc066b9c46f942d075354a08efdaecacb84",
+      "bytes": 11416,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "f1a5c1741d5e00e23bb6c0390a2de32b71dda37cc95a198987fbfcee7f10bcbf",
+      "bytes": 355,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "124d59bee2f8da8ee47b0735d75c5357ae50feb4acf4973818bad9e78cfa15fe",
+      "bytes": 10440,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J+C-314159/closeout.json",
+      "sha256": "e8e3b26c7103e528cfe04e80e8bc36fb21c75d6b429b747f0afd6f5b38827828",
+      "bytes": 1213,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-271828/callbacks/01/callback-result.json",
+      "sha256": "c46d340e389ccd48628270098dbb3195dfeec894b86ab0dcf272ed05589dc884",
+      "bytes": 1391,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-271828/callbacks/01/input-public.json.gz",
+      "sha256": "adbcbca034bbbd866c39a8f8b2dab15c9488059828b3ad8440a5d312bab31e69",
+      "bytes": 11418,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "08ae839b58148dbd835b9b31a90fa816286c7361e0d71e627d8f42f92fd04136",
+      "bytes": 342,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "294d5c84a0ee9ac7f494f5811b67ac62538001cba1ad3d751a16e647c86f234f",
+      "bytes": 10445,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-271828/closeout.json",
+      "sha256": "0067ed9653e90d1eef0cc9f6b707e031f3f20e4ccbc0872f7b569f9921cd2f73",
+      "bytes": 1199,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/01/callback-result.json",
+      "sha256": "66ba3fc3428938d6823183f0d34d8dc497d1d5aaf468326e8af5de7e7f1d9608",
+      "bytes": 2569,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/01/input-public.json.gz",
+      "sha256": "ab602e053db9c09dd06e69166e5a70455beb8df712a056a6eb1a9356353eee51",
+      "bytes": 11413,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "e4607dd09ce3586f2316404a035f9597f4ad99a7a811438fd98caa6190fc522b",
+      "bytes": 443,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "144539117e654e8526276db7a622f6bb798f01bec1a75b4283125214ad0c7a27",
+      "bytes": 10439,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/callback-result.json",
+      "sha256": "ca92307a0ea1c8b3d1f195884462b624d07f237415f0c48cf18eb55a81dce525",
+      "bytes": 1172,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/input-public.json.gz",
+      "sha256": "88ee01e229678096a2d3dcd07ed88b038275150ce31e3d133003c12ded36d03b",
+      "bytes": 13159,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "539571967e5e590f690e33f3c2e70e947936c914d95219afa9cbc92fca9b4012",
+      "bytes": 379,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/02/wire-public.json.gz",
+      "sha256": "44d2299db8fd1c7b7f206577011d655d88aca6f7de8e423d031ff6f5ed134ab2",
+      "bytes": 11747,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/03/callback-result.json",
+      "sha256": "c054c0b264ae8d65856a726c200e8b878a302f6e6961e239131381d5def88483",
+      "bytes": 1407,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/03/input-public.json.gz",
+      "sha256": "4b3e373dd7c1d251573121e4c5698bab6d520a689529622c6f343dfae0359aa7",
+      "bytes": 13234,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/03/pi-public.jsonl.gz",
+      "sha256": "2af50522ed947f46369935480ae4634a274cacbe3512fbdb2c95266622930a7d",
+      "bytes": 342,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/callbacks/03/wire-public.json.gz",
+      "sha256": "569e105f05374c8c3f4dae9bf7869c3c74662992432f1d038803d07488eae805",
+      "bytes": 11824,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G+J-314159/closeout.json",
+      "sha256": "abb991ea62bc585dfcd024f9cc7f7c18bbdb96d2db8bbb909d4f9c73ac082484",
+      "bytes": 2274,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/callback-result.json",
+      "sha256": "f6c1bb294f675372222bd5cabf21933ab62a69e1468bd86e57bd44d047285c12",
+      "bytes": 1169,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/input-public.json.gz",
+      "sha256": "2624ce5e1a2f91664f1fc1408fa386604b7efeda0c120fc53e3258db2bbfd681",
+      "bytes": 10658,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "441acc82a31fc163af4339cb7589fd152fa1ff4b68b1dd155874a708f342c662",
+      "bytes": 383,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/01/wire-public.json.gz",
+      "sha256": "59c30e45b77815a4a506ebc80297a9e74bc1aca2d32cba632838a6991bdd9017",
+      "bytes": 9797,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/02/callback-result.json",
+      "sha256": "4d951b55402bb129930782049df528e7fb003f1f994954e486cc3d77803bf2e1",
+      "bytes": 1406,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/02/input-public.json.gz",
+      "sha256": "edf857cd245afc3a48d949c3436f2ea416631b0ae1bf35cf94570608905adedb",
+      "bytes": 10747,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/02/pi-public.jsonl.gz",
+      "sha256": "64f5c5476d5a39d00275560291c283a3e3beb60f02ad7c236fbeeb4eaa868965",
+      "bytes": 342,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/callbacks/02/wire-public.json.gz",
+      "sha256": "c175b71d21997964030900d99f569842acd50aae3e8433add28d4793f2fd4fbc",
+      "bytes": 9889,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-271828/closeout.json",
+      "sha256": "3a4a76be1302fd6276e01a6eb46c528f1d738bfbed63450a796a52ed06c58e29",
+      "bytes": 1788,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-314159/callbacks/01/callback-result.json",
+      "sha256": "c29eade6d54615dfc4e22754ee67f58a3994b0212297bd97fc573328b64bd623",
+      "bytes": 1431,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-314159/callbacks/01/input-public.json.gz",
+      "sha256": "68b4a91ebe755806d4aef2f9ddc2b88a08625e99d3b8fdac2b1b0eeae14ce254",
+      "bytes": 10658,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-314159/callbacks/01/pi-public.jsonl.gz",
+      "sha256": "9a874656eec0f88af7d2916086e1de8a195d3b0582a6192e65c2303b6e856ef3",
+      "bytes": 355,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-314159/callbacks/01/wire-public.json.gz",
+      "sha256": "f7c2e2ff9ad0bf080767a54181b2699fdc81483515efdfbf0f209f177492b71e",
+      "bytes": 9795,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/episodes/LC-G-314159/closeout.json",
+      "sha256": "50ebac61d7d24974fa93bf9588febf155086b4bcba6744d8342855354f82ec4d",
+      "bytes": 1246,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/fact-tool-cost.json",
+      "sha256": "5657e6e6eab4be7242aba941ec1573a109a6c040d2dfb07fefde94f3f4213d07",
+      "bytes": 133,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/finish_development.py",
+      "sha256": "6102add1b6ea8c41ff7d7a31d77abdcf09aaef0ddf234d7a371258c42ba2bb4a",
+      "bytes": 5062,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/finite-service-close.json",
+      "sha256": "42107567d8467b6a79e37bb8c52e18fd604138be5db0ef052447a518aedd3197",
+      "bytes": 152,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/finite-service-open.json",
+      "sha256": "d663a4eee7fd3ce5556d16512033ee6101e316091a34f8aaa0d4dbb923ad71cd",
+      "bytes": 1195,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/freeze.py",
+      "sha256": "2c4b2942369f54f2c05d65ff6df95753fbac2646a975e4b3cf81a5bc3d2d44a8",
+      "bytes": 3672,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/inputs.py",
+      "sha256": "62e128b2d3ca4472bf88237c20458acf2f022f9eeb348459a9d38c10fc10bba6",
+      "bytes": 5454,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/integration-review.json",
+      "sha256": "bc30176016a5559f7cc5857370d09d9cf6a61eadb93392c04b5cebb1c1f4758e",
+      "bytes": 2232,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/logical-inputs.jsonl",
+      "sha256": "b05fcd2388ea9b3963c87547cef602207cd92f736b3aa566c8257aeb3bf3044c",
+      "bytes": 30731,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/postflight-audit.json",
+      "sha256": "2673c38f3163d35f4d590f6de8c83ef2e8d2dc73c931718f1ed08a25b2668898",
+      "bytes": 44015,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/preflight.json",
+      "sha256": "133eed5cdf1bc46470d9d17d51a99e44b1c765fe5b14b19c1e5f2547fece5a6e",
+      "bytes": 1676,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/provider.py",
+      "sha256": "7e6efa1d7d6373d4972940800a94787bd83cb46685957726525e0ea51daf70ee",
+      "bytes": 8719,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/report-launch-failure-001.json",
+      "sha256": "32d72c1662553b5680ed658750aa611f7e843d07866c3dae8ff91bb19468c0a2",
+      "bytes": 531,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/run_comparison.py",
+      "sha256": "2baabc0ee15a77c60241ee4d6b903cdf198f377d5a2aae7b38544dc59d6ea5a5",
+      "bytes": 10671,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/runtime-closeout.json",
+      "sha256": "6ea27663deb7531d943b660a5a9fa705f3f8f8fda381d3ce2f5f799243cc6d1d",
+      "bytes": 544,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/runtime-open.json",
+      "sha256": "e54335fdd18afdcc070aaeb0f94f8d1aaa2bf1bae3fabadb1c5fb1baf603b230",
+      "bytes": 166,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science-resource-ledger.json",
+      "sha256": "14be8d28cc31dd855268eff5f4623059953e8221bb81ab195cf7ba0988939d21",
+      "bytes": 28258,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/001/result/decision.json",
+      "sha256": "648df3287faef1b1720fe07c5bef9a3da0c40e078f05295fb77327ccc127764a",
+      "bytes": 3901,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/001/result/public-result.json.gz",
+      "sha256": "a218f0b13279ab00b35feecf2d5658c9fc4c6dff737008383c3381d940db6ad7",
+      "bytes": 28194,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/002/result/decision.json",
+      "sha256": "3682344bc86a115be36d8ce2caa1d5eeb08f49a48e712f14defd4366b880fe71",
+      "bytes": 3901,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/002/result/public-result.json.gz",
+      "sha256": "8e01fa17af9cda65ecd0982accb0c4209b9ee87889ce3c0b9825daa6f4a32708",
+      "bytes": 43907,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/003/result/decision.json",
+      "sha256": "38c61ef1eb0732ebda34c0c0b6b3af95bf936d0ccc6bc4d7964fd0304db6ea5a",
+      "bytes": 3901,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/003/result/public-result.json.gz",
+      "sha256": "061f39bb5e06de427c35aad8b8a5577e3b5f985557c757ae736b287ff330646f",
+      "bytes": 29033,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/004/result/decision.json",
+      "sha256": "1d4e85ce4d9f7e5d16b4814a6896dc6a55d2949e0789e28d9f4c44eabc7304f1",
+      "bytes": 3923,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/004/result/public-result.json.gz",
+      "sha256": "ec7863bfaa4a09a31c317dc8f8fc8387223bee03c79edbcfbb619461e3fa1609",
+      "bytes": 32620,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/005/result/decision.json",
+      "sha256": "d91cd6fe606ef1275c99be948646ae8eaf229fa85406a5d314cb56947ce1c333",
+      "bytes": 3923,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/005/result/public-result.json.gz",
+      "sha256": "625ef9f58d2f024e0cf28f149e7206f27f9f490c19130d44deaa6e8c64911e9c",
+      "bytes": 35008,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/006/result/decision.json",
+      "sha256": "cbeb06791f36cd30cb70b92931ede73f8b65410d65b39fb82499a265a2f79005",
+      "bytes": 3923,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/006/result/public-result.json.gz",
+      "sha256": "4b015ea48b0e5a32df4b6f139a1f9ce3ac55bf8b218c4774e3c6c5a4a8200897",
+      "bytes": 27225,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/007/result/decision.json",
+      "sha256": "69f8ee4f6c848ff89a003a12f5c569aaff0956833c3521bfb74da4c556615999",
+      "bytes": 4023,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/007/result/public-result.json.gz",
+      "sha256": "58d169622c59372418cd9ce275e82d4e7b68f70f81638429702c5346c3d25652",
+      "bytes": 126417,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/008/result/decision.json",
+      "sha256": "c696bdb157f3361507126aa79f2c9f29b89d3b941971fb6985496979653fee88",
+      "bytes": 4023,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/008/result/public-result.json.gz",
+      "sha256": "22031482383ef81d2f16f750de6a9758fadbc5cc11d93214a0a3c73dc2db884b",
+      "bytes": 122272,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/009/result/decision.json",
+      "sha256": "6f38fcfe6130a9964abd08bafd48b0c999814031f20d1166f1dba44d45ee4196",
+      "bytes": 4023,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/009/result/public-result.json.gz",
+      "sha256": "fb237b767f0ac7e430ede98bcfb7738b1b179074ea93d9e619abe7c9f2a7b189",
+      "bytes": 120923,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/010/result/decision.json",
+      "sha256": "edd86e25a88b006aec0f4d2e1e3d592a42d3f05624662abdffbfe5afce1c12bd",
+      "bytes": 4078,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/010/result/public-result.json.gz",
+      "sha256": "c854315b90db5608c37a59d7b099a749026b95b15b3f0e6630110f4d20725206",
+      "bytes": 140865,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/011/result/decision.json",
+      "sha256": "e73ec11222bc90ad6c9204ccc59d26d4fc95a6dbfa413484d37ff903f204b0ee",
+      "bytes": 4078,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/011/result/public-result.json.gz",
+      "sha256": "73cddfe0e59990d49218cae5036713336245760a8ea4ca792382d3e2c690cf0f",
+      "bytes": 137846,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/012/result/decision.json",
+      "sha256": "a3d3e0e5743f3ac62b2b3751c029ab4e7f1ff1d07ed92d11bd884e8b9905c7e6",
+      "bytes": 4078,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/012/result/public-result.json.gz",
+      "sha256": "18aeef78fe26a9a98617615650934d401f93c4f6d7c2b0504dd0e0c1f05a26a9",
+      "bytes": 141368,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/013/result/decision.json",
+      "sha256": "9cc32f7e48d506007aca5c07f96cf0765339fd96b383c04527041a0420a78226",
+      "bytes": 3982,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/013/result/public-result.json.gz",
+      "sha256": "c567747fe18af6ad40dc9ab8b12a0715c9e56482863879ea1ce0c8e14b1d03e5",
+      "bytes": 34548,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/014/result/decision.json",
+      "sha256": "8c61bb6e30473b99c4d02641adf9d7d4ca4d9a3f3a9e5114c08b216f7146ae09",
+      "bytes": 3982,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/014/result/public-result.json.gz",
+      "sha256": "b1a74303dcb45757fe66fee3207d699325d4d3f9471fc454a646887f4d6f1b20",
+      "bytes": 34650,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/015/result/decision.json",
+      "sha256": "90e784abdc9b2923b5880a75c2b43cdfc2eda1a70cdbdd580444dab0af1093c3",
+      "bytes": 3982,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/015/result/public-result.json.gz",
+      "sha256": "5eb3d1c5a118bc5d6f2652db3c1180e8d489d9a3bfd66aad4fab79a9e3042614",
+      "bytes": 36664,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/016/result/decision.json",
+      "sha256": "ad7664d4cbf0d03c351eb76f7d3a23142fe0d1e8f5a3bfec6b4dc07d3091805f",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/016/result/public-result.json.gz",
+      "sha256": "ad9a611f78798128f17d7962027254591351d326c90b4893207a1783a6982a00",
+      "bytes": 365246,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/017/result/decision.json",
+      "sha256": "31cdc167c40aa3a6cf078a50bc8fe7194f20edcf22ba0a9e666117a4419b3572",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/017/result/public-result.json.gz",
+      "sha256": "9a61c7091bab390e85f65c47708d9401675e7d58de7baf78af4cba3bd4b9519f",
+      "bytes": 672112,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/018/result/decision.json",
+      "sha256": "7f8818234bf266984969ef84f858e90b27838ab4aefca175bb6c2579c71ec2d7",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/science/018/result/public-result.json.gz",
+      "sha256": "a1475759ffbe7da2bb2e52e19a51cc2aee734710329331b28a14d8a202b17d3f",
+      "bytes": 642278,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/source-amendment.json",
+      "sha256": "0a3b63041d10bcbc7849893b8e1e00cda51db789cc19f891933329e5831520c9",
+      "bytes": 1335,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/stage1.py",
+      "sha256": "ea29cea98e5eca11f64b6610415457c9e29d977f11a549a1de496426c1cdacfa",
+      "bytes": 11309,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/candidate-1.json.gz",
+      "sha256": "54afcccdb14d93e075e3c60489db63fc113e925d5b7870bf401e47a3e98412ff",
+      "bytes": 122754,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/history.json",
+      "sha256": "3c4bda4d171345b4fbc718f20881d8a0fa7f3171a124b04e6d55ad31f86c4e6d",
+      "bytes": 2389,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/model-actions.jsonl",
+      "sha256": "c9b4c35707477268f704c8d840a5b9c463c83eebe8666dc1c285e01c5a8d3930",
+      "bytes": 391,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/proposals-0.json.gz",
+      "sha256": "d82a157c128897cbd270988a596fa91034f96ad94e98a81f78d214a911826b2e",
+      "bytes": 40668,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/result.json",
+      "sha256": "b43e29a7ddac618a415340895d827aebb900bc907ad81489c8d8158d0826ed9d",
+      "bytes": 6009,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-271828/strategy-state.json.gz",
+      "sha256": "11dde7873310fce78c57a437fff7821ab565674f1398315af054ee0c9c73a52b",
+      "bytes": 247157,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/candidate-1.json.gz",
+      "sha256": "b2e72df7e0ed459d944d4eec038c94e535362066657aa0724301e7e3752a0f0c",
+      "bytes": 122096,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/history.json",
+      "sha256": "0bf09e1cd9be94e83623e7f84fa78d3c26ea7575f290557b3a3af533736e3697",
+      "bytes": 2479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/model-actions.jsonl",
+      "sha256": "1293ca282b7d31bb3c0a03cf75a22a3272d413bea7138bd74d26bc35ac6766a5",
+      "bytes": 410,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/proposals-0.json.gz",
+      "sha256": "9ba9839113a25f53bd9559671c9896b15d6aa1446165fc6f8f36755b11084439",
+      "bytes": 41347,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/result.json",
+      "sha256": "d592dc69121c5b7c574d5030bbdcfc88aa373ab2029598aa42a16edc95235fbb",
+      "bytes": 6671,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J+C-314159/strategy-state.json.gz",
+      "sha256": "dc1c2dc8490f979a75481f1ce4b5666671b95f476494b7ec00001799f3027090",
+      "bytes": 246586,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/candidate-1.json.gz",
+      "sha256": "8d06dfe9ded9b7a33cd28a31ad1f6441451c43561e57a2a9ab3a1f57ab519e2d",
+      "bytes": 122754,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/history.json",
+      "sha256": "8c2109bedb3ecdbc6cf740f70e3cb9c3b1a747d13a251942725424b5adc7dd37",
+      "bytes": 2387,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/model-actions.jsonl",
+      "sha256": "94ddd78dd2cecc9d2c9a59c6a256f2e2c323a133a28da6613347e1bba2fd262a",
+      "bytes": 422,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/proposals-0.json.gz",
+      "sha256": "1096d8a67d9e24785a06c8e1d4dc8fbe738cb2c3c7f629d85ea359e083fb71f7",
+      "bytes": 40668,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/rejections.jsonl",
+      "sha256": "c4a472e2c763cba2860e5e1b4a1fdcd1f3ab2ef859b050453a9e87e174e2bc64",
+      "bytes": 162,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/result.json",
+      "sha256": "b4a6a931d3d709b0f228cbd5fd01e7121fd3121e047fd13951bdeb54e932ba19",
+      "bytes": 6523,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-271828/strategy-state.json.gz",
+      "sha256": "9f6a97c9fb049a5c1cb20e45b6f56911cca17b40fa891f520b21fdeaf0d62731",
+      "bytes": 247155,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/candidate-1.json.gz",
+      "sha256": "3b58f002543dbf7a5fc86289adafd60ad3cb043d20a6a3da336a3c392d6a1deb",
+      "bytes": 122754,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/history.json",
+      "sha256": "853dd3927f5da8484f558326045ac829ae843bcc99097da86dcbd233ab673e26",
+      "bytes": 2387,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/model-actions.jsonl",
+      "sha256": "94ddd78dd2cecc9d2c9a59c6a256f2e2c323a133a28da6613347e1bba2fd262a",
+      "bytes": 422,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/proposals-0.json.gz",
+      "sha256": "88f8f2b82b4bf7ac27a231306e353996f1775718ab7d6db52bac878a95546f12",
+      "bytes": 41348,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/rejections.jsonl",
+      "sha256": "c4a472e2c763cba2860e5e1b4a1fdcd1f3ab2ef859b050453a9e87e174e2bc64",
+      "bytes": 162,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/result.json",
+      "sha256": "30aa8f3fab42d6ab8906412f3455d0e100290d50a180e8a986e3e310f558703f",
+      "bytes": 6525,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G+J-314159/strategy-state.json.gz",
+      "sha256": "b76e6161b50abcb03e3384527c2452b3ed06d87a50120f6be80bc4c5c454531c",
+      "bytes": 247156,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/candidate-1.json.gz",
+      "sha256": "136f5d2a648a24e237b234706cc57d1676d59eafba888dd9fa2a09ac82ef2b28",
+      "bytes": 122754,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/history.json",
+      "sha256": "c465b1953b25f2c9efabbeb0c56c77195a42607a8fa58045cf7693d57d57a8da",
+      "bytes": 2385,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/model-actions.jsonl",
+      "sha256": "ea7aebd79ac68d34ff311ffee176717384186c443425be0f55b85a7d252aaf96",
+      "bytes": 1141,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/rejections.jsonl",
+      "sha256": "8d3acbebfc6864905630e95ede1d22ebc867340988d565ab07914dd30a6ebcc3",
+      "bytes": 212,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-271828/result.json",
+      "sha256": "8c77e5d6c8afa7bf5d5a52e9992d86dc408e4d65e1b03d41dcc00457a0efe9f5",
+      "bytes": 6593,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-314159/candidate-1.json.gz",
+      "sha256": "71b36492d78fc78489b99e7a368b47197f8229c68458f41e04061cc3fc43a2af",
+      "bytes": 122754,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-314159/history.json",
+      "sha256": "68788c300d5719ef25fdf23914636b68501be14a84c407d24c99541f92b97dd9",
+      "bytes": 2385,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-314159/model-actions.jsonl",
+      "sha256": "c9b4c35707477268f704c8d840a5b9c463c83eebe8666dc1c285e01c5a8d3930",
+      "bytes": 391,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/DOOR-G-314159/result.json",
+      "sha256": "50264d4f080bc2c3288e854bd090835204db8f131f4efdc43ef11d108a419c76",
+      "bytes": 4972,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/candidate-1.json.gz",
+      "sha256": "3809d13defd9e725c5bbf02660d35c77c23178ed01f9488f741179036c6a799d",
+      "bytes": 1325856,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/history.json",
+      "sha256": "1f738c30df00bf0add8fef9e6fc0be3886452e664bc5849a3b50ac9a1539be93",
+      "bytes": 2196,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/model-actions.jsonl",
+      "sha256": "dec77989fc7881a49e51edcad3810c99440a25682be29980e64e1d89167d46d6",
+      "bytes": 226,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/proposals-0.json.gz",
+      "sha256": "e48715b3a6f7642d992432416aeab0d4d3f56bf52e7e6f449b7f1db01c0f31f6",
+      "bytes": 109521,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/result.json",
+      "sha256": "9083592ed9d9706a62da68938c52e2071872a8d4d7bfc38e95c3fe4f9fb5e9e4",
+      "bytes": 5334,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-271828/strategy-state.json.gz",
+      "sha256": "fb3080ad88b8857d5666990907a52bae56c6c810edb7ac2343a500d75f537810",
+      "bytes": 2485810,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/candidate-1.json.gz",
+      "sha256": "2c7d627b7d23def2705d2777ddb554e6d7093fd3838038e67dde76529ea3fb75",
+      "bytes": 1759786,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/history.json",
+      "sha256": "b97262e60050fd898eff3fb146006a6a388dfe70738bfb18e1542d74e8aacb43",
+      "bytes": 2211,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/model-actions.jsonl",
+      "sha256": "1c3a7a6559689e50bfb5c3bf921f1078ce4c041a9ad11dbf952e71b25969143f",
+      "bytes": 226,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/proposals-0.json.gz",
+      "sha256": "380b5b333912f8448957ea070be77cdf86ec6ff659e3fabdb56c8ac008812cdc",
+      "bytes": 109520,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/result.json",
+      "sha256": "5d52001f85b0194de11590badb3110a94f8a77c08823bd149ea7528d14f04016",
+      "bytes": 5362,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J+C-314159/strategy-state.json.gz",
+      "sha256": "b06e04c00d105f45ee634d827d84e10e311229644d69e70892adfdf38982f54a",
+      "bytes": 2934879,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/candidate-1.json.gz",
+      "sha256": "54e86a8a0085605f90218c38633d0d2ab8c78c379fbe72009753dc2a68970dd1",
+      "bytes": 1747204,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/history.json",
+      "sha256": "f395ee7da7c389c0d6cc3d806f31e9b3b5f4b179d48cc0f5773b81d6d9c42b33",
+      "bytes": 2194,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/model-actions.jsonl",
+      "sha256": "85242d569ac8ad25099c0b90ddee20af4636dac8b6bee1772c9f6db0e8d92848",
+      "bytes": 204,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/proposals-0.json.gz",
+      "sha256": "22756197c8246b4bcfed84a91bbb91ea27d9a0b1d8b2622e3626e00511be304d",
+      "bytes": 109524,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/result.json",
+      "sha256": "bdd42b56b04de28a7224bf8289b69e013ab041cc6ca0cdbb50a27b7d2278a6d7",
+      "bytes": 5314,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-271828/strategy-state.json.gz",
+      "sha256": "ab49ad502318b73f1ce1d27d58c1b5e352076aced96c61f078c15a312fb00f27",
+      "bytes": 2921178,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/candidate-1.json.gz",
+      "sha256": "ff5adc1877897b424c5d9e17fdacf3f9e9d2740fba5b85af1db4a31648e81481",
+      "bytes": 1747204,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/history.json",
+      "sha256": "bf6e96ee0de192e48db058b374180b329f00a2542e7a65a2e7b28933f233a68e",
+      "bytes": 2194,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/model-actions.jsonl",
+      "sha256": "91a0763b5752676091c80fcff29a59fede26f444e97d0231d664a81e000eb078",
+      "bytes": 257,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/proposals-0.json.gz",
+      "sha256": "8717e25ed3f709381d734b0bec86deb52281da3e0cd2b12e7718a7904824c40d",
+      "bytes": 109523,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/rejections.jsonl",
+      "sha256": "c4a472e2c763cba2860e5e1b4a1fdcd1f3ab2ef859b050453a9e87e174e2bc64",
+      "bytes": 162,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/result.json",
+      "sha256": "2810125f18542a6be9734462fe9b9f3eb46f3921cea4a1293461ba0e41452cea",
+      "bytes": 6388,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G+J-314159/strategy-state.json.gz",
+      "sha256": "b7388dc0714e13f64b946aa6432bd85b8187270b9c1bab0a94c096e65d300f6a",
+      "bytes": 2921179,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/candidate-1.json.gz",
+      "sha256": "a6a7e0ad3dfeebd0165b40e2e6ac9c4aefc095fd79402ee17f6765967f347a8a",
+      "bytes": 1747204,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/history.json",
+      "sha256": "88ab16a66cb1626641eb1120a01127ce6fd356db5d9e1beb507ac9faf4eda163",
+      "bytes": 2192,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/model-actions.jsonl",
+      "sha256": "91a0763b5752676091c80fcff29a59fede26f444e97d0231d664a81e000eb078",
+      "bytes": 257,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/rejections.jsonl",
+      "sha256": "c4a472e2c763cba2860e5e1b4a1fdcd1f3ab2ef859b050453a9e87e174e2bc64",
+      "bytes": 162,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/result.json",
+      "sha256": "94e649f31c5fd95d1428cb474846b67a0e36a06a476c7b13529eed46bf7ca9a0",
+      "bytes": 5091,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-314159/candidate-1.json.gz",
+      "sha256": "bc8d3fa01967d8104eff27df7b4fe448e4cbfeadf80056e6f5974f527b1da51f",
+      "bytes": 1747204,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-314159/history.json",
+      "sha256": "e7b056200572e0855064b9f5fb9bf1f477341ad4950c040844a8dd2f1dff7608",
+      "bytes": 2192,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-314159/model-actions.jsonl",
+      "sha256": "54f5086322ee54489edab6df88eeff0530e38a75ee302870238bc3206a5900a5",
+      "bytes": 226,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-314159/result.json",
+      "sha256": "6cb29ec7f492389e22820d44b5240b143c73212bcf774cda27911eb9037bd2ff",
+      "bytes": 4549,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/verify_readonly.py",
+      "sha256": "4229b11471224f8632492f4fcf5a3ac2bd30a81d1e79eb3d71bdb88f7792b8ce",
+      "bytes": 6928,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/selected-companion-chains.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "bytes": 3,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/shared/API.json",
+      "sha256": "4458fde5a9f86c8a768dc183879c556a3ed44c465fe9bcad6abc101fa1a26855",
+      "bytes": 1647,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/shared/common-history.json.gz",
+      "sha256": "9339b777fc234a81cb60a795f433df4f57eedb572b5ca9ddc505aed0ef6980c0",
+      "bytes": 4063,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/shared/protocol.json",
+      "sha256": "12ff307fd93f8cbd28e105ec0d9edfd12828e586fe15ce3aac9f4a5f300deca1",
+      "bytes": 24214,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/shared/registration.json",
+      "sha256": "41e4bad37c6cc0096ee4ebfc3e18a725403227815e36b167861086e1ab0f3d56",
+      "bytes": 2280,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/trajectory-table.json",
+      "sha256": "ca7fcf5a1be2b054ab9c85a28cc13e9da55723e4bf343dcf2cb503a262082803",
+      "bytes": 19103,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/lc-service-learning/s0/runtime.py",
+      "sha256": "55c8b143c662e9bfa30b7e3a87e21b77292696302311144f48cb3080f46a7f76",
+      "bytes": 29627,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/public_bridge.py",
+      "sha256": "efbe94f5468273f3d0239e1a9eef67d534f519389d77a62004d8c0213ef472ef",
+      "bytes": 5274,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/DOOR/cold-contact-challenge/task.json",
+      "sha256": "e1229f4650de7a1dda323fddeb73084d207ac9fcc7cd088b57892b816b1a5347",
+      "bytes": 7014,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/DOOR/link-recovery-challenge/task.json",
+      "sha256": "88e019d97f417211de74380c3b8cc70c7047774fc48e9b976fb9e3f2ddcaed06",
+      "bytes": 6387,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/DOOR/local-repair-control/task.json",
+      "sha256": "56839a37104c5ff1a857d226faae3f21aee6781df6c6dbe1bfd46b3567b262f3",
+      "bytes": 6235,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/LC/light-before-link-challenge/task.json",
+      "sha256": "eee7ccd0cb7e4e1863737050a8a4459454ffaed18127aea9e8a4f2161b67c388",
+      "bytes": 14919,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/LC/link-before-light-challenge/task.json",
+      "sha256": "ac87d09467b8abd5fd5d62280ef41d65f02ba9ace22cbe6876dd67c80120f0b9",
+      "bytes": 14840,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/LC/local-repair-control/task.json",
+      "sha256": "ff2f8ddfabe13d26f3477a8dd485468e48b78f133af5ef17e9b8525eaeaf7850",
+      "bytes": 11441,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/stage3-host/MANIFEST.json",
+      "sha256": "85b9ea6889aad400eb67160ff6fc12d4993f6a147821aa741a86a8a75e107e54",
+      "bytes": 17003,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_closure.py",
+      "sha256": "dbf4152667a237c8509d23dc06d6079d70abec87a105dbf3707237bb629640d6",
+      "bytes": 17965,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_search.py",
+      "sha256": "37d118f6c984194c2b8df5be4091114928a5c7993ce0485411f99c8220d80e81",
+      "bytes": 36351,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/apparatus.py",
+      "sha256": "f2618f1f7bab90f2fd6b0e9f3013ece72a7215c59c7820461f3f98e5ecf01082",
+      "bytes": 12114,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/common.py",
+      "sha256": "48ff162673868238b2bf3bc5dc47c382d4142d99e8a4177629875ad4804edcf0",
+      "bytes": 3585,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/freeze_stage3.py",
+      "sha256": "788f5e641cbec1e9247c93a964263ea86b57b5e3da9a8eb5c5546d845d3918d0",
+      "bytes": 6598,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/provider.py",
+      "sha256": "85d87f74fe09c3ba0c6a8fcd51600b20a759cea438d6d53363c4dd7a8cf8e76b",
+      "bytes": 18416,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/run_stage3.py",
+      "sha256": "712828b0941e275e21c5d4ceca51b79e175025143c24136a978e940da6de5986",
+      "bytes": 12132,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/016/result/decision.json",
+      "sha256": "77d7b8f325ce2984a8278e9f627f597cfdade794a3e0088ee0b6a2376fa00ed0",
+      "bytes": 3942,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/016/result/public-result.json.gz",
+      "sha256": "1b1f5d28d2b82d624689ee27e14ee910a33b0d50aea4462a0bda8557ab57a9e2",
+      "bytes": 37258,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/017/result/decision.json",
+      "sha256": "9c8839e59401e595206afa1332ccf4e79a8bc3b8626b2c9777a77593a1f12054",
+      "bytes": 3942,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/017/result/public-result.json.gz",
+      "sha256": "47f6d7ed61273d35cc812c198a32fdf0acdb9c35b2da26838f73a894d17d08d6",
+      "bytes": 35502,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/018/result/decision.json",
+      "sha256": "c7932665eea7d43a15113025c5f9565170e7340e0760692dc11adea8da17371c",
+      "bytes": 3942,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/018/result/public-result.json.gz",
+      "sha256": "71d5632abb02f0ccec4a82a4bed6d8995b1b3360cd6c988cb9400e74dfe2cc1d",
+      "bytes": 36394,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/040/result/decision.json",
+      "sha256": "ab84b6982d260cea070a7eeba3a0694a9adcd84b23ff4ed296328c3273dba922",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/040/result/public-result.json.gz",
+      "sha256": "faa87ef2477b796a8fd950eaebc0af687c70fadb790d612734def488c5df26ac",
+      "bytes": 365250,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/041/result/decision.json",
+      "sha256": "31f84a12942ed5b942bd0dcc5c65aa08361e0c595d0858bc6458c06ccb2310fc",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/041/result/public-result.json.gz",
+      "sha256": "4b0b97140c85869e2e89ff5830b106c972ab662ee767f8f20d1227fa50414b16",
+      "bytes": 665194,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/042/result/decision.json",
+      "sha256": "4d20418781ed57fce083391328fc27a64ace401a9e3d50ce9b240f0a6e1ae637",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/042/result/public-result.json.gz",
+      "sha256": "74007b64dadd412659964fb7862fa44e6553327cf1fdb8cc9c8aed8450b2d488",
+      "bytes": 636005,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/070/result/decision.json",
+      "sha256": "1a87b674a97bd88ada12f6ad0774752712c7a9c35753152beecfb1426e4577be",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/070/result/public-result.json.gz",
+      "sha256": "4b70c82bec7608678d1e445b0f5f0f8e9248d26641f1f95bd4270cb2917371fd",
+      "bytes": 365290,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/071/result/decision.json",
+      "sha256": "faa0bc4e95a1d01c702d8d605a8a81ef20c977964204ab38195a086c6006f8a1",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/071/result/public-result.json.gz",
+      "sha256": "07f5bc073f108f96b4717f9a9782422561c39a4e45ccfd68784671b679324abc",
+      "bytes": 457816,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/072/result/decision.json",
+      "sha256": "00c1f52e21aaf910c50c6afcae45935278b3d1fce0aba5275171bc9fdd6a4f73",
+      "bytes": 3479,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science/072/result/public-result.json.gz",
+      "sha256": "a6a82e27495c5ebb7c9f737e66d7380a0e4a8a70474babc58a4d2618c8584158",
+      "bytes": 444624,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/shared/prefixes/identity-progress.json.gz",
+      "sha256": "e3210d5e9c752eee7a23e8fc6461e924ea7fbb481596773256aec2a6b0602e23",
+      "bytes": 216537,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/shared/prefixes/saved-undelivered.json.gz",
+      "sha256": "ac4497178821d0b6e58eb819c1e406f9bdba11e4bb36c2e35aaa0247146d0a5e",
+      "bytes": 753371,
+      "check_kind": "content_read"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/service-repair-m3/s0/public_projection.py",
+      "sha256": "678d8f8ea10d8a0f02306da39923f6010a4548dccd11796243ab89a98588c394",
+      "bytes": 9722,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-architecture-v2/pi-bf-aiot/packages/coding-agent/dist/bundle/index.js",
+      "sha256": "60b4367b2d4045acf8a8fbb882e78628293b1d7e583241fcf04cdb4b540d39c2",
+      "bytes": 6260,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/__init__.py",
+      "sha256": "f70dd8d816cb927272c5d2aec77a6e99f7d4fe5165dd21ac3fba9764082770a0",
+      "bytes": 63,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/__init__.py",
+      "sha256": "ea51084f2ef7d2cfbb122d49c92f347762bf15a95b4f9dbd5cc8b474b931a387",
+      "bytes": 74,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/__init__.py",
+      "sha256": "c728ef8f3315a396f3788b830ece034c119f7273e60d6e69033b9f48657d1d6d",
+      "bytes": 62,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar.py",
+      "sha256": "d3c286c67c02a5e9d70e6bb0f7b21bb635266b807ebc9e87fb5b756acaf1466c",
+      "bytes": 12661,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/ar_service.py",
+      "sha256": "d0b1fb78097d0c6505e240bccb664b4b5548f3ab0f23e8d24be1ea6ae2b42122",
+      "bytes": 17277,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/common.py",
+      "sha256": "fcbaab1118332b723b214ae27a8694cefc5ca284cc891778e79a41292c6a18ad",
+      "bytes": 1569,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/campaign20261019/phase1.py",
+      "sha256": "b8249af9163ebfbd1ed9a7ef7092f33480da1288ec2e5a9c81a07f3021b4a12f",
+      "bytes": 17463,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/historical_usage.py",
+      "sha256": "05de84418bb89551583f9b1d5d407084815083dfbbee979e44dfe1b3258d63b0",
+      "bytes": 6560,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/__init__.py",
+      "sha256": "e915d4fb96fd325f1b7fa2b8698b5beda3c7080b25cfe411503033ca628e4c29",
+      "bytes": 73,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/adapter.py",
+      "sha256": "fce8c5ff1dbc93b54cac1992224f24ee88b7f436e5042522ba0cb2b559990caf",
+      "bytes": 7810,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/decision_facts.py",
+      "sha256": "0b8996c2ee52325dc433eed3c054caf242e30105c48d1530b6ef21f2587f9a37",
+      "bytes": 11726,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/door_model.py",
+      "sha256": "eabc8a422ece68b36bcaf0d194a2332f1941a5bc24d541dd7d4ff1dac96e3d53",
+      "bytes": 8317,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/door_program.py",
+      "sha256": "f5e05fde4534a09f61364cf6a7f37660781ca7fc497a008e488962b7358e8cc2",
+      "bytes": 6741,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/dynamic_methods.py",
+      "sha256": "b14312f24bb3e0c0ac57036a68f54b2eb4930a432b85a5b0ee28bc89dc7f7033",
+      "bytes": 27255,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/dynamic_relations.py",
+      "sha256": "a6e75e19511b90f08e645b549f62e2784d0ffc1167714b18199637b08d415cea",
+      "bytes": 33316,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/e3lc.py",
+      "sha256": "91674bce735ac28901cea47f4902eb10d5f90ab36e6a82339a0dcc7d71b1cb36",
+      "bytes": 12122,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/e3lc_lc.py",
+      "sha256": "54da4fe656536547ad46e827337294bf15e123aa8322c9af5d72a83589c9cabb",
+      "bytes": 23334,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/engineering.py",
+      "sha256": "b21abc3fdd35768afb475cddc96a887123e6a0f2380e5289bcbd24505d51acec",
+      "bytes": 5704,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/episode_methods.py",
+      "sha256": "c4aeb3bf17e5f11076c9147a75d194e3ec0dcfe850592b58d744f1b5889b25c8",
+      "bytes": 36592,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/evaluator.py",
+      "sha256": "5ca8799028fb2af212f62207bd00a868d3518aec37b2739f5a78121d3817cde3",
+      "bytes": 8683,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/executor.py",
+      "sha256": "36803b22b9495e8cd9050b61795b95876f0ef801f7c0e7057444bdae8247b2b0",
+      "bytes": 9768,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/f1first.py",
+      "sha256": "48e403cec9113f1076713fe3f369608c43a2bfcf6fb6e42b08bf1efa92d8c383",
+      "bytes": 37511,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/lcpv20261023.py",
+      "sha256": "ad76a33e136a0e48a856e590ba6953d6edae9edb519936baefca6d2ee631204d",
+      "bytes": 18357,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/m2_methods.py",
+      "sha256": "6368f921ffb3afacd8c0c25ca5c32dfdbe1bb7c10c4d1fec6eeeca24188e118e",
+      "bytes": 15351,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/m3_methods.py",
+      "sha256": "d6bbdcf90825e4d2a18fd36ae5fd4aee9d83c14648557af2e690566ea5e7ea73",
+      "bytes": 27854,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/methods.py",
+      "sha256": "260da9338be02a906070e78ca8ee4dc97c13839a524b9627835cdd87d07d5750",
+      "bytes": 46969,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/pilot.py",
+      "sha256": "0544d4349592e2682b514a3ad2e5d28dc9308330893a94d43aadc96d31b0cd05",
+      "bytes": 48879,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/public_projection.py",
+      "sha256": "903a91072488a3121ecae832470a6da96922a96d2101f994ed5e60b1ad44f40a",
+      "bytes": 3046,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/__init__.py",
+      "sha256": "1d5b2c1eaed52aba2d63f4b58796d0a2b1aa8ebc21a955f896c0440156b03a01",
+      "bytes": 71,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/adapter.py",
+      "sha256": "2138c49035364f963348f5fa5ac9a646d3a367b9cf73a59ab21c4cc977b89b12",
+      "bytes": 970,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/consumer.py",
+      "sha256": "02b00d2e058bdfd0d2b2fc08ae600bfdd47a46b85fc784e44e24c5d2d5e22477",
+      "bytes": 5478,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/firmware.py",
+      "sha256": "87f6663877c09dda8732f02ec4f50b99067db37738d6f82dac8a5aa431fad95f",
+      "bytes": 4192,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/lc_adapter.py",
+      "sha256": "8399613898f7ccaa8f2b8dfff660c454f7f3d704920967a66ecb1d7d6c0ead26",
+      "bytes": 5728,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/__init__.py",
+      "sha256": "e49bbb2069c29e98a1b6eaebd0a284251165675463c777c5e68938a40745d909",
+      "bytes": 86,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/adapter.py",
+      "sha256": "ac60fff5f9986e86c3b82412a78567a444f427ba930a4d889293b407bbed89d4",
+      "bytes": 6682,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/facts.py",
+      "sha256": "600570608da0d49bacf0533fa457dd3c4fa91aacb661a10f4bb6cca16da86237",
+      "bytes": 20481,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/holding.py",
+      "sha256": "ce32fc759d4c76c7897dbb209e22b9279f490226ab1552631cdbce87532f9916",
+      "bytes": 7883,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/task.py",
+      "sha256": "dee526d67740590716f93566c0356ca4d176098185e01dd994e7c78ffc20d0c1",
+      "bytes": 9447,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024lc/__init__.py",
+      "sha256": "dd0385a46dd69319afed05575f45f4506c150c06707ff5f85ac2b2fe80188112",
+      "bytes": 70,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024lc/adapter.py",
+      "sha256": "a336ba091edfeb681cda1b22f2cafb2b39c83f2dfcfc6d02d9229c4fadc193e1",
+      "bytes": 160,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/provider.py",
+      "sha256": "4a2dc1f74c1ece7f8f559849023fc0ebdc52ccdf7ea12bff1fab999e90ecde7e",
+      "bytes": 21816,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/server.py",
+      "sha256": "dbacbb0e78a2a36cdbe772121c08b555a7a1bd94abac4b64e46dd408ef078c31",
+      "bytes": 70717,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/store.py",
+      "sha256": "61e929bb9fcf13c60140b0892371d72f7b968fc3931ff4189cd5de108e0f3ad3",
+      "bytes": 8736,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/coupled/__init__.py",
+      "sha256": "875eaaa8e90980c0978a1cc1b9821f2635becee51a6c592f7729d7caaa37ca06",
+      "bytes": 82,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/coupled/engine.py",
+      "sha256": "5295ad41cb56d39c4186d89c62b6b105ea98e307bc0de5384860fc1c1ea21e49",
+      "bytes": 13852,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/kernel/__init__.py",
+      "sha256": "d89f5b16b131582f889105a7f88c042b0c4f809eebc707e2c3ac3165ed2ecf28",
+      "bytes": 143,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/kernel/canonical.py",
+      "sha256": "58092adfb932650a177aa4b074b9961140da7580ea1d333b0519ae527c3309ff",
+      "bytes": 1114,
+      "check_kind": "sha256_checked"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/scripts/pqe_pi_callback.mjs",
+      "sha256": "bfe7db5288186da5429376329cfe8faac8b0e780c04b6bfe4e8c379fc56db229",
+      "bytes": 3347,
+      "check_kind": "sha256_checked"
+    }
+  ],
+  "stop": "No further B check, numeric, full, model, cleanup or source change. Submit this one result to S0 and stop."
+}

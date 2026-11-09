@@ -1,0 +1,25 @@
+{
+  "schema": "joint-closure-owner-api-v1",
+  "family_contract": [
+    "family_id",
+    "world_kind",
+    "tasks (frozen original3 public task contracts)",
+    "design_domain",
+    "initial_design",
+    "initial_problem",
+    "component_contract"
+  ],
+  "A_entry": "a/shared_facts.py",
+  "A_functions": {
+    "candidate_facts": "candidate_facts(contract, design, public_result=None, *, meter=None) -> source/input-bound fact dict; no natural-language recommendation",
+    "calculate": "calculate(contract, design, operation=\"all\", *, public_result=None, meter=None) -> conditional numeric facts/applicability/UNKNOWN; no scientific full execution"
+  },
+  "B_entry": "b/joint_strategy.py",
+  "B_functions": {
+    "Strategy": "Strategy(contract, initial_design, initial_public, *, fact_fn, calc_fn, recursive=False, seed=314159)",
+    "update": "strategy.update(family_result) -> factual update receipt; preserve current parent/observations",
+    "propose": "strategy.propose(parent_id=None) -> {candidates:[{id,parent_id,design,predicted_facts,derivations,closure_chain}],...}; small bounded pool, same J base with only recursive switch"
+  },
+  "meter": "S0 supplies a callable meter(kind, key, details=None); count each new bounded analytic input bundle and actual geometry/cache miss, memo exact keys; pure structural checks and cache hits reported separately. Owner tests record all numerical calls in owner counter; no hidden full execution.",
+  "integration": "A/B may settle routine compatible signature details via shared API files; preserve these names or a tiny adapter. No per-step message confirmation. Zero A/B paid/full dispatch."
+}

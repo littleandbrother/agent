@@ -1,0 +1,242 @@
+{
+  "schema": "BFA100-A-stage1-frozen-v1",
+  "at_epoch": 1793616214.884753,
+  "classification": "PRIVATE_DEVELOPER_COUNTERFACTUALS",
+  "package": "BF-PQE-RELATION-SYNTHESIS-20261102-001",
+  "original_inputs": [
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/a/M2r/public-tasks-and-common-parent.json",
+      "sha256": "2d8de7dbc9bb70227c57b5ae3782b83c1b2ac161e7e6f00be0e048d5471a04d5"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/episodes/mechanism-G-271828/callbacks/12/callback-result.json",
+      "sha256": "b6c3fa870b60ce62b6489e8b0c9fce4eb271f09401b46f645ce67779a4d9ee69"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/comparison-result.json",
+      "sha256": "49bd1f1fee02076c8d4173a14d07e25b52561c50d451054c9120e2e3c2cb2474"
+    }
+  ],
+  "preflight": {
+    "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/preflight.json",
+    "sha256": "4d20d3139cfce7960675bc25f4483d4dd1a12657b14647404a0dca947ba7e53d"
+  },
+  "registration": {
+    "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/shared/registration.json",
+    "sha256": "82f4c8be716d1f424fbf4e357e0ef13e87bbd5b10a3b32d47f948e7a9fc4b11c"
+  },
+  "runner": {
+    "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/run_stage1.py",
+    "sha256": "c91d0ec7a95b4d1cd9d3cccc31a5d5414d20b3f0d4fe87dab904f577e3744ec5"
+  },
+  "sources": {
+    "door_model.py": "eabc8a422ece68b36bcaf0d194a2332f1941a5bc24d541dd7d4ff1dac96e3d53",
+    "door_program.py": "f5e05fde4534a09f61364cf6a7f37660781ca7fc497a008e488962b7358e8cc2",
+    "engineering.py": "b21abc3fdd35768afb475cddc96a887123e6a0f2380e5289bcbd24505d51acec",
+    "executor.py": "36803b22b9495e8cd9050b61795b95876f0ef801f7c0e7057444bdae8247b2b0",
+    "evaluator.py": "5ca8799028fb2af212f62207bd00a868d3518aec37b2739f5a78121d3817cde3",
+    "adapter.py": "fce8c5ff1dbc93b54cac1992224f24ee88b7f436e5042522ba0cb2b559990caf",
+    "public_projection.py": "903a91072488a3121ecae832470a6da96922a96d2101f994ed5e60b1ad44f40a",
+    "bold/consumer.py": "02b00d2e058bdfd0d2b2fc08ae600bfdd47a46b85fc784e44e24c5d2d5e22477",
+    "bold/firmware.py": "87f6663877c09dda8732f02ec4f50b99067db37738d6f82dac8a5aa431fad95f",
+    "codebt/adapter.py": "ac60fff5f9986e86c3b82412a78567a444f427ba930a4d889293b407bbed89d4",
+    "codebt/consumer.py": "3b15295b9cfdbaf7761c578d557a8414de56e57064a9a48baf48d5dfa2a4270b",
+    "codebt/holding.py": "ce32fc759d4c76c7897dbb209e22b9279f490226ab1552631cdbce87532f9916",
+    "codebt/task.py": "dee526d67740590716f93566c0356ca4d176098185e01dd994e7c78ffc20d0c1",
+    "codebt/facts.py": "600570608da0d49bacf0533fa457dd3c4fa91aacb661a10f4bb6cca16da86237",
+    "codebt/bounds.py": "d123b269a95e7c24f6db263eacd6b9a258ad41ee8c653417d6de5c0dd6761ca5"
+  },
+  "designs": {
+    "startup19_no_persistence_holder_off": {
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "debounce_s": 0.07,
+      "esr_ohm": 5.0,
+      "mechanism": {},
+      "persistent_queue": false,
+      "retry_s": 0.1,
+      "startup_v": 1.9,
+      "tx_gate_v": 2.2,
+      "firmware_policy": "fixed_retry_v1",
+      "backoff_max_s": 1.0,
+      "tx_reserve_v": 0.025,
+      "holding_component": "off",
+      "holding_capacity": 2,
+      "holding_overflow": "drop_new",
+      "read_source": "contact_only",
+      "clear_after": "never"
+    },
+    "saved_G_callback12_untouched": {
+      "backoff_max_s": 1,
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "clear_after": "save",
+      "debounce_s": 0.07,
+      "esr_ohm": 5,
+      "firmware_policy": "fixed_retry_v1",
+      "holding_capacity": 2,
+      "holding_component": "lp_fifo",
+      "holding_overflow": "drop_new",
+      "mechanism": {},
+      "persistent_queue": true,
+      "read_source": "holding_then_contact",
+      "retry_s": 0.1,
+      "startup_v": 3.2,
+      "tx_gate_v": 2.2,
+      "tx_reserve_v": 0.025
+    }
+  },
+  "new_vs_old_R_success": {
+    "persistent_queue": {
+      "new": false,
+      "old_R_success": true
+    }
+  },
+  "old_R_success": {
+    "id": "mechanism-R-314159",
+    "design": {
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "debounce_s": 0.07,
+      "esr_ohm": 5.0,
+      "mechanism": {},
+      "persistent_queue": true,
+      "retry_s": 0.1,
+      "startup_v": 1.9,
+      "tx_gate_v": 2.2,
+      "firmware_policy": "fixed_retry_v1",
+      "backoff_max_s": 1.0,
+      "tx_reserve_v": 0.025,
+      "holding_component": "off",
+      "holding_capacity": 2,
+      "holding_overflow": "drop_new",
+      "read_source": "contact_only",
+      "clear_after": "never"
+    },
+    "final_node_id": "node-59940fca5fcd57c94a7cf414",
+    "canonical_members": [
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/science/013/result/public-result.json.gz",
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/science/014/result/public-result.json.gz",
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/partial-ancestor-validation/s0/science/015/result/public-result.json.gz"
+    ]
+  },
+  "inputs": [
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--capture-recover.json",
+      "sha256": "58382a59d85dcf1b548bfb20b6eecb761593b5a78eb15ec5374ebdc05796ed31",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "capture-recover",
+      "task_sha256": "973bc9050569e779fc5b725d1cd6988e5f80d3ee0ac2e2304c3db686aef856ba",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--reuse-train.json",
+      "sha256": "2ad42a3eea9d5460bd9da32c041c85e5755d6bda9899d82811cf547ccfa4ee07",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "reuse-train",
+      "task_sha256": "e1f51ca5afcf693d602bceabc4500790a6d00c572b57218954868064ae260969",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--radio-gap.json",
+      "sha256": "c58bbcc71c4dd7b5c50a519342bf0d56de1d694a77128bfa93a36366e4afed6d",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "radio-gap",
+      "task_sha256": "9bb5f58618cb994e2d46a6f118fa1ad33b40383fbd03f7eea07a7b62cd7a7bdf",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--capture-recover.json",
+      "sha256": "eafc329aedc255ee467f04118eb75c03099c89b1bd26134bd47749dee88e5544",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "capture-recover",
+      "task_sha256": "973bc9050569e779fc5b725d1cd6988e5f80d3ee0ac2e2304c3db686aef856ba",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--reuse-train.json",
+      "sha256": "1437f95866bcd431e7c0f26c497cdb00dfccb3ddd006cf721289c145bfa2d36d",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "reuse-train",
+      "task_sha256": "e1f51ca5afcf693d602bceabc4500790a6d00c572b57218954868064ae260969",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468"
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--radio-gap.json",
+      "sha256": "2d3d86997f5ea73dfb45da3521a77f1d6c6b7bda29a45948a24530e6527fea3f",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "radio-gap",
+      "task_sha256": "9bb5f58618cb994e2d46a6f118fa1ad33b40383fbd03f7eea07a7b62cd7a7bdf",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468"
+    }
+  ],
+  "static_results": [
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--capture-recover.json",
+      "sha256": "58382a59d85dcf1b548bfb20b6eecb761593b5a78eb15ec5374ebdc05796ed31",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "capture-recover",
+      "task_sha256": "973bc9050569e779fc5b725d1cd6988e5f80d3ee0ac2e2304c3db686aef856ba",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 1
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--reuse-train.json",
+      "sha256": "2ad42a3eea9d5460bd9da32c041c85e5755d6bda9899d82811cf547ccfa4ee07",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "reuse-train",
+      "task_sha256": "e1f51ca5afcf693d602bceabc4500790a6d00c572b57218954868064ae260969",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 0
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/startup19_no_persistence_holder_off--radio-gap.json",
+      "sha256": "c58bbcc71c4dd7b5c50a519342bf0d56de1d694a77128bfa93a36366e4afed6d",
+      "design_name": "startup19_no_persistence_holder_off",
+      "condition_id": "radio-gap",
+      "task_sha256": "9bb5f58618cb994e2d46a6f118fa1ad33b40383fbd03f7eea07a7b62cd7a7bdf",
+      "design_sha256": "3ed4efc544c5e44e4a9a89d7b824a3f94def29ce76a9a0bf3dc84763c56c50be",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 0
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--capture-recover.json",
+      "sha256": "eafc329aedc255ee467f04118eb75c03099c89b1bd26134bd47749dee88e5544",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "capture-recover",
+      "task_sha256": "973bc9050569e779fc5b725d1cd6988e5f80d3ee0ac2e2304c3db686aef856ba",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 0
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--reuse-train.json",
+      "sha256": "1437f95866bcd431e7c0f26c497cdb00dfccb3ddd006cf721289c145bfa2d36d",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "reuse-train",
+      "task_sha256": "e1f51ca5afcf693d602bceabc4500790a6d00c572b57218954868064ae260969",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 0
+    },
+    {
+      "path": "docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/inputs/saved_G_callback12_untouched--radio-gap.json",
+      "sha256": "2d3d86997f5ea73dfb45da3521a77f1d6c6b7bda29a45948a24530e6527fea3f",
+      "design_name": "saved_G_callback12_untouched",
+      "condition_id": "radio-gap",
+      "task_sha256": "9bb5f58618cb994e2d46a6f118fa1ad33b40383fbd03f7eea07a7b62cd7a7bdf",
+      "design_sha256": "5ee3c2e05ed3af29ff30067297d00a7495f72f5f05edb5c7fd58d0d9b6e71468",
+      "status": "LEGAL",
+      "error": null,
+      "static_geometry_real_misses": 0
+    }
+  ],
+  "claim_boundary": "Fixed-design neighborhood only; no new model episode, no global necessity, no old outcome replacement. Static legality is distinct from dynamic model validity."
+}

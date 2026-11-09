@@ -1,0 +1,171 @@
+{
+  "schema": "joint-closure-real-model-trajectory-v1",
+  "ident": "LC-G-271828",
+  "family": "LC",
+  "condition": "G",
+  "repeat_identifier": 271828,
+  "backend_seed_supported": false,
+  "status": "COMPLETE",
+  "termination": "FIRST_WHOLE_SERVICE_PASS",
+  "fatal": null,
+  "last_feedback": {
+    "status": "EVALUATED",
+    "slot": 1,
+    "statuses": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "public_check": {
+      "verdict": "PASS"
+    }
+  },
+  "first_all_service_PASS_design_slot": 1,
+  "first_all_service_PASS_logical_inputs": 3,
+  "logical_evaluated_designs": 1,
+  "history": [
+    {
+      "slot": 1,
+      "parent_id": "initial",
+      "design": {
+        "ack_spacing_s": 0.02,
+        "area_cm2": 50,
+        "brownout_v": 2.2,
+        "capacitance_f": 0.05,
+        "esr_ohm": 0.1,
+        "nvm_capacity_records": 4096,
+        "persistent_records": true,
+        "retry_s": 10,
+        "sample_period_s": 60,
+        "startup_v": 2.3
+      },
+      "raw_proposal": {
+        "ack_spacing_s": 0.02,
+        "area_cm2": 50,
+        "brownout_v": 2.2,
+        "capacitance_f": 0.05,
+        "esr_ohm": 0.1,
+        "nvm_capacity_records": 4096,
+        "persistent_records": true,
+        "retry_s": 10,
+        "sample_period_s": 60,
+        "startup_v": 2.3
+      },
+      "result": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/s0/trajectories/LC-G-271828/candidate-1.json.gz",
+        "sha256": "a6a7e0ad3dfeebd0165b40e2e6ac9c4aefc095fd79402ee17f6765967f347a8a"
+      },
+      "statuses": [
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "public_check": {
+        "verdict": "PASS"
+      },
+      "model_valid": true,
+      "usage": {
+        "full_inputs": 0,
+        "full_wall_s": 0.0,
+        "logical_inputs": 3,
+        "cache_reuses": 3
+      },
+      "selected_method_candidate_id": null,
+      "origin": "FREE_OR_MODIFIED_MODEL_PROPOSAL",
+      "closure_chain": [],
+      "derivations": [],
+      "complexity": {
+        "changes": {
+          "ack_spacing_s": {
+            "before": 0.25,
+            "after": 0.02
+          },
+          "area_cm2": {
+            "before": 25.0,
+            "after": 50
+          },
+          "capacitance_f": {
+            "before": 0.012,
+            "after": 0.05
+          },
+          "esr_ohm": {
+            "before": 8.0,
+            "after": 0.1
+          },
+          "nvm_capacity_records": {
+            "before": 2048,
+            "after": 4096
+          },
+          "retry_s": {
+            "before": 45.0,
+            "after": 10
+          },
+          "startup_v": {
+            "before": 2.5,
+            "after": 2.3
+          }
+        },
+        "changed_field_count": 7,
+        "added_components": [],
+        "capacitance_f": 0.05,
+        "pv_area_cm2": 50,
+        "scope": "Actual unweighted fields/components; no synthetic aggregate burden score."
+      }
+    }
+  ],
+  "final": {
+    "design": {
+      "ack_spacing_s": 0.02,
+      "area_cm2": 50,
+      "brownout_v": 2.2,
+      "capacitance_f": 0.05,
+      "esr_ohm": 0.1,
+      "nvm_capacity_records": 4096,
+      "persistent_records": true,
+      "retry_s": 10,
+      "sample_period_s": 60,
+      "startup_v": 2.3
+    },
+    "public_check": {
+      "verdict": "PASS"
+    }
+  },
+  "new_resources": {
+    "full_attempts": 0,
+    "full_wall_s": 0.0,
+    "logical_inputs": 3,
+    "cache_reuses": 3,
+    "cheap_numeric": 0
+  },
+  "wall_s": 35.589268125011586,
+  "method_strategy_cost": null,
+  "model_ledger": {
+    "requests": 2,
+    "unknown_or_missing_usage": [],
+    "settled_charge_upper_bound_usd": 0.017118599999999998,
+    "unsettled_reserved_usd": 0,
+    "cache_aware_rate_estimate_usd": 0.017118599999999998,
+    "rate_scope": "Existing pinned .006/.30/1.20 USD per million; estimates, not invoice amounts",
+    "rows": [
+      {
+        "id": "llm-8a521010c38c400a1f9b",
+        "status": "SETTLED",
+        "reserved": 0.0590115,
+        "charged": 0.008916,
+        "usage": "{\"completion_tokens\":2795,\"completion_tokens_details\":{\"reasoning_tokens\":2693},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":18540,\"prompt_tokens\":18540,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":21335}",
+        "response_hash": "bb4c8c92c4f39e9629566177bfdc911e79e5304acfee11c0a6d4dddd1ef72d8b",
+        "error": null
+      },
+      {
+        "id": "llm-ce5eb9de7ba27bec6efb",
+        "status": "SETTLED",
+        "reserved": 0.059066099999999996,
+        "charged": 0.008202599999999999,
+        "usage": "{\"completion_tokens\":2190,\"completion_tokens_details\":{\"reasoning_tokens\":2106},\"prompt_cache_hit_tokens\":0,\"prompt_cache_miss_tokens\":18582,\"prompt_tokens\":18582,\"prompt_tokens_details\":{\"cached_tokens\":0},\"total_tokens\":20772}",
+        "response_hash": "e0c0e6b67b1206bd30766d7268b01a28cde6b89e03d21acaf7786c610fc0f5be",
+        "error": null
+      }
+    ]
+  },
+  "method_identity": "actual accounted deepseek/deepseek-flash Pi model; thinking high; underlying weights unreported"
+}

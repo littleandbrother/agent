@@ -1,0 +1,240 @@
+{
+  "schema": "BFA100-A-stage3-prospective-rules-v1",
+  "package": "BF-PQE-RELATION-SYNTHESIS-20261102-001",
+  "at": "2026-11-02T10:47:42.924335+00:00",
+  "selection": "One natural rule per condition, frozen before stage2 outcome and stage3 dispatch. No sweep, method-outcome selection, private solution or replacement.",
+  "visibility": "A_S0_HOST_ONLY_UNTIL_B_STAGE2_ALGORITHM_FREEZE",
+  "DOOR": [
+    {
+      "id": "local-repair-control",
+      "starts_s": [
+        61.0,
+        66.0,
+        71.0
+      ],
+      "segments": [
+        [
+          0,
+          90,
+          1.5,
+          0.5
+        ],
+        [
+          90,
+          0,
+          1.5,
+          0
+        ]
+      ],
+      "gateway": [
+        [
+          0,
+          86400
+        ]
+      ],
+      "role": "local-repair/complexity-control",
+      "mechanism": "Three smooth complete warm cycles with ample stable endpoint holds and uninterrupted link; complex holder enabling is optional, never required by task construction."
+    },
+    {
+      "id": "cold-contact-challenge",
+      "starts_s": [
+        73.0,
+        211.0,
+        51017.0
+      ],
+      "segments": [
+        [
+          0,
+          74,
+          1.1,
+          0
+        ],
+        [
+          74,
+          90,
+          0.18,
+          0.2
+        ],
+        [
+          90,
+          16,
+          0.95,
+          0
+        ],
+        [
+          16,
+          0,
+          0.18,
+          0
+        ]
+      ],
+      "gateway": [
+        [
+          0,
+          86400
+        ]
+      ],
+      "role": "natural cold/source/contact challenge",
+      "mechanism": "Widely separated complete cycles and split-speed strokes change when mechanical work reaches the store relative to stable contact events; continuous link isolates source/event timing."
+    },
+    {
+      "id": "link-recovery-challenge",
+      "starts_s": [
+        95.0,
+        101.0,
+        43019.0
+      ],
+      "segments": [
+        [
+          0,
+          90,
+          1.25,
+          0.35
+        ],
+        [
+          90,
+          0,
+          1.25,
+          0
+        ]
+      ],
+      "gateway": [
+        [
+          0,
+          95.9
+        ],
+        [
+          96.8,
+          101.9
+        ],
+        [
+          102.8,
+          43019.9
+        ],
+        [
+          43020.8,
+          86400
+        ]
+      ],
+      "role": "natural transport challenge",
+      "mechanism": "Three complete strokes with a finite 0.9s gateway outage around each opening; the unchanged two-second delivery deadline applies and no future gateway observation is added."
+    }
+  ],
+  "LC": [
+    {
+      "id": "local-repair-control",
+      "dark": [
+        21600,
+        64800
+      ],
+      "gateway": [
+        [
+          0,
+          86400
+        ]
+      ],
+      "recovery": 64800,
+      "light_blocks_s": [
+        86400
+      ],
+      "lit_w_m2": [
+        0.6
+      ],
+      "shade_blocks_s": [
+        86400
+      ],
+      "shade": [
+        0.8
+      ],
+      "role": "local-repair/complexity-control",
+      "mechanism": "Stable illumination outside the original twelve-hour dark interval and continuously available link remove shadow/outage interactions; strict energy, sample, timestamp and service requirements remain."
+    },
+    {
+      "id": "light-before-link-challenge",
+      "dark": [
+        23400,
+        66600
+      ],
+      "gateway": [
+        [
+          0,
+          14400
+        ],
+        [
+          67800,
+          86400
+        ]
+      ],
+      "recovery": 67800,
+      "light_blocks_s": [
+        1200,
+        1800,
+        900
+      ],
+      "lit_w_m2": [
+        0.4,
+        0.8,
+        0.55
+      ],
+      "shade_blocks_s": [
+        2700,
+        1800
+      ],
+      "shade": [
+        0.8,
+        0.45
+      ],
+      "role": "natural recovery/queue challenge",
+      "mechanism": "Light returns 1200s before connectivity after twelve hours of darkness, coupling powered sampling and accumulated FIFO delivery without changing scheduling or service deadlines."
+    },
+    {
+      "id": "link-before-light-challenge",
+      "dark": [
+        25200,
+        68400
+      ],
+      "gateway": [
+        [
+          0,
+          18000
+        ],
+        [
+          66600,
+          86400
+        ]
+      ],
+      "recovery": 66600,
+      "light_blocks_s": [
+        1800,
+        1200,
+        600
+      ],
+      "lit_w_m2": [
+        0.7,
+        0.35,
+        0.9
+      ],
+      "shade_blocks_s": [
+        1800,
+        3600
+      ],
+      "shade": [
+        0.65,
+        0.9
+      ],
+      "role": "natural retained-energy challenge",
+      "mechanism": "Connectivity returns 1800s before the twelve-hour darkness ends, so any recovery must use retained stored energy; no new storage/RTC or policy branch is introduced."
+    }
+  ],
+  "initials": "Same original task-module default DOOR design in all DOOR conditions; original qualified LC flat default in all LC conditions. No engineering winner. Initial PASS remains a correct-stop control.",
+  "initial_dispatch": {
+    "owner": "campaign-s0",
+    "cap_each": 1,
+    "cap_total": 6,
+    "A_new_full": 0
+  },
+  "evaluation": "One whole design must pass all three complete original service conjunctions; no cross-design splicing. Six candidate slots are additional to common initial; exact reuse consumes its candidate/evaluation slot.",
+  "complexity": "Report actual edited fields, enabled components, source area, storage, and measured load/energy separately; no invented weighted score.",
+  "unexpressible_LC": "Return NOT_RUN_INTERFACE_GAP with exact missing original interface; do not substitute DOOR, invent platform/model or change semantics.",
+  "claim_boundary": "Finite constructed two-family/two-seed comparison only; not an official benchmark, physical or unseen-model qualification."
+}

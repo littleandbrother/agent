@@ -1,0 +1,640 @@
+{
+  "at": "2026-11-02T11:21:35.376305+00:00",
+  "status": "FINITE_PACKAGE_EXECUTED",
+  "package": "BF-PQE-RELATION-SYNTHESIS-20261102-001",
+  "stage1": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/STAGE1-RESULT.json",
+    "sha256": "eae135963f3d8f02c42de0c3a2d5a9e41990e4b1e431d892b6f0de9d7d1e1c42"
+  },
+  "stage2": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2-result.json",
+    "sha256": "b702cbab98963385aecc69574bb1296252f95766a221e9310a4b8de0f48a4945"
+  },
+  "component_closure_implementation": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/core-closure-gate.json",
+    "sha256": "7f2c4813b82831516754242d20bc2e6160c36bc3e8791cb7df2212010aed6b23"
+  },
+  "comparison": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage3-result.json",
+    "sha256": "b1aa578181fc92f3e2d45a35bc559abece6d280c5af844e9933e94b3fe1d1cd0"
+  },
+  "trajectories": [
+    {
+      "ident": "DOOR-G-314159",
+      "family": "DOOR",
+      "condition": "G",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 4.172194292012136,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 1
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "capacitance_f",
+          "esr_ohm",
+          "persistent_queue",
+          "retry_s"
+        ],
+        "changes": {
+          "capacitance_f": {
+            "before": 0.0001,
+            "after": 0.001
+          },
+          "esr_ohm": {
+            "before": 5.0,
+            "after": 0.1
+          },
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "retry_s": {
+            "before": 0.1,
+            "after": 1
+          }
+        },
+        "changed_field_count": 4,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.0009,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "DOOR-D-314159",
+      "family": "DOOR",
+      "condition": "D",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 2.3628040429903194,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 4
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "persistent_queue",
+          "startup_v",
+          "firmware_policy",
+          "holding_component",
+          "holding_overflow"
+        ],
+        "changes": {
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "startup_v": {
+            "before": 2.2,
+            "after": 2.5746888237712704
+          },
+          "firmware_policy": {
+            "before": "fixed_retry_v1",
+            "after": "voltage_history_backoff_v1"
+          },
+          "holding_component": {
+            "before": "off",
+            "after": "lp_fifo"
+          },
+          "holding_overflow": {
+            "before": "drop_new",
+            "after": "overwrite_oldest"
+          }
+        },
+        "changed_field_count": 5,
+        "added_components": [
+          "holder:lp_fifo"
+        ],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "DOOR-R-314159",
+      "family": "DOOR",
+      "condition": "R",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 4,
+      "first_all_service_PASS_logical_inputs": 12,
+      "logical_evaluated_designs": 4,
+      "new_resources": {
+        "full_attempts": 12,
+        "full_wall_s": 16.89412183294189,
+        "logical_inputs": 12,
+        "cache_reuses": 0,
+        "cheap_numeric": 2
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "capacitance_f",
+          "esr_ohm",
+          "persistent_queue",
+          "startup_v"
+        ],
+        "changes": {
+          "capacitance_f": {
+            "before": 0.0001,
+            "after": 0.00025702811244979917
+          },
+          "esr_ohm": {
+            "before": 5.0,
+            "after": 0.1
+          },
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "startup_v": {
+            "before": 2.2,
+            "after": 1.9
+          }
+        },
+        "changed_field_count": 4,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.00015702811244979918,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "DOOR-G-271828",
+      "family": "DOOR",
+      "condition": "G",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 4.226429250004003,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "capacitance_f",
+          "persistent_queue",
+          "startup_v"
+        ],
+        "changes": {
+          "capacitance_f": {
+            "before": 0.0001,
+            "after": 0.00068
+          },
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "startup_v": {
+            "before": 2.2,
+            "after": 1.9
+          }
+        },
+        "changed_field_count": 3,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.00058,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "DOOR-D-271828",
+      "family": "DOOR",
+      "condition": "D",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 2.4419395010045264,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "persistent_queue",
+          "firmware_policy",
+          "holding_component"
+        ],
+        "changes": {
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "firmware_policy": {
+            "before": "fixed_retry_v1",
+            "after": "voltage_history_backoff_v1"
+          },
+          "holding_component": {
+            "before": "off",
+            "after": "lp_fifo"
+          }
+        },
+        "changed_field_count": 3,
+        "added_components": [
+          "holder:lp_fifo"
+        ],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "DOOR-R-271828",
+      "family": "DOOR",
+      "condition": "R",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 4,
+      "first_all_service_PASS_logical_inputs": 12,
+      "logical_evaluated_designs": 4,
+      "new_resources": {
+        "full_attempts": 0,
+        "full_wall_s": 0.0,
+        "logical_inputs": 12,
+        "cache_reuses": 12,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "capacitance_f",
+          "esr_ohm",
+          "persistent_queue",
+          "startup_v"
+        ],
+        "changes": {
+          "capacitance_f": {
+            "before": 0.0001,
+            "after": 0.00025702811244979917
+          },
+          "esr_ohm": {
+            "before": 5.0,
+            "after": 0.1
+          },
+          "persistent_queue": {
+            "before": false,
+            "after": true
+          },
+          "startup_v": {
+            "before": 2.2,
+            "after": 1.9
+          }
+        },
+        "changed_field_count": 4,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0,
+        "capacitance_delta_f": 0.00015702811244979918,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-G-314159",
+      "family": "LC",
+      "condition": "G",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 11.330267000972526,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "ack_spacing_s",
+          "area_cm2",
+          "capacitance_f",
+          "esr_ohm",
+          "nvm_capacity_records",
+          "retry_s",
+          "startup_v"
+        ],
+        "changes": {
+          "ack_spacing_s": {
+            "before": 0.25,
+            "after": 0.02
+          },
+          "area_cm2": {
+            "before": 25.0,
+            "after": 50
+          },
+          "capacitance_f": {
+            "before": 0.012,
+            "after": 0.05
+          },
+          "esr_ohm": {
+            "before": 8.0,
+            "after": 0.1
+          },
+          "nvm_capacity_records": {
+            "before": 2048,
+            "after": 4096
+          },
+          "retry_s": {
+            "before": 45.0,
+            "after": 10
+          },
+          "startup_v": {
+            "before": 2.5,
+            "after": 2.3
+          }
+        },
+        "changed_field_count": 7,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 25.0,
+        "capacitance_delta_f": 0.038000000000000006,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-D-314159",
+      "family": "LC",
+      "condition": "D",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": null,
+      "first_all_service_PASS_logical_inputs": null,
+      "logical_evaluated_designs": 6,
+      "new_resources": {
+        "full_attempts": 18,
+        "full_wall_s": 21.21305041902815,
+        "logical_inputs": 18,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [],
+        "changes": {},
+        "changed_field_count": 0,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0.0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-R-314159",
+      "family": "LC",
+      "condition": "R",
+      "seed": 314159,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": null,
+      "first_all_service_PASS_logical_inputs": null,
+      "logical_evaluated_designs": 6,
+      "new_resources": {
+        "full_attempts": 9,
+        "full_wall_s": 13.505997625004966,
+        "logical_inputs": 18,
+        "cache_reuses": 9,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "startup_v"
+        ],
+        "changes": {
+          "startup_v": {
+            "before": 2.5,
+            "after": 2.3
+          }
+        },
+        "changed_field_count": 1,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0.0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-G-271828",
+      "family": "LC",
+      "condition": "G",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": 1,
+      "first_all_service_PASS_logical_inputs": 3,
+      "logical_evaluated_designs": 1,
+      "new_resources": {
+        "full_attempts": 3,
+        "full_wall_s": 21.62410291802371,
+        "logical_inputs": 3,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "ack_spacing_s",
+          "area_cm2",
+          "capacitance_f",
+          "esr_ohm",
+          "nvm_capacity_records",
+          "retry_s",
+          "startup_v"
+        ],
+        "changes": {
+          "ack_spacing_s": {
+            "before": 0.25,
+            "after": 0.01
+          },
+          "area_cm2": {
+            "before": 25.0,
+            "after": 50
+          },
+          "capacitance_f": {
+            "before": 0.012,
+            "after": 0.05
+          },
+          "esr_ohm": {
+            "before": 8.0,
+            "after": 0.1
+          },
+          "nvm_capacity_records": {
+            "before": 2048,
+            "after": 4096
+          },
+          "retry_s": {
+            "before": 45.0,
+            "after": 60
+          },
+          "startup_v": {
+            "before": 2.5,
+            "after": 2.3
+          }
+        },
+        "changed_field_count": 7,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 25.0,
+        "capacitance_delta_f": 0.038000000000000006,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-D-271828",
+      "family": "LC",
+      "condition": "D",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": null,
+      "first_all_service_PASS_logical_inputs": null,
+      "logical_evaluated_designs": 6,
+      "new_resources": {
+        "full_attempts": 18,
+        "full_wall_s": 97.56297774906852,
+        "logical_inputs": 18,
+        "cache_reuses": 0,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [],
+        "changes": {},
+        "changed_field_count": 0,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0.0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    },
+    {
+      "ident": "LC-R-271828",
+      "family": "LC",
+      "condition": "R",
+      "seed": 271828,
+      "status": "COMPLETE",
+      "fatal": null,
+      "first_all_service_PASS_design_slot": null,
+      "first_all_service_PASS_logical_inputs": null,
+      "logical_evaluated_designs": 6,
+      "new_resources": {
+        "full_attempts": 9,
+        "full_wall_s": 34.469544249994215,
+        "logical_inputs": 18,
+        "cache_reuses": 9,
+        "cheap_numeric": 0
+      },
+      "final_complexity": {
+        "changed_fields": [
+          "esr_ohm",
+          "startup_v",
+          "retry_s"
+        ],
+        "changes": {
+          "esr_ohm": {
+            "before": 8.0,
+            "after": 57.41043662944454
+          },
+          "startup_v": {
+            "before": 2.5,
+            "after": 3.4749011905206357
+          },
+          "retry_s": {
+            "before": 45.0,
+            "after": 3417.962779994379
+          }
+        },
+        "changed_field_count": 3,
+        "added_components": [],
+        "inactive_fields_normalized": [],
+        "pv_area_delta_cm2": 0.0,
+        "capacitance_delta_f": 0.0,
+        "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+      }
+    }
+  ],
+  "resources": {
+    "new_full_inputs": 105,
+    "new_full_wall_s": 257.27283687805175,
+    "logical_inputs_including_stage1": 138,
+    "exact_reused_inputs": 33,
+    "cheap_numeric": 26,
+    "software_checks": 22,
+    "software_original_B_failures": 3,
+    "software_S0": 8,
+    "provider_episodes": 4,
+    "provider_requests": 31,
+    "provider_tokens": {
+      "prompt_tokens": 376312,
+      "completion_tokens": 109100,
+      "total_tokens": 485412,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 376312,
+      "reasoning_tokens": 101077
+    },
+    "cache_aware_rate_estimate_usd": 0.2438136,
+    "unsettled_reserved_usd": 0.0,
+    "new_unknown": 0,
+    "original_unknown_reserved_usd": 0.3686529,
+    "scientific_phase_new_inputs": {
+      "stage1": 6,
+      "stage2": 9,
+      "initial": 6,
+      "comparison": 84
+    }
+  },
+  "cost_closeout": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/cost-closeout.json",
+    "sha256": "89c6377e0cf5bb94c621c4c157b71d6e9eab2998e4a557481ddf5dafe8f67de4"
+  },
+  "metadata_errata": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/metadata-errata.json",
+    "sha256": "2054b53e8aeda94db4582255067a3a6fe8b3e4575a3d2650092d020b447913cd"
+  },
+  "final_resource_total": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/resource-total.json",
+    "sha256": "27a737f17716c57632c4c650715463996225d73f9d1fad9713eeb5cdd2a53f3e"
+  },
+  "independent_readbacks": [
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/FINAL-SERVICE-READBACK.json",
+      "sha256": "a82367f8ac648ad4a589ea172175fdea14993d984fd125317464eb6156791a89"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/FINAL-METHOD-COST-READBACK.json",
+      "sha256": "5db8ec4bf978a8b2407bea35ecfea8efe1476d77b05b81739af670fcef54aa38"
+    }
+  ]
+}

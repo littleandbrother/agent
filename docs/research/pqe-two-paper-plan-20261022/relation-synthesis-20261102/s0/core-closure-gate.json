@@ -1,0 +1,395 @@
+{
+  "at": "2026-11-02T11:01:35.484312+00:00",
+  "status": "PASS",
+  "software_checks": 1,
+  "new_provider_requests": 0,
+  "new_full_inputs": 0,
+  "source_freeze": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/freeze-receipt.json",
+    "sha256": "c7111c62483048c14dec332a9574610a176978bb65f6e0921173062be32c75a2"
+  },
+  "actual_source_fact_readback": [
+    {
+      "id": "closure-7c2766e715b69515b23b",
+      "parent_id": null,
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.2,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "transition": null,
+      "unmet": [
+        "CONSUMPTION"
+      ],
+      "unknown": [
+        "DYNAMIC_CAPACITY",
+        "DYNAMIC_TIMING",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE"
+      ],
+      "source_facts_sha256": "5b35ded85e1f67a31e6e124d9b6088e106c3740ce0f4cb8e380b13f42d48ed45"
+    },
+    {
+      "id": "closure-dddc0856b632c5a31a84",
+      "parent_id": "closure-7c2766e715b69515b23b",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.2,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "never"
+      },
+      "transition": {
+        "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+        "consumed_check": {
+          "kind": "CONSUMPTION",
+          "subject": "holding_record",
+          "holds": false,
+          "predicate": {
+            "any_enabled_reader_for": "holding_record",
+            "from_fact_ids": [
+              "holder.production",
+              "program.read"
+            ]
+          },
+          "applicable": true,
+          "hard_refuted": false,
+          "dependencies": [
+            "holding_component",
+            "read_source"
+          ],
+          "refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+            "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+          ]
+        },
+        "patch": {
+          "read_source": "holding_then_contact"
+        },
+        "source_fact_ids": [
+          "holder.production",
+          "program.read"
+        ],
+        "source_refs": [
+          "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+          "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+        ],
+        "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+        "dynamic_obligation_resolved": false,
+        "new_unmet": []
+      },
+      "unmet": [],
+      "unknown": [
+        "DYNAMIC_CAPACITY",
+        "DYNAMIC_TIMING",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE"
+      ],
+      "source_facts_sha256": "f80dc1a5ba8ad34b986643498a08c9ac4dcbff7f514d3f56166bd62cae4426bb"
+    },
+    {
+      "id": "closure-7d1b0da6e98db0111167",
+      "parent_id": "closure-dddc0856b632c5a31a84",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.2,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "early"
+      },
+      "transition": {
+        "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+        "consumed_check": {
+          "kind": "DYNAMIC_CAPACITY",
+          "subject": "holding_record",
+          "holds": null,
+          "predicate": {
+            "observed_within_declared_limit": "holder.capacity",
+            "from_fact_ids": [
+              "holder.capacity"
+            ]
+          },
+          "applicable": true,
+          "hard_refuted": false,
+          "dependencies": [
+            "clear_after",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow"
+          ],
+          "refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+          ]
+        },
+        "patch": {
+          "clear_after": "early"
+        },
+        "source_fact_ids": [
+          "holder.capacity"
+        ],
+        "source_refs": [
+          "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+        ],
+        "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+        "dynamic_obligation_resolved": false,
+        "new_unmet": [
+          "ff0b81ea02d3272fbb987dda70ac6a418d06821ee30f652c0ac156c0097a04ba"
+        ]
+      },
+      "unmet": [
+        "RELIABLE_HANDOFF"
+      ],
+      "unknown": [
+        "DYNAMIC_CAPACITY",
+        "DYNAMIC_TIMING",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE"
+      ],
+      "source_facts_sha256": "18e7d9cb22499b8c88f124ce2f4323a2749120e5617288553d0f4462bd9b8fa5"
+    },
+    {
+      "id": "closure-e9552add2c8f23de53f4",
+      "parent_id": "closure-dddc0856b632c5a31a84",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.2,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "save"
+      },
+      "transition": {
+        "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+        "consumed_check": {
+          "kind": "DYNAMIC_CAPACITY",
+          "subject": "holding_record",
+          "holds": null,
+          "predicate": {
+            "observed_within_declared_limit": "holder.capacity",
+            "from_fact_ids": [
+              "holder.capacity"
+            ]
+          },
+          "applicable": true,
+          "hard_refuted": false,
+          "dependencies": [
+            "clear_after",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow"
+          ],
+          "refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+          ]
+        },
+        "patch": {
+          "clear_after": "save"
+        },
+        "source_fact_ids": [
+          "holder.capacity"
+        ],
+        "source_refs": [
+          "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+        ],
+        "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+        "dynamic_obligation_resolved": false,
+        "new_unmet": []
+      },
+      "unmet": [],
+      "unknown": [
+        "DYNAMIC_CAPACITY",
+        "DYNAMIC_TIMING",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE"
+      ],
+      "source_facts_sha256": "718f763c4ead94d7609fd67ef241c9ff6295db264f65a31cd1c7e8109464014a"
+    },
+    {
+      "id": "closure-3d9dc0cf95eea9fa9ad8",
+      "parent_id": "closure-dddc0856b632c5a31a84",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.2,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "holding_then_contact",
+        "clear_after": "ack"
+      },
+      "transition": {
+        "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+        "consumed_check": {
+          "kind": "DYNAMIC_CAPACITY",
+          "subject": "holding_record",
+          "holds": null,
+          "predicate": {
+            "observed_within_declared_limit": "holder.capacity",
+            "from_fact_ids": [
+              "holder.capacity"
+            ]
+          },
+          "applicable": true,
+          "hard_refuted": false,
+          "dependencies": [
+            "clear_after",
+            "holding_capacity",
+            "holding_component",
+            "holding_overflow"
+          ],
+          "refs": [
+            "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+          ]
+        },
+        "patch": {
+          "clear_after": "ack"
+        },
+        "source_fact_ids": [
+          "holder.capacity"
+        ],
+        "source_refs": [
+          "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+        ],
+        "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+        "dynamic_obligation_resolved": false,
+        "new_unmet": []
+      },
+      "unmet": [],
+      "unknown": [
+        "DYNAMIC_CAPACITY",
+        "DYNAMIC_TIMING",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE",
+        "DYNAMIC_EVIDENCE"
+      ],
+      "source_facts_sha256": "e77a7e26a77a9270b6817fdd8615bf97cbabbc453c6e26a5bfca29c8bb06f67a"
+    }
+  ],
+  "exact_decision_consequence_bindings": [
+    {
+      "prefix_id": "identity-progress",
+      "switch": "off",
+      "independently_generated_v2_decision": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-off.json.gz",
+        "sha256": "905a7623d266fa1bffee1b27defa2c8b3d1be74fec1322bb4d1059ddb7e1e50d"
+      },
+      "retained_v1_consequence": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/identity-progress-off.json.gz",
+        "sha256": "b14735050bfe03e266d190650a8d54cbc95129d686f3b7a67e926c101c1fa473"
+      },
+      "exact_same_consumer_input": true,
+      "new_logical_or_numerical_execution": 0,
+      "causality": "New decision provenance bound to a retained exact-input consequence; v1 execution is not reattributed to v2."
+    },
+    {
+      "prefix_id": "identity-progress",
+      "switch": "on",
+      "independently_generated_v2_decision": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-on.json.gz",
+        "sha256": "c86c1b55ae3f624e06bfc7483164a95ffd56752659f92c39a661841dfc0ffcdb"
+      },
+      "retained_v1_consequence": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/identity-progress-on.json.gz",
+        "sha256": "e0bc66ee23f15839e281462d22e500d4f6bec221e2726f1ff6079a5c689e666c"
+      },
+      "exact_same_consumer_input": true,
+      "new_logical_or_numerical_execution": 0,
+      "causality": "New decision provenance bound to a retained exact-input consequence; v1 execution is not reattributed to v2."
+    },
+    {
+      "prefix_id": "saved-undelivered",
+      "switch": "off",
+      "independently_generated_v2_decision": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-off.json.gz",
+        "sha256": "296dfe8d5702954c3a79ce277424df657654642e734b7c65ec6a2d0f036ac932"
+      },
+      "retained_v1_consequence": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/saved-undelivered-off.json.gz",
+        "sha256": "f07a7c64fc29cf49493cb53fdc4663c4d229de7c37fbd98a97f172b6f3480c9c"
+      },
+      "exact_same_consumer_input": true,
+      "new_logical_or_numerical_execution": 0,
+      "causality": "New decision provenance bound to a retained exact-input consequence; v1 execution is not reattributed to v2."
+    },
+    {
+      "prefix_id": "saved-undelivered",
+      "switch": "on",
+      "independently_generated_v2_decision": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-on.json.gz",
+        "sha256": "fe4d1375e97e5131640920d8f77f5f5fcdf7de7752bcca40375b95c1d963a6f5"
+      },
+      "retained_v1_consequence": {
+        "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/saved-undelivered-on.json.gz",
+        "sha256": "862e2b5ae89e561f1cb3a33fba8f29b3007dd825247448a171f938f22419a54d"
+      },
+      "exact_same_consumer_input": true,
+      "new_logical_or_numerical_execution": 0,
+      "causality": "New decision provenance bound to a retained exact-input consequence; v1 execution is not reattributed to v2."
+    }
+  ],
+  "scope": "Actual producer->unmet consumption->read companion generation exists. early is an unmet sibling; save/ack are two supported siblings, not a logged early->save edge. All service/dynamic obligations UNKNOWN.",
+  "selected_component_closure_executed_in_stage2": false,
+  "stage3_admission": "Mechanism implementation and prospective decision chain only, not evidence of efficacy."
+}

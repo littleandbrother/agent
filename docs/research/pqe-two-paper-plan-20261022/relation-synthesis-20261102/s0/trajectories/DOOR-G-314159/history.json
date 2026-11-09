@@ -1,0 +1,101 @@
+[
+  {
+    "slot": 1,
+    "parent_id": "node-72f3730cc55524c426b82e76",
+    "request_id": "request-e45dd3eaca8ef063f8f6",
+    "design": {
+      "backoff_max_s": 1,
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "clear_after": "never",
+      "debounce_s": 0.07,
+      "esr_ohm": 0.1,
+      "firmware_policy": "fixed_retry_v1",
+      "holding_capacity": 2,
+      "holding_component": "off",
+      "holding_overflow": "drop_new",
+      "mechanism": {},
+      "persistent_queue": true,
+      "read_source": "contact_only",
+      "retry_s": 1,
+      "startup_v": 2.2,
+      "tx_gate_v": 2.2,
+      "tx_reserve_v": 0.025
+    },
+    "raw_proposal": {
+      "backoff_max_s": 1,
+      "brownout_v": 1.8,
+      "capacitance_f": 0.001,
+      "clear_after": "never",
+      "debounce_s": 0.07,
+      "esr_ohm": 0.1,
+      "firmware_policy": "fixed_retry_v1",
+      "holding_capacity": 2,
+      "holding_component": "off",
+      "holding_overflow": "drop_new",
+      "mechanism": {},
+      "persistent_queue": true,
+      "read_source": "contact_only",
+      "retry_s": 1,
+      "startup_v": 2.2,
+      "tx_gate_v": 2.2,
+      "tx_reserve_v": 0.025
+    },
+    "result": {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-G-314159/candidate-1.json.gz",
+      "sha256": "5a0534be13dd3dce58bdd60aeb24f52e40f352f742e6b63c9fe4df2fade7ec9d"
+    },
+    "statuses": [
+      "PASS",
+      "PASS",
+      "PASS"
+    ],
+    "model_valid": true,
+    "public_check": {
+      "verdict": "PASS"
+    },
+    "usage": {
+      "full_inputs": 3,
+      "full_wall_s": 4.172194292012136,
+      "logical_inputs": 3,
+      "cache_reuses": 0
+    },
+    "selection": {
+      "free_full_design": true
+    },
+    "derivations": [],
+    "closure_derivations": [],
+    "complexity": {
+      "changed_fields": [
+        "capacitance_f",
+        "esr_ohm",
+        "persistent_queue",
+        "retry_s"
+      ],
+      "changes": {
+        "capacitance_f": {
+          "before": 0.0001,
+          "after": 0.001
+        },
+        "esr_ohm": {
+          "before": 5.0,
+          "after": 0.1
+        },
+        "persistent_queue": {
+          "before": false,
+          "after": true
+        },
+        "retry_s": {
+          "before": 0.1,
+          "after": 1
+        }
+      },
+      "changed_field_count": 4,
+      "added_components": [],
+      "inactive_fields_normalized": [],
+      "pv_area_delta_cm2": 0,
+      "capacitance_delta_f": 0.0009,
+      "scope": "Unweighted real changes; no synthetic aggregate complexity score."
+    }
+  }
+]

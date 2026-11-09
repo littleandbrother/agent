@@ -1,0 +1,12 @@
+{
+  "schema": "BFA101-B-direct-launch-failure-v1",
+  "stage": "PYTHON_PARSE_BEFORE_ANY_CASE",
+  "command": "rtk proxy env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src /Users/depengsu/.local/share/bf-agent-runtime/product-cad/bin/python -B docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/check_direct.py",
+  "exit_code": 1,
+  "stderr": "  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/b/check_direct.py\", line 207\n    \"joint_patches\":[c[\"design_patch\"] for c in outputs[0][\"common_candidates\"] if c[\"origin\"]=='SAME_PARENT_JOINT_RECALCULATED'})\n                                                                                                                                ^\nSyntaxError: closing parenthesis '}' does not match opening parenthesis '['\n",
+  "executed_cases": 0,
+  "numeric_inputs": 0,
+  "full": 0,
+  "provider": 0,
+  "correction": "Close the list comprehension before the containing dict; no strategy or scientific semantics change."
+}

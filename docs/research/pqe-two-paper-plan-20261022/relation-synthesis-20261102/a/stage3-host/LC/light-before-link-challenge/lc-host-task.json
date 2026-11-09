@@ -1,0 +1,573 @@
+{
+  "schema_version": "pqe-lc-pv-task-draft-v1",
+  "task_id": "LC-PV-STRICT-24H-v1",
+  "owner": "campaign-a",
+  "status": "EXECUTABLE_CONSTRUCTED_WORLD_DEVELOPMENT_INSTANCE",
+  "scope": "Independent optical-powered cold-chain air-point history task. Numeric services are requirements to test, not a feasibility statement or inheritance of A/R qualification.",
+  "duration_s": 86400,
+  "target": {
+    "quantity": "temperature_of_air_at_specified_interior_point",
+    "unit": "degC",
+    "box_interior_m": [
+      0.6,
+      0.4,
+      0.4
+    ],
+    "coordinate_origin": "inside lower-left-bottom corner",
+    "point_m": [
+      0.3,
+      0.2,
+      0.2
+    ],
+    "permitted_probe_tip_radius_from_point_m": 0.005,
+    "not_content_core_or_outer_surface": true
+  },
+  "service": {
+    "cold_start_first_valid_receive_deadline_s": 1800,
+    "continuous_new_sampling": {
+      "start_s": 1800,
+      "end_s": 86400,
+      "maximum_spacing_s": 60,
+      "strict": true
+    },
+    "dark_interval_s": [
+      23400,
+      66600
+    ],
+    "dark_sampling_maximum_spacing_s": 60,
+    "recovery_at_s": 67800,
+    "recovery_old_history_deadline_s": 67920,
+    "recovery_delay_s": 120,
+    "new_sample_receive_max_delay_s": 10,
+    "new_sample_receive_scope": "Every sample acquired while gateway is available must be received within10s of acquisition; no frame-label exemption.",
+    "maximum_temperature_error_c": 0.5,
+    "temperature_reference": "independent air-point truth at actual acquisition time",
+    "maximum_timestamp_error_s": 60,
+    "timestamp_requirement": "Known absolute acquisition time or an uncertainty interval containing truth with width<=120s and midpoint error<=60s; UNKNOWN time fails this strict service.",
+    "history": "All committed records retained; pre-recovery unacknowledged records delivered by 67920 in acquisition order without duplicate logical samples.",
+    "gap_markers": "Must describe known missing intervals but do not satisfy continuous sampling.",
+    "all_applicable_services_required": true,
+    "loss_rate_statistical_claim": "NOT_ESTABLISHED_BY_FINITE_TRACES"
+  },
+  "initial": {
+    "capacitor_v": 0,
+    "battery_or_chemical_store_j": 0,
+    "power_state": "OFF",
+    "clock_state": "UNPOWERED_UNSYNCHRONIZED",
+    "records": [],
+    "sensor_temperature_c": 5,
+    "air_temperature_c": 5
+  },
+  "gateway_windows_s": [
+    [
+      0,
+      14400
+    ],
+    [
+      67800,
+      86400
+    ]
+  ],
+  "optical_environment": {
+    "spectral_model": "CONSTRUCTED_TWO_BAND_SPD_V1",
+    "wavelength_nm": {
+      "min": 380,
+      "max": 780,
+      "step": 1
+    },
+    "normalized_shape": "phi(lambda)=normalize(0.25*exp(-0.5*((lambda-450)/12)^2)/(12*sqrt(2*pi))+0.75*exp(-0.5*((lambda-580)/60)^2)/(60*sqrt(2*pi))) by trapezoidal integral over380..780nm",
+    "spectral_irradiance": "E_lambda(t)=irradiance_w_m2(t)*phi(lambda); unitsW/m2/nm. No lux-to-watt conversion.",
+    "irradiance_schedule_w_m2": [
+      [
+        0,
+        1200,
+        0.4
+      ],
+      [
+        1200,
+        3000,
+        0.8
+      ],
+      [
+        3000,
+        3900,
+        0.55
+      ],
+      [
+        3900,
+        5100,
+        0.4
+      ],
+      [
+        5100,
+        6900,
+        0.8
+      ],
+      [
+        6900,
+        7800,
+        0.55
+      ],
+      [
+        7800,
+        9000,
+        0.4
+      ],
+      [
+        9000,
+        10800,
+        0.8
+      ],
+      [
+        10800,
+        11700,
+        0.55
+      ],
+      [
+        11700,
+        12900,
+        0.4
+      ],
+      [
+        12900,
+        14700,
+        0.8
+      ],
+      [
+        14700,
+        15600,
+        0.55
+      ],
+      [
+        15600,
+        16800,
+        0.4
+      ],
+      [
+        16800,
+        18600,
+        0.8
+      ],
+      [
+        18600,
+        19500,
+        0.55
+      ],
+      [
+        19500,
+        20700,
+        0.4
+      ],
+      [
+        20700,
+        22500,
+        0.8
+      ],
+      [
+        22500,
+        23400,
+        0.55
+      ],
+      [
+        23400,
+        66600,
+        0.0
+      ],
+      [
+        66600,
+        67800,
+        0.4
+      ],
+      [
+        67800,
+        69600,
+        0.8
+      ],
+      [
+        69600,
+        70500,
+        0.55
+      ],
+      [
+        70500,
+        71700,
+        0.4
+      ],
+      [
+        71700,
+        73500,
+        0.8
+      ],
+      [
+        73500,
+        74400,
+        0.55
+      ],
+      [
+        74400,
+        75600,
+        0.4
+      ],
+      [
+        75600,
+        77400,
+        0.8
+      ],
+      [
+        77400,
+        78300,
+        0.55
+      ],
+      [
+        78300,
+        79500,
+        0.4
+      ],
+      [
+        79500,
+        81300,
+        0.8
+      ],
+      [
+        81300,
+        82200,
+        0.55
+      ],
+      [
+        82200,
+        83400,
+        0.4
+      ],
+      [
+        83400,
+        85200,
+        0.8
+      ],
+      [
+        85200,
+        86100,
+        0.55
+      ],
+      [
+        86100,
+        86400,
+        0.4
+      ]
+    ],
+    "uniform_shading_transmission": [
+      [
+        0,
+        2700,
+        0.8
+      ],
+      [
+        2700,
+        4500,
+        0.45
+      ],
+      [
+        4500,
+        7200,
+        0.8
+      ],
+      [
+        7200,
+        9000,
+        0.45
+      ],
+      [
+        9000,
+        11700,
+        0.8
+      ],
+      [
+        11700,
+        13500,
+        0.45
+      ],
+      [
+        13500,
+        16200,
+        0.8
+      ],
+      [
+        16200,
+        18000,
+        0.45
+      ],
+      [
+        18000,
+        20700,
+        0.8
+      ],
+      [
+        20700,
+        22500,
+        0.45
+      ],
+      [
+        22500,
+        23400,
+        0.8
+      ],
+      [
+        23400,
+        66600,
+        0.8
+      ],
+      [
+        66600,
+        69300,
+        0.8
+      ],
+      [
+        69300,
+        71100,
+        0.45
+      ],
+      [
+        71100,
+        73800,
+        0.8
+      ],
+      [
+        73800,
+        75600,
+        0.45
+      ],
+      [
+        75600,
+        78300,
+        0.8
+      ],
+      [
+        78300,
+        80100,
+        0.45
+      ],
+      [
+        80100,
+        82800,
+        0.8
+      ],
+      [
+        82800,
+        84600,
+        0.45
+      ],
+      [
+        84600,
+        86400,
+        0.8
+      ]
+    ],
+    "window_transmission": 0.85,
+    "incidence_angle_deg": 0,
+    "reference_area_cm2": 25,
+    "legal_area_cm2": [
+      10,
+      50
+    ],
+    "spatial_scope": "Uniform attenuation over every cell; nonuniform substring shading/mismatch is MODEL_DOMAIN until a per-cell reference is bound.",
+    "source_identity": "Constructed public spectrum; not an Epishine characterization lamp or a measured cold-chain light trace."
+  },
+  "pv_consumer_contract": {
+    "required_inputs": [
+      "spectral_irradiance_w_m2_nm",
+      "cell_temperature_c",
+      "active_area_m2",
+      "series_parallel_layout",
+      "shading_per_cell",
+      "v_input_v"
+    ],
+    "equations": [
+      "Iph=A_cell*integral(S_lambda*E_lambda*d_lambda)",
+      "I=Iph-I0*(exp((V+I*Rs)/(n*Ns*k_B*T/q))-1)-(V+I*Rs)/Rsh"
+    ],
+    "required_characterization": [
+      "spectral responsivity or EQE",
+      "I-V at declared spectrum, irradiance and cell temperature",
+      "series/parallel and active area normalization",
+      "PMIC cold-start, input loading, conversion and leakage"
+    ],
+    "coefficient_status": "BOUND_TO_EXPLICIT_CONSTRUCTED_PROFILE; NOT_VENDOR_OR_MEASURED",
+    "missing_profile_result": "MODEL_UNKNOWN; no constant pulse/power substitute or inferred watts from lux."
+  },
+  "thermal_reference": {
+    "model": "CONSTRUCTED_FIRST_ORDER_PROBE_V1",
+    "equation": "dT_sensor/dt=(T_air(point,t)-T_sensor)/tau_s",
+    "nominal_tau_s": 24.0,
+    "nominal_bias_c": 0.05,
+    "quantization_step_c": 0.0625,
+    "air_truth_piecewise_linear_knots_s_c": [
+      [
+        0,
+        5
+      ],
+      [
+        10200,
+        5
+      ],
+      [
+        10800,
+        8.5
+      ],
+      [
+        11700,
+        8.5
+      ],
+      [
+        12300,
+        5.5
+      ],
+      [
+        46800,
+        5.5
+      ],
+      [
+        47700,
+        9
+      ],
+      [
+        48900,
+        9
+      ],
+      [
+        49800,
+        5
+      ],
+      [
+        86400,
+        5
+      ]
+    ],
+    "domain_c": [
+      -20,
+      50
+    ],
+    "max_abs_air_slew_c_s": 0.02,
+    "model_scope": "Local probe-to-air lag and quantization only; contents-core temperature, full box CFD, external-to-internal heat transport and self-heating are not certified.",
+    "sensor_reading": "Program obtains sensor temperature only at powered acquisition events; it cannot read ideal air truth or retrospective samples."
+  },
+  "clock_reference": {
+    "nominal_rate_error_ppm": -15.0,
+    "rate_bound_ppm": 20,
+    "scope": "Constructed bounded oscillator assumption. RTC continuation must consume power; no oscillator advance through unpowered periods without an explicit powered retention domain.",
+    "resynchronization": "Only an actual available-gateway sync event can restore absolute time; every failed or unknown timestamp remains in evaluation."
+  },
+  "program_and_storage": {
+    "must_execute": [
+      "powered sample",
+      "sensor acquisition energy",
+      "NVM commit and corruption semantics",
+      "reset persistence",
+      "FIFO/ACK and retransmission",
+      "RTC energy and uncertainty"
+    ],
+    "allowed_architectures": [
+      "single_store",
+      "separate_startup_bulk_store_if_actual_consumer_bound"
+    ],
+    "storage_capacitance_f_proposed": [
+      0.001,
+      1.0
+    ],
+    "service_cannot_be_rewritten": true
+  },
+  "generation_rules_for_S0": {
+    "public_development_template": "The explicit schedules in this draft are one constructed template, not a held-out test.",
+    "holdout_generation": "S0 owns seed-to-split binding before H formation. No held-out realizations or outcomes are generated by A in Stage1.",
+    "immutable_services": [
+      "86400s horizon",
+      "1800s cold start",
+      "43200s darkness",
+      "60s strict sampling",
+      "120s recovery",
+      "10s fresh delivery",
+      "0.5C temperature error",
+      "60s timestamp error"
+    ],
+    "declared_environment_variation": {
+      "dark_start_s": [
+        18000,
+        25200
+      ],
+      "dark_duration_s": 43200,
+      "irradiance_lit_w_m2": [
+        0.3,
+        1.0
+      ],
+      "uniform_shadow_transmission": [
+        0.2,
+        1.0
+      ],
+      "probe_tau_s": [
+        10,
+        30
+      ],
+      "probe_bias_c": [
+        -0.15,
+        0.15
+      ],
+      "clock_rate_ppm": [
+        -20,
+        20
+      ]
+    },
+    "dependent_windows": "For a variant, gateway recovery is dark_start+43200, old-history deadline is recovery+120; gateway outage begins no later than dark_start. Deadlines remain relative to the same physical recovery.",
+    "split_unit": [
+      "complete spectral/thermal/shading/transport scenario block",
+      "program/architecture mechanism family"
+    ],
+    "exposure": "Freeze DOOR-derived H before first LC-PV result; any target-data adaptation uses a separately named condition/budget and fresh unexposed tests."
+  },
+  "reuse_from_A_R": {
+    "reuse_candidates": [
+      "NVM history encoding and retention",
+      "FIFO ACK/de-duplication checks",
+      "clock uncertainty semantics",
+      "single/split nominal storage interfaces",
+      "program energy accounting"
+    ],
+    "requires_rebinding": [
+      "PV optical-to-loaded-electrical source",
+      "temperature target and lag",
+      "initial-state and24h environmental schedule",
+      "all service values and independent evaluator inputs"
+    ],
+    "not_inherited": [
+      "prior A/R qualification",
+      "prior PASS/FAIL of complete mission",
+      "R11 window outcomes",
+      "mechanical source or calibrated physical claim"
+    ]
+  },
+  "qualification_gaps": [
+    "Measured/calibrated profile, switching, physical RF/MCU/NVM and continuous-grid convergence remain outside this discrete-world claim."
+  ],
+  "sources": [
+    {
+      "url": "https://www.epishine.com/hubfs/MultiCell_Data_Sheet_1.6.6.pdf",
+      "role": "Primary vendor I-V/spectral-condition reference; no product performance copied into constructed spectrum."
+    }
+  ],
+  "next_owner": "S0 common host; at most one initial, no replacement.",
+  "instance_id": "REL-SYNTH-LC-20261102:light-before-link-challenge",
+  "allowed_for_learning": false,
+  "description": "Light returns 1200s before connectivity after twelve hours of darkness, coupling powered sampling and accumulated FIFO delivery without changing scheduling or service deadlines.",
+  "generation_receipt": {
+    "rule_source_sha256": "73650f8bea3e144c7e3357a06439a6248f66d18b71503a1e5fa46f2a870aa0fe",
+    "rule": "Explicit new joint light/shadow/darkness/connectivity/thermal/clock block, selected before one initial observation and all H0 results.",
+    "dark_start_s": 23400,
+    "dark_duration_s": 43200,
+    "irradiance_lit_w_m2": 0.45,
+    "uniform_shadow_domain": [
+      0.2,
+      1.0
+    ],
+    "probe_tau_s": 24,
+    "probe_bias_c": 0.05,
+    "clock_rate_ppm": -15,
+    "exposure": "New development realization, not a held-out F2 test; allowed_for_learning=false."
+  }
+}

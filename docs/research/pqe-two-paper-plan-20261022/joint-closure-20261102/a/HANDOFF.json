@@ -1,0 +1,112 @@
+{
+  "schema": "BFA101-A-handoff-v1",
+  "at": "2026-11-02T13:52:13.583288+00:00",
+  "status": "IMPLEMENTED_V2_INTEGRATION_RECHECK_REQUIRED",
+  "owner": "campaign-a",
+  "package": "BF-PQE-JOINT-CLOSURE-20261102-001",
+  "entry": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py",
+    "sha256": "c8fee4a3ae85f301c9e600d42aad968d4e195e9cc1c14ece800f07facc07e6b3",
+    "bytes": 35489
+  },
+  "source_manifest": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/SOURCE-MANIFEST.json",
+    "sha256": "052cc997e2b384edce180073986da86596daf7adf67cfaf66bf1b13e755abd0b",
+    "bytes": 4211
+  },
+  "first_checks": {
+    "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/checks-20261102T134742440214Z.json",
+    "sha256": "25c28d1388b9cc7cdfe1230c820bec4b7808ff73664fc346f5a547169d5e7f2f",
+    "bytes": 15588
+  },
+  "software_cases": 6,
+  "case_attempts": 6,
+  "first_pass_cases": [
+    1,
+    5
+  ],
+  "first_failed_cases": [
+    2,
+    3,
+    4,
+    6
+  ],
+  "cheap_numeric": 5,
+  "actual_geometry_misses": 1,
+  "cheap_total": 6,
+  "events": {
+    "structural": 9,
+    "cheap_numeric": 5,
+    "geometry_miss": 1,
+    "geometry_hit": 2
+  },
+  "full": 0,
+  "model": 0,
+  "new_checks_after_cap": 0,
+  "revision": {
+    "version": "bfa101-shared-facts-v2",
+    "reason": "Frozen public LC challenges exceed initial 32-segment guard; bounded limit now128. Complete numeric conditional constraints and LC checks; DOOR pulse charge/ESR/capacitance interface added for B.",
+    "prior_receipt_retained": true,
+    "new_verification_owner": "S0 integration allocation",
+    "scientific_semantics_changed": false
+  },
+  "api": {
+    "candidate_facts": "candidate_facts(contract,design,public_result=None,*,meter=None)",
+    "calculate": "calculate(contract,design,operation=\"all\",*,public_result=None,meter=None)",
+    "operations": [
+      "all",
+      "storage",
+      "loads",
+      "source",
+      "energy",
+      "clock",
+      "recovery",
+      "bounds"
+    ],
+    "facts_keys": [
+      "facts",
+      "loads",
+      "active_fields",
+      "component_contract",
+      "checks (LC; DOOR original semantic_checks)"
+    ],
+    "numeric_keys": [
+      "tasks[]: storage/loads/source/energy/clock/recovery/bounds",
+      "constraints[]: conditional inequalities, no candidate patch or certificate"
+    ],
+    "door_load_keys": [
+      "phase_points[].phase_charge_c",
+      "phase_points[].peak_esr_drop_v",
+      "phase_points[].capacitive_drop_v_no_source",
+      "phase_points[].end_terminal_v_no_source",
+      "phase_points[].conditional_capacitance_lower_f_no_source",
+      "phase_points[].conditional_capacitance_interval_nonempty",
+      "conditional_phase_chains[].conditional_capacitance_lower_f",
+      "conditional_phase_chains[].phase_ends",
+      "public_domain_endpoint_points"
+    ],
+    "charged_meter_kinds": [
+      "cheap_numeric",
+      "geometry_miss"
+    ],
+    "separate_meter_kinds": [
+      "memo_hit",
+      "geometry_hit",
+      "structural"
+    ],
+    "bound_input": "contract/design/task/source SHA256; public_result hash only, never imported as observation"
+  },
+  "limitations": [
+    "V2 not rerun by A after six-case cap; S0 accepted integration recheck",
+    "Static input-bound conditional arithmetic is not a consumer or physical exclusion certificate",
+    "LC exact future device sync, powered coverage, queue occupancy, recovered service stay UNKNOWN",
+    "No RTC/split, hidden thermal truth, live future beacon or new scientific branch",
+    "DOOR phase charge bounds explicitly omit source/leakage/holder/idle and assume declared start voltage/phase chain; not necessary whole-service bounds",
+    "Public-result data is not projected into predictions; same-design raw observation remains in S0 public pages"
+  ],
+  "next": "S0 integration with actual B and original consumers; A waits for one final service readback",
+  "available_now_bytes": 18070777856,
+  "retained_bytes_before_handoff": 70909,
+  "retained_cap_bytes": 5000000,
+  "peak_estimate_bytes": 20000000
+}

@@ -1,0 +1,731 @@
+{
+  "schema": "BFA100-final-independent-method-cost-readback-v1",
+  "at": "2026-11-02T12:02:48.843512+00:00",
+  "at_local": "2026-11-02T20:02:48.843839+08:00",
+  "package": "BF-PQE-RELATION-SYNTHESIS-20261102-001",
+  "owner": "B",
+  "status": "PASS",
+  "status_scope": "Readback consistency and claim boundaries only; PASS does not mean R wins or component closure has been dynamically validated.",
+  "findings": [
+    {
+      "id": "frozen_sources",
+      "status": "PASS",
+      "finding": "Frozen v1, v2 and normal-generation source hashes still match; no result-driven method revision found.",
+      "evidence": [
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_search.py",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_closure.py",
+        "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/freeze_closure.py"
+      ]
+    },
+    {
+      "id": "v2_decision_consequence_binding",
+      "status": "PASS",
+      "finding": "All four frozen v2 designs bind to retained exact-input v1 consequences: each off is 0/3 PASS and each on is 3/3 PASS. This is not a retrospective v2 execution or unseen-prefix result. Stage2 charges 12 logical inputs, 9 new executions and 3 exact reuses.",
+      "evidence": [
+        "b/closure-v2/freeze-receipt.json",
+        "s0/stage2-result.json",
+        "s0/core-closure-gate.json"
+      ]
+    },
+    {
+      "id": "complete_fair_budget_result_readback",
+      "status": "PASS",
+      "finding": "Read all 38 saved candidate families (114 condition evaluations); design/hash/member verdict bindings and first-pass slots match. Both seeds: DOOR G=1/D=1/R=4; LC G=1, D/R no all-condition PASS within six new designs. COMPLETE denotes operational completion, not scientific success.",
+      "evidence": [
+        "s0/stage3-result.json"
+      ]
+    },
+    {
+      "id": "component_closure_claim_boundary",
+      "status": "PASS",
+      "finding": "Zero executed R selections introduce a component duty. DOOR selected derivations remain conditional charge/identity/startup probes, and LC selected probes have no actual candidate-fact adapter. Static producer->unmet reader->read companion exists among alternatives, with early/save/ack siblings; no dynamic closure benefit or LC closure transfer is established.",
+      "evidence": [
+        "s0/REPORT.md",
+        "s0/core-closure-gate.json",
+        "b/closure-v2/freeze-receipt.json",
+        "s0/stage3-result.json"
+      ]
+    },
+    {
+      "id": "figure_data",
+      "status": "PASS",
+      "finding": "All six cumulative curves match first-pass slots with denominator two; plot trajectory data exactly match stage3. Figure sources and explicit G metadata erratum hashes match. No replotting or visual acceptance claim is made.",
+      "evidence": [
+        "figures/plot-data.json",
+        "s0/stage3-result.json",
+        "s0/metadata-errata.json"
+      ]
+    },
+    {
+      "id": "historical_accounting_preserved",
+      "status": "PASS",
+      "finding": "Direct read-only SQLite comparison confirms all 1995 old rows and both exception authorization rows unchanged. Both original UNKNOWN rows retain null usage, original error text and full reserves totaling USD 0.3686529. No historical retry or fabricated usage is inferred.",
+      "evidence": [
+        "s0/preflight.json",
+        "s0/cost-closeout.json",
+        "/Users/depengsu/.local/share/bf-campaign-20261019-s0/workbench/state/workbench.sqlite [model_requests and historical_usage_exceptions, read-only]"
+      ]
+    },
+    {
+      "id": "new_model_accounting",
+      "status": "PASS",
+      "finding": "All 31 new model rows are SETTLED and their full row identities match the closeout. Summed usage is prompt 376312, completion 109100, total 485412; reasoning 101077 is already within completion. Pinned-rate estimate USD 0.2438136 agrees with row charges; it is not an invoice. No new UNKNOWN or unaccounted reserve appears.",
+      "evidence": [
+        "s0/cost-closeout.json",
+        "/Users/depengsu/.local/share/bf-campaign-20261019-s0/workbench/state/workbench.sqlite [new 31 model_requests, read-only]"
+      ]
+    },
+    {
+      "id": "G_nested_metadata_erratum",
+      "status": "PASS",
+      "finding": "The four preserved raw G finals still contain wrong inherited zero-call/deterministic labels. Explicit metadata-errata correctly overrides only reporting interpretation using outer actual-model identity and settled ledgers: DOOR 7/9 and LC 7/8. REPORT and plot-data link the erratum; no correction to raw evidence is requested.",
+      "evidence": [
+        "s0/metadata-errata.json",
+        "s0/stage3-result.json",
+        "s0/REPORT.md"
+      ]
+    },
+    {
+      "id": "resource_reconciliation",
+      "status": "PASS",
+      "finding": "Science ledger plus separately retained stage1 and B static misses reconcile to 105 new full / 257.27283687805175s, 138 logical / 33 reuse, 26 cheap and 22 software. B remains 10 software and 12 cheap; original 7 PASS/3 FAIL receipt is preserved. This readback adds no science, algorithm cases, model calls or copies.",
+      "evidence": [
+        "s0/science-resource-ledger.json",
+        "s0/cost-closeout.json",
+        "s0/verification.json",
+        "b/direct-checks.json",
+        "b/closure-v2/freeze-receipt.json"
+      ]
+    },
+    {
+      "id": "current_research_claim",
+      "status": "PASS",
+      "finding": "Current report states seen-prefix activation and exact original consequences, retains negative comparative findings, identifies deterministic D/R versus actual-model G, and disclaims stable R superiority, same-model causality, dynamic component-chain efficacy, LC closure transfer, global necessity, anti-overdesign proof, significance, hardware, H-learning and recursion. No substantive reporting correction remains required.",
+      "evidence": [
+        "s0/REPORT.md"
+      ]
+    }
+  ],
+  "required_substantive_corrections": [],
+  "claim_boundary": {
+    "supported": [
+      "Seen-prefix on/off action changes and exact original full-consumer outcomes.",
+      "Actual source-factual producer->unmet consumption->read companion generation among alternatives.",
+      "Finite 12-trajectory G/D/R results with shared six-new-design ceiling and logical cache accounting."
+    ],
+    "not_established": [
+      "Dynamic benefit of newly introduced component-closure duties: selected count is zero.",
+      "LC candidate-level source-contract closure or closure transfer: adapter unavailable.",
+      "Stable R advantage, same-model causal attribution, statistical significance or hardware validity.",
+      "Global component necessity, minimal/Pareto designs, general anti-overdesign, learned H/G or recursion."
+    ],
+    "preserved_adverse_evidence": [
+      "R needs 4 designs versus G/D 1 on DOOR for both seeds.",
+      "D/R have no all-condition LC PASS within six designs; G passes at design 1.",
+      "Original B software receipt remains 7 PASS/3 FAIL.",
+      "Original G nested labels remain wrong in raw files and are explicitly corrected in metadata interpretation.",
+      "Both historical UNKNOWN rows and reserves are unchanged."
+    ]
+  },
+  "readback_summary": {
+    "stage2_bindings": [
+      {
+        "prefix_id": "identity-progress",
+        "switch": "off",
+        "exact_design_match": true,
+        "statuses": [
+          "FAIL",
+          "FAIL",
+          "FAIL"
+        ],
+        "new_full_inputs": 3,
+        "cache_reuses": 0,
+        "selected_component_duty": false
+      },
+      {
+        "prefix_id": "identity-progress",
+        "switch": "on",
+        "exact_design_match": true,
+        "statuses": [
+          "PASS",
+          "PASS",
+          "PASS"
+        ],
+        "new_full_inputs": 0,
+        "cache_reuses": 3,
+        "selected_component_duty": false
+      },
+      {
+        "prefix_id": "saved-undelivered",
+        "switch": "off",
+        "exact_design_match": true,
+        "statuses": [
+          "FAIL",
+          "FAIL",
+          "FAIL"
+        ],
+        "new_full_inputs": 3,
+        "cache_reuses": 0,
+        "selected_component_duty": false
+      },
+      {
+        "prefix_id": "saved-undelivered",
+        "switch": "on",
+        "exact_design_match": true,
+        "statuses": [
+          "PASS",
+          "PASS",
+          "PASS"
+        ],
+        "new_full_inputs": 3,
+        "cache_reuses": 0,
+        "selected_component_duty": false
+      }
+    ],
+    "stage3_trajectories": [
+      {
+        "ident": "DOOR-G-314159",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "DOOR-D-314159",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "DOOR-R-314159",
+        "status": "COMPLETE",
+        "new_designs": 4,
+        "first_all_service_PASS_design_slot": 4,
+        "initial_excluded": true
+      },
+      {
+        "ident": "DOOR-G-271828",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "DOOR-D-271828",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "DOOR-R-271828",
+        "status": "COMPLETE",
+        "new_designs": 4,
+        "first_all_service_PASS_design_slot": 4,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-G-314159",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-D-314159",
+        "status": "COMPLETE",
+        "new_designs": 6,
+        "first_all_service_PASS_design_slot": null,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-R-314159",
+        "status": "COMPLETE",
+        "new_designs": 6,
+        "first_all_service_PASS_design_slot": null,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-G-271828",
+        "status": "COMPLETE",
+        "new_designs": 1,
+        "first_all_service_PASS_design_slot": 1,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-D-271828",
+        "status": "COMPLETE",
+        "new_designs": 6,
+        "first_all_service_PASS_design_slot": null,
+        "initial_excluded": true
+      },
+      {
+        "ident": "LC-R-271828",
+        "status": "COMPLETE",
+        "new_designs": 6,
+        "first_all_service_PASS_design_slot": null,
+        "initial_excluded": true
+      }
+    ],
+    "saved_stage3_candidate_families_read": 38,
+    "candidate_binding_mismatches": [],
+    "curve_mismatches": [],
+    "selected_R_component_duty_count": 0,
+    "selected_R_derivations_reviewed": 12,
+    "G_errata": [
+      {
+        "ident": "DOOR-G-314159",
+        "actual_requests": 7,
+        "original_preserved_hash_matches": true,
+        "erratum_matches_ledger": true
+      },
+      {
+        "ident": "DOOR-G-271828",
+        "actual_requests": 9,
+        "original_preserved_hash_matches": true,
+        "erratum_matches_ledger": true
+      },
+      {
+        "ident": "LC-G-314159",
+        "actual_requests": 7,
+        "original_preserved_hash_matches": true,
+        "erratum_matches_ledger": true
+      },
+      {
+        "ident": "LC-G-271828",
+        "actual_requests": 8,
+        "original_preserved_hash_matches": true,
+        "erratum_matches_ledger": true
+      }
+    ],
+    "model_tokens": {
+      "prompt_tokens": 376312,
+      "completion_tokens": 109100,
+      "total_tokens": 485412,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 376312,
+      "reasoning_tokens": 101077
+    },
+    "new_settled_requests": 31,
+    "rate_estimate_usd": 0.2438136,
+    "baseline_rows_sha256": "5c2fb059935a9efc650580cceb7a4f90202dc3fe238ae714fa390990548b7c87",
+    "baseline_authorizations_sha256": "cb0214f2f1f77a6a9029e7857be76670b026f911a683e7a0c97a16f7f9090cd1",
+    "historical_unknown_reserved_usd": 0.3686529,
+    "resource_reconciliation": {
+      "new_full_inputs": 105,
+      "new_full_wall_s": 257.27283687805175,
+      "logical_inputs_including_stage1": 138,
+      "exact_reused_inputs": 33,
+      "cheap_numeric": 26,
+      "software_checks": 22
+    }
+  },
+  "new_work": {
+    "full_consumers": 0,
+    "cheap_scientific_calls": 0,
+    "software_algorithm_cases": 0,
+    "model_requests": 0,
+    "backups_or_source_copies": 0,
+    "files_written": [
+      "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/FINAL-METHOD-COST-READBACK.json"
+    ]
+  },
+  "reviewed_refs": [
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/REPORT.md",
+      "sha256": "72c05b43ea8f6be6e3b90bd5abc2819ea02399e1c64b803b1d7c5b3614479fd2",
+      "role": "current scientific/reporting claims"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage3-result.json",
+      "sha256": "b1aa578181fc92f3e2d45a35bc559abece6d280c5af844e9933e94b3fe1d1cd0",
+      "role": "figure data source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/verification.json",
+      "sha256": "8372b0516aa6cb8c30e5088c6dd5b83516cbe81033d6427da9f28589ab59a152",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/cost-closeout.json",
+      "sha256": "89c6377e0cf5bb94c621c4c157b71d6e9eab2998e4a557481ddf5dafe8f67de4",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/metadata-errata.json",
+      "sha256": "2054b53e8aeda94db4582255067a3a6fe8b3e4575a3d2650092d020b447913cd",
+      "role": "figure data source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/figures/plot-data.json",
+      "sha256": "ade9d66c0b5e73c61838a3d270d417026f1f3cbb534d1f45a6a42be16a7664c9",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2-result.json",
+      "sha256": "b702cbab98963385aecc69574bb1296252f95766a221e9310a4b8de0f48a4945",
+      "role": "figure data source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/core-closure-gate.json",
+      "sha256": "7f2c4813b82831516754242d20bc2e6160c36bc3e8791cb7df2212010aed6b23",
+      "role": "figure data source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/science-resource-ledger.json",
+      "sha256": "0ed1c47510009851125b2bbf56997dfc125794d0f60334ca059a087e4191faf1",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/preflight.json",
+      "sha256": "4d20d3139cfce7960675bc25f4483d4dd1a12657b14647404a0dca947ba7e53d",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/freeze-receipt.json",
+      "sha256": "c7111c62483048c14dec332a9574610a176978bb65f6e0921173062be32c75a2",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/direct-checks.json",
+      "sha256": "27a1d43b99255d33e2c821c3df7611dfe33d494229ec4808397f93c551e49104",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/frozen-prefixes/freeze-receipt.json",
+      "sha256": "5567b5486b85d8fcb7a677100407fb04746c357f43bb28e98210e8a8253cd91b",
+      "role": "reviewed saved evidence"
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_search.py",
+      "sha256": "37d118f6c984194c2b8df5be4091114928a5c7993ce0485411f99c8220d80e81",
+      "role": "frozen B method source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_closure.py",
+      "sha256": "dbf4152667a237c8509d23dc06d6079d70abec87a105dbf3707237bb629640d6",
+      "role": "frozen B method source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/freeze_closure.py",
+      "sha256": "40f9769a2c7406f618359cf4ecc2fcb457960dd8ed9641cd6fca206112dbb652",
+      "role": "frozen B method source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-off.json.gz",
+      "sha256": "905a7623d266fa1bffee1b27defa2c8b3d1be74fec1322bb4d1059ddb7e1e50d",
+      "role": "frozen v2 selected design and derivation",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/identity-progress-off.json.gz",
+      "sha256": "b14735050bfe03e266d190650a8d54cbc95129d686f3b7a67e926c101c1fa473",
+      "role": "original actual stage2 consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-on.json.gz",
+      "sha256": "c86c1b55ae3f624e06bfc7483164a95ffd56752659f92c39a661841dfc0ffcdb",
+      "role": "frozen v2 selected design and derivation",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/identity-progress-on.json.gz",
+      "sha256": "e0bc66ee23f15839e281462d22e500d4f6bec221e2726f1ff6079a5c689e666c",
+      "role": "original actual stage2 consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-off.json.gz",
+      "sha256": "296dfe8d5702954c3a79ce277424df657654642e734b7c65ec6a2d0f036ac932",
+      "role": "frozen v2 selected design and derivation",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/saved-undelivered-off.json.gz",
+      "sha256": "f07a7c64fc29cf49493cb53fdc4663c4d229de7c37fbd98a97f172b6f3480c9c",
+      "role": "original actual stage2 consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-on.json.gz",
+      "sha256": "fe4d1375e97e5131640920d8f77f5f5fcdf7de7752bcca40375b95c1d963a6f5",
+      "role": "frozen v2 selected design and derivation",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/stage2/saved-undelivered-on.json.gz",
+      "sha256": "862e2b5ae89e561f1cb3a33fba8f29b3007dd825247448a171f938f22419a54d",
+      "role": "original actual stage2 consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-G-314159/candidate-1.json.gz",
+      "sha256": "5a0534be13dd3dce58bdd60aeb24f52e40f352f742e6b63c9fe4df2fade7ec9d",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-D-314159/candidate-1.json.gz",
+      "sha256": "f17139ec62a49048f9042226288afcbe9db8eb0437282ca00902b9774275f9ea",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-314159/candidate-1.json.gz",
+      "sha256": "a88577e4cec2612a5f969d68d9c982e8049d49c23b7cdb13b07026aaa5f2bc6d",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-314159/candidate-2.json.gz",
+      "sha256": "bc69d109d28f3f4c316f4602221fbbf7a6e66df2972c716416357bbb1c4708fc",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-314159/candidate-3.json.gz",
+      "sha256": "ccc76d1c533d28f5fd69744ee2394ee3eb60a97fea7025c997b4f581e26b4479",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-314159/candidate-4.json.gz",
+      "sha256": "ceda75aa79bc0ab16253bbd0fee4f1a46f538081f07f809939a76dd80644d907",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-G-271828/candidate-1.json.gz",
+      "sha256": "16e73fb7b3946a893d89a1b7118268aa29ea9428cf91d03341824e2ce510771d",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-D-271828/candidate-1.json.gz",
+      "sha256": "a7b4853b4df57649da10e070ec22a1d215c683b4118e5107534976e21211982d",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-271828/candidate-1.json.gz",
+      "sha256": "5ea07549c68d822f5530e7276c366aaddcc92780a20bb024bdb41d7b46ac3239",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-271828/candidate-2.json.gz",
+      "sha256": "05b32a67a35d27afdae2bc92c695ca644d5b2c34aed855ed469752bd4f20e3cf",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-271828/candidate-3.json.gz",
+      "sha256": "58c4a15d3c4db5a73b0bf1e6796fbdc66df701678b55c9bb97708dea664e957b",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-R-271828/candidate-4.json.gz",
+      "sha256": "4cc9890cfb40147eeba54dbfa5d443237b582f0af8413c0610f2610631d828cc",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-G-314159/candidate-1.json.gz",
+      "sha256": "68ba74d6f4e7e45427dbb96d0517311b517eeb51ceba38f6da3ce26404e7ce6c",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-1.json.gz",
+      "sha256": "355c7b7a9360c981fd014345fe426218bb3175ac29f9817162b545e7c17ed284",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-2.json.gz",
+      "sha256": "7154053ac47359742818edd4cbd67d780a78b7d16a864a0fb559c3f4b7396e4b",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-3.json.gz",
+      "sha256": "51d843c37070e563d3498c2cdcbfdc23f53903eeea0f91a20d17fff50d4f9a17",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-4.json.gz",
+      "sha256": "9e6a33b246b14ae79679f21615050ee6fc6bd1cba4ad0d168da9a0ed62e33bb9",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-5.json.gz",
+      "sha256": "5fa4287faafd0c0b2069d2fc91788b5a51d529d13f47322d44cf24f48087cc42",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-314159/candidate-6.json.gz",
+      "sha256": "3735f263b639805479ec0f48ba65740e9bb2f007b7652b3e81ece90711dc35ad",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-1.json.gz",
+      "sha256": "5ee1f50cec8c52709780d59f9be44a5cfd9805e2e102e9e3b8ae49f947d91fbb",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-2.json.gz",
+      "sha256": "0cd590aa507e600a22901e6cb0c912022607c4ec218b075a52d7dfa7d15367c3",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-3.json.gz",
+      "sha256": "837298729dd9c0bb3b9fee133e9b5de00f81d6fbb44a492c3afaa09d32bbe8e3",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-4.json.gz",
+      "sha256": "4eb94610772196ec5208a35faf49b6a86a6343ae83c83888b6f6c406c195a472",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-5.json.gz",
+      "sha256": "7da23b2773650a986a920831509094c76ad3e663b47648ace7bc7fcad7555c20",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-314159/candidate-6.json.gz",
+      "sha256": "2d536b8b2782b905ac655e67d5e508a4df6e89d09f4bd742ab5978b60e1b4ae0",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-G-271828/candidate-1.json.gz",
+      "sha256": "ab361896a74baac24ba2671a43a3fa055cd64c213ce8f0136375e7d70c5db6c8",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-1.json.gz",
+      "sha256": "a8f4db227737fb54176d835e066f07e9cfb711da042a0fd7953eb159d3cf8062",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-2.json.gz",
+      "sha256": "1d0cd9c179f66d639e2122c0cc1327de592f19d3dd6cc97378e4916397d986d1",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-3.json.gz",
+      "sha256": "de5ad77c2f1529aff1410f8e9d5681d78cd6a631964c56dd921049b59f21d7b6",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-4.json.gz",
+      "sha256": "7ffa3f1042714cf34c650f98db3a2ea65f831df84bd0ce8ca1f7805f26ba42dd",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-5.json.gz",
+      "sha256": "e58ad11791440ed8dae895496a8ee244c0ddfc2029913d60c6fe6f8b1fbca0ad",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-D-271828/candidate-6.json.gz",
+      "sha256": "fd8b8bdd8bbc455e453b9d7d4e5181cac2277d474252d241361b240edfc97ac4",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-1.json.gz",
+      "sha256": "f79d934c54ccded1155be19d4333baff35b4f6ddb2f27954c39b2ab5056fcb08",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-2.json.gz",
+      "sha256": "d625d6a2fcd1ffb3837b4520669204e171ac80faf5b087ff62a61e19c3e4828b",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-3.json.gz",
+      "sha256": "2c06f74707f30eb972b45da67f1c5f2d7531b597bbf631fe7b74d79a1646d911",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-4.json.gz",
+      "sha256": "fdafab1619c45cbafa3dd2c78e1e2949eb33e878e02cdee60d11a18c2f680a6d",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-5.json.gz",
+      "sha256": "ead767513e38b8e8f577d97d2ef0bb44e2b534a6279b3a9851cd62d540deb7c5",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-R-271828/candidate-6.json.gz",
+      "sha256": "d2395691c762df00472253d8f3de35b7d883cfc60ae6d1ccbc520428576fc7f7",
+      "role": "actual stage3 candidate family consequence",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/a/FIXED-NEIGHBORHOOD-MATRIX.json",
+      "sha256": "1c9d67d5993457c523072c677572ae7c824eb01acb5e8c2cb5f57a75099d3bde",
+      "role": "figure data source",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-G-314159/result.json",
+      "sha256": "49a101f92ad70b701174f5ab0b008e3169475af3c49bc83352789fa65c6667a7",
+      "role": "preserved G raw result",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/DOOR-G-271828/result.json",
+      "sha256": "a2c1c1470be9db3b6438bb4c31d1d8b38c5dd0b16e090b76ae2cf0a66d3cd027",
+      "role": "preserved G raw result",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-G-314159/result.json",
+      "sha256": "13fe3b2950bcfba55eae704a8d48456683796a10756ccc019b7d6db42cd3583f",
+      "role": "preserved G raw result",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/s0/trajectories/LC-G-271828/result.json",
+      "sha256": "4bd4378ced500124fd7637af0411dc4bf5d27582279ce38f3dba73c189752806",
+      "role": "preserved G raw result",
+      "expected_hash_matches": true
+    }
+  ],
+  "review_limit": "No simulator/provider/algorithm or verification suite was run. Frozen B hashes, saved candidate files, plot data and direct DB rows were independently read; apparatus-wide source/task audit and credential closure remain as reported in supplied verification.json.",
+  "next_action": "Stop after this one readback; no retry, tuning, new batch or cleanup authorized."
+}

@@ -1,0 +1,2893 @@
+{
+  "instruction": "Real accountable BF design-method callback. Return validated JSON actions, not executable code outside the loaded H. Return exactly one JSON object using the supplied site contract. No Markdown. No filesystem, shell, native tools, credentials or hidden evaluator. Only supplied public facts and declared PUBLIC_TOOLS are available. Public paging references resolve through public_object. No update, uncertainty, scoped rejection and supported stop are valid. Do not change science, permissions, quotas, accounting or adoption.",
+  "request": {
+    "site": "strong_generic_free_joint_design",
+    "task_family": [
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Three smooth complete warm cycles with ample stable endpoint holds and uninterrupted link; complex holder enabling is optional, never required by task construction.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 90,
+            "end_s": 62.5,
+            "start_deg": 0,
+            "start_s": 61.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 64.5,
+            "start_deg": 90,
+            "start_s": 63.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 67.5,
+            "start_deg": 0,
+            "start_s": 66.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 69.5,
+            "start_deg": 90,
+            "start_s": 68.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 72.5,
+            "start_deg": 0,
+            "start_s": 71.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 74.5,
+            "start_deg": 90,
+            "start_s": 73.0
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:local-repair-control",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      },
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Widely separated complete cycles and split-speed strokes change when mechanical work reaches the store relative to stable contact events; continuous link isolates source/event timing.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 74,
+            "end_s": 74.1,
+            "start_deg": 0,
+            "start_s": 73.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 74.28,
+            "start_deg": 74,
+            "start_s": 74.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 75.42999999999999,
+            "start_deg": 90,
+            "start_s": 74.47999999999999
+          },
+          {
+            "end_deg": 0,
+            "end_s": 75.61,
+            "start_deg": 16,
+            "start_s": 75.42999999999999
+          },
+          {
+            "end_deg": 74,
+            "end_s": 212.1,
+            "start_deg": 0,
+            "start_s": 211.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 212.28,
+            "start_deg": 74,
+            "start_s": 212.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 213.42999999999998,
+            "start_deg": 90,
+            "start_s": 212.48
+          },
+          {
+            "end_deg": 0,
+            "end_s": 213.60999999999999,
+            "start_deg": 16,
+            "start_s": 213.42999999999998
+          },
+          {
+            "end_deg": 74,
+            "end_s": 51018.1,
+            "start_deg": 0,
+            "start_s": 51017.0
+          },
+          {
+            "end_deg": 90,
+            "end_s": 51018.28,
+            "start_deg": 74,
+            "start_s": 51018.1
+          },
+          {
+            "end_deg": 16,
+            "end_s": 51019.42999999999,
+            "start_deg": 90,
+            "start_s": 51018.479999999996
+          },
+          {
+            "end_deg": 0,
+            "end_s": 51019.60999999999,
+            "start_deg": 16,
+            "start_s": 51019.42999999999
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:cold-contact-challenge",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      },
+      {
+        "components": {
+          "boot_a": 0.001,
+          "boot_s": 0.002,
+          "idle_a": 2e-06,
+          "leakage_ohm": 100000000.0,
+          "max_v": 3.3,
+          "provenance": "Original constructed DOOR load assumptions; not calibrated hardware.",
+          "tx_a": 0.015,
+          "tx_s": 0.006,
+          "write_a": 0.003,
+          "write_s": 0.002
+        },
+        "description": "Three complete strokes with a finite 0.9s gateway outage around each opening; the unchanged two-second delivery deadline applies and no future gateway observation is added.",
+        "design_domain": {
+          "backoff_max_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "brownout_v": {
+            "kind": "number",
+            "max": 2.0,
+            "min": 1.8
+          },
+          "capacitance_f": {
+            "kind": "number",
+            "max": 0.001,
+            "min": 1e-05
+          },
+          "clear_after": {
+            "kind": "enum",
+            "values": [
+              "early",
+              "save",
+              "ack",
+              "never"
+            ]
+          },
+          "debounce_s": {
+            "kind": "number",
+            "max": 0.5,
+            "min": 0.0
+          },
+          "esr_ohm": {
+            "kind": "number",
+            "max": 100.0,
+            "min": 0.1
+          },
+          "firmware_policy": {
+            "kind": "enum",
+            "values": [
+              "fixed_retry_v1",
+              "voltage_history_backoff_v1"
+            ]
+          },
+          "holding_capacity": {
+            "kind": "integer",
+            "max": 4,
+            "min": 1
+          },
+          "holding_component": {
+            "kind": "enum",
+            "values": [
+              "off",
+              "lp_fifo"
+            ]
+          },
+          "holding_overflow": {
+            "kind": "enum",
+            "values": [
+              "drop_new",
+              "overwrite_oldest"
+            ]
+          },
+          "mechanism": {
+            "editable": {
+              "cam_base_radius_m": [
+                0.006,
+                0.008
+              ],
+              "stroke_m": [
+                0.006,
+                0.0085
+              ]
+            },
+            "kind": "mechanism"
+          },
+          "persistent_queue": {
+            "kind": "boolean"
+          },
+          "read_source": {
+            "kind": "enum",
+            "values": [
+              "contact_only",
+              "holding_then_contact"
+            ]
+          },
+          "retry_s": {
+            "kind": "number",
+            "max": 1.0,
+            "min": 0.01
+          },
+          "startup_v": {
+            "kind": "number",
+            "max": 3.2,
+            "min": 1.9
+          },
+          "tx_gate_v": {
+            "kind": "number",
+            "max": 3.3,
+            "min": 1.8
+          },
+          "tx_reserve_v": {
+            "kind": "number",
+            "max": 0.2,
+            "min": 0.0
+          }
+        },
+        "duration_s": 86400.0,
+        "gateway_windows": [
+          [
+            0,
+            95.9
+          ],
+          [
+            96.8,
+            101.9
+          ],
+          [
+            102.8,
+            43019.9
+          ],
+          [
+            43020.8,
+            86400
+          ]
+        ],
+        "geometry": {
+          "door_height_m": 0.6,
+          "door_width_m": 0.45,
+          "handle_radius_m": 0.4,
+          "installation_envelope_mm": [
+            60,
+            35,
+            20
+          ]
+        },
+        "initial": {
+          "angle_deg": 0.0,
+          "capacitor_v": 0.0,
+          "event_counter": 0,
+          "logical_state": 0,
+          "mechanical_stored_j": 0.0,
+          "queue": []
+        },
+        "integration": {
+          "allowed_dt_s": [
+            0.001,
+            0.0005
+          ],
+          "dt_s": 0.001,
+          "method": "Original midpoint loaded source; new paid holder and event-aware idle integration."
+        },
+        "motion": [
+          {
+            "end_deg": 90,
+            "end_s": 96.25,
+            "start_deg": 0,
+            "start_s": 95.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 97.85,
+            "start_deg": 90,
+            "start_s": 96.6
+          },
+          {
+            "end_deg": 90,
+            "end_s": 102.25,
+            "start_deg": 0,
+            "start_s": 101.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 103.85,
+            "start_deg": 90,
+            "start_s": 102.6
+          },
+          {
+            "end_deg": 90,
+            "end_s": 43020.25,
+            "start_deg": 0,
+            "start_s": 43019.0
+          },
+          {
+            "end_deg": 0,
+            "end_s": 43021.85,
+            "start_deg": 90,
+            "start_s": 43020.6
+          }
+        ],
+        "schema_version": "codebt-door-task-v1",
+        "sensor": {
+          "bounce_offsets_s": [
+            0.0,
+            0.012,
+            0.024,
+            0.036,
+            0.048
+          ],
+          "closed_deg": 10.0,
+          "open_deg": 80.0
+        },
+        "service": {
+          "closed_deg": 10.0,
+          "device_absolute_time": "Unavailable; sequence and direction frame only.",
+          "handle_force_max_n": 0.5,
+          "initial_state_event": false,
+          "loss_rate_status": "Finite constructed task; no population-loss qualification.",
+          "open_deg": 80.0,
+          "receive_deadline_s": 2.0,
+          "require_event_order": true,
+          "require_no_spurious_event_ids": true,
+          "stable_s": 0.06,
+          "target_loss_rate": 0.01
+        },
+        "task_id": "REL-SYNTH-DOOR-20261102:link-recovery-challenge",
+        "public_inputs": {
+          "source_model": {
+            "kind": "constructed continuous cam and reciprocal electromagnetic generator",
+            "equations": [
+              "x=L/2*(1-cos(2*theta))",
+              "u=L*sin(2*theta)*omega",
+              "e=K*u",
+              "i=max((abs(e)-Vbus-Vrect)/Rcoil,0)",
+              "Pmechanical=Vbus*i+Rcoil*i*i+Vrect*i+friction_power"
+            ],
+            "defaults": {
+              "K_Vs_per_m": 500,
+              "coil_ohm": 1500,
+              "rectifier_v": 0.3,
+              "stroke_m": 0.008,
+              "base_radius_m": 0.007,
+              "coulomb_n": 0.05,
+              "viscous_n_s_m": 0.2
+            },
+            "scope": "Prescribed angle; reaction checked as force constraint, no load-to-angle feedback."
+          },
+          "supply_scope": "esr_ohm is simplified series load-branch supply impedance, not full net capacitor-current ESR.",
+          "gateway_scope": "Ideal link inside listed windows; sequence, direction, CRC and deadlines checked.",
+          "program": "Powered contact debounce -> persistent queue SAVE -> TX -> independent gateway ACK. Brownout resets volatile state. Saved event IDs persist when persistent_queue is true. No free unpowered absolute clock.",
+          "feedback_access": "Compact factual summaries; observe candidate target detail:<list>:<offset> returns 64 rows from trace/activity/records/packets/receiver_records of current result. Same legal actions and observation access in both conditions.",
+          "program_state_semantics": {
+            "committed_image": [
+              "seq",
+              "last_direction",
+              "queue of seq/direction records"
+            ],
+            "persistent_queue_false": "Completed SAVE/ACK updates volatile RAM. Reset clears this image; BOOT starts from seq=0, last_direction=0, queue=[].",
+            "persistent_queue_true": "Completed SAVE/ACK atomically updates NVM. Reset clears RAM but retains the last committed NVM image; BOOT reloads that image.",
+            "commit_rules": "SAVE commits the new sequence, last direction and queued record only after the full write_s at write_a. ACK deletes its queued record only after the same write interval. Incomplete operations leave the previous committed image intact.",
+            "costs": "Both state options use the same declared BOOT/SAVE/ACK/TX/IDLE loads in Task.components. Interrupted intervals still consume current for their elapsed time; energy uses the coupled supply voltage.",
+            "clock_rules": "Reset clears pending work, debounce sample/time, powered uptime and retry deadline. The device does not retain unpowered absolute time or unavailable contact-edge history."
+          }
+        }
+      }
+    ],
+    "current_nodes": [
+      {
+        "id": "node-72f3730cc55524c426b82e76",
+        "design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 5.0,
+          "mechanism": {},
+          "persistent_queue": false,
+          "retry_s": 0.1,
+          "startup_v": 2.2,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.025,
+          "holding_component": "off",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "contact_only",
+          "clear_after": "never"
+        },
+        "parent_id": null,
+        "slot": 0,
+        "observations": {
+          "statuses": [
+            "PASS",
+            "FAIL",
+            "FAIL"
+          ],
+          "stage_counts": {
+            "capture": 24,
+            "save": 24,
+            "tx": 21,
+            "receive": 10,
+            "ack": 18,
+            "clear": 0
+          },
+          "received_count": 10,
+          "model_valid": true
+        }
+      }
+    ],
+    "initial_results": {
+      "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+      "section": "",
+      "type": "dict",
+      "count": 6,
+      "read": {
+        "name": "public_object",
+        "arguments": {
+          "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+          "section": "",
+          "offset": 0
+        }
+      },
+      "summary": {
+        "design": {
+          "brownout_v": 1.8,
+          "capacitance_f": 0.0001,
+          "debounce_s": 0.07,
+          "esr_ohm": 5.0,
+          "mechanism": {},
+          "persistent_queue": false,
+          "retry_s": 0.1,
+          "startup_v": 2.2,
+          "tx_gate_v": 2.2,
+          "firmware_policy": "fixed_retry_v1",
+          "backoff_max_s": 1.0,
+          "tx_reserve_v": 0.025,
+          "holding_component": "off",
+          "holding_capacity": 2,
+          "holding_overflow": "drop_new",
+          "read_source": "contact_only",
+          "clear_after": "never"
+        },
+        "results": {
+          "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+          "section": "/results",
+          "type": "list",
+          "count": 3,
+          "read": {
+            "name": "public_object",
+            "arguments": {
+              "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results",
+              "offset": 0
+            }
+          }
+        },
+        "model_valid": true,
+        "execution_status": "COMPLETE",
+        "public_check": {
+          "verdict": "FAIL"
+        },
+        "usage": {
+          "full_inputs": 3,
+          "full_wall_s": 4.175973583012819,
+          "logical_inputs": 3,
+          "cache_reuses": 0
+        }
+      }
+    },
+    "own_evaluated_results": [],
+    "public_page_history": [
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results",
+        "offset": 0,
+        "next_offset": null,
+        "type": "list",
+        "total": 3,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2",
+              "type": "dict",
+              "count": 23,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "schema_version",
+            "value": "pqe-public-result-codebt-v1"
+          },
+          {
+            "key": "execution_status",
+            "value": "COMPLETE"
+          },
+          {
+            "key": "task_id",
+            "value": "REL-SYNTH-DOOR-20261102:local-repair-control"
+          },
+          {
+            "key": "task_sha256",
+            "value": "bf2374997c7660bb79c979f135f9f3a4d60194de9c68f37f9b6c09b3e670dea8"
+          },
+          {
+            "key": "input_sha256",
+            "value": "72f3730cc55524c426b82e7626ce1ce9f2a169f548ca05a1d59dca9d9a1f5e11"
+          },
+          {
+            "key": "design",
+            "value": {
+              "brownout_v": 1.8,
+              "capacitance_f": 0.0001,
+              "debounce_s": 0.07,
+              "esr_ohm": 5.0,
+              "mechanism": {},
+              "persistent_queue": false,
+              "retry_s": 0.1,
+              "startup_v": 2.2,
+              "tx_gate_v": 2.2,
+              "firmware_policy": "fixed_retry_v1",
+              "backoff_max_s": 1.0,
+              "tx_reserve_v": 0.025,
+              "holding_component": "off",
+              "holding_capacity": 2,
+              "holding_overflow": "drop_new",
+              "read_source": "contact_only",
+              "clear_after": "never"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "schema_version",
+            "value": "pqe-public-result-codebt-v1"
+          },
+          {
+            "key": "execution_status",
+            "value": "COMPLETE"
+          },
+          {
+            "key": "task_id",
+            "value": "REL-SYNTH-DOOR-20261102:cold-contact-challenge"
+          },
+          {
+            "key": "task_sha256",
+            "value": "53abc16a5b057ac9c2e025f293e76903558e5ffbb21b2e90aadf8cca76c3778d"
+          },
+          {
+            "key": "input_sha256",
+            "value": "72f3730cc55524c426b82e7626ce1ce9f2a169f548ca05a1d59dca9d9a1f5e11"
+          },
+          {
+            "key": "design",
+            "value": {
+              "brownout_v": 1.8,
+              "capacitance_f": 0.0001,
+              "debounce_s": 0.07,
+              "esr_ohm": 5.0,
+              "mechanism": {},
+              "persistent_queue": false,
+              "retry_s": 0.1,
+              "startup_v": 2.2,
+              "tx_gate_v": 2.2,
+              "firmware_policy": "fixed_retry_v1",
+              "backoff_max_s": 1.0,
+              "tx_reserve_v": 0.025,
+              "holding_component": "off",
+              "holding_capacity": 2,
+              "holding_overflow": "drop_new",
+              "read_source": "contact_only",
+              "clear_after": "never"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "schema_version",
+            "value": "pqe-public-result-codebt-v1"
+          },
+          {
+            "key": "execution_status",
+            "value": "COMPLETE"
+          },
+          {
+            "key": "task_id",
+            "value": "REL-SYNTH-DOOR-20261102:link-recovery-challenge"
+          },
+          {
+            "key": "task_sha256",
+            "value": "99a0e4839e3888ec2fe595ac7b1c43b33dd3c30a5c2516f6fd4f5652e5e0e3c6"
+          },
+          {
+            "key": "input_sha256",
+            "value": "72f3730cc55524c426b82e7626ce1ce9f2a169f548ca05a1d59dca9d9a1f5e11"
+          },
+          {
+            "key": "design",
+            "value": {
+              "brownout_v": 1.8,
+              "capacitance_f": 0.0001,
+              "debounce_s": 0.07,
+              "esr_ohm": 5.0,
+              "mechanism": {},
+              "persistent_queue": false,
+              "retry_s": 0.1,
+              "startup_v": 2.2,
+              "tx_gate_v": 2.2,
+              "firmware_policy": "fixed_retry_v1",
+              "backoff_max_s": 1.0,
+              "tx_reserve_v": 0.025,
+              "holding_component": "off",
+              "holding_capacity": 2,
+              "holding_overflow": "drop_new",
+              "read_source": "contact_only",
+              "clear_after": "never"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0",
+        "offset": 6,
+        "next_offset": 12,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "problem",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/problem",
+              "type": "dict",
+              "count": 5,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/problem",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "sources",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/sources",
+              "type": "dict",
+              "count": 15,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/sources",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "model_valid",
+            "value": true
+          },
+          {
+            "key": "domain_errors",
+            "value": []
+          },
+          {
+            "key": "program_version",
+            "value": "codebt-door-program-v1"
+          },
+          {
+            "key": "engineering_model_sha256",
+            "value": "2fe7ef18373f469f457e838c61b5d90412bb4536fa999334c0ecaad5a862ee79"
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1",
+        "offset": 6,
+        "next_offset": 12,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "problem",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/problem",
+              "type": "dict",
+              "count": 5,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/problem",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "sources",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/sources",
+              "type": "dict",
+              "count": 15,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/sources",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "model_valid",
+            "value": true
+          },
+          {
+            "key": "domain_errors",
+            "value": []
+          },
+          {
+            "key": "program_version",
+            "value": "codebt-door-program-v1"
+          },
+          {
+            "key": "engineering_model_sha256",
+            "value": "8bc9abf1b65e8c110ade84a104e05e59c3d59c81b5a41faea85b6b8d6b6123f1"
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2",
+        "offset": 6,
+        "next_offset": 12,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "problem",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/problem",
+              "type": "dict",
+              "count": 5,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/problem",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "sources",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/sources",
+              "type": "dict",
+              "count": 15,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/sources",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "model_valid",
+            "value": true
+          },
+          {
+            "key": "domain_errors",
+            "value": []
+          },
+          {
+            "key": "program_version",
+            "value": "codebt-door-program-v1"
+          },
+          {
+            "key": "engineering_model_sha256",
+            "value": "274e37ae89728b2dfd27b85b30467392323392b386d4cbba6d26bd4849984cd7"
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0",
+        "offset": 12,
+        "next_offset": 18,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "facts",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/facts",
+              "type": "dict",
+              "count": 9,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/facts",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "public_check",
+            "value": {
+              "verdict": "PASS",
+              "failures": [],
+              "unknown": [],
+              "received_count": 6
+            }
+          },
+          {
+            "key": "usage",
+            "value": {
+              "paid_model_requests": 0,
+              "numerical_inputs": 1,
+              "wall_s": 1.382865292020142
+            }
+          },
+          {
+            "key": "result_sha256",
+            "value": "9212bceee2929d3d13691a6f76cd6d5af6526ccbc92e8bd85ba797ad84a7d601"
+          },
+          {
+            "key": "public_projection",
+            "value": {
+              "version": "pqe-public-projection-v1",
+              "source_result_sha256": "9212bceee2929d3d13691a6f76cd6d5af6526ccbc92e8bd85ba797ad84a7d601",
+              "source_public_sha256": "c4c768947a2038cb2e10f485ef1810b5260ea61af94386264943618e9ac82976"
+            }
+          },
+          {
+            "key": "component_contract",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/component_contract",
+              "type": "dict",
+              "count": 6,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/component_contract",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0",
+        "offset": 18,
+        "next_offset": null,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "adapter_version",
+            "value": "codebt-door-adapter-v1"
+          },
+          {
+            "key": "codebt_projection",
+            "value": {
+              "version": "codebt-door-adapter-v1",
+              "base_public_sha256": "e1010e935af55b5f98bd37ed0611e8c4ea892f2a018dce2dc26f31ac31bd1101",
+              "component_contract_sha256": "0d5dbc97338a93296a7e6f448e614605686b3e053b7d598ba31485c4893bc8b0",
+              "raw_result_sha256": "9212bceee2929d3d13691a6f76cd6d5af6526ccbc92e8bd85ba797ad84a7d601",
+              "extra_energy_fields_are_diagnostic_subsets": true
+            }
+          },
+          {
+            "key": "condition_id",
+            "value": "local-repair-control"
+          },
+          {
+            "key": "relationship_graph",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/relationship_graph",
+              "type": "dict",
+              "count": 8,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/relationship_graph",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "relationship_view",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/relationship_view",
+              "type": "dict",
+              "count": 7,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/relationship_view",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1",
+        "offset": 12,
+        "next_offset": 18,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "facts",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/facts",
+              "type": "dict",
+              "count": 9,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/facts",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "public_check",
+            "value": {
+              "verdict": "FAIL",
+              "failures": [
+                "MISSED_OR_LATE_EVENT"
+              ],
+              "unknown": [],
+              "received_count": 2
+            }
+          },
+          {
+            "key": "usage",
+            "value": {
+              "paid_model_requests": 0,
+              "numerical_inputs": 1,
+              "wall_s": 1.288783791998867
+            }
+          },
+          {
+            "key": "result_sha256",
+            "value": "495b5cca385fcb539a215e6dde5107e29c3829031919b4133081a6f44c6bbbcb"
+          },
+          {
+            "key": "public_projection",
+            "value": {
+              "version": "pqe-public-projection-v1",
+              "source_result_sha256": "495b5cca385fcb539a215e6dde5107e29c3829031919b4133081a6f44c6bbbcb",
+              "source_public_sha256": "69b8d0040566f8357bd5a1f16d3ccada97a546fe900352aa8552a6ba8ee388e1"
+            }
+          },
+          {
+            "key": "component_contract",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/component_contract",
+              "type": "dict",
+              "count": 6,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/component_contract",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1",
+        "offset": 18,
+        "next_offset": null,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "adapter_version",
+            "value": "codebt-door-adapter-v1"
+          },
+          {
+            "key": "codebt_projection",
+            "value": {
+              "version": "codebt-door-adapter-v1",
+              "base_public_sha256": "afde564a22002db49f6005e9f28b63475cc0bc12d1539d8e35e38d149967c517",
+              "component_contract_sha256": "9854c93f78fbcd9ad814245755c7efe52359cacd680139a42635b9b0e0c63d13",
+              "raw_result_sha256": "495b5cca385fcb539a215e6dde5107e29c3829031919b4133081a6f44c6bbbcb",
+              "extra_energy_fields_are_diagnostic_subsets": true
+            }
+          },
+          {
+            "key": "condition_id",
+            "value": "cold-contact-challenge"
+          },
+          {
+            "key": "relationship_graph",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/relationship_graph",
+              "type": "dict",
+              "count": 8,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/relationship_graph",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "relationship_view",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/relationship_view",
+              "type": "dict",
+              "count": 7,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/relationship_view",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2",
+        "offset": 12,
+        "next_offset": 18,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "facts",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/facts",
+              "type": "dict",
+              "count": 9,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/facts",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "public_check",
+            "value": {
+              "verdict": "FAIL",
+              "failures": [
+                "MISSED_OR_LATE_EVENT"
+              ],
+              "unknown": [],
+              "received_count": 2
+            }
+          },
+          {
+            "key": "usage",
+            "value": {
+              "paid_model_requests": 0,
+              "numerical_inputs": 1,
+              "wall_s": 1.3578394159849267
+            }
+          },
+          {
+            "key": "result_sha256",
+            "value": "450484fcbe5d23772c2c103ff0db03ea758f3dd31283ffe8136af23a47eec76e"
+          },
+          {
+            "key": "public_projection",
+            "value": {
+              "version": "pqe-public-projection-v1",
+              "source_result_sha256": "450484fcbe5d23772c2c103ff0db03ea758f3dd31283ffe8136af23a47eec76e",
+              "source_public_sha256": "2f9731bf7044aa9f2e758acdbcd7d7433d9d40c57367c4059e88d81edcc8c220"
+            }
+          },
+          {
+            "key": "component_contract",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/component_contract",
+              "type": "dict",
+              "count": 6,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/component_contract",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2",
+        "offset": 18,
+        "next_offset": null,
+        "type": "dict",
+        "total": 23,
+        "rows": [
+          {
+            "key": "adapter_version",
+            "value": "codebt-door-adapter-v1"
+          },
+          {
+            "key": "codebt_projection",
+            "value": {
+              "version": "codebt-door-adapter-v1",
+              "base_public_sha256": "4fa0853e00eadd18671e4ff721f8c82186b93d91cf84dc7a17900ba11b5e020f",
+              "component_contract_sha256": "49e8cfc28fb4b55cf8ce6d062749cf547a0f214ccd86911f382e83eca337a35c",
+              "raw_result_sha256": "450484fcbe5d23772c2c103ff0db03ea758f3dd31283ffe8136af23a47eec76e",
+              "extra_energy_fields_are_diagnostic_subsets": true
+            }
+          },
+          {
+            "key": "condition_id",
+            "value": "link-recovery-challenge"
+          },
+          {
+            "key": "relationship_graph",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/relationship_graph",
+              "type": "dict",
+              "count": 8,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/relationship_graph",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "relationship_view",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/relationship_view",
+              "type": "dict",
+              "count": 7,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/relationship_view",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0/facts",
+        "offset": 0,
+        "next_offset": 4,
+        "type": "dict",
+        "total": 9,
+        "rows": [
+          {
+            "key": "trace",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/facts/trace",
+              "type": "list",
+              "count": 800,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/facts/trace",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "activity",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/facts/activity",
+              "type": "list",
+              "count": 39,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/facts/activity",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "records",
+            "value": [
+              {
+                "seq": 1,
+                "direction": 1,
+                "committed_s": 62.4539999999965,
+                "durable": false
+              },
+              {
+                "seq": 2,
+                "direction": 0,
+                "committed_s": 64.45399999999506,
+                "durable": false
+              },
+              {
+                "seq": 3,
+                "direction": 1,
+                "committed_s": 67.45400000000939,
+                "durable": false
+              },
+              {
+                "seq": 4,
+                "direction": 0,
+                "committed_s": 69.45400000001894,
+                "durable": false
+              },
+              {
+                "seq": 5,
+                "direction": 1,
+                "committed_s": 72.45400000003326,
+                "durable": false
+              },
+              {
+                "seq": 6,
+                "direction": 0,
+                "committed_s": 74.45400000004281,
+                "durable": false
+              }
+            ]
+          },
+          {
+            "key": "packets",
+            "value": [
+              {
+                "time_s": 62.459999999996484,
+                "hex": "0000000101321c"
+              },
+              {
+                "time_s": 64.45999999999509,
+                "hex": "0000000200776e"
+              },
+              {
+                "time_s": 67.46000000000942,
+                "hex": "0000000301547e"
+              },
+              {
+                "time_s": 69.46000000001897,
+                "hex": "0000000400ddc8"
+              },
+              {
+                "time_s": 72.46000000003329,
+                "hex": "0000000501fed8"
+              },
+              {
+                "time_s": 74.46000000004284,
+                "hex": "0000000600bbaa"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1/facts",
+        "offset": 0,
+        "next_offset": 4,
+        "type": "dict",
+        "total": 9,
+        "rows": [
+          {
+            "key": "trace",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/facts/trace",
+              "type": "list",
+              "count": 747,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/facts/trace",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "activity",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/facts/activity",
+              "type": "list",
+              "count": 45,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/facts/activity",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "records",
+            "value": [
+              {
+                "seq": 1,
+                "direction": 1,
+                "committed_s": 74.28800000000639,
+                "durable": false
+              },
+              {
+                "seq": 2,
+                "direction": 0,
+                "committed_s": 75.61800000001274,
+                "durable": false
+              },
+              {
+                "seq": 1,
+                "direction": 1,
+                "committed_s": 212.28800000000638,
+                "durable": false
+              },
+              {
+                "seq": 2,
+                "direction": 0,
+                "committed_s": 213.61800000001273,
+                "durable": false
+              },
+              {
+                "seq": 1,
+                "direction": 1,
+                "committed_s": 51018.2879999954,
+                "durable": false
+              },
+              {
+                "seq": 2,
+                "direction": 0,
+                "committed_s": 51019.617999990835,
+                "durable": false
+              }
+            ]
+          },
+          {
+            "key": "packets",
+            "value": [
+              {
+                "time_s": 74.29400000000642,
+                "hex": "0000000101321c"
+              },
+              {
+                "time_s": 75.62400000001277,
+                "hex": "0000000200776e"
+              },
+              {
+                "time_s": 212.2940000000064,
+                "hex": "0000000101321c"
+              },
+              {
+                "time_s": 213.62400000001276,
+                "hex": "0000000200776e"
+              },
+              {
+                "time_s": 51018.29399999538,
+                "hex": "0000000101321c"
+              },
+              {
+                "time_s": 51019.623999990814,
+                "hex": "0000000200776e"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2/facts",
+        "offset": 0,
+        "next_offset": 3,
+        "type": "dict",
+        "total": 9,
+        "rows": [
+          {
+            "key": "trace",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/facts/trace",
+              "type": "list",
+              "count": 792,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/facts/trace",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "activity",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/facts/activity",
+              "type": "list",
+              "count": 84,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/facts/activity",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "records",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/facts/records",
+              "type": "list",
+              "count": 12,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/facts/records",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1/relationship_graph",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 8,
+        "rows": [
+          {
+            "key": "schema",
+            "value": "codebt-public-record-relations-v2"
+          },
+          {
+            "key": "result_ref",
+            "value": "495b5cca385fcb539a215e6dde5107e29c3829031919b4133081a6f44c6bbbcb"
+          },
+          {
+            "key": "scope",
+            "value": {
+              "public_input_only": true,
+              "no_hidden_truth": true,
+              "no_observer_identity": true,
+              "absence_is_not_loss": true,
+              "device_seq_is_not_globally_unique": true,
+              "execution_status": "COMPLETE"
+            }
+          },
+          {
+            "key": "events",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/relationship_graph/events",
+              "type": "list",
+              "count": 35,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/relationship_graph/events",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "records",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/relationship_graph/records",
+              "type": "list",
+              "count": 6,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/relationship_graph/records",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "holder_records",
+            "value": []
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2/relationship_graph",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 8,
+        "rows": [
+          {
+            "key": "schema",
+            "value": "codebt-public-record-relations-v2"
+          },
+          {
+            "key": "result_ref",
+            "value": "450484fcbe5d23772c2c103ff0db03ea758f3dd31283ffe8136af23a47eec76e"
+          },
+          {
+            "key": "scope",
+            "value": {
+              "public_input_only": true,
+              "no_hidden_truth": true,
+              "no_observer_identity": true,
+              "absence_is_not_loss": true,
+              "device_seq_is_not_globally_unique": true,
+              "execution_status": "COMPLETE"
+            }
+          },
+          {
+            "key": "events",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/relationship_graph/events",
+              "type": "list",
+              "count": 65,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/relationship_graph/events",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "records",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/2/relationship_graph/records",
+              "type": "list",
+              "count": 12,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/2/relationship_graph/records",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "holder_records",
+            "value": []
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0/component_contract",
+        "offset": 0,
+        "next_offset": null,
+        "type": "dict",
+        "total": 6,
+        "rows": [
+          {
+            "key": "schema",
+            "value": "codebt-design-facts-v1"
+          },
+          {
+            "key": "version",
+            "value": "codebt-component-facts-v1"
+          },
+          {
+            "key": "design_sha256",
+            "value": "72f3730cc55524c426b82e7626ce1ce9f2a169f548ca05a1d59dca9d9a1f5e11"
+          },
+          {
+            "key": "scope",
+            "value": {
+              "task_id": "REL-SYNTH-DOOR-20261102:local-repair-control",
+              "static_only": true,
+              "no_scientific_execution": true,
+              "full_service": "UNKNOWN"
+            }
+          },
+          {
+            "key": "facts",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/component_contract/facts",
+              "type": "list",
+              "count": 12,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/component_contract/facts",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "loads",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/0/component_contract/loads",
+              "type": "list",
+              "count": 4,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/0/component_contract/loads",
+                  "offset": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1/relationship_view",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "dict",
+        "total": 7,
+        "rows": [
+          {
+            "key": "schema",
+            "value": "partial-ancestor-observed-relations-v2"
+          },
+          {
+            "key": "relations",
+            "value": {
+              "public_object_ref": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+              "section": "/results/1/relationship_view/relations",
+              "type": "list",
+              "count": 30,
+              "read": {
+                "name": "public_object",
+                "arguments": {
+                  "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+                  "section": "/results/1/relationship_view/relations",
+                  "offset": 0
+                }
+              }
+            }
+          },
+          {
+            "key": "unknowns",
+            "value": []
+          },
+          {
+            "key": "source_graph_schema",
+            "value": "codebt-public-record-relations-v2"
+          },
+          {
+            "key": "source_types",
+            "value": {
+              "component_domain": "component_contract; static source facts",
+              "runtime": "relations with source pointers",
+              "manual_contract": "depends_on lists declare field scope, never correct values"
+            }
+          },
+          {
+            "key": "absence_is_not_loss",
+            "value": true
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1/facts/activity",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "list",
+        "total": 45,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "time_s": 73.38400000000208,
+              "action": "boot",
+              "uptime_s": 0.0,
+              "boot": 1,
+              "capacitor_v": 2.2036901989951736
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "time_s": 73.38600000000208,
+              "action": "boot_complete",
+              "uptime_s": 0.002
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "time_s": 74.28600000000638,
+              "action": "capture",
+              "uptime_s": 0.9020000000000007,
+              "direction": 1
+            }
+          },
+          {
+            "index": 3,
+            "value": {
+              "time_s": 74.28800000000639,
+              "action": "save_commit",
+              "uptime_s": 0.9040000000000007,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              },
+              "durable": false
+            }
+          },
+          {
+            "index": 4,
+            "value": {
+              "time_s": 74.28800000000639,
+              "action": "tx_begin",
+              "uptime_s": 0.9040000000000007,
+              "seq": 1,
+              "capacitor_v": 3.2334911076352
+            }
+          },
+          {
+            "index": 5,
+            "value": {
+              "time_s": 74.29400000000642,
+              "action": "wire_complete",
+              "uptime_s": 0.9100000000000007,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              },
+              "hex": "0000000101321c"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/1/relationship_graph/events",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "list",
+        "total": 35,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "id": "#/facts/activity/0",
+              "stage": "boot",
+              "source_ref": "#/facts/activity/0",
+              "time_s": 73.38400000000208,
+              "observed_mcu_resets": 0
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "id": "#/facts/activity/1",
+              "stage": "boot_ready",
+              "source_ref": "#/facts/activity/1",
+              "time_s": 73.38600000000208,
+              "observed_mcu_resets": 0
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "id": "#/facts/activity/2",
+              "stage": "capture",
+              "source_ref": "#/facts/activity/2",
+              "time_s": 74.28600000000638,
+              "observed_mcu_resets": 0,
+              "direction": 1
+            }
+          },
+          {
+            "index": 3,
+            "value": {
+              "id": "#/facts/activity/3",
+              "stage": "save",
+              "source_ref": "#/facts/activity/3",
+              "time_s": 74.28800000000639,
+              "observed_mcu_resets": 0,
+              "durable": false,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              }
+            }
+          },
+          {
+            "index": 4,
+            "value": {
+              "id": "#/facts/activity/5",
+              "stage": "tx",
+              "source_ref": "#/facts/activity/5",
+              "time_s": 74.29400000000642,
+              "observed_mcu_resets": 0,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              }
+            }
+          },
+          {
+            "index": 5,
+            "value": {
+              "id": "#/facts/activity/7",
+              "stage": "ack",
+              "source_ref": "#/facts/activity/7",
+              "time_s": 74.29600000000643,
+              "observed_mcu_resets": 0,
+              "durable": false,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              }
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2/facts/activity",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "list",
+        "total": 84,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "time_s": 95.3480000000019,
+              "action": "boot",
+              "uptime_s": 0.0,
+              "boot": 1,
+              "capacitor_v": 2.207908096723259
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "time_s": 95.35000000000191,
+              "action": "boot_complete",
+              "uptime_s": 0.002
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "time_s": 96.23000000000611,
+              "action": "capture",
+              "uptime_s": 0.8820000000000007,
+              "direction": 1
+            }
+          },
+          {
+            "index": 3,
+            "value": {
+              "time_s": 96.23200000000612,
+              "action": "save_commit",
+              "uptime_s": 0.8840000000000007,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              },
+              "durable": false
+            }
+          },
+          {
+            "index": 4,
+            "value": {
+              "time_s": 96.23200000000612,
+              "action": "tx_begin",
+              "uptime_s": 0.8840000000000007,
+              "seq": 1,
+              "capacitor_v": 3.2339399909600615
+            }
+          },
+          {
+            "index": 5,
+            "value": {
+              "time_s": 96.23800000000615,
+              "action": "wire_complete",
+              "uptime_s": 0.8900000000000007,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              },
+              "hex": "0000000101321c"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/2/relationship_graph/events",
+        "offset": 0,
+        "next_offset": 6,
+        "type": "list",
+        "total": 65,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "id": "#/facts/activity/0",
+              "stage": "boot",
+              "source_ref": "#/facts/activity/0",
+              "time_s": 95.3480000000019,
+              "observed_mcu_resets": 0
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "id": "#/facts/activity/1",
+              "stage": "boot_ready",
+              "source_ref": "#/facts/activity/1",
+              "time_s": 95.35000000000191,
+              "observed_mcu_resets": 0
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "id": "#/facts/activity/2",
+              "stage": "capture",
+              "source_ref": "#/facts/activity/2",
+              "time_s": 96.23000000000611,
+              "observed_mcu_resets": 0,
+              "direction": 1
+            }
+          },
+          {
+            "index": 3,
+            "value": {
+              "id": "#/facts/activity/3",
+              "stage": "save",
+              "source_ref": "#/facts/activity/3",
+              "time_s": 96.23200000000612,
+              "observed_mcu_resets": 0,
+              "durable": false,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              }
+            }
+          },
+          {
+            "index": 4,
+            "value": {
+              "id": "#/facts/activity/5",
+              "stage": "tx",
+              "source_ref": "#/facts/activity/5",
+              "time_s": 96.23800000000615,
+              "observed_mcu_resets": 0,
+              "record": {
+                "seq": 1,
+                "direction": 1
+              }
+            }
+          },
+          {
+            "index": 5,
+            "value": {
+              "id": "#/facts/activity/7",
+              "stage": "mcu_reset",
+              "source_ref": "#/facts/activity/7",
+              "time_s": 96.34200000000665,
+              "observed_mcu_resets": 0,
+              "reason": "LOAD_TERMINAL_UVLO"
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0/component_contract/facts",
+        "offset": 0,
+        "next_offset": 4,
+        "type": "list",
+        "total": 12,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "id": "holder.production",
+              "kind": "production",
+              "subject": "holder",
+              "relation": "produces",
+              "object": "holding_record",
+              "value": {
+                "enabled": false,
+                "voltage_domain_v": [
+                  1.0,
+                  3.3
+                ],
+                "input": "current_contact",
+                "requires_mcu_power": false
+              },
+              "depends_on": [
+                "holding_component"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.holding:prepare/advance"
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "id": "program.read",
+              "kind": "consumption",
+              "subject": "program.read",
+              "relation": "reads",
+              "object": "holding_record",
+              "value": {
+                "enabled": false,
+                "configured_source": "contact_only",
+                "order": "holder prefix before direct contact"
+              },
+              "depends_on": [
+                "holding_component",
+                "read_source"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+              ]
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "id": "pending.created",
+              "kind": "handoff",
+              "subject": "mcu_pending",
+              "relation": "available_after",
+              "object": "read_commit",
+              "value": {
+                "enabled": false,
+                "survives_mcu_reset": false
+              },
+              "depends_on": [
+                "holding_component",
+                "read_source"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance"
+              ]
+            }
+          },
+          {
+            "index": 3,
+            "value": {
+              "id": "queue.handoff",
+              "kind": "handoff",
+              "subject": "mcu_queue",
+              "relation": "available_after",
+              "object": "save_commit",
+              "value": {
+                "destination": "ram_queue",
+                "survives_mcu_reset": false,
+                "atomic": true,
+                "dynamic_observation": null,
+                "status": "UNKNOWN"
+              },
+              "depends_on": [
+                "persistent_queue"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.advance",
+                "bfworld.agentlab.pqe20261022.door_program:DoorProgram.advance"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "version": "M3-public-objects-v1",
+        "visibility": "PUBLIC_ONLY",
+        "object_id": "pub-3c070f51dcaffb427304dcf56192ed24eee881a3062bc0c3d2c157840048f66c",
+        "section": "/results/0/component_contract/loads",
+        "offset": 0,
+        "next_offset": 3,
+        "type": "list",
+        "total": 4,
+        "rows": [
+          {
+            "index": 0,
+            "value": {
+              "component": "holder",
+              "operation": "monitor",
+              "enabled": false,
+              "current_a": 0.0,
+              "duration_s": null,
+              "voltage_domain_v": [
+                1.0,
+                3.3
+              ],
+              "equation": "integral(Vbus*I_operation*dt); interruption still pays elapsed load",
+              "depends_on": [
+                "holding_component",
+                "read_source",
+                "clear_after",
+                "capacitance_f",
+                "esr_ohm",
+                "startup_v",
+                "brownout_v",
+                "mechanism"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+                "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled"
+              ]
+            }
+          },
+          {
+            "index": 1,
+            "value": {
+              "component": "holder",
+              "operation": "capture",
+              "enabled": false,
+              "current_a": 0.0,
+              "duration_s": 0.002,
+              "voltage_domain_v": [
+                1.0,
+                3.3
+              ],
+              "equation": "integral(Vbus*I_operation*dt); interruption still pays elapsed load",
+              "depends_on": [
+                "holding_component",
+                "read_source",
+                "clear_after",
+                "capacitance_f",
+                "esr_ohm",
+                "startup_v",
+                "brownout_v",
+                "mechanism"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+                "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled"
+              ]
+            }
+          },
+          {
+            "index": 2,
+            "value": {
+              "component": "mcu_holder_io",
+              "operation": "read",
+              "enabled": false,
+              "current_a": 0.0,
+              "duration_s": 0.002,
+              "voltage_domain_v": [
+                1.8,
+                3.3
+              ],
+              "equation": "integral(Vbus*I_operation*dt); interruption still pays elapsed load",
+              "depends_on": [
+                "holding_component",
+                "read_source",
+                "clear_after",
+                "capacitance_f",
+                "esr_ohm",
+                "startup_v",
+                "brownout_v",
+                "mechanism"
+              ],
+              "source_refs": [
+                "bfworld.agentlab.pqe20261024debt.holding:PROFILE",
+                "bfworld.agentlab.pqe20261024debt.consumer:_execute_enabled"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "last_feedback": null,
+    "site_contract": {
+      "outputs": [
+        {
+          "design": "complete legal design object",
+          "parent_id": "optional evaluated node id"
+        },
+        {
+          "final_design": "explicit already evaluated full design object"
+        },
+        {
+          "tool_calls": [
+            {
+              "name": "public_object",
+              "arguments": {
+                "object_id": "pub-64hex",
+                "section": "RFC6901",
+                "offset": 0
+              }
+            }
+          ]
+        }
+      ],
+      "candidate_slots_excluding_initial": 6,
+      "public_reads": 64,
+      "freedom": "Any legal whole-design edits or restarts. Every evaluated failed ancestor remains available. Initial observations do not use candidate slots.",
+      "semantics": "Absent stage is UNKNOWN. Numeric seq is not globally unique. Read pages remain verbatim in public_page_history across all queries. No filesystem, private reference or code execution."
+    },
+    "remaining": {
+      "design_slots": 6,
+      "logical_condition_evaluations": 18,
+      "provider_requests": 6,
+      "public_reads": 38,
+      "output_tokens": 121074,
+      "usd": 4.9709759,
+      "wall_s": 821.3526307080174
+    },
+    "public_paging": {
+      "version": "M3-public-objects-v1",
+      "tool": "public_object",
+      "row_cap": 6,
+      "byte_cap": 1800,
+      "section_syntax": "RFC6901 JSON pointer",
+      "rule": "Every referenced original public field is readable. Scalar facts, unknowns and validity conditions are factual summaries; no recommended actions. Pages may refer to a large row; read its section.",
+      "history": "All read pages retained inline, including previous design queries."
+    },
+    "PUBLIC_TOOLS": [
+      {
+        "name": "public_object",
+        "arguments": {
+          "object_id": "pub-...",
+          "section": "",
+          "offset": 0
+        }
+      }
+    ],
+    "max_output_tokens": 32768
+  },
+  "max_output_tokens": 32768
+}

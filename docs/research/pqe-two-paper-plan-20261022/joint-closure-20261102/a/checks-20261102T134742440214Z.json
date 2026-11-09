@@ -1,0 +1,292 @@
+{
+  "schema": "BFA101-A-six-direct-checks-v1",
+  "at": "2026-11-02T13:47:42.643580+00:00",
+  "status": "FAIL",
+  "cases": [
+    {
+      "name": "1 LC facts",
+      "before": {},
+      "evidence": {
+        "facts": 10,
+        "active_fields": [
+          "area_cm2",
+          "capacitance_f",
+          "esr_ohm",
+          "startup_v",
+          "brownout_v",
+          "persistent_records",
+          "nvm_capacity_records",
+          "sample_period_s",
+          "ack_spacing_s",
+          "retry_s"
+        ],
+        "no_door_gate_required": true
+      },
+      "status": "PASS",
+      "after": {
+        "structural": 1
+      },
+      "wall_s": 0.0024065830220934004
+    },
+    {
+      "name": "2 active C and PV",
+      "before": {
+        "structural": 1
+      },
+      "status": "FAIL",
+      "error": "Traceback (most recent call last):\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 65, in run\n    row[\"evidence\"] = fn()\n                      ^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 87, in case2\n    a = mod.calculate(lc_contract, ld, meter=meter)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in calculate\n    \"tasks\": [function(t, design, sections) for t in tasks],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in <listcomp>\n    \"tasks\": [function(t, design, sections) for t in tasks],\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 286, in _lc_numeric\n    for a, b in _segments(t):\n                ^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 249, in _segments\n    raise ValueError(\"BOUNDED_ANALYTIC_SEGMENT_LIMIT\")\nValueError: BOUNDED_ANALYTIC_SEGMENT_LIMIT\n",
+      "after": {
+        "structural": 2,
+        "cheap_numeric": 1
+      },
+      "wall_s": 0.0020609580096788704
+    },
+    {
+      "name": "3 necessary bounds and load guards",
+      "before": {
+        "structural": 2,
+        "cheap_numeric": 1
+      },
+      "status": "FAIL",
+      "error": "Traceback (most recent call last):\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 65, in run\n    row[\"evidence\"] = fn()\n                      ^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 108, in case3\n    a = mod.calculate(lc_contract, ld, meter=meter)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in calculate\n    \"tasks\": [function(t, design, sections) for t in tasks],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in <listcomp>\n    \"tasks\": [function(t, design, sections) for t in tasks],\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 286, in _lc_numeric\n    for a, b in _segments(t):\n                ^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 249, in _segments\n    raise ValueError(\"BOUNDED_ANALYTIC_SEGMENT_LIMIT\")\nValueError: BOUNDED_ANALYTIC_SEGMENT_LIMIT\n",
+      "after": {
+        "structural": 3,
+        "cheap_numeric": 2
+      },
+      "wall_s": 0.0014465829881373793
+    },
+    {
+      "name": "4 clock queue recovery",
+      "before": {
+        "structural": 3,
+        "cheap_numeric": 2
+      },
+      "status": "FAIL",
+      "error": "Traceback (most recent call last):\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 65, in run\n    row[\"evidence\"] = fn()\n                      ^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 130, in case4\n    a = mod.calculate(lc_contract, changed, meter=meter)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in calculate\n    \"tasks\": [function(t, design, sections) for t in tasks],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in <listcomp>\n    \"tasks\": [function(t, design, sections) for t in tasks],\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 286, in _lc_numeric\n    for a, b in _segments(t):\n                ^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 249, in _segments\n    raise ValueError(\"BOUNDED_ANALYTIC_SEGMENT_LIMIT\")\nValueError: BOUNDED_ANALYTIC_SEGMENT_LIMIT\n",
+      "after": {
+        "structural": 5,
+        "cheap_numeric": 3
+      },
+      "wall_s": 0.002639167010784149
+    },
+    {
+      "name": "5 DOOR common component facts",
+      "before": {
+        "structural": 5,
+        "cheap_numeric": 3
+      },
+      "evidence": {
+        "holder_off_retained": true,
+        "holder_on_shared_loads": 4,
+        "geometry_misses": 1
+      },
+      "status": "PASS",
+      "after": {
+        "structural": 8,
+        "cheap_numeric": 4,
+        "geometry_miss": 1,
+        "geometry_hit": 2
+      },
+      "wall_s": 0.007913541019661352
+    },
+    {
+      "name": "6 binding metering and noninterference",
+      "before": {
+        "structural": 8,
+        "cheap_numeric": 4,
+        "geometry_miss": 1,
+        "geometry_hit": 2
+      },
+      "status": "FAIL",
+      "error": "Traceback (most recent call last):\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 65, in run\n    row[\"evidence\"] = fn()\n                      ^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/direct_checks.py\", line 161, in case6\n    a = mod.calculate(lc_contract, ld, meter=meter)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in calculate\n    \"tasks\": [function(t, design, sections) for t in tasks],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 445, in <listcomp>\n    \"tasks\": [function(t, design, sections) for t in tasks],\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 286, in _lc_numeric\n    for a, b in _segments(t):\n                ^^^^^^^^^^^^\n  File \"/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py\", line 249, in _segments\n    raise ValueError(\"BOUNDED_ANALYTIC_SEGMENT_LIMIT\")\nValueError: BOUNDED_ANALYTIC_SEGMENT_LIMIT\n",
+      "after": {
+        "structural": 9,
+        "cheap_numeric": 5,
+        "geometry_miss": 1,
+        "geometry_hit": 2
+      },
+      "wall_s": 0.0020823749946430326
+    }
+  ],
+  "software_cases": 6,
+  "event_counts": {
+    "structural": 9,
+    "cheap_numeric": 5,
+    "geometry_miss": 1,
+    "geometry_hit": 2
+  },
+  "events": [
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "f690d4a13e3b18ca740982770d2c27686ff68bc0ac8b65751dbf7e95c31013b2",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "f690d4a13e3b18ca740982770d2c27686ff68bc0ac8b65751dbf7e95c31013b2",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "98fb63d6d22d403ce19c43e214b169f9d1447a5e01132e1d443c3420f36285a7",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "98fb63d6d22d403ce19c43e214b169f9d1447a5e01132e1d443c3420f36285a7",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "8c08c44e6de1ebb4f05d3af9d2b89057d98afd042af8df6a7ba988d66fda9dae",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0c7dbc638d188248ef6277e54161dcc319c9d04e4e350f8ac13afc03448f75ee",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_miss",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": true
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "7e840d2802d4a0dec53e090424b4a770d56f25fd9d7b50704d4e5c6901a65954",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "7e840d2802d4a0dec53e090424b4a770d56f25fd9d7b50704d4e5c6901a65954",
+      "details": {
+        "family": "DOOR",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "geometry_hit",
+      "key": "22eb5c222ced6b1915ef80d82c1152199ae3716cdd6f6723226d06d6302af08d",
+      "details": {
+        "source": "original static_geometry_facts",
+        "actual_miss": false
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "9fbfbfe468f1d3968c9288042b7031c610560ffb83c87083194e116a399142c3",
+      "details": {
+        "operation": "all",
+        "family": "DOOR",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    },
+    {
+      "kind": "structural",
+      "key": "0128cf30eb7d88f99a066965b4c093998da97cfcb90e4d7dddfe5e36b48f1c60",
+      "details": {
+        "family": "LC",
+        "task_count": 3
+      }
+    },
+    {
+      "kind": "cheap_numeric",
+      "key": "f690d4a13e3b18ca740982770d2c27686ff68bc0ac8b65751dbf7e95c31013b2",
+      "details": {
+        "operation": "all",
+        "family": "LC",
+        "task_count": 3,
+        "bounded_analytic_bundle": true,
+        "full_execution": false
+      }
+    }
+  ],
+  "cheap_total": 6,
+  "full": 0,
+  "model": 0,
+  "full_attempts": [],
+  "source_sha256": {
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/joint-closure-20261102/a/shared_facts.py": "a222ceb1ff5aad5122377afdc92e89e5823710e1e6fcafb28d3cbfdcd2a070b7",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/door_model.py": "eabc8a422ece68b36bcaf0d194a2332f1941a5bc24d541dd7d4ff1dac96e3d53",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/lcpv20261023.py": "ad76a33e136a0e48a856e590ba6953d6edae9edb519936baefca6d2ee631204d",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/facts.py": "600570608da0d49bacf0533fa457dd3c4fa91aacb661a10f4bb6cca16da86237",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/task.py": "dee526d67740590716f93566c0356ca4d176098185e01dd994e7c78ffc20d0c1",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/bounds.py": "d123b269a95e7c24f6db263eacd6b9a258ad41ee8c653417d6de5c0dd6761ca5",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261023bold/consumer.py": "02b00d2e058bdfd0d2b2fc08ae600bfdd47a46b85fc784e44e24c5d2d5e22477",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261022/adapter.py": "fce8c5ff1dbc93b54cac1992224f24ee88b7f436e5042522ba0cb2b559990caf",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/agentlab/pqe20261024debt/holding.py": "ce32fc759d4c76c7897dbb209e22b9279f490226ab1552631cdbce87532f9916",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/workbench/bf-campaign-s0-20261019/battery-world/packages/python/bfworld/src/bfworld/coupled/engine.py": "5295ad41cb56d39c4186d89c62b6b105ea98e307bc0de5384860fc1c1ea21e49"
+  },
+  "wall_s": 0.20426658299402334,
+  "available_before_bytes": 18080866304,
+  "available_after_bytes": 18080911360,
+  "peak_estimate_bytes": 20000000,
+  "retained_cap_bytes": 5000000
+}

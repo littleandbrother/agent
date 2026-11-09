@@ -1,0 +1,396 @@
+{
+  "task": {
+    "allowed_operations": [
+      "edit",
+      "observe",
+      "verify",
+      "restructure",
+      "report",
+      "select",
+      "refine"
+    ],
+    "description": "Stable illumination outside the original twelve-hour dark interval and continuously available link remove shadow/outage interactions; strict energy, sample, timestamp and service requirements remain.",
+    "design_domain": {
+      "ack_spacing_s": {
+        "kind": "number",
+        "max": 2.0,
+        "min": 0.0
+      },
+      "area_cm2": {
+        "kind": "number",
+        "max": 50.0,
+        "min": 10.0
+      },
+      "brownout_v": {
+        "kind": "number",
+        "max": 3.2,
+        "min": 2.2
+      },
+      "capacitance_f": {
+        "kind": "number",
+        "max": 1.0,
+        "min": 0.001
+      },
+      "esr_ohm": {
+        "kind": "number",
+        "max": 100.0,
+        "min": 0.1
+      },
+      "nvm_capacity_records": {
+        "kind": "integer",
+        "max": 4096,
+        "min": 1
+      },
+      "persistent_records": {
+        "kind": "boolean"
+      },
+      "retry_s": {
+        "kind": "number",
+        "max": 3600.0,
+        "min": 10.0
+      },
+      "sample_period_s": {
+        "kind": "number",
+        "max": 60.0,
+        "min": 30.0
+      },
+      "startup_v": {
+        "kind": "number",
+        "max": 3.6,
+        "min": 2.3
+      }
+    },
+    "duration_s": 86400,
+    "gateway_windows": [
+      [
+        0,
+        86400
+      ]
+    ],
+    "initial": {
+      "air_temperature_c": 5,
+      "battery_or_chemical_store_j": 0,
+      "capacitor_v": 0,
+      "clock_state": "UNPOWERED_UNSYNCHRONIZED",
+      "power_state": "OFF",
+      "records": [],
+      "sensor_temperature_c": 5
+    },
+    "integration": {
+      "allowed_dt_s": [
+        1.0
+      ],
+      "dt_s": 1.0,
+      "scope": "Frozen constructed one-second consumer; refinement cannot change integration or evaluator."
+    },
+    "public_inputs": {
+      "Profile": {
+        "load": {
+          "ack_j": 2e-06,
+          "ack_s": 0.002,
+          "boot_j": 1e-05,
+          "boot_s": 0.01,
+          "dropout_v": 0.1,
+          "efficiency": 0.8,
+          "leakage_ohm": 100000000.0,
+          "off_background_w": 1e-07,
+          "output_v": 2.0,
+          "powered_background_w": 2e-06,
+          "save_j": 2e-06,
+          "save_s": 0.002,
+          "scope": "Declared regulated-output energy impulses with positive completion durations, ESR/dropout and conversion guards; background includes a current-availability gateway beacon listener. No compiled MCU, RF, switching or NVM device calibration.",
+          "sense_j": 2e-06,
+          "sense_s": 0.01,
+          "sync_j": 2e-06,
+          "sync_s": 0.005,
+          "tx_j": 2e-05,
+          "tx_s": 0.002
+        },
+        "pmic": {
+          "cold_input_v": 1.8,
+          "cold_min_input_v": 0.5,
+          "cold_min_power_w": 5e-06,
+          "conversion_efficiency": 0.75,
+          "maximum_step_s": 1.0,
+          "maximum_voltage_v": 4.2,
+          "operating_input_offset_v": 1.8,
+          "relation": "OFF: Vin=1.8V; ON: Vin=1.8+Vstore/5, diode I(Vin), Pbus=.75*Vin*I. Idealized controlled input loading, no MPPT/switching or specific PMIC claim.",
+          "storage_reflection_divisor": 5.0
+        },
+        "profile_id": "LC-PV-CONSTRUCTED-SPECTRAL-DIODE-PMIC-20261023-v1",
+        "provenance": "Prospective explicit constructed coefficients, not a fitted/vendor/physical device profile; no old A/R qualification inherited.",
+        "pv": {
+          "cell_temperature_c": 25.0,
+          "eqe_constant": 0.7,
+          "ideality_factor": 1.4,
+          "parallel_strings": 1,
+          "saturation_current_a": 1e-10,
+          "series_cells": 8,
+          "series_resistance_ohm": 50.0,
+          "shunt_resistance_ohm": 100000000.0,
+          "temperature_scope": "Only the declared fixed 25 C PV junction, no unbound temperature scaling."
+        }
+      },
+      "allowed_for_learning": false,
+      "clock_contract": {
+        "nominal_rate_error_ppm": -15.0,
+        "rate_bound_ppm": 20,
+        "resynchronization": "Only an actual available-gateway sync event can restore absolute time; every failed or unknown timestamp remains in evaluation.",
+        "scope": "Constructed bounded oscillator assumption. RTC continuation must consume power; no oscillator advance through unpowered periods without an explicit powered retention domain."
+      },
+      "consumer_contract_task_id": "LC-PV-STRICT-24H-v1",
+      "design_fields": [
+        "area_cm2",
+        "capacitance_f",
+        "esr_ohm",
+        "startup_v",
+        "brownout_v",
+        "persistent_records",
+        "nvm_capacity_records"
+      ],
+      "domain_scope": "Finite development action box within the existing constructed consumer. Sampling30..60s and retries10..3600s bound retained event output; the original60s service maximum remains unchanged. No claim to every configuration the low-level consumer can encode.",
+      "exposure": "Prospectively frozen before stage2 outcomes; new stage3 schedules.",
+      "feedback_access": {
+        "detail_page_rows": 4,
+        "lists": [
+          "trace",
+          "activity",
+          "records",
+          "packets",
+          "receiver_records"
+        ],
+        "scope": "Current retained result only; detail observe/verify has no simulation or candidate evaluation. Sampled lists keep exact counts; final memory/pending are sampled with exact counts.",
+        "target": "detail:<list>:<offset>"
+      },
+      "fixed_program_semantics": {
+        "ack_drop_first_n": 1,
+        "clock_continuation": "Only while powered; reset loses synchronization; no unpowered clock.",
+        "gateway_beacon": "Current available beacon while powered; charged sync phase on initial/new availability. No future schedule access.",
+        "rank": {
+          "args": [
+            {
+              "const": 0
+            },
+            {
+              "field": "seq"
+            }
+          ],
+          "op": "-"
+        },
+        "receiver_dedup": true,
+        "storage": "Atomic SAVE/ACK after paid completion; interrupted pending write discarded; persistent image survives reset only when enabled."
+      },
+      "instance_id": "REL-SYNTH-LC-20261102:local-repair-control",
+      "observations": "Only powered quantized samples, device record/time intervals, actual wire/receiver, activity and supply/energy facts; no ideal air truth or hypothetical missing samples.",
+      "optical_environment": {
+        "incidence_angle_deg": 0,
+        "irradiance_schedule_w_m2": [
+          [
+            0,
+            21600,
+            0.6
+          ],
+          [
+            21600,
+            64800,
+            0.0
+          ],
+          [
+            64800,
+            86400,
+            0.6
+          ]
+        ],
+        "legal_area_cm2": [
+          10,
+          50
+        ],
+        "normalized_shape": "phi(lambda)=normalize(0.25*exp(-0.5*((lambda-450)/12)^2)/(12*sqrt(2*pi))+0.75*exp(-0.5*((lambda-580)/60)^2)/(60*sqrt(2*pi))) by trapezoidal integral over380..780nm",
+        "reference_area_cm2": 25,
+        "source_identity": "Constructed public spectrum; not an Epishine characterization lamp or a measured cold-chain light trace.",
+        "spatial_scope": "Uniform attenuation over every cell; nonuniform substring shading/mismatch is MODEL_DOMAIN until a per-cell reference is bound.",
+        "spectral_irradiance": "E_lambda(t)=irradiance_w_m2(t)*phi(lambda); unitsW/m2/nm. No lux-to-watt conversion.",
+        "spectral_model": "CONSTRUCTED_TWO_BAND_SPD_V1",
+        "uniform_shading_transmission": [
+          [
+            0,
+            21600,
+            0.8
+          ],
+          [
+            21600,
+            64800,
+            0.8
+          ],
+          [
+            64800,
+            86400,
+            0.8
+          ]
+        ],
+        "wavelength_nm": {
+          "max": 780,
+          "min": 380,
+          "step": 1
+        },
+        "window_transmission": 0.85
+      },
+      "program_fields": [
+        "sample_period_s",
+        "ack_spacing_s",
+        "retry_s"
+      ],
+      "target": {
+        "box_interior_m": [
+          0.6,
+          0.4,
+          0.4
+        ],
+        "coordinate_origin": "inside lower-left-bottom corner",
+        "not_content_core_or_outer_surface": true,
+        "permitted_probe_tip_radius_from_point_m": 0.005,
+        "point_m": [
+          0.3,
+          0.2,
+          0.2
+        ],
+        "quantity": "temperature_of_air_at_specified_interior_point",
+        "unit": "degC"
+      },
+      "thermal_contract": {
+        "domain_c": [
+          -20,
+          50
+        ],
+        "equation": "dT_sensor/dt=(T_air(point,t)-T_sensor)/tau_s",
+        "max_abs_air_slew_c_s": 0.02,
+        "model": "CONSTRUCTED_FIRST_ORDER_PROBE_V1",
+        "model_scope": "Local probe-to-air lag and quantization only; contents-core temperature, full box CFD, external-to-internal heat transport and self-heating are not certified.",
+        "nominal_bias_c": 0.05,
+        "nominal_tau_s": 24.0,
+        "quantization_step_c": 0.0625,
+        "sensor_reading": "Program obtains sensor temperature only at powered acquisition events; it cannot read ideal air truth or retrospective samples."
+      }
+    },
+    "service": {
+      "all_applicable_services_required": true,
+      "cold_start_first_valid_receive_deadline_s": 1800,
+      "continuous_new_sampling": {
+        "end_s": 86400,
+        "maximum_spacing_s": 60,
+        "start_s": 1800,
+        "strict": true
+      },
+      "dark_interval_s": [
+        21600,
+        64800
+      ],
+      "dark_sampling_maximum_spacing_s": 60,
+      "gap_markers": "Must describe known missing intervals but do not satisfy continuous sampling.",
+      "history": "Every committed record retained without corruption; receive all pre-recovery unacknowledged records by64920 in acquisition order with no duplicate logical samples.",
+      "loss_rate_statistical_claim": "NOT_ESTABLISHED_BY_FINITE_TRACES",
+      "maximum_temperature_error_c": 0.5,
+      "maximum_timestamp_error_s": 60,
+      "new_sample_receive_max_delay_s": 10,
+      "new_sample_receive_scope": "Samples created while gateway is available, including those created at/after64800; use acquisition time, not frame live/history label.",
+      "recovery_at_s": 64800,
+      "recovery_delay_s": 120,
+      "recovery_old_history_deadline_s": 64920,
+      "temperature_reference": "independent air-point truth at actual acquisition time",
+      "timestamp_requirement": "Known absolute acquisition time or an uncertainty interval containing truth with width<=120s and midpoint error<=60s; UNKNOWN time fails this strict service."
+    },
+    "task_id": "REL-SYNTH-LC-20261102:local-repair-control",
+    "initial_design": {
+      "area_cm2": 25.0,
+      "capacitance_f": 0.012,
+      "esr_ohm": 8.0,
+      "startup_v": 2.5,
+      "brownout_v": 2.2,
+      "persistent_records": true,
+      "nvm_capacity_records": 2048,
+      "sample_period_s": 60.0,
+      "ack_spacing_s": 0.25,
+      "retry_s": 45.0
+    },
+    "initial_problem": {
+      "active_variables": [
+        "area_cm2",
+        "capacitance_f",
+        "esr_ohm",
+        "startup_v",
+        "brownout_v",
+        "persistent_records",
+        "nvm_capacity_records",
+        "sample_period_s",
+        "ack_spacing_s",
+        "retry_s"
+      ],
+      "groups": [
+        [
+          "area_cm2",
+          "capacitance_f",
+          "esr_ohm",
+          "startup_v",
+          "brownout_v"
+        ],
+        [
+          "persistent_records",
+          "nvm_capacity_records"
+        ],
+        [
+          "sample_period_s",
+          "ack_spacing_s",
+          "retry_s"
+        ]
+      ],
+      "fixed_choices": {},
+      "assumptions": [
+        "Original 24h service and spatial/optical hard bounds remain fixed.",
+        "The declared finite development action box changes real supply/activity/record/receive behavior.",
+        "A sampling gap or unknown-time record is not valid continuous history."
+      ],
+      "local_objective": "Meet every applicable frozen LC-PV service; report scope of any remaining failure."
+    }
+  },
+  "design": {
+    "area_cm2": 25.0,
+    "capacitance_f": 0.012,
+    "esr_ohm": 8.0,
+    "startup_v": 2.3,
+    "brownout_v": 2.2,
+    "persistent_records": false,
+    "nvm_capacity_records": 2048,
+    "sample_period_s": 34.488996154083864,
+    "ack_spacing_s": 0.25,
+    "retry_s": 1561.6665673102948
+  },
+  "decision": {
+    "actual_input": {
+      "operation": "edit",
+      "design_patch": {
+        "startup_v": 2.3,
+        "persistent_records": false,
+        "sample_period_s": 34.488996154083864,
+        "retry_s": 1561.6665673102948
+      },
+      "problem_patch": {
+        "active_variables": [
+          "ack_spacing_s",
+          "area_cm2",
+          "brownout_v",
+          "capacitance_f",
+          "esr_ohm",
+          "nvm_capacity_records",
+          "persistent_records",
+          "retry_s",
+          "sample_period_s",
+          "startup_v"
+        ]
+      }
+    }
+  },
+  "group": "LC-R-314159",
+  "slot": 4,
+  "phase": "comparison",
+  "lc_context_binding": "d353ecefbc84d9c838a19dad99593e1d5591ce716bd3c129c9b69b330429b0fe"
+}

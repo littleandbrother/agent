@@ -1,0 +1,2446 @@
+{
+  "at": "2026-11-02T10:58:36.996064+00:00",
+  "schema": "public-contract-companion-expansion-v2:freeze",
+  "source_manifest": {
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_search.py": "37d118f6c984194c2b8df5be4091114928a5c7993ce0485411f99c8220d80e81",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/semantic_closure.py": "dbf4152667a237c8509d23dc06d6079d70abec87a105dbf3707237bb629640d6",
+    "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/freeze_closure.py": "40f9769a2c7406f618359cf4ecc2fcb457960dd8ed9641cd6fca206112dbb652"
+  },
+  "cells": [
+    {
+      "prefix_id": "identity-progress",
+      "switch": "off",
+      "design": {
+        "brownout_v": 1.9683849416809895,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {
+          "stroke_m": 0.006
+        },
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 3.058414407554322,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.14227515253294962,
+        "holding_component": "lp_fifo",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "design_patch": {
+        "brownout_v": 1.9683849416809895,
+        "mechanism": {
+          "stroke_m": 0.006
+        },
+        "startup_v": 3.058414407554322,
+        "tx_reserve_v": 0.14227515253294962,
+        "holding_component": "lp_fifo"
+      },
+      "selection": {
+        "relations_enabled": false,
+        "satisfied_rules": [],
+        "score": [
+          0,
+          0,
+          1,
+          3.5372124652586794,
+          -10
+        ],
+        "consumed_constraints": [],
+        "ordering_before": [
+          "proposal-968d91470f3ff23e786b",
+          "proposal-e6c111f7948090963f4c",
+          "proposal-0736f7e2d11bee78a75b",
+          "proposal-334241a7c5a560622fa0",
+          "proposal-939262aecea5a9c8f68d",
+          "proposal-5771b010d326c73611bc",
+          "proposal-8e4e168f8e93ff4a0580",
+          "proposal-f49a13208137f42e47b3",
+          "proposal-289bc3175b60a165562d",
+          "proposal-2e65bf82071534c3845e",
+          "proposal-5c8a6631b9f98710e4de",
+          "proposal-2a8e6a28683d61b13220",
+          "proposal-abdfa20b782bd62e8066",
+          "proposal-67e265ada33e501eaa29",
+          "proposal-144d656fc076f1376355",
+          "proposal-2b91a9aca68a8cf5e900",
+          "proposal-b17509a14bbeadb294f2",
+          "proposal-e8aeb1cba7e024ccbdf1",
+          "proposal-e7fa3e1a741d393582f8",
+          "proposal-3202d5ef50f6590c5dc3",
+          "proposal-508ca73a54c11fb0934b",
+          "proposal-b83f56565bc25c28b7ed",
+          "proposal-a79fe2ac28932e059163",
+          "proposal-923fabe03d9c10a02d8b"
+        ],
+        "ordering_after": [
+          {
+            "id": "proposal-f49a13208137f42e47b3",
+            "score": [
+              0,
+              0,
+              1,
+              3.5372124652586794,
+              -10
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-144d656fc076f1376355",
+            "score": [
+              0,
+              0,
+              1,
+              3.3441373387959494,
+              -22
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-b17509a14bbeadb294f2",
+            "score": [
+              0,
+              0,
+              1,
+              2.8913305216041616,
+              -24
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-508ca73a54c11fb0934b",
+            "score": [
+              0,
+              0,
+              1,
+              2.612533647151221,
+              -28
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-5c8a6631b9f98710e4de",
+            "score": [
+              0,
+              0,
+              1,
+              1.9198437657313365,
+              -16
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-334241a7c5a560622fa0",
+            "score": [
+              0,
+              0,
+              1,
+              1.8880211204287174,
+              -6
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-a79fe2ac28932e059163",
+            "score": [
+              0,
+              0,
+              1,
+              1.2504431240046674,
+              -30
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-968d91470f3ff23e786b",
+            "score": [
+              0,
+              0,
+              1,
+              1.005975365694777,
+              0
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-5771b010d326c73611bc",
+            "score": [
+              0,
+              0,
+              1,
+              0.8567651266091976,
+              -8
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e7fa3e1a741d393582f8",
+            "score": [
+              0,
+              0,
+              1,
+              0.1363301461880371,
+              -26
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e6c111f7948090963f4c",
+            "score": [
+              0,
+              0,
+              0,
+              1.0,
+              -3
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-2e65bf82071534c3845e",
+            "score": [
+              0,
+              0,
+              0,
+              1.0,
+              -13
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-b83f56565bc25c28b7ed",
+            "score": [
+              0,
+              0,
+              0,
+              1.0,
+              -29
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-939262aecea5a9c8f68d",
+            "score": [
+              0,
+              0,
+              0,
+              0.9090909090909092,
+              -7
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-2a8e6a28683d61b13220",
+            "score": [
+              0,
+              0,
+              0,
+              0.875,
+              -17
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-3202d5ef50f6590c5dc3",
+            "score": [
+              0,
+              0,
+              0,
+              0.7333333333333332,
+              -27
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-8e4e168f8e93ff4a0580",
+            "score": [
+              0,
+              0,
+              0,
+              0.5000000000000002,
+              -9
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-923fabe03d9c10a02d8b",
+            "score": [
+              0,
+              0,
+              0,
+              0.4090909090909091,
+              -31
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-2b91a9aca68a8cf5e900",
+            "score": [
+              0,
+              0,
+              0,
+              0.37500000000000006,
+              -23
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e8aeb1cba7e024ccbdf1",
+            "score": [
+              0,
+              0,
+              0,
+              0.36,
+              -25
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-67e265ada33e501eaa29",
+            "score": [
+              0,
+              0,
+              0,
+              0.14,
+              -21
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-abdfa20b782bd62e8066",
+            "score": [
+              0,
+              0,
+              0,
+              0.125,
+              -19
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-0736f7e2d11bee78a75b",
+            "score": [
+              0,
+              0,
+              0,
+              0.09090909090909093,
+              -5
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-289bc3175b60a165562d",
+            "score": [
+              0,
+              0,
+              0,
+              0.04904904904904905,
+              -11
+            ],
+            "satisfied_rules": []
+          }
+        ],
+        "scope": "Constraint satisfaction is a conditional prediction, not empirical service."
+      },
+      "same_as_v1_selected_design": true,
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-off.json.gz",
+      "sha256": "905a7623d266fa1bffee1b27defa2c8b3d1be74fec1322bb4d1059ddb7e1e50d"
+    },
+    {
+      "prefix_id": "identity-progress",
+      "switch": "on",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.001,
+        "debounce_s": 0.07,
+        "esr_ohm": 5.0,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 1.9,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "off",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "design_patch": {
+        "startup_v": 1.9
+      },
+      "selection": {
+        "relations_enabled": true,
+        "ordering_before": [
+          "proposal-968d91470f3ff23e786b",
+          "proposal-e6c111f7948090963f4c",
+          "proposal-0736f7e2d11bee78a75b",
+          "proposal-334241a7c5a560622fa0",
+          "proposal-939262aecea5a9c8f68d",
+          "proposal-5771b010d326c73611bc",
+          "proposal-8e4e168f8e93ff4a0580",
+          "proposal-f49a13208137f42e47b3",
+          "proposal-289bc3175b60a165562d",
+          "proposal-2e65bf82071534c3845e",
+          "proposal-5c8a6631b9f98710e4de",
+          "proposal-2a8e6a28683d61b13220",
+          "proposal-abdfa20b782bd62e8066",
+          "proposal-67e265ada33e501eaa29",
+          "proposal-144d656fc076f1376355",
+          "proposal-2b91a9aca68a8cf5e900",
+          "proposal-b17509a14bbeadb294f2",
+          "proposal-e8aeb1cba7e024ccbdf1",
+          "proposal-e7fa3e1a741d393582f8",
+          "proposal-3202d5ef50f6590c5dc3",
+          "proposal-508ca73a54c11fb0934b",
+          "proposal-b83f56565bc25c28b7ed",
+          "proposal-a79fe2ac28932e059163",
+          "proposal-923fabe03d9c10a02d8b",
+          "closure-proposal-2218a980958ef8012026",
+          "closure-proposal-849ff2d17eb272914a83",
+          "closure-proposal-a86a0613c527f4a17737",
+          "closure-proposal-d330b4ec784995380787"
+        ],
+        "ordering_after": [
+          {
+            "id": "closure-proposal-2218a980958ef8012026",
+            "score": [
+              3,
+              -1,
+              -16
+            ]
+          },
+          {
+            "id": "closure-proposal-849ff2d17eb272914a83",
+            "score": [
+              2,
+              -2,
+              -12
+            ]
+          },
+          {
+            "id": "closure-proposal-a86a0613c527f4a17737",
+            "score": [
+              2,
+              -3,
+              -10
+            ]
+          },
+          {
+            "id": "closure-proposal-d330b4ec784995380787",
+            "score": [
+              2,
+              -3,
+              -11
+            ]
+          },
+          {
+            "id": "proposal-f49a13208137f42e47b3",
+            "score": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "proposal-144d656fc076f1376355",
+            "score": [
+              0,
+              0,
+              -1
+            ]
+          },
+          {
+            "id": "proposal-b17509a14bbeadb294f2",
+            "score": [
+              0,
+              0,
+              -2
+            ]
+          },
+          {
+            "id": "proposal-508ca73a54c11fb0934b",
+            "score": [
+              0,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "proposal-5c8a6631b9f98710e4de",
+            "score": [
+              0,
+              0,
+              -4
+            ]
+          },
+          {
+            "id": "proposal-334241a7c5a560622fa0",
+            "score": [
+              0,
+              0,
+              -5
+            ]
+          },
+          {
+            "id": "proposal-a79fe2ac28932e059163",
+            "score": [
+              0,
+              0,
+              -6
+            ]
+          },
+          {
+            "id": "proposal-968d91470f3ff23e786b",
+            "score": [
+              0,
+              0,
+              -7
+            ]
+          },
+          {
+            "id": "proposal-5771b010d326c73611bc",
+            "score": [
+              0,
+              0,
+              -8
+            ]
+          },
+          {
+            "id": "proposal-e7fa3e1a741d393582f8",
+            "score": [
+              0,
+              0,
+              -9
+            ]
+          },
+          {
+            "id": "proposal-e6c111f7948090963f4c",
+            "score": [
+              0,
+              0,
+              -13
+            ]
+          },
+          {
+            "id": "proposal-2e65bf82071534c3845e",
+            "score": [
+              0,
+              0,
+              -14
+            ]
+          },
+          {
+            "id": "proposal-b83f56565bc25c28b7ed",
+            "score": [
+              0,
+              0,
+              -15
+            ]
+          },
+          {
+            "id": "proposal-939262aecea5a9c8f68d",
+            "score": [
+              0,
+              0,
+              -17
+            ]
+          },
+          {
+            "id": "proposal-2a8e6a28683d61b13220",
+            "score": [
+              0,
+              0,
+              -18
+            ]
+          },
+          {
+            "id": "proposal-3202d5ef50f6590c5dc3",
+            "score": [
+              0,
+              0,
+              -19
+            ]
+          },
+          {
+            "id": "proposal-8e4e168f8e93ff4a0580",
+            "score": [
+              0,
+              0,
+              -20
+            ]
+          },
+          {
+            "id": "proposal-923fabe03d9c10a02d8b",
+            "score": [
+              0,
+              0,
+              -21
+            ]
+          },
+          {
+            "id": "proposal-2b91a9aca68a8cf5e900",
+            "score": [
+              0,
+              0,
+              -22
+            ]
+          },
+          {
+            "id": "proposal-e8aeb1cba7e024ccbdf1",
+            "score": [
+              0,
+              0,
+              -23
+            ]
+          },
+          {
+            "id": "proposal-67e265ada33e501eaa29",
+            "score": [
+              0,
+              0,
+              -24
+            ]
+          },
+          {
+            "id": "proposal-abdfa20b782bd62e8066",
+            "score": [
+              0,
+              0,
+              -25
+            ]
+          },
+          {
+            "id": "proposal-0736f7e2d11bee78a75b",
+            "score": [
+              0,
+              0,
+              -26
+            ]
+          },
+          {
+            "id": "proposal-289bc3175b60a165562d",
+            "score": [
+              0,
+              0,
+              -27
+            ]
+          }
+        ],
+        "consumed_derivations": [
+          {
+            "intent": {
+              "kind": "DISCRIMINATING_PUBLIC_HYPOTHESIS",
+              "rule": "earlier_powered_sampling",
+              "priority": 3,
+              "consumed_pending": [
+                "pending-1e1129e2c8647d310986",
+                "pending-d3063cde793d41fae72b",
+                "pending-933f1ec4bbdeb55cb3bf"
+              ],
+              "contract_refs": [
+                "public_contract:design_domain",
+                "public_state:pending_service",
+                "bfworld.agentlab.pqe20261022.door_program:DoorProgram.begin_step",
+                "public_contract:startup/brownout domain"
+              ],
+              "prediction": "Lower legal boot threshold permits earlier powered sampling; it may expose capture opportunities absent at the present threshold, without asserting missing events or a known cause.",
+              "side_effects": [
+                "Less voltage reserve at boot may increase brownouts and paid reboot load."
+              ],
+              "expected_observations": [
+                "Compare boot timing, capture/SAVE occurrences and original complete service; additional brownouts can refute the benefit."
+              ],
+              "coverage_satisfied": false,
+              "full_service": "UNKNOWN"
+            },
+            "closure_node_id": "closure-86f16ee648db48f02c0f",
+            "actual_facts_sha256": "139355a01c27a8170281197c67dcb313b88cdbbf271883da5f51449ee59cafbb",
+            "static_companion_closure": true,
+            "new_applicable_obligations_at_this_edge": [],
+            "introduced_component_duty": false,
+            "remaining_unknown_obligations": [
+              "49a667eb95943786a1fd8965d694b5351ecb10e599a0350a0724f58f1ade3734",
+              "5f19944fc366a046d03c644d346a854a006cb6fb3131f2786d7c558bd5e0c176",
+              "65eafe8e7f0c84c8ec47ed9db3d4ff62506279af597c76c07bd3df0be3ae9c0f"
+            ],
+            "coverage_satisfied": false,
+            "complete_service": "UNKNOWN"
+          }
+        ],
+        "coverage_satisfied": false,
+        "full_service": "UNKNOWN",
+        "basis": "Actual source facts and unmet companions, or explicitly admitted conditional probe; static closure never proves service."
+      },
+      "same_as_v1_selected_design": true,
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/identity-progress-on.json.gz",
+      "sha256": "c86c1b55ae3f624e06bfc7483164a95ffd56752659f92c39a661841dfc0ffcdb"
+    },
+    {
+      "prefix_id": "saved-undelivered",
+      "switch": "off",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.0001,
+        "debounce_s": 0.4542513546590269,
+        "esr_ohm": 49.80630328737728,
+        "mechanism": {
+          "stroke_m": 0.006
+        },
+        "persistent_queue": false,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.985536756339737,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 0.5646265512137523,
+        "tx_reserve_v": 0.025,
+        "holding_component": "off",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "design_patch": {
+        "debounce_s": 0.4542513546590269,
+        "mechanism": {
+          "stroke_m": 0.006
+        },
+        "persistent_queue": false,
+        "tx_gate_v": 2.985536756339737,
+        "backoff_max_s": 0.5646265512137523
+      },
+      "selection": {
+        "relations_enabled": false,
+        "satisfied_rules": [],
+        "score": [
+          0,
+          0,
+          1,
+          3.7319650406013607,
+          -18
+        ],
+        "consumed_constraints": [],
+        "ordering_before": [
+          "proposal-96d5f5c88ccfff17c97b",
+          "proposal-e56aa79a9296be535fee",
+          "proposal-1e092d72c47a9b6a8e2c",
+          "proposal-47ebbed1ad47e2c6e536",
+          "proposal-c3c6f992295ddc0a1b97",
+          "proposal-732285e59663036c7442",
+          "proposal-dd548631c3b3ee7e322f",
+          "proposal-0d376fb98e519eff451b",
+          "proposal-e40a6279a996d200f498",
+          "proposal-7a58de7ff80d25fcefd7",
+          "proposal-de7ddd0eed64b013b90c",
+          "proposal-2fd148a584469a4fdb52",
+          "proposal-959a727efd29b4e95c32",
+          "proposal-b2571eee4383d9831d68",
+          "proposal-fb11792e38b128a88dee",
+          "proposal-73dcf1eaacab83e8e0f4",
+          "proposal-4c488c65785e0347c527",
+          "proposal-948d648a2e6b7365fac7",
+          "proposal-4d410998eadf6139a468",
+          "proposal-47030e79a5730a9fd195",
+          "proposal-d2de7432555864e160c2",
+          "proposal-e424189c3abaceaa6620",
+          "proposal-a5ed921f7b0a83280f59",
+          "proposal-c1f656eb6e7c061abb3a"
+        ],
+        "ordering_after": [
+          {
+            "id": "proposal-b2571eee4383d9831d68",
+            "score": [
+              0,
+              0,
+              1,
+              3.7319650406013607,
+              -18
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-73dcf1eaacab83e8e0f4",
+            "score": [
+              0,
+              0,
+              1,
+              2.1733913636769278,
+              -20
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e424189c3abaceaa6620",
+            "score": [
+              0,
+              0,
+              1,
+              2.15279566929248,
+              -28
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-c1f656eb6e7c061abb3a",
+            "score": [
+              0,
+              0,
+              1,
+              2.013255789892141,
+              -30
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-4c488c65785e0347c527",
+            "score": [
+              0,
+              0,
+              1,
+              1.3910284820540366,
+              -22
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-47030e79a5730a9fd195",
+            "score": [
+              0,
+              0,
+              1,
+              1.2258088973012335,
+              -26
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e40a6279a996d200f498",
+            "score": [
+              0,
+              0,
+              1,
+              1.0928449595904048,
+              -12
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-0d376fb98e519eff451b",
+            "score": [
+              0,
+              0,
+              1,
+              0.8099961643915302,
+              -10
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-4d410998eadf6139a468",
+            "score": [
+              0,
+              0,
+              1,
+              0.7699715758372643,
+              -24
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-47ebbed1ad47e2c6e536",
+            "score": [
+              0,
+              0,
+              1,
+              0.7562075018907011,
+              -4
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-e56aa79a9296be535fee",
+            "score": [
+              0,
+              0,
+              1,
+              0.694922516993451,
+              -2
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-de7ddd0eed64b013b90c",
+            "score": [
+              0,
+              0,
+              1,
+              0.6687316750845493,
+              -14
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-c3c6f992295ddc0a1b97",
+            "score": [
+              0,
+              0,
+              0,
+              1.0,
+              -5
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-959a727efd29b4e95c32",
+            "score": [
+              0,
+              0,
+              0,
+              1.0,
+              -17
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-7a58de7ff80d25fcefd7",
+            "score": [
+              0,
+              0,
+              0,
+              0.9090909090909091,
+              -13
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-948d648a2e6b7365fac7",
+            "score": [
+              0,
+              0,
+              0,
+              0.875,
+              -23
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-96d5f5c88ccfff17c97b",
+            "score": [
+              0,
+              0,
+              0,
+              0.8726790363818734,
+              -1
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-fb11792e38b128a88dee",
+            "score": [
+              0,
+              0,
+              0,
+              0.49999999999999944,
+              -19
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-1e092d72c47a9b6a8e2c",
+            "score": [
+              0,
+              0,
+              0,
+              0.4090909090909091,
+              -3
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-732285e59663036c7442",
+            "score": [
+              0,
+              0,
+              0,
+              0.3726790363818732,
+              -7
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-a5ed921f7b0a83280f59",
+            "score": [
+              0,
+              0,
+              0,
+              0.36,
+              -29
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-d2de7432555864e160c2",
+            "score": [
+              0,
+              0,
+              0,
+              0.23333333333333314,
+              -27
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-dd548631c3b3ee7e322f",
+            "score": [
+              0,
+              0,
+              0,
+              0.125,
+              -9
+            ],
+            "satisfied_rules": []
+          },
+          {
+            "id": "proposal-2fd148a584469a4fdb52",
+            "score": [
+              0,
+              0,
+              0,
+              0.09090909090909093,
+              -15
+            ],
+            "satisfied_rules": []
+          }
+        ],
+        "scope": "Constraint satisfaction is a conditional prediction, not empirical service."
+      },
+      "same_as_v1_selected_design": true,
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-off.json.gz",
+      "sha256": "296dfe8d5702954c3a79ce277424df657654642e734b7c65ec6a2d0f036ac932"
+    },
+    {
+      "prefix_id": "saved-undelivered",
+      "switch": "on",
+      "design": {
+        "brownout_v": 1.8,
+        "capacitance_f": 0.00025702811244979917,
+        "debounce_s": 0.07,
+        "esr_ohm": 0.1,
+        "mechanism": {},
+        "persistent_queue": true,
+        "retry_s": 0.1,
+        "startup_v": 2.0655172527035646,
+        "tx_gate_v": 2.2,
+        "firmware_policy": "fixed_retry_v1",
+        "backoff_max_s": 1.0,
+        "tx_reserve_v": 0.025,
+        "holding_component": "off",
+        "holding_capacity": 2,
+        "holding_overflow": "drop_new",
+        "read_source": "contact_only",
+        "clear_after": "never"
+      },
+      "design_patch": {
+        "capacitance_f": 0.00025702811244979917,
+        "esr_ohm": 0.1
+      },
+      "selection": {
+        "relations_enabled": true,
+        "ordering_before": [
+          "proposal-96d5f5c88ccfff17c97b",
+          "proposal-e56aa79a9296be535fee",
+          "proposal-1e092d72c47a9b6a8e2c",
+          "proposal-47ebbed1ad47e2c6e536",
+          "proposal-c3c6f992295ddc0a1b97",
+          "proposal-732285e59663036c7442",
+          "proposal-dd548631c3b3ee7e322f",
+          "proposal-0d376fb98e519eff451b",
+          "proposal-e40a6279a996d200f498",
+          "proposal-7a58de7ff80d25fcefd7",
+          "proposal-de7ddd0eed64b013b90c",
+          "proposal-2fd148a584469a4fdb52",
+          "proposal-959a727efd29b4e95c32",
+          "proposal-b2571eee4383d9831d68",
+          "proposal-fb11792e38b128a88dee",
+          "proposal-73dcf1eaacab83e8e0f4",
+          "proposal-4c488c65785e0347c527",
+          "proposal-948d648a2e6b7365fac7",
+          "proposal-4d410998eadf6139a468",
+          "proposal-47030e79a5730a9fd195",
+          "proposal-d2de7432555864e160c2",
+          "proposal-e424189c3abaceaa6620",
+          "proposal-a5ed921f7b0a83280f59",
+          "proposal-c1f656eb6e7c061abb3a",
+          "closure-proposal-db42d3f17a8d686d54c6",
+          "closure-proposal-4dee53a67326786b3a29",
+          "closure-proposal-e3a9ebe36d34f7e4cd33",
+          "closure-proposal-e518f9ac309cedce4864",
+          "closure-proposal-039ef962f8db075ae6bf"
+        ],
+        "ordering_after": [
+          {
+            "id": "closure-proposal-db42d3f17a8d686d54c6",
+            "score": [
+              6,
+              -2,
+              -20
+            ]
+          },
+          {
+            "id": "closure-proposal-4dee53a67326786b3a29",
+            "score": [
+              3,
+              -1,
+              -26
+            ]
+          },
+          {
+            "id": "closure-proposal-e3a9ebe36d34f7e4cd33",
+            "score": [
+              2,
+              -2,
+              -14
+            ]
+          },
+          {
+            "id": "closure-proposal-e518f9ac309cedce4864",
+            "score": [
+              2,
+              -3,
+              -12
+            ]
+          },
+          {
+            "id": "closure-proposal-039ef962f8db075ae6bf",
+            "score": [
+              2,
+              -3,
+              -13
+            ]
+          },
+          {
+            "id": "proposal-b2571eee4383d9831d68",
+            "score": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "id": "proposal-73dcf1eaacab83e8e0f4",
+            "score": [
+              0,
+              0,
+              -1
+            ]
+          },
+          {
+            "id": "proposal-e424189c3abaceaa6620",
+            "score": [
+              0,
+              0,
+              -2
+            ]
+          },
+          {
+            "id": "proposal-c1f656eb6e7c061abb3a",
+            "score": [
+              0,
+              0,
+              -3
+            ]
+          },
+          {
+            "id": "proposal-4c488c65785e0347c527",
+            "score": [
+              0,
+              0,
+              -4
+            ]
+          },
+          {
+            "id": "proposal-47030e79a5730a9fd195",
+            "score": [
+              0,
+              0,
+              -5
+            ]
+          },
+          {
+            "id": "proposal-e40a6279a996d200f498",
+            "score": [
+              0,
+              0,
+              -6
+            ]
+          },
+          {
+            "id": "proposal-0d376fb98e519eff451b",
+            "score": [
+              0,
+              0,
+              -7
+            ]
+          },
+          {
+            "id": "proposal-4d410998eadf6139a468",
+            "score": [
+              0,
+              0,
+              -8
+            ]
+          },
+          {
+            "id": "proposal-47ebbed1ad47e2c6e536",
+            "score": [
+              0,
+              0,
+              -9
+            ]
+          },
+          {
+            "id": "proposal-e56aa79a9296be535fee",
+            "score": [
+              0,
+              0,
+              -10
+            ]
+          },
+          {
+            "id": "proposal-de7ddd0eed64b013b90c",
+            "score": [
+              0,
+              0,
+              -11
+            ]
+          },
+          {
+            "id": "proposal-c3c6f992295ddc0a1b97",
+            "score": [
+              0,
+              0,
+              -15
+            ]
+          },
+          {
+            "id": "proposal-959a727efd29b4e95c32",
+            "score": [
+              0,
+              0,
+              -16
+            ]
+          },
+          {
+            "id": "proposal-7a58de7ff80d25fcefd7",
+            "score": [
+              0,
+              0,
+              -17
+            ]
+          },
+          {
+            "id": "proposal-948d648a2e6b7365fac7",
+            "score": [
+              0,
+              0,
+              -18
+            ]
+          },
+          {
+            "id": "proposal-96d5f5c88ccfff17c97b",
+            "score": [
+              0,
+              0,
+              -19
+            ]
+          },
+          {
+            "id": "proposal-fb11792e38b128a88dee",
+            "score": [
+              0,
+              0,
+              -21
+            ]
+          },
+          {
+            "id": "proposal-1e092d72c47a9b6a8e2c",
+            "score": [
+              0,
+              0,
+              -22
+            ]
+          },
+          {
+            "id": "proposal-732285e59663036c7442",
+            "score": [
+              0,
+              0,
+              -23
+            ]
+          },
+          {
+            "id": "proposal-a5ed921f7b0a83280f59",
+            "score": [
+              0,
+              0,
+              -24
+            ]
+          },
+          {
+            "id": "proposal-d2de7432555864e160c2",
+            "score": [
+              0,
+              0,
+              -25
+            ]
+          },
+          {
+            "id": "proposal-dd548631c3b3ee7e322f",
+            "score": [
+              0,
+              0,
+              -27
+            ]
+          },
+          {
+            "id": "proposal-2fd148a584469a4fdb52",
+            "score": [
+              0,
+              0,
+              -28
+            ]
+          }
+        ],
+        "consumed_derivations": [
+          {
+            "intent": {
+              "kind": "DISCRIMINATING_PUBLIC_HYPOTHESIS",
+              "rule": "tx_charge_headroom",
+              "priority": 6,
+              "consumed_pending": [
+                "pending-52f8051a38fdadaf8aa0",
+                "pending-6fe7716008685c650569",
+                "pending-86a7b5d1ac0c4ad5dbef"
+              ],
+              "contract_refs": [
+                "public_contract:design_domain",
+                "public_state:pending_service",
+                "public_contract:tasks/0/components",
+                "bfworld.agentlab.pqe20261023bold.firmware:DoorProgram.effective_tx_gate"
+              ],
+              "prediction": "Reducing series drop and sizing charge storage to the declared TX+write load may permit complete frames from the existing gate; missing TX cause is still UNKNOWN.",
+              "side_effects": [
+                "Larger C delays boot and changes harvested source loading.",
+                "Lower ESR reduces resistive loss; service and link availability remain unknown."
+              ],
+              "expected_observations": [
+                "At least one completed wire frame for an existing saved record, or explicit repeated interruption/gate evidence refuting this probe."
+              ],
+              "coverage_satisfied": false,
+              "full_service": "UNKNOWN"
+            },
+            "closure_node_id": "closure-2de1271d42ced0c14571",
+            "actual_facts_sha256": "409cf711457891a8fad9fdf59c16e337417df03d4ad6378201258aa339751165",
+            "static_companion_closure": true,
+            "new_applicable_obligations_at_this_edge": [],
+            "introduced_component_duty": false,
+            "remaining_unknown_obligations": [
+              "49a667eb95943786a1fd8965d694b5351ecb10e599a0350a0724f58f1ade3734",
+              "5f19944fc366a046d03c644d346a854a006cb6fb3131f2786d7c558bd5e0c176",
+              "65eafe8e7f0c84c8ec47ed9db3d4ff62506279af597c76c07bd3df0be3ae9c0f"
+            ],
+            "coverage_satisfied": false,
+            "complete_service": "UNKNOWN"
+          }
+        ],
+        "coverage_satisfied": false,
+        "full_service": "UNKNOWN",
+        "basis": "Actual source facts and unmet companions, or explicitly admitted conditional probe; static closure never proves service."
+      },
+      "same_as_v1_selected_design": true,
+      "path": "/Users/depengsu/Documents/Long-Horizon AI Agent/docs/research/pqe-two-paper-plan-20261022/relation-synthesis-20261102/b/closure-v2/saved-undelivered-on.json.gz",
+      "sha256": "fe4d1375e97e5131640920d8f77f5f5fcdf7de7752bcca40375b95c1d963a6f5"
+    }
+  ],
+  "prefix_reports": [
+    {
+      "prefix_id": "identity-progress",
+      "common_raw_pool_identical_on_off": true,
+      "new_pool_sizes": [
+        24,
+        28
+      ],
+      "on_off_selected_design_changed": true,
+      "selected_intent_kinds": [
+        "DISCRIMINATING_PUBLIC_HYPOTHESIS"
+      ],
+      "selected_introduces_component_duty": false,
+      "selected_claims_coverage_satisfied": false,
+      "actual_component_closure_trails": [
+        {
+          "intent": {
+            "kind": "INTRODUCE_PUBLIC_PRODUCER",
+            "rule": "capture_frontend_companions",
+            "priority": 2,
+            "consumed_pending": [
+              "pending-1e1129e2c8647d310986",
+              "pending-d3063cde793d41fae72b",
+              "pending-933f1ec4bbdeb55cb3bf"
+            ],
+            "contract_refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance"
+            ],
+            "producer_fact_id": "holder.production",
+            "prediction": "The declared non-MCU producer may retain a powered contact; its new duties must be checked from actual facts.",
+            "side_effects": [
+              "Additional paid monitor/capture/read/clear loads; voltage, capacity and retention remain unknown."
+            ],
+            "expected_observations": [
+              "paid capture/import/retention and original full service"
+            ],
+            "coverage_satisfied": false,
+            "full_service": "UNKNOWN"
+          },
+          "nodes": 5,
+          "closed_trails": [
+            [
+              {
+                "node_id": "closure-7c2766e715b69515b23b",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "5b35ded85e1f67a31e6e124d9b6088e106c3740ce0f4cb8e380b13f42d48ed45",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dddc0856b632c5a31a84",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "f80dc1a5ba8ad34b986643498a08c9ac4dcbff7f514d3f56166bd62cae4426bb",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ],
+            [
+              {
+                "node_id": "closure-7c2766e715b69515b23b",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "5b35ded85e1f67a31e6e124d9b6088e106c3740ce0f4cb8e380b13f42d48ed45",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dddc0856b632c5a31a84",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "f80dc1a5ba8ad34b986643498a08c9ac4dcbff7f514d3f56166bd62cae4426bb",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-e9552add2c8f23de53f4",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "save"
+                },
+                "transition": {
+                  "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+                  "consumed_check": {
+                    "kind": "DYNAMIC_CAPACITY",
+                    "subject": "holding_record",
+                    "holds": null,
+                    "predicate": {
+                      "observed_within_declared_limit": "holder.capacity",
+                      "from_fact_ids": [
+                        "holder.capacity"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "clear_after",
+                      "holding_capacity",
+                      "holding_component",
+                      "holding_overflow"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                    ]
+                  },
+                  "patch": {
+                    "clear_after": "save"
+                  },
+                  "source_fact_ids": [
+                    "holder.capacity"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                  ],
+                  "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "718f763c4ead94d7609fd67ef241c9ff6295db264f65a31cd1c7e8109464014a",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ],
+            [
+              {
+                "node_id": "closure-7c2766e715b69515b23b",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "5b35ded85e1f67a31e6e124d9b6088e106c3740ce0f4cb8e380b13f42d48ed45",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dddc0856b632c5a31a84",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "f80dc1a5ba8ad34b986643498a08c9ac4dcbff7f514d3f56166bd62cae4426bb",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-3d9dc0cf95eea9fa9ad8",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 5.0,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 3.2,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "ack"
+                },
+                "transition": {
+                  "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+                  "consumed_check": {
+                    "kind": "DYNAMIC_CAPACITY",
+                    "subject": "holding_record",
+                    "holds": null,
+                    "predicate": {
+                      "observed_within_declared_limit": "holder.capacity",
+                      "from_fact_ids": [
+                        "holder.capacity"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "clear_after",
+                      "holding_capacity",
+                      "holding_component",
+                      "holding_overflow"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                    ]
+                  },
+                  "patch": {
+                    "clear_after": "ack"
+                  },
+                  "source_fact_ids": [
+                    "holder.capacity"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                  ],
+                  "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "e77a7e26a77a9270b6817fdd8615bf97cbabbc453c6e26a5bfca29c8bb06f67a",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ]
+          ]
+        }
+      ],
+      "interpretation": "Actual contract-to-companion generation exists in alternatives; selected simple/charge probes must not be reported as executed component-closure chains."
+    },
+    {
+      "prefix_id": "saved-undelivered",
+      "common_raw_pool_identical_on_off": true,
+      "new_pool_sizes": [
+        24,
+        29
+      ],
+      "on_off_selected_design_changed": true,
+      "selected_intent_kinds": [
+        "DISCRIMINATING_PUBLIC_HYPOTHESIS"
+      ],
+      "selected_introduces_component_duty": false,
+      "selected_claims_coverage_satisfied": false,
+      "actual_component_closure_trails": [
+        {
+          "intent": {
+            "kind": "INTRODUCE_PUBLIC_PRODUCER",
+            "rule": "capture_frontend_companions",
+            "priority": 2,
+            "consumed_pending": [
+              "pending-4c1b73ef46e484f346a2",
+              "pending-5c3a6d7da191d51c1c08",
+              "pending-28a7a52af4fbb2b0865a"
+            ],
+            "contract_refs": [
+              "bfworld.agentlab.pqe20261024debt.holding:prepare/advance"
+            ],
+            "producer_fact_id": "holder.production",
+            "prediction": "The declared non-MCU producer may retain a powered contact; its new duties must be checked from actual facts.",
+            "side_effects": [
+              "Additional paid monitor/capture/read/clear loads; voltage, capacity and retention remain unknown."
+            ],
+            "expected_observations": [
+              "paid capture/import/retention and original full service"
+            ],
+            "coverage_satisfied": false,
+            "full_service": "UNKNOWN"
+          },
+          "nodes": 5,
+          "closed_trails": [
+            [
+              {
+                "node_id": "closure-2b83a476a0a5c062859d",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "ce186dcdc85fc683ac4a9cc26733df557279bfdc299cb9f43fcd93926cf02011",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dd38cb4606e0f8d4d833",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "7a8a54c285c226b5006a7a8f60c9efd4d36dfa1e88ee4335dba2a3c4f281478b",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ],
+            [
+              {
+                "node_id": "closure-2b83a476a0a5c062859d",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "ce186dcdc85fc683ac4a9cc26733df557279bfdc299cb9f43fcd93926cf02011",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dd38cb4606e0f8d4d833",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "7a8a54c285c226b5006a7a8f60c9efd4d36dfa1e88ee4335dba2a3c4f281478b",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-3e88ba5b802caa6b49f3",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "save"
+                },
+                "transition": {
+                  "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+                  "consumed_check": {
+                    "kind": "DYNAMIC_CAPACITY",
+                    "subject": "holding_record",
+                    "holds": null,
+                    "predicate": {
+                      "observed_within_declared_limit": "holder.capacity",
+                      "from_fact_ids": [
+                        "holder.capacity"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "clear_after",
+                      "holding_capacity",
+                      "holding_component",
+                      "holding_overflow"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                    ]
+                  },
+                  "patch": {
+                    "clear_after": "save"
+                  },
+                  "source_fact_ids": [
+                    "holder.capacity"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                  ],
+                  "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "1c8227e8004a915cfb0c6b71e2aa399816baef4dfff6b7e2127542906fb88896",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ],
+            [
+              {
+                "node_id": "closure-2b83a476a0a5c062859d",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "contact_only",
+                  "clear_after": "never"
+                },
+                "transition": null,
+                "actual_facts_sha256": "ce186dcdc85fc683ac4a9cc26733df557279bfdc299cb9f43fcd93926cf02011",
+                "unmet": [
+                  {
+                    "id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                    "kind": "CONSUMPTION",
+                    "source_fact_ids": [
+                      "holder.production",
+                      "program.read"
+                    ]
+                  }
+                ],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-dd38cb4606e0f8d4d833",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "never"
+                },
+                "transition": {
+                  "consumed_obligation_id": "61963214c34b46f948b8f3437abc0951e44051c5028cdcfbf52899d6dea80dd0",
+                  "consumed_check": {
+                    "kind": "CONSUMPTION",
+                    "subject": "holding_record",
+                    "holds": false,
+                    "predicate": {
+                      "any_enabled_reader_for": "holding_record",
+                      "from_fact_ids": [
+                        "holder.production",
+                        "program.read"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "holding_component",
+                      "read_source"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                      "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                    ]
+                  },
+                  "patch": {
+                    "read_source": "holding_then_contact"
+                  },
+                  "source_fact_ids": [
+                    "holder.production",
+                    "program.read"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:prepare/advance",
+                    "bfworld.agentlab.pqe20261024debt.consumer:HoldingDoorProgram.begin_step"
+                  ],
+                  "kind": "COMPANION_FROM_ACTUAL_UNMET_CHECK",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "7a8a54c285c226b5006a7a8f60c9efd4d36dfa1e88ee4335dba2a3c4f281478b",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              },
+              {
+                "node_id": "closure-27b153a8739c0d8b0ef2",
+                "design": {
+                  "brownout_v": 1.8,
+                  "capacitance_f": 0.0001,
+                  "debounce_s": 0.07,
+                  "esr_ohm": 49.80630328737728,
+                  "mechanism": {},
+                  "persistent_queue": true,
+                  "retry_s": 0.1,
+                  "startup_v": 2.0655172527035646,
+                  "tx_gate_v": 2.2,
+                  "firmware_policy": "fixed_retry_v1",
+                  "backoff_max_s": 1.0,
+                  "tx_reserve_v": 0.025,
+                  "holding_component": "lp_fifo",
+                  "holding_capacity": 2,
+                  "holding_overflow": "drop_new",
+                  "read_source": "holding_then_contact",
+                  "clear_after": "ack"
+                },
+                "transition": {
+                  "consumed_obligation_id": "fbda3ffbbfd0cc404e966aad69eb320ab21e65fe6129e9315ce9220d5102daad",
+                  "consumed_check": {
+                    "kind": "DYNAMIC_CAPACITY",
+                    "subject": "holding_record",
+                    "holds": null,
+                    "predicate": {
+                      "observed_within_declared_limit": "holder.capacity",
+                      "from_fact_ids": [
+                        "holder.capacity"
+                      ]
+                    },
+                    "applicable": true,
+                    "hard_refuted": false,
+                    "dependencies": [
+                      "clear_after",
+                      "holding_capacity",
+                      "holding_component",
+                      "holding_overflow"
+                    ],
+                    "refs": [
+                      "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                    ]
+                  },
+                  "patch": {
+                    "clear_after": "ack"
+                  },
+                  "source_fact_ids": [
+                    "holder.capacity"
+                  ],
+                  "source_refs": [
+                    "bfworld.agentlab.pqe20261024debt.holding:advance/clear_commit"
+                  ],
+                  "kind": "OPTIONAL_DYNAMIC_CAPACITY_PROBE",
+                  "dynamic_obligation_resolved": false,
+                  "new_unmet": []
+                },
+                "actual_facts_sha256": "7675833330afc7f73f1cdeb12935083b5aa2637c48142f485f7a85c5ca117a2f",
+                "unmet": [],
+                "remaining_dynamic_unknowns": [
+                  "DYNAMIC_CAPACITY",
+                  "DYNAMIC_TIMING",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE",
+                  "DYNAMIC_EVIDENCE"
+                ],
+                "full_service": "UNKNOWN"
+              }
+            ]
+          ]
+        }
+      ],
+      "interpretation": "Actual contract-to-companion generation exists in alternatives; selected simple/charge probes must not be reported as executed component-closure chains."
+    }
+  ],
+  "costs": {
+    "new_B_cheap_cap": 10,
+    "geometry_misses": 6,
+    "geometry_cache_hits": 930,
+    "structural_validator_calls": 878,
+    "actual_design_facts_calls": 63,
+    "fact_and_validation_wall_s": 0.18760627045412548,
+    "full_consumers": 0,
+    "provider_calls": 0,
+    "new_software_tests": 0
+  },
+  "B_total_cheap": 12,
+  "B_total_cheap_cap": 16,
+  "B_software_cases_total": 10,
+  "old_software_receipt_preserved": true,
+  "wall_s": 0.47756300002220087,
+  "source_scope": "New v2 only; original frozen v1 and four cells unchanged. No S0 stage2 consequences or new A tasks/results read.",
+  "claim_boundary": "Static source-contract expansion capability and conditional probes only; complete physical service UNKNOWN; actual selected designs compared explicitly to frozen v1."
+}
