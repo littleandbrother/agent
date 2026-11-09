@@ -1,3 +1,20 @@
+# Minimal wake-up node · 2026-11-10
+
+最新独立实现：[完整设计与实际仿真结果](wakeup/README.md)。
+
+一个 `sim.py`，一份 `design.json`。从空储能开始，机械采能 → 模拟唤醒 → 实际采样确认 → 保存与上报。30 秒任务：4/4 异常按时交付、0 误报、最长延迟 95.9 ms；完整数值仿真耗时 5.2 秒。
+
+```bash
+python3 -m pip install numpy scipy matplotlib
+PYTHONDONTWRITEBYTECODE=1 python3 -B wakeup/sim.py
+```
+
+[设计参数](wakeup/design.json) · [结果](wakeup/result.json) · [波形](wakeup/waveforms.svg) · [原始轨迹](wakeup/trace.csv)
+
+以下目录保留以前的研究材料；新节点运行只依赖 `wakeup/`。
+
+---
+
 # BF-AIoT Agent
 
 ## 2026-10-20 ABC 研究与双论文更新
