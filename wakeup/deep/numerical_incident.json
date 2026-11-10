@@ -1,0 +1,31 @@
+{
+  "input": {
+    "artifact": "agents.jsonl",
+    "job": "P6-impact-transfer/Raw",
+    "response_id": 182,
+    "base": "evaluation step 4 design",
+    "applied_changes": {"A": true, "C_uF": 800, "gate_V": 2.5, "shield_V": 12.0, "shunt_kohm": 2.0, "wake_low_ratio": 0.05}
+  },
+  "diagnostic": {
+    "method": "Unchanged simulator; solve_ivp RHS wrapper aborts at 50000 calls; 20 second wall limit. Derivatives computed from the saved stopped state without further simulation.",
+    "rhs_calls": 50000,
+    "runtime_s": 0.3461353749735281,
+    "simulation_time_s": 0.09838171586618007,
+    "last_500_time_span_s": 8.047885989015846e-8,
+    "storage_V": 0.005389798252072771,
+    "aux_voltage_V": -1.2143122088698776e-9,
+    "harvester_voltage_V": 2.699101849874176,
+    "envelope_voltage_V": 2.445745786527382,
+    "aux_mechanical_current_A": -4.5716213563407374e-7,
+    "envelope_current_A": 5.335606334679415e-7,
+    "aux_dVdt_at_minus_1nV": 1.6316114836973261,
+    "aux_dVdt_at_plus_1nV": -21.15846113292824,
+    "storage_dVdt_at_comparator_minus_1nV": 0.04027987061139107,
+    "storage_dVdt_at_comparator_plus_1nV": 0.040186120521033035
+  },
+  "cause": "With A=true and detector=harvester, envelope current ie comes from vh and is charged to the harvester, but the aux electrical equation also subtracts sign(vw)*ie. This duplicate load drives both sides toward vw=0 and causes solver chattering; the observed stall is not at the 0.9 V comparator threshold.",
+  "minimal_correction": "Charge the aux branch for ie only when detector == aux; retain the existing harvester ie*harvest_wake term. Preserve the interrupted input and distinguish corrected execution from its original attempt.",
+  "scope": "P5 harmonic results, P6 envelope-reset aux-source results, and the original A=false impact reference are unaffected by this particular duplicate-load error. Impact candidates using A=true and harvester detection are affected.",
+  "api_requests": 0,
+  "scientific_result": false
+}

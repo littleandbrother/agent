@@ -68,8 +68,11 @@ def simulate(design, task=TASK):
     modules = design.get("modules", dict(A=True, B=False, C=False, D=False))
     A, B, C, D = (modules[k] for k in "ABCD")
     regulated = "converter_input_R_ohm" in c
-    harvest_wake = f.get("wake_from_harvester", False)
-    triggered, next_poll = A or B or harvest_wake, 0.0
+    wiring = design.get("connections", {})
+    A = wiring.get("aux_resonator", A)
+    detector = wiring.get("detector_source", "harvester" if f.get("wake_from_harvester", False) else "aux" if A else "none")
+    harvest_wake = detector == "harvester"
+    triggered, next_poll = wiring.get("mcu_gate", "envelope" if A or B or harvest_wake else "poll") == "envelope", 0.0
     Cs, Ce = c["storage_uF"] * 1e-6, c["envelope_nF"] * 1e-9
     # qh, qh_dot, vh, qw, qw_dot, vw, storage, envelope, sensor;
     # then energy terms: input, damping, rectifier, front-end, MCU, idle, clamp.
@@ -89,7 +92,7 @@ def simulate(design, task=TASK):
             storage_current = ih
         shunt = max(abs(vh)-c["shunt_threshold_V"], 0)/c["shunt_ohm"] if D else 0.
         source = vh if harvest_wake else vw
-        ie = max((abs(source)-ve-2*c["envelope_diode_V"])/c["envelope_charge_ohm"], 0) if A or harvest_wake else 0.
+        ie = max((abs(source)-ve-2*c["envelope_diode_V"])/c["envelope_charge_ohm"], 0) if detector != "none" else 0.
         envelope_dot = (ie-ve/c["envelope_discharge_ohm"])/Ce
         if B:
             envelope_dot = (max(ve, 2*abs(a/G))-ve)/.002-ve/.04
@@ -106,7 +109,7 @@ def simulate(design, task=TASK):
         return [uh, (-h["c"] * uh - h["k"] * qh + h["theta"] * vh - h["forcing_mass"] * a) / h["m"],
                 (-h["theta"]*uh-np.sign(vh)*(ih+shunt+ie*harvest_wake))/h["cp"],
                 uw, (-w["c"]*uw-w["k"]*qw+w["theta"]*vw-w["forcing_mass"]*a)/w["m"] if A else 0.,
-                (-w["theta"]*uw-np.sign(vw)*ie-vw/c["trigger_input_ohm"])/w["cp"] if A else 0.,
+                (-w["theta"]*uw-np.sign(vw)*ie*(detector == "aux")-vw/c["trigger_input_ohm"])/w["cp"] if A else 0.,
                 vdot, envelope_dot,
                 2 * np.pi * f["sensor_bandwidth_Hz"] * (a - sensor) if sampling else 0,
                 -a * (h["forcing_mass"] * uh + A*w["forcing_mass"] * uw),
@@ -150,7 +153,7 @@ def simulate(design, task=TASK):
         nonlocal phase, brownouts
         phase = name
         events.append({"time_s": t, "event": name})
-        sol = advance(t + duration, mW * 1e-3, name == "SAMPLE", "brownout")
+        sol = advance(t + duration, mW * 1e-3, name in ("SAMPLE", "PEEK"), "brownout")
         if sol.status == 1:
             brownouts += 1
             events.append({"time_s": t, "event": "BROWNOUT"})
@@ -182,6 +185,16 @@ def simulate(design, task=TASK):
         if work("BOOT", f["boot_s"], f["boot_mW"]) is None:
             continue
         y[8] = 0.0  # The high-bandwidth accelerometer is powered only during acquisition.
+        if f.get("peek_window_s", 0):
+            peek_start = t
+            peek = work("PEEK", f["peek_window_s"], f.get("peek_mW", f["sample_mW"]))
+            if peek is None:
+                continue
+            pv = peek.sol(np.linspace(peek_start, t, 16))[8] / G
+            prms = float(np.sqrt(np.mean(pv**2)))
+            events.append({"time_s": t, "event": "PEEK_RESULT", "rms_g": prms})
+            if prms < f.get("peek_threshold_g", .3):
+                continue
         sample_start = t
         sol = work("SAMPLE", f["sample_count"] / f["sample_Hz"], f["sample_mW"])
         if sol is None:
