@@ -1,327 +1,367 @@
-"""One-file boundary pilot: --calibrate, then --agents. No dependency on the old harness."""
+"""Boundary pilot: --calibrate, --agents, optional --followup, --transient, --report.
+Earlier pilot retained in limits/ and Git commit 5f06f8a. No old harness dependency.
+"""
 import argparse
 import concurrent.futures
 import copy
 import inspect
 import json
 import os
-import time
 import threading
+import time
 import urllib.request
 from pathlib import Path
 
 import numpy as np
 from scipy.stats import qmc
-from sim import G, beam
+from sim import G, TASK, beam, simulate
 
 HERE = Path(__file__).resolve().parent
-OUT = HERE / "limits"
+OUT = HERE / "boundary"
 BASE = json.loads((HERE / "design.json").read_text())
-# LHS is uniform in the coordinates explicitly listed here; rates depend on this measure.
+SAMPLE_MS = 62.5  # Fixed 128 samples / 2048 Hz, not a universal classification theorem.
 DOMAIN = dict(C_uF=(50, 1500, "log"), R_kohm=(2, 300, "log"), h=(.85, 1.15, "linear"),
               mass_g=(3.5, 5.8, "linear"), L2_mm=(15, 22, "linear"), m2_g=(.08, .28, "linear"),
-              gate_V=(1.9, 3.2, "linear"), poll_ms=(15, 400, "log"), shunt_kohm=(.5, 100, "log"),
-              shield_V=(5, 50, "log"), trigger_V=(.2, 1.2, "linear"), sample_ms=(25, 80, "linear"))
+              gate_V=(1.9, 3.2, "linear"), poll_ms=(15, 4000, "log"), shunt_kohm=(.5, 100, "log"),
+              shield_V=(5, 50, "log"), trigger_V=(.2, 1.2, "linear"))
 DEFAULT = dict(C_uF=75., R_kohm=45., h=1., mass_g=4.65, L2_mm=18., m2_g=.14,
-               gate_V=2.9, poll_ms=100., shunt_kohm=3., shield_V=15., trigger_V=.55, sample_ms=62.5,
+               gate_V=2.9, poll_ms=100., shunt_kohm=3., shield_V=15., trigger_V=.55,
                A=False, B=False, C=False, D=False)
 MODULES = dict(A=dict(description="passive tuned trigger beam + comparator", idle_uW=.5, area_mm2=15),
                B=dict(description="active filter wake-up, gain 2 V/g", idle_uW=180., area_mm2=18),
-               C=dict(description="additional off-chip FRAM, 5 uJ per write", idle_uW=2., area_mm2=40),
+               C=dict(description="additional FRAM; +5 uJ per write", idle_uW=2., area_mm2=40),
                D=dict(description="voltage-triggered parallel resistive shunt", idle_uW=.5, area_mm2=12))
-N, SEED, STEPS, USD_CAP = 10000, 20261110, 6, 2.
+ARMS = ("Fixed-P0", "All-Open", "Cert-Guided")
+N, SEED, USD_CAP = 10000, 20261110, 2.
+RATES = dict(input=.30, output=1.20, cache=.006)  # Official peak USD / million tokens.
 
 
 def sample(n, seed):
-    u = qmc.LatinHypercube(len(DOMAIN) + 4, seed=seed).random(n)
-    x = {k: np.exp(np.log(a) + u[:, i] * np.log(b/a)) if scale == "log" else a + u[:, i]*(b-a)
-         for i, (k, (a, b, scale)) in enumerate(DOMAIN.items())}
-    return dict(x, **{k: u[:, len(DOMAIN)+i] >= .5 for i, k in enumerate(MODULES)})
+    u = qmc.LatinHypercube(len(DOMAIN), seed=seed).random(n)
+    return {k: np.exp(np.log(a)+u[:, i]*np.log(b/a)) if scale == "log" else a+u[:, i]*(b-a)
+            for i, (k, (a, b, scale)) in enumerate(DOMAIN.items())} | {k: np.zeros(n, bool) for k in MODULES}
 
 
 def mechanics(x):
-    d = dict(BASE["harvester"], substrate_mm=.15*x["h"], piezo_layer_mm=.12*x["h"], tip_mass_g=x["mass_g"])
-    return beam(d)
+    return beam(dict(BASE["harvester"], substrate_mm=.15*x["h"], piezo_layer_mm=.12*x["h"], tip_mass_g=x["mass_g"]))
 
 
 def response(b, hz, amplitude_g, resistance):
     w = 2*np.pi*hz
-    z = b["k"]-b["m"]*w*w + 1j*w*b["c"] + b["theta"]**2*1j*w/(1/resistance+1j*w*b["cp"])
+    z = b["k"]-b["m"]*w*w+1j*w*b["c"]+b["theta"]**2*1j*w/(1/resistance+1j*w*b["cp"])
     q = b["forcing_mass"]*amplitude_g*G/np.abs(z)
-    v = b["theta"]*w*q/np.abs(1/resistance+1j*w*b["cp"])
-    return q, v
+    return q, b["theta"]*w*q/np.abs(1/resistance+1j*w*b["cp"])
 
 
 def oracle(t, x):
-    """Harmonic reduced-order screen, NOT sim.py's transient diode/program consumer.
-    Resistive extraction efficiency=.65; shock is a settled high-amplitude sinusoid.
-    D latches on an observed open-switch voltage crossing, with negligible switching delay.
+    """Settled harmonic screen: D engages on open-switch peak voltage.
+    Constant .65 extraction efficiency; no transient or waveform classification claim.
     """
     b, r = mechanics(x), x["R_kohm"]*1000
-    qb, vb = response(b, t["background_Hz"], t["background_g"], r)
-    engaged = np.asarray(x["D"]) & (vb > x["shield_V"])
-    rl = 1/(1/r + engaged/(x["shunt_kohm"]*1000))
-    qb, vb = response(b, t["background_Hz"], t["background_g"], rl)
-    power = .65*vb*vb/(2*r)  # current diverted through the shunt is not harvested
-    qh, vh = response(b, t["event_Hz"], t["event_g"], r)
-    rh = 1/(1/r + (np.asarray(x["D"]) & (vh > x["shield_V"]))/ (x["shunt_kohm"]*1000))
-    qh, vh = response(b, t["event_Hz"], t["event_g"], rh)
-    idle = (1.4 + sum(np.asarray(x[k])*v["idle_uW"] for k,v in MODULES.items()))*1e-6
-    packet = (.003*x["sample_ms"]/1000 + 68e-6 + np.asarray(x["C"])*5e-6)/.85
+    def loaded(hz, amplitude):
+        _, open_v = response(b, hz, amplitude, r)
+        load = 1/(1/r+(np.asarray(x["D"]) & (open_v > x["shield_V"]))/ (x["shunt_kohm"]*1000))
+        return response(b, hz, amplitude, load)
+    qb, vb = loaded(t["background_Hz"], t["background_g"])
+    qe, ve = loaded(t["event_Hz"], t["event_g"])
+    power = .65*vb**2/(2*r)
+    idle = (1.4+sum(np.asarray(x[k])*v["idle_uW"] for k, v in MODULES.items()))*1e-6
+    packet = (.003*SAMPLE_MS/1000+68e-6+np.asarray(x["C"])*5e-6)/.85
     active = np.asarray(x["A"]) | np.asarray(x["B"])
     if t["case"] == "wake":
         w = beam(dict(BASE["trigger_beam"], length_mm=x["L2_mm"], tip_mass_g=x["m2_g"]))
         qt, vt = response(w, t["event_Hz"], t["event_g"], 1e8)
-        envelope = np.maximum(vt*(1-np.exp(-.03*2*np.pi*t["event_Hz"]*t["event_ms"]/1000))-.2, 0)
-        envelope = np.where(x["B"], np.maximum(envelope*np.asarray(x["A"]), 2*t["event_g"]), envelope)
-        capture = np.where(active, envelope/x["trigger_V"]-1, t["event_ms"]/(x["poll_ms"]+x["sample_ms"])-1)
-        demand = np.where(active, packet/t["event_period_s"], .003*np.minimum(1, x["sample_ms"]/x["poll_ms"]))
-        stress = np.maximum((qb+qh)*b["stress_per_m"], np.asarray(x["A"])*qt*w["stress_per_m"])/1e6
+        env = np.maximum(vt*(1-np.exp(-.03*2*np.pi*t["event_Hz"]*t["event_ms"]/1000))-.2, 0)
+        env = np.maximum(env*np.asarray(x["A"]), np.asarray(x["B"])*2*t["event_g"])
+        capture = np.where(active, env/x["trigger_V"]-1, t["event_ms"]/(x["poll_ms"]+SAMPLE_MS)-1)
+        demand = np.where(active, packet/t["event_period_s"], .003*np.minimum(1, SAMPLE_MS/x["poll_ms"]))
+        stress = np.maximum((qb+qe)*b["stress_per_m"], np.asarray(x["A"])*qt*w["stress_per_m"])/1e6
     else:
-        capture, demand = vh/(x["gate_V"]+.3)-1, packet/t["event_period_s"]
-        stress = qh*b["stress_per_m"]/1e6
+        capture, demand = ve/(x["gate_V"]+.3)-1, packet/t["event_period_s"]
+        stress = qe*b["stress_per_m"]/1e6
     net = power-idle
-    slack = dict(energy=(net-demand)/max(t["power_scale_W"], 1e-9),
+    slack = dict(energy=(net-demand)/1e-4,
                  cold_charge=2*net*t["ready_s"]/(x["C_uF"]*1e-6*x["gate_V"]**2)-1,
-                 burst_energy=(.5*x["C_uF"]*1e-6*(x["gate_V"]**2-1.8**2)+net*(x["sample_ms"]+9.5)/1000)/packet-1,
-                 capture=capture, adc_window=x["sample_ms"]*t["event_Hz"]/4000-1 if t["case"]=="wake" else x["sample_ms"]/10-1,
-                 stress=1-stress/t["stress_MPa"],
-                 area=1-(20+.03*x["C_uF"]+sum(np.asarray(x[k])*v["area_mm2"] for k,v in MODULES.items()))/t["area_mm2"],
-                 rectifier_voltage=vb/(x["gate_V"]+.3)-1)
-    return slack
+                 burst_energy=(.5*x["C_uF"]*1e-6*(x["gate_V"]**2-1.8**2)+net*(SAMPLE_MS+9.5)/1000)/packet-1,
+                 capture=capture, stress=1-stress/t["stress_MPa"],
+                 area=1-(20+.03*x["C_uF"]+sum(np.asarray(x[k])*v["area_mm2"] for k, v in MODULES.items()))/t["area_mm2"],
+                 rectifier_voltage=vb/(x["gate_V"]+.3)-1,
+                 acquisition_window=np.asarray(SAMPLE_MS*t["event_Hz"]/4000-1 if t["case"] == "wake" else 1.))
+    return dict(slack=slack, harvested_uW=power*1e6, required_uW=(demand+idle)*1e6,
+                background_voltage_V=vb, event_voltage_V=ve, stress_MPa=stress)
 
 
-def passed(s):
-    return np.logical_and.reduce([np.asarray(v) >= 0 for v in s.values()])
+def passed(result):
+    return np.logical_and.reduce(np.broadcast_arrays(*[np.asarray(v) >= 0 for v in result["slack"].values()]))
+
+
+def scalar(x):
+    if isinstance(x, dict): return {k: scalar(v) for k, v in x.items()}
+    return x.item() if isinstance(x, (np.ndarray, np.generic)) else x
 
 
 def local_keys(t):
-    return ("C_uF", "poll_ms") if t["case"]=="wake" else ("C_uF", "R_kohm")
+    return ("C_uF", "poll_ms") if t["case"] == "wake" else ("C_uF", "R_kohm")
 
 
-def intervals(polynomials, lo=2000., hi=300000.):
-    cuts = [lo, hi]
-    for p in polynomials:
-        cuts += [float(z.real) for z in np.roots(p) if abs(z.imag)<1e-6 and lo<z.real<hi]
-    cuts = sorted(cuts)
-    good=[[a,b] for a,b in zip(cuts[:-1],cuts[1:]) if all(np.polyval(p,(a+b)/2)>=0 for p in polynomials)]
-    for z in cuts:  # retain feasible singleton roots, too
-        if all(np.polyval(p,z)>=-1e-10*sum(abs(p[j])*z**(len(p)-j-1) for j in range(len(p))) for p in polynomials):
-            if not any(a<=z<=b for a,b in good): good.append([z,z])
-    return good
-
-
-def certificate(t):
-    """Necessary constraints in fixed P0; quadratic root partition, not gradient signs."""
-    b, x = mechanics(DEFAULT), DEFAULT
-    def coefficients(hz):
-        w=2*np.pi*hz; k=b["k"]-b["m"]*w*w; c=w*b["c"]; a=b["theta"]**2/b["cp"]; beta=w*b["cp"]
-        return np.array([((k+a)**2+c*c)*beta*beta, 2*c*a*beta, k*k+c*c]), w, beta
-    d,w,beta=coefficients(t["background_Hz"]); f=b["forcing_mass"]*t["background_g"]*G
-    packet=(.003*x["sample_ms"]/1000+68e-6)/.85
-    # Optimistically credit harvesting throughout the packet: still a necessary cold-start bound.
-    need=packet/(t["ready_s"]*(1-1.8**2/x["gate_V"]**2)+(x["sample_ms"]+9.5)/1000)+1.4e-6
-    if t["case"]=="wake":
-        poll_max=t["event_ms"]-x["sample_ms"]
-        need=max(need, .003*min(1,x["sample_ms"]/max(poll_max,1e-9))+1.4e-6)
-    polys=[-need*d+np.array([0,.65*b["theta"]**2*w*w*f*f/2,0])]
-    if t["case"]=="impact":
-        ds,ws,bs=coefficients(t["event_Hz"]); fs=b["forcing_mass"]*t["event_g"]*G
-        polys.append((t["stress_MPa"]*1e6)**2*ds-(fs*b["stress_per_m"])**2*np.array([bs*bs,0,1]))
-    feasible=intervals(polys)
-    if t["case"]=="wake":
-        r=x["R_kohm"]*1000
-        feasible=[[r,r]] if all(np.polyval(p,r)>=0 for p in polys) else []
-    return dict(scope="P0: only "+", ".join(local_keys(t))+" vary; harmonic oracle only", proved_empty=not feasible,
-                necessary_R_intervals_ohm=feasible, power_lower_bound_W=need,
-                excluded_constraints=["energy/cold_start", "stress"] if t["case"]=="impact" else ["energy/capture"])
+def bounds(t):
+    """Necessary bounds over ALL allowed geometry/load, not a zero-sample claim.
+    F^2/c increases with tip mass and decreases with h on the declared rectangle.
+    With equal forcing frequencies and no D, q_event/q_bg = a_event/a_bg.
+    """
+    b = mechanics(dict(DEFAULT, h=.85, mass_g=5.8))
+    upper = .65*(b["forcing_mass"]*t["background_g"]*G)**2/(8*b["c"])
+    packet = (.003*SAMPLE_MS/1000+68e-6)/.85
+    if t["case"] == "wake":
+        poll_limit = t["event_ms"]-SAMPLE_MS
+        poll_need = .003*min(1, SAMPLE_MS/max(poll_limit, 1e-9))+1.4e-6
+        active_need = packet/t["event_period_s"]+1.9e-6
+        b_need = packet/t["event_period_s"]+181.4e-6
+        return dict(scope="Declared harmonic geometry/load rectangle; fixed acquisition; no transient theorem",
+                    power_upper_uW=upper*1e6, no_wake_power_lower_uW=poll_need*1e6,
+                    active_B_power_lower_uW=b_need*1e6, active_A_power_lower_uW=active_need*1e6,
+                    excluded_without_any_wake=upper < poll_need, excluded_without_A=upper < min(poll_need, b_need),
+                    all_architectures_excluded_by_energy=upper < active_need,
+                    derivation="P_useful <= .65 F^2/(8 c); capture needs poll+62.5 <= event_ms")
+    b = mechanics(dict(DEFAULT, h=1.15))
+    stress_upper = .65*b["theta"]**2*(2*np.pi*t["background_Hz"])/(4*b["cp"])*(t["stress_MPa"]*1e6/b["stress_per_m"]*t["background_g"]/t["event_g"])**2
+    need = packet/t["event_period_s"]+1.4e-6
+    return dict(scope="Harmonic geometry/load rectangle, equal forcing frequencies, D absent",
+                no_D_stress_limited_power_upper_uW=stress_upper*1e6, service_power_lower_uW=need*1e6,
+                excluded_without_D=t["event_Hz"] == t["background_Hz"] and stress_upper < need,
+                derivation="q_event/q_bg=a_event/a_bg; max_R R/(1+(w Cp R)^2)=1/(2 w Cp)")
 
 
 def calibrate():
-    started=time.perf_counter(); full=sample(N,SEED)
-    rows=[]
-    for i in range(15):
-        kind="wake" if i<5 or i in (10,11) else "impact"
-        t=dict(id=f"{kind}-{i+1:02}", case=kind, role="deadlock" if i<10 else "control",
-               background_Hz=45., background_g=.13+.012*(i%5), event_Hz=(198+6*(i%5)) if kind=="wake" else 48+i%5,
-               event_g=.5 if kind=="wake" else 3.+.4*(i%5), event_ms=150., event_period_s=60.,
-               ready_s=12., stress_MPa=40., area_mm2=95., power_scale_W=100e-6)
-        if i>=10:
-            t.update(background_g=.35 if kind=="wake" else .16, event_g=.5 if kind=="wake" else .3+.02*(i%3),
-                     event_ms=500., ready_s=60., stress_MPa=40.)
-            if kind=="impact": t["event_Hz"]=44.8+.1*(i%3)
-        local={k:full[k] if k in local_keys(t) else np.full(N,v) for k,v in DEFAULT.items()}
-        candidates=[]
-        for factor in ((1.,1.5,2.,2.5,3.) if i<5 else (1.,1.2,1.4) if i<10 else (1.,)):
-            for ready in (8.,12.,20.,35.,60.,100.):
-                stress_values=(40.,) if kind=="wake" or i>=10 else np.linspace(20,220,41)
-                for stress in stress_values:
-                    q=dict(t,background_g=t["background_g"]*factor,ready_s=ready,stress_MPa=float(stress)); cert=certificate(q)
-                    if (i<10 and not cert["proved_empty"]) or (i>=10 and cert["proved_empty"]): continue
-                    rho=float(passed(oracle(q,full)).mean()); r0=float(passed(oracle(q,local)).mean())
-                    if i>=10 and r0==0: continue
-                    candidates.append((abs(rho-.015),q,rho,r0,cert))
-        if not candidates: rows.append(dict(task=t,status="NO_ADMISSIBLE_CALIBRATION")); continue
-        _,t,rho,r0,cert=min(candidates,key=lambda z:z[0])
-        fresh=sample(N,SEED+1); fresh_local={k:fresh[k] if k in local_keys(t) else np.full(N,v) for k,v in DEFAULT.items()}
-        ok=passed(oracle(t,fresh)); j=np.flatnonzero(ok)
-        witness={k:float(v[j[0]]) if k in DOMAIN else bool(v[j[0]]) for k,v in fresh.items()} if len(j) else None
-        all_on=dict(fresh,**{k:np.ones(N,dtype=bool) for k in MODULES})
-        measured=float(ok.mean()); r0=float(passed(oracle(t,fresh_local)).mean())
-        rows.append(dict(task=t,status="IN_ZONE" if .005<=measured<=.03 else "OUTSIDE_TARGET_ZONE",rho_P0=r0,rho_full=measured,selection_rho=rho,
-                         zero_hit_95_upper=1-.05**(1/N) if r0==0 else None,certificate=cert,
-                         all_modules_enabled_rho=float(passed(oracle(t,all_on)).mean()),witness=witness))
-    output=dict(seed=SEED,n=N,coordinates=DOMAIN,modules=MODULES,default=DEFAULT,tasks=rows,
-                model="harmonic screen; representative .65 rectification efficiency, no impact transient qualification",
-                calibration_policy="Choose closest 1.5% volume BEFORE model runs; do not select by model performance",
-                runtime_s=time.perf_counter()-started)
-    OUT.mkdir(exist_ok=True);(OUT/"calibration.json").write_text(json.dumps(output,indent=2))
-    print(json.dumps({"runtime_s":output["runtime_s"],"tasks":[{k:r.get(k) for k in ["status","rho_P0","rho_full"]} for r in rows]},indent=2),flush=True)
-    return output
+    started = time.perf_counter(); x = sample(N, SEED+301)
+    settings = [("wake", "D1", .30, .5, 3000., 40.), ("wake", "D2", .16, .5, 150., 40.),
+                ("wake", "D3", .095, .5, 150., 40.), ("impact", "D1", .20, 1.5, 500., 150.),
+                ("impact", "D2", .12, 5., 500., 285.), ("impact", "D3", .12, 5., 500., 225.)]
+    rows = []
+    for kind, level, bg, event_g, event_ms, stress in settings:
+        t = dict(id=kind+"-"+level, case=kind, difficulty=level, background_Hz=45., background_g=bg,
+                 event_Hz=210. if kind == "wake" else 45., event_g=event_g, event_ms=event_ms,
+                 event_period_s=6., ready_s=100., stress_MPa=stress, area_mm2=95.)
+        rates, witnesses = {}, {}
+        for label, mods in [("none", ()), ("A", ("A",)), ("B", ("B",)), ("D", ("D",)), ("all", tuple(MODULES))]:
+            z = x | {k: np.full(N, k in mods) for k in MODULES}; ok = passed(oracle(t, z)); hits = np.flatnonzero(ok)
+            rates[label] = dict(hits=len(hits), n=N, fraction=float(ok.mean()))
+            if len(hits): witnesses[label] = {k: scalar(v[hits[0]]) for k, v in z.items()}
+        local = {k: x[k] if k in local_keys(t) else np.full(N, v) for k, v in DEFAULT.items()}
+        rates["P0"] = dict(hits=int(passed(oracle(t, local)).sum()), n=N)
+        rows.append(dict(task=t, rates=rates, witnesses=witnesses, bounds=scalar(bounds(t)), initial=scalar(oracle(t, DEFAULT))))
+    OUT.mkdir(exist_ok=True)
+    result = dict(seed=SEED+301, coordinates=DOMAIN, fixed_acquisition_ms=SAMPLE_MS, default=DEFAULT,
+                  modules=MODULES, workpoints=rows, runtime_s=time.perf_counter()-started,
+                  policy="Mechanism-conditioned points; witnesses/labels/rates NEVER sent to learners. Zero hits is not proof. D3 is rare under this measure, not globally impossible.")
+    (OUT/"calibration.json").write_text(json.dumps(result, indent=2))
+    print(json.dumps({r["task"]["id"]: dict(rates=r["rates"], bounds=r["bounds"]) for r in rows}, indent=2))
 
 
-def agents(feedback="slack"):
-    calibration=json.loads((OUT/"calibration.json").read_text())
-    log=OUT/"agents.jsonl"
-    previous=[json.loads(s) for s in log.read_text().splitlines()] if log.exists() else []
-    terminals={(r["task"],r["arm"]):r for r in previous if r["kind"]=="terminal"}
-    sent={r["id"] for r in previous if r["kind"]=="request"}; received={r["id"] for r in previous if r["kind"]=="response"}
-    if sent-received: raise SystemExit("An existing request has no settled usage; do not retry it.")
-    prior_summary=json.loads((OUT/"summary.json").read_text()) if (OUT/"summary.json").exists() else {}
-    prior_runtime=prior_summary.get("runtime_s",0.)
-    max_output=16384
-    key=os.environ.get("DEEPSEEK_API_KEY") or (Path.home()/".local/share/bf-campaign-20261019-s0/workbench/secrets/deepseek.key").read_text().strip()
-    source="\n".join(inspect.getsource(f) for f in (beam,mechanics,response,oracle))
-    rules={"Fixed-P0":"Only the two declared P0 variables can change.",
-           "All-Open":"All variables are available immediately. This does NOT enable/install all modules. Choose freely.",
-           "Free-Expand":"Start in P0, but you may immediately change any variable or module in the same call. No unlock overhead.",
-           "Cert-Guided":"Expand beyond P0 only if the supplied necessary-bound certificate proves P0 empty; otherwise stay local."}
-    common=dict(model="deepseek-flash",thinking="enabled",reasoning_effort="high",max_tokens=max_output,
-                feedback=feedback,max_evaluations=STEPS,max_requests=360,usd_cap=USD_CAP,
-                source=source,base_beams={k:BASE[k] for k in ["harvester","trigger_beam"]},
-                G=G,domain=DOMAIN,modules=MODULES,rules=rules,initial=DEFAULT,
-                rate_usd_per_million=dict(input=.30,output=1.20,cache=.006))
-    common["output_limit_policy"]=("Initial 4096-token pilot retained. Only length-truncated episodes continue, with 16384 tokens and unchanged six-evaluation budget; complete episodes are not rerun." if previous else "16384-token ceiling, six design evaluations per trajectory.")
-    (OUT/"agent_input.json").write_text(json.dumps(common,indent=2))
-    lock,halt=threading.Lock(),threading.Event()
-    answers=[r for r in previous if r["kind"]=="response"]
-    tally=dict(spent=sum(r["estimated_usd"] for r in answers),reserved=0.,requests=len(sent),
-               prompt_tokens=sum(r["response"]["usage"]["prompt_tokens"] for r in answers),
-               completion_tokens=sum(r["response"]["usage"]["completion_tokens"] for r in answers),
-               reasoning_tokens=sum(r["response"]["usage"].get("completion_tokens_details",{}).get("reasoning_tokens",0) for r in answers),
-               cache_hit_tokens=sum(r["response"]["usage"].get("prompt_cache_hit_tokens",0) for r in answers))
-    started=time.perf_counter()
+def public_spec():
+    return dict(domain=DOMAIN, modules=MODULES, acquisition="Fixed 128 samples at 2048 Hz (62.5 ms); sample_ms is not an action.",
+                classifier="Harmonic capture/window screen only; waveform classification checked separately.",
+                parameters=dict(C_uF="storage capacitance", R_kohm="regulated rectifier equivalent input load",
+                                h="multiplier of BOTH .15-mm steel and .12-mm PZT thickness of 30x10-mm beam",
+                                mass_g="harvester tip mass", L2_mm="trigger beam length", m2_g="trigger beam mass",
+                                gate_V="MCU start threshold; brownout=1.8 V", poll_ms="sampling interval if A and B off",
+                                shunt_kohm="D parallel load above shield_V", shield_V="D voltage threshold", trigger_V="wake envelope threshold"),
+                physics=["Beam resonance increases with thickness and decreases with mass/length; electrical load changes damping and stiffness.",
+                         "Harvest depends on resonance, acceleration squared and load. Useful power cannot exceed mechanical input.",
+                         "Larger storage helps bursts but slows charging and costs board area.",
+                         "Without A/B, complete capture needs poll_ms+62.5 <= event_ms; polling consumes energy every interval.",
+                         "A/B replace polling with triggered acquisition. All installed modules pay their stated costs.",
+                         "D changes damping at high observed voltage, potentially sacrificing harvested power; no prescribed stress-reduction percentage.",
+                         "PASS requires all energy, charging, burst, capture, acquisition, stress, area and rectifier constraints together."],
+                base_beams={k: BASE[k] for k in ("harvester", "trigger_beam")},
+                circuit_specs=dict(extraction_efficiency=.65, regulator_efficiency=.85, idle_uW=1.4,
+                                   base_area_mm2=20., storage_area_mm2_per_uF=.03, digital_energy_uJ=255.5,
+                                   brownout_V=1.8, bridge_pair_drop_V=.3),
+                feedback_units="Slack >=0 satisfies a condition; energy scaled by 100 uW. I0/I1 include physical units.")
+
+
+def feedback(result, visibility):
+    s = result["slack"]; worst = min(s, key=lambda k: float(s[k]))
+    return dict(pass_=bool(passed(result)), worst_constraint=worst) | (scalar(result) if visibility != "I2" else {})
+
+
+def run_agents(jobs):
+    rows = {r["task"]["id"]: r for r in json.loads((OUT/"calibration.json").read_text())["workpoints"]}
+    path = OUT/"agents.jsonl"; previous = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
+    requests = {r["id"] for r in previous if r["kind"] == "request"}; settled = {r["id"] for r in previous if r["kind"] == "response"}
+    if requests-settled: raise SystemExit("Unsettled request: preserve UNKNOWN; no automatic retry.")
+    terminals = {r["job"] for r in previous if r["kind"] == "terminal"}
+    started = time.perf_counter(); lock = threading.Lock(); halt = threading.Event()
+    tally = dict(spent=sum(r["estimated_usd"] for r in previous if r["kind"] == "response"), reserved=0., requests=len(requests))
+    key = os.environ.get("DEEPSEEK_API_KEY") or (Path.home()/".local/share/bf-campaign-20261019-s0/workbench/secrets/deepseek.key").read_text().strip()
+    source = "\n".join(inspect.getsource(f) for f in (beam, mechanics, response, oracle))
+    inputs = dict(model="deepseek-flash", thinking="high", max_output=16384, usd_cap=USD_CAP, max_requests=600,
+                  wall_s=7200, simultaneous_requests=3, spec=public_spec(), source=source, rates=RATES,
+                  visibility=dict(I0="source + specs + continuous feedback", I1="specs + continuous feedback", I2="specs + pass/fail/worst name"),
+                  certificate_policy="All-Open and Cert-Guided have identical actions. Cert gets an additional analytic necessary bound: tests diagnostic information, not a pure strategy ablation.",
+                  repeat_policy="54 first-replicate cells. At most two D2 case/visibility blocks with pass mismatch or >=2-step gap get two paired repeats; I1 then I2 then I0/case order, regardless of winner. If both fail I1/D2 with completed evaluations, at most one paired 12-evaluation block.",
+                  replicate_note="Independent API conversations; no deterministic provider seed claim.")
+    (OUT/"protocol.json").write_text(json.dumps(inputs, indent=2))
     def emit(row):
         with lock:
-            with log.open("a") as f: f.write(json.dumps(row,ensure_ascii=False)+"\n")
-    def view(s):
-        out={k:float(v) for k,v in s.items()}
-        return dict(pass_=bool(passed(s)),**({"slack":out} if feedback=="slack" else {}))
-    def run(row,arm):
-        t=row["task"]; x=copy.deepcopy(DEFAULT); initial=view(oracle(t,x)); evaluated=0; error=None
-        old=terminals.get((t["id"],arm))
-        if old and (old.get("error")!="MODEL_OUTPUT_LENGTH" or old.get("output_limit",4096)>=max_output):return old
-        messages=[dict(role="system",content="Design this physical node. You have six design evaluations. Use evaluate with a patch; no prose-only answer. Minimize unnecessary hardware while satisfying every constraint. All public equations and component facts follow.\n"+json.dumps({k:common[k] for k in ["source","base_beams","G","domain","modules"]})),
-                  dict(role="user",content=json.dumps(dict(task=t,initial=x,initial_feedback=initial,P0=local_keys(t),condition=rules[arm],certificate=row["certificate"] if arm=="Cert-Guided" else None)))]
-        if initial["pass_"]:
-            emit(dict(kind="initial_pass",task=t["id"],arm=arm,design=x));return dict(task=t["id"],arm=arm,pass_=True,first_pass=0,evaluations=0)
-        if old:
-            x=old["final_design"].copy();evaluated=old["evaluations"]
-            for r in previous:
-                if r["kind"]!="response" or (r["task"],r["arm"])!=(t["id"],arm):continue
-                m=r["response"]["choices"][0]["message"];calls=m.get("tool_calls",[])
-                if not calls:continue
-                messages.append(m)
-                evaluations=[v for v in previous if v["kind"]=="evaluation" and (v["task"],v["arm"],v["step"])==(t["id"],arm,r["step"])]
-                for j,c in enumerate(calls):
-                    reply=evaluations[j]["feedback"] if j<len(evaluations) else {"not_executed":True}
-                    messages.append(dict(role="tool",tool_call_id=c["id"],content=json.dumps(reply)))
-            messages.append(dict(role="user",content=f"The previous generation hit its output limit before submitting a tool call. That usage remains counted. Continue from the unchanged current design {json.dumps(x)}; {STEPS-evaluated} design evaluations remain. The generation ceiling is now 16384 tokens. Do not repeat evaluated designs."))
-        allowed=local_keys(t) if arm=="Fixed-P0" or (arm=="Cert-Guided" and not row["certificate"]["proved_empty"]) else tuple(DEFAULT)
-        properties={k:dict(type="boolean") if k in MODULES else dict(type="number",minimum=DOMAIN[k][0],maximum=DOMAIN[k][1]) for k in allowed}
-        tools=[dict(type="function",function=dict(name="evaluate",description="Apply changes to current design and evaluate all service slacks.",parameters=dict(type="object",properties=dict(changes=dict(type="object",properties=properties,additionalProperties=False),reason=dict(type="string")),required=["changes","reason"])))]
-        for step in range(evaluated+1,STEPS+1):
-            if time.perf_counter()-started+prior_runtime>=7200: halt.set();error="WALL_TIME_STOP";break
-            if halt.is_set(): error="STOPPED_AFTER_OPERATIONAL_ERROR";break
-            body=dict(model=common["model"],messages=messages,tools=tools,tool_choice="auto",thinking=dict(type="enabled"),reasoning_effort="high",max_tokens=max_output,stream=False)
-            raw=json.dumps(body).encode(); reserve=(len(raw)*.30+max_output*1.20)/1e6
+            with path.open("a") as f: f.write(json.dumps(row, ensure_ascii=False)+"\n")
+    def run(job):
+        tid, vis, arm, rep, budget = job; jid = f"{tid}/{vis}/{arm}/r{rep}/b{budget}"
+        if jid in terminals: return
+        t = {k: v for k, v in rows[tid]["task"].items() if k != "difficulty"}
+        x = DEFAULT.copy(); evaluations = 0; error = None; finish = None
+        allowed = local_keys(t) if arm == "Fixed-P0" else tuple(DEFAULT)
+        spec = dict(inputs["spec"])
+        if vis == "I0": spec |= dict(source=source, G=G, BASE=BASE, SAMPLE_MS=SAMPLE_MS)
+        messages = [dict(role="system", content="Design a vibration-powered monitoring node. Use evaluate(changes,reason), relative to the CURRENT design. All-Open/Cert may freely install or remove modules; availability does not install them. Satisfy every constraint, avoid unnecessary hardware. You may finish with a scoped diagnosis.\n"+json.dumps(spec)),
+                    dict(role="user", content=json.dumps(dict(task=t, initial=x, initial_feedback=feedback(oracle(t, x), vis),
+                         allowed_variables=allowed, evaluations=budget, analytic_bound=rows[tid]["bounds"] if arm == "Cert-Guided" else None)))]
+        props = {k: dict(type="boolean") if k in MODULES else dict(type="number", minimum=DOMAIN[k][0], maximum=DOMAIN[k][1]) for k in allowed}
+        tools = [dict(type="function", function=dict(name="evaluate", description="Apply patch to current design and evaluate.", parameters=dict(type="object", properties=dict(changes=dict(type="object", properties=props, additionalProperties=False), reason=dict(type="string")), required=["changes", "reason"]))),
+                 dict(type="function", function=dict(name="finish", description="Stop with scoped diagnosis; no evaluation.", parameters=dict(type="object", properties=dict(missing_function=dict(type="string"), reason=dict(type="string")), required=["missing_function", "reason"])))]
+        emit(dict(kind="start", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget, messages=messages))
+        for _ in range(budget+2):
+            if halt.is_set(): error = "DEPENDENCY_STOP"; break
+            if time.perf_counter()-started > 7200: halt.set(); error = "WALL_STOP"; break
+            body = dict(model=inputs["model"], messages=messages, tools=tools, tool_choice="auto", thinking=dict(type="enabled"), reasoning_effort="high", max_tokens=16384, stream=False)
+            raw = json.dumps(body).encode(); reserve = (len(raw)*RATES["input"]+16384*RATES["output"])/1e6
             with lock:
-                if tally["spent"]+tally["reserved"]+reserve>USD_CAP or tally["requests"]>=360:
-                    halt.set();error="BUDGET_STOP";break
-                tally["reserved"]+=reserve;tally["requests"]+=1;rid=tally["requests"]
-            emit(dict(kind="request",id=rid,task=t["id"],arm=arm,step=step,reserved_usd=reserve,max_tokens=max_output))
+                if tally["spent"]+tally["reserved"]+reserve > USD_CAP or tally["requests"] >= 600:
+                    halt.set(); error = "BUDGET_STOP"; break
+                tally["requests"] += 1; rid = tally["requests"]; tally["reserved"] += reserve
+            emit(dict(kind="request", job=jid, id=rid, reserved_usd=reserve))
             try:
-                req=urllib.request.Request("https://api.deepseek.com/chat/completions",data=raw,headers={"Authorization":"Bearer "+key,"Content-Type":"application/json"})
-                with urllib.request.urlopen(req,timeout=240) as response: answer=json.load(response)
-                usage=answer.get("usage",{})
-                if not all(type(usage.get(k)) is int for k in ["prompt_tokens","completion_tokens","total_tokens"]): raise RuntimeError("USAGE_UNKNOWN")
-                charge=(usage["prompt_tokens"]*.30+usage["completion_tokens"]*1.20)/1e6
+                req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=240) as stream: answer = json.load(stream)
+                u = answer.get("usage", {})
+                if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
+                cost = (u["prompt_tokens"]*RATES["input"]+u["completion_tokens"]*RATES["output"])/1e6
                 with lock:
-                    tally["reserved"]-=reserve;tally["spent"]+=charge
-                    for k in ["prompt_tokens","completion_tokens"]:tally[k]+=usage[k]
-                    tally["reasoning_tokens"]+=usage.get("completion_tokens_details",{}).get("reasoning_tokens",0)
-                    tally["cache_hit_tokens"]+=usage.get("prompt_cache_hit_tokens",0)
-                emit(dict(kind="response",id=rid,task=t["id"],arm=arm,step=step,response=answer,estimated_usd=charge))
+                    tally["reserved"] -= reserve; tally["spent"] += cost
+                emit(dict(kind="response", job=jid, id=rid, response=answer, estimated_usd=cost))
             except Exception as e:
-                error=type(e).__name__+": "+str(e);halt.set()
-                emit(dict(kind="UNKNOWN",id=rid,task=t["id"],arm=arm,error=error,reserved_usd=reserve));break
-            message=answer["choices"][0]["message"]; messages.append(message)
-            calls=message.get("tool_calls",[])
+                halt.set(); error = type(e).__name__+": "+str(e)
+                emit(dict(kind="UNKNOWN", job=jid, id=rid, error=error, reservation_usd=reserve)); break
+            m = answer["choices"][0]["message"]; messages.append(m); calls = m.get("tool_calls", [])
             if not calls:
-                error="MODEL_OUTPUT_LENGTH" if answer["choices"][0]["finish_reason"]=="length" else "NO_TOOL_SUBMISSION";break
-            result={}
+                error = "OUTPUT_LENGTH" if answer["choices"][0]["finish_reason"] == "length" else "TEXT_WITHOUT_ACTION"; break
             for call in calls:
-                if evaluated>=STEPS or result.get("pass_"):
-                    messages.append(dict(role="tool",tool_call_id=call["id"],content="No execution: evaluation budget exhausted or service already passed."));continue
                 try:
-                    patch=json.loads(call["function"]["arguments"])["changes"]
-                    if any(k not in allowed or (k in DOMAIN and not DOMAIN[k][0]<=v<=DOMAIN[k][1]) or (k in MODULES and type(v) is not bool) for k,v in patch.items()):raise ValueError("OUTSIDE_DECLARED_DOMAIN")
-                    candidate=dict(x,**patch);s=oracle(t,candidate);x=candidate;result=view(s);evaluated+=1
-                except Exception as e:
-                    result=dict(error=str(e));emit(dict(kind="invalid_action",task=t["id"],arm=arm,step=step,error=str(e)))
-                messages.append(dict(role="tool",tool_call_id=call["id"],content=json.dumps(dict(result,remaining_evaluations=STEPS-evaluated))))
-                emit(dict(kind="evaluation",id=rid,task=t["id"],arm=arm,step=step,design=x.copy(),feedback=result))
-            if result.get("pass_"):break
-            if evaluated>=STEPS:break
-        good=bool(passed(oracle(t,x)))
-        expanded=any(x[k]!=DEFAULT[k] for k in DEFAULT if k not in local_keys(t))
-        conditional=sample(N,SEED+2)
-        conditional.update({k:np.full(N,x[k]) for k in MODULES})
-        diagnostic=int(passed(oracle(t,conditional)).sum()) if not good else None
-        result=dict(task=t["id"],arm=arm,role=t["role"],pass_=good,first_pass=evaluated if good else None,evaluations=evaluated,
-                    expanded=expanded,unneeded_expansion_control=expanded and t["role"]=="control",enabled_modules=[k for k in MODULES if x[k]],
-                    final_design=x,final_slack={k:float(v) for k,v in oracle(t,x).items()},error=error,output_limit=max_output,
-                    same_architecture_feasible_samples=diagnostic,diagnostic_samples=N)
-        emit(dict(kind="terminal",**result));print(t["id"],arm,"PASS" if good else error or "FAIL",evaluated,flush=True)
-        return result
-    jobs=[(r,a) for r in calibration["tasks"] if r.get("witness") for a in rules]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-        futures=[pool.submit(run,r,a) for r,a in jobs]
-        results=[f.result() for f in futures]
-    if abs(tally["reserved"])<1e-10:tally["reserved"]=0.
-    tally["total_tokens"]=tally["prompt_tokens"]+tally["completion_tokens"]
-    summary=dict(model=common["model"],feedback=feedback,completed_trajectories=len(results),results=results,accounting=tally,
-                 cache_aware_peak_estimate_usd=tally["spent"]-tally["cache_hit_tokens"]*(.30-.006)/1e6,
-                 runtime_s=prior_runtime+time.perf_counter()-started,operational_stop=halt.is_set(),
-                 initial_pilot=prior_summary.get("initial_pilot",{k:prior_summary[k] for k in ["runtime_s","accounting"] if k in prior_summary}),
-                 scientific_evaluations=sum(r["evaluations"] for r in results),
-                 same_architecture_sampling_scope="All continuous coordinates sampled with final modules fixed; not a P0 feasibility test or an impossibility proof.",
-                 interpretation="Same continuous feedback in all four arms by default. A separate binary run is needed to isolate feedback value. Zero conditional samples is not an impossibility proof.")
-    summary["by_arm"]={a:dict(
-        passes=sum(r["pass_"] for r in results if r["arm"]==a),
-        deadlock_passes=sum(r["pass_"] for r in results if r["arm"]==a and r["role"]=="deadlock"),
-        control_passes=sum(r["pass_"] for r in results if r["arm"]==a and r["role"]=="control"),
-        success_by_evaluation=[sum(r["pass_"] and r["first_pass"]<=n for r in results if r["arm"]==a) for n in range(1,STEPS+1)],
-        control_expansions=sum(r["unneeded_expansion_control"] for r in results if r["arm"]==a),
-        length_incomplete=sum(r.get("error")=="MODEL_OUTPUT_LENGTH" for r in results if r["arm"]==a),
-        text_stops=sum(r.get("error")=="NO_TOOL_SUBMISSION" for r in results if r["arm"]==a)) for a in rules}
-    (OUT/"summary.json").write_text(json.dumps(summary,indent=2));print(json.dumps({k:summary[k] for k in ["accounting","runtime_s","operational_stop"]}),flush=True)
+                    a = json.loads(call["function"]["arguments"])
+                    if call["function"]["name"] == "finish": finish = a; reply = dict(stopped=True)
+                    elif evaluations >= budget or bool(passed(oracle(t, x))): reply = dict(not_executed="Already passed or evaluation budget used")
+                    else:
+                        patch = a["changes"]
+                        if any(k not in allowed or (k in DOMAIN and (type(v) not in (int, float) or not DOMAIN[k][0] <= v <= DOMAIN[k][1])) or (k in MODULES and type(v) is not bool) for k, v in patch.items()): raise ValueError("Outside declared domain")
+                        x |= patch; actual = oracle(t, x); evaluations += 1; reply = feedback(actual, vis)
+                        emit(dict(kind="evaluation", job=jid, step=evaluations, design=x.copy(), actual=scalar(actual), public=reply, reason=a.get("reason")))
+                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(reply | dict(remaining_evaluations=budget-evaluations))))
+                except (KeyError, ValueError, TypeError) as e:
+                    emit(dict(kind="invalid_action", job=jid, error=str(e)))
+                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(dict(error=str(e), remaining_evaluations=budget-evaluations))))
+            if finish is not None or bool(passed(oracle(t, x))) or evaluations >= budget: break
+        actual = scalar(oracle(t, x)); ok = bool(passed(actual)); tight = min(actual["slack"], key=actual["slack"].get)
+        result = dict(kind="terminal", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget,
+                      pass_=ok, evaluations=evaluations, first_pass=evaluations if ok else None, final_design=x,
+                      tightest=tight, minimum_slack=actual["slack"][tight], final_actual=actual,
+                      enabled_modules=[k for k in MODULES if x[k]], diagnosis=finish, error=error)
+        emit(result); print(jid, "PASS" if ok else error or "FAIL", evaluations, flush=True)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool: list(pool.map(run, jobs))
+    print(json.dumps(dict(accounting=tally, runtime_s=time.perf_counter()-started, operational_stop=halt.is_set())), flush=True)
+    report()
 
 
-if __name__=="__main__":
-    p=argparse.ArgumentParser();p.add_argument("--calibrate",action="store_true");p.add_argument("--agents",action="store_true")
-    p.add_argument("--feedback",choices=["slack","binary"],default="slack")
-    args=p.parse_args()
-    if args.feedback=="binary": OUT=HERE/"limits-binary"
-    if args.calibrate or not args.agents: calibrate()
-    if args.agents: agents(args.feedback)
+def followup_jobs():
+    rows = [json.loads(s) for s in (OUT/"agents.jsonl").read_text().splitlines()]
+    transfer = json.loads((OUT/"transient.json").read_text())
+    qualified = {a["source_job"].removeprefix("calibration/").split("-")[0] for a in transfer if not a["removed_module"]
+                 and a["transient"]["verdict"] == "PASS" and any(b["source_job"] == a["source_job"]
+                 and b["removed_module"] and b["transient"]["verdict"] == "FAIL" for b in transfer)}
+    first = {(r["task"], r["visibility"], r["arm"]): r for r in rows if r["kind"] == "terminal" and r["replicate"] == 0 and r["budget"] == 6}
+    jobs = []; selected = []
+    for vis in ("I1", "I2", "I0"):
+        for case in ("wake", "impact"):
+            if case not in qualified: continue
+            a = first.get((case+"-D2", vis, "All-Open")); b = first.get((case+"-D2", vis, "Cert-Guided"))
+            if not a or not b or a["error"] or b["error"]: continue
+            if a["pass_"] != b["pass_"] or (a["pass_"] and abs(a["first_pass"]-b["first_pass"]) >= 2): selected.append((case+"-D2", vis))
+    for tid, vis in selected[:2]: jobs += [(tid, vis, arm, rep, 6) for rep in (1, 2) for arm in ARMS]
+    for case in ("wake", "impact"):
+        if case not in qualified: continue
+        a = first.get((case+"-D2", "I1", "All-Open")); b = first.get((case+"-D2", "I1", "Cert-Guided"))
+        if a and b and not a["error"] and not b["error"] and not a["pass_"] and not b["pass_"]:
+            jobs += [(case+"-D2", "I1", arm, 3, 12) for arm in ("All-Open", "Cert-Guided")]; break
+    (OUT/"followup-selection.json").write_text(json.dumps(dict(selected_blocks=selected[:2], qualified_cases=sorted(qualified), jobs=jobs,
+        policy="Original sign-blind gap rule, plus physical-transfer requirement after observed impact model mismatch; no repetitions for an unqualified engineering premise"), indent=2))
+    return jobs
+
+
+def report():
+    records = [json.loads(s) for s in (OUT/"agents.jsonl").read_text().splitlines()]
+    terminal = [r for r in records if r["kind"] == "terminal"]; responses = [r for r in records if r["kind"] == "response"]
+    usage = {k: sum(r["response"]["usage"].get(k, 0) for r in responses) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "prompt_cache_hit_tokens")}
+    usage["reasoning_tokens"] = sum(r["response"]["usage"].get("completion_tokens_details", {}).get("reasoning_tokens", 0) for r in responses)
+    costs = sum(r["estimated_usd"] for r in responses)
+    summary = dict(results=terminal, requests=len([r for r in records if r["kind"] == "request"]), settled=len(responses),
+                   unknown=[r for r in records if r["kind"] == "UNKNOWN"], usage=usage, conservative_estimated_usd=costs,
+                   cache_aware_peak_estimated_usd=costs-usage["prompt_cache_hit_tokens"]*(.30-.006)/1e6,
+                   evaluations=len([r for r in records if r["kind"] == "evaluation"]), invalid_actions=len([r for r in records if r["kind"] == "invalid_action"]))
+    (OUT/"summary.json").write_text(json.dumps(summary, indent=2))
+
+
+def transient():
+    """D2 I0 successes plus module removal; a calibration witness if All-Open submitted none."""
+    calibration = json.loads((OUT/"calibration.json").read_text()); summary = json.loads((OUT/"summary.json").read_text())
+    output = json.loads((OUT/"transient.json").read_text()) if (OUT/"transient.json").exists() else []
+    for case in ("wake", "impact"):
+        t = next(r["task"] for r in calibration["workpoints"] if r["task"]["id"] == case+"-D2")
+        candidates = [r for r in summary["results"] if r["task"] == case+"-D2" and r["pass_"]]
+        for arm in ("All-Open", "Cert-Guided"):
+            choices = [r for r in candidates if r["arm"] == arm and r["visibility"] == "I0" and r["replicate"] == 0]
+            if not choices:
+                if arm != "All-Open": continue
+                row = next(a for a in calibration["workpoints"] if a["task"]["id"] == case+"-D2")
+                witness = row["witnesses"].get("A" if case == "wake" else "D")
+                if witness is None: continue
+                choices = [dict(job="calibration/"+case+"-D2", final_design=witness,
+                                enabled_modules=[k for k in MODULES if witness[k]], first_pass=0)]
+            r = min(choices, key=lambda r: (len(r["enabled_modules"]), r["first_pass"], r["job"]))
+            for remove in (False, True):
+                if any(a["source_job"] == r["job"] and a["removed_module"] == remove for a in output): continue
+                x = dict(r["final_design"])
+                if remove: x["A" if case == "wake" else "D"] = False
+                d = copy.deepcopy(BASE)
+                d["harvester"] |= dict(substrate_mm=.15*x["h"], piezo_layer_mm=.12*x["h"], tip_mass_g=x["mass_g"])
+                d["trigger_beam"] |= dict(length_mm=x["L2_mm"], tip_mass_g=x["m2_g"])
+                d["modules"] = {k: x[k] for k in MODULES}
+                d["circuit"] |= dict(storage_uF=x["C_uF"], start_V=x["gate_V"], wake_high_V=x["trigger_V"],
+                                      wake_low_V=x["trigger_V"]*.33, converter_input_R_ohm=x["R_kohm"]*1000,
+                                      shunt_ohm=x["shunt_kohm"]*1000, shunt_threshold_V=x["shield_V"])
+                d["firmware"]["poll_s"] = x["poll_ms"]/1000
+                task = dict(TASK, background_peak_g=t["background_g"], fault_Hz=t["event_Hz"], fault_peak_g=t["event_g"],
+                            fault_duration_s=t["event_ms"]/1000, stress_limit_MPa=t["stress_MPa"],
+                            fault_starts_s=[t["ready_s"], t["ready_s"]+6], duration_s=t["ready_s"]+7.5,
+                            nuisance_starts_s=[t["ready_s"]+3])
+                if case == "impact":
+                    d["firmware"] |= dict(target_band_Hz=[35, 55], minimum_target_rms_g=1., wake_from_harvester=True)
+                    d["circuit"] |= dict(wake_high_V=x["gate_V"]+.3, wake_low_V=(x["gate_V"]+.3)*.33)
+                    task |= dict(nuisance_Hz=75., nuisance_peak_g=2.)
+                a = simulate(d, task); a.pop("trace")
+                output.append(dict(source_job=r["job"], removed_module=remove, harmonic=scalar(oracle(t, x)), transient=a))
+                print(r["job"], "removed" if remove else "selected", a["verdict"], a["metrics"], flush=True)
+                (OUT/"transient.json").write_text(json.dumps(output, indent=2))
+
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    for flag in ("calibrate", "agents", "followup", "transient", "report"): p.add_argument("--"+flag, action="store_true")
+    args = p.parse_args()
+    if args.calibrate: calibrate()
+    if args.agents:
+        rows = json.loads((OUT/"calibration.json").read_text())["workpoints"]
+        run_agents([(r["task"]["id"], vis, arm, 0, 6) for r in rows for vis in ("I0", "I1", "I2") for arm in ARMS])
+    if args.followup:
+        jobs = followup_jobs()
+        if jobs: run_agents(jobs)
+    if args.report: report()
+    if args.transient: transient()

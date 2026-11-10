@@ -1,0 +1,157 @@
+{
+  "model": "deepseek-flash",
+  "thinking": "high",
+  "max_output": 16384,
+  "usd_cap": 2.0,
+  "max_requests": 600,
+  "wall_s": 7200,
+  "simultaneous_requests": 3,
+  "spec": {
+    "domain": {
+      "C_uF": [
+        50,
+        1500,
+        "log"
+      ],
+      "R_kohm": [
+        2,
+        300,
+        "log"
+      ],
+      "h": [
+        0.85,
+        1.15,
+        "linear"
+      ],
+      "mass_g": [
+        3.5,
+        5.8,
+        "linear"
+      ],
+      "L2_mm": [
+        15,
+        22,
+        "linear"
+      ],
+      "m2_g": [
+        0.08,
+        0.28,
+        "linear"
+      ],
+      "gate_V": [
+        1.9,
+        3.2,
+        "linear"
+      ],
+      "poll_ms": [
+        15,
+        4000,
+        "log"
+      ],
+      "shunt_kohm": [
+        0.5,
+        100,
+        "log"
+      ],
+      "shield_V": [
+        5,
+        50,
+        "log"
+      ],
+      "trigger_V": [
+        0.2,
+        1.2,
+        "linear"
+      ]
+    },
+    "modules": {
+      "A": {
+        "description": "passive tuned trigger beam + comparator",
+        "idle_uW": 0.5,
+        "area_mm2": 15
+      },
+      "B": {
+        "description": "active filter wake-up, gain 2 V/g",
+        "idle_uW": 180.0,
+        "area_mm2": 18
+      },
+      "C": {
+        "description": "additional FRAM; +5 uJ per write",
+        "idle_uW": 2.0,
+        "area_mm2": 40
+      },
+      "D": {
+        "description": "voltage-triggered parallel resistive shunt",
+        "idle_uW": 0.5,
+        "area_mm2": 12
+      }
+    },
+    "acquisition": "Fixed 128 samples at 2048 Hz (62.5 ms); sample_ms is not an action.",
+    "classifier": "Harmonic capture/window screen only; waveform classification checked separately.",
+    "parameters": {
+      "C_uF": "storage capacitance",
+      "R_kohm": "regulated rectifier equivalent input load",
+      "h": "multiplier of BOTH .15-mm steel and .12-mm PZT thickness of 30x10-mm beam",
+      "mass_g": "harvester tip mass",
+      "L2_mm": "trigger beam length",
+      "m2_g": "trigger beam mass",
+      "gate_V": "MCU start threshold; brownout=1.8 V",
+      "poll_ms": "sampling interval if A and B off",
+      "shunt_kohm": "D parallel load above shield_V",
+      "shield_V": "D voltage threshold",
+      "trigger_V": "wake envelope threshold"
+    },
+    "physics": [
+      "Beam resonance increases with thickness and decreases with mass/length; electrical load changes damping and stiffness.",
+      "Harvest depends on resonance, acceleration squared and load. Useful power cannot exceed mechanical input.",
+      "Larger storage helps bursts but slows charging and costs board area.",
+      "Without A/B, complete capture needs poll_ms+62.5 <= event_ms; polling consumes energy every interval.",
+      "A/B replace polling with triggered acquisition. All installed modules pay their stated costs.",
+      "D changes damping at high observed voltage, potentially sacrificing harvested power; no prescribed stress-reduction percentage.",
+      "PASS requires all energy, charging, burst, capture, acquisition, stress, area and rectifier constraints together."
+    ],
+    "base_beams": {
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      }
+    },
+    "circuit_specs": {
+      "extraction_efficiency": 0.65,
+      "regulator_efficiency": 0.85,
+      "idle_uW": 1.4,
+      "base_area_mm2": 20.0,
+      "storage_area_mm2_per_uF": 0.03,
+      "digital_energy_uJ": 255.5,
+      "brownout_V": 1.8,
+      "bridge_pair_drop_V": 0.3
+    },
+    "feedback_units": "Slack >=0 satisfies a condition; energy scaled by 100 uW. I0/I1 include physical units."
+  },
+  "source": "def beam(d):\n    \"\"\"Symmetric parallel bimorph, one cubic Rayleigh-Ritz bending mode.\"\"\"\n    L, b, hs, hp = (d[k] * 1e-3 for k in\n                    (\"length_mm\", \"width_mm\", \"substrate_mm\", \"piezo_layer_mm\"))\n    # Declared representative material constants, not a fitted commercial part.\n    Es, Ep, rhos, rhop, eps, e31 = 200e9, 60e9, 7800, 7500, 1700 * 8.8541878128e-12, 11.4\n    z = (hs + hp) / 2\n    EI = Es * b * hs**3 / 12 + 2 * Ep * b * (hp**3 / 12 + hp * z**2)\n    mb = b * L * (rhos * hs + 2 * rhop * hp)\n    mt = d[\"tip_mass_g\"] * 1e-3\n    m, forcing_mass, k = mt + 33 / 140 * mb, mt + 3 / 8 * mb, 3 * EI / L**3\n    cp, theta = 2 * eps * b * L / hp, 3 * b * e31 * z / L\n    return {\"m\": m, \"forcing_mass\": forcing_mass, \"k\": k,\n            \"c\": 2 * d[\"damping_ratio\"] * np.sqrt(k * m), \"cp\": cp, \"theta\": theta,\n            \"stress_per_m\": Ep * (hs / 2 + hp) * 3 / L**2,\n            \"short_circuit_Hz\": np.sqrt(k / m) / (2 * np.pi),\n            \"open_circuit_Hz\": np.sqrt((k + theta**2 / cp) / m) / (2 * np.pi),\n            \"beam_mass_g\": mb * 1000}\n\ndef mechanics(x):\n    return beam(dict(BASE[\"harvester\"], substrate_mm=.15*x[\"h\"], piezo_layer_mm=.12*x[\"h\"], tip_mass_g=x[\"mass_g\"]))\n\ndef response(b, hz, amplitude_g, resistance):\n    w = 2*np.pi*hz\n    z = b[\"k\"]-b[\"m\"]*w*w+1j*w*b[\"c\"]+b[\"theta\"]**2*1j*w/(1/resistance+1j*w*b[\"cp\"])\n    q = b[\"forcing_mass\"]*amplitude_g*G/np.abs(z)\n    return q, b[\"theta\"]*w*q/np.abs(1/resistance+1j*w*b[\"cp\"])\n\ndef oracle(t, x):\n    \"\"\"Settled harmonic screen: D engages on open-switch peak voltage.\n    Constant .65 extraction efficiency; no transient or waveform classification claim.\n    \"\"\"\n    b, r = mechanics(x), x[\"R_kohm\"]*1000\n    def loaded(hz, amplitude):\n        _, open_v = response(b, hz, amplitude, r)\n        load = 1/(1/r+(np.asarray(x[\"D\"]) & (open_v > x[\"shield_V\"]))/ (x[\"shunt_kohm\"]*1000))\n        return response(b, hz, amplitude, load)\n    qb, vb = loaded(t[\"background_Hz\"], t[\"background_g\"])\n    qe, ve = loaded(t[\"event_Hz\"], t[\"event_g\"])\n    power = .65*vb**2/(2*r)\n    idle = (1.4+sum(np.asarray(x[k])*v[\"idle_uW\"] for k, v in MODULES.items()))*1e-6\n    packet = (.003*SAMPLE_MS/1000+68e-6+np.asarray(x[\"C\"])*5e-6)/.85\n    active = np.asarray(x[\"A\"]) | np.asarray(x[\"B\"])\n    if t[\"case\"] == \"wake\":\n        w = beam(dict(BASE[\"trigger_beam\"], length_mm=x[\"L2_mm\"], tip_mass_g=x[\"m2_g\"]))\n        qt, vt = response(w, t[\"event_Hz\"], t[\"event_g\"], 1e8)\n        env = np.maximum(vt*(1-np.exp(-.03*2*np.pi*t[\"event_Hz\"]*t[\"event_ms\"]/1000))-.2, 0)\n        env = np.maximum(env*np.asarray(x[\"A\"]), np.asarray(x[\"B\"])*2*t[\"event_g\"])\n        capture = np.where(active, env/x[\"trigger_V\"]-1, t[\"event_ms\"]/(x[\"poll_ms\"]+SAMPLE_MS)-1)\n        demand = np.where(active, packet/t[\"event_period_s\"], .003*np.minimum(1, SAMPLE_MS/x[\"poll_ms\"]))\n        stress = np.maximum((qb+qe)*b[\"stress_per_m\"], np.asarray(x[\"A\"])*qt*w[\"stress_per_m\"])/1e6\n    else:\n        capture, demand = ve/(x[\"gate_V\"]+.3)-1, packet/t[\"event_period_s\"]\n        stress = qe*b[\"stress_per_m\"]/1e6\n    net = power-idle\n    slack = dict(energy=(net-demand)/1e-4,\n                 cold_charge=2*net*t[\"ready_s\"]/(x[\"C_uF\"]*1e-6*x[\"gate_V\"]**2)-1,\n                 burst_energy=(.5*x[\"C_uF\"]*1e-6*(x[\"gate_V\"]**2-1.8**2)+net*(SAMPLE_MS+9.5)/1000)/packet-1,\n                 capture=capture, stress=1-stress/t[\"stress_MPa\"],\n                 area=1-(20+.03*x[\"C_uF\"]+sum(np.asarray(x[k])*v[\"area_mm2\"] for k, v in MODULES.items()))/t[\"area_mm2\"],\n                 rectifier_voltage=vb/(x[\"gate_V\"]+.3)-1,\n                 acquisition_window=np.asarray(SAMPLE_MS*t[\"event_Hz\"]/4000-1 if t[\"case\"] == \"wake\" else 1.))\n    return dict(slack=slack, harvested_uW=power*1e6, required_uW=(demand+idle)*1e6,\n                background_voltage_V=vb, event_voltage_V=ve, stress_MPa=stress)\n",
+  "rates": {
+    "input": 0.3,
+    "output": 1.2,
+    "cache": 0.006
+  },
+  "visibility": {
+    "I0": "source + specs + continuous feedback",
+    "I1": "specs + continuous feedback",
+    "I2": "specs + pass/fail/worst name"
+  },
+  "certificate_policy": "All-Open and Cert-Guided have identical actions. Cert gets an additional analytic necessary bound: tests diagnostic information, not a pure strategy ablation.",
+  "repeat_policy": "54 first-replicate cells. At most two D2 case/visibility blocks with pass mismatch or >=2-step gap get two paired repeats; I1 then I2 then I0/case order, regardless of winner. If both fail I1/D2 with completed evaluations, at most one paired 12-evaluation block.",
+  "replicate_note": "Independent API conversations; no deterministic provider seed claim."
+}

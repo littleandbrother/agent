@@ -48,23 +48,28 @@ def beam(d):
             "beam_mass_g": mb * 1000}
 
 
-def acceleration(t):
-    a = TASK["background_peak_g"] * np.sin(2 * np.pi * TASK["background_Hz"] * t)
+def acceleration(t, task=TASK):
+    a = task["background_peak_g"] * np.sin(2 * np.pi * task["background_Hz"] * t)
     for name in ("fault", "nuisance"):
-        duration = TASK[f"{name}_duration_s"]
-        for start in TASK[f"{name}_starts_s"]:
+        duration = task[f"{name}_duration_s"]
+        for start in task[f"{name}_starts_s"]:
             u = t - start
             if 0 <= u < duration:
                 edge = min(u / 0.005, (duration - u) / 0.005, 1.0)
                 taper = 0.5 - 0.5 * np.cos(np.pi * edge)
-                a += TASK[f"{name}_peak_g"] * taper * np.sin(2 * np.pi * TASK[f"{name}_Hz"] * u)
+                a += task[f"{name}_peak_g"] * taper * np.sin(2 * np.pi * task[f"{name}_Hz"] * u)
     return G * a
 
 
-def simulate(design):
+def simulate(design, task=TASK):
     started = time.perf_counter()
     h, w = beam(design["harvester"]), beam(design["trigger_beam"])
     c, f = design["circuit"], design["firmware"]
+    modules = design.get("modules", dict(A=True, B=False, C=False, D=False))
+    A, B, C, D = (modules[k] for k in "ABCD")
+    regulated = "converter_input_R_ohm" in c
+    harvest_wake = f.get("wake_from_harvester", False)
+    triggered, next_poll = A or B or harvest_wake, 0.0
     Cs, Ce = c["storage_uF"] * 1e-6, c["envelope_nF"] * 1e-9
     # qh, qh_dot, vh, qw, qw_dot, vw, storage, envelope, sensor;
     # then energy terms: input, damping, rectifier, front-end, MCU, idle, clamp.
@@ -74,29 +79,41 @@ def simulate(design):
 
     def rhs(t, y, power, sampling):
         qh, uh, vh, qw, uw, vw, vs, ve, sensor = y[:9]
-        a = acceleration(t)
-        ih = max((abs(vh) - max(vs, 0) - 2 * c["bridge_diode_V"]) / c["bridge_series_ohm"], 0)
-        ie = max((abs(vw) - ve - 2 * c["envelope_diode_V"]) / c["envelope_charge_ohm"], 0)
+        a = acceleration(t, task)
+        if regulated:
+            # Representative regulated-input rectifier, not the original series resistor.
+            ih = max(abs(vh)-2*c["bridge_diode_V"], 0)/c["converter_input_R_ohm"]
+            storage_current = .65*max(abs(vh)-2*c["bridge_diode_V"], 0)*ih/max(vs, .1)
+        else:
+            ih = max((abs(vh)-max(vs, 0)-2*c["bridge_diode_V"])/c["bridge_series_ohm"], 0)
+            storage_current = ih
+        shunt = max(abs(vh)-c["shunt_threshold_V"], 0)/c["shunt_ohm"] if D else 0.
+        source = vh if harvest_wake else vw
+        ie = max((abs(source)-ve-2*c["envelope_diode_V"])/c["envelope_charge_ohm"], 0) if A or harvest_wake else 0.
+        envelope_dot = (ie-ve/c["envelope_discharge_ohm"])/Ce
+        if B:
+            envelope_dot = (max(ve, 2*abs(a/G))-ve)/.002-ve/.04
         iq = c["reference_and_power_control_nA"] * 1e-9
         if vs >= c["comparator_supply_min_V"]:
             iq += c["comparator_nA"] * 1e-9
         il = power / (c["regulator_efficiency"] * max(vs, 0.1))
         leakage = max(vs, 0) / c["storage_leak_ohm"]
+        extra = ((.5*A+180*B+2*C+.5*D)*1e-6+Ce*ve*envelope_dot*B)/max(vs, .1) if regulated else 0.
         clamp = max((vs - c["clamp_V"]) / c["clamp_ohm"], 0)
-        vdot = (ih - il - iq - leakage - clamp) / Cs
+        vdot = (storage_current - il - iq - leakage - extra - clamp) / Cs
         if vs <= 0 and vdot < 0:
             vdot = 0.0
         return [uh, (-h["c"] * uh - h["k"] * qh + h["theta"] * vh - h["forcing_mass"] * a) / h["m"],
-                (-h["theta"] * uh - np.sign(vh) * ih) / h["cp"],
-                uw, (-w["c"] * uw - w["k"] * qw + w["theta"] * vw - w["forcing_mass"] * a) / w["m"],
-                (-w["theta"] * uw - np.sign(vw) * ie - vw / c["trigger_input_ohm"]) / w["cp"],
-                vdot, (ie - ve / c["envelope_discharge_ohm"]) / Ce,
+                (-h["theta"]*uh-np.sign(vh)*(ih+shunt+ie*harvest_wake))/h["cp"],
+                uw, (-w["c"]*uw-w["k"]*qw+w["theta"]*vw-w["forcing_mass"]*a)/w["m"] if A else 0.,
+                (-w["theta"]*uw-np.sign(vw)*ie-vw/c["trigger_input_ohm"])/w["cp"] if A else 0.,
+                vdot, envelope_dot,
                 2 * np.pi * f["sensor_bandwidth_Hz"] * (a - sensor) if sampling else 0,
-                -a * (h["forcing_mass"] * uh + w["forcing_mass"] * uw),
+                -a * (h["forcing_mass"] * uh + A*w["forcing_mass"] * uw),
                 h["c"] * uh**2 + w["c"] * uw**2,
-                ih * (abs(vh) - vs),
-                ie * (abs(vw) - ve) + ve**2 / c["envelope_discharge_ohm"] + vw**2 / c["trigger_input_ohm"],
-                vs * il, vs * (iq + leakage), vs * clamp]
+                ih*abs(vh)-vs*storage_current+shunt*abs(vh),
+                ie*(abs(source)-ve)+ve**2/c["envelope_discharge_ohm"]+A*vw**2/c["trigger_input_ohm"] if not B else 0.,
+                vs * il, vs * (iq + leakage + extra), vs * clamp]
 
     def advance(end, power=0.0, sampling=False, stop=None):
         nonlocal t, y
@@ -113,9 +130,13 @@ def simulate(design):
             def event(t, y):
                 return y[6] - c["brownout_V"]
             event.direction = -1
+        elif stop == "ready":
+            def event(t, y):
+                return y[6] - c["start_V"]
+            event.direction = 1
         if event is not None:
             event.terminal = True
-        sol = solve_ivp(lambda t, y: rhs(t, y, power, sampling), (t, min(end, TASK["duration_s"])), y,
+        sol = solve_ivp(lambda t, y: rhs(t, y, power, sampling), (t, min(end, task["duration_s"])), y,
                         method="LSODA", rtol=2e-6,
                         atol=[1e-10, 1e-8, 1e-7, 1e-10, 1e-8, 1e-7, 1e-7, 1e-7, 1e-6] + [1e-11] * 7,
                         max_step=0.00025, dense_output=True, events=event)
@@ -136,20 +157,25 @@ def simulate(design):
             return None
         return sol
 
-    while t < TASK["duration_s"] - 1e-9:
+    while t < task["duration_s"] - 1e-9:
         phase = "OFF"
-        if not armed:
+        if triggered and not armed:
             if y[7] > c["wake_low_V"]:
-                advance(TASK["duration_s"], stop="rearm")
+                advance(task["duration_s"], stop="rearm")
             armed = True
-        if t >= TASK["duration_s"] - 1e-9:
+        if t >= task["duration_s"] - 1e-9:
             break
-        if not (y[7] >= c["wake_high_V"] and y[6] >= c["start_V"]):
-            sol = advance(TASK["duration_s"], stop="wake")
+        if not triggered and next_poll > t:
+            advance(next_poll)
+        if t >= task["duration_s"] - 1e-9:
+            break
+        if not (y[6] >= c["start_V"] and (not triggered or y[7] >= c["wake_high_V"])):
+            sol = advance(task["duration_s"], stop="wake" if triggered else "ready")
             if sol.status == 0:
                 break
         armed = False
         wake_at = t
+        next_poll = t + f.get("poll_s", .1)
         if boot_at is None:
             boot_at = t
         events.append({"time_s": t, "event": "WAKE", "storage_V": float(y[6])})
@@ -175,7 +201,7 @@ def simulate(design):
         events.append({"time_s": t, "event": "CONFIRM" if detected else "REJECT",
                        "target_band_fraction": fraction, "rms_g": rms, "samples_g": values.tolist()})
         if detected:
-            if work("SAVE", f["save_s"], f["save_mW"]) is None:
+            if work("SAVE", f["save_s"], f["save_mW"]+(5e-3/f["save_s"] if C else 0)) is None:
                 continue
             sequence += 1  # Device-owned persistent counter, committed by SAVE.
             ok = True
@@ -196,8 +222,8 @@ def simulate(design):
         ts.extend(grid.tolist()); ys.extend(sol.sol(grid).T.tolist()); modes.extend([name] * len(grid))
     trace = np.array(ys)
     matched, missed, latencies = set(), [], []
-    for start in TASK["fault_starts_s"]:
-        found = next((i for i, r in enumerate(records) if i not in matched and start <= r["received_s"] <= start + TASK["delivery_deadline_s"]), None)
+    for start in task["fault_starts_s"]:
+        found = next((i for i, r in enumerate(records) if i not in matched and start <= r["received_s"] <= start + task["delivery_deadline_s"]), None)
         if found is None:
             missed.append(start)
         else:
@@ -214,13 +240,13 @@ def simulate(design):
               + 0.5 * Cs * y[6]**2 + 0.5 * Ce * y[7]**2)
     residual = float(y[9] - sum(y[10:]) - stored)
     checks = {"all_faults_delivered_on_time": not missed, "no_false_reports": len(matched) == len(records),
-              "no_brownouts": brownouts == 0, "stress_within_limit": peak_stress <= TASK["stress_limit_MPa"],
-              "travel_within_limit": peak_tip <= TASK["tip_travel_limit_mm"]}
+              "no_brownouts": brownouts == 0, "stress_within_limit": peak_stress <= task["stress_limit_MPa"],
+              "travel_within_limit": peak_tip <= task["tip_travel_limit_mm"]}
     ready = np.flatnonzero(trace[:, 6] >= c["start_V"])
     active = np.array(modes) != "OFF"
-    return {"task": TASK, "design": design, "model": "Single cubic Rayleigh-Ritz mode per symmetric bimorph, coupled diode circuits and program loads",
+    return {"task": task, "design": design, "model": "Single cubic beam modes; actual rectifier, envelope, storage and program loads; optional regulated input and voltage shunt",
             "verdict": "PASS" if all(checks.values()) else "FAIL", "checks": checks,
-            "metrics": {"faults": len(TASK["fault_starts_s"]), "delivered_on_time": len(matched),
+            "metrics": {"faults": len(task["fault_starts_s"]), "delivered_on_time": len(matched),
                         "missed_fault_starts_s": missed, "false_reports": len(records) - len(matched),
                         "wakeups": sum(e["event"] == "WAKE" for e in events), "brownouts": brownouts,
                         "cold_charge_ready_s": float(ts[ready[0]]) if len(ready) else None,

@@ -1,0 +1,745 @@
+{
+  "seed": 20261411,
+  "coordinates": {
+    "C_uF": [
+      50,
+      1500,
+      "log"
+    ],
+    "R_kohm": [
+      2,
+      300,
+      "log"
+    ],
+    "h": [
+      0.85,
+      1.15,
+      "linear"
+    ],
+    "mass_g": [
+      3.5,
+      5.8,
+      "linear"
+    ],
+    "L2_mm": [
+      15,
+      22,
+      "linear"
+    ],
+    "m2_g": [
+      0.08,
+      0.28,
+      "linear"
+    ],
+    "gate_V": [
+      1.9,
+      3.2,
+      "linear"
+    ],
+    "poll_ms": [
+      15,
+      4000,
+      "log"
+    ],
+    "shunt_kohm": [
+      0.5,
+      100,
+      "log"
+    ],
+    "shield_V": [
+      5,
+      50,
+      "log"
+    ],
+    "trigger_V": [
+      0.2,
+      1.2,
+      "linear"
+    ]
+  },
+  "fixed_acquisition_ms": 62.5,
+  "default": {
+    "C_uF": 75.0,
+    "R_kohm": 45.0,
+    "h": 1.0,
+    "mass_g": 4.65,
+    "L2_mm": 18.0,
+    "m2_g": 0.14,
+    "gate_V": 2.9,
+    "poll_ms": 100.0,
+    "shunt_kohm": 3.0,
+    "shield_V": 15.0,
+    "trigger_V": 0.55,
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+  },
+  "modules": {
+    "A": {
+      "description": "passive tuned trigger beam + comparator",
+      "idle_uW": 0.5,
+      "area_mm2": 15
+    },
+    "B": {
+      "description": "active filter wake-up, gain 2 V/g",
+      "idle_uW": 180.0,
+      "area_mm2": 18
+    },
+    "C": {
+      "description": "additional FRAM; +5 uJ per write",
+      "idle_uW": 2.0,
+      "area_mm2": 40
+    },
+    "D": {
+      "description": "voltage-triggered parallel resistive shunt",
+      "idle_uW": 0.5,
+      "area_mm2": 12
+    }
+  },
+  "workpoints": [
+    {
+      "task": {
+        "id": "wake-D1",
+        "case": "wake",
+        "difficulty": "D1",
+        "background_Hz": 45.0,
+        "background_g": 0.3,
+        "event_Hz": 210.0,
+        "event_g": 0.5,
+        "event_ms": 3000.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 208,
+          "n": 10000,
+          "fraction": 0.0208
+        },
+        "A": {
+          "hits": 156,
+          "n": 10000,
+          "fraction": 0.0156
+        },
+        "B": {
+          "hits": 392,
+          "n": 10000,
+          "fraction": 0.0392
+        },
+        "D": {
+          "hits": 172,
+          "n": 10000,
+          "fraction": 0.0172
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 2667,
+          "n": 10000
+        }
+      },
+      "witnesses": {
+        "none": {
+          "C_uF": 702.954434154024,
+          "R_kohm": 97.07900390424508,
+          "h": 1.0001545354248085,
+          "mass_g": 4.545252221087496,
+          "L2_mm": 21.956280290744374,
+          "m2_g": 0.2708673174994739,
+          "gate_V": 2.067767445958753,
+          "poll_ms": 2637.9244708037145,
+          "shunt_kohm": 7.946938720703072,
+          "shield_V": 9.273385612878478,
+          "trigger_V": 0.5529954762151009,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "A": {
+          "C_uF": 143.29706203694064,
+          "R_kohm": 70.01223678028475,
+          "h": 1.027895577185216,
+          "mass_g": 5.3506076641129345,
+          "L2_mm": 16.007669019700238,
+          "m2_g": 0.2528473219641965,
+          "gate_V": 2.7262357750166513,
+          "poll_ms": 767.9460942314057,
+          "shunt_kohm": 0.805488297660141,
+          "shield_V": 6.68370908557186,
+          "trigger_V": 0.7183045017407124,
+          "A": true,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "B": {
+          "C_uF": 410.7867191809091,
+          "R_kohm": 86.73710636873996,
+          "h": 0.9707554670716942,
+          "mass_g": 4.179942576411704,
+          "L2_mm": 15.312656558127909,
+          "m2_g": 0.13987304136360826,
+          "gate_V": 2.565574624493139,
+          "poll_ms": 230.63806135137366,
+          "shunt_kohm": 88.31177110492821,
+          "shield_V": 9.13541869079032,
+          "trigger_V": 0.6078880446728971,
+          "A": false,
+          "B": true,
+          "C": false,
+          "D": false
+        },
+        "D": {
+          "C_uF": 702.954434154024,
+          "R_kohm": 97.07900390424508,
+          "h": 1.0001545354248085,
+          "mass_g": 4.545252221087496,
+          "L2_mm": 21.956280290744374,
+          "m2_g": 0.2708673174994739,
+          "gate_V": 2.067767445958753,
+          "poll_ms": 2637.9244708037145,
+          "shunt_kohm": 7.946938720703072,
+          "shield_V": 9.273385612878478,
+          "trigger_V": 0.5529954762151009,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": true
+        }
+      },
+      "bounds": {
+        "scope": "Declared harmonic geometry/load rectangle; fixed acquisition; no transient theorem",
+        "power_upper_uW": 741.1585392333027,
+        "no_wake_power_lower_uW": 65.22978723404255,
+        "active_B_power_lower_uW": 231.49803921568628,
+        "active_A_power_lower_uW": 51.998039215686276,
+        "excluded_without_any_wake": false,
+        "excluded_without_A": false,
+        "all_architectures_excluded_by_energy": false,
+        "derivation": "P_useful <= .65 F^2/(8 c); capture needs poll+62.5 <= event_ms"
+      },
+      "initial": {
+        "slack": {
+          "energy": -14.549125660851999,
+          "cold_charge": 132.20251570822037,
+          "burst_energy": -0.2543909943029913,
+          "capture": 17.46153846153846,
+          "stress": 0.4703916388014753,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": 1.3872995363741003,
+          "acquisition_window": 2.28125
+        },
+        "harvested_uW": 421.4874339147999,
+        "required_uW": 1876.3999999999999,
+        "background_voltage_V": 7.63935851639712,
+        "event_voltage_V": 0.06052009681273904,
+        "stress_MPa": 21.18433444794099
+      }
+    },
+    {
+      "task": {
+        "id": "wake-D2",
+        "case": "wake",
+        "difficulty": "D2",
+        "background_Hz": 45.0,
+        "background_g": 0.16,
+        "event_Hz": 210.0,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "A": {
+          "hits": 63,
+          "n": 10000,
+          "fraction": 0.0063
+        },
+        "B": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "D": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 0,
+          "n": 10000
+        }
+      },
+      "witnesses": {
+        "A": {
+          "C_uF": 143.29706203694064,
+          "R_kohm": 70.01223678028475,
+          "h": 1.027895577185216,
+          "mass_g": 5.3506076641129345,
+          "L2_mm": 16.007669019700238,
+          "m2_g": 0.2528473219641965,
+          "gate_V": 2.7262357750166513,
+          "poll_ms": 767.9460942314057,
+          "shunt_kohm": 0.805488297660141,
+          "shield_V": 6.68370908557186,
+          "trigger_V": 0.7183045017407124,
+          "A": true,
+          "B": false,
+          "C": false,
+          "D": false
+        }
+      },
+      "bounds": {
+        "scope": "Declared harmonic geometry/load rectangle; fixed acquisition; no transient theorem",
+        "power_upper_uW": 210.8184289374727,
+        "no_wake_power_lower_uW": 2144.2571428571428,
+        "active_B_power_lower_uW": 231.49803921568628,
+        "active_A_power_lower_uW": 51.998039215686276,
+        "excluded_without_any_wake": true,
+        "excluded_without_A": true,
+        "all_architectures_excluded_by_energy": false,
+        "derivation": "P_useful <= .65 F^2/(8 c); capture needs poll+62.5 <= event_ms"
+      },
+      "initial": {
+        "slack": {
+          "energy": -17.565102410197902,
+          "cold_charge": 36.57106903851281,
+          "burst_energy": -0.32663278571589505,
+          "capture": -0.07692307692307687,
+          "stress": 0.7161622975833422,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": 0.2732264193995202,
+          "acquisition_window": 2.28125
+        },
+        "harvested_uW": 119.88975898020976,
+        "required_uW": 1876.3999999999999,
+        "background_voltage_V": 4.074324542078465,
+        "event_voltage_V": 0.06052009681273904,
+        "stress_MPa": 11.353508096666312
+      }
+    },
+    {
+      "task": {
+        "id": "wake-D3",
+        "case": "wake",
+        "difficulty": "D3",
+        "background_Hz": 45.0,
+        "background_g": 0.095,
+        "event_Hz": 210.0,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "A": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "B": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "D": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 0,
+          "n": 10000
+        }
+      },
+      "witnesses": {},
+      "bounds": {
+        "scope": "Declared harmonic geometry/load rectangle; fixed acquisition; no transient theorem",
+        "power_upper_uW": 74.32173129533953,
+        "no_wake_power_lower_uW": 2144.2571428571428,
+        "active_B_power_lower_uW": 231.49803921568628,
+        "active_A_power_lower_uW": 51.998039215686276,
+        "excluded_without_any_wake": true,
+        "excluded_without_A": true,
+        "all_architectures_excluded_by_energy": false,
+        "derivation": "P_useful <= .65 F^2/(8 c); capture needs poll+62.5 <= event_ms"
+      },
+      "initial": {
+        "slack": {
+          "energy": -18.341341767657656,
+          "cold_charge": 11.95785120387923,
+          "burst_energy": -0.34522607286913853,
+          "capture": -0.07692307692307687,
+          "stress": 0.830270103446352,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": -0.24402181348153473,
+          "acquisition_window": 2.28125
+        },
+        "harvested_uW": 42.26582323423411,
+        "required_uW": 1876.3999999999999,
+        "background_voltage_V": 2.4191301968590886,
+        "event_voltage_V": 0.06052009681273904,
+        "stress_MPa": 6.789195862145923
+      }
+    },
+    {
+      "task": {
+        "id": "impact-D1",
+        "case": "impact",
+        "difficulty": "D1",
+        "background_Hz": 45.0,
+        "background_g": 0.2,
+        "event_Hz": 45.0,
+        "event_g": 1.5,
+        "event_ms": 500.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 150.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 578,
+          "n": 10000,
+          "fraction": 0.0578
+        },
+        "A": {
+          "hits": 578,
+          "n": 10000,
+          "fraction": 0.0578
+        },
+        "B": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "D": {
+          "hits": 349,
+          "n": 10000,
+          "fraction": 0.0349
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 4090,
+          "n": 10000
+        }
+      },
+      "witnesses": {
+        "none": {
+          "C_uF": 410.7867191809091,
+          "R_kohm": 86.73710636873996,
+          "h": 0.9707554670716942,
+          "mass_g": 4.179942576411704,
+          "L2_mm": 15.312656558127909,
+          "m2_g": 0.13987304136360826,
+          "gate_V": 2.565574624493139,
+          "poll_ms": 230.63806135137366,
+          "shunt_kohm": 88.31177110492821,
+          "shield_V": 9.13541869079032,
+          "trigger_V": 0.6078880446728971,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "A": {
+          "C_uF": 410.7867191809091,
+          "R_kohm": 86.73710636873996,
+          "h": 0.9707554670716942,
+          "mass_g": 4.179942576411704,
+          "L2_mm": 15.312656558127909,
+          "m2_g": 0.13987304136360826,
+          "gate_V": 2.565574624493139,
+          "poll_ms": 230.63806135137366,
+          "shunt_kohm": 88.31177110492821,
+          "shield_V": 9.13541869079032,
+          "trigger_V": 0.6078880446728971,
+          "A": true,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "D": {
+          "C_uF": 410.7867191809091,
+          "R_kohm": 86.73710636873996,
+          "h": 0.9707554670716942,
+          "mass_g": 4.179942576411704,
+          "L2_mm": 15.312656558127909,
+          "m2_g": 0.13987304136360826,
+          "gate_V": 2.565574624493139,
+          "poll_ms": 230.63806135137366,
+          "shunt_kohm": 88.31177110492821,
+          "shield_V": 9.13541869079032,
+          "trigger_V": 0.6078880446728971,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": true
+        }
+      },
+      "bounds": {
+        "scope": "Harmonic geometry/load rectangle, equal forcing frequencies, D absent",
+        "no_D_stress_limited_power_upper_uW": 437.30450276519144,
+        "service_power_lower_uW": 51.498039215686276,
+        "excluded_without_D": false,
+        "derivation": "q_event/q_bg=a_event/a_bg; max_R R/(1+(w Cp R)^2)=1/(2 w Cp)"
+      },
+      "initial": {
+        "slack": {
+          "energy": 1.3582970919089146,
+          "cold_charge": 57.95449810751575,
+          "burst_energy": -0.3104793416732581,
+          "capture": 10.936497681870502,
+          "stress": 0.2977981177660942,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": 0.5915330242494004,
+          "acquisition_window": 1.0
+        },
+        "harvested_uW": 187.32774840657774,
+        "required_uW": 51.498039215686276,
+        "background_voltage_V": 5.092905677598081,
+        "event_voltage_V": 38.196792581985605,
+        "stress_MPa": 105.33028233508587
+      }
+    },
+    {
+      "task": {
+        "id": "impact-D2",
+        "case": "impact",
+        "difficulty": "D2",
+        "background_Hz": 45.0,
+        "background_g": 0.12,
+        "event_Hz": 45.0,
+        "event_g": 5.0,
+        "event_ms": 500.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 285.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "A": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "B": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "D": {
+          "hits": 20,
+          "n": 10000,
+          "fraction": 0.002
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 0,
+          "n": 10000
+        }
+      },
+      "witnesses": {
+        "D": {
+          "C_uF": 1451.4114340257045,
+          "R_kohm": 123.90122379421508,
+          "h": 0.9662749118945699,
+          "mass_g": 4.391410569535081,
+          "L2_mm": 20.73858666378947,
+          "m2_g": 0.2691162650969878,
+          "gate_V": 2.847061682681425,
+          "poll_ms": 70.87832465765133,
+          "shunt_kohm": 41.581605705681845,
+          "shield_V": 17.463522749373166,
+          "trigger_V": 0.5221211259917056,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": true
+        }
+      },
+      "bounds": {
+        "scope": "Harmonic geometry/load rectangle, equal forcing frequencies, D absent",
+        "no_D_stress_limited_power_upper_uW": 51.148883861427834,
+        "service_power_lower_uW": 51.498039215686276,
+        "excluded_without_D": true,
+        "derivation": "q_event/q_bg=a_event/a_bg; max_R R/(1+(w Cp R)^2)=1/(2 w Cp)"
+      },
+      "initial": {
+        "slack": {
+          "energy": 0.159399502106817,
+          "cold_charge": 19.939513095954972,
+          "burst_energy": -0.3391965755268348,
+          "capture": 38.788325606235,
+          "stress": -0.23193312672615018,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": -0.045080185450359966,
+          "acquisition_window": 1.0
+        },
+        "harvested_uW": 67.43798942636796,
+        "required_uW": 51.498039215686276,
+        "background_voltage_V": 3.055743406558848,
+        "event_voltage_V": 127.32264193995198,
+        "stress_MPa": 351.1009411169528
+      }
+    },
+    {
+      "task": {
+        "id": "impact-D3",
+        "case": "impact",
+        "difficulty": "D3",
+        "background_Hz": 45.0,
+        "background_g": 0.12,
+        "event_Hz": 45.0,
+        "event_g": 5.0,
+        "event_ms": 500.0,
+        "event_period_s": 6.0,
+        "ready_s": 100.0,
+        "stress_MPa": 225.0,
+        "area_mm2": 95.0
+      },
+      "rates": {
+        "none": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "A": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "B": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "D": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "all": {
+          "hits": 0,
+          "n": 10000,
+          "fraction": 0.0
+        },
+        "P0": {
+          "hits": 0,
+          "n": 10000
+        }
+      },
+      "witnesses": {},
+      "bounds": {
+        "scope": "Harmonic geometry/load rectangle, equal forcing frequencies, D absent",
+        "no_D_stress_limited_power_upper_uW": 31.87949825158244,
+        "service_power_lower_uW": 51.498039215686276,
+        "excluded_without_D": true,
+        "derivation": "q_event/q_bg=a_event/a_bg; max_R R/(1+(w Cp R)^2)=1/(2 w Cp)"
+      },
+      "initial": {
+        "slack": {
+          "energy": 0.159399502106817,
+          "cold_charge": 19.939513095954972,
+          "burst_energy": -0.3391965755268348,
+          "capture": 38.788325606235,
+          "stress": -0.5604486271864568,
+          "area": 0.7657894736842106,
+          "rectifier_voltage": -0.045080185450359966,
+          "acquisition_window": 1.0
+        },
+        "harvested_uW": 67.43798942636796,
+        "required_uW": 51.498039215686276,
+        "background_voltage_V": 3.055743406558848,
+        "event_voltage_V": 127.32264193995198,
+        "stress_MPa": 351.1009411169528
+      },
+      "post_run_private_reference": {
+        "kind": "Post-run independent numerical feasibility check, not sent to any learner; task unchanged",
+        "design": {
+          "C_uF": 848.393181575803,
+          "R_kohm": 125.28926971972952,
+          "h": 1.0472189595807802,
+          "mass_g": 5.799999974256199,
+          "L2_mm": 18.0,
+          "m2_g": 0.14,
+          "gate_V": 2.501555675470528,
+          "poll_ms": 100.0,
+          "shunt_kohm": 10.13234000249639,
+          "shield_V": 5.0,
+          "trigger_V": 0.55,
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": true
+        },
+        "result": {
+          "slack": {
+            "energy": 0.007239237261640879,
+            "cold_charge": 0.914537666664627,
+            "burst_energy": 3.2709306507334306,
+            "capture": 7.192010529730052,
+            "stress": 0.007239237289287104,
+            "area": 0.3952442584497464,
+            "rectifier_voltage": 0.6092065311902197,
+            "acquisition_window": 1.0
+          },
+          "harvested_uW": 52.721962941850364,
+          "required_uW": 51.998039215686276,
+          "background_voltage_V": 4.508281690460201,
+          "event_voltage_V": 22.95037359307955,
+          "stress_MPa": 223.3711716099104
+        },
+        "pass_": true,
+        "oracle_evaluations": 13602,
+        "runtime_s": 1.9608889579540119
+      }
+    }
+  ],
+  "runtime_s": 0.04354595800396055,
+  "policy": "Mechanism-conditioned points; witnesses/labels/rates NEVER sent to learners. Zero hits is not proof. D3 is rare under this measure, not globally impossible."
+}
