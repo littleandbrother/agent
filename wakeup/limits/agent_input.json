@@ -1,0 +1,144 @@
+{
+  "model": "deepseek-flash",
+  "thinking": "enabled",
+  "reasoning_effort": "high",
+  "max_tokens": 16384,
+  "feedback": "slack",
+  "max_evaluations": 6,
+  "max_requests": 360,
+  "usd_cap": 2.0,
+  "source": "def beam(d):\n    \"\"\"Symmetric parallel bimorph, one cubic Rayleigh-Ritz bending mode.\"\"\"\n    L, b, hs, hp = (d[k] * 1e-3 for k in\n                    (\"length_mm\", \"width_mm\", \"substrate_mm\", \"piezo_layer_mm\"))\n    # Declared representative material constants, not a fitted commercial part.\n    Es, Ep, rhos, rhop, eps, e31 = 200e9, 60e9, 7800, 7500, 1700 * 8.8541878128e-12, 11.4\n    z = (hs + hp) / 2\n    EI = Es * b * hs**3 / 12 + 2 * Ep * b * (hp**3 / 12 + hp * z**2)\n    mb = b * L * (rhos * hs + 2 * rhop * hp)\n    mt = d[\"tip_mass_g\"] * 1e-3\n    m, forcing_mass, k = mt + 33 / 140 * mb, mt + 3 / 8 * mb, 3 * EI / L**3\n    cp, theta = 2 * eps * b * L / hp, 3 * b * e31 * z / L\n    return {\"m\": m, \"forcing_mass\": forcing_mass, \"k\": k,\n            \"c\": 2 * d[\"damping_ratio\"] * np.sqrt(k * m), \"cp\": cp, \"theta\": theta,\n            \"stress_per_m\": Ep * (hs / 2 + hp) * 3 / L**2,\n            \"short_circuit_Hz\": np.sqrt(k / m) / (2 * np.pi),\n            \"open_circuit_Hz\": np.sqrt((k + theta**2 / cp) / m) / (2 * np.pi),\n            \"beam_mass_g\": mb * 1000}\n\ndef mechanics(x):\n    d = dict(BASE[\"harvester\"], substrate_mm=.15*x[\"h\"], piezo_layer_mm=.12*x[\"h\"], tip_mass_g=x[\"mass_g\"])\n    return beam(d)\n\ndef response(b, hz, amplitude_g, resistance):\n    w = 2*np.pi*hz\n    z = b[\"k\"]-b[\"m\"]*w*w + 1j*w*b[\"c\"] + b[\"theta\"]**2*1j*w/(1/resistance+1j*w*b[\"cp\"])\n    q = b[\"forcing_mass\"]*amplitude_g*G/np.abs(z)\n    v = b[\"theta\"]*w*q/np.abs(1/resistance+1j*w*b[\"cp\"])\n    return q, v\n\ndef oracle(t, x):\n    \"\"\"Harmonic reduced-order screen, NOT sim.py's transient diode/program consumer.\n    Resistive extraction efficiency=.65; shock is a settled high-amplitude sinusoid.\n    D latches on an observed open-switch voltage crossing, with negligible switching delay.\n    \"\"\"\n    b, r = mechanics(x), x[\"R_kohm\"]*1000\n    qb, vb = response(b, t[\"background_Hz\"], t[\"background_g\"], r)\n    engaged = np.asarray(x[\"D\"]) & (vb > x[\"shield_V\"])\n    rl = 1/(1/r + engaged/(x[\"shunt_kohm\"]*1000))\n    qb, vb = response(b, t[\"background_Hz\"], t[\"background_g\"], rl)\n    power = .65*vb*vb/(2*r)  # current diverted through the shunt is not harvested\n    qh, vh = response(b, t[\"event_Hz\"], t[\"event_g\"], r)\n    rh = 1/(1/r + (np.asarray(x[\"D\"]) & (vh > x[\"shield_V\"]))/ (x[\"shunt_kohm\"]*1000))\n    qh, vh = response(b, t[\"event_Hz\"], t[\"event_g\"], rh)\n    idle = (1.4 + sum(np.asarray(x[k])*v[\"idle_uW\"] for k,v in MODULES.items()))*1e-6\n    packet = (.003*x[\"sample_ms\"]/1000 + 68e-6 + np.asarray(x[\"C\"])*5e-6)/.85\n    active = np.asarray(x[\"A\"]) | np.asarray(x[\"B\"])\n    if t[\"case\"] == \"wake\":\n        w = beam(dict(BASE[\"trigger_beam\"], length_mm=x[\"L2_mm\"], tip_mass_g=x[\"m2_g\"]))\n        qt, vt = response(w, t[\"event_Hz\"], t[\"event_g\"], 1e8)\n        envelope = np.maximum(vt*(1-np.exp(-.03*2*np.pi*t[\"event_Hz\"]*t[\"event_ms\"]/1000))-.2, 0)\n        envelope = np.where(x[\"B\"], np.maximum(envelope*np.asarray(x[\"A\"]), 2*t[\"event_g\"]), envelope)\n        capture = np.where(active, envelope/x[\"trigger_V\"]-1, t[\"event_ms\"]/(x[\"poll_ms\"]+x[\"sample_ms\"])-1)\n        demand = np.where(active, packet/t[\"event_period_s\"], .003*np.minimum(1, x[\"sample_ms\"]/x[\"poll_ms\"]))\n        stress = np.maximum((qb+qh)*b[\"stress_per_m\"], np.asarray(x[\"A\"])*qt*w[\"stress_per_m\"])/1e6\n    else:\n        capture, demand = vh/(x[\"gate_V\"]+.3)-1, packet/t[\"event_period_s\"]\n        stress = qh*b[\"stress_per_m\"]/1e6\n    net = power-idle\n    slack = dict(energy=(net-demand)/max(t[\"power_scale_W\"], 1e-9),\n                 cold_charge=2*net*t[\"ready_s\"]/(x[\"C_uF\"]*1e-6*x[\"gate_V\"]**2)-1,\n                 burst_energy=(.5*x[\"C_uF\"]*1e-6*(x[\"gate_V\"]**2-1.8**2)+net*(x[\"sample_ms\"]+9.5)/1000)/packet-1,\n                 capture=capture, adc_window=x[\"sample_ms\"]*t[\"event_Hz\"]/4000-1 if t[\"case\"]==\"wake\" else x[\"sample_ms\"]/10-1,\n                 stress=1-stress/t[\"stress_MPa\"],\n                 area=1-(20+.03*x[\"C_uF\"]+sum(np.asarray(x[k])*v[\"area_mm2\"] for k,v in MODULES.items()))/t[\"area_mm2\"],\n                 rectifier_voltage=vb/(x[\"gate_V\"]+.3)-1)\n    return slack\n",
+  "base_beams": {
+    "harvester": {
+      "length_mm": 30.0,
+      "width_mm": 10.0,
+      "substrate_mm": 0.15,
+      "piezo_layer_mm": 0.12,
+      "tip_mass_g": 4.65,
+      "damping_ratio": 0.015
+    },
+    "trigger_beam": {
+      "length_mm": 18.0,
+      "width_mm": 6.0,
+      "substrate_mm": 0.1,
+      "piezo_layer_mm": 0.08,
+      "tip_mass_g": 0.14,
+      "damping_ratio": 0.03
+    }
+  },
+  "G": 9.80665,
+  "domain": {
+    "C_uF": [
+      50,
+      1500,
+      "log"
+    ],
+    "R_kohm": [
+      2,
+      300,
+      "log"
+    ],
+    "h": [
+      0.85,
+      1.15,
+      "linear"
+    ],
+    "mass_g": [
+      3.5,
+      5.8,
+      "linear"
+    ],
+    "L2_mm": [
+      15,
+      22,
+      "linear"
+    ],
+    "m2_g": [
+      0.08,
+      0.28,
+      "linear"
+    ],
+    "gate_V": [
+      1.9,
+      3.2,
+      "linear"
+    ],
+    "poll_ms": [
+      15,
+      400,
+      "log"
+    ],
+    "shunt_kohm": [
+      0.5,
+      100,
+      "log"
+    ],
+    "shield_V": [
+      5,
+      50,
+      "log"
+    ],
+    "trigger_V": [
+      0.2,
+      1.2,
+      "linear"
+    ],
+    "sample_ms": [
+      25,
+      80,
+      "linear"
+    ]
+  },
+  "modules": {
+    "A": {
+      "description": "passive tuned trigger beam + comparator",
+      "idle_uW": 0.5,
+      "area_mm2": 15
+    },
+    "B": {
+      "description": "active filter wake-up, gain 2 V/g",
+      "idle_uW": 180.0,
+      "area_mm2": 18
+    },
+    "C": {
+      "description": "additional off-chip FRAM, 5 uJ per write",
+      "idle_uW": 2.0,
+      "area_mm2": 40
+    },
+    "D": {
+      "description": "voltage-triggered parallel resistive shunt",
+      "idle_uW": 0.5,
+      "area_mm2": 12
+    }
+  },
+  "rules": {
+    "Fixed-P0": "Only the two declared P0 variables can change.",
+    "All-Open": "All variables are available immediately. This does NOT enable/install all modules. Choose freely.",
+    "Free-Expand": "Start in P0, but you may immediately change any variable or module in the same call. No unlock overhead.",
+    "Cert-Guided": "Expand beyond P0 only if the supplied necessary-bound certificate proves P0 empty; otherwise stay local."
+  },
+  "initial": {
+    "C_uF": 75.0,
+    "R_kohm": 45.0,
+    "h": 1.0,
+    "mass_g": 4.65,
+    "L2_mm": 18.0,
+    "m2_g": 0.14,
+    "gate_V": 2.9,
+    "poll_ms": 100.0,
+    "shunt_kohm": 3.0,
+    "shield_V": 15.0,
+    "trigger_V": 0.55,
+    "sample_ms": 62.5,
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+  },
+  "rate_usd_per_million": {
+    "input": 0.3,
+    "output": 1.2,
+    "cache": 0.006
+  },
+  "output_limit_policy": "Initial 4096-token pilot retained. Only length-truncated episodes continue, with 16384 tokens and unchanged six-evaluation budget; complete episodes are not rerun."
+}

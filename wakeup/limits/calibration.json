@@ -1,0 +1,894 @@
+{
+  "seed": 20261110,
+  "n": 10000,
+  "coordinates": {
+    "C_uF": [
+      50,
+      1500,
+      "log"
+    ],
+    "R_kohm": [
+      2,
+      300,
+      "log"
+    ],
+    "h": [
+      0.85,
+      1.15,
+      "linear"
+    ],
+    "mass_g": [
+      3.5,
+      5.8,
+      "linear"
+    ],
+    "L2_mm": [
+      15,
+      22,
+      "linear"
+    ],
+    "m2_g": [
+      0.08,
+      0.28,
+      "linear"
+    ],
+    "gate_V": [
+      1.9,
+      3.2,
+      "linear"
+    ],
+    "poll_ms": [
+      15,
+      400,
+      "log"
+    ],
+    "shunt_kohm": [
+      0.5,
+      100,
+      "log"
+    ],
+    "shield_V": [
+      5,
+      50,
+      "log"
+    ],
+    "trigger_V": [
+      0.2,
+      1.2,
+      "linear"
+    ],
+    "sample_ms": [
+      25,
+      80,
+      "linear"
+    ]
+  },
+  "modules": {
+    "A": {
+      "description": "passive tuned trigger beam + comparator",
+      "idle_uW": 0.5,
+      "area_mm2": 15
+    },
+    "B": {
+      "description": "active filter wake-up, gain 2 V/g",
+      "idle_uW": 180.0,
+      "area_mm2": 18
+    },
+    "C": {
+      "description": "additional off-chip FRAM, 5 uJ per write",
+      "idle_uW": 2.0,
+      "area_mm2": 40
+    },
+    "D": {
+      "description": "voltage-triggered parallel resistive shunt",
+      "idle_uW": 0.5,
+      "area_mm2": 12
+    }
+  },
+  "default": {
+    "C_uF": 75.0,
+    "R_kohm": 45.0,
+    "h": 1.0,
+    "mass_g": 4.65,
+    "L2_mm": 18.0,
+    "m2_g": 0.14,
+    "gate_V": 2.9,
+    "poll_ms": 100.0,
+    "shunt_kohm": 3.0,
+    "shield_V": 15.0,
+    "trigger_V": 0.55,
+    "sample_ms": 62.5,
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+  },
+  "tasks": [
+    {
+      "task": {
+        "id": "wake-01",
+        "case": "wake",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.39,
+        "event_Hz": 198,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 12.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0148,
+      "selection_rho": 0.016,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 0.002144257142857143,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "wake-02",
+        "case": "wake",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.42600000000000005,
+        "event_Hz": 204,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 8.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0127,
+      "selection_rho": 0.0148,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 0.002144257142857143,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "wake-03",
+        "case": "wake",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.308,
+        "event_Hz": 210,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 60.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.015,
+      "selection_rho": 0.0156,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 0.002144257142857143,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "wake-04",
+        "case": "wake",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.332,
+        "event_Hz": 216,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 20.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0135,
+      "selection_rho": 0.0146,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 0.002144257142857143,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "wake-05",
+        "case": "wake",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.44499999999999995,
+        "event_Hz": 222,
+        "event_g": 0.5,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 8.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0129,
+      "selection_rho": 0.0155,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 0.002144257142857143,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "impact-06",
+        "case": "impact",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.182,
+        "event_Hz": 48,
+        "event_g": 3.0,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 100.0,
+        "stress_MPa": 80.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0089,
+      "selection_rho": 0.0099,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 6.283926003771231e-06,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-07",
+        "case": "impact",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.1988,
+        "event_Hz": 49,
+        "event_g": 3.4,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 100.0,
+        "stress_MPa": 70.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0092,
+      "selection_rho": 0.0105,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 6.283926003771231e-06,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-08",
+        "case": "impact",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.21559999999999999,
+        "event_Hz": 50,
+        "event_g": 3.8,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 100.0,
+        "stress_MPa": 65.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0109,
+      "selection_rho": 0.0119,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 6.283926003771231e-06,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-09",
+        "case": "impact",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.2324,
+        "event_Hz": 51,
+        "event_g": 4.2,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 100.0,
+        "stress_MPa": 60.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0117,
+      "selection_rho": 0.0118,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 6.283926003771231e-06,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-10",
+        "case": "impact",
+        "role": "deadlock",
+        "background_Hz": 45.0,
+        "background_g": 0.24919999999999998,
+        "event_Hz": 52,
+        "event_g": 4.6,
+        "event_ms": 150.0,
+        "event_period_s": 60.0,
+        "ready_s": 100.0,
+        "stress_MPa": 55.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0,
+      "rho_full": 0.0108,
+      "selection_rho": 0.0113,
+      "zero_hit_95_upper": 0.00029952835977664627,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": true,
+        "necessary_R_intervals_ohm": [],
+        "power_lower_bound_W": 6.283926003771231e-06,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 170.65596158315898,
+        "R_kohm": 299.9260360232344,
+        "h": 0.9675285987982948,
+        "mass_g": 4.873307399428613,
+        "L2_mm": 15.476058363657797,
+        "m2_g": 0.18715399803877733,
+        "gate_V": 3.056722504996359,
+        "poll_ms": 181.4620003381099,
+        "shunt_kohm": 2.5497918531280446,
+        "shield_V": 5.0014922692348245,
+        "trigger_V": 1.1481728957396449,
+        "sample_ms": 58.91232088934099,
+        "A": false,
+        "B": false,
+        "C": false,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "wake-11",
+        "case": "wake",
+        "role": "control",
+        "background_Hz": 45.0,
+        "background_g": 0.35,
+        "event_Hz": 198,
+        "event_g": 0.5,
+        "event_ms": 500.0,
+        "event_period_s": 60.0,
+        "ready_s": 12.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0503,
+      "rho_full": 0.0145,
+      "selection_rho": 0.0144,
+      "zero_hit_95_upper": null,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": false,
+        "necessary_R_intervals_ohm": [
+          [
+            45000.0,
+            45000.0
+          ]
+        ],
+        "power_lower_bound_W": 0.00042997142857142853,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "wake-12",
+        "case": "wake",
+        "role": "control",
+        "background_Hz": 45.0,
+        "background_g": 0.35,
+        "event_Hz": 204,
+        "event_g": 0.5,
+        "event_ms": 500.0,
+        "event_period_s": 60.0,
+        "ready_s": 12.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.0503,
+      "rho_full": 0.0137,
+      "selection_rho": 0.0147,
+      "zero_hit_95_upper": null,
+      "certificate": {
+        "scope": "P0: only C_uF, poll_ms vary; harmonic oracle only",
+        "proved_empty": false,
+        "necessary_R_intervals_ohm": [
+          [
+            45000.0,
+            45000.0
+          ]
+        ],
+        "power_lower_bound_W": 0.00042997142857142853,
+        "excluded_constraints": [
+          "energy/capture"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 104.20576404905897,
+        "R_kohm": 20.554108332010934,
+        "h": 0.9927955362268999,
+        "mass_g": 4.510544897040383,
+        "L2_mm": 19.152740127079234,
+        "m2_g": 0.1846226203145403,
+        "gate_V": 2.8463526340298397,
+        "poll_ms": 44.840130133857244,
+        "shunt_kohm": 6.92032215823113,
+        "shield_V": 47.87374950726446,
+        "trigger_V": 0.95609959187635,
+        "sample_ms": 38.06147507401238,
+        "A": false,
+        "B": true,
+        "C": true,
+        "D": true
+      }
+    },
+    {
+      "task": {
+        "id": "impact-13",
+        "case": "impact",
+        "role": "control",
+        "background_Hz": 45.0,
+        "background_g": 0.16,
+        "event_Hz": 44.8,
+        "event_g": 0.3,
+        "event_ms": 500.0,
+        "event_period_s": 60.0,
+        "ready_s": 35.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.2669,
+      "rho_full": 0.0121,
+      "selection_rho": 0.0136,
+      "zero_hit_95_upper": null,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": false,
+        "necessary_R_intervals_ohm": [
+          [
+            2000.0,
+            300000.0
+          ]
+        ],
+        "power_lower_bound_W": 1.532382373625175e-05,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-14",
+        "case": "impact",
+        "role": "control",
+        "background_Hz": 45.0,
+        "background_g": 0.16,
+        "event_Hz": 44.9,
+        "event_g": 0.32,
+        "event_ms": 500.0,
+        "event_period_s": 60.0,
+        "ready_s": 35.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.2669,
+      "rho_full": 0.012,
+      "selection_rho": 0.0137,
+      "zero_hit_95_upper": null,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": false,
+        "necessary_R_intervals_ohm": [
+          [
+            2000.0,
+            300000.0
+          ]
+        ],
+        "power_lower_bound_W": 1.532382373625175e-05,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    },
+    {
+      "task": {
+        "id": "impact-15",
+        "case": "impact",
+        "role": "control",
+        "background_Hz": 45.0,
+        "background_g": 0.16,
+        "event_Hz": 45.0,
+        "event_g": 0.33999999999999997,
+        "event_ms": 500.0,
+        "event_period_s": 60.0,
+        "ready_s": 35.0,
+        "stress_MPa": 40.0,
+        "area_mm2": 95.0,
+        "power_scale_W": 0.0001
+      },
+      "status": "IN_ZONE",
+      "rho_P0": 0.2669,
+      "rho_full": 0.0119,
+      "selection_rho": 0.0136,
+      "zero_hit_95_upper": null,
+      "certificate": {
+        "scope": "P0: only C_uF, R_kohm vary; harmonic oracle only",
+        "proved_empty": false,
+        "necessary_R_intervals_ohm": [
+          [
+            2000.0,
+            300000.0
+          ]
+        ],
+        "power_lower_bound_W": 1.532382373625175e-05,
+        "excluded_constraints": [
+          "energy/cold_start",
+          "stress"
+        ]
+      },
+      "all_modules_enabled_rho": 0.0,
+      "witness": {
+        "C_uF": 164.7226340467675,
+        "R_kohm": 200.7460666145596,
+        "h": 1.0227324020037405,
+        "mass_g": 5.575757128095679,
+        "L2_mm": 15.404299747378827,
+        "m2_g": 0.13019342714710025,
+        "gate_V": 2.6394331237337694,
+        "poll_ms": 258.29548600958816,
+        "shunt_kohm": 0.657282910043805,
+        "shield_V": 43.92193386262347,
+        "trigger_V": 0.43052660213262917,
+        "sample_ms": 52.82708311911375,
+        "A": true,
+        "B": false,
+        "C": true,
+        "D": false
+      }
+    }
+  ],
+  "model": "harmonic screen; representative .65 rectification efficiency, no impact transient qualification",
+  "calibration_policy": "Choose closest 1.5% volume BEFORE model runs; do not select by model performance",
+  "runtime_s": 7.904225333011709
+}
