@@ -217,6 +217,15 @@ def explore_sweep(t, base, allowed, vis, vary, low, high, n=None):
     return dict(n=len(points), official_design_unchanged=True, points=points)
 
 
+def ask(raw, key, rates=RATES, timeout=600):
+    """One DeepSeek chat call; returns the answer and its uncached peak-rate USD estimate."""
+    req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as stream: answer = json.load(stream)
+    u = answer.get("usage", {})
+    if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
+    return answer, (u["prompt_tokens"]*rates["input"]+u["completion_tokens"]*rates["output"])/1e6
+
+
 def run_agents(jobs, *, out=None, calibration=None, max_output=16384):
     out = Path(out) if out else OUT
     out.mkdir(exist_ok=True)
@@ -286,11 +295,7 @@ def run_agents(jobs, *, out=None, calibration=None, max_output=16384):
                 tally["requests"] += 1; rid = tally["requests"]; tally["reserved"] += reserve
             emit(dict(kind="request", job=jid, id=rid, reserved_usd=reserve, max_tokens=max_output))
             try:
-                req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
-                with urllib.request.urlopen(req, timeout=600) as stream: answer = json.load(stream)
-                u = answer.get("usage", {})
-                if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
-                cost = (u["prompt_tokens"]*RATES["input"]+u["completion_tokens"]*RATES["output"])/1e6
+                answer, cost = ask(raw, key); u = answer["usage"]
                 with lock:
                     tally["reserved"] -= reserve; tally["spent"] += cost
                 used["prompt_tokens"] += u["prompt_tokens"]; used["completion_tokens"] += u["completion_tokens"]
