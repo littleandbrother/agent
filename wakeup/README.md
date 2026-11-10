@@ -145,3 +145,5 @@ flowchart LR
 第一轮 [Agent 能力预实验](limits/README.md) 的十五题、六十条轨迹与结果保留，原实验源码见提交 `5f06f8a`。
 
 当前 [结构与信息边界实验](boundary/README.md) 重写同一个 [agent_limits.py](agent_limits.py)：固定现有采样窗口、按模块必要性定义六个工作点，比较白盒 / 灰盒 / 黑盒，并将中间档设计送回完整瞬态程序。`simulate(design, task)` 增加可选任务与模块，原默认设计仍使用本页的二极管整流与分类流程，本页原结果和波形保留。
+
+同一脚本的 [wake-D3 工具与反馈预实验](boundary_d3/README.md) 写在 `boundary_d3/`，不覆盖上一轮 54 格结果。
