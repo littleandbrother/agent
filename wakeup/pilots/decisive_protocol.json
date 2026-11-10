@@ -6,33 +6,88 @@
  "tests": "Wilson 95% intervals per cell; two-sided Fisher exact test for pre-registered contrasts; alpha 0.05; no other contrasts are called conclusions",
  "exp1": {
   "question": "Is the counter_hidden failure caused by hidden laws alone, by a wrong textbook prior, or by low identifiability of quantities only visible through total harvest?",
-  "cells": {"text_given": "existing A/text confirm, n=16", "counter_hidden": "existing A/counter_hidden confirm, n=16",
-            "counter_given": "NEW 16 fresh instances (A/counter/0.1 x8, 0.001 x8); the 6 phase-1 runs reported separately",
-            "text_hidden": "NEW 16 fresh instances, real physics, laws removed from spec",
-            "counter_hidden_obs": "NEW 16 fresh instances, counterfactual, laws removed, feedback adds load_match_0to1 and source_impedance_kohm (as directly as resonance_Hz)"},
-  "metrics": ["pass rate", "first-evaluation mass direction", "final load / optimal load (internal 40/h)", "first pass step"],
+  "cells": {
+   "text_given": "existing A/text confirm, n=16",
+   "counter_hidden": "existing A/counter_hidden confirm, n=16",
+   "counter_given": "NEW 16 fresh instances (A/counter/0.1 x8, 0.001 x8); the 6 phase-1 runs reported separately",
+   "text_hidden": "NEW 16 fresh instances, real physics, laws removed from spec",
+   "counter_hidden_obs": "NEW 16 fresh instances, counterfactual, laws removed, feedback adds load_match_0to1 and source_impedance_kohm (as directly as resonance_Hz)"
+  },
+  "metrics": [
+   "pass rate",
+   "first-evaluation mass direction",
+   "final load / optimal load (internal 40/h)",
+   "first pass step"
+  ],
   "hypotheses": {
    "H1a_prior": "text_hidden >> counter_hidden (Fisher p<0.05) and text_hidden >= 12/16: hiding laws hurts mainly when the textbook prior is wrong",
    "H1b_laws_only": "text_hidden <= 6/16 and not different from counter_hidden: hiding laws is enough",
    "H1c_identifiability": "counter_hidden_obs >> counter_hidden (Fisher p<0.05): exposing the electrical matching quantity rescues the counterfactual hidden case",
-   "H1d_given": "counter_given >= 13/16: given laws the counterfactual world is not hard"},
+   "H1d_given": "counter_given >= 13/16: given laws the counterfactual world is not hard"
+  },
   "interaction": "difference in differences of pass rates (text_given-text_hidden) - (counter_given-counter_hidden), reported with both Fisher contrasts; called an interaction only if H1a and H1d both hold"
  },
  "exp2": {
   "question": "Are INFEASIBLE verdicts calibrated on difficulty-matched pairs, and do a branch-optimize gate or a sound global bound fix false INFEASIBLE / premature branch abandonment (T4b/C4 defect)?",
   "tasks": "8 matched pairs: same env (fresh source_Hz, bump_g), stress task needing shunt S, default shunt_thr_V=2 below the background open voltage at resonance (T4b-like: enabling S at default wastes 80% harvest); feasible twin optimum margin +0.03 with stored witness, infeasible twin -0.03 (only sensor load differs). Infeasibility certified by a sound interval branch-and-bound bound on min(energy,stress) slack for all 16 module combinations.",
-  "arms": {"base": "verdict FEASIBLE/INFEASIBLE/UNSURE + confidence", "branch": "after enabling a module the agent may not disable it or declare INFEASIBLE before optimize_branch(module) (grid over the module's own parameter at the current design; not an evaluation)",
-           "bound": "global_bound() returns the sound per-combination upper bounds; INFEASIBLE accepted only if all are < 0, else UNSURE"},
+  "arms": {
+   "base": "verdict FEASIBLE/INFEASIBLE/UNSURE + confidence",
+   "branch": "after enabling a module the agent may not disable it or declare INFEASIBLE before optimize_branch(module) (grid over the module's own parameter at the current design; not an evaluation)",
+   "bound": "global_bound() returns the sound per-combination upper bounds; INFEASIBLE accepted only if all are < 0, else UNSURE"
+  },
   "n": "16 tasks x 3 arms = 48 runs, 6 evaluations each; priority order base, branch, bound pairs 0-3, then Exp 3, then bound pairs 4-7",
-  "metrics": ["pass rate on feasible", "INFEASIBLE precision and recall", "AUC of p(feasible) from verdict+confidence (UNSURE/none = 0.5)", "false INFEASIBLE count on feasible", "structure retention: S installed at end", "enabled-then-abandoned-after-one-default-point rate (S turned on with shunt_thr_V unchanged, off at the next evaluation)"],
-  "hypotheses": {"H2a_miscalibration": "base: >=2 false INFEASIBLE on the 8 feasible twins, and AUC < 0.8",
-                 "H2b_branch_gate": "branch pass rate on feasible > base (Fisher p<0.05) or false INFEASIBLE reduced to 0 with abandonment rate lower",
-                 "H2c_bound": "bound arm has 0 false INFEASIBLE (guaranteed by design) and its pass rate on feasible is reported vs base"},
+  "metrics": [
+   "pass rate on feasible",
+   "INFEASIBLE precision and recall",
+   "AUC of p(feasible) from verdict+confidence (UNSURE/none = 0.5)",
+   "false INFEASIBLE count on feasible",
+   "structure retention: S installed at end",
+   "enabled-then-abandoned-after-one-default-point rate (S turned on with shunt_thr_V unchanged, off at the next evaluation)"
+  ],
+  "hypotheses": {
+   "H2a_miscalibration": "base: >=2 false INFEASIBLE on the 8 feasible twins, and AUC < 0.8",
+   "H2b_branch_gate": "branch pass rate on feasible > base (Fisher p<0.05) or false INFEASIBLE reduced to 0 with abandonment rate lower",
+   "H2c_bound": "bound arm has 0 false INFEASIBLE (guaranteed by design) and its pass rate on feasible is reported vs base"
+  },
   "deviation_note": "requested random feasible volume 1e-3..1e-2 is checked and reported; if unreachable in this world it is documented, not forced"
  },
  "exp3": {
-  "cells": {"H/prims/stress": "existing 8 confirm instances; rerun the 3 infra ones", "B/0.0001/py vs B/0.0001/nopy": "8 NEW fresh instances each"},
-  "hypotheses": {"H3a": "H/prims/stress pass rate < H/prims/wake 8/8 (Fisher p<0.05)", "H3b": "B py >= 6/8 and nopy <= 2/8 and Fisher p<0.05"}
+  "cells": {
+   "H/prims/stress": "existing 8 confirm instances; rerun the 3 infra ones",
+   "B/0.0001/py vs B/0.0001/nopy": "8 NEW fresh instances each"
+  },
+  "hypotheses": {
+   "H3a": "H/prims/stress pass rate < H/prims/wake 8/8 (Fisher p<0.05)",
+   "H3b": "B py >= 6/8 and nopy <= 2/8 and Fisher p<0.05"
+  }
  },
- "conclusion_rule": "a claim is a conclusion only if its pre-registered criterion holds on fresh instances; otherwise it is reported as a hint"
+ "conclusion_rule": "a claim is a conclusion only if its pre-registered criterion holds on fresh instances; otherwise it is reported as a hint",
+ "addendum_round2": {
+  "written_before_any_model_call": "2026-11-11 00:29 Asia/Shanghai",
+  "budget": "new USD 5 (separate from round 1's 5.92), conservative uncached peak-rate ledger, split into two independent caps that sum to 5: Exp 3 CAP=1.6 in decisive2_exp3.jsonl, Exp 2 CAP=3.4 in decisive2_exp2.jsonl (calibration gate included); streaming, read timeout 300 s, WORKERS=6, no run killed mid-flight; Exp 3 and Exp 2 run in parallel",
+  "infra_rule": "unchanged: infra failures excluded and rerun once if budget allows; BUDGET_STOP excluded",
+  "exp3": {
+   "cells": {
+    "H/prims/stress": "the 8 confirm instances; run the 3 that were infra (#1,#5,#7) so n=8 valid",
+    "B/0.0001/py vs nopy": "8 fresh instances each (decisive.json)"
+   },
+   "hypotheses": {
+    "H3a": "H/prims/stress pass rate < H/prims/wake (8/8), Fisher two-sided p<0.05, n=8",
+    "H3b": "B py >= 80% (>=7/8 when n=8) and nopy <= 20% (<=1/8), plus Fisher p<0.05 (stricter than round-1 6/8, 2/8 per user request)"
+   }
+  },
+  "exp2_redo_G3": {
+   "design": "identical 8 matched pairs, envs, witnesses, sound bounds and arms as G2; ONLY change: module S semantics hidden: variable renamed S_setting_V ('setting of module S, V'), module described as 'piezo protection circuit with one setting'; no threshold meaning, no direction, no 80% harvest-loss statement. Default S_setting_V=2 is below the background open voltage (~3.3-3.5 V): enabling S at default fixes stress but drops energy slack from +0.03 to about -0.8 and cold_start to about -60 (clearly harmful); passing requires S on and setting above open_V. Random feasible volume reported as in round 1 (0..5e-7).",
+   "calibration_gate": "base arm on G3 pairs p0,p1 feasible first; proceed if at least one shows S enabled then abandoned, or fails; if both pass trivially, harden once (also hide open_V from outputs) and document",
+   "n": "3 arms x 16 tasks; if budget short keep base and branch at 16, bound reduced to pairs 0-3 (8 tasks), documented",
+   "metrics": "as G2: feasible pass rate, INFEASIBLE precision/recall, AUC, false INFEASIBLE, enabled-then-abandoned-after-default-point rate, structure retention (S at end); Wilson 95%, Fisher",
+   "hypotheses": {
+    "H2a'": "G3 base: >=2 false INFEASIBLE on 8 feasible OR AUC<0.8 (miscalibration appears once the branch is opaque)",
+    "H2t_trap": "G3 base abandon-after-default rate > G2 base (0/25 S-trajectories in round 1), reported descriptively with Fisher on per-run abandon counts",
+    "H2b'": "G3 branch feasible pass rate > G3 base (Fisher p<0.05), or false INFEASIBLE reduced to 0 with lower abandonment",
+    "H2c'": "G3 bound arm: 0 false INFEASIBLE; pass rate vs base reported",
+    "H2s_semantics": "G3 base feasible pass < G2 base 8/8 (Fisher p<0.05): hiding parameter semantics alone creates the failure"
+   }
+  }
+ }
 }
