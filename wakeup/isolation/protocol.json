@@ -1,0 +1,195 @@
+{
+  "model": "deepseek-flash",
+  "thinking": "high",
+  "max_output": 32768,
+  "usd_cap": 3,
+  "max_requests": 300,
+  "wall_s": 7200,
+  "full_designs": 3,
+  "math_designs": 6,
+  "observations": 3,
+  "successful_requests_per_job": 12,
+  "optimize_internal_calls": 50,
+  "conditions": {
+    "C0": "Original wording and delta-only feedback; 3 freely timed single-view observations.",
+    "C1": "C0 plus component-level voltage definitions and current full design/diff echo. A combined interface intervention.",
+    "C2": "C1; replace freely timed observations with power/trigger/program after edits1/2/3. Same three single views; timing and scheduling both change.",
+    "C3": "C2 plus at most one component group per edit; a diagnostic restriction, not a proposed method.",
+    "C4": "T4b only: C3 plus bounded within-component numerical search; best found, not global extreme/proof."
+  },
+  "jobs": [
+    {
+      "task": "T1a",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T1a",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T1a",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T1a",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T1b",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T1b",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T1b",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T1b",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T2",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T2",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T2",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T2",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T3",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T3",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T3",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T3",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T4a_resonance",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T4a_resonance",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T4a_resonance",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T4a_resonance",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C0",
+      "replicate": 0
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C1",
+      "replicate": 0
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C2",
+      "replicate": 0
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C3",
+      "replicate": 0
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C4",
+      "replicate": 0
+    },
+    {
+      "task": "T1a",
+      "condition": "C0",
+      "replicate": 1
+    },
+    {
+      "task": "T1a",
+      "condition": "C1",
+      "replicate": 1
+    },
+    {
+      "task": "T2",
+      "condition": "C1",
+      "replicate": 1
+    },
+    {
+      "task": "T2",
+      "condition": "C2",
+      "replicate": 1
+    },
+    {
+      "task": "T3",
+      "condition": "C2",
+      "replicate": 1
+    },
+    {
+      "task": "T3",
+      "condition": "C3",
+      "replicate": 1
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C3",
+      "replicate": 1
+    },
+    {
+      "task": "T4b_numeric",
+      "condition": "C4",
+      "replicate": 1
+    }
+  ],
+  "repeats": "Four fixed adjacent pairs, once each, regardless of direction or sign. No post-result task selection.",
+  "interpretation": "Finite elimination study. No assumed baseline failure, no unique-cause or intrinsic-LLM conclusion from residual failures.",
+  "rates": {
+    "miss": 0.3,
+    "hit": 0.006,
+    "output": 1.2
+  },
+  "http500": "Automatic retry; original UNKNOWN and full reservation retained. Incomplete response reads treated as transport recovery; other missing usage stops."
+}
