@@ -217,10 +217,24 @@ def explore_sweep(t, base, allowed, vis, vary, low, high, n=None):
     return dict(n=len(points), official_design_unchanged=True, points=points)
 
 
+def collect(stream):
+    """Rebuild a non-stream answer from SSE chunks; the read timeout then bounds silence, not total generation time."""
+    m, calls, fin, u = dict(role="assistant", content="", reasoning_content=""), {}, None, {}
+    for line in stream:
+        if not line.startswith(b"data: {"): continue
+        d = json.loads(line[6:]); u = d.get("usage") or u
+        for ch in d.get("choices", []):
+            dl = ch["delta"]; fin = ch.get("finish_reason") or fin; m["content"] += dl.get("content") or ""; m["reasoning_content"] += dl.get("reasoning_content") or ""
+            for tc in dl.get("tool_calls") or []:
+                c = calls.setdefault(tc["index"], dict(id="", type="function", function=dict(name="", arguments="")))
+                c["id"] += tc.get("id") or ""; c["function"]["name"] += tc["function"].get("name") or ""; c["function"]["arguments"] += tc["function"].get("arguments") or ""
+    return dict(choices=[dict(finish_reason=fin, message=m | (dict(tool_calls=[calls[i] for i in sorted(calls)]) if calls else {}))], usage=u)
+
+
 def ask(raw, key, rates=RATES, timeout=600):
     """One DeepSeek chat call; returns the answer and its uncached peak-rate USD estimate."""
     req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as stream: answer = json.load(stream)
+    with urllib.request.urlopen(req, timeout=timeout) as stream: answer = collect(stream) if b'"stream": true' in raw else json.load(stream)
     u = answer.get("usage", {})
     if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
     return answer, (u["prompt_tokens"]*rates["input"]+u["completion_tokens"]*rates["output"])/1e6

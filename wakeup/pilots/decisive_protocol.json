@@ -1,0 +1,38 @@
+{
+ "written_before_any_model_call": "2026-11-10 23:30 Asia/Shanghai",
+ "model": "deepseek-flash, thinking high, max_tokens 65536, request read timeout 300 s",
+ "budget": "USD 6 on the uncached peak-rate ledger of decisive.jsonl; every request without usage (timeout/HTTP error) charged 0.0786 live; stop at cap",
+ "infra_rule": "timeouts / HTTP errors / no usage are excluded from denominators and rerun once; still-failing runs are listed separately",
+ "tests": "Wilson 95% intervals per cell; two-sided Fisher exact test for pre-registered contrasts; alpha 0.05; no other contrasts are called conclusions",
+ "exp1": {
+  "question": "Is the counter_hidden failure caused by hidden laws alone, by a wrong textbook prior, or by low identifiability of quantities only visible through total harvest?",
+  "cells": {"text_given": "existing A/text confirm, n=16", "counter_hidden": "existing A/counter_hidden confirm, n=16",
+            "counter_given": "NEW 16 fresh instances (A/counter/0.1 x8, 0.001 x8); the 6 phase-1 runs reported separately",
+            "text_hidden": "NEW 16 fresh instances, real physics, laws removed from spec",
+            "counter_hidden_obs": "NEW 16 fresh instances, counterfactual, laws removed, feedback adds load_match_0to1 and source_impedance_kohm (as directly as resonance_Hz)"},
+  "metrics": ["pass rate", "first-evaluation mass direction", "final load / optimal load (internal 40/h)", "first pass step"],
+  "hypotheses": {
+   "H1a_prior": "text_hidden >> counter_hidden (Fisher p<0.05) and text_hidden >= 12/16: hiding laws hurts mainly when the textbook prior is wrong",
+   "H1b_laws_only": "text_hidden <= 6/16 and not different from counter_hidden: hiding laws is enough",
+   "H1c_identifiability": "counter_hidden_obs >> counter_hidden (Fisher p<0.05): exposing the electrical matching quantity rescues the counterfactual hidden case",
+   "H1d_given": "counter_given >= 13/16: given laws the counterfactual world is not hard"},
+  "interaction": "difference in differences of pass rates (text_given-text_hidden) - (counter_given-counter_hidden), reported with both Fisher contrasts; called an interaction only if H1a and H1d both hold"
+ },
+ "exp2": {
+  "question": "Are INFEASIBLE verdicts calibrated on difficulty-matched pairs, and do a branch-optimize gate or a sound global bound fix false INFEASIBLE / premature branch abandonment (T4b/C4 defect)?",
+  "tasks": "8 matched pairs: same env (fresh source_Hz, bump_g), stress task needing shunt S, default shunt_thr_V=2 below the background open voltage at resonance (T4b-like: enabling S at default wastes 80% harvest); feasible twin optimum margin +0.03 with stored witness, infeasible twin -0.03 (only sensor load differs). Infeasibility certified by a sound interval branch-and-bound bound on min(energy,stress) slack for all 16 module combinations.",
+  "arms": {"base": "verdict FEASIBLE/INFEASIBLE/UNSURE + confidence", "branch": "after enabling a module the agent may not disable it or declare INFEASIBLE before optimize_branch(module) (grid over the module's own parameter at the current design; not an evaluation)",
+           "bound": "global_bound() returns the sound per-combination upper bounds; INFEASIBLE accepted only if all are < 0, else UNSURE"},
+  "n": "16 tasks x 3 arms = 48 runs, 6 evaluations each; priority order base, branch, bound pairs 0-3, then Exp 3, then bound pairs 4-7",
+  "metrics": ["pass rate on feasible", "INFEASIBLE precision and recall", "AUC of p(feasible) from verdict+confidence (UNSURE/none = 0.5)", "false INFEASIBLE count on feasible", "structure retention: S installed at end", "enabled-then-abandoned-after-one-default-point rate (S turned on with shunt_thr_V unchanged, off at the next evaluation)"],
+  "hypotheses": {"H2a_miscalibration": "base: >=2 false INFEASIBLE on the 8 feasible twins, and AUC < 0.8",
+                 "H2b_branch_gate": "branch pass rate on feasible > base (Fisher p<0.05) or false INFEASIBLE reduced to 0 with abandonment rate lower",
+                 "H2c_bound": "bound arm has 0 false INFEASIBLE (guaranteed by design) and its pass rate on feasible is reported vs base"},
+  "deviation_note": "requested random feasible volume 1e-3..1e-2 is checked and reported; if unreachable in this world it is documented, not forced"
+ },
+ "exp3": {
+  "cells": {"H/prims/stress": "existing 8 confirm instances; rerun the 3 infra ones", "B/0.0001/py vs B/0.0001/nopy": "8 NEW fresh instances each"},
+  "hypotheses": {"H3a": "H/prims/stress pass rate < H/prims/wake 8/8 (Fisher p<0.05)", "H3b": "B py >= 6/8 and nopy <= 2/8 and Fisher p<0.05"}
+ },
+ "conclusion_rule": "a claim is a conclusion only if its pre-registered criterion holds on fresh instances; otherwise it is reported as a hint"
+}

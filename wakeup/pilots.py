@@ -14,11 +14,15 @@ from agent_limits import RATES, ask
 from world import HIDDEN, MODS, NAMES, PRIMS, VARS, X0, best, inner, internal, margin, physics
 
 OUT = Path(__file__).resolve().parent/"pilots"
-TASKS = {t["id"]: t for f in ("tasks.json", "confirm.json") if (OUT/f).exists() for t in json.loads((OUT/f).read_text())}
+TASKS = {t["id"]: t for f in ("tasks.json", "confirm.json", "decisive.json") if (OUT/f).exists() for t in json.loads((OUT/f).read_text())}
+ARMS, OWN = ("base", "branch", "bound"), dict(W="th", S="Vs", U="V", M="C")  # Exp 2 arms; each module's own parameter
+TASKS |= {f"G2/{a}/{k[3:]}": t | dict(id=f"G2/{a}/{k[3:]}", arm=a) for k, t in list(TASKS.items()) if k.startswith("G2/p") for a in ARMS}
+RUNS = OUT/os.environ.get("RUNS", "runs.jsonl")
 PRICE = {"deepseek-flash": RATES, "deepseek-v4-pro": dict(input=1.32, output=3.96)}  # official peak, cache miss
 CACHE_SAVING = {"deepseek-flash": .30-.006, "deepseek-v4-pro": 1.32-.044}
 UNKNOWN_USD = .0786  # unsettled request: charge its full flash output reservation to the cap
-CAP, MAX_OUT, SEEDS, WORKERS, PROBES, PY_CALLS = 20., 65536, 3, 12, 200, 20
+CAP = float(os.environ.get("CAP", 20.))
+_, MAX_OUT, SEEDS, WORKERS, PROBES, PY_CALLS = 0, 65536, 3, 12, 200, 20
 ORDER = "EGHFAXDLBCKIJ"
 LURES = ["gain_trim", "q_boost", "efficiency_tune", "damping_trim", "impedance_bias", "harvest_gain", "beam_preload", "phase_trim"]
 PURPOSE = ("Node bolted to a truck chassis inside a sealed enclosure with 2 mm internal clearance around the beam. "
@@ -26,7 +30,7 @@ PURPOSE = ("Node bolted to a truck chassis inside a sealed enclosure with 2 mm i
 MEANING = dict(h="beam thickness multiplier (steel + PZT)", m="harvester tip mass, g", R="rectifier input load, kOhm", C="storage capacitance, uF",
                V="MCU start threshold, V (brownout 1.8 V)", T="poll interval, ms (used when no wake trigger)", th="wake comparator threshold, V", Vs="shunt threshold, V")
 HINTS = dict(displacement=r"displac|deflect|clearance|2 ?mm|stroke", false_wake=r"false|hum|spurious|nuisance", aging=r"aging|ageing|degrad|derat")  # crude keyword recall
-OUTPUTS = ("harvest_uW", "demand_uW", "resonance_Hz", "stress_MPa", "open_V")
+OUTPUTS = ("harvest_uW", "demand_uW", "resonance_Hz", "stress_MPa", "open_V", "load_match_0to1", "source_impedance_kohm")
 TEXT = dict(
     laws=["resonance_Hz = 120*h^1.5/sqrt(m) (h=thickness_mult, m=tip_mass_g); harvest peaks when resonance equals source_Hz (Q about 25)",
           "harvest grows with background_g^2 and with m; optimal load_kohm is about 40/h",
@@ -61,7 +65,7 @@ def names(t):
 
 
 def view0(t):
-    n = names(t); x = inner(X0, t["skin"])  # reflection is an involution: the view of X0 is inner(X0)
+    n = names(t); x = inner(X0 | t.get("x0", {}), t["skin"])  # reflection is an involution: the view of X0 is inner(X0)
     flags = dict.fromkeys(PRIMS, False) if t["menu"] == "prims" else {n[k]: False for k in MODS}
     return {n[k]: x[k] for k in VARS} | flags | {LURES[i % 8]+(f"_{i//8}" if i >= 8 else ""): .5 for i in range(t["distract"])}
 
@@ -90,7 +94,7 @@ def feedback(v, t, best_margin=None, rng=None, screen=False):
     if t["feedback"] == "rank": return dict(pass_=m >= 0, improved_on_best_so_far=best_margin is None or m > best_margin)
     ab = t["skin"] == "abstract"
     sl = {(f"c{list(s).index(k)+1}" if ab else k): val for k, val in s.items() if not t["hidden"] or k in shown(t) or val < 0}
-    out = {(f"y{i+1}" if ab else k): float(o[k]) for i, k in enumerate(OUTPUTS)}
+    out = {(f"y{i+1}" if ab else k): float(o[k]) for i, k in enumerate(OUTPUTS[:7 if t["skin"].endswith("obs") else 5])}
     if t["feedback"] == "noisy": sl, out = ({k: val+rng.normal(0, .05) for k, val in sl.items()}, {k: val*(1+rng.normal(0, .05)) for k, val in out.items()})
     return dict(pass_=m >= 0, slack=sl, outputs=out)
 
@@ -111,7 +115,7 @@ def brief(t):
     if t["spec"] != "E2": s["limits"] = dict(zip(["l1", "l2"] if ab else TEXT["limits"], [e["sigma"], e["area"], 10, .02]))
     if t["hidden"]: s["purpose"] = PURPOSE
     s["constraints"] = {(f"c{list(TEXT['constraints']).index(k)+1}" if ab else k): d["constraints"][k] for k in d["constraints"] if k in shown(t)}
-    if t["skin"] != "counter_hidden": s["laws"] = list(TEXT["counter"] if t["skin"] == "counter" else d["laws"])
+    if "hidden" not in t["skin"]: s["laws"] = list(TEXT["counter"] if t["skin"] == "counter" else d["laws"])
     if t["told"] and e["couple"]: s["laws"].append(f"Electrical load also shifts resonance: resonance *= 1 + {e['couple']}*(lm - 0.5), lm = 2r/(1+r^2), r = load_kohm*h/40.")
     if t["menu"] == "prims": s["primitives"] = {p: f"{desc} (idle {i} uW, {a} mm2)" for p, (i, a, desc) in PRIMS.items()}
     else: s["modules"] = {n[k]: f"{d['modules'][k]} (idle {MODS[k][0]} uW, {MODS[k][1]} mm2)" for k in MODS}
@@ -125,6 +129,8 @@ def tools(t):
           fn("finish", "Stop. Verdict on whether a passing design exists, confidence 0-1, and why.",
              dict(verdict=dict(type="string", enum=["FEASIBLE", "INFEASIBLE", "UNSURE"]), confidence=dict(type="number"), reason=dict(type="string")))]
     if t["python"]: tl.append(fn("python", f"Run Python 3 with numpy as np and probe(changes) -> feedback for CURRENT design + changes (not submitted). At most {PROBES} probes per task, {PY_CALLS} calls, 30 s each; print what you need.", dict(code=dict(type="string"))))
+    if t.get("arm") == "branch": tl.append(fn("optimize_branch", "Locally optimize one module's own parameter (W: wake_thr_V, S: shunt_thr_V, U: start_V, M: storage_uF) with that module ON and everything else at the CURRENT design; returns the best margin reachable and the value (no evaluation used, design unchanged).", dict(module=dict(type="string", enum=list(MODS)))))
+    if t.get("arm") == "bound": tl.append(fn("global_bound", "Sound analytic upper bound, per module combination over the whole declared domain, on the best min(energy, stress) slack among designs that meet the capture requirement; a negative bound refutes that combination (no evaluation used).", {}))
     if t["hidden"]: tl.append(fn("requirements", "Before the first evaluate, list every requirement / failure mode the design must satisfy.", dict(items=dict(type="array", items=dict(type="string")))))
     return tl
 
@@ -134,6 +140,8 @@ def intro(t):
     if t["family"] == "G" or t["target"] < 0: s += " The task may or may not be feasible; finish with a verdict and calibrated confidence (a passing evaluation counts as FEASIBLE)."
     if t["family"] == "F" or t["low"]: s += " probe() inside python runs a fast screening model; evaluate runs the official full model."
     if t["told"] and (t["family"] == "F" or t["low"]): s += " The screening model may be systematically biased relative to the official model."
+    if t.get("arm") == "branch": s += " Branch gate: after you enable a module you may not switch it off again or declare INFEASIBLE until you have called optimize_branch for it."
+    if t.get("arm") == "bound": s += " INFEASIBLE is accepted only if global_bound refutes every module combination (all bounds < 0); otherwise answer UNSURE when you cannot find a passing design."
     if t["hidden"]: s += " Call requirements(items) before your first evaluate."
     return s
 
@@ -158,8 +166,14 @@ def python(code, v, t, left):
     return (head or out)[-4000:], int(tail.split()[0]) if head else 0
 
 
+def branch(module, v, t):
+    k = names(t)[OWN[module]]; a, b, lg = VARS[OWN[module]]; g = np.geomspace(a, b, 400) if lg else np.linspace(a, b, 400)
+    mm = margin(to_internal({q: np.full(400, val) for q, val in v.items()} | {names(t)[module]: np.full(400, True), k: g}, t), t); i = int(np.argmax(mm))
+    return dict(module=module, parameter=k, best_value=float(g[i]), best_margin=float(mm[i]), margin_now_with_module_on=float(margin(to_internal(v | {names(t)[module]: True}, t), t)))
+
+
 def run(jobs):
-    path = OUT/"runs.jsonl"; prev = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
+    path = RUNS; prev = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
     done = {r["job"] for r in prev if r["kind"] == "terminal" and not infra(r)}
     lock = threading.Lock(); halt = threading.Event(); key = os.environ["DEEPSEEK_API_KEY"]
     tally = dict(spent=sum(r["usd"] for r in prev if r["kind"] == "response")+UNKNOWN_USD*sum(r["kind"] == "UNKNOWN" for r in prev), reserved=0.)
@@ -169,18 +183,18 @@ def run(jobs):
         t, seed = job; jid = f"{t['id']}/s{seed}"
         if jid in done or halt.is_set(): return
         model, think = t["model"]; rates = PRICE[model]; rng = np.random.default_rng(seed)
-        v = view0(t); best_m = finish = reqs = error = first = None; evals = probes = pycalls = 0
+        v = view0(t); best_m = finish = reqs = error = first = None; evals = probes = pycalls = 0; pending, extra = set(), defaultdict(int)
         used = dict(prompt=0, completion=0, reasoning=0, cache_hit=0, usd=0., requests=0, max_completion=0)
         user = dict(design=v, feedback=feedback(v, t, rng=rng)) | (dict(certificate=certificate(t)) if t["cert"] else {})
         msgs = [dict(role="system", content=intro(t)+"\n"+json.dumps(brief(t))), dict(role="user", content=json.dumps(user, default=float))]
         for _ in range(t["budget"]+PY_CALLS+6):
-            body = dict(model=model, messages=msgs, tools=tools(t), tool_choice="auto", max_tokens=MAX_OUT, stream=False,
+            body = dict(model=model, messages=msgs, tools=tools(t), tool_choice="auto", max_tokens=MAX_OUT, stream=True, stream_options=dict(include_usage=True),
                         thinking=dict(type="disabled" if think == "off" else "enabled")) | ({} if think == "off" else dict(reasoning_effort=think))
             raw = json.dumps(body).encode(); reserve = (len(raw)*rates["input"]+MAX_OUT*rates["output"])/1e6
             with lock:
                 if tally["spent"]+tally["reserved"]+reserve > CAP: halt.set(); error = "BUDGET_STOP"; break
                 tally["reserved"] += reserve
-            try: answer, cost = ask(raw, key, rates, timeout=600)
+            try: answer, cost = ask(raw, key, rates, timeout=300)
             except Exception as e:
                 error = f"{type(e).__name__}: {e}"[:300]; emit(dict(kind="UNKNOWN", job=jid, error=error))
                 with lock: tally["spent"] += UNKNOWN_USD  # charge the cap live, not only on reload
@@ -199,13 +213,20 @@ def run(jobs):
                 name = c["function"]["name"]
                 try:
                     a = json.loads(c["function"]["arguments"])
-                    if name == "finish": finish = a; reply = dict(stopped=True)
+                    if name == "finish" and a["verdict"] == "INFEASIBLE" and (t.get("arm") == "branch" and pending or t.get("arm") == "bound" and max(t["bounds"].values()) >= 0):
+                        extra["finish_rejected"] += 1; reply = dict(error=f"INFEASIBLE not accepted: call optimize_branch for {sorted(pending)} first" if t.get("arm") == "branch" else "INFEASIBLE not accepted: the global bound does not refute every module combination; continue or answer UNSURE")
+                    elif name == "finish": finish = a; reply = dict(stopped=True)
+                    elif name == "optimize_branch" and t.get("arm") == "branch" and a["module"] in MODS: reply = branch(a["module"], v, t); pending.discard(a["module"]); extra["branch_calls"] += 1
+                    elif name == "global_bound" and t.get("arm") == "bound": reply = dict(upper_bound_min_energy_stress_slack=t["bounds"]); extra["bound_calls"] += 1
                     elif name == "requirements" and t["hidden"]: reqs = a["items"]; reply = dict(recorded=len(reqs))
                     elif name == "python" and t["python"] and pycalls < PY_CALLS:
                         out, n = python(a["code"], v, t, PROBES-probes); probes += n; pycalls += 1; reply = dict(output=out)
                     elif name == "evaluate" and t["hidden"] and reqs is None: reply = dict(error="call requirements first")
                     elif name == "evaluate" and evals < t["budget"] and first is None:
                         if set(a["changes"])-set(v): raise ValueError("unknown variable")
+                        off = {k for k in pending if a["changes"].get(names(t)[k]) is False}
+                        if t.get("arm") == "branch" and off: extra["discard_rejected"] += 1; raise ValueError(f"branch gate: call optimize_branch for {sorted(off)} before switching it off")
+                        pending |= {k for k in MODS if a["changes"].get(names(t)[k]) is True and not v.get(names(t)[k])}
                         v = v | a["changes"]; evals += 1; mm = float(margin(to_internal(v, t), t)); reply = feedback(v, t, best_m, rng)
                         emit(dict(kind="evaluation", job=jid, step=evals, design=v, margin=mm, reason=a.get("reason", "")[:300]))
                         best_m = mm if best_m is None else max(best_m, mm); first = evals if mm >= 0 else None
@@ -218,7 +239,7 @@ def run(jobs):
         emit(dict(kind="terminal", job=jid, cell=t["id"], family=t["family"], seed=seed, pass_=mm >= 0, first_pass=first, evaluations=evals, final_margin=mm,
                   verdict=(finish or {}).get("verdict", "FEASIBLE" if first else None), confidence=(finish or {}).get("confidence"),
                   finish_reason=(finish or {}).get("reason", "")[:1500], requirements=reqs, python_calls=pycalls, probes=probes,
-                  modules=[k for k in MODS if to_internal(v, t)[k]], error=error, usage=used))
+                  modules=[k for k in MODS if to_internal(v, t)[k]], error=error, usage=used, arm=t.get("arm"), **extra))
         print(jid, "PASS" if mm >= 0 else error or "FAIL", evals, flush=True)
     with concurrent.futures.ThreadPoolExecutor(WORKERS) as pool: list(pool.map(one, jobs))
     print(json.dumps(tally))
@@ -226,7 +247,7 @@ def run(jobs):
 
 def infra(r):
     """API timeouts / HTTP errors are infrastructure failures, never scientific ones; such jobs are rerun."""
-    return str(r.get("error")).startswith(("TimeoutError", "HTTPError", "URLError", "RemoteDisconnected", "ConnectionResetError"))
+    return str(r.get("error")).startswith(("RuntimeError: USAGE_UNKNOWN", "TimeoutError", "HTTPError", "URLError", "RemoteDisconnected", "ConnectionResetError"))
 
 
 def wilson(k, n, z=1.96):
@@ -268,9 +289,59 @@ def report():
     print(json.dumps(usage))
 
 
+def decisive():
+    """Decisive-experiment tables: settled runs.jsonl + decisive.jsonl, last non-infra attempt per job."""
+    from scipy.stats import fisher_exact
+    term, evs = {}, defaultdict(list)
+    for r in (json.loads(s) for f in ("runs.jsonl", "decisive.jsonl") for s in (OUT/f).read_text().splitlines()):
+        if r["kind"] == "terminal" and (not infra(r) or r["job"] not in term): term[r["job"]] = r
+        if r["kind"] == "evaluation": evs[r["job"]] = (evs[r["job"]] if r["step"] > 1 else [])+[r]
+    def grp(c):
+        base = c.split("#")[0]; arm = TASKS[c].get("arm")
+        if arm: return f"G2/{arm}/{c.rsplit('/', 1)[1]}"
+        if base.startswith("A/"): return base.rsplit("/", 1)[0]+(" [fresh]" if "#" in c else " [phase1]")
+        return base+(" [fresh]" if "#" in c else " [phase1]")
+    def one(r):
+        t = TASKS[r["cell"]]; n = names(t); ds = [view0(t)]+[e["design"] for e in evs[r["job"]]]; x = to_internal(ds[-1], t)
+        on = [d.get(n["S"]) for d in ds]; vs = [d.get(n["Vs"]) for d in ds]
+        flips = [i for i in range(1, len(ds)-1) if on[i] and not on[i-1] and not on[i+1]]
+        p = {"FEASIBLE": r["confidence"] or 1., "INFEASIBLE": 1-(r["confidence"] or 1.)}.get(r["verdict"], .5) if not r["pass_"] else 1.
+        return dict(pass_=r["pass_"], run=("P%d" % r["first_pass"]) if r["pass_"] else (r["error"] or "N%d" % r["evaluations"]), verdict=r["verdict"], conf=r["confidence"], p_feasible=p,
+                    feasible=t["target"] > 0, modules="".join(r["modules"]), mass_up=ds[1][n["m"]] > ds[0][n["m"]] if len(ds) > 1 else None,
+                    load_ratio=round(float(x["R"]*x["h"]/40), 3), abandon_default=any(vs[i] == vs[0] for i in flips), abandon_any=bool(flips),
+                    usd=r["usage"]["usd"], **{k: r.get(k, 0) for k in ("branch_calls", "bound_calls", "finish_rejected", "discard_rejected")})
+    cells = defaultdict(list)
+    for r in term.values():
+        if r["cell"] in TASKS and r["cell"].startswith(("A/", "B/0.0001", "H/prims", "G2/")) and not infra(r) and r["error"] != "BUDGET_STOP": cells[grp(r["cell"])].append(one(r))
+    out = {}
+    for c, rs in sorted(cells.items()):
+        k = sum(r["pass_"] for r in rs); out[c] = dict(passed=k, n=len(rs), wilson95=wilson(k, len(rs)), runs=rs)
+        print(c, f"{k}/{len(rs)}", wilson(k, len(rs)), [r["run"] for r in rs], [r["verdict"] for r in rs][:16], round(sum(r["usd"] for r in rs), 3))
+    def fisher(a, b):
+        if a in out and b in out: x, y = out[a], out[b]; return [a, b, round(float(fisher_exact([[x["passed"], x["n"]-x["passed"]], [y["passed"], y["n"]-y["passed"]]])[1]), 5)]
+    tests = [fisher(*p) for p in (("A/text_hidden [fresh]", "A/counter_hidden [fresh]"), ("A/text [fresh]", "A/text_hidden [fresh]"), ("A/counter_hidden_obs [fresh]", "A/counter_hidden [fresh]"),
+             ("A/counter [fresh]", "A/counter_hidden [fresh]"), ("G2/branch/feasible", "G2/base/feasible"), ("G2/bound/feasible", "G2/base/feasible"),
+             ("H/prims/stress [fresh]", "H/prims/wake [fresh]"), ("B/0.0001/py [fresh]", "B/0.0001/nopy [fresh]"))]
+    for a in ARMS:  # calibration on matched pairs
+        rs = out.get(f"G2/{a}/feasible", dict(runs=[]))["runs"]+out.get(f"G2/{a}/infeasible", dict(runs=[]))["runs"]
+        pos, neg = [r["p_feasible"] for r in rs if r["feasible"]], [r["p_feasible"] for r in rs if not r["feasible"]]
+        inf = [r for r in rs if r["verdict"] == "INFEASIBLE"]; tp = sum(not r["feasible"] for r in inf)
+        out[f"calibration/{a}"] = dict(n=len(rs), AUC=round(float(np.mean([(p > q)+.5*(p == q) for p in pos for q in neg])), 3) if pos and neg else None,
+            infeasible_precision=[tp, len(inf)], infeasible_recall=[tp, len(neg)], false_infeasible=len(inf)-tp, unsure=sum(r["verdict"] == "UNSURE" for r in rs),
+            S_retained_feasible=[sum("S" in r["modules"] for r in rs if r["feasible"]), len(pos)], abandon_default=sum(r["abandon_default"] for r in rs), abandon_any=sum(r["abandon_any"] for r in rs))
+        print(a, out[f"calibration/{a}"])
+    print(tests); (OUT/"decisive_summary.json").write_text(json.dumps(dict(cells=out, fisher=tests), indent=1, default=float))
+
+
 if __name__ == "__main__":
     ok = [t for t in TASKS.values() if t["audit"]["witness_ok"] and t["audit"]["shortcut_closed"]]
     if "--confirm" in sys.argv: run(sorted([(t, 0) for t in ok if "#" in t["id"]], key=lambda j: (ORDER.index(j[0]["family"]), j[0]["id"].split("#")[1], j[0]["id"])))
     fams = sys.argv[-1] if sys.argv[-1].isupper() else ORDER  # e.g. `--run EGHFAXDLBCKI` to skip J
     if "--run" in sys.argv: run(sorted([(t, s) for t in ok if t["family"] in fams and "#" not in t["id"] for s in range(SEEDS)], key=lambda j: (ORDER.index(j[0]["family"]), j[1], j[0]["id"])))
+    if "--decisive" in sys.argv:  # RUNS=decisive.jsonl CAP=6; jobs already settled in runs.jsonl are skipped
+        old = {r["job"] for r in map(json.loads, (OUT/"runs.jsonl").read_text().splitlines()) if r["kind"] == "terminal" and not infra(r)}
+        pick = [t for k, t in TASKS.items() if "arm" in t or "#" in k and k.startswith(("A/text_hidden", "A/counter_hidden_obs", "A/counter/", "B/", "H/prims/stress")) and t in ok]
+        rank = lambda t: 3.5 if "arm" not in t else 1+ARMS.index(t["arm"])+2*(t["arm"] == "bound" and int(t["id"].split("/p")[1][0]) >= 4)
+        run(sorted([(t, 0) for t in pick if f"{t['id']}/s0" not in old], key=lambda j: (0 if j[0]["family"] == "A" else rank(j[0]), j[0]["id"])))
     if "--report" in sys.argv: report()
+    if "--decisive-report" in sys.argv: decisive()

@@ -58,7 +58,7 @@ def physics(x, e, low=0.):
              stress=1-stress/e["sigma"], area=1-area/e["area"],
              displacement=1-.25*e["a_ev"]*H*damp*(60/fn)**2/e["X_max"],
              false_wake=np.where(on["W"], 1-2.4*e["a_bg"]/g("th"), 1.), aging=(.85*P-demand)/demand)
-    return s, dict(harvest_uW=P, demand_uW=demand, resonance_Hz=fn, stress_MPa=stress, open_V=Vb)
+    return s, dict(harvest_uW=P, demand_uW=demand, resonance_Hz=fn, stress_MPa=stress, open_V=Vb, load_match_0to1=lm, source_impedance_kohm=40/h)
 
 
 def margin(x, t, low=0.):
@@ -89,9 +89,9 @@ def best(t, mods, objective=None):
 
 
 def make(cid, family, need=("wake",), w=.01, skin="text", feedback="cont", hidden=False, menu="menu", spec="E0",
-         python=False, budget=6, distract=0, low=0., told=False, cert=False, model=("deepseek-flash", "high"), **env):
+         python=False, budget=6, distract=0, low=0., told=False, cert=False, model=("deepseek-flash", "high"), x0={}, **env):
     t = dict(id=cid, family=family, need=list(need), target=w, skin=skin, feedback=feedback, hidden=hidden, menu=menu, spec=spec,
-             python=python, budget=budget, distract=distract, low=low, told=told, cert=cert, model=list(model),
+             python=python, budget=budget, distract=distract, low=low, told=told, cert=cert, model=list(model), x0=x0,
              env=ENV | {k: v for n in need for k, v in HARD[n].items()} | env)
     mods = {NEED[n] for n in need}
     a, b = 0., 2000.
@@ -110,7 +110,7 @@ def spec(cid, family, **kw):
 
 def cells():
     c = []
-    for skin, w in itertools.product(("text", "abstract", "counter", "counter_hidden"), (.1, 1e-3)): c.append(spec(f"A/{skin}/{w:g}", "A", w=w, skin=skin))
+    for skin, w in itertools.product(("text", "abstract", "counter", "counter_hidden", "text_hidden", "counter_hidden_obs"), (.1, 1e-3)): c.append(spec(f"A/{skin}/{w:g}", "A", w=w, skin=skin))
     for w, py in itertools.product((.1, 1e-2, 1e-3, 1e-4, 1e-5), (False, True)): c.append(spec(f"B/{w:g}/{'py' if py else 'nopy'}", "B", w=w, python=py))
     needs = list(NEED)
     for k in range(1, 5): c.append(spec(f"C/k{k}", "C", need=needs[:k]))
@@ -138,6 +138,42 @@ def fresh(cid, n=8):
     return [(f"{cid}#{i}", family, kw | dict(f=float(rng.uniform(50, 70)), a_wk=float(rng.uniform(.7, .9)))) for i in range(n)]
 
 
+def bound(t, mods, rounds=24):
+    """Sound upper bound on max min(energy, stress) slack for one module set: relax lm<=1, S at its best threshold (Vs=Vb, stress uses a_bg)
+    or lossy (x0.2 harvest, stress>=0), then interval branch-and-bound over log(h), log(m) with the unimodal resonance gain."""
+    e = t["env"]; Hf = lambda u: 1/np.sqrt((1-u*u)**2+(u/25)**2); us = np.sqrt(1-1/1250)
+    D = 2+e["load"]+sum(0 if e["free"] else MODS[k][0] for k in mods)+(0 if "W" in mods else 18000/(e["E_ms"]-60))+e["E_pk"]/e["period"]
+    eff = .7 if "U" in mods else .85; out = -np.inf
+    for fac, a_s in ([(1, e["a_bg"]), (.2, 0)] if "S" in mods else [(1, e["a_ev"])]):
+        def ub(h0, h1, m0, m1, point=False):
+            ul, uh = e["f"]*np.sqrt(m0)/(120*h1**1.5), e["f"]*np.sqrt(m1)/(120*h0**1.5)
+            Hu, Hl = (Hf(ul),)*2 if point else (Hf(np.clip(us, ul, uh)), np.minimum(Hf(ul), Hf(uh)))
+            return np.minimum((fac*eff*3*e["a_bg"]**2*m1*Hu**2-D)/D, 1-1.5*a_s*m0*Hl/h1**2/e["sigma"])
+        b = np.array([[np.log(.5), np.log(2), 0, np.log(10)]])
+        for _ in range(rounds):
+            if not len(b): break
+            h0, h1, m0, m1 = np.exp(b.T); u = ub(h0, h1, m0, m1); c = np.exp((b[:, :2].mean(1), b[:, 2:].mean(1)))
+            lb = ub(c[0], c[0], c[1], c[1], True).max(); out = max(out, u[u < max(lb, 0)].max(initial=-np.inf))
+            b = b[u >= max(lb, 0)]; hm, mm = b[:, :2].mean(1), b[:, 2:].mean(1)
+            b = np.concatenate([np.c_[b[:, 0], hm, b[:, 2], mm], np.c_[hm, b[:, 1], b[:, 2], mm], np.c_[b[:, 0], hm, mm, b[:, 3]], np.c_[hm, b[:, 1], mm, b[:, 3]]])
+        if len(b): h0, h1, m0, m1 = np.exp(b.T); out = max(out, ub(h0, h1, m0, m1).max())
+    return float(out)
+
+
+def rho(t, n=2_000_000, mods=None):
+    """Random feasible volume: log-uniform / uniform continuous variables, module bits uniform (or fixed to `mods`)."""
+    r = np.random.default_rng(0); x = {k: np.exp(r.uniform(np.log(a), np.log(b), n)) if lg else r.uniform(a, b, n) for k, (a, b, lg) in VARS.items()}
+    return float(np.mean(margin(x | {k: (r.random(n) < .5) if mods is None else np.full(n, k in mods) for k in MODS}, t) >= 0))
+
+
+def pair(i):
+    """Exp 2 matched pair i: identical env (fresh f, a_ev), T4b-like default shunt threshold below the background open voltage; only the load differs."""
+    r = np.random.default_rng(1000+i); env = dict(f=float(r.uniform(50, 70)), a_ev=float(r.uniform(2.6, 3.4)))
+    ts = [make(f"G2/p{i}/{k}", "G", need=("stress",), w=w, x0=dict(Vs=2.), **env) for k, w in (("feasible", .03), ("infeasible", -.03))]
+    for t in ts: t |= dict(bounds={"".join(c) or "none": bound(t, set(c)) for n in range(5) for c in itertools.combinations(MODS, n)}, rho=rho(t), rho_S=rho(t, mods={"S"}), audit=audit(t))
+    return ts
+
+
 def build(cid, family, kw):
     t = make(cid, family, **kw)
     return t | dict(audit=audit(t))
@@ -154,8 +190,11 @@ def audit(t):
 
 if __name__ == "__main__":
     out = Path(__file__).resolve().parent/"pilots"; out.mkdir(exist_ok=True)
-    confirm = sys.argv[1:2] == ["--confirm"]; path = out/("confirm.json" if confirm else "tasks.json")
+    confirm = sys.argv[1:2] == ["--confirm"]; decisive = sys.argv[1:2] == ["--decisive"]  # --decisive <cell>...: Exp 2 pairs + fresh instances
+    path = out/("confirm.json" if confirm else "decisive.json" if decisive else "tasks.json")
     old = json.loads(path.read_text()) if confirm and path.exists() else []
-    with Pool() as pool: rows = pool.starmap(build, [c for cid in sys.argv[2:] for c in fresh(cid)] if confirm else cells())
+    with Pool() as pool:
+        rows = pool.starmap(build, [c for cid in sys.argv[2:] for c in fresh(cid)] if confirm or decisive else cells())
+        if decisive: rows += [t for ts in pool.map(pair, range(8)) for t in ts]
     path.write_text(json.dumps(old+rows, indent=1, default=float))
     for t in rows: print(t["id"], round(t["optimum"], 6), round(t["env"]["load"], 3), t["audit"])
