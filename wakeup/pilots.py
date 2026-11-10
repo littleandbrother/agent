@@ -176,7 +176,7 @@ def branch(module, v, t):
 
 def run(jobs):
     path = RUNS; prev = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
-    done = {r["job"] for r in prev if r["kind"] == "terminal" and not infra(r)}
+    done = {r["job"] for r in prev if r["kind"] == "terminal" and not infra(r) and r["error"] != "BUDGET_STOP"}
     lock = threading.Lock(); halt = threading.Event(); key = os.environ["DEEPSEEK_API_KEY"]
     tally = dict(spent=sum(r["usd"] for r in prev if r["kind"] == "response")+UNKNOWN_USD*sum(r["kind"] == "UNKNOWN" for r in prev), reserved=0.)
     def emit(row):
@@ -317,7 +317,7 @@ def decisive():
         mech = dict(S_ever=bool(son), S_values=len({vs[i] for i in son}), S_over_ocv=round(max(ocv, default=0), 3), S_crossed=any(q > 1 for q in ocv), hint_at_eval=h,
                     S_crossed_after_hint=None if h is None else any(q > 1 for i, q in zip(son, ocv) if i > h), cites_uW=bool(re.search(r"\d\s*(uW|μW|µW)", r["finish_reason"] or "")))
         p = {"FEASIBLE": r["confidence"] or 1., "INFEASIBLE": 1-(r["confidence"] or 1.)}.get(r["verdict"], .5) if not r["pass_"] else 1.
-        return dict(pass_=r["pass_"], run=("P%d" % r["first_pass"]) if r["pass_"] else (r["error"] or "N%d" % r["evaluations"]), verdict=r["verdict"], conf=r["confidence"], p_feasible=p,
+        return dict(job=r["job"], pass_=r["pass_"], run=("P%d" % r["first_pass"]) if r["pass_"] else (r["error"] or "N%d" % r["evaluations"]), verdict=r["verdict"], conf=r["confidence"], p_feasible=p,
                     feasible=t["target"] > 0, modules="".join(r["modules"]), mass_up=ds[1][n["m"]] > ds[0][n["m"]] if len(ds) > 1 else None,
                     load_ratio=round(float(x["R"]*x["h"]/40), 3), abandon_default=any(vs[i] == vs[0] for i in flips), abandon_any=bool(flips),
                     usd=r["usage"]["usd"], **mech, **{k: r.get(k, 0) for k in ("branch_calls", "bound_calls", "finish_rejected", "discard_rejected")})
