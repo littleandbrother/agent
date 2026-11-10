@@ -89,5 +89,30 @@
     "H2s_semantics": "G3 base feasible pass < G2 base 8/8 (Fisher p<0.05): hiding parameter semantics alone creates the failure"
    }
   }
+ },
+ "addendum_closureA": {
+  "written_before_any_model_call": "2026-11-11 02:10 Asia/Shanghai",
+  "question": "In G3 (opaque S_setting_V) is false INFEASIBLE caused by (a) never testing the S branch, or (b) opening S but not tuning S_setting_V above the background open voltage (OCV)? And is the full-certificate gain the structure hint (which combination survives) or the numeric bound?",
+  "design": "8 FRESH matched pairs p8..p15 (world.py --closureA, rng 1000+i, identical construction to G2/G3; witnesses stored, audit witness_ok and shortcut_closed all True) x 2 seeds (s0, s1) = 16 feasible + 16 infeasible runs per arm; G3 opaque skin; deepseek-flash thinking high, max_tokens 65536, streaming, read timeout 300 s. Old G3 p0..p7 (seed 0) reported separately, pooled base also reported.",
+  "arms": {
+   "base": "G3 baseline, unchanged",
+   "hint": "Unexplored-Branch Prompt: when the model calls finish(INFEASIBLE), the system lists every module never evaluated ENABLED with >=2 distinct values of its own parameter (W wake_thr_V, S S_setting_V, U start_V, M storage_uF) and not yet listed, and rejects once with the generic sentence 'INFEASIBLE not accepted yet: you have not yet tested module X enabled while varying P; ...'. No numbers. Identical rule on infeasible tasks. Once every untested module has been listed, INFEASIBLE is accepted. Nothing added to the intro.",
+   "anon": "Anonymous Global Bound: same tool name, timing and acceptance rule as full_cert, but global_bound returns only the single number max over all module combinations of the sound per-combination bound on min(energy, stress) slack (capture met), with requirement 0; no module named. INFEASIBLE accepted only if it is negative, else UNSURE or keep searching.",
+   "bound": "Full Certificate: existing per-combination bound dict (G3 bound arm), unchanged."
+  },
+  "metric_note": "The bound is on min(energy, stress) slack (dimensionless, requirement >= 0), not on raw uW, because the binding pair is energy vs stress; this is the same quantity the full certificate uses.",
+  "bound_check": "offline (before any call): anon value = +0.049 on all 16 feasible tasks (old and fresh), -0.011 on all 16 infeasible tasks; never below the optimizer's best global margin beyond 2.5e-7; per-combination bounds are below optimizer margins by at most 2.6e-4 (numeric tolerance, existing in G3 too) with zero sign flips; 400k random samples per combination never exceed the bound by more than that. Witness OCV 3.22-3.53 V, default S_setting_V = 2 V; enabling S at default at the witness gives margin -9.8 to -41 (trap present). No-S bound (max over combos without S) is -0.002 to -0.012 on fresh feasible tasks.",
+  "hypotheses": {
+   "HA1_base_replicates": "fresh base, feasible: pass <= 8/16 AND false INFEASIBLE >= 6/16 AND AUC < 0.5 (from G3 3/8, 5/8, 0.41). Also fresh base vs G2 base (8/8, semantics shown) Fisher two-sided p < 0.05.",
+   "HA2a_cause_forgetting": "hint >> base (feasible pass, Fisher p < 0.05, diff >= 5/16) AND hint ~ bound (p >= 0.05, |diff| <= 3/16) -> cause (a): the model forgets/ignores an untested branch.",
+   "HA2b_cause_tuning": "hint ~ base (p >= 0.05) AND among hint-arm feasible failures where the hint fired, >= half opened S after the hint but never set S_setting_V above the design's OCV -> cause (b).",
+   "HA2_mixed": "otherwise: report the decomposition of base and hint feasible failures into (a) S never enabled, (b) S enabled but S_setting_V never > OCV, (c) crossed OCV but still failed.",
+   "HA3_structure_vs_number": "anon ~ bound (p >= 0.05, |diff| <= 3/16) AND anon >> base (p < 0.05) -> the numeric global bound alone suffices (structure hint not needed). anon ~ base (p >= 0.05) AND bound >> anon (p < 0.05) -> full_cert gain is the structure hint. Otherwise partial.",
+   "calibration": "AUC and false INFEASIBLE per arm; anon/bound false INFEASIBLE is 0 by rule, so for them the informative outcomes are pass rate and UNSURE."
+  },
+  "mechanism_metrics_per_run": "S ever enabled in an evaluation; number of distinct S_setting_V among S-on evaluations; max S_setting_V / OCV of that evaluated design; S crossed OCV; S kept in final design; hint fired (eval index) and whether S crossed OCV after the hint; finish reason cites a uW figure (crude proxy for the no-S power cap); all non-evaluate tool calls with args and replies logged as kind=tool.",
+  "tests": "Fisher exact two-sided on feasible pass: hint/anon/bound vs base, hint vs bound, anon vs bound (fresh). Wilson 95%. Seeds are not independent instances: n=16 runs over 8 pairs; per-seed halves reported; a result is a CONCLUSION only if its pre-registered criterion holds on the fresh pairs AND its direction holds in both seed halves (and, for base, also on the old G3 pairs); else 迹象.",
+  "budget": "USD 6 conservative uncached peak-rate ledger, single file decisive3_closureA.jsonl shared by all 4 arms (so the total cannot exceed 6), WORKERS=12, jobs ordered seed-major then pair then arm so a budget stop hits arms equally; no run killed mid-flight; infra failures excluded and rerun once; BUDGET_STOP excluded.",
+  "command": "RUNS=decisive3_closureA.jsonl CAP=6 WORKERS=12 NSEED=2 ONLY=\"G3/base/p8 ... G3/anon/p15 (arms base hint anon bound, pairs 8..15)\" python3 pilots.py --decisive"
  }
 }

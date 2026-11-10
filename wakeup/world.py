@@ -191,10 +191,11 @@ def audit(t):
 if __name__ == "__main__":
     out = Path(__file__).resolve().parent/"pilots"; out.mkdir(exist_ok=True)
     confirm = sys.argv[1:2] == ["--confirm"]; decisive = sys.argv[1:2] == ["--decisive"]  # --decisive <cell>...: Exp 2 pairs + fresh instances
-    path = out/("confirm.json" if confirm else "decisive.json" if decisive else "tasks.json")
+    closure = sys.argv[1:2] == ["--closureA"]  # closure A: 8 fresh matched pairs p8..p15
+    path = out/("confirm.json" if confirm else "decisive.json" if decisive else "closureA.json" if closure else "tasks.json")
     old = json.loads(path.read_text()) if confirm and path.exists() else []
     with Pool() as pool:
-        rows = pool.starmap(build, [c for cid in sys.argv[2:] for c in fresh(cid)] if confirm or decisive else cells())
-        if decisive: rows += [t for ts in pool.map(pair, range(8)) for t in ts]
+        rows = [] if closure else pool.starmap(build, [c for cid in sys.argv[2:] for c in fresh(cid)] if confirm or decisive else cells())
+        if decisive or closure: rows += [t for ts in pool.map(pair, range(8, 16) if closure else range(8)) for t in ts]
     path.write_text(json.dumps(old+rows, indent=1, default=float))
     for t in rows: print(t["id"], round(t["optimum"], 6), round(t["env"]["load"], 3), t["audit"])
