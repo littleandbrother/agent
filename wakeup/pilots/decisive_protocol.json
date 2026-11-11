@@ -114,5 +114,80 @@
   "tests": "Fisher exact two-sided on feasible pass: hint/anon/bound vs base, hint vs bound, anon vs bound (fresh). Wilson 95%. Seeds are not independent instances: n=16 runs over 8 pairs; per-seed halves reported; a result is a CONCLUSION only if its pre-registered criterion holds on the fresh pairs AND its direction holds in both seed halves (and, for base, also on the old G3 pairs); else 迹象.",
   "budget": "USD 6 conservative uncached peak-rate ledger, single file decisive3_closureA.jsonl shared by all 4 arms (so the total cannot exceed 6), WORKERS=12, jobs ordered seed-major then pair then arm so a budget stop hits arms equally; no run killed mid-flight; infra failures excluded and rerun once; BUDGET_STOP excluded.",
   "command": "RUNS=decisive3_closureA.jsonl CAP=6 WORKERS=12 NSEED=2 ONLY=\"G3/base/p8 ... G3/anon/p15 (arms base hint anon bound, pairs 8..15)\" python3 pilots.py --decisive"
+ },
+ "addendum_theorems": {
+  "written_before_any_model_call": "2026-11-11T19:38:32+08:00",
+  "source": "User derivation (t32u): f=min_j g_j; chi=C_min/C_max; same-symptom bound P_step1<=1/2 when F_A∩F_B=∅ under identical h; measure first iff c_m<c_e/2; stop certificate max_m U_m<0.",
+  "code": "wakeup/theorems.py (--build gate, --run agents, --report). Ground truth = full transient sim.py for every label and every agent evaluation.",
+  "world": {
+   "fixed": "design.json, trigger beam A on, direct bridge rectifier, storage regulated <=2.95 V (clamp), start 2.9 V, brownout 1.8 V, bg 45 Hz",
+   "structures": "m0 = 1 harvester beam, m1 = 2 identical parallel beams each with its own bridge (P_c x2, same Voc)",
+   "X1_X3_domain": "storage_uF [20,1000], harvester_beams {1,2}, tip_mass_g [3.8,5.8]",
+   "simplified_model": "E_need = report-task energy/0.85 (harvest during task ignored); P_c = 0.5*100uF*2.9^2/t_ready from a cold-start sim at 100 uF; T = t1+0.25-0.072 s; C_min=2E/(Von^2-Voff^2), C_max=2 P_c T/Von^2",
+   "deviation": "Polling m0 (no trigger) is infeasible at every C (one 62.5 ms sample costs ~0.2 mJ every poll), so it has no chi window; structural fix that raises P_c = second beam. The regulated converter in sim.py was tested and is not better (0.65 efficiency)."
+  },
+  "gate": {
+   "rule": "No model call on a task unless its simulation gate passes; failing families are reported, not fudged.",
+   "X1": "chi_s in {0.6,0.95,1.05,1.8} via first-fault time t1, tx_mW~U(8,20); C grid sims give true windows for 1 and 2 beams; x0 = 0.75*C_min must FAIL; task must be feasible in truth. chi=1 boundary check: chi_s 0.7..1.4 at tx=12 (no LLM). Surrogate pair: Voc-peak tip mass vs power-optimal mass at the centre of the true 2-beam window.",
+   "X2_I": "theta_A brownout (hidden high tx, high bg) vs theta_B late start (hidden low bg), same C0~U(160,190); feedback = pass/fail only; gate: F_A∩F_B=∅ on a 40-point C grid over [20,1000], F_A above C0, F_B below C0, C0 fails both, ideal policy (centre of simplified window per hypothesis) passes.",
+   "X2_II": "hidden tip-mass error: theta_A soft (f_mid = 0.94 f_opt at L0, needs shorter beam) vs theta_B stiff with matched open-circuit amplitude at L0; feedback = pass, delivered, Voc (0.1 V), final storage V (0.1 V); gate: displayed base fields identical, F_A∩F_B=∅ on L grid, A windows shorter, B longer, ideal policy L0*(f_theta/f_opt)^(2/3) passes; diagnostic = phase lag.",
+   "X3": "S1 chi(m0)=0.85 (window exists); S2 chi(m1)=0.85, m0 certified empty; S3 chi(m1)=1.2 (best-branch ratio ~0.83), both branches certified empty. Certification = 56 full sims per branch (7 tip masses around the optimum x 8 C incl. 6 across [0.6,1.6] C_min) with 0 hits required, plus the simulated P_c(tip mass) curve over the whole mass domain. History = 4 failing 1-beam points at C = {0.7,0.85,1.25,1.6} C_min."
+  },
+  "arms": {
+   "X1": {
+    "base": "feedback only, 6 evaluations",
+    "chi": "plus simplified C windows / chi for 1 and 2 beams"
+   },
+   "X2": {
+    "blind": "no diagnostic, 4 units",
+    "tool": "diagnose() costs 0.2 unit (c_m=0.2 c_e < 0.5 c_e)",
+    "given": "diagnosis of x0 in the first message"
+   },
+   "X3": {
+    "L0": "history only",
+    "L1": "plus current-branch (1 beam) bound C_max/C_min",
+    "L2": "plus bounds for both branches"
+   }
+  },
+  "n": {
+   "X1": "4 levels x 4 instances x 2 arms = 32",
+   "X2": "2 families x 4 pairs x 2 theta x 3 arms = 48 (pair halves are not independent)",
+   "X3": "3 states x 4 instances x 3 levels = 36",
+   "total": 116,
+   "seed": "one sample per task x arm"
+  },
+  "hypotheses": {
+   "H1a": "simplified chi=1 predicts transient m0 feasibility within the grid resolution (gate, no LLM).",
+   "H1b": "pass rate lower at chi>1 than chi<1 for base; chi arm raises pass and 2-beam switching at chi>1 (pooled 1.05+1.8, Fisher).",
+   "H1c": "surrogate: some agents move tip mass toward the Voc peak (higher Voc, lower P_c); reported descriptively.",
+   "H2a": "blind P_step1 <= 0.5 (theorem; Wilson CI reported) in both families; given ~1.",
+   "H2b": "tool arm: rational agents call diagnose before the first evaluation; tool P_step1 > blind (Fisher).",
+   "H2c": "E[N_eval] blind >= 1.5, given/tool ~1 (+0.2 units); Mann-Whitney on N_eval with failures scored budget+1=5.",
+   "H3a": "false INFEASIBLE on S1/S2 falls from L0 to L2; H3b correct INFEASIBLE on S3 rises L0->L2; H3c at L1, INFEASIBLE without testing 2 beams = stop scope exceeding evidence scope."
+  },
+  "tests": "Wilson 95%, two-sided Fisher on pooled cells as listed in theorems.report(); Mann-Whitney for N_eval.",
+  "exclusion": "Timeouts, HTTP/URL errors, missing usage and BUDGET_STOP are excluded from denominators and rerun once; TEXT_WITHOUT_ACTION counts as a valid non-verdict (X3) / failure (X1, X2).",
+  "model": "deepseek-flash, thinking high, max_tokens 65536, streaming, read timeout 300 s",
+  "budget": "CAP USD 6 conservative uncached ledger across all three; jobs interleaved by instance index so a stop truncates cells evenly; experiments run in parallel (WORKERS=16).",
+  "conclusion_rule": "结论/已复现 only if stable across the 4 instances; otherwise 迹象.",
+  "amendment_1": {
+   "written_before_any_model_call": "2026-11-11T21:38:10+08:00",
+   "changes": [
+    "X3 certification grid reduced to 3 tip masses (m*, m*±0.05 g) x 8 capacitances = 24 full sims per branch (slow pathological LSODA runs made 56/branch infeasible in wall time); off-optimum masses are covered by the simulated P_c(tip mass) curve over the whole mass domain.",
+    "Gate built as three stage files pilots/theorems_X1/X2/X3.json (separate rng seeds 20261111/2/3).",
+    "X1 surrogate pair is a gate-level demonstration only (no separate agent arm): inversion holds in 6/8 chi>1 instances (Voc-peak mass 13.4 V FAIL vs power-optimal 6.2 V PASS); in 2/8 chi=1.05 instances the 2-beam window is wide enough that both pass. Agent-level surrogate metric = runs that raise tip mass toward the Voc peak (descriptive)."
+   ],
+   "X1_gate": "16/16 pass: chi_s 0.6/0.95 one-beam feasible in truth, chi_s 1.05/1.8 one-beam empty and two-beam feasible; chi=1 boundary: simplified 1.0 -> true window single point, 1.1 -> empty."
+  },
+  "amendment_2": {
+   "written_before_any_model_call": "2026-11-11T21:44:00+08:00",
+   "changes": [
+    "X2-II (resonance side, phase diagnostic) DROPPED at gate: in 2/2 built pairs the stiff-side half B had passing lengths at/below L0 (B_longer False) and the visible base feedback of A and B differed (identical_base False), so the same-symptom premise F_A∩F_B=∅ under identical h failed; no model call on II.",
+    "X2-I extended from 4 to 8 pairs (same generator, rng seed unchanged, pairs p4-p7 appended); only pairs whose gate ok=True are run.",
+    "n: X1 32 (4 chi levels x 4 instances x 2 arms), X2 8 pairs x 2 theta x 3 arms = 48 (pair halves not independent; replication unit = pair), X3 36; total 116.",
+    "Three parallel processes (ONLY=X1/X2/X3), separate run files pilots/theorems_X{1,2,3}.jsonl, WORKERS=6 each; budget split CAP X1 1.8 / X2 2.2 / X3 2.0 USD (sum 6, conservative ledger, BUDGET_STOP when a worst-case 65536-token request no longer fits).",
+    "Report pools all three run files; X2 replication judged per pair (结论 only if direction holds in a majority of the 8 pairs and Fisher/MWU p<0.05; otherwise 迹象)."
+   ]
+  }
  }
 }
