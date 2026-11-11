@@ -34,9 +34,6 @@ MODULES = dict(A=dict(description="passive tuned trigger beam + comparator", idl
 ARMS = ("Fixed-P0", "All-Open", "Cert-Guided")
 N, SEED, USD_CAP = 10000, 20261110, 2.
 RATES = dict(input=.30, output=1.20, cache=.006)  # Official peak USD / million tokens.
-HELPER_LIMIT, EXPLORE_POINTS, D3_MAX_OUTPUT = 20, 11, 65536
-# 65536 is the official thinking-mode default (4x the 16384 ceiling that exhausted all 7 prior truncations).
-# Official model maximum is 384K; that reservation would be ~USD 0.47/request and can trip the USD 2 cap with 3 workers.
 
 
 def sample(n, seed):
@@ -188,64 +185,9 @@ def feedback(result, visibility):
     return dict(pass_=bool(passed(result)), worst_constraint=worst) | (scalar(result) if visibility != "I2" else {})
 
 
-def explore_sweep(t, base, allowed, vis, vary, low, high, n=None):
-    """Local 1-2 variable sweep. Does not mutate the official design. Feedback matches the information tier."""
-    if not isinstance(vary, list) or not 1 <= len(vary) <= 2: raise ValueError("vary must be 1 or 2 allowed names")
-    if any(k not in allowed for k in vary): raise ValueError("explore variable outside allowed set")
-    if not (isinstance(low, list) and isinstance(high, list) and len(low) == len(high) == len(vary)):
-        raise ValueError("low and high must match vary")
-    axes = []
-    for i, k in enumerate(vary):
-        if k in MODULES:
-            lo, hi = bool(low[i]), bool(high[i])
-            axes.append([(k, lo)] if lo == hi else [(k, False), (k, True)])
-        else:
-            lo, hi = float(low[i]), float(high[i])
-            a, b, scale = DOMAIN[k]
-            lo, hi = max(a, min(lo, hi)), min(b, max(lo, hi))
-            if lo > hi: raise ValueError("empty explore interval")
-            count = int(n or EXPLORE_POINTS) if len(vary) == 1 else min(int(n or 3), 3)
-            count = max(2, min(count, EXPLORE_POINTS))
-            vals = np.geomspace(lo, hi, count) if scale == "log" and lo > 0 else np.linspace(lo, hi, count)
-            axes.append([(k, float(v)) for v in vals])
-    combos = list(__import__("itertools").product(*axes))[:EXPLORE_POINTS]
-    points = []
-    for combo in combos:
-        y = dict(base)
-        for k, v in combo: y[k] = v
-        points.append(dict(settings={k: v for k, v in combo}, public=feedback(oracle(t, y), vis)))
-    return dict(n=len(points), official_design_unchanged=True, points=points)
-
-
-def collect(stream):
-    """Rebuild a non-stream answer from SSE chunks; the read timeout then bounds silence, not total generation time."""
-    m, calls, fin, u = dict(role="assistant", content="", reasoning_content=""), {}, None, {}
-    for line in stream:
-        if not line.startswith(b"data: {"): continue
-        d = json.loads(line[6:]); u = d.get("usage") or u
-        for ch in d.get("choices", []):
-            dl = ch["delta"]; fin = ch.get("finish_reason") or fin; m["content"] += dl.get("content") or ""; m["reasoning_content"] += dl.get("reasoning_content") or ""
-            for tc in dl.get("tool_calls") or []:
-                c = calls.setdefault(tc["index"], dict(id="", type="function", function=dict(name="", arguments="")))
-                c["id"] += tc.get("id") or ""; c["function"]["name"] += tc["function"].get("name") or ""; c["function"]["arguments"] += tc["function"].get("arguments") or ""
-    return dict(choices=[dict(finish_reason=fin, message=m | (dict(tool_calls=[calls[i] for i in sorted(calls)]) if calls else {}))], usage=u)
-
-
-def ask(raw, key, rates=RATES, timeout=600):
-    """One DeepSeek chat call; returns the answer and its uncached peak-rate USD estimate."""
-    req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as stream: answer = collect(stream) if b'"stream": true' in raw else json.load(stream)
-    u = answer.get("usage", {})
-    if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
-    return answer, (u["prompt_tokens"]*rates["input"]+u["completion_tokens"]*rates["output"])/1e6
-
-
-def run_agents(jobs, *, out=None, calibration=None, max_output=16384):
-    out = Path(out) if out else OUT
-    out.mkdir(exist_ok=True)
-    cal = Path(calibration) if calibration else out/"calibration.json"
-    rows = {r["task"]["id"]: r for r in json.loads(cal.read_text())["workpoints"]}
-    path = out/"agents.jsonl"; previous = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
+def run_agents(jobs):
+    rows = {r["task"]["id"]: r for r in json.loads((OUT/"calibration.json").read_text())["workpoints"]}
+    path = OUT/"agents.jsonl"; previous = [json.loads(s) for s in path.read_text().splitlines()] if path.exists() else []
     requests = {r["id"] for r in previous if r["kind"] == "request"}; settled = {r["id"] for r in previous if r["kind"] == "response"}
     if requests-settled: raise SystemExit("Unsettled request: preserve UNKNOWN; no automatic retry.")
     terminals = {r["job"] for r in previous if r["kind"] == "terminal"}
@@ -253,116 +195,80 @@ def run_agents(jobs, *, out=None, calibration=None, max_output=16384):
     tally = dict(spent=sum(r["estimated_usd"] for r in previous if r["kind"] == "response"), reserved=0., requests=len(requests))
     key = os.environ.get("DEEPSEEK_API_KEY") or (Path.home()/".local/share/bf-campaign-20261019-s0/workbench/secrets/deepseek.key").read_text().strip()
     source = "\n".join(inspect.getsource(f) for f in (beam, mechanics, response, oracle))
-    inputs = dict(model="deepseek-flash", thinking="high", max_output=max_output, usd_cap=USD_CAP, max_requests=600,
+    inputs = dict(model="deepseek-flash", thinking="high", max_output=16384, usd_cap=USD_CAP, max_requests=600,
                   wall_s=7200, simultaneous_requests=3, spec=public_spec(), source=source, rates=RATES,
                   visibility=dict(I0="source + specs + continuous feedback", I1="specs + continuous feedback", I2="specs + pass/fail/worst name"),
                   certificate_policy="All-Open and Cert-Guided have identical actions. Cert gets an additional analytic necessary bound: tests diagnostic information, not a pure strategy ablation.",
                   repeat_policy="54 first-replicate cells. At most two D2 case/visibility blocks with pass mismatch or >=2-step gap get two paired repeats; I1 then I2 then I0/case order, regardless of winner. If both fail I1/D2 with completed evaluations, at most one paired 12-evaluation block.",
                   replicate_note="Independent API conversations; no deterministic provider seed claim.")
-    protocol = {k: v for k, v in inputs.items() if k != "source"}
-    protocol["helper"] = dict(name="explore", limit=HELPER_LIMIT, points=EXPLORE_POINTS,
-                              rule="Same information tier as evaluate; does not commit the design or consume the 6 evaluations.")
-    protocol["calibration"] = str(cal)
-    (out/"protocol.json").write_text(json.dumps(protocol, indent=2))
+    (OUT/"protocol.json").write_text(json.dumps(inputs, indent=2))
     def emit(row):
         with lock:
             with path.open("a") as f: f.write(json.dumps(row, ensure_ascii=False)+"\n")
     def run(job):
-        tid, vis, arm, rep, budget, *rest = job
-        helper = bool(rest[0]) if rest else False
-        jid = f"{tid}/{vis}/{arm}/r{rep}/b{budget}" + (f"/{'tool' if helper else 'notool'}" if rest else "")
+        tid, vis, arm, rep, budget = job; jid = f"{tid}/{vis}/{arm}/r{rep}/b{budget}"
         if jid in terminals: return
         t = {k: v for k, v in rows[tid]["task"].items() if k != "difficulty"}
-        x = DEFAULT.copy(); evaluations = 0; helpers = 0; error = None; finish = None
-        used = dict(prompt_tokens=0, completion_tokens=0, reasoning_tokens=0, estimated_usd=0., requests=0)
+        x = DEFAULT.copy(); evaluations = 0; error = None; finish = None
         allowed = local_keys(t) if arm == "Fixed-P0" else tuple(DEFAULT)
         spec = dict(inputs["spec"])
         if vis == "I0": spec |= dict(source=source, G=G, BASE=BASE, SAMPLE_MS=SAMPLE_MS)
-        intro = "Design a vibration-powered monitoring node. Use evaluate(changes,reason), relative to the CURRENT design. All-Open/Cert may freely install or remove modules; availability does not install them. Satisfy every constraint, avoid unnecessary hardware. You may finish with a scoped diagnosis."
-        if helper:
-            intro += " You may also call explore to sweep one or two allowed variables without changing the official design or consuming a design evaluation. explore returns the same information tier as evaluate, at most 20 calls and 11 points each."
-        messages = [dict(role="system", content=intro+"\n"+json.dumps(spec)),
+        messages = [dict(role="system", content="Design a vibration-powered monitoring node. Use evaluate(changes,reason), relative to the CURRENT design. All-Open/Cert may freely install or remove modules; availability does not install them. Satisfy every constraint, avoid unnecessary hardware. You may finish with a scoped diagnosis.\n"+json.dumps(spec)),
                     dict(role="user", content=json.dumps(dict(task=t, initial=x, initial_feedback=feedback(oracle(t, x), vis),
                          allowed_variables=allowed, evaluations=budget, analytic_bound=rows[tid]["bounds"] if arm == "Cert-Guided" else None)))]
         props = {k: dict(type="boolean") if k in MODULES else dict(type="number", minimum=DOMAIN[k][0], maximum=DOMAIN[k][1]) for k in allowed}
         tools = [dict(type="function", function=dict(name="evaluate", description="Apply patch to current design and evaluate.", parameters=dict(type="object", properties=dict(changes=dict(type="object", properties=props, additionalProperties=False), reason=dict(type="string")), required=["changes", "reason"]))),
                  dict(type="function", function=dict(name="finish", description="Stop with scoped diagnosis; no evaluation.", parameters=dict(type="object", properties=dict(missing_function=dict(type="string"), reason=dict(type="string")), required=["missing_function", "reason"])))]
-        if helper:
-            tools.append(dict(type="function", function=dict(name="explore",
-                description="Sweep 1-2 allowed variables around an optional hold patch. Does not commit the official design or use a design evaluation. Returns the same information as evaluate at this visibility tier.",
-                parameters=dict(type="object", properties=dict(
-                    vary=dict(type="array", items=dict(type="string"), minItems=1, maxItems=2),
-                    low=dict(type="array", items={"type": ["number", "boolean"]}, minItems=1, maxItems=2),
-                    high=dict(type="array", items={"type": ["number", "boolean"]}, minItems=1, maxItems=2),
-                    n=dict(type="integer", minimum=2, maximum=11),
-                    hold=dict(type="object", description="Temporary patch, not committed."),
-                    reason=dict(type="string")), required=["vary", "low", "high", "reason"]))))
-        emit(dict(kind="start", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget, helper=helper, max_output=max_output))
-        for _ in range(budget + (HELPER_LIMIT if helper else 0) + 3):
+        emit(dict(kind="start", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget, messages=messages))
+        for _ in range(budget+2):
             if halt.is_set(): error = "DEPENDENCY_STOP"; break
             if time.perf_counter()-started > 7200: halt.set(); error = "WALL_STOP"; break
-            body = dict(model=inputs["model"], messages=messages, tools=tools, tool_choice="auto", thinking=dict(type="enabled"), reasoning_effort="high", max_tokens=max_output, stream=False)
-            raw = json.dumps(body).encode(); reserve = (len(raw)*RATES["input"]+max_output*RATES["output"])/1e6
+            body = dict(model=inputs["model"], messages=messages, tools=tools, tool_choice="auto", thinking=dict(type="enabled"), reasoning_effort="high", max_tokens=16384, stream=False)
+            raw = json.dumps(body).encode(); reserve = (len(raw)*RATES["input"]+16384*RATES["output"])/1e6
             with lock:
                 if tally["spent"]+tally["reserved"]+reserve > USD_CAP or tally["requests"] >= 600:
                     halt.set(); error = "BUDGET_STOP"; break
                 tally["requests"] += 1; rid = tally["requests"]; tally["reserved"] += reserve
-            emit(dict(kind="request", job=jid, id=rid, reserved_usd=reserve, max_tokens=max_output))
+            emit(dict(kind="request", job=jid, id=rid, reserved_usd=reserve))
             try:
-                answer, cost = ask(raw, key); u = answer["usage"]
+                req = urllib.request.Request("https://api.deepseek.com/chat/completions", data=raw, headers={"Authorization": "Bearer "+key, "Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=240) as stream: answer = json.load(stream)
+                u = answer.get("usage", {})
+                if not all(type(u.get(k)) is int for k in ("prompt_tokens", "completion_tokens", "total_tokens")): raise RuntimeError("USAGE_UNKNOWN")
+                cost = (u["prompt_tokens"]*RATES["input"]+u["completion_tokens"]*RATES["output"])/1e6
                 with lock:
                     tally["reserved"] -= reserve; tally["spent"] += cost
-                used["prompt_tokens"] += u["prompt_tokens"]; used["completion_tokens"] += u["completion_tokens"]
-                used["reasoning_tokens"] += u.get("completion_tokens_details", {}).get("reasoning_tokens", 0)
-                used["estimated_usd"] += cost; used["requests"] += 1
-                ch = answer["choices"][0]; m = ch["message"]
-                emit(dict(kind="response", job=jid, id=rid, estimated_usd=cost, finish_reason=ch.get("finish_reason"),
-                          usage=u, tool_names=[c.get("function", {}).get("name") for c in m.get("tool_calls") or []]))
+                emit(dict(kind="response", job=jid, id=rid, response=answer, estimated_usd=cost))
             except Exception as e:
                 halt.set(); error = type(e).__name__+": "+str(e)
                 emit(dict(kind="UNKNOWN", job=jid, id=rid, error=error, reservation_usd=reserve)); break
-            messages.append(m); calls = m.get("tool_calls", [])
+            m = answer["choices"][0]["message"]; messages.append(m); calls = m.get("tool_calls", [])
             if not calls:
-                error = "OUTPUT_LENGTH" if ch.get("finish_reason") == "length" else "TEXT_WITHOUT_ACTION"; break
+                error = "OUTPUT_LENGTH" if answer["choices"][0]["finish_reason"] == "length" else "TEXT_WITHOUT_ACTION"; break
             for call in calls:
                 try:
-                    a = json.loads(call["function"]["arguments"]); name = call["function"]["name"]
-                    if name == "finish":
-                        finish = a; reply = dict(stopped=True)
-                    elif name == "explore":
-                        if not helper: raise ValueError("explore is not available in this condition")
-                        if helpers >= HELPER_LIMIT: reply = dict(not_executed="explore budget used")
-                        else:
-                            y = dict(x)
-                            if a.get("hold"):
-                                patch = a["hold"]
-                                if any(k not in allowed or (k in DOMAIN and (type(v) not in (int, float) or not DOMAIN[k][0] <= v <= DOMAIN[k][1])) or (k in MODULES and type(v) is not bool) for k, v in patch.items()):
-                                    raise ValueError("Outside declared domain")
-                                y |= patch
-                            reply = explore_sweep(t, y, allowed, vis, a["vary"], a["low"], a["high"], a.get("n"))
-                            helpers += 1
-                            emit(dict(kind="explore", job=jid, step=helpers, hold=a.get("hold"), vary=a["vary"], public=reply, reason=a.get("reason")))
-                    elif evaluations >= budget or bool(passed(oracle(t, x))):
-                        reply = dict(not_executed="Already passed or evaluation budget used")
+                    a = json.loads(call["function"]["arguments"])
+                    if call["function"]["name"] == "finish": finish = a; reply = dict(stopped=True)
+                    elif evaluations >= budget or bool(passed(oracle(t, x))): reply = dict(not_executed="Already passed or evaluation budget used")
                     else:
                         patch = a["changes"]
                         if any(k not in allowed or (k in DOMAIN and (type(v) not in (int, float) or not DOMAIN[k][0] <= v <= DOMAIN[k][1])) or (k in MODULES and type(v) is not bool) for k, v in patch.items()): raise ValueError("Outside declared domain")
                         x |= patch; actual = oracle(t, x); evaluations += 1; reply = feedback(actual, vis)
                         emit(dict(kind="evaluation", job=jid, step=evaluations, design=x.copy(), actual=scalar(actual), public=reply, reason=a.get("reason")))
-                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(reply | dict(remaining_evaluations=budget-evaluations, remaining_explores=HELPER_LIMIT-helpers if helper else 0))))
-                except (KeyError, ValueError, TypeError, json.JSONDecodeError) as e:
+                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(reply | dict(remaining_evaluations=budget-evaluations))))
+                except (KeyError, ValueError, TypeError) as e:
                     emit(dict(kind="invalid_action", job=jid, error=str(e)))
-                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(dict(error=str(e), remaining_evaluations=budget-evaluations, remaining_explores=HELPER_LIMIT-helpers if helper else 0))))
+                    messages.append(dict(role="tool", tool_call_id=call["id"], content=json.dumps(dict(error=str(e), remaining_evaluations=budget-evaluations))))
             if finish is not None or bool(passed(oracle(t, x))) or evaluations >= budget: break
         actual = scalar(oracle(t, x)); ok = bool(passed(actual)); tight = min(actual["slack"], key=actual["slack"].get)
-        result = dict(kind="terminal", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget, helper=helper,
-                      pass_=ok, evaluations=evaluations, helper_calls=helpers, first_pass=evaluations if ok else None, final_design=x,
+        result = dict(kind="terminal", job=jid, task=tid, visibility=vis, arm=arm, replicate=rep, budget=budget,
+                      pass_=ok, evaluations=evaluations, first_pass=evaluations if ok else None, final_design=x,
                       tightest=tight, minimum_slack=actual["slack"][tight], final_actual=actual,
-                      enabled_modules=[k for k in MODULES if x[k]], diagnosis=finish, error=error, usage=used)
-        emit(result); print(jid, "PASS" if ok else error or "FAIL", evaluations, "explore", helpers, flush=True)
+                      enabled_modules=[k for k in MODULES if x[k]], diagnosis=finish, error=error)
+        emit(result); print(jid, "PASS" if ok else error or "FAIL", evaluations, flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool: list(pool.map(run, jobs))
     print(json.dumps(dict(accounting=tally, runtime_s=time.perf_counter()-started, operational_stop=halt.is_set())), flush=True)
-    report(out)
+    report()
 
 
 def followup_jobs():
@@ -390,115 +296,17 @@ def followup_jobs():
     return jobs
 
 
-def _usage_of(r):
-    return r.get("usage") or r.get("response", {}).get("usage") or {}
-
-
-def report(out=None):
-    out = Path(out) if out else OUT
-    records = [json.loads(s) for s in (out/"agents.jsonl").read_text().splitlines()]
+def report():
+    records = [json.loads(s) for s in (OUT/"agents.jsonl").read_text().splitlines()]
     terminal = [r for r in records if r["kind"] == "terminal"]; responses = [r for r in records if r["kind"] == "response"]
-    usage = {k: sum(_usage_of(r).get(k, 0) for r in responses) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "prompt_cache_hit_tokens")}
-    usage["reasoning_tokens"] = sum(_usage_of(r).get("completion_tokens_details", {}).get("reasoning_tokens", 0) for r in responses)
+    usage = {k: sum(r["response"]["usage"].get(k, 0) for r in responses) for k in ("prompt_tokens", "completion_tokens", "total_tokens", "prompt_cache_hit_tokens")}
+    usage["reasoning_tokens"] = sum(r["response"]["usage"].get("completion_tokens_details", {}).get("reasoning_tokens", 0) for r in responses)
     costs = sum(r["estimated_usd"] for r in responses)
-    cells = {}
-    for r in terminal:
-        key = (r.get("visibility"), r.get("arm"), bool(r.get("helper")))
-        cells.setdefault(str(key), []).append(dict(job=r["job"], pass_=r["pass_"], first_pass=r.get("first_pass"),
-            evaluations=r["evaluations"], helper_calls=r.get("helper_calls", 0), minimum_slack=r.get("minimum_slack"),
-            tightest=r.get("tightest"), error=r.get("error"), modules=r.get("enabled_modules"), usage=r.get("usage")))
     summary = dict(results=terminal, requests=len([r for r in records if r["kind"] == "request"]), settled=len(responses),
                    unknown=[r for r in records if r["kind"] == "UNKNOWN"], usage=usage, conservative_estimated_usd=costs,
                    cache_aware_peak_estimated_usd=costs-usage["prompt_cache_hit_tokens"]*(.30-.006)/1e6,
-                   evaluations=len([r for r in records if r["kind"] == "evaluation"]),
-                   explores=len([r for r in records if r["kind"] == "explore"]),
-                   invalid_actions=len([r for r in records if r["kind"] == "invalid_action"]),
-                   length_truncated=sum(r.get("error")=="OUTPUT_LENGTH" for r in terminal),
-                   cells=cells)
-    (out/"summary.json").write_text(json.dumps(summary, indent=2))
-    return summary
-
-
-def compact_transient(a):
-    return dict(verdict=a["verdict"], checks=a["checks"], metrics=a["metrics"], energy_J=a.get("energy_J"), runtime_s=a.get("runtime_s"))
-
-
-def run_one_transient(t, x):
-    d = copy.deepcopy(BASE)
-    d["harvester"] |= dict(substrate_mm=.15*x["h"], piezo_layer_mm=.12*x["h"], tip_mass_g=x["mass_g"])
-    d["trigger_beam"] |= dict(length_mm=x["L2_mm"], tip_mass_g=x["m2_g"])
-    d["modules"] = {k: x[k] for k in MODULES}
-    d["circuit"] |= dict(storage_uF=x["C_uF"], start_V=x["gate_V"], wake_high_V=x["trigger_V"],
-                          wake_low_V=x["trigger_V"]*.33, converter_input_R_ohm=x["R_kohm"]*1000,
-                          shunt_ohm=x["shunt_kohm"]*1000, shunt_threshold_V=x["shield_V"])
-    d["firmware"]["poll_s"] = x["poll_ms"]/1000
-    task = dict(TASK, background_peak_g=t["background_g"], fault_Hz=t["event_Hz"], fault_peak_g=t["event_g"],
-                fault_duration_s=t["event_ms"]/1000, stress_limit_MPa=t["stress_MPa"],
-                fault_starts_s=[t["ready_s"], t["ready_s"]+6], duration_s=t["ready_s"]+7.5,
-                nuisance_starts_s=[t["ready_s"]+3])
-    a = simulate(d, task); a.pop("trace", None)
-    return compact_transient(a)
-
-
-def d3_transient(out, calibration):
-    """Replay a few passing wake-D3 designs, plus one remove-A counterfactual. Stop under 5 minutes."""
-    summary = json.loads((out/"summary.json").read_text())
-    t = next(r["task"] for r in json.loads(Path(calibration).read_text())["workpoints"] if r["task"]["id"] == "wake-D3")
-    passed = [r for r in summary["results"] if r["pass_"]]
-    chosen, seen = [], set()
-    for r in sorted(passed, key=lambda r: (r.get("first_pass") or 9, r["job"])):
-        key = tuple(sorted((k, r["final_design"][k]) for k in list(DOMAIN)+list(MODULES)))
-        if key in seen: continue
-        seen.add(key); chosen.append(r)
-        if len(chosen) >= 3: break
-    output, started = [], time.perf_counter()
-    for i, r in enumerate(chosen):
-        if time.perf_counter()-started > 280: break
-        a = run_one_transient(t, r["final_design"])
-        output.append(dict(source_job=r["job"], removed_module=False, harmonic=r.get("final_actual"), transient=a))
-        print(r["job"], "selected", a["verdict"], a["metrics"].get("delivered_on_time"), flush=True)
-        if i == 0:
-            x = dict(r["final_design"], A=False)
-            b = run_one_transient(t, x)
-            output.append(dict(source_job=r["job"], removed_module=True, harmonic=scalar(oracle(t, x)), transient=b))
-            print(r["job"], "removed-A", b["verdict"], b["metrics"].get("delivered_on_time"), flush=True)
-        (out/"transient.json").write_text(json.dumps(output, indent=2))
-    return output
-
-
-def d3_plot(out):
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    rows = [json.loads(s) for s in (out/"agents.jsonl").read_text().splitlines() if s]
-    terms = [r for r in rows if r["kind"]=="terminal"]
-    vis_arm = [("I1","All-Open"),("I1","Cert-Guided"),("I2","All-Open"),("I2","Cert-Guided")]
-    fig, axes = plt.subplots(2, 4, figsize=(11, 5.2), sharey=True, layout="constrained")
-    for col, (vis, arm) in enumerate(vis_arm):
-        for row, helper in enumerate((False, True)):
-            ax = axes[row][col]
-            cell = [r for r in terms if r.get("visibility")==vis and r.get("arm")==arm and bool(r.get("helper"))==helper]
-            cell = sorted(cell, key=lambda r: r.get("replicate", 0))
-            colors, labels = [], []
-            for r in cell:
-                if r["pass_"]: colors.append("#16a34a"); labels.append(f"P{r['first_pass']}")
-                elif r.get("error")=="OUTPUT_LENGTH": colors.append("#f59e0b"); labels.append(f"L{r['evaluations']}")
-                elif r.get("error"): colors.append("#a8a29e"); labels.append(r["error"][:6])
-                else: colors.append("#dc2626"); labels.append(f"N{r['evaluations']}")
-            ax.bar(range(len(cell)), [1]*len(cell), color=colors)
-            for i, (r, lab) in enumerate(zip(cell, labels)):
-                ax.text(i, 0.5, lab, ha="center", va="center", color="white", fontsize=8)
-                ax.text(i, 0.15, f"e{r.get('helper_calls',0)}", ha="center", va="center", color="white", fontsize=6)
-            ax.set_xticks(range(3), ["s0","s1","s2"]); ax.set_yticks([])
-            ax.set_title(f"{vis} {arm}\n{'explore' if helper else 'no tool'}", fontsize=8)
-    fig.suptitle("wake-D3 2x2x2x3  |  P=first pass  N=finished fail  L=truncated  e=explore calls")
-    fig.savefig(out/"overview.png", dpi=120); plt.close(fig)
-
-
-def d3_jobs():
-    return [("wake-D3", vis, arm, rep, 6, helper)
-            for vis in ("I1", "I2") for helper in (False, True)
-            for arm in ("All-Open", "Cert-Guided") for rep in (0, 1, 2)]
+                   evaluations=len([r for r in records if r["kind"] == "evaluation"]), invalid_actions=len([r for r in records if r["kind"] == "invalid_action"]))
+    (OUT/"summary.json").write_text(json.dumps(summary, indent=2))
 
 
 def transient():
@@ -546,7 +354,7 @@ def transient():
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    for flag in ("calibrate", "agents", "followup", "transient", "report", "d3", "tool"): p.add_argument("--"+flag, action="store_true")
+    for flag in ("calibrate", "agents", "followup", "transient", "report"): p.add_argument("--"+flag, action="store_true")
     args = p.parse_args()
     if args.calibrate: calibrate()
     if args.agents:
@@ -555,14 +363,5 @@ if __name__ == "__main__":
     if args.followup:
         jobs = followup_jobs()
         if jobs: run_agents(jobs)
-    if args.d3:
-        dest = HERE/"boundary_d3"
-        jobs = d3_jobs()
-        if args.tool: jobs = [j for j in jobs if j[5]]
-        run_agents(jobs, out=dest, calibration=HERE/"boundary"/"calibration.json", max_output=D3_MAX_OUTPUT)
-        try: d3_plot(dest)
-        except Exception as e: print("plot skipped:", type(e).__name__, e, flush=True)
-        try: d3_transient(dest, HERE/"boundary"/"calibration.json")
-        except Exception as e: print("transient skipped:", type(e).__name__, e, flush=True)
-    if args.report: report(HERE/"boundary_d3" if args.d3 else OUT)
-    if args.transient and not args.d3: transient()
+    if args.report: report()
+    if args.transient: transient()

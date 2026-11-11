@@ -146,4 +146,4 @@ flowchart LR
 
 当前 [结构与信息边界实验](boundary/README.md) 重写同一个 [agent_limits.py](agent_limits.py)：固定现有采样窗口、按模块必要性定义六个工作点，比较白盒 / 灰盒 / 黑盒，并将中间档设计送回完整瞬态程序。`simulate(design, task)` 增加可选任务与模块，原默认设计仍使用本页的二极管整流与分类流程，本页原结果和波形保留。
 
-同一脚本的 [wake-D3 工具与反馈预实验](boundary_d3/README.md) 写在 `boundary_d3/`，不覆盖上一轮 54 格结果。
+最新 [六维能力拆解预实验](deep/README.md)：三个子 agent 并行实现12题，比较组件连接、未知故障、软件预检、复位配套、数值求解与快筛失配；包含实际模型轨迹和定点反事实。

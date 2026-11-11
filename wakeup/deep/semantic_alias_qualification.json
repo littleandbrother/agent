@@ -1,0 +1,1035 @@
+[
+  {
+    "id": "P2_unit_u",
+    "axis": 2,
+    "initial_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "initial": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "power": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "max_storage_V": 0.12794388572292623,
+        "storage_before_first_event_V": 0.06357362138295443,
+        "final_storage_V": 0.1279392925842958,
+        "main_peak_voltage_V": 0.4861553760347175,
+        "cold_charge_ready_s": null,
+        "energy_J": {
+          "mechanical_input": 4.18870307029162e-05,
+          "mechanical_damping": 3.2809235008238554e-05,
+          "rectifier_loss": 7.421099944990389e-06,
+          "trigger_front_end_loss": 4.758291641569814e-08,
+          "MCU_input": 0.0,
+          "idle": 3.4938744584237445e-07,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 1.5770221398651275e-06,
+          "final_stored_all_domains": 1.2580632850467598e-06,
+          "balance_residual": 1.6621023824231778e-09
+        }
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "trigger": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "aux_peak_voltage_V": 1.3801749958852176,
+        "envelope_peak_V": 1.186602443926984,
+        "wakeups": 0,
+        "first_wake_s": null
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "witness_input": {
+      "main_length_mm": 40.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "witness": {
+      "pass_": true,
+      "metrics": {
+        "delivered": 4,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": 0.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "scope": "Two hidden stationary manufacturing/mounting variants, not four causes.",
+    "other_instance_repair_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 12.857142857142858,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "other_instance_repair_result": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "physical_factors": {
+      "main_factor": 0.75
+    },
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "diagnosis_reproduction": {
+      "purpose": "Resolve whether the failed mixed intervention restored supply and introduced another bottleneck.",
+      "runs": [
+        {
+          "id": "text-second-exact",
+          "source": "agents.jsonl:119",
+          "design": {
+            "main_length_mm": 40.0,
+            "aux_length_mm": 20.0,
+            "C_uF": 80.0,
+            "gate_V": 2.0,
+            "threshold_V": 0.55
+          },
+          "result": {
+            "pass_": false,
+            "metrics": {
+              "delivered": 0,
+              "expected": 4,
+              "false_reports": 0,
+              "brownouts": 0
+            },
+            "slack": {
+              "delivery": -1.0,
+              "false_reports": 0
+            },
+            "cost": {
+              "full": 1,
+              "numeric": 0
+            },
+            "fidelity": "full transient",
+            "cached": false
+          },
+          "measurements": {
+            "power": {
+              "pass_": false,
+              "metrics": {
+                "delivered": 0,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "max_storage_V": 3.3053484604117402,
+                "storage_before_first_event_V": 3.3040795186677783,
+                "final_storage_V": 3.304695199259041,
+                "main_peak_voltage_V": 4.254698106833669,
+                "cold_charge_ready_s": 2.387,
+                "energy_J": {
+                  "mechanical_input": 0.009760695926193549,
+                  "mechanical_damping": 0.004970686553332069,
+                  "rectifier_loss": 0.0010136806045493332,
+                  "trigger_front_end_loss": 1.2386085594656532e-09,
+                  "MCU_input": 0.0,
+                  "idle": 4.81315606447526e-05,
+                  "clamp_loss": 0.00327192823458122,
+                  "rectified_to_storage": 0.0037569002096262023,
+                  "final_stored_all_domains": 0.00045654048395781953,
+                  "balance_residual": -2.727494802038646e-07
+                }
+              },
+              "slack": {
+                "delivery": -1.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            },
+            "trigger": {
+              "pass_": false,
+              "metrics": {
+                "delivered": 0,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "aux_peak_voltage_V": 0.39596181674194203,
+                "envelope_peak_V": 0.19384664574484634,
+                "wakeups": 0,
+                "first_wake_s": null
+              },
+              "slack": {
+                "delivery": -1.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            },
+            "program": {
+              "pass_": false,
+              "metrics": {
+                "delivered": 0,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "wakeups": 0,
+                "stages": {
+                  "WAKE": 0,
+                  "SAMPLE": 0,
+                  "CONFIRM": 0,
+                  "REJECT": 0,
+                  "TX": 0,
+                  "RECEIVED": 0,
+                  "BROWNOUT": 0
+                },
+                "peak_stress_MPa": 13.482244885843667,
+                "peak_tip_mm": 0.3456985868165043,
+                "minimum_active_storage_V": null
+              },
+              "slack": {
+                "delivery": -1.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            }
+          },
+          "elapsed_s": 11.160301416995935,
+          "new_scientific_inputs": 1,
+          "external_model_calls": 0
+        },
+        {
+          "id": "restore-aux-only",
+          "reference": "text-second-exact",
+          "changed_field": {
+            "aux_length_mm": [
+              20.0,
+              18.0
+            ]
+          },
+          "design": {
+            "main_length_mm": 40.0,
+            "aux_length_mm": 18.0,
+            "C_uF": 80.0,
+            "gate_V": 2.0,
+            "threshold_V": 0.55
+          },
+          "result": {
+            "pass_": true,
+            "metrics": {
+              "delivered": 4,
+              "expected": 4,
+              "false_reports": 0,
+              "brownouts": 0
+            },
+            "slack": {
+              "delivery": 0.0,
+              "false_reports": 0
+            },
+            "cost": {
+              "full": 1,
+              "numeric": 0
+            },
+            "fidelity": "full transient",
+            "cached": false
+          },
+          "measurements": {
+            "power": {
+              "pass_": true,
+              "metrics": {
+                "delivered": 4,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "max_storage_V": 3.3053405251801835,
+                "storage_before_first_event_V": 3.3040794803664255,
+                "final_storage_V": 3.3046952656914583,
+                "main_peak_voltage_V": 4.254800739771802,
+                "cold_charge_ready_s": 2.387,
+                "energy_J": {
+                  "mechanical_input": 0.009799777787996433,
+                  "mechanical_damping": 0.004979288618560881,
+                  "rectifier_loss": 0.001094931355651571,
+                  "trigger_front_end_loss": 4.758346465036218e-08,
+                  "MCU_input": 0.0012023529411758032,
+                  "idle": 4.3278148624819694e-05,
+                  "clamp_loss": 0.0020235925327387644,
+                  "rectified_to_storage": 0.0037060640545027285,
+                  "final_stored_all_domains": 0.00045654080202821225,
+                  "balance_residual": -2.54194248269367e-07
+                }
+              },
+              "slack": {
+                "delivery": 0.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            },
+            "trigger": {
+              "pass_": true,
+              "metrics": {
+                "delivered": 4,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "aux_peak_voltage_V": 1.3801785472207373,
+                "envelope_peak_V": 1.1866056114369559,
+                "wakeups": 4,
+                "first_wake_s": 8.023872658195442
+              },
+              "slack": {
+                "delivery": 0.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            },
+            "program": {
+              "pass_": true,
+              "metrics": {
+                "delivered": 4,
+                "expected": 4,
+                "false_reports": 0,
+                "brownouts": 0,
+                "wakeups": 4,
+                "stages": {
+                  "WAKE": 4,
+                  "SAMPLE": 4,
+                  "CONFIRM": 4,
+                  "REJECT": 0,
+                  "TX": 4,
+                  "RECEIVED": 4,
+                  "BROWNOUT": 0
+                },
+                "peak_stress_MPa": 13.48228711914536,
+                "peak_tip_mm": 0.3456996697216759,
+                "minimum_active_storage_V": 1.903451045326507
+              },
+              "slack": {
+                "delivery": 0.0,
+                "false_reports": 0
+              },
+              "cost": {
+                "full": 0,
+                "numeric": 0
+              },
+              "fidelity": "full transient",
+              "cached": true
+            }
+          },
+          "elapsed_s": 8.89925374998711,
+          "new_scientific_inputs": 1,
+          "external_model_calls": 0
+        }
+      ],
+      "source_contract": {
+        "gate_V": "circuit.start_V: storage supply start threshold",
+        "threshold_V": "circuit.wake_high_V: envelope comparator high threshold",
+        "public_spec": "Source public spec does not explicitly map these names to their distinct voltage nodes."
+      },
+      "log_evidence": {
+        "mixed_failure": "agents.jsonl:119",
+        "unsupported_reverse": "agents.jsonl:130",
+        "raw_gate_node_confusion": "agents.jsonl:133",
+        "raw_final_explicit_ambiguity": "agents.jsonl:163",
+        "text_final_gate_node_confusion": "agents.jsonl:154"
+      },
+      "conclusion": "The mixed intervention restores supply but detunes the auxiliary trigger: envelope falls below .55 V and no program stage executes. Restoring only auxiliary nominal length 20 to 18 mm, retaining main40/C80/gate2, restores full service.",
+      "scope": "Two fixed-input causal reproductions, not new Agent trials or method win-rate evidence; no original records edited and no model APIs."
+    }
+  },
+  {
+    "id": "P2_unit_v",
+    "axis": 2,
+    "initial_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "initial": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "power": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "max_storage_V": 3.3046845097503614,
+        "storage_before_first_event_V": 3.156502711206583,
+        "final_storage_V": 3.304377128864887,
+        "main_peak_voltage_V": 4.254990660657581,
+        "cold_charge_ready_s": 7.086,
+        "energy_J": {
+          "mechanical_input": 0.009710301431838047,
+          "mechanical_damping": 0.004973002915728733,
+          "rectifier_loss": 0.0010892930980995188,
+          "trigger_front_end_loss": 3.399926044530876e-10,
+          "MCU_input": 0.0,
+          "idle": 4.4419029331187445e-05,
+          "clamp_loss": 0.0027652412324787965,
+          "rectified_to_storage": 0.0036285783775423857,
+          "final_stored_all_domains": 0.000838615961969215,
+          "balance_residual": -2.711457620077542e-07
+        }
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "trigger": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "aux_peak_voltage_V": 0.16014833325186267,
+        "envelope_peak_V": 0.0,
+        "wakeups": 0,
+        "first_wake_s": null
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "witness_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 12.857142857142858,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "witness": {
+      "pass_": true,
+      "metrics": {
+        "delivered": 4,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": 0.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "scope": "Two hidden stationary manufacturing/mounting variants, not four causes.",
+    "other_instance_repair_input": {
+      "main_length_mm": 40.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55
+    },
+    "other_instance_repair_result": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "physical_factors": {
+      "aux_factor": 1.4
+    },
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    }
+  },
+  {
+    "id": "P1_named",
+    "axis": 1,
+    "initial_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55,
+      "passive_wakeup": false
+    },
+    "initial": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "witness_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55,
+      "passive_wakeup": true
+    },
+    "witness": {
+      "pass_": true,
+      "metrics": {
+        "delivered": 4,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": 0.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 1,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": false
+    },
+    "power": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "max_storage_V": 2.900000000000001,
+        "storage_before_first_event_V": 2.5890206904004422,
+        "final_storage_V": 2.8803601126196288,
+        "main_peak_voltage_V": 3.851741553096605,
+        "cold_charge_ready_s": 7.085592898462754,
+        "energy_J": {
+          "mechanical_input": 0.00976528440823974,
+          "mechanical_damping": 0.004933028816476911,
+          "rectifier_loss": 0.0012857354842257685,
+          "trigger_front_end_loss": 0.0,
+          "MCU_input": 0.0028729411764706237,
+          "idle": 3.2173177910684325e-05,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 0.00352734993275907,
+          "final_stored_all_domains": 0.0006416761935019365,
+          "balance_residual": -2.7044034618401835e-07
+        }
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "trigger": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "aux_peak_voltage_V": 0.0,
+        "envelope_peak_V": 0.0,
+        "wakeups": 12,
+        "first_wake_s": 7.085592898462754
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "program": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "wakeups": 12,
+        "stages": {
+          "WAKE": 12,
+          "SAMPLE": 12,
+          "CONFIRM": 0,
+          "REJECT": 12,
+          "TX": 0,
+          "RECEIVED": 0,
+          "BROWNOUT": 0
+        },
+        "peak_stress_MPa": 13.693278885091015,
+        "peak_tip_mm": 0.35110971500233373,
+        "minimum_active_storage_V": 2.3083553655269515
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "scope": "Named vs independently wired representation changes naming and action factorization; not a pure label-only ablation.",
+    "physical_factors": {},
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    }
+  },
+  {
+    "id": "P1_primitives",
+    "axis": 1,
+    "initial_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55,
+      "aux_resonator": false,
+      "detector_source": "none",
+      "mcu_gate": "poll"
+    },
+    "initial": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "witness_input": {
+      "main_length_mm": 30.0,
+      "aux_length_mm": 18.0,
+      "C_uF": 150.0,
+      "gate_V": 2.9,
+      "threshold_V": 0.55,
+      "aux_resonator": true,
+      "detector_source": "aux",
+      "mcu_gate": "envelope"
+    },
+    "witness": {
+      "pass_": true,
+      "metrics": {
+        "delivered": 4,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0
+      },
+      "slack": {
+        "delivery": 0.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "power": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "max_storage_V": 2.900000000000001,
+        "storage_before_first_event_V": 2.5890206904004422,
+        "final_storage_V": 2.8803601126196288,
+        "main_peak_voltage_V": 3.851741553096605,
+        "cold_charge_ready_s": 7.085592898462754,
+        "energy_J": {
+          "mechanical_input": 0.00976528440823974,
+          "mechanical_damping": 0.004933028816476911,
+          "rectifier_loss": 0.0012857354842257685,
+          "trigger_front_end_loss": 0.0,
+          "MCU_input": 0.0028729411764706237,
+          "idle": 3.2173177910684325e-05,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 0.00352734993275907,
+          "final_stored_all_domains": 0.0006416761935019365,
+          "balance_residual": -2.7044034618401835e-07
+        }
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "trigger": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "aux_peak_voltage_V": 0.0,
+        "envelope_peak_V": 0.0,
+        "wakeups": 12,
+        "first_wake_s": 7.085592898462754
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "program": {
+      "pass_": false,
+      "metrics": {
+        "delivered": 0,
+        "expected": 4,
+        "false_reports": 0,
+        "brownouts": 0,
+        "wakeups": 12,
+        "stages": {
+          "WAKE": 12,
+          "SAMPLE": 12,
+          "CONFIRM": 0,
+          "REJECT": 12,
+          "TX": 0,
+          "RECEIVED": 0,
+          "BROWNOUT": 0
+        },
+        "peak_stress_MPa": 13.693278885091015,
+        "peak_tip_mm": 0.35110971500233373,
+        "minimum_active_storage_V": 2.3083553655269515
+      },
+      "slack": {
+        "delivery": -1.0,
+        "false_reports": 0
+      },
+      "cost": {
+        "full": 0,
+        "numeric": 0
+      },
+      "fidelity": "full transient",
+      "cached": true
+    },
+    "scope": "Named vs independently wired representation changes naming and action factorization; not a pure label-only ablation.",
+    "partial_wiring": [
+      {
+        "design": {
+          "main_length_mm": 30.0,
+          "aux_length_mm": 18.0,
+          "C_uF": 150.0,
+          "gate_V": 2.9,
+          "threshold_V": 0.55,
+          "aux_resonator": true,
+          "detector_source": "aux",
+          "mcu_gate": "poll"
+        },
+        "result": {
+          "pass_": false,
+          "metrics": {
+            "delivered": 0,
+            "expected": 4,
+            "false_reports": 0,
+            "brownouts": 0
+          },
+          "slack": {
+            "delivery": -1.0,
+            "false_reports": 0
+          },
+          "cost": {
+            "full": 1,
+            "numeric": 0
+          },
+          "fidelity": "full transient",
+          "cached": false
+        }
+      },
+      {
+        "design": {
+          "main_length_mm": 30.0,
+          "aux_length_mm": 18.0,
+          "C_uF": 150.0,
+          "gate_V": 2.9,
+          "threshold_V": 0.55,
+          "aux_resonator": true,
+          "detector_source": "none",
+          "mcu_gate": "envelope"
+        },
+        "result": {
+          "pass_": false,
+          "metrics": {
+            "delivered": 0,
+            "expected": 4,
+            "false_reports": 0,
+            "brownouts": 0
+          },
+          "slack": {
+            "delivery": -1.0,
+            "false_reports": 0
+          },
+          "cost": {
+            "full": 1,
+            "numeric": 0
+          },
+          "fidelity": "full transient",
+          "cached": false
+        }
+      }
+    ],
+    "physical_factors": {},
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    }
+  }
+]

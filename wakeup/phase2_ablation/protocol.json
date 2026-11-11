@@ -1,0 +1,82 @@
+{
+  "status": "complete",
+  "owner": "coordinator",
+  "owned_paths": [
+    "wakeup/phase2_ablation.py",
+    "wakeup/phase2_ablation/",
+    "root coordination notes"
+  ],
+  "hypothesis": "On the seven historical D-pass/P-normal-fail pairs, amplitude/phase alone or event windows alone can recover some of the diagnostic bundle benefit.",
+  "paper_claim": "Field-subset sufficiency on a retrospectively selected cohort, not a population method advantage or phase-only causal effect.",
+  "falsifier": "Neither subset repairs these cases, or the observed repair actions do not consume the supplied field subset.",
+  "schema_changes": "Two filtered diagnostic views; no change to physical kernel, service, task, legal domain, model client or episode loop.",
+  "targeted_tests": "One offline projection check using original cached initial facts, then 14 real model conversations and original full-consumer evaluations.",
+  "negative_controls": "Original P/D historical results remain reference only; each new arm excludes energy ledger and global minimum active voltage.",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B wakeup/phase2_ablation.py --run",
+  "output": "wakeup/phase2_ablation/",
+  "cost_cap_usd": 4,
+  "wall_limit_s": 28800,
+  "max_conversations": 14,
+  "max_model_responses": 168,
+  "max_new_full": 84,
+  "max_numeric": 0,
+  "max_concurrent_model_requests": 3,
+  "per_episode": {
+    "design_actions": 6,
+    "model_responses": 12,
+    "wall_limit_s": 900,
+    "max_output_per_request": 32768
+  },
+  "available_bytes": 13561888768,
+  "estimated_peak_additional_bytes": 1200000000,
+  "retained_output_cap_bytes": 20000000,
+  "stop_condition": "Exactly fourteen trajectories, no rescue or extra groups. HTTP500 retry already authorized; retain UNKNOWN/reserve; other missing usage stops paid dependencies.",
+  "claim_boundary": "Seven pairs are five task IDs, three offset pairs and four nominal pairs. EW adds pre-event single voltage and wake/receive timestamps, not post-event voltage curves. Old work and automations remain paused. No commit/push.",
+  "started_at": "2026-11-11T02:06:29.250729+08:00",
+  "completed_at": "2026-11-11T02:21:06.353291+08:00",
+  "result": "PA 5/7, EW 4/7; complementary repairs; two false global exclusions; fourteen normal terminals, no extensions.",
+  "actual_accounting": {
+    "requests": 55,
+    "settled": 55,
+    "unknown": [],
+    "inflight_ids": [],
+    "usage": {
+      "prompt_tokens": 689582,
+      "completion_tokens": 251765,
+      "total_tokens": 941347,
+      "prompt_cache_hit_tokens": 661888,
+      "reasoning_tokens": 235660
+    },
+    "estimated_usd": 0.314397528,
+    "conservative_usd": 0.5089926,
+    "model_identities": [
+      {
+        "model": "deepseek-flash",
+        "fingerprint": "bc19ba97cbe016479903222bb1578db6",
+        "responses": 55
+      }
+    ],
+    "rate_estimate_not_bill": true
+  },
+  "actual_science": {
+    "logical_evaluations": 65,
+    "design_actions": 51,
+    "shared_cached_initials": 14,
+    "new_full": 28,
+    "reused": 37,
+    "numeric": 0,
+    "new_full_runtime_s": 291.40962866914924,
+    "batch_runtime_s": 698.0104675410548
+  },
+  "evidence": [
+    "wakeup/phase2_ablation/README.md",
+    "wakeup/phase2_ablation/summary.json",
+    "wakeup/phase2_ablation/results.jsonl"
+  ],
+  "checks": "Original consumer evaluations plus one cached projection check; independent read-only exposure/outcome/usage readback. No repository-wide health claim.",
+  "storage_after": {
+    "available_bytes": 12461588480,
+    "retained_bytes": 1556843
+  },
+  "next_handoff": "This ablation is closed. No further experiments, old-task resumes or automations authorized by this package."
+}

@@ -1,0 +1,78 @@
+--- phase2_round1.py
++++ phase2.py
+@@ -228,6 +228,7 @@
+     jid = f"{stage}/{t['id']}/{condition}/r{job['rep']}"
+     x = t['initial'].copy()
+     history = []
++    observed = []
+     actions = numeric = 0
+     diagnosis = error = None
+     started = time.monotonic()
+@@ -244,6 +245,8 @@
+                 HALT.set()
+                 raise RuntimeError('SCIENTIFIC_EVALUATION_LIMIT')
+         emit(dict(kind='evaluation', job=jid, design=z, result=r))
++        if module is scope:
++            observed.append(dict(design=z.copy(), pass_=r['pass_'], slack=r['slack'], base=r['base']))
+         return r
+ 
+     def present(r):
+@@ -254,9 +257,11 @@
+         feedback |= dict(current_design=x.copy(), remaining_design_actions=6-actions)
+         if module is scope:
+             feedback['remaining_numeric_evaluations'] = 16-numeric
++            feedback['actual_numerical_points'] = observed.copy()
+         if condition in ('S', 'PS', 'DS'):
+-            changed = sorted({k for h in history for k in h['changes']})
+-            feedback['scope_summary'] = dict(evaluated_designs=[h['design'] for h in history],
++            changed = sorted({k for h in (observed if module is scope else history)
++                              for k in h['design'] if h['design'][k] != t['initial'][k]})
++            feedback['scope_summary'] = dict(evaluated_designs=[h['design'] for h in (observed if module is scope else history)],
+                 changed_variables=changed, not_changed_in_this_run=sorted(set(t['domain'])-set(changed)),
+                 interpretation='Finite evaluated points; no claim that intervals between them were exhausted.')
+         elif condition in ('P', 'D') and (module is scope or stage == 'J'):
+@@ -282,8 +287,10 @@
+             dict(changes=dict(type='object'), reason=dict(type='string')), ['changes', 'reason']),
+             function('finish', 'Stop freely; distinguish point, branch and global conclusions. No label is forbidden.',
+             dict(label=dict(type='string', enum=['FEASIBLE', 'INFEASIBLE', 'UNSURE']),
+-                 scope=dict(type='string', enum=['point', 'branch', 'global']), p_global=dict(type='number'),
+-                 p_branch=dict(type='number'), reason=dict(type='string')), ['label', 'scope', 'p_global', 'reason'])]
++                 scope=dict(type='string', enum=['point', 'branch', 'global']),
++                 p_global=dict(type='number', description='Probability 0..1 that some legal design in the entire domain can PASS.'),
++                 p_branch=dict(type='number', description='Probability 0..1 that some design in the current module branch can PASS.'),
++                 reason=dict(type='string')), ['label', 'scope', 'p_global', 'reason'])]
+         if module is scope:
+             tools.append(function('optimize', 'Bounded numerical search from current design; every internal point counts. '
+                 'Returns best FOUND point, not a global extreme or proof. You choose variables and initial changes.',
+@@ -292,12 +299,18 @@
+             condition=condition, rep=job['rep'], public_messages=messages, tools=tools))
+         result = initial
+         for turn in range(12):
+-            if result['pass_'] or diagnosis is not None or actions >= 6 or module is scope and numeric >= 16:
++            if diagnosis is not None:
+                 break
++            exhausted = result['pass_'] or actions >= 6 or module is scope and numeric >= 16
++            if exhausted and module is not scope:
++                break
++            active_tools = [tools[1]] if exhausted else tools
++            if exhausted:
++                messages.append(dict(role='user', content='Scientific evaluation has ended. No more evaluation points are available. Use finish to state your final conclusion and its scope; distinguish a found witness, a proof, and exhausted finite search.'))
+             if time.monotonic()-started > 900:
+                 error = 'EPISODE_TIME_LIMIT'
+                 break
+-            answer = request(messages, tools, jid)
++            answer = request(messages, active_tools, jid)
+             msg = answer['choices'][0]['message']
+             messages.append(msg)
+             if not msg.get('tool_calls'):
+@@ -402,6 +415,10 @@
+     else:
+         batch = json.loads(manifest.read_text())
+     pending = [j for j in batch if j['round'] == round_number and f"{j['stage']}/{j['task']['id']}/{j['condition']}/r{j['rep']}" not in done]
++    if round_number == 2:
++        # Reproduce the observed false exclusion and proxy mismatch first; the frozen set is unchanged.
++        pending.sort(key=lambda j: 0 if j['stage']=='A1' and j['task']['id']=='A1-E2-nominal' and j['condition']=='P'
++                     else 1 if j['stage']=='A3' and j['task']['family']=='E1' else 2)
+     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+         list(pool.map(episode, pending))
+     emit(dict(kind='round_end', round=round_number, accounting=TALLY, runtime_s=time.monotonic()-START))
