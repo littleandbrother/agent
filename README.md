@@ -1,5 +1,7 @@
 # Minimal wake-up node · 2026-11-10
 
+> 最新预实验：[统一实验 / 代码 / 数据索引](wakeup/EXPERIMENTS.md) · [后续三组试验方案](wakeup/NEXT_EXPERIMENTS.md)。
+
 最新独立实现：[完整设计与实际仿真结果](wakeup/README.md)。
 
 一个 `sim.py`，一份 `design.json`。从空储能开始，机械采能 → 模拟唤醒 → 实际采样确认 → 保存与上报。30 秒任务：4/4 异常按时交付、0 误报、最长延迟 95.9 ms；完整数值仿真耗时 5.2 秒。
