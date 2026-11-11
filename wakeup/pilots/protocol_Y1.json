@@ -1,0 +1,48 @@
+{
+  "written_before_any_model_call": "2026-11-12T01:07:01+08:00",
+  "family": "Y1",
+  "source": "t36u tweak 2: area constraint on structure switch; remake of X1. Old X1-X3 files untouched.",
+  "code": "wakeup/theorems_v2.py (--build Y1 gate, --run with ONLY=Y1). Ground truth = full transient sim.py for every label and every agent evaluation.",
+  "world": {
+    "fixed": "design.json, trigger beam A on, direct bridge rectifier, storage regulated <=2.95 V (clamp), start 2.9 V, brownout 1.8 V, bg 45 Hz, beam length 30 mm, width 10 mm per beam",
+    "structures": "1 beam = 300 mm^2; 2 identical parallel beams = 600 mm^2, each with its own bridge",
+    "domain": "storage_uF [20,1000], harvester_beams {1,2}, tip_mass_g [3.8,5.8]",
+    "area_rule": "A second beam is allowed only when one beam cannot physically meet the service. Single-solvable is determined by the full-transient 1-beam truth window, not only simplified chi. Submitting two beams on a single-solvable task sets area_pass=False and the evaluation is a failure."
+  },
+  "chi_levels": {
+    "values": [
+      0.6,
+      0.9,
+      1.1,
+      1.8
+    ],
+    "justification_from_gate_tx12": {
+      "0.6": "simplified [116.3, 193.8] uF, true [108.2, 183.17] uF (wide 1-beam window)",
+      "0.9": "simplified [116.3, 129.2] uF, true [109.13, 124.0] uF (narrow but not a point)",
+      "1.0": "simplified [116.3, 116.3] uF, true window is the single point 110.71 uF — not used as an agent level",
+      "1.1": "simplified [116.3, 105.7] uF, true window empty (clearly above the point boundary)",
+      "1.8": "simplified [116.3, 64.6] uF, true window empty (deep infeasible on 1 beam)"
+    }
+  },
+  "gate": {
+    "rule": "No model call on a task unless x0 fails, the task is feasible in truth, and margin_ok (chi<1 iff 1-beam truth window exists; chi>1 iff 1-beam empty and 2-beam window exists).",
+    "result": "16/16 tasks pass. 4 instances x 4 levels. Seed 20261114. m*=4.5875 g, P1=91.3 uW, P2=178.9 uW."
+  },
+  "arms": {
+    "base": "feedback only, 6 evaluations; area rule is in the task text",
+    "chi": "plus simplified C windows / chi for 1 and 2 beams, and the rule that a second beam is allowed only when the one-beam window is empty"
+  },
+  "n": {
+    "Y1": "4 levels x 4 instances x 2 arms = 32",
+    "seed": "one sample per task x arm"
+  },
+  "hypotheses": {
+    "H1a": "simplified chi=1 predicts transient 1-beam feasibility within the grid resolution (gate, no LLM): true window shrinks to a point at chi=1.0 and is empty at chi>=1.1.",
+    "H1b": "primary: pass including area. base pass rate lower than chi, Fisher on pooled chi<1 (0.6+0.9) and on pooled chi>1 (1.1+1.8).",
+    "H1c": "secondary: structure choice is correct (1 beam on single-solvable tasks, 2 beams when the 1-beam truth window is empty). chi raises structure_ok vs base on both sides (Fisher)."
+  },
+  "tests": "Wilson 95%, two-sided Fisher on pooled cells as listed in theorems_v2.report(); conclusion only if significant and stable across the 4 instances, otherwise 迹象.",
+  "exclusion": "Timeouts, HTTP/URL errors, missing usage and BUDGET_STOP are excluded from denominators and rerun once; TEXT_WITHOUT_ACTION counts as a valid failure.",
+  "model": "deepseek-flash, thinking high, max_tokens 65536, streaming, read timeout 300 s",
+  "budget": "CAP USD 1.80 conservative uncached ledger for Y1 only; WORKERS=8; BUDGET_STOP when a worst-case 65536-token request no longer fits."
+}
