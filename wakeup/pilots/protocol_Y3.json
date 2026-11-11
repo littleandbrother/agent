@@ -1,0 +1,38 @@
+{
+ "written_before_any_model_call": "2026-11-12T01:18:17+08:00",
+ "source": "User tweak 3 (t36u): non-saturating stop certificate; 4 structure branches, 1-2 extra evals, hidden cold_charge_ready_s.",
+ "code": "wakeup/theorems_y3.py (--build gate, --run agents, --report); agent loop = theorems.agent (X3 path) with Y3 describe/evidence/feedback. Ground truth = full transient sim.py.",
+ "model": "deepseek-flash, thinking enabled, reasoning_effort high, max_tokens 65536, stream, timeout 300 s",
+ "branches": "harvester_beams in {1,2,3,4}: n identical parallel 30 mm beams (width 10n, tip mass n*m, bridge series 5000/n), as in theorems.node; tip_mass_g [3.8,5.8], storage_uF [20,1000]",
+ "history": "4 failed one-beam designs at m*, C = {0.7,0.85,1.25,1.6}*C_min(1 beam); feedback shows only pass and delivered_on_time (cold_charge_ready_s, wake, voltages, Voc hidden); same feedback for agent evaluations",
+ "budget_extra_evals": 2,
+ "states": {
+  "S1": "chi_1=0.85 (narrow 1-beam window)",
+  "S2": "chi_4=0.85, chi_3~1.1, chi_2~1.6, chi_1~3.2: only the 4-beam branch feasible",
+  "S3": "chi_4=1.2: all four branches infeasible"
+ },
+ "levels": {
+  "L0": "history only",
+  "L1": "history + best C_max/C_min for 1 beam (U_m0)",
+  "L2": "history + best C_max/C_min for each of 1..4 beams"
+ },
+ "gate": "per instance: feasible branches have a passing C in an 18-point transient C grid at m*; every infeasible branch 0 passes on 10 transient points (C 30, 600, 8 geometric in [0.6,1.6]C_min); history all fail; ratio>=1 iff branch feasible. Only gated instances are run.",
+ "n": "4 instances per state x 3 levels = 36 runs; tx_mW ~ U(8,20), seed 20261113",
+ "infra_rule": "timeouts / HTTP errors / missing usage / BUDGET_STOP excluded and rerun once; TEXT_WITHOUT_ACTION counts as valid non-verdict (verdict None)",
+ "cap_usd": 2.0,
+ "workers": 8,
+ "metrics": "verdict FEASIBLE/INFEASIBLE/UNSURE/None; false INFEASIBLE on S1+S2; correct INFEASIBLE on S3; found passing design; tested 4 beams; evaluations used; usd. Wilson 95% CI.",
+ "hypotheses": {
+  "H1": "S1+S2 false INFEASIBLE: L0 > L2 (two-sided Fisher)",
+  "H2": "S2 found solution: L2 > L0 and L2 > L1 (Fisher)",
+  "H3": "S3 correct INFEASIBLE: L2 >= L0 (Fisher, report)",
+  "ladder": "L1 vs L0, L1 vs L2 on same metrics"
+ },
+ "conclusion_rule": "conclusion only if p<0.05 two-sided; otherwise reported as 迹象 (indication)",
+ "schedule_note": "gate saves per instance; instances are launched as they pass the gate (i0 first) without changing any rule above",
+ "amendment_1": {
+  "written": "2026-11-12T01:29:28+08:00",
+  "change": "n raised from 4 to 6 instances per state (i4,i5 same seed/rng continuation) -> 54 runs; cap unchanged $2",
+  "why": "cost ~$0.025/run on i0 (task brief allowed 6 if cheap); decided on cost only. Runs seen so far: only the 9 i0 runs; all analyses use all gated instances i0-i5."
+ }
+}
