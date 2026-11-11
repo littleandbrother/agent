@@ -1,0 +1,35 @@
+{
+  "job": "L-direct-narrow-b6-legacy-01-gateway_only",
+  "task": "legacy-01",
+  "selection_id": "legacy-01-gateway_only",
+  "arm": "L",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.4,
+    "reason": "Best full-transient design found: main=30mm, aux=18mm, C=200uF, gate=3.1V, threshold=0.4V. It delivers 3/3 target presentations on time with 0 false reports and safety slack stress=0.656, travel=0.765 (well within limits), a large improvement over the initial design (0 delivered, slack 0.90/0.94). However pass_ stays false because of a residual faults=4 that is invariant to every legal control: thresholds 0.4/0.8/1.0 gave byte-identical results; C=150/200/300uF and gate=2.9/3.1/3.2V kept faults at exactly 4 (only deliveries varied 0/3/2); main=35/30mm kept faults at 4; aux=18/19.5/24mm kept faults at 4 (while deliveries collapsed to 0 at the detuned lengths). The constant 4 equals the number of strong .8g/250Hz nuisance presentations and does not respond to the wake threshold, storage, gate, or either beam length, indicating the faults are tied to the fixed input scenario rather than to the five legal controls. I could not eliminate them within the 6-evaluation budget. Since a limited search is not a full-domain proof, I do not claim global INFEASIBLE; status is UNKNOWN. Selected final (best-service) design is evaluation 3a10c5641521790d8329b2b5.",
+    "evaluation_id": "3a10c5641521790d8329b2b5"
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": {
+    "main_length_mm": 30.0,
+    "aux_length_mm": 18.0,
+    "C_uF": 200.0,
+    "gate_V": 3.1,
+    "threshold_V": 0.4
+  },
+  "design": {
+    "main_length_mm": 30.0,
+    "aux_length_mm": 19.5,
+    "C_uF": 200.0,
+    "gate_V": 3.1,
+    "threshold_V": 1.0
+  },
+  "runtime_s": 784.2257141659502
+}

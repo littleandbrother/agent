@@ -1,0 +1,1273 @@
+{
+  "completed": 36,
+  "expected": 36,
+  "cells": [
+    {
+      "arm": "L",
+      "feedback_level": "gateway_only",
+      "completed": 9,
+      "found": 0,
+      "selected": 0,
+      "first_pass_median": null,
+      "errors": 0
+    },
+    {
+      "arm": "L",
+      "feedback_level": "original_p",
+      "completed": 9,
+      "found": 6,
+      "selected": 6,
+      "first_pass_median": 3.0,
+      "errors": 0
+    },
+    {
+      "arm": "A",
+      "feedback_level": "gateway_only",
+      "completed": 9,
+      "found": 3,
+      "selected": 3,
+      "first_pass_median": 1,
+      "errors": 1
+    },
+    {
+      "arm": "A",
+      "feedback_level": "original_p",
+      "completed": 9,
+      "found": 5,
+      "selected": 5,
+      "first_pass_median": 3,
+      "errors": 4
+    }
+  ],
+  "paired": [
+    {
+      "arm": "L",
+      "metric": "found",
+      "paired": 9,
+      "both": 0,
+      "gateway_only": 0,
+      "original_p_only": 6,
+      "neither": 3,
+      "exact_two_sided_p": 0.03125
+    },
+    {
+      "arm": "L",
+      "metric": "selected",
+      "paired": 9,
+      "both": 0,
+      "gateway_only": 0,
+      "original_p_only": 6,
+      "neither": 3,
+      "exact_two_sided_p": 0.03125
+    },
+    {
+      "arm": "A",
+      "metric": "found",
+      "paired": 9,
+      "both": 2,
+      "gateway_only": 1,
+      "original_p_only": 3,
+      "neither": 3,
+      "exact_two_sided_p": 0.625
+    },
+    {
+      "arm": "A",
+      "metric": "selected",
+      "paired": 9,
+      "both": 2,
+      "gateway_only": 1,
+      "original_p_only": 3,
+      "neither": 3,
+      "exact_two_sided_p": 0.625
+    }
+  ],
+  "rows": [
+    {
+      "job": "A-direct-narrow-b6-legacy-01-gateway_only",
+      "task": "legacy-01",
+      "selection_id": "legacy-01-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.6,
+        "reason": "Used all 6 full-transient evaluations. The best evaluated design (main 30.0 mm, aux 17.6 mm, C=300 uF, gate=2.6 V, threshold=0.5 V) achieved 3 on-time deliveries, 0 false reports, and positive safety margins (stress slack 0.654, travel slack 0.764), versus the initial design's 0 on-time deliveries. However the evaluator still returned pass_=false with terminal faults=4. Shortening the main beam increased charging/recovery but did not eliminate the faults, and larger storage delayed readiness enough to lose all deliveries. I therefore cannot certify a passing design, but I also cannot prove global infeasibility over the declared legal/hidden-factor space within the exhausted evaluation budget. The selected evaluation_id is the best measured design.",
+        "evaluation_id": "75c6474881530f3276dbe865"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 17.6,
+        "C_uF": 300.0,
+        "gate_V": 2.6,
+        "threshold_V": 0.5
+      },
+      "design": {
+        "main_length_mm": 29.5,
+        "aux_length_mm": 17.6,
+        "C_uF": 300.0,
+        "gate_V": 2.6,
+        "threshold_V": 0.5
+      },
+      "runtime_s": 548.5267240420217
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-01-original_p",
+      "task": "legacy-01",
+      "selection_id": "legacy-01-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": null,
+      "error": "DEPENDENCY_OR_TIME_STOP",
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 30.1,
+        "aux_length_mm": 18.0,
+        "C_uF": 220.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 1800.02572091599
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-02-gateway_only",
+      "task": "legacy-02",
+      "selection_id": "legacy-02-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.7,
+        "reason": "Six full-transient evaluations were used. Key findings: (1) The direct branch's clamp (3.3 V) minus 2 diode drops minus the 5000 Ω series drop makes storage asymptote near ~3.0 V, so the original gate 2.9 V is at the edge and the MCU is very hard to start. (2) The main beam at the nominal 35 mm resonates ~35 Hz, detuned from the 45 Hz background; the switched/rectified harvester is strongly electrically damped, so charging from 0.15 g is weak. (3) Digital confirmation math is sound: a 210 Hz target in 128 pts @2048 Hz yields band fraction ~0.8–0.89 with RMS > 0.12 g, while 250 Hz nuisance gives ~0.01, so confirmation/rejection is not the blocker. Experimentally, every combination tried (main 29.5–35 mm, aux 18–21.4 mm, C 80–330 µF, gate 2.0–2.9 V, threshold 0.15–0.55 V) returned exactly faults=4, delivered_on_time=0, false_reports=0, with only the mechanical safety slacks changing (stress depends only on aux length, travel only on main length; both <1). This invariance indicates the service failure is governed by a fixed, unresolved effective-length (manufacturing/mounting) factor that detunes the narrow-band beams, which the pass/fail-plus-slack feedback did not let me identify to the required ~1–2% precision. I could not find a passing design, but a failed search is not a proof over the whole legal space, so INFEASIBLE is not justified. Status UNKNOWN; final evaluated design is main=34.0 mm, aux=20.8 mm, C=100 µF, gate=2.0 V, threshold=0.15 V (feasibility unconfirmed).",
+        "evaluation_id": "98117acc0c630f2190788d59"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 20.8,
+        "C_uF": 100.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.15
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 20.8,
+        "C_uF": 100.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.15
+      },
+      "runtime_s": 1670.44287887495
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-02-original_p",
+      "task": "legacy-02",
+      "selection_id": "legacy-02-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": null,
+      "error": "DEPENDENCY_OR_TIME_STOP",
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.8,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 1800.0206692090724
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-04-gateway_only",
+      "task": "legacy-04",
+      "selection_id": "legacy-04-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.95,
+        "reason": "Found a passing design verified by full-transient evaluation: main_length=29.8mm (loaded resonance on the 45Hz background for fast charging), aux_length=18.0mm (210Hz trigger resonance), C=80uF (fastest readiness, still holds a full MCU report), gate=3.0V (start only near full charge), threshold=0.55V (between target ~1.3V and nuisance ~0.44V envelope peaks). Measured result: pass_=true, delivered_on_time=4/4, false_reports=0, with positive safety slacks (stress 0.619, travel 0.743). I reconstructed the coupled model from the task equations and validated it against the free initial result (stress slack matched to 5e-5, travel to <0.1%, confirming length factor ~1.0), so the predicted and observed slacks agree to ~0.001.",
+        "evaluation_id": "7473e56b7fc9a40f8460a691"
+      },
+      "error": null,
+      "first_pass": 1,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 29.8,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 29.8,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 972.1607274169801
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-04-original_p",
+      "task": "legacy-04",
+      "selection_id": "legacy-04-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 0,
+      "final": null,
+      "error": "DEPENDENCY_OR_TIME_STOP",
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 33.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 1800.033188374946
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-06-gateway_only",
+      "task": "legacy-06",
+      "selection_id": "legacy-06-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.35,
+        "reason": "Six full-transient evaluations spanning all five legal controls (main_length 29.8-33mm, aux_length 18-22mm, C 80-150uF, gate 2.0-2.9V, threshold 0.15-0.65V) all returned faults=4, delivered_on_time=0, false_reports=0, pass_=false. Main-beam mechanical slacks varied with main length (travel 0.913/0.955/0.964/0.970; stress 0.854/0.901/0.917/0.939), proving measurements were live and the main beam's response peaks near ~30mm, yet the service outcome was completely insensitive to every control. This indicates the delivery path is gated by a mechanism not recoverable within the sampled space - most likely the 210Hz auxiliary trigger never crossing threshold (leaving the MCU to poll and brown out) and/or the hidden length factor pushing the true resonances outside the probed ranges (untested corner ~factor 0.75 implies main~39.5mm, aux~24mm). I could not locate a passing design, but a failed 6-point search with an uncalibrated nominal model is not a proof of global infeasibility, so I cannot claim INFEASIBLE. Status UNKNOWN; no passing design to select.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 22.0,
+        "C_uF": 120.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.3
+      },
+      "runtime_s": 1046.2610621670028
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-06-original_p",
+      "task": "legacy-06",
+      "selection_id": "legacy-06-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 0,
+      "final": null,
+      "error": "DEPENDENCY_OR_TIME_STOP",
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 33.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 1800.878670666949
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-07-gateway_only",
+      "task": "legacy-07",
+      "selection_id": "legacy-07-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.92,
+        "reason": "Retuning aux_length_mm from 16 to 18 mm moves the auxiliary trigger beam's resonance from the 250 Hz nuisance band (~245–255 Hz) to ~210 Hz, matching the target. In the full transient evaluation with the actual hidden manufacturing factor, this design (main 30 mm, aux 18 mm, C 150 µF, gate 2.9 V, threshold 0.55 V) passes: delivered_on_time=4, false_reports=0, stress slack 0.658 and travel slack 0.766 positive. The main beam stays resonant with the 45 Hz background for storage charging. Evaluation id 11e27458d2e0c6d13a9215a7 is selected as final.",
+        "evaluation_id": "11e27458d2e0c6d13a9215a7"
+      },
+      "error": null,
+      "first_pass": 1,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 58.15402729099151
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-07-original_p",
+      "task": "legacy-07",
+      "selection_id": "legacy-07-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.97,
+        "reason": "Repaired by retuning the auxiliary trigger/sensing beam from 16 mm to 18 mm (resonance ~250 Hz -> ~210 Hz) while leaving the main 30 mm harvester at the 45 Hz background optimum. Full-transient evaluation 11e27458d2e0c6d13a9215a7 reports pass_=true: 4/4 target events CONFIRM/TX/ACK/RECEIVED, 0 rejects, 0 false reports, 0 brownouts; stress slack 0.658 and travel slack 0.766 remain positive; storage charges to 3.16 V before first event.",
+        "evaluation_id": "11e27458d2e0c6d13a9215a7"
+      },
+      "error": null,
+      "first_pass": 1,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 122.4404067909345
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-08-gateway_only",
+      "task": "legacy-08",
+      "selection_id": "legacy-08-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.8,
+        "reason": "All six physical evaluations were exhausted without finding a passing design. Every evaluated candidate remained at 4 faults, 0 delivered-on-time reports, and 0 false reports, although mechanical stress/travel slack stayed below 1. Broad changes to both beam lengths, storage capacitance, start gate, and trigger threshold did not produce a valid report. The hidden stationary length factor and event timing could not be identified reliably enough to certify a feasible point, and the failed search is not a proof that the entire declared legal space is infeasible. No qualifying evaluated design is selected.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 20.0,
+        "C_uF": 80.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.4
+      },
+      "runtime_s": 1578.161769459024
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-08-original_p",
+      "task": "legacy-08",
+      "selection_id": "legacy-08-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 3,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.95,
+        "reason": "Found and physically verified a passing design: {main_length_mm:38, aux_length_mm:18, C_uF:110, gate_V:2.9, threshold_V:0.55} (evaluation 46a28bb00f19e234c471767d). The hidden effective-length factor shifts the main beam's 45 Hz resonance to a longer nominal length (~38 mm), which raises main_peak to 4.20 V and charges storage to the 3.3 V clamp. With C=110 uF the node is cold-charge ready at 7.38 s (storage 3.09 V at the first event), so it catches all 4 target events: WAKE/BOOT/SAMPLE/INFER/CONFIRM/SAVE/TX/ACK/RECEIVED = 4 each, delivered_on_time = 4/4 (delivery slack 0.0), false_reports = 0, brownouts = 0. Peak stress 11.84 MPa (stress slack 0.704) and peak tip 0.312 mm (travel slack 0.792) are within limits. Aux at 18 mm correctly wakes on the 210 Hz target envelope (peak 1.19 V > threshold 0.55 V) while the 250 Hz nuisance is rejected (REJECT=0, i.e., it never caused a false event).",
+        "evaluation_id": "46a28bb00f19e234c471767d"
+      },
+      "error": null,
+      "first_pass": 3,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 38.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 110.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 38.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 110.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 1744.6905932920054
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-09-gateway_only",
+      "task": "legacy-09",
+      "selection_id": "legacy-09-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 2,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.97,
+        "reason": "The evaluated design {main_length_mm:34, aux_length_mm:18, C_uF:80, gate_V:2.0, threshold_V:0.55} returned pass_=true in full-transient fidelity, delivering all 4 target events on time with 0 false reports. Stress slack 0.733 and travel slack 0.810 are both below the safety limits. All controls are within the declared domain.",
+        "evaluation_id": "246c9afc2d2f23b271515518"
+      },
+      "error": null,
+      "first_pass": 2,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 433.04673508298583
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-09-original_p",
+      "task": "legacy-09",
+      "selection_id": "legacy-09-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 4,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.99,
+        "reason": "Full-transient evaluation 246c9afc2d2f23b271515518 passes with all four target deliveries on time, zero false reports, zero brownouts, and positive stress/travel safety slack. Final design: main_length_mm=34, aux_length_mm=18, C_uF=80, gate_V=2.0, threshold_V=0.55.",
+        "evaluation_id": "246c9afc2d2f23b271515518"
+      },
+      "error": null,
+      "first_pass": 4,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 265.92008458299097
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-10-gateway_only",
+      "task": "legacy-10",
+      "selection_id": "legacy-10-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 5,
+      "final": null,
+      "error": "DEPENDENCY_OR_TIME_STOP",
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 33.6,
+        "aux_length_mm": 19.5,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.5
+      },
+      "runtime_s": 1800.0200757499551
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-10-original_p",
+      "task": "legacy-10",
+      "selection_id": "legacy-10-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 2,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.96,
+        "reason": "Found a verified passing design. Measurements identified fixed per-beam hidden length factors: main ×0.92 (initial main=34→effective 31.28 reproduced cold-charge 29.8s, tip 0.198mm, stress 7.11MPa) and aux ×1.0 (aux=18→210Hz target). Retuning main to 32.4 (effective 29.8mm, ~45Hz background) cut cold-charge-ready to 5.83s with storage at the 3.30V clamp before the first event. Aux=18mm gives target envelope 1.19V (>0.55 threshold) while nuisance envelope is 0.43V (<0.55). C=120µF/gate=3.0V provides ~459µJ usable vs ~300µJ per transaction, so no brownouts. Final evaluation: delivered_on_time=4/4, false_reports=0, brownouts=0, stress slack 0.612 (15.5MPa of 40), travel slack 0.738 (0.393mm of 1.5mm), stages WAKE/BOOT/SAMPLE/INFER/CONFIRM/SAVE/TX/ACK/RECEIVED all=4, REJECT=0.",
+        "evaluation_id": "53a47bd4a8e0c966d726190b"
+      },
+      "error": null,
+      "first_pass": 2,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 32.4,
+        "aux_length_mm": 18.0,
+        "C_uF": 120.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 32.4,
+        "aux_length_mm": 18.0,
+        "C_uF": 120.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 820.7742746250005
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-11-gateway_only",
+      "task": "legacy-11",
+      "selection_id": "legacy-11-gateway_only",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.6,
+        "reason": "Six full-transient evaluations (budget exhausted) all returned pass_=false, faults=4, delivered_on_time=0, false_reports=0, across nominal, ±length-scaling compensations (both signs of a common effective-length factor), thresholds 0.15–0.55 V, gate 2.7–2.9 V, and C 150–220 µF. Nominal beam analysis + a coupled aux-beam/envelope ODE were used to target 45 Hz harvest and 210 Hz wake while rejecting 250 Hz nuisance. No tested design delivered, and slack stayed <1. The systematic zero-delivery (even with a well-centered aux resonance and benign threshold) points to a likely unmet start/energy condition (possibly gate_V above the clamp/harvest-limited maximum), whose fix (low gate ~2.1–2.3 V with large C) could not be verified before the hard evaluation budget ran out. Since a failed search over six designs is not a proof over the full legal domain, the correct status is UNKNOWN rather than INFEASIBLE; no passing design is available to select.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 36.0,
+        "aux_length_mm": 21.7,
+        "C_uF": 220.0,
+        "gate_V": 2.7,
+        "threshold_V": 0.4
+      },
+      "runtime_s": 1101.0813338749576
+    },
+    {
+      "job": "A-direct-narrow-b6-legacy-11-original_p",
+      "task": "legacy-11",
+      "selection_id": "legacy-11-original_p",
+      "arm": "A",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 3,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.93,
+        "reason": "Found a passing full-transient design (evaluation 13021cd2e5c251f946d6ba73): main_length_mm=30.0, aux_length_mm=13.0, C_uF=150, gate_V=2.9, threshold_V=0.15. Diagnosis: the original aux beam (16mm) resonated near the 245-255Hz nuisance, and the 210Hz target response stayed below the ~0.2V rectifier/envelope drop (envelope 0.0148V << 0.55V threshold), so the node never woke (0 delivered). Probing showed aux response increasing as nominal length shortened (16→16.65→18mm gave 0.215→0.2005→0.166V), i.e. the true 210Hz resonance lay well below 16mm due to the stationary effective-length factor. At aux=13mm the aux_peak rose to 1.361V and envelope_peak to 1.145V, crossing the 0.15V threshold. Result: 4/4 targets delivered on time (delivery slack 0.0=100%), 0 false reports, 0 brownouts, 2 nuisance wakes correctly rejected by digital spectral confirmation, stress slack 0.658 and travel slack 0.766 both positive. All service/safety conditions met with large trigger margin.",
+        "evaluation_id": "13021cd2e5c251f946d6ba73"
+      },
+      "error": null,
+      "first_pass": 3,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 13.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.15
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 13.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.15
+      },
+      "runtime_s": 416.7081662090495
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-01-gateway_only",
+      "task": "legacy-01",
+      "selection_id": "legacy-01-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.4,
+        "reason": "Best full-transient design found: main=30mm, aux=18mm, C=200uF, gate=3.1V, threshold=0.4V. It delivers 3/3 target presentations on time with 0 false reports and safety slack stress=0.656, travel=0.765 (well within limits), a large improvement over the initial design (0 delivered, slack 0.90/0.94). However pass_ stays false because of a residual faults=4 that is invariant to every legal control: thresholds 0.4/0.8/1.0 gave byte-identical results; C=150/200/300uF and gate=2.9/3.1/3.2V kept faults at exactly 4 (only deliveries varied 0/3/2); main=35/30mm kept faults at 4; aux=18/19.5/24mm kept faults at 4 (while deliveries collapsed to 0 at the detuned lengths). The constant 4 equals the number of strong .8g/250Hz nuisance presentations and does not respond to the wake threshold, storage, gate, or either beam length, indicating the faults are tied to the fixed input scenario rather than to the five legal controls. I could not eliminate them within the 6-evaluation budget. Since a limited search is not a full-domain proof, I do not claim global INFEASIBLE; status is UNKNOWN. Selected final (best-service) design is evaluation 3a10c5641521790d8329b2b5.",
+        "evaluation_id": "3a10c5641521790d8329b2b5"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 200.0,
+        "gate_V": 3.1,
+        "threshold_V": 0.4
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 19.5,
+        "C_uF": 200.0,
+        "gate_V": 3.1,
+        "threshold_V": 1.0
+      },
+      "runtime_s": 784.2257141659502
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-01-original_p",
+      "task": "legacy-01",
+      "selection_id": "legacy-01-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 4,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.97,
+        "reason": "The full-transient evaluation with main length 30 mm, auxiliary length 18 mm, 80 uF storage, 2.0 V gate, and 0.55 V wake threshold passes: 4/4 targets delivered on time, 0 false reports, 0 brownouts, and both safety slacks remain positive (stress 0.663, travel 0.770). Peak storage reached 3.305 V, above the 2.0 V gate, with cold-charge ready at 2.387 s. No further evaluation is needed because a passing design has been found.",
+        "evaluation_id": "8a7d341296c8372992b4d0e3"
+      },
+      "error": null,
+      "first_pass": 4,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 135.1789158330066
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-02-gateway_only",
+      "task": "legacy-02",
+      "selection_id": "legacy-02-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.65,
+        "reason": "Six paid full-transient evaluations plus the free initial result all produced faults=4, delivered_on_time=0, false_reports=0, despite wide joint changes in aux length, main length, storage, gate voltage, and wake threshold. Only stress/travel slack varied (with main length), so no tested design achieved service. This failed search does not cover the full 5-D legal space and cannot establish global infeasibility, especially with a hidden fixed manufacturing/mounting length factor. Final selected evaluated design is 40acdb8d777fdef908aac5bf (main 32 mm, aux 19.5 mm, 300 uF, gate 2.4 V, threshold 0.2 V), the best-reasoned frequency-tuned candidate with significant stored-energy margin and the largest measured safety slack in the tested set.",
+        "evaluation_id": "40acdb8d777fdef908aac5bf"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 32.0,
+        "aux_length_mm": 19.5,
+        "C_uF": 300.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.2
+      },
+      "design": {
+        "main_length_mm": 32.0,
+        "aux_length_mm": 19.5,
+        "C_uF": 300.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.2
+      },
+      "runtime_s": 596.825079292059
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-02-original_p",
+      "task": "legacy-02",
+      "selection_id": "legacy-02-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.6,
+        "reason": "Used all 6 physical evaluations. Tuning the main beam to 42 mm greatly increased charging, and 80–150 uF designs reached WAKE/BOOT/SAMPLE, but every tested design either failed to complete acquisition before brownout or failed to reach the target/inference stage. No tested design satisfied the full service condition, and the remaining budget did not permit a full-domain proof or a passing candidate. Therefore I cannot claim feasibility, but I also cannot prove global infeasibility.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 42.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 415.9838269589236
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-04-gateway_only",
+      "task": "legacy-04",
+      "selection_id": "legacy-04-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.2,
+        "reason": "The physical evaluation budget is exhausted. The best observed designs achieved 3 on-time deliveries with 0 false reports and safe stress/travel slack, but none reached a passing terminal state. Lowering the start voltage did not improve the result, so the remaining limitation was not resolved. No design was proven infeasible over the full declared domain, so the correct judgment is UNKNOWN; the selected evaluation is the best-performing higher-margin stored-energy design.",
+        "evaluation_id": "3ef77facbb27b7b2e7ff35d6"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 17.6,
+        "C_uF": 300.0,
+        "gate_V": 2.8,
+        "threshold_V": 0.25
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 17.6,
+        "C_uF": 300.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.25
+      },
+      "runtime_s": 414.67024154099636
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-04-original_p",
+      "task": "legacy-04",
+      "selection_id": "legacy-04-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 3,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.97,
+        "reason": "Measured full-transient design at (main_length_mm=30.0, aux_length_mm=18.0, C_uF=80.0, gate_V=2.0, threshold_V=0.15) passes. It delivered 4/4 events on time with zero false reports and zero brownouts, positive stress slack (0.663) and travel slack (0.770), reached 3.305 V storage, and completed WAKE/BOOT/SAMPLE/INFER/CONFIRM/SAVE/TX/ACK/RECEIVED stages. This evaluated design satisfies the original service and safety conditions under the fixed hidden manufacturing factor.",
+        "evaluation_id": "b46a7e8e8b9d6faccbc07754"
+      },
+      "error": null,
+      "first_pass": 3,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.15
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.15
+      },
+      "runtime_s": 71.54162133298814
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-06-gateway_only",
+      "task": "legacy-06",
+      "selection_id": "legacy-06-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.8,
+        "reason": "All six physical evaluations were consumed. Every evaluated design, including the final candidate, remained failing the full-transient service condition: faults=4 and delivered_on_time=0, with false_reports=0. The evaluations did not establish a passing design, but a finite failed search is not a proof that the entire declared legal space is infeasible, especially with the unspecified stationary effective-length manufacturing factor. Therefore feasibility is unresolved rather than disproved. Final candidate retained for the record: evaluation 73796473e765baa7da4c9447 (main 33.0 mm, aux 18.7 mm, C 150 uF, gate 3.0 V, threshold 0.25 V).",
+        "evaluation_id": "73796473e765baa7da4c9447"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 33.0,
+        "aux_length_mm": 18.7,
+        "C_uF": 150.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.25
+      },
+      "design": {
+        "main_length_mm": 33.0,
+        "aux_length_mm": 18.7,
+        "C_uF": 150.0,
+        "gate_V": 3.0,
+        "threshold_V": 0.25
+      },
+      "runtime_s": 308.384149666992
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-06-original_p",
+      "task": "legacy-06",
+      "selection_id": "legacy-06-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 4,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.99,
+        "reason": "The evaluated design main_length_mm=35.5, aux_length_mm=18.0, C_uF=150, gate_V=2.8, threshold_V=0.9 passes the full transient: 4/4 events delivered on time, 0 false reports, 0 brownouts, and positive stress/travel margins. Tuning the main beam to the 45 Hz background gives cold-charge readiness before the first event, while the auxiliary at 18 mm and a 0.9 V threshold wake only for the 210 Hz target; the 2.8 V gate leaves enough stored energy for the complete MCU sequence.",
+        "evaluation_id": "310c61886506f758ce1c13df"
+      },
+      "error": null,
+      "first_pass": 4,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 35.5,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.8,
+        "threshold_V": 0.9
+      },
+      "design": {
+        "main_length_mm": 35.5,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.8,
+        "threshold_V": 0.9
+      },
+      "runtime_s": 292.3741957079619
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-07-gateway_only",
+      "task": "legacy-07",
+      "selection_id": "legacy-07-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.5,
+        "reason": "Budget exhausted (6/6 physical evaluations) without a passing design, so FEASIBLE is not established; and since a curated search failure is not a full-domain proof, INFEASIBLE is not justified either. Measurements give a consistent diagnosis: (1) delivered=0/faults=4/false=0 was invariant across C=95-320 uF, gate=2.2-2.9 V, threshold=0.15-0.55 V, so the blocker is mechanical tuning, not storage/boot/wake setpoints; (2) stress/travel slack (<1, safe) depends only on main length (aux 21 vs 23 mm gave identical slack), so the aux beam is safety-neutral and can be tuned to 210 Hz freely; (3) main-length deflection shows resonance peaks near ~24 and ~34 mm with a trough at ~30-32 mm, indicating the legacy 30 mm main beam is off-resonance from the 45 Hz/0.15 g background, whose harvest optimum appears near ~34 mm. Best next design (untested due to budget): main ~34 mm (or ~24 mm for the higher mode), aux tuned toward 210 Hz, larger storage (~300 uF) for a full sample+infer+TX buffer above the 1.8 V brownout, gate reachable at resonance, and a low threshold. No false reports were ever produced, so nuisance rejection by digital confirmation is already working.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 32.0,
+        "aux_length_mm": 21.0,
+        "C_uF": 320.0,
+        "gate_V": 2.8,
+        "threshold_V": 0.25
+      },
+      "runtime_s": 546.5664317089831
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-07-original_p",
+      "task": "legacy-07",
+      "selection_id": "legacy-07-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 1,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.88,
+        "reason": "Diagnosed the initial failure: aux trigger beam (L=16mm) resonates at ~248 Hz, coincident with the 250 Hz nuisance, so the node woke on nuisance and rejected it while the 210 Hz target never triggered — hence CONFIRM=0/REJECT=2/delivered=0. Fix: lengthen the aux beam to 17.7mm (f ∝ L^-1.5) to move its resonance onto the 210 Hz target, and lower threshold to 0.5V for margin. Verified with full-transient evaluation 98118efb4e4c36bd9ccde009: delivered_on_time=4 (CONFIRM=4, REJECT=0, RECEIVED=4), false_reports=0, brownouts=0, peak stress slack +0.658, travel slack +0.766 — all service and safety conditions met. The design is robust for this instance's fixed manufacturing factor (measured aux_peak=1.05V, envelope=0.85V match a 210 Hz resonant trigger). This is a valid passing design, not merely a marginal point: all required target events are delivered with the delivery metric at its maximum.",
+        "evaluation_id": "98118efb4e4c36bd9ccde009"
+      },
+      "error": null,
+      "first_pass": 1,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 17.7,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.5
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 17.7,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.5
+      },
+      "runtime_s": 169.00742708297912
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-08-gateway_only",
+      "task": "legacy-08",
+      "selection_id": "legacy-08-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.55,
+        "reason": "Exhausted all 6 physical evaluations across main length 24-42mm, aux 17.5-18mm, C=80-150uF, gate=2.0-2.9V, and threshold=0.15-0.55V. Every design gave pass_=false, faults=4, delivered_on_time=0, false_reports=0, with all mechanical slacks <1 (stress 0.90-0.94, travel 0.92-0.98), so no safety violation but zero deliveries. Critically, the outcome was invariant to storage capacitance, gate voltage, and to LOWERING the comparator threshold through 0.15-0.55V; main length only shifted stress/travel. This pattern strongly indicates the analog comparator threshold sits BELOW the .8g/250Hz nuisance envelope (aux response roughly 0.6-0.7V), so the nuisance repeatedly wakes/drains the node (the 4 faults), while the .5g/210Hz target envelope (~3V) could be separated by a threshold near 0.7-1.0V. That high-threshold region (and its interaction with a background-resonant main beam for energy) is the leading candidate but was untested within budget. No design was verified to pass, and a failed search is not a full-domain proof, so I cannot assert INFEASIBLE; no final design can be honestly selected.",
+        "evaluation_id": ""
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": null,
+      "design": {
+        "main_length_mm": 42.0,
+        "aux_length_mm": 17.5,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 0.4
+      },
+      "runtime_s": 580.9162446249975
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-08-original_p",
+      "task": "legacy-08",
+      "selection_id": "legacy-08-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 3,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.97,
+        "reason": "Full-transient evaluation 2248d8d4552250635e06a9bd passes: 4/4 target events delivered on time, 0 false reports, 0 brownouts. The main beam at 38 mm is tuned to the continuous 45 Hz background, the auxiliary beam at 18.4 mm favors the 210 Hz target while rejecting the 250 Hz nuisance, and 80 uF storage with a 2.9 V gate reaches cold-charge readiness at 5.39 s, well before the first target, while retaining ample usable energy above the 1.8 V brownout. Safety margins remain healthy: peak stress 11.75 MPa (70.6% slack) and peak tip 0.309 mm (79.4% slack).",
+        "evaluation_id": "2248d8d4552250635e06a9bd"
+      },
+      "error": null,
+      "first_pass": 3,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 38.0,
+        "aux_length_mm": 18.4,
+        "C_uF": 80.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.65
+      },
+      "design": {
+        "main_length_mm": 38.0,
+        "aux_length_mm": 18.4,
+        "C_uF": 80.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.65
+      },
+      "runtime_s": 309.2143585419981
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-09-gateway_only",
+      "task": "legacy-09",
+      "selection_id": "legacy-09-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.78,
+        "reason": "The full physical-evaluation budget was exhausted without observing a passing design. The best balanced tested design retained delivered_on_time=3 and false_reports=0, but still had faults=4. The four faults were invariant across main-beam shortening/lengthening, storage/gate changes, threshold increase, and auxiliary-beam detuning plus maximum threshold; attempts to suppress them by detuning lost all target deliveries. Thus no tested design met every service and safety condition, but the sparse measurements are not a global proof that the entire legal domain is infeasible. Final selected evaluated design: main_length_mm=34.0, aux_length_mm=18.0, C_uF=150.0, gate_V=2.9, threshold_V=0.75.",
+        "evaluation_id": "489769f0e010cb4f52353ea9"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.75
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 21.7,
+        "C_uF": 150.0,
+        "gate_V": 2.9,
+        "threshold_V": 1.0
+      },
+      "runtime_s": 475.1232680409448
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-09-original_p",
+      "task": "legacy-09",
+      "selection_id": "legacy-09-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.82,
+        "reason": "The physical evaluation budget is exhausted. No evaluated design achieved the required fourth on-time delivery: the best candidates remained at delivered_on_time=3, faults=4, with zero false reports and zero brownouts. The last design (main 34 mm, aux 18 mm, 100 uF, 2.9 V gate, 0.55 V threshold) preserved safety margins and improved cold-charge readiness from 12.38 s to 8.278 s, but still did not add a delivery. A truly passing design may exist, but it was not located or verified within the hard evaluation budget, so a global INFEASIBLE claim is not justified.",
+        "evaluation_id": "90d94783bb1883121bf89efb"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 100.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 100.0,
+        "gate_V": 2.9,
+        "threshold_V": 0.55
+      },
+      "runtime_s": 527.9671926669544
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-10-gateway_only",
+      "task": "legacy-10",
+      "selection_id": "legacy-10-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.7,
+        "reason": "All six physical evaluations were consumed. The best-reasoned geometry kept the main beam at 34 mm for the 45 Hz background and centered the auxiliary beam near 21.8 mm for the 210 Hz target, with reduced storage and a usable gate-to-brownout energy margin. Nevertheless the measured result remained 4 faults, 0 delivered-on-time, and 0 false reports. Other tested combinations of main/aux length, storage, gate, and threshold also failed, with threshold 0.15 not changing the outcome. This is not a full-domain proof of impossibility, so INFEASIBLE is not justified; the correct judgment is UNKNOWN. Final selected evaluation is the last reasoned candidate.",
+        "evaluation_id": "df0c09ab6b44568bab46d305"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 21.8,
+        "C_uF": 80.0,
+        "gate_V": 3.2,
+        "threshold_V": 0.25
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 21.8,
+        "C_uF": 80.0,
+        "gate_V": 3.2,
+        "threshold_V": 0.25
+      },
+      "runtime_s": 479.5549355420517
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-10-original_p",
+      "task": "legacy-10",
+      "selection_id": "legacy-10-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.8,
+        "reason": "Exhausted the six physical evaluations. The closest design (34 mm main, 18 mm aux, 95 uF, 3.0 V gate, 1.0 V threshold) was safe with zero false reports and zero brownouts and delivered one target on time, but delivery slack remained -0.75, so it did not pass. Lowering storage/gate to improve readiness produced brownouts, while higher gates missed too many target windows. A failed measured search is not a full-domain infeasibility proof, so the global claim remains unresolved.",
+        "evaluation_id": "92cb7d65ee297961d5649140"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 95.0,
+        "gate_V": 3.0,
+        "threshold_V": 1.0
+      },
+      "design": {
+        "main_length_mm": 34.0,
+        "aux_length_mm": 18.0,
+        "C_uF": 80.0,
+        "gate_V": 2.0,
+        "threshold_V": 1.0
+      },
+      "runtime_s": 571.9990289169364
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-11-gateway_only",
+      "task": "legacy-11",
+      "selection_id": "legacy-11-gateway_only",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 6,
+      "final": {
+        "status": "UNKNOWN",
+        "confidence": 0.78,
+        "reason": "All six full-transient evaluations remained failing, each with 4 faults and 0 delivered-on-time reports. The tested directions included retuning the auxiliary beam toward 210 Hz, minimum trigger threshold, maximum storage with a low start gate, and both longer and shorter effective-length hypotheses for the hidden mounting factor. None produced a delivered report, so no tested design is a feasible selection. I do not claim global INFEASIBLE because the hidden stationary length factor is unrevealed and a failed six-point search is not a full-domain proof. The selected evaluation is the best-tested compromise: main beam left at its nominal 30 mm background resonance, auxiliary beam lengthened to 19.1 mm for target selectivity, 200 uF storage at a 2.7 V start gate for adequate above-brownout report energy, and the trigger threshold at its legal minimum to maximize wake sensitivity.",
+        "evaluation_id": "7f889fe299854b13a0a3fc0f"
+      },
+      "error": null,
+      "first_pass": null,
+      "selected_pass": false,
+      "last_working_pass": false,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 19.1,
+        "C_uF": 200.0,
+        "gate_V": 2.7,
+        "threshold_V": 0.15
+      },
+      "design": {
+        "main_length_mm": 24.0,
+        "aux_length_mm": 16.0,
+        "C_uF": 200.0,
+        "gate_V": 2.7,
+        "threshold_V": 0.25
+      },
+      "runtime_s": 513.3547717920737
+    },
+    {
+      "job": "L-direct-narrow-b6-legacy-11-original_p",
+      "task": "legacy-11",
+      "selection_id": "legacy-11-original_p",
+      "arm": "L",
+      "budget": 6,
+      "branch": "direct",
+      "width": "narrow",
+      "evaluations": 3,
+      "final": {
+        "status": "FEASIBLE",
+        "confidence": 0.98,
+        "reason": "The evaluated design {main_length_mm: 30.0, aux_length_mm: 13.0, C_uF: 150.0, gate_V: 2.4, threshold_V: 0.15} passes the full transient: all 4 target events are delivered on time, with 0 false reports and 0 brownouts. Stress and travel slacks remain positive (0.6577 and 0.7659), and all parameters are within the declared legal domain. The 13 mm auxiliary length provides sufficient 210 Hz envelope response for wake-up while the digital confirmation rejects nuisance events.",
+        "evaluation_id": "530ab8734a725521d308426c"
+      },
+      "error": null,
+      "first_pass": 3,
+      "selected_pass": true,
+      "last_working_pass": true,
+      "selected_design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 13.0,
+        "C_uF": 150.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.15
+      },
+      "design": {
+        "main_length_mm": 30.0,
+        "aux_length_mm": 13.0,
+        "C_uF": 150.0,
+        "gate_V": 2.4,
+        "threshold_V": 0.15
+      },
+      "runtime_s": 66.59617529099341
+    }
+  ],
+  "accounting": {
+    "requests": 453,
+    "responses": 453,
+    "usage": {
+      "prompt_tokens": 13829584,
+      "completion_tokens": 1578542,
+      "total_tokens": 15408126,
+      "prompt_cache_hit_tokens": 13581952
+    },
+    "estimated_usd": 2.050031712,
+    "unknown": []
+  },
+  "science": {
+    "attempts": 144,
+    "returned": 144,
+    "new_full": 124,
+    "reused": 20
+  }
+}

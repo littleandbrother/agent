@@ -1,0 +1,35 @@
+{
+  "job": "A-direct-narrow-b6-legacy-11-original_p",
+  "task": "legacy-11",
+  "selection_id": "legacy-11-original_p",
+  "arm": "A",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 3,
+  "final": {
+    "status": "FEASIBLE",
+    "confidence": 0.93,
+    "reason": "Found a passing full-transient design (evaluation 13021cd2e5c251f946d6ba73): main_length_mm=30.0, aux_length_mm=13.0, C_uF=150, gate_V=2.9, threshold_V=0.15. Diagnosis: the original aux beam (16mm) resonated near the 245-255Hz nuisance, and the 210Hz target response stayed below the ~0.2V rectifier/envelope drop (envelope 0.0148V << 0.55V threshold), so the node never woke (0 delivered). Probing showed aux response increasing as nominal length shortened (16\u219216.65\u219218mm gave 0.215\u21920.2005\u21920.166V), i.e. the true 210Hz resonance lay well below 16mm due to the stationary effective-length factor. At aux=13mm the aux_peak rose to 1.361V and envelope_peak to 1.145V, crossing the 0.15V threshold. Result: 4/4 targets delivered on time (delivery slack 0.0=100%), 0 false reports, 0 brownouts, 2 nuisance wakes correctly rejected by digital spectral confirmation, stress slack 0.658 and travel slack 0.766 both positive. All service/safety conditions met with large trigger margin.",
+    "evaluation_id": "13021cd2e5c251f946d6ba73"
+  },
+  "error": null,
+  "first_pass": 3,
+  "selected_pass": true,
+  "last_working_pass": true,
+  "selected_design": {
+    "main_length_mm": 30.0,
+    "aux_length_mm": 13.0,
+    "C_uF": 150.0,
+    "gate_V": 2.9,
+    "threshold_V": 0.15
+  },
+  "design": {
+    "main_length_mm": 30.0,
+    "aux_length_mm": 13.0,
+    "C_uF": 150.0,
+    "gate_V": 2.9,
+    "threshold_V": 0.15
+  },
+  "runtime_s": 416.7081662090495
+}

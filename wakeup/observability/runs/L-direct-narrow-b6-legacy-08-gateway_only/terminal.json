@@ -1,0 +1,29 @@
+{
+  "job": "L-direct-narrow-b6-legacy-08-gateway_only",
+  "task": "legacy-08",
+  "selection_id": "legacy-08-gateway_only",
+  "arm": "L",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.55,
+    "reason": "Exhausted all 6 physical evaluations across main length 24-42mm, aux 17.5-18mm, C=80-150uF, gate=2.0-2.9V, and threshold=0.15-0.55V. Every design gave pass_=false, faults=4, delivered_on_time=0, false_reports=0, with all mechanical slacks <1 (stress 0.90-0.94, travel 0.92-0.98), so no safety violation but zero deliveries. Critically, the outcome was invariant to storage capacitance, gate voltage, and to LOWERING the comparator threshold through 0.15-0.55V; main length only shifted stress/travel. This pattern strongly indicates the analog comparator threshold sits BELOW the .8g/250Hz nuisance envelope (aux response roughly 0.6-0.7V), so the nuisance repeatedly wakes/drains the node (the 4 faults), while the .5g/210Hz target envelope (~3V) could be separated by a threshold near 0.7-1.0V. That high-threshold region (and its interaction with a background-resonant main beam for energy) is the leading candidate but was untested within budget. No design was verified to pass, and a failed search is not a full-domain proof, so I cannot assert INFEASIBLE; no final design can be honestly selected.",
+    "evaluation_id": ""
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": null,
+  "design": {
+    "main_length_mm": 42.0,
+    "aux_length_mm": 17.5,
+    "C_uF": 80.0,
+    "gate_V": 2.0,
+    "threshold_V": 0.4
+  },
+  "runtime_s": 580.9162446249975
+}

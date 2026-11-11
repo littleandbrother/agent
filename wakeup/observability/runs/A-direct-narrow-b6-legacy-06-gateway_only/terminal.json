@@ -1,0 +1,29 @@
+{
+  "job": "A-direct-narrow-b6-legacy-06-gateway_only",
+  "task": "legacy-06",
+  "selection_id": "legacy-06-gateway_only",
+  "arm": "A",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.35,
+    "reason": "Six full-transient evaluations spanning all five legal controls (main_length 29.8-33mm, aux_length 18-22mm, C 80-150uF, gate 2.0-2.9V, threshold 0.15-0.65V) all returned faults=4, delivered_on_time=0, false_reports=0, pass_=false. Main-beam mechanical slacks varied with main length (travel 0.913/0.955/0.964/0.970; stress 0.854/0.901/0.917/0.939), proving measurements were live and the main beam's response peaks near ~30mm, yet the service outcome was completely insensitive to every control. This indicates the delivery path is gated by a mechanism not recoverable within the sampled space - most likely the 210Hz auxiliary trigger never crossing threshold (leaving the MCU to poll and brown out) and/or the hidden length factor pushing the true resonances outside the probed ranges (untested corner ~factor 0.75 implies main~39.5mm, aux~24mm). I could not locate a passing design, but a failed 6-point search with an uncalibrated nominal model is not a proof of global infeasibility, so I cannot claim INFEASIBLE. Status UNKNOWN; no passing design to select.",
+    "evaluation_id": ""
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": null,
+  "design": {
+    "main_length_mm": 30.0,
+    "aux_length_mm": 22.0,
+    "C_uF": 120.0,
+    "gate_V": 2.4,
+    "threshold_V": 0.3
+  },
+  "runtime_s": 1046.2610621670028
+}

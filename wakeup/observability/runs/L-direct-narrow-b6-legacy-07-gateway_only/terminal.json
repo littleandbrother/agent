@@ -1,0 +1,29 @@
+{
+  "job": "L-direct-narrow-b6-legacy-07-gateway_only",
+  "task": "legacy-07",
+  "selection_id": "legacy-07-gateway_only",
+  "arm": "L",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.5,
+    "reason": "Budget exhausted (6/6 physical evaluations) without a passing design, so FEASIBLE is not established; and since a curated search failure is not a full-domain proof, INFEASIBLE is not justified either. Measurements give a consistent diagnosis: (1) delivered=0/faults=4/false=0 was invariant across C=95-320 uF, gate=2.2-2.9 V, threshold=0.15-0.55 V, so the blocker is mechanical tuning, not storage/boot/wake setpoints; (2) stress/travel slack (<1, safe) depends only on main length (aux 21 vs 23 mm gave identical slack), so the aux beam is safety-neutral and can be tuned to 210 Hz freely; (3) main-length deflection shows resonance peaks near ~24 and ~34 mm with a trough at ~30-32 mm, indicating the legacy 30 mm main beam is off-resonance from the 45 Hz/0.15 g background, whose harvest optimum appears near ~34 mm. Best next design (untested due to budget): main ~34 mm (or ~24 mm for the higher mode), aux tuned toward 210 Hz, larger storage (~300 uF) for a full sample+infer+TX buffer above the 1.8 V brownout, gate reachable at resonance, and a low threshold. No false reports were ever produced, so nuisance rejection by digital confirmation is already working.",
+    "evaluation_id": ""
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": null,
+  "design": {
+    "main_length_mm": 32.0,
+    "aux_length_mm": 21.0,
+    "C_uF": 320.0,
+    "gate_V": 2.8,
+    "threshold_V": 0.25
+  },
+  "runtime_s": 546.5664317089831
+}

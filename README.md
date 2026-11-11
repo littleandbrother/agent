@@ -1,3 +1,9 @@
+# 最新：原题观测剥离实验 · 2026-11-12
+
+[36条完整报告与超时定位](wakeup/observability/REPORT.md) · [全部数据与复核入口](wakeup/observability/README.md)
+
+原9物理实例、直接整流、5变量和6次评价：无Python的L组剥离内部反馈0/9，原P为6/9；带Python的A组3/9对5/9，另有5条自主计算到时。旧P本已包含相同内部字段，因此支持当前反馈包的作用，不将其写成历史提升的唯一原因。
+
 # Minimal wake-up node · 2026-11-10
 
 > 最新预实验：[统一实验 / 代码 / 数据索引](wakeup/EXPERIMENTS.md) · [后续三组试验方案](wakeup/NEXT_EXPERIMENTS.md)。

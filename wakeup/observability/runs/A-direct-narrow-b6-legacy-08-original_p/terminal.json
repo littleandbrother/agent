@@ -1,0 +1,35 @@
+{
+  "job": "A-direct-narrow-b6-legacy-08-original_p",
+  "task": "legacy-08",
+  "selection_id": "legacy-08-original_p",
+  "arm": "A",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 3,
+  "final": {
+    "status": "FEASIBLE",
+    "confidence": 0.95,
+    "reason": "Found and physically verified a passing design: {main_length_mm:38, aux_length_mm:18, C_uF:110, gate_V:2.9, threshold_V:0.55} (evaluation 46a28bb00f19e234c471767d). The hidden effective-length factor shifts the main beam's 45 Hz resonance to a longer nominal length (~38 mm), which raises main_peak to 4.20 V and charges storage to the 3.3 V clamp. With C=110 uF the node is cold-charge ready at 7.38 s (storage 3.09 V at the first event), so it catches all 4 target events: WAKE/BOOT/SAMPLE/INFER/CONFIRM/SAVE/TX/ACK/RECEIVED = 4 each, delivered_on_time = 4/4 (delivery slack 0.0), false_reports = 0, brownouts = 0. Peak stress 11.84 MPa (stress slack 0.704) and peak tip 0.312 mm (travel slack 0.792) are within limits. Aux at 18 mm correctly wakes on the 210 Hz target envelope (peak 1.19 V > threshold 0.55 V) while the 250 Hz nuisance is rejected (REJECT=0, i.e., it never caused a false event).",
+    "evaluation_id": "46a28bb00f19e234c471767d"
+  },
+  "error": null,
+  "first_pass": 3,
+  "selected_pass": true,
+  "last_working_pass": true,
+  "selected_design": {
+    "main_length_mm": 38.0,
+    "aux_length_mm": 18.0,
+    "C_uF": 110.0,
+    "gate_V": 2.9,
+    "threshold_V": 0.55
+  },
+  "design": {
+    "main_length_mm": 38.0,
+    "aux_length_mm": 18.0,
+    "C_uF": 110.0,
+    "gate_V": 2.9,
+    "threshold_V": 0.55
+  },
+  "runtime_s": 1744.6905932920054
+}

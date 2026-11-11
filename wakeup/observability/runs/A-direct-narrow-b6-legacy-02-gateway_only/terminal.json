@@ -1,0 +1,35 @@
+{
+  "job": "A-direct-narrow-b6-legacy-02-gateway_only",
+  "task": "legacy-02",
+  "selection_id": "legacy-02-gateway_only",
+  "arm": "A",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.7,
+    "reason": "Six full-transient evaluations were used. Key findings: (1) The direct branch's clamp (3.3 V) minus 2 diode drops minus the 5000 \u03a9 series drop makes storage asymptote near ~3.0 V, so the original gate 2.9 V is at the edge and the MCU is very hard to start. (2) The main beam at the nominal 35 mm resonates ~35 Hz, detuned from the 45 Hz background; the switched/rectified harvester is strongly electrically damped, so charging from 0.15 g is weak. (3) Digital confirmation math is sound: a 210 Hz target in 128 pts @2048 Hz yields band fraction ~0.8\u20130.89 with RMS > 0.12 g, while 250 Hz nuisance gives ~0.01, so confirmation/rejection is not the blocker. Experimentally, every combination tried (main 29.5\u201335 mm, aux 18\u201321.4 mm, C 80\u2013330 \u00b5F, gate 2.0\u20132.9 V, threshold 0.15\u20130.55 V) returned exactly faults=4, delivered_on_time=0, false_reports=0, with only the mechanical safety slacks changing (stress depends only on aux length, travel only on main length; both <1). This invariance indicates the service failure is governed by a fixed, unresolved effective-length (manufacturing/mounting) factor that detunes the narrow-band beams, which the pass/fail-plus-slack feedback did not let me identify to the required ~1\u20132% precision. I could not find a passing design, but a failed search is not a proof over the whole legal space, so INFEASIBLE is not justified. Status UNKNOWN; final evaluated design is main=34.0 mm, aux=20.8 mm, C=100 \u00b5F, gate=2.0 V, threshold=0.15 V (feasibility unconfirmed).",
+    "evaluation_id": "98117acc0c630f2190788d59"
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": {
+    "main_length_mm": 34.0,
+    "aux_length_mm": 20.8,
+    "C_uF": 100.0,
+    "gate_V": 2.0,
+    "threshold_V": 0.15
+  },
+  "design": {
+    "main_length_mm": 34.0,
+    "aux_length_mm": 20.8,
+    "C_uF": 100.0,
+    "gate_V": 2.0,
+    "threshold_V": 0.15
+  },
+  "runtime_s": 1670.44287887495
+}

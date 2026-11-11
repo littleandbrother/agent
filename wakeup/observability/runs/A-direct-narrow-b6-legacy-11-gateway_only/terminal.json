@@ -1,0 +1,29 @@
+{
+  "job": "A-direct-narrow-b6-legacy-11-gateway_only",
+  "task": "legacy-11",
+  "selection_id": "legacy-11-gateway_only",
+  "arm": "A",
+  "budget": 6,
+  "branch": "direct",
+  "width": "narrow",
+  "evaluations": 6,
+  "final": {
+    "status": "UNKNOWN",
+    "confidence": 0.6,
+    "reason": "Six full-transient evaluations (budget exhausted) all returned pass_=false, faults=4, delivered_on_time=0, false_reports=0, across nominal, \u00b1length-scaling compensations (both signs of a common effective-length factor), thresholds 0.15\u20130.55 V, gate 2.7\u20132.9 V, and C 150\u2013220 \u00b5F. Nominal beam analysis + a coupled aux-beam/envelope ODE were used to target 45 Hz harvest and 210 Hz wake while rejecting 250 Hz nuisance. No tested design delivered, and slack stayed <1. The systematic zero-delivery (even with a well-centered aux resonance and benign threshold) points to a likely unmet start/energy condition (possibly gate_V above the clamp/harvest-limited maximum), whose fix (low gate ~2.1\u20132.3 V with large C) could not be verified before the hard evaluation budget ran out. Since a failed search over six designs is not a proof over the full legal domain, the correct status is UNKNOWN rather than INFEASIBLE; no passing design is available to select.",
+    "evaluation_id": ""
+  },
+  "error": null,
+  "first_pass": null,
+  "selected_pass": false,
+  "last_working_pass": false,
+  "selected_design": null,
+  "design": {
+    "main_length_mm": 36.0,
+    "aux_length_mm": 21.7,
+    "C_uF": 220.0,
+    "gate_V": 2.7,
+    "threshold_V": 0.4
+  },
+  "runtime_s": 1101.0813338749576
+}
