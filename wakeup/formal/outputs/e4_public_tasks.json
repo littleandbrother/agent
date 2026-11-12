@@ -1,0 +1,7010 @@
+[
+  {
+    "id": "E4-T01",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.175479060260386,
+      "background_peak_g": 0.1563148054166268,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4974790608654663,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.089179188429739,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T02",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3633484819968428,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.498360039643662,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.00018714268927992527,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T03",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3645152867705239,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49744407958385645,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.001920199497438037,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T04",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3635875291642777,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4998221077256234,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.00028707375993914665,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T05",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36370561718833205,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4988817275349318,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0006066397963237141,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T06",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36481675977815287,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4977916157197253,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0003512186863322842,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T07",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36406996313952206,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49900048184664875,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0015017992304018316,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T08",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3631719122756965,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4983170864866089,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0010160895608984626,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T09",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.06884083809071,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.98137105584754,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T10",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17794383965144,
+      "background_peak_g": 0.15573331978734087,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5057912546477554,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.94566361253338,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T11",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.18535555215677,
+      "background_peak_g": 0.15636849701077613,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4821414785453344,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.962883822242151,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T12",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.9011619188619,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.240428282332243,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T13",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.182193087195536,
+      "background_peak_g": 0.1547234134062383,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49739943007734855,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.006324942750345,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T14",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.1790065943024,
+      "background_peak_g": 0.1563638065171836,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5104781324367106,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.015732212898122,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T15",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3634384907223708,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.499404516829319,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.00028039473938954563,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T16",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17294660859727,
+      "background_peak_g": 0.15733628423348803,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5079861693623352,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.04722950915372,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T17",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.173516325126716,
+      "background_peak_g": 0.15541414780136856,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5007864253171881,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.984464045617722,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T18",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.80385097359495,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.281764635588445,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T19",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17775167501072,
+      "background_peak_g": 0.15574006574244623,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5095813534601294,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.923182344609694,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T20",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.68720217866767,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.76666658453964,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T21",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17411651146885,
+      "background_peak_g": 0.15672972653466596,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4883840029921558,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.938388411622874,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T22",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36457891896109484,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.499700649165219,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0015895687961056243,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T23",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.181253515029187,
+      "background_peak_g": 0.15497429759716205,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4853820674573156,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.925197434331059,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T24",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.175835962352416,
+      "background_peak_g": 0.15667582445969552,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5012086239529456,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.055113809000357,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T25",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.00873793279898,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.625009120989954,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T26",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17240828187621,
+      "background_peak_g": 0.15504486336911527,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4843344533602993,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.097715598616572,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T27",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.1636609043061,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.55734970653259,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T28",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36467178296052966,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4994130783552449,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0006382535785397536,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T29",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36343364178207815,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49755650672862933,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0010962123504452653,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T30",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3645732611297249,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4999998459530966,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0011300946165926171,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T31",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.59143205600165,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.37249977704068,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T32",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.6338870121452,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.790317791970473,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T33",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36311064798430204,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49861572244274965,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0014714619954579906,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T34",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3631641403650842,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4986697178727058,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0008554530738942286,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T35",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.3643868618352122,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4994285748507978,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0012625620441916372,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T36",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.82487319442329,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.27282281536473,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T37",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.21470771458158,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.97790678401051,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T38",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.118357708837266,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.95894082202542,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T39",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.45027761689408,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.43317570362105,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T40",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.73949745740641,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.74351359379003,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T41",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.178506074589315,
+      "background_peak_g": 0.156233350185878,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49669142558444795,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.98457826975916,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T42",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.59939076454446,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.80564561200061,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T43",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.36085259978139,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.471780146441354,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T44",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 44.58145301896676,
+      "background_peak_g": 0.15,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.5,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        8.0,
+        14.0,
+        20.0,
+        26.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.813623684725332,
+        "width_mm": 10.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 4.65,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      }
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T45",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.179093555799227,
+      "background_peak_g": 0.15462703086900947,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4895265915752444,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.920345849363414,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T46",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.173133032406515,
+      "background_peak_g": 0.1551401956808048,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4899524091809523,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        10.01355933926509,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  },
+  {
+    "id": "E4-T47",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 45.0,
+      "background_peak_g": 0.36433772216746296,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.49864455763035354,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        0.0014029097910094803,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 29.85,
+        "width_mm": 0.75,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.12,
+        "tip_mass_g": 0.34875,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 0.44999999999999996,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.0105,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 150.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.15,
+        "bridge_series_ohm": 66666.66666666667,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 1333333.3333333335,
+        "envelope_nF": 0.15,
+        "envelope_discharge_ohm": 266666666.6666667,
+        "trigger_input_ohm": 1333333333.3333335,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.6,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85,
+        "converter_input_R_ohm": 360000.0
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "Main width0.75mm/tipmass0.34875g; aux width0.45mm/tipmass0.0105g. Other manufactured material/damping and firmware service parameters fixed; zero initial energy.",
+      "coupling": "wake_low_V<wake_high_V; all original module power costs apply."
+    },
+    "current_branch": "boost_65pct"
+  },
+  {
+    "id": "E4-T48",
+    "task": {
+      "duration_s": 30.0,
+      "background_Hz": 29.17705255488358,
+      "background_peak_g": 0.15503221391459002,
+      "fault_Hz": 210.0,
+      "fault_peak_g": 0.4877441442628375,
+      "fault_duration_s": 0.15,
+      "fault_starts_s": [
+        9.922021470940637,
+        16.0,
+        22.0,
+        28.0
+      ],
+      "nuisance_Hz": 250.0,
+      "nuisance_peak_g": 0.8,
+      "nuisance_duration_s": 0.2,
+      "nuisance_starts_s": [
+        11.0,
+        23.0
+      ],
+      "delivery_deadline_s": 0.25,
+      "stress_limit_MPa": 40.0,
+      "tip_travel_limit_mm": 1.5
+    },
+    "initial": {
+      "name": "Mechanical-analog wake-up with digital confirmation",
+      "harvester": {
+        "length_mm": 30.0,
+        "width_mm": 50.0,
+        "substrate_mm": 0.15,
+        "piezo_layer_mm": 0.0035,
+        "tip_mass_g": 9.3,
+        "damping_ratio": 0.015
+      },
+      "trigger_beam": {
+        "length_mm": 18.0,
+        "width_mm": 6.0,
+        "substrate_mm": 0.1,
+        "piezo_layer_mm": 0.08,
+        "tip_mass_g": 0.14,
+        "damping_ratio": 0.03
+      },
+      "circuit": {
+        "storage_uF": 100.0,
+        "storage_leak_ohm": 10000000.0,
+        "bridge_diode_V": 0.05,
+        "bridge_series_ohm": 5000.0,
+        "clamp_V": 3.3,
+        "clamp_ohm": 100.0,
+        "envelope_diode_V": 0.1,
+        "envelope_charge_ohm": 100000.0,
+        "envelope_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "trigger_input_ohm": 100000000.0,
+        "wake_high_V": 0.55,
+        "wake_low_V": 0.18,
+        "start_V": 2.9,
+        "brownout_V": 1.8,
+        "comparator_supply_min_V": 0.9,
+        "comparator_nA": 75.0,
+        "reference_and_power_control_nA": 125.0,
+        "regulator_efficiency": 0.85
+      },
+      "firmware": {
+        "sample_Hz": 2048,
+        "sample_count": 128,
+        "sensor_bandwidth_Hz": 800,
+        "sensor_range_g": 4,
+        "adc_bits": 12,
+        "target_band_Hz": [
+          195,
+          225
+        ],
+        "minimum_target_rms_g": 0.12,
+        "minimum_band_fraction": 0.55,
+        "boot_s": 0.002,
+        "boot_mW": 3.0,
+        "sample_mW": 3.0,
+        "infer_s": 0.002,
+        "infer_mW": 5.0,
+        "save_s": 0.0005,
+        "save_mW": 2.0,
+        "tx_s": 0.004,
+        "tx_mW": 12.0,
+        "ack_s": 0.001,
+        "ack_mW": 3.0
+      }
+    },
+    "domain": {
+      "harvester.length_mm": [
+        24.0,
+        42.0
+      ],
+      "harvester.tip_mass_g": [
+        1.0,
+        12.0
+      ],
+      "trigger_beam.length_mm": [
+        11.0,
+        24.0
+      ],
+      "circuit.storage_uF": [
+        80.0,
+        1000.0
+      ],
+      "circuit.start_V": [
+        1.9,
+        3.2
+      ],
+      "circuit.wake_high_V": [
+        0.15,
+        2.0
+      ],
+      "circuit.wake_low_V": [
+        0.05,
+        1.5
+      ],
+      "circuit.converter_input_R_ohm": [
+        100.0,
+        1000000.0
+      ],
+      "circuit.bridge_series_ohm": [
+        100.0,
+        500000.0
+      ],
+      "circuit.envelope_charge_ohm": [
+        100000.0,
+        100000000.0
+      ],
+      "circuit.envelope_discharge_ohm": [
+        1000000.0,
+        100000000.0
+      ],
+      "circuit.shunt_ohm": [
+        10000.0,
+        1000000.0
+      ],
+      "circuit.shunt_threshold_V": [
+        0.5,
+        5.0
+      ],
+      "branch": [
+        "direct",
+        "boost_65pct"
+      ],
+      "modules": {
+        "A": [
+          false,
+          true
+        ],
+        "B": [
+          false,
+          true
+        ],
+        "C": [
+          false,
+          true
+        ],
+        "D": [
+          false,
+          true
+        ]
+      },
+      "fixed_platform": "3.5um piezo film, 0.15mm substrate, width50mm, bridge diode0.05V; other manufactured material and firmware service parameters fixed.",
+      "coupling": "wake_low_V<wake_high_V. No free energy: boost has 65% efficiency; A/B/C/D static loads are 0.5/180/2/0.5uW in the original consumer.",
+      "area": "Main L*50 plus auxiliary L*6 projected beam area; report separately. No 300mm2 restriction is claimed for this new thin-film platform."
+    },
+    "current_branch": "direct"
+  }
+]

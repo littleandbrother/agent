@@ -1,2 +1,0 @@
-"""Replaceable scientific worlds."""
-

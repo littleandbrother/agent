@@ -61,7 +61,7 @@ def acceleration(t, task=TASK):
     return G * a
 
 
-def simulate(design, task=TASK):
+def simulate(design, task=TASK, *, rtol=2e-6, max_step=0.00025):
     started = time.perf_counter()
     h, w = beam(design["harvester"]), beam(design["trigger_beam"])
     c, f = design["circuit"], design["firmware"]
@@ -101,7 +101,7 @@ def simulate(design, task=TASK):
             iq += c["comparator_nA"] * 1e-9
         il = power / (c["regulator_efficiency"] * max(vs, 0.1))
         leakage = max(vs, 0) / c["storage_leak_ohm"]
-        extra = ((.5*A+180*B+2*C+.5*D)*1e-6+Ce*ve*envelope_dot*B)/max(vs, .1) if regulated else 0.
+        extra = ((.5*A+180*B+2*C+.5*D)*1e-6+max(Ce*ve*envelope_dot, 0)*B)/max(vs, .1)
         clamp = max((vs - c["clamp_V"]) / c["clamp_ohm"], 0)
         vdot = (storage_current - il - iq - leakage - extra - clamp) / Cs
         if vs <= 0 and vdot < 0:
@@ -140,9 +140,9 @@ def simulate(design, task=TASK):
         if event is not None:
             event.terminal = True
         sol = solve_ivp(lambda t, y: rhs(t, y, power, sampling), (t, min(end, task["duration_s"])), y,
-                        method="LSODA", rtol=2e-6,
+                        method="LSODA", rtol=rtol,
                         atol=[1e-10, 1e-8, 1e-7, 1e-10, 1e-8, 1e-7, 1e-7, 1e-7, 1e-6] + [1e-11] * 7,
-                        max_step=0.00025, dense_output=True, events=event)
+                        max_step=max_step, dense_output=True, events=event)
         if not sol.success:
             raise RuntimeError(sol.message)
         segments.append((phase, sol))
@@ -245,9 +245,11 @@ def simulate(design, task=TASK):
             records[found]["fault_start_s"] = start
             records[found]["latency_s"] = latency
             latencies.append(latency)
-    peak_stress = max(float(np.max(np.abs(trace[:, 0]))) * h["stress_per_m"],
-                      float(np.max(np.abs(trace[:, 3]))) * w["stress_per_m"]) / 1e6
-    peak_tip = float(np.max(np.abs(trace[:, [0, 3]]))) * 1000
+    # Safety uses accepted solver nodes, not the coarser 1 ms exported waveform.
+    peak_h = max(float(np.abs(sol.y[0]).max()) for _, sol in segments)
+    peak_w = max(float(np.abs(sol.y[3]).max()) for _, sol in segments)
+    peak_stress = max(peak_h * h["stress_per_m"], peak_w * w["stress_per_m"]) / 1e6
+    peak_tip = max(peak_h, peak_w) * 1000
     stored = (0.5 * h["m"] * y[1]**2 + 0.5 * h["k"] * y[0]**2 + 0.5 * h["cp"] * y[2]**2
               + 0.5 * w["m"] * y[4]**2 + 0.5 * w["k"] * y[3]**2 + 0.5 * w["cp"] * y[5]**2
               + 0.5 * Cs * y[6]**2 + 0.5 * Ce * y[7]**2)

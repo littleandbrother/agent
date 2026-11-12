@@ -1,1 +1,0 @@
-"""Studio projections and provenance."""

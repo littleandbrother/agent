@@ -1,0 +1,107 @@
+{
+  "E1": {
+    "qualified": 20,
+    "case1": 10,
+    "case2_low_voltage": 10,
+    "F1_counts": 4,
+    "domain_and_nested_feedback_checked": true
+  },
+  "E2": {
+    "qualified_pairs": 32,
+    "halves": 64,
+    "same_initial_F0": true,
+    "own_witness_PASS": 64,
+    "crossed_witness_FAIL": 64,
+    "single_axis_numerical_nonoverlap": 32,
+    "tighter_repeats_consistent": 10,
+    "new_full_calls": 438,
+    "exact_input_reuses": 64
+  },
+  "E3": {
+    "proxy_counterfactuals": 16,
+    "local_controls": 8,
+    "architecture_required_tasks": 8,
+    "qualified": 32,
+    "without_A_full_PASS_hits": 0,
+    "finer_repeats_consistent": 16,
+    "new_full_calls": 259,
+    "short_prefix_ODE_calls": 1554
+  },
+  "E4": {
+    "qualified": 48,
+    "S1_local_narrow_windows": 16,
+    "S2_direct_excluded_boost_PASS": 16,
+    "S3_all_branches_excluded_true_3_of_4_history": 16,
+    "original_C_start_ranges_retained": true,
+    "tighter_repeats_consistent": 6,
+    "new_full_retained": 236,
+    "aborted_dispatch_upper": 32,
+    "exact_input_reuses": 16
+  },
+  "new_experimental_model_requests": 0,
+  "experiment_api_usd": 0,
+  "core_changes": [
+    "module parasitic draw on both supply branches",
+    "positive active-envelope charging energy",
+    "safety peaks from accepted solver nodes",
+    "rtol/max_step exposed for numerical repeat"
+  ],
+  "previous_round_full_calls": 454,
+  "current_task_status": "completed_task_construction_and_calibration",
+  "task_acceptance": [
+    {
+      "experiment": "E1 反馈阶梯",
+      "count": "20 / 20",
+      "status": "校验通过",
+      "checks": "初态0/4；同域完整PASS见证；F0–F3嵌套"
+    },
+    {
+      "experiment": "E2 主动测量",
+      "count": "32对 / 32对",
+      "status": "校验通过",
+      "checks": "同F0；64正确见证PASS；64交叉FAIL；单轴区间分开；10复算一致"
+    },
+    {
+      "experiment": "E3 结构与代理",
+      "count": "32 / 32",
+      "status": "校验通过",
+      "checks": "8单梁控制；8结构题两种读出/多支路零反例；16代理峰FAIL/受载PASS；16细步长复算一致"
+    },
+    {
+      "experiment": "E4 停止依据",
+      "count": "48 / 48",
+      "status": "校验通过",
+      "checks": "16窄窗解；16当前排除/他支路PASS；16全分支排除/实测3/4；6复算一致"
+    }
+  ],
+  "previous_round_full_call_breakdown": {
+    "feedback_agent_development_and_E2": 286,
+    "structure_stop_agent": 105,
+    "final_E1_low_voltage_internal_node_peaks": 31,
+    "engineering_report": 31,
+    "final_case2_half_step_internal_node_peaks": 1
+  },
+  "continuation_full_call_breakdown": {
+    "E2_new_complete": 438,
+    "E2_exact_reuse": 64,
+    "E4_new_complete_retained": 236,
+    "E4_aborted_dispatch_upper": 32,
+    "E4_exact_reuse": 16,
+    "E3_new_complete": 259,
+    "E3_short_prefix_ODE": 1554,
+    "E3_interrupted_complete_attempts": 2,
+    "E3_interrupted_prefix_attempts": 4,
+    "E3_prefix_retained": 1530,
+    "E3_prefix_output_error": 24,
+    "E3_exact_proxy_reuse": 32
+  },
+  "continuation_new_complete_retained": 933,
+  "all_rounds_new_complete_retained": 1387,
+  "unresolved_aborted_dispatch_upper": 34,
+  "validation_methods": {
+    "E1": "full-transient failure/pass witnesses and nested projection",
+    "E2": "fixed single-axis numerical coverage, boundary refinement, independent tighter integration",
+    "E3": "declared mixed-domain numerical counterexample searches, physical full-service witnesses and finer integration repeats",
+    "E4": "full-transient witnesses plus local pass-window bracketing and covering analytic exclusion bounds"
+  }
+}

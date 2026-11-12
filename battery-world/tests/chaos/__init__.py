@@ -1,2 +1,0 @@
-"""Crash and tamper tests."""
-

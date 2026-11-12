@@ -1,0 +1,269 @@
+{
+  "result": {
+    "verdict": "PASS",
+    "checks": {
+      "all_faults_delivered_on_time": true,
+      "no_false_reports": true,
+      "no_brownouts": true,
+      "stress_within_limit": true,
+      "travel_within_limit": true
+    },
+    "metrics": {
+      "faults": 4,
+      "delivered_on_time": 4,
+      "missed_fault_starts_s": [],
+      "false_reports": 0,
+      "wakeups": 4,
+      "brownouts": 0,
+      "cold_charge_ready_s": 7.1530000000000005,
+      "first_wake_s": 8.023872693867268,
+      "max_latency_s": 0.0958778057147196,
+      "minimum_active_storage_V": 2.4519970093671843,
+      "peak_stress_MPa": 13.718637465021661,
+      "peak_tip_mm": 0.35175993500055536,
+      "final_storage_V": 3.3043620845537327
+    },
+    "energy_J": {
+      "mechanical_input": 0.009749363049846818,
+      "mechanical_damping": 0.004983734189076352,
+      "rectifier_loss": 0.0011339042616896132,
+      "trigger_front_end_loss": 4.758366543994252e-08,
+      "MCU_input": 0.0012023529411762073,
+      "idle": 5.647991443125264e-05,
+      "clamp_loss": 0.0015345044716090898,
+      "rectified_to_storage": 0.0036122479861542714,
+      "final_stored_all_domains": 0.0008386087252609429,
+      "balance_residual": -2.690370620799746e-07
+    },
+    "runtime_s": 11.287333292071708,
+    "measurements": {
+      "stages": {
+        "WAKE": 4,
+        "BOOT": 4,
+        "SAMPLE": 4,
+        "INFER": 4,
+        "CONFIRM": 4,
+        "REJECT": 0,
+        "SAVE": 4,
+        "TX": 4,
+        "ACK": 4,
+        "BROWNOUT": 0
+      },
+      "storage_before_first_event_V": 3.1375539720401475,
+      "main_peak_voltage_V": 4.255702750585761,
+      "aux_peak_voltage_V": 1.3801731830069175,
+      "envelope_peak_V": 1.1866039467883547,
+      "t_ready_s": 7.1530000000000005,
+      "phase": {
+        "main": {
+          "amplitude_V": 4.296112640050001,
+          "phase_deg": -51.99218310605219,
+          "reference": "background sine at absolute clock; target sine relative to event start",
+          "window_s": [
+            6.99,
+            7.99
+          ]
+        },
+        "aux": {
+          "amplitude_V": 1.1980916196575755,
+          "phase_deg": -85.64490852766724,
+          "reference": "background sine at absolute clock; target sine relative to event start",
+          "window_s": [
+            8.01,
+            8.14
+          ]
+        }
+      },
+      "windows": [
+        {
+          "start_s": 8.0,
+          "storage_before_V": 3.140475538518182,
+          "minimum_storage_V": 2.4519970093671843,
+          "envelope_max_V": 1.1865849521827416,
+          "events": [
+            {
+              "time_s": 8.023872693867268,
+              "event": "WAKE"
+            },
+            {
+              "time_s": 8.023872693867268,
+              "event": "BOOT"
+            },
+            {
+              "time_s": 8.025872693867269,
+              "event": "SAMPLE"
+            },
+            {
+              "time_s": 8.088372693867269,
+              "event": "INFER"
+            },
+            {
+              "time_s": 8.09037269386727,
+              "event": "CONFIRM"
+            },
+            {
+              "time_s": 8.09037269386727,
+              "event": "SAVE"
+            },
+            {
+              "time_s": 8.09087269386727,
+              "event": "TX"
+            },
+            {
+              "time_s": 8.09487269386727,
+              "event": "ACK"
+            },
+            {
+              "time_s": 8.09587269386727,
+              "event": "RECEIVED"
+            }
+          ]
+        },
+        {
+          "start_s": 14.0,
+          "storage_before_V": 3.304583846070671,
+          "minimum_storage_V": 2.6509511588328,
+          "envelope_max_V": 1.1866039467883547,
+          "events": [
+            {
+              "time_s": 14.023877805714719,
+              "event": "WAKE"
+            },
+            {
+              "time_s": 14.023877805714719,
+              "event": "BOOT"
+            },
+            {
+              "time_s": 14.02587780571472,
+              "event": "SAMPLE"
+            },
+            {
+              "time_s": 14.08837780571472,
+              "event": "INFER"
+            },
+            {
+              "time_s": 14.09037780571472,
+              "event": "CONFIRM"
+            },
+            {
+              "time_s": 14.09037780571472,
+              "event": "SAVE"
+            },
+            {
+              "time_s": 14.09087780571472,
+              "event": "TX"
+            },
+            {
+              "time_s": 14.09487780571472,
+              "event": "ACK"
+            },
+            {
+              "time_s": 14.09587780571472,
+              "event": "RECEIVED"
+            }
+          ]
+        },
+        {
+          "start_s": 20.0,
+          "storage_before_V": 3.304583943967918,
+          "minimum_storage_V": 2.650949140096776,
+          "envelope_max_V": 1.1865886047897134,
+          "events": [
+            {
+              "time_s": 20.02387159607048,
+              "event": "WAKE"
+            },
+            {
+              "time_s": 20.02387159607048,
+              "event": "BOOT"
+            },
+            {
+              "time_s": 20.02587159607048,
+              "event": "SAMPLE"
+            },
+            {
+              "time_s": 20.08837159607048,
+              "event": "INFER"
+            },
+            {
+              "time_s": 20.09037159607048,
+              "event": "CONFIRM"
+            },
+            {
+              "time_s": 20.09037159607048,
+              "event": "SAVE"
+            },
+            {
+              "time_s": 20.09087159607048,
+              "event": "TX"
+            },
+            {
+              "time_s": 20.09487159607048,
+              "event": "ACK"
+            },
+            {
+              "time_s": 20.09587159607048,
+              "event": "RECEIVED"
+            }
+          ]
+        },
+        {
+          "start_s": 26.0,
+          "storage_before_V": 3.304583909236653,
+          "minimum_storage_V": 2.6509514885162857,
+          "envelope_max_V": 1.1866002951205332,
+          "events": [
+            {
+              "time_s": 26.023877787340485,
+              "event": "WAKE"
+            },
+            {
+              "time_s": 26.023877787340485,
+              "event": "BOOT"
+            },
+            {
+              "time_s": 26.025877787340484,
+              "event": "SAMPLE"
+            },
+            {
+              "time_s": 26.088377787340484,
+              "event": "INFER"
+            },
+            {
+              "time_s": 26.090377787340483,
+              "event": "CONFIRM"
+            },
+            {
+              "time_s": 26.090377787340483,
+              "event": "SAVE"
+            },
+            {
+              "time_s": 26.09087778734048,
+              "event": "TX"
+            },
+            {
+              "time_s": 26.094877787340483,
+              "event": "ACK"
+            },
+            {
+              "time_s": 26.095877787340484,
+              "event": "RECEIVED"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gateway": {
+    "pass_": true,
+    "delivered_on_time": 4,
+    "expected": 4,
+    "false_alarms": 0,
+    "safety": {
+      "stress": true,
+      "travel": true
+    }
+  },
+  "source": "outputs/report/case1.json + case1_trace.npz",
+  "identity": "All direction-specific witnesses algebraically realize baseline(); same TASK and physical consumer."
+}

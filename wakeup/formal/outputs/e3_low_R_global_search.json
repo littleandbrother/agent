@@ -1,0 +1,315 @@
+{
+  "seed": 11239,
+  "bounds": [
+    [
+      0,
+      1
+    ],
+    [
+      24,
+      42
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      1.90309,
+      3
+    ],
+    [
+      1.9,
+      3.2
+    ],
+    [
+      -1.30103,
+      1.477121
+    ],
+    [
+      0.100001,
+      3.2
+    ],
+    [
+      0.01,
+      0.999999
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      0.3,
+      20
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "arms": [
+    1,
+    3
+  ],
+  "readout_charge_ohm": 100000.0,
+  "nfev": 160,
+  "best_score": 3.755605232684777,
+  "best_x": [
+    1.0,
+    24.0,
+    5.5,
+    3.0,
+    2.0791812460476247,
+    2.8,
+    0.6532125137753437,
+    3.1,
+    0.94,
+    0.0,
+    4.5,
+    4.000000000000001,
+    0.0,
+    0.0
+  ],
+  "prefix_calls": 160,
+  "full_calls": 1,
+  "pass_hits": 0,
+  "best_design": {
+    "name": "Mechanical-analog wake-up with digital confirmation",
+    "harvester": {
+      "length_mm": 24.0,
+      "width_mm": 6.0,
+      "substrate_mm": 0.15,
+      "piezo_layer_mm": 0.12,
+      "tip_mass_g": 5.5,
+      "damping_ratio": 0.015
+    },
+    "trigger_beam": {
+      "length_mm": 18.0,
+      "width_mm": 6.0,
+      "substrate_mm": 0.1,
+      "piezo_layer_mm": 0.08,
+      "tip_mass_g": 0.14,
+      "damping_ratio": 0.03
+    },
+    "circuit": {
+      "storage_uF": 119.99999999999996,
+      "storage_leak_ohm": 10000000.0,
+      "bridge_diode_V": 0.15,
+      "bridge_series_ohm": 1000.0,
+      "clamp_V": 3.3,
+      "clamp_ohm": 100.0,
+      "envelope_diode_V": 0.1,
+      "envelope_charge_ohm": 100000.0,
+      "envelope_nF": 2.0,
+      "envelope_discharge_ohm": 20000000.0,
+      "trigger_input_ohm": 100000000.0,
+      "wake_high_V": 3.1,
+      "wake_low_V": 2.9139999999999997,
+      "start_V": 2.8,
+      "brownout_V": 1.8,
+      "comparator_supply_min_V": 0.9,
+      "comparator_nA": 75.0,
+      "reference_and_power_control_nA": 125.0,
+      "regulator_efficiency": 0.85,
+      "shunt_ohm": 31622.776601683792,
+      "shunt_threshold_V": 4.000000000000001
+    },
+    "firmware": {
+      "sample_Hz": 2048,
+      "sample_count": 128,
+      "sensor_bandwidth_Hz": 800,
+      "sensor_range_g": 4,
+      "adc_bits": 12,
+      "target_band_Hz": [
+        195,
+        225
+      ],
+      "minimum_target_rms_g": 0.12,
+      "minimum_band_fraction": 0.55,
+      "boot_s": 0.002,
+      "boot_mW": 3.0,
+      "sample_mW": 3.0,
+      "infer_s": 0.002,
+      "infer_mW": 5.0,
+      "save_s": 0.0005,
+      "save_mW": 2.0,
+      "tx_s": 0.004,
+      "tx_mW": 12.0,
+      "ack_s": 0.001,
+      "ack_mW": 3.0,
+      "poll_s": 4.500000000000001
+    },
+    "modules": {
+      "A": false,
+      "B": false,
+      "C": false,
+      "D": false
+    },
+    "connections": {
+      "detector_source": "harvester",
+      "mcu_gate": "envelope"
+    }
+  },
+  "best_result": {
+    "verdict": "FAIL",
+    "checks": {
+      "all_faults_delivered_on_time": false,
+      "no_false_reports": true,
+      "no_brownouts": true,
+      "stress_within_limit": true,
+      "travel_within_limit": true,
+      "mechanical_area_within_limit": true
+    },
+    "metrics": {
+      "faults": 4,
+      "delivered_on_time": 1,
+      "missed_fault_starts_s": [
+        17.53,
+        23.28,
+        29.03
+      ],
+      "false_reports": 0,
+      "wakeups": 6,
+      "brownouts": 0,
+      "cold_charge_ready_s": 8.73,
+      "first_wake_s": 9.505423336552797,
+      "max_latency_s": 0.06957906926089308,
+      "minimum_active_storage_V": 1.941459324537266,
+      "peak_stress_MPa": 18.56080915709803,
+      "peak_tip_mm": 0.3045876374498139,
+      "final_storage_V": 2.637733762421572
+    },
+    "energy_J": {
+      "mechanical_input": 0.005262800389517667,
+      "mechanical_damping": 0.0029650249963121436,
+      "rectifier_loss": 0.0003325563329113586,
+      "trigger_front_end_loss": 9.783307054737265e-06,
+      "MCU_input": 0.0014976470588228732,
+      "idle": 3.0439185823907268e-05,
+      "clamp_loss": 0.0,
+      "rectified_to_storage": 0.0019455446087319,
+      "final_stored_all_domains": 0.0004282394843417088,
+      "balance_residual": -8.89975749062018e-07
+    },
+    "runtime_s": 16.085199875058606,
+    "measurements": {
+      "stages": {
+        "WAKE": 6,
+        "BOOT": 6,
+        "SAMPLE": 6,
+        "INFER": 6,
+        "CONFIRM": 1,
+        "REJECT": 5,
+        "SAVE": 1,
+        "TX": 1,
+        "ACK": 1,
+        "BROWNOUT": 0
+      },
+      "storage_before_first_event_V": 2.948644433619944,
+      "main_peak_voltage_V": 3.3216662179775103,
+      "aux_peak_voltage_V": 0.0,
+      "envelope_peak_V": 3.100000000000018,
+      "t_ready_s": 8.73,
+      "phase": {
+        "main": {
+          "amplitude_V": 3.754394103275985,
+          "phase_deg": -41.04303915446125,
+          "reference": "background sine at absolute clock; target sine relative to event start",
+          "window_s": [
+            11.77,
+            12.77
+          ]
+        },
+        "aux": {
+          "amplitude_V": 0.0,
+          "phase_deg": null,
+          "reference": "background sine at absolute clock; target sine relative to event start",
+          "window_s": [
+            13.04,
+            13.17
+          ]
+        }
+      },
+      "windows": [
+        {
+          "start_s": 13.03,
+          "storage_before_V": 2.9358312975618674,
+          "minimum_storage_V": 1.9414480883371479,
+          "envelope_max_V": 3.100000000000002,
+          "events": [
+            {
+              "time_s": 13.027579069260891,
+              "event": "WAKE"
+            },
+            {
+              "time_s": 13.027579069260891,
+              "event": "BOOT"
+            },
+            {
+              "time_s": 13.029579069260892,
+              "event": "SAMPLE"
+            },
+            {
+              "time_s": 13.092079069260892,
+              "event": "INFER"
+            },
+            {
+              "time_s": 13.094079069260893,
+              "event": "CONFIRM"
+            },
+            {
+              "time_s": 13.094079069260893,
+              "event": "SAVE"
+            },
+            {
+              "time_s": 13.094579069260893,
+              "event": "TX"
+            },
+            {
+              "time_s": 13.098579069260893,
+              "event": "ACK"
+            },
+            {
+              "time_s": 13.099579069260892,
+              "event": "RECEIVED"
+            }
+          ]
+        },
+        {
+          "start_s": 17.53,
+          "storage_before_V": 2.189421819045649,
+          "minimum_storage_V": 2.1876808495566022,
+          "envelope_max_V": 2.408166613261561,
+          "events": []
+        },
+        {
+          "start_s": 23.28,
+          "storage_before_V": 2.70755316496582,
+          "minimum_storage_V": 2.705175306562891,
+          "envelope_max_V": 2.9134135452512138,
+          "events": []
+        },
+        {
+          "start_s": 29.03,
+          "storage_before_V": 2.4161695300258144,
+          "minimum_storage_V": 2.414424143665355,
+          "envelope_max_V": 2.6305295431726026,
+          "events": []
+        }
+      ]
+    },
+    "mechanical_area_mm2": 144.0
+  },
+  "claim": "Mixed-domain numerical counterexample search, not a symbolic impossibility proof."
+}

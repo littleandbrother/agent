@@ -1,0 +1,5311 @@
+{
+  "requested": 8,
+  "qualified": 8,
+  "tasks": [
+    {
+      "id": "E3-T06",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.20511243202295734,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6543430190217174,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.432,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 34.25701701343675,
+          "peak_tip_mm": 0.8208020315755074,
+          "final_storage_V": 3.301133702735032
+        },
+        "energy_J": {
+          "mechanical_input": 0.005312334724287937,
+          "mechanical_damping": 0.0021863870264007346,
+          "rectifier_loss": 0.0012995649093853628,
+          "trigger_front_end_loss": 1.3076557243833704e-06,
+          "MCU_input": 0.0,
+          "idle": 4.2504799545582463e-05,
+          "clamp_loss": 0.001231858368791486,
+          "rectified_to_storage": 0.0018192373545037235,
+          "final_stored_all_domains": 0.0005507406052677432,
+          "balance_residual": -2.8640827355705563e-08
+        },
+        "runtime_s": 22.25764791702386,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.1519919914214003,
+          "main_peak_voltage_V": 12.798194098729446,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.3027024575711965,
+          "t_ready_s": 9.432,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.837804742832066,
+              "phase_deg": 7.771326261979262,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.153373498043759,
+              "minimum_storage_V": 3.1519919914214003,
+              "envelope_max_V": 1.302686226048652,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.301258366200701,
+              "minimum_storage_V": 3.300997845246993,
+              "envelope_max_V": 1.302677508760961,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.301258364807639,
+              "minimum_storage_V": 3.3009978455337143,
+              "envelope_max_V": 1.3027024575711965,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3012583704761984,
+              "minimum_storage_V": 3.3009978486351987,
+              "envelope_max_V": 1.3026848296922757,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.432,
+          "first_wake_s": 12.061028005305175,
+          "max_latency_s": 0.1330280688876755,
+          "minimum_active_storage_V": 2.3579447858917892,
+          "peak_stress_MPa": 34.257240218577955,
+          "peak_tip_mm": 0.8208073795961274,
+          "final_storage_V": 3.26201210996309
+        },
+        "energy_J": {
+          "mechanical_input": 0.0053123468057184285,
+          "mechanical_damping": 0.0021863924778965397,
+          "rectifier_loss": 0.0012995676331967433,
+          "trigger_front_end_loss": 1.307658825797542e-06,
+          "MCU_input": 0.0012023529411759422,
+          "idle": 3.746860607259157e-05,
+          "clamp_loss": 4.738445162336103e-05,
+          "rectified_to_storage": 0.0018192421491491874,
+          "final_stored_all_domains": 0.000537902560041828,
+          "balance_residual": -2.952311437519079e-08
+        },
+        "runtime_s": 19.30772770801559,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.1519919914214003,
+          "main_peak_voltage_V": 12.798194581837768,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.3027217837735656,
+          "t_ready_s": 9.432,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.837804742832066,
+              "phase_deg": 7.771326261979262,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.153373498043759,
+              "minimum_storage_V": 2.3579447858917892,
+              "envelope_max_V": 1.3026935800617414,
+              "events": [
+                {
+                  "time_s": 12.061028005305175,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061028005305175,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063028005305176,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.125528005305176,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.127528005305177,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.127528005305177,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128028005305177,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132028005305177,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133028005305176,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.1542635201248914,
+              "minimum_storage_V": 2.359132548429116,
+              "envelope_max_V": 1.302699160733195,
+              "events": [
+                {
+                  "time_s": 16.061027856610863,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061027856610863,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063027856610862,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.125527856610862,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.12752785661086,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.12752785661086,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.12802785661086,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.13202785661086,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133027856610862,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.155144541997538,
+              "minimum_storage_V": 2.360308662934481,
+              "envelope_max_V": 1.3027068929964218,
+              "events": [
+                {
+                  "time_s": 20.061027738321947,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061027738321947,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.063027738321946,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.125527738321946,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.127527738321945,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.127527738321945,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.128027738321943,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.132027738321945,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.133027738321946,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.301258366430655,
+              "minimum_storage_V": 2.5016966687718267,
+              "envelope_max_V": 1.3027217837735656,
+              "events": [
+                {
+                  "time_s": 26.061028068887676,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.061028068887676,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063028068887675,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.125528068887675,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.127528068887674,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.127528068887674,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128028068887673,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.132028068887674,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133028068887675,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8564310054644488,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T08",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.20240547480406354,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6453175319887594,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.721,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 33.78535947613652,
+          "peak_tip_mm": 0.8095010632316472,
+          "final_storage_V": 3.301099030665238
+        },
+        "energy_J": {
+          "mechanical_input": 0.005167093680517223,
+          "mechanical_damping": 0.0021269490551756257,
+          "rectifier_loss": 0.0012664687044792015,
+          "trigger_front_end_loss": 1.2725216523007887e-06,
+          "MCU_input": 0.0,
+          "idle": 4.224605755678521e-05,
+          "clamp_loss": 0.0011796096683091722,
+          "rectified_to_storage": 0.001766718466378906,
+          "final_stored_all_domains": 0.0005505698383605999,
+          "balance_residual": -2.2165016463188657e-08
+        },
+        "runtime_s": 22.243393000098877,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.1051479038026324,
+          "main_peak_voltage_V": 12.624414300891853,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2846160960250945,
+          "t_ready_s": 9.721,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.801341232475098,
+              "phase_deg": 7.7378911369362235,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.106508937283844,
+              "minimum_storage_V": 3.1051479038026324,
+              "envelope_max_V": 1.2846158441910867,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.301220047653652,
+              "minimum_storage_V": 3.3009667377923537,
+              "envelope_max_V": 1.2846126706387158,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.301220049373273,
+              "minimum_storage_V": 3.3009667387980564,
+              "envelope_max_V": 1.2846093802032272,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.301220050892052,
+              "minimum_storage_V": 3.30096673955687,
+              "envelope_max_V": 1.2846160960250945,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.721,
+          "first_wake_s": 12.061589942158351,
+          "max_latency_s": 0.13359011464982373,
+          "minimum_active_storage_V": 2.2171210602308467,
+          "peak_stress_MPa": 33.78562785370605,
+          "peak_tip_mm": 0.8095074935887976,
+          "final_storage_V": 3.234340586673143
+        },
+        "energy_J": {
+          "mechanical_input": 0.005167100123246474,
+          "mechanical_damping": 0.002126956894571653,
+          "rectifier_loss": 0.0012664727968802287,
+          "trigger_front_end_loss": 1.2725263176335522e-06,
+          "MCU_input": 0.0012023529411756865,
+          "idle": 3.602233640079308e-05,
+          "clamp_loss": 5.302536563127874e-06,
+          "rectified_to_storage": 0.001766725765669666,
+          "final_stored_all_domains": 0.0005287550705354138,
+          "balance_residual": -3.4979198062145764e-08
+        },
+        "runtime_s": 19.40216054103803,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.1051479038026324,
+          "main_peak_voltage_V": 12.624516801743763,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2846347418857338,
+          "t_ready_s": 9.721,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.801341232475098,
+              "phase_deg": 7.7378911369362235,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.106508937283844,
+              "minimum_storage_V": 2.2901058593156427,
+              "envelope_max_V": 1.2846347418857338,
+              "events": [
+                {
+                  "time_s": 12.061589942158351,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061589942158351,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063589942158352,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.126089942158352,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.128089942158352,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.128089942158352,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128589942158353,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132589942158353,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133589942158352,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.0797683875577775,
+              "minimum_storage_V": 2.2537121065280905,
+              "envelope_max_V": 1.2846312314183164,
+              "events": [
+                {
+                  "time_s": 16.06159009898849,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.06159009898849,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063590098988488,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.126090098988488,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.128090098988487,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.128090098988487,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.128590098988486,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132590098988487,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.13359009898849,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.053085472482428,
+              "minimum_storage_V": 2.2171210602308467,
+              "envelope_max_V": 1.2846261846322284,
+              "events": [
+                {
+                  "time_s": 20.061590114649825,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061590114649825,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.063590114649823,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.126090114649823,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.128090114649822,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.128090114649822,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.12859011464982,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.132590114649823,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.133590114649824,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.2776596572371592,
+              "minimum_storage_V": 2.4961597614870836,
+              "envelope_max_V": 1.284632446685208,
+              "events": [
+                {
+                  "time_s": 26.061590008734946,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.061590008734946,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063590008734945,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.126090008734945,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.128090008734944,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.128090008734944,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128590008734943,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.132590008734944,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133590008734945,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8446406963426514,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T05",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.2004000802568928,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6504097228284119,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.944,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 33.92341743011401,
+          "peak_tip_mm": 0.8128089475420479,
+          "final_storage_V": 3.3010736700056706
+        },
+        "energy_J": {
+          "mechanical_input": 0.005104187546769197,
+          "mechanical_damping": 0.0021014170826313024,
+          "rectifier_loss": 0.0012514254922827578,
+          "trigger_front_end_loss": 1.257193612689509e-06,
+          "MCU_input": 0.0,
+          "idle": 4.2056272913855853e-05,
+          "clamp_loss": 0.0011576002838966867,
+          "rectified_to_storage": 0.0017445109255507778,
+          "final_stored_all_domains": 0.0005504448370183065,
+          "balance_residual": -1.3615586401069003e-08
+        },
+        "runtime_s": 17.322919709025882,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0704438898284634,
+          "main_peak_voltage_V": 12.674972214654623,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2897008907079932,
+          "t_ready_s": 9.944,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7743255749207814,
+              "phase_deg": 7.712435967315933,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0717897579887445,
+              "minimum_storage_V": 3.0704438898284634,
+              "envelope_max_V": 1.289681707128673,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.3011920300889352,
+              "minimum_storage_V": 3.30094400040461,
+              "envelope_max_V": 1.2897008907079932,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.3011920336034133,
+              "minimum_storage_V": 3.300944003599306,
+              "envelope_max_V": 1.2896900084993252,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3011920371814805,
+              "minimum_storage_V": 3.3009440051723504,
+              "envelope_max_V": 1.2896762600224803,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.944,
+          "first_wake_s": 12.061543566956871,
+          "max_latency_s": 0.1335439131333942,
+          "minimum_active_storage_V": 2.1496556135856193,
+          "peak_stress_MPa": 33.924452169933566,
+          "peak_tip_mm": 0.8128337400260436,
+          "final_storage_V": 3.1844020228225016
+        },
+        "energy_J": {
+          "mechanical_input": 0.00510419593647239,
+          "mechanical_damping": 0.0021014255782700404,
+          "rectifier_loss": 0.001251429934592274,
+          "trigger_front_end_loss": 1.2571988080599485e-06,
+          "MCU_input": 0.0012023529411757093,
+          "idle": 3.514507722181903e-05,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 0.0017445188305453302,
+          "final_stored_all_domains": 0.0005126112938351528,
+          "balance_residual": -2.6087430665222393e-08
+        },
+        "runtime_s": 18.511365959071554,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0704438898284634,
+          "main_peak_voltage_V": 12.675094278865963,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.289699303452875,
+          "t_ready_s": 9.944,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7743255749207814,
+              "phase_deg": 7.712435967315933,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0717897579887445,
+              "minimum_storage_V": 2.244837552555177,
+              "envelope_max_V": 1.2896992400781553,
+              "events": [
+                {
+                  "time_s": 12.061543566956871,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061543566956871,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063543566956872,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.126043566956872,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.128043566956872,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.128043566956872,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128543566956873,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132543566956873,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133543566956872,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.0373572435059284,
+              "minimum_storage_V": 2.1975055404112034,
+              "envelope_max_V": 1.2896932212089751,
+              "events": [
+                {
+                  "time_s": 16.061543913133395,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061543913133395,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063543913133394,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.126043913133394,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.128043913133393,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.128043913133393,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.12854391313339,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132543913133393,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133543913133394,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.002909051466908,
+              "minimum_storage_V": 2.1496556135856193,
+              "envelope_max_V": 1.289699303452875,
+              "events": [
+                {
+                  "time_s": 20.06154379041287,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.06154379041287,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.06354379041287,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.12604379041287,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.128043790412868,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.128043790412868,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.128543790412866,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.132543790412868,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.13354379041287,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.2188133336863984,
+              "minimum_storage_V": 2.4420949990887655,
+              "envelope_max_V": 1.289693634483871,
+              "events": [
+                {
+                  "time_s": 26.061543658214166,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.061543658214166,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063543658214165,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.126043658214165,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.128043658214164,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.128043658214164,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128543658214163,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.132543658214164,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133543658214165,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8481113042483391,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T07",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.20202274990145128,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6412003986933218,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.763,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 33.60124506322197,
+          "peak_tip_mm": 0.8050896609165151,
+          "final_storage_V": 3.3010941687727815
+        },
+        "energy_J": {
+          "mechanical_input": 0.005136257444550723,
+          "mechanical_damping": 0.0021142786189128054,
+          "rectifier_loss": 0.0012596027247020031,
+          "trigger_front_end_loss": 1.265086510359839e-06,
+          "MCU_input": 0.0,
+          "idle": 4.2209566505586164e-05,
+          "clamp_loss": 0.0011683774762216471,
+          "rectified_to_storage": 0.0017554481782825165,
+          "final_stored_all_domains": 0.0005505458750563726,
+          "balance_residual": -2.1903358051128877e-08
+        },
+        "runtime_s": 18.23725929192733,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.098524205483719,
+          "main_peak_voltage_V": 12.556559259658716,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2776140095494433,
+          "t_ready_s": 9.763,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.796183801809085,
+              "phase_deg": 7.7330160059087145,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.099882343710015,
+              "minimum_storage_V": 3.098524205483719,
+              "envelope_max_V": 1.2775967461174285,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.301214674155994,
+              "minimum_storage_V": 3.300962374062238,
+              "envelope_max_V": 1.2776140095494433,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.301214676109748,
+              "minimum_storage_V": 3.3009623745160384,
+              "envelope_max_V": 1.2776068971038683,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3012146754308263,
+              "minimum_storage_V": 3.3009623738369545,
+              "envelope_max_V": 1.2776013140263407,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.763,
+          "first_wake_s": 12.061832048366247,
+          "max_latency_s": 0.13383237243827395,
+          "minimum_active_storage_V": 2.186469927131943,
+          "peak_stress_MPa": 33.60140992760037,
+          "peak_tip_mm": 0.8050936110858095,
+          "final_storage_V": 3.2163991642535272
+        },
+        "energy_J": {
+          "mechanical_input": 0.005136269846579583,
+          "mechanical_damping": 0.002114287283449966,
+          "rectifier_loss": 0.0012596072220768739,
+          "trigger_front_end_loss": 1.2650918387401742e-06,
+          "MCU_input": 0.001202352941176072,
+          "idle": 3.568751626910769e-05,
+          "clamp_loss": 1.5453412374705418e-07,
+          "rectified_to_storage": 0.0017554561707594663,
+          "final_stored_all_domains": 0.000522945914927037,
+          "balance_residual": -3.065728196110194e-08
+        },
+        "runtime_s": 18.131333707948215,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.098524205483719,
+          "main_peak_voltage_V": 12.556688033573876,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2776206722927475,
+          "t_ready_s": 9.763,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.796183801809085,
+              "phase_deg": 7.7330160059087145,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.099882343710015,
+              "minimum_storage_V": 2.2794145660205527,
+              "envelope_max_V": 1.2776166119205423,
+              "events": [
+                {
+                  "time_s": 12.061832048366247,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061832048366247,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063832048366248,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.126332048366248,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.128332048366248,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.128332048366248,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128832048366249,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132832048366248,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133832048366248,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.06602748704371,
+              "minimum_storage_V": 2.2331748357488332,
+              "envelope_max_V": 1.2776193700592982,
+              "events": [
+                {
+                  "time_s": 16.061832372438275,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061832372438275,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063832372438274,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.126332372438274,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.128332372438273,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.128332372438273,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.12883237243827,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132832372438273,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133832372438274,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.0321670110542653,
+              "minimum_storage_V": 2.186469927131943,
+              "envelope_max_V": 1.2776206722927475,
+              "events": [
+                {
+                  "time_s": 20.06183220724322,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.06183220724322,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.06383220724322,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.12633220724322,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.12833220724322,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.12833220724322,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.128832207243217,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.13283220724322,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.13383220724322,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.2507431032612875,
+              "minimum_storage_V": 2.4799895313652747,
+              "envelope_max_V": 1.2776199257357121,
+              "events": [
+                {
+                  "time_s": 26.06183182944938,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.06183182944938,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063831829449377,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.126331829449377,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.128331829449376,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.128331829449376,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128831829449375,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.132831829449376,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133831829449377,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8400352481900093,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T09",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.20027895404178842,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6556299031515452,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.961,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 34.13552888114585,
+          "peak_tip_mm": 0.8178911620810161,
+          "final_storage_V": 3.301072152487118
+        },
+        "energy_J": {
+          "mechanical_input": 0.005118705456918086,
+          "mechanical_damping": 0.002107465389877667,
+          "rectifier_loss": 0.0012544045534570395,
+          "trigger_front_end_loss": 1.2606572017278098e-06,
+          "MCU_input": 0.0,
+          "idle": 4.204514250402988e-05,
+          "clamp_loss": 0.0011631156573968621,
+          "rectified_to_storage": 0.0017500146676971888,
+          "final_stored_all_domains": 0.0005504373603678828,
+          "balance_residual": -2.33038871226424e-08
+        },
+        "runtime_s": 17.657672166940756,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0683484873671873,
+          "main_peak_voltage_V": 12.7528480407253,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2976997171811597,
+          "t_ready_s": 9.961,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.772695122647225,
+              "phase_deg": 7.710926078125475,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0696934334330277,
+              "minimum_storage_V": 3.0683484873671873,
+              "envelope_max_V": 1.2976997171811597,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.301190348573811,
+              "minimum_storage_V": 3.300942637955208,
+              "envelope_max_V": 1.2976896993084677,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.301190343562549,
+              "minimum_storage_V": 3.3009426341562786,
+              "envelope_max_V": 1.2976945868568595,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.301190352116014,
+              "minimum_storage_V": 3.300942639414154,
+              "envelope_max_V": 1.2976916344670324,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.961,
+          "first_wake_s": 12.061339238399295,
+          "max_latency_s": 0.13333929577854065,
+          "minimum_active_storage_V": 2.1635476857409746,
+          "peak_stress_MPa": 34.135843082178425,
+          "peak_tip_mm": 0.817898690373563,
+          "final_storage_V": 3.201166095856327
+        },
+        "energy_J": {
+          "mechanical_input": 0.005118714801551043,
+          "mechanical_damping": 0.002107472251699422,
+          "rectifier_loss": 0.0012544080174694257,
+          "trigger_front_end_loss": 1.260661199193034e-06,
+          "MCU_input": 0.0012023529411751882,
+          "idle": 3.5294681743840476e-05,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 0.0017500208415820303,
+          "final_stored_all_domains": 0.000517956680348372,
+          "balance_residual": -3.043208439824745e-08
+        },
+        "runtime_s": 17.549018541001715,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0683484873671873,
+          "main_peak_voltage_V": 12.752913600434029,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2977149180260767,
+          "t_ready_s": 9.961,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.772695122647225,
+              "phase_deg": 7.710926078125475,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0696934334330277,
+              "minimum_storage_V": 2.2444019607915915,
+              "envelope_max_V": 1.2977096347672972,
+              "events": [
+                {
+                  "time_s": 12.061339238399295,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061339238399295,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063339238399296,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.125839238399296,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.127839238399297,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.127839238399297,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128339238399297,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132339238399297,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133339238399296,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.0403579777473717,
+              "minimum_storage_V": 2.2041250215228843,
+              "envelope_max_V": 1.2977149180260767,
+              "events": [
+                {
+                  "time_s": 16.061339290226485,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061339290226485,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063339290226484,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.125839290226484,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.127839290226483,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.127839290226483,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.12833929022648,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132339290226483,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133339290226484,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.011060039490382,
+              "minimum_storage_V": 2.1635476857409746,
+              "envelope_max_V": 1.29770853679199,
+              "events": [
+                {
+                  "time_s": 20.061339123517484,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061339123517484,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.063339123517483,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.125839123517483,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.127839123517482,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.127839123517482,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.12833912351748,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.132339123517482,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.133339123517484,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.230730807329761,
+              "minimum_storage_V": 2.4599986629963855,
+              "envelope_max_V": 1.297707651840519,
+              "events": [
+                {
+                  "time_s": 26.06133929577854,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.06133929577854,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.06333929577854,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.12583929577854,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.12783929577854,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.12783929577854,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128339295778538,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.13233929577854,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.13333929577854,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8533960770544606,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T02",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.2022050179467205,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6577659697241012,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.743,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 34.29397176120259,
+          "peak_tip_mm": 0.8216874715433441,
+          "final_storage_V": 3.301096482936043
+        },
+        "energy_J": {
+          "mechanical_input": 0.005205236459501596,
+          "mechanical_damping": 0.0021427996279563756,
+          "rectifier_loss": 0.0012743903288697236,
+          "trigger_front_end_loss": 1.2816310401172777e-06,
+          "MCU_input": 0.0,
+          "idle": 4.222764965714319e-05,
+          "clamp_loss": 0.0011940039458200645,
+          "rectified_to_storage": 0.0017810934949598432,
+          "final_stored_all_domains": 0.0005505572846507929,
+          "balance_residual": -2.4008492622131297e-08
+        },
+        "runtime_s": 18.016729832976125,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.101679200569463,
+          "main_peak_voltage_V": 12.811217436350896,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.3038408294494697,
+          "t_ready_s": 9.743,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7986386329112007,
+              "phase_deg": 7.7352870390517365,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.103038724250905,
+              "minimum_storage_V": 3.101679200569463,
+              "envelope_max_V": 1.3038408294494697,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.3012172410875977,
+              "minimum_storage_V": 3.300964463245754,
+              "envelope_max_V": 1.3038319517343442,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.301217235419914,
+              "minimum_storage_V": 3.3009644590807303,
+              "envelope_max_V": 1.303829513563473,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.30121723970306,
+              "minimum_storage_V": 3.300964460913971,
+              "envelope_max_V": 1.303825257369875,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.743,
+          "first_wake_s": 12.061116392553963,
+          "max_latency_s": 0.1331163925539638,
+          "minimum_active_storage_V": 2.2528270311703387,
+          "peak_stress_MPa": 34.294142140707045,
+          "peak_tip_mm": 0.8216915538556874,
+          "final_storage_V": 3.2471722029714467
+        },
+        "energy_J": {
+          "mechanical_input": 0.0052052467583859,
+          "mechanical_damping": 0.002142805909470518,
+          "rectifier_loss": 0.0012743935701282454,
+          "trigger_front_end_loss": 1.281634716042919e-06,
+          "MCU_input": 0.0012023529411757728,
+          "idle": 3.6321298132453193e-05,
+          "clamp_loss": 1.5218672588312706e-05,
+          "rectified_to_storage": 0.0017810992776840606,
+          "final_stored_all_domains": 0.0005329017763125262,
+          "balance_residual": -2.9044137970645097e-08
+        },
+        "runtime_s": 17.155539291910827,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.101679200569463,
+          "main_peak_voltage_V": 12.81126595614699,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.3038716366130223,
+          "t_ready_s": 9.743,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7986386329112007,
+              "phase_deg": 7.7352870390517365,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.103038724250905,
+              "minimum_storage_V": 2.2912418722701524,
+              "envelope_max_V": 1.3038716366130223,
+              "events": [
+                {
+                  "time_s": 12.061116392553963,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061116392553963,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063116392553964,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.125616392553964,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.127616392553964,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.127616392553964,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128116392553965,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132116392553964,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133116392553964,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.088862834879065,
+              "minimum_storage_V": 2.2720119561528853,
+              "envelope_max_V": 1.3038447439519965,
+              "events": [
+                {
+                  "time_s": 16.061116332866057,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061116332866057,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063116332866056,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.125616332866056,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.127616332866054,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.127616332866054,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.128116332866053,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132116332866055,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133116332866056,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.074774517052367,
+              "minimum_storage_V": 2.2528270311703387,
+              "envelope_max_V": 1.3038374124211463,
+              "events": [
+                {
+                  "time_s": 20.061116209669994,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061116209669994,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.063116209669992,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.125616209669992,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.12761620966999,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.12761620966999,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.12811620966999,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.13211620966999,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.133116209669993,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3012163576243805,
+              "minimum_storage_V": 2.5026713995684617,
+              "envelope_max_V": 1.3038436879305597,
+              "events": [
+                {
+                  "time_s": 26.061116335077894,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.061116335077894,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063116335077893,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.125616335077893,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.127616335077892,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.127616335077892,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.12811633507789,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.132116335077892,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133116335077894,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8573535535176762,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T01",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.2032174746740229,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.641997655915861,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.634,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 33.677376630863336,
+          "peak_tip_mm": 0.8069137819531643,
+          "final_storage_V": 3.301109384175041
+        },
+        "energy_J": {
+          "mechanical_input": 0.005188163303079385,
+          "mechanical_damping": 0.002135464218658272,
+          "rectifier_loss": 0.001271625428721696,
+          "trigger_front_end_loss": 1.2776738259646607e-06,
+          "MCU_input": 0.0,
+          "idle": 4.232316547919321e-05,
+          "clamp_loss": 0.0011868809522014565,
+          "rectified_to_storage": 0.0017740702759950757,
+          "final_stored_all_domains": 0.0005506208516586864,
+          "balance_residual": -2.8987465883591537e-08
+        },
+        "runtime_s": 14.7742577920435,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.119199719902926,
+          "main_peak_voltage_V": 12.584806224476901,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2806058565717697,
+          "t_ready_s": 9.634,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.812279708555132,
+              "phase_deg": 7.748007127666813,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.12056689757995,
+              "minimum_storage_V": 3.119199719902926,
+              "envelope_max_V": 1.2805845119267523,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.3012314786375643,
+              "minimum_storage_V": 3.300976015335913,
+              "envelope_max_V": 1.2805866216514148,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.3012314817605835,
+              "minimum_storage_V": 3.300976018466277,
+              "envelope_max_V": 1.280589911482099,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3012314860878833,
+              "minimum_storage_V": 3.3009760215506248,
+              "envelope_max_V": 1.2806058565717697,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.634,
+          "first_wake_s": 12.061668384107337,
+          "max_latency_s": 0.1336687466503399,
+          "minimum_active_storage_V": 2.239784912229654,
+          "peak_stress_MPa": 33.67770614572131,
+          "peak_tip_mm": 0.8069216771667128,
+          "final_storage_V": 3.2370093274083143
+        },
+        "energy_J": {
+          "mechanical_input": 0.005188171536063447,
+          "mechanical_damping": 0.002135469045074189,
+          "rectifier_loss": 0.0012716278842282683,
+          "trigger_front_end_loss": 1.2776765897852262e-06,
+          "MCU_input": 0.001202352941176554,
+          "idle": 3.628525020725615e-05,
+          "clamp_loss": 1.1524963867897847e-05,
+          "rectified_to_storage": 0.0017740746245381294,
+          "final_stored_all_domains": 0.0005296661102970476,
+          "balance_residual": -3.233537755110462e-08
+        },
+        "runtime_s": 14.193755583022721,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.119199719902926,
+          "main_peak_voltage_V": 12.58488682385339,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2806012077493745,
+          "t_ready_s": 9.634,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.812279708555132,
+              "phase_deg": 7.748007127666813,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.12056689757995,
+              "minimum_storage_V": 2.3078092084773907,
+              "envelope_max_V": 1.2806012077493745,
+              "events": [
+                {
+                  "time_s": 12.061668384107337,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061668384107337,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063668384107338,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.126168384107338,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.128168384107338,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.128168384107338,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128668384107339,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132668384107339,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133668384107338,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.0955415438732947,
+              "minimum_storage_V": 2.2738665135809755,
+              "envelope_max_V": 1.280600663579054,
+              "events": [
+                {
+                  "time_s": 16.061668235171076,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061668235171076,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063668235171075,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.126168235171075,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.128168235171074,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.128168235171074,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.128668235171073,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132668235171074,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133668235171076,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.07058364571782,
+              "minimum_storage_V": 2.239784912229654,
+              "envelope_max_V": 1.2805967637628715,
+              "events": [
+                {
+                  "time_s": 20.061668458774445,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061668458774445,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.063668458774444,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.126168458774444,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.128168458774443,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.128168458774443,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.12866845877444,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.132668458774443,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.133668458774444,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.2975863640640353,
+              "minimum_storage_V": 2.4962512991853005,
+              "envelope_max_V": 1.280587802640512,
+              "events": [
+                {
+                  "time_s": 26.06166874665034,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.06166874665034,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.06366874665034,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.12616874665034,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.12816874665034,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.12816874665034,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.128668746650337,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.13266874665034,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.13366874665034,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8419426536430328,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    },
+    {
+      "id": "E3-T04",
+      "kind": "local_single_beam",
+      "task": {
+        "duration_s": 30.0,
+        "background_Hz": 47.0,
+        "background_peak_g": 0.20011186405722683,
+        "fault_Hz": 47.0,
+        "fault_peak_g": 0.6530892973423582,
+        "fault_duration_s": 0.15,
+        "fault_starts_s": [
+          12.0,
+          16.0,
+          20.0,
+          26.0
+        ],
+        "nuisance_Hz": 250.0,
+        "nuisance_peak_g": 0.8,
+        "nuisance_duration_s": 0.2,
+        "nuisance_starts_s": [
+          11.0,
+          23.0
+        ],
+        "delivery_deadline_s": 0.25,
+        "stress_limit_MPa": 40.0,
+        "tip_travel_limit_mm": 1.5
+      },
+      "initial": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 3.2,
+          "wake_low_V": 1.0,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "witness": {
+        "name": "Mechanical-analog wake-up with digital confirmation",
+        "harvester": {
+          "length_mm": 29.0,
+          "width_mm": 10.0,
+          "substrate_mm": 0.15,
+          "piezo_layer_mm": 0.12,
+          "tip_mass_g": 4.25,
+          "damping_ratio": 0.015
+        },
+        "trigger_beam": {
+          "length_mm": 18.0,
+          "width_mm": 6.0,
+          "substrate_mm": 0.1,
+          "piezo_layer_mm": 0.08,
+          "tip_mass_g": 0.14,
+          "damping_ratio": 0.03
+        },
+        "circuit": {
+          "storage_uF": 100,
+          "storage_leak_ohm": 10000000.0,
+          "bridge_diode_V": 0.15,
+          "bridge_series_ohm": 5000.0,
+          "clamp_V": 3.3,
+          "clamp_ohm": 100.0,
+          "envelope_diode_V": 0.1,
+          "envelope_charge_ohm": 100000000.0,
+          "envelope_nF": 2.0,
+          "envelope_discharge_ohm": 20000000.0,
+          "trigger_input_ohm": 100000000.0,
+          "wake_high_V": 0.7,
+          "wake_low_V": 0.4,
+          "start_V": 2.8,
+          "brownout_V": 1.8,
+          "comparator_supply_min_V": 0.9,
+          "comparator_nA": 75.0,
+          "reference_and_power_control_nA": 125.0,
+          "regulator_efficiency": 0.85,
+          "shunt_threshold_V": 1,
+          "shunt_ohm": 47000,
+          "converter_input_R_ohm": 46415.888
+        },
+        "firmware": {
+          "sample_Hz": 2048,
+          "sample_count": 128,
+          "sensor_bandwidth_Hz": 800,
+          "sensor_range_g": 4,
+          "adc_bits": 12,
+          "target_band_Hz": [
+            30,
+            65
+          ],
+          "minimum_target_rms_g": 0.3,
+          "minimum_band_fraction": 0.55,
+          "boot_s": 0.002,
+          "boot_mW": 3.0,
+          "sample_mW": 3.0,
+          "infer_s": 0.002,
+          "infer_mW": 5.0,
+          "save_s": 0.0005,
+          "save_mW": 2.0,
+          "tx_s": 0.004,
+          "tx_mW": 12.0,
+          "ack_s": 0.001,
+          "ack_mW": 3.0
+        },
+        "modules": {
+          "A": false,
+          "B": false,
+          "C": false,
+          "D": false
+        },
+        "connections": {
+          "detector_source": "harvester",
+          "mcu_gate": "envelope"
+        }
+      },
+      "domain": {
+        "harvester.length_mm": [
+          24.0,
+          42.0
+        ],
+        "harvester.tip_mass_g": [
+          2.0,
+          7.0
+        ],
+        "trigger_beam.length_mm": [
+          11.0,
+          24.0
+        ],
+        "trigger_beam.tip_mass_g": [
+          0.04,
+          0.6
+        ],
+        "circuit.storage_uF": [
+          80.0,
+          1000.0
+        ],
+        "circuit.start_V": [
+          1.9,
+          3.2
+        ],
+        "circuit.converter_input_R_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.bridge_series_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.wake_high_V": [
+          0.100001,
+          3.2
+        ],
+        "circuit.wake_low_V": [
+          0.1,
+          3.199999
+        ],
+        "firmware.poll_s": [
+          0.05,
+          30.0
+        ],
+        "circuit.shunt_ohm": [
+          1000.0,
+          1000000.0
+        ],
+        "circuit.shunt_threshold_V": [
+          0.3,
+          20.0
+        ]
+      },
+      "mechanical_area_limit_mm2": 300.0,
+      "fixed_stock": {
+        "main_width_mm": 10.0,
+        "aux_width_mm": 6.0,
+        "main_substrate_mm": 0.15,
+        "main_piezo_layer_mm": 0.12,
+        "aux_substrate_mm": 0.1,
+        "aux_piezo_layer_mm": 0.08,
+        "envelope_capacitance_nF": 2.0,
+        "envelope_discharge_ohm": 20000000.0,
+        "readout_charge_choices_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "initial_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "all_faults_delivered_on_time": false,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 0,
+          "missed_fault_starts_s": [
+            12.0,
+            16.0,
+            20.0,
+            26.0
+          ],
+          "false_reports": 0,
+          "wakeups": 0,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.981,
+          "first_wake_s": null,
+          "max_latency_s": null,
+          "minimum_active_storage_V": null,
+          "peak_stress_MPa": 34.02448364084536,
+          "peak_tip_mm": 0.8152305054686879,
+          "final_storage_V": 3.3010700474783294
+        },
+        "energy_J": {
+          "mechanical_input": 0.005102453667806121,
+          "mechanical_damping": 0.0021007771224365803,
+          "rectifier_loss": 0.0012508150221651618,
+          "trigger_front_end_loss": 1.2567427597074559e-06,
+          "MCU_input": 0.0,
+          "idle": 4.20293036098561e-05,
+          "clamp_loss": 0.0011571693723650318,
+          "rectified_to_storage": 0.0017440518488928169,
+          "final_stored_all_domains": 0.0005504269645779697,
+          "balance_residual": -2.086010818637754e-08
+        },
+        "runtime_s": 14.957922874949872,
+        "measurements": {
+          "stages": {
+            "WAKE": 0,
+            "BOOT": 0,
+            "SAMPLE": 0,
+            "INFER": 0,
+            "CONFIRM": 0,
+            "REJECT": 0,
+            "SAVE": 0,
+            "TX": 0,
+            "ACK": 0,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0654567579186502,
+          "main_peak_voltage_V": 12.711898650062732,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.293490200537313,
+          "t_ready_s": 9.981,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7704431167751067,
+              "phase_deg": 7.708777889138999,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0668004493304384,
+              "minimum_storage_V": 3.0654567579186502,
+              "envelope_max_V": 1.293490200537313,
+              "events": []
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.3011880336017496,
+              "minimum_storage_V": 3.300940757587179,
+              "envelope_max_V": 1.2934655275901161,
+              "events": []
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.3011880240560667,
+              "minimum_storage_V": 3.300940749757816,
+              "envelope_max_V": 1.293455730145558,
+              "events": []
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.3011880298711196,
+              "minimum_storage_V": 3.300940753811444,
+              "envelope_max_V": 1.2934677073450889,
+              "events": []
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "witness_result": {
+        "verdict": "PASS",
+        "checks": {
+          "all_faults_delivered_on_time": true,
+          "no_false_reports": true,
+          "no_brownouts": true,
+          "stress_within_limit": true,
+          "travel_within_limit": true,
+          "mechanical_area_within_limit": true
+        },
+        "metrics": {
+          "faults": 4,
+          "delivered_on_time": 4,
+          "missed_fault_starts_s": [],
+          "false_reports": 0,
+          "wakeups": 4,
+          "brownouts": 0,
+          "cold_charge_ready_s": 9.981,
+          "first_wake_s": 12.061454393627193,
+          "max_latency_s": 0.13345453919496109,
+          "minimum_active_storage_V": 2.147012495867926,
+          "peak_stress_MPa": 34.02475420987982,
+          "peak_tip_mm": 0.8152369883335878,
+          "final_storage_V": 3.1831197950420296
+        },
+        "energy_J": {
+          "mechanical_input": 0.00510246353936875,
+          "mechanical_damping": 0.0021007846635825132,
+          "rectifier_loss": 0.0012508189208803977,
+          "trigger_front_end_loss": 1.2567472208734377e-06,
+          "MCU_input": 0.0012023529411762538,
+          "idle": 3.5093270593442046e-05,
+          "clamp_loss": 0.0,
+          "rectified_to_storage": 0.0017440587932491163,
+          "final_stored_all_domains": 0.0005121864472777018,
+          "balance_residual": -2.9451362431719835e-08
+        },
+        "runtime_s": 14.23462916596327,
+        "measurements": {
+          "stages": {
+            "WAKE": 4,
+            "BOOT": 4,
+            "SAMPLE": 4,
+            "INFER": 4,
+            "CONFIRM": 4,
+            "REJECT": 0,
+            "SAVE": 4,
+            "TX": 4,
+            "ACK": 4,
+            "BROWNOUT": 0
+          },
+          "storage_before_first_event_V": 3.0654567579186502,
+          "main_peak_voltage_V": 12.711981545612387,
+          "aux_peak_voltage_V": 0.0,
+          "envelope_peak_V": 1.2934854167188392,
+          "t_ready_s": 9.981,
+          "phase": {
+            "main": {
+              "amplitude_V": 2.7704431167751067,
+              "phase_deg": 7.708777889138999,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                9.99,
+                10.99
+              ]
+            },
+            "aux": {
+              "amplitude_V": 0.0,
+              "phase_deg": null,
+              "reference": "background sine at absolute clock; target sine relative to event start",
+              "window_s": [
+                12.01,
+                12.14
+              ]
+            }
+          },
+          "windows": [
+            {
+              "start_s": 12.0,
+              "storage_before_V": 3.0668004493304384,
+              "minimum_storage_V": 2.2392011947695485,
+              "envelope_max_V": 1.2934788387187335,
+              "events": [
+                {
+                  "time_s": 12.061454393627193,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 12.061454393627193,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 12.063454393627193,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 12.125954393627193,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 12.127954393627194,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 12.127954393627194,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 12.128454393627194,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 12.132454393627194,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 12.133454393627193,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 16.0,
+              "storage_before_V": 3.033464130705156,
+              "minimum_storage_V": 2.193337345327674,
+              "envelope_max_V": 1.2934854167188392,
+              "events": [
+                {
+                  "time_s": 16.061454201054115,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 16.061454201054115,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 16.063454201054114,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 16.125954201054114,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 16.127954201054113,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 16.127954201054113,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 16.12845420105411,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 16.132454201054113,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 16.133454201054114,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 20.0,
+              "storage_before_V": 3.000125345860886,
+              "minimum_storage_V": 2.147012495867926,
+              "envelope_max_V": 1.293479134837105,
+              "events": [
+                {
+                  "time_s": 20.061454539194962,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 20.061454539194962,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 20.06345453919496,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 20.12595453919496,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 20.12795453919496,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 20.12795453919496,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 20.12845453919496,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 20.13245453919496,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 20.13345453919496,
+                  "event": "RECEIVED"
+                }
+              ]
+            },
+            {
+              "start_s": 26.0,
+              "storage_before_V": 3.21648234932196,
+              "minimum_storage_V": 2.4401186755112465,
+              "envelope_max_V": 1.2934745222157802,
+              "events": [
+                {
+                  "time_s": 26.061454503998153,
+                  "event": "WAKE"
+                },
+                {
+                  "time_s": 26.061454503998153,
+                  "event": "BOOT"
+                },
+                {
+                  "time_s": 26.063454503998152,
+                  "event": "SAMPLE"
+                },
+                {
+                  "time_s": 26.125954503998152,
+                  "event": "INFER"
+                },
+                {
+                  "time_s": 26.12795450399815,
+                  "event": "CONFIRM"
+                },
+                {
+                  "time_s": 26.12795450399815,
+                  "event": "SAVE"
+                },
+                {
+                  "time_s": 26.12845450399815,
+                  "event": "TX"
+                },
+                {
+                  "time_s": 26.13245450399815,
+                  "event": "ACK"
+                },
+                {
+                  "time_s": 26.133454503998152,
+                  "event": "RECEIVED"
+                }
+              ]
+            }
+          ]
+        },
+        "mechanical_area_mm2": 290.0
+      },
+      "qualified": true,
+      "mechanical_area_mm2": 290.0,
+      "minimum_any_dual_area_mm2": 306.0,
+      "reference_stress_ratio": 0.8506188552469955,
+      "ratio_definition": "unshunted reference-witness peak stress / fixed 40 MPa safety limit; not a global impossibility certificate",
+      "area_formula": "Lmain*10 + (Laux*6 if A enabled else 0), mm2; 300mm2 limit makes single legal L<=30, but the manufacturing domain remains24\u201342.",
+      "branches": {
+        "supply": [
+          "direct",
+          "regulated"
+        ],
+        "mcu_gate": [
+          "poll",
+          "envelope"
+        ],
+        "detector_without_A": [
+          "none",
+          "harvester"
+        ],
+        "modules": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "readout_charge_ohm": [
+          100000.0,
+          100000000.0
+        ]
+      },
+      "smallest_dual_result": {
+        "verdict": "FAIL",
+        "checks": {
+          "mechanical_area_within_limit": false
+        },
+        "mechanical_area_mm2": 306.0,
+        "failure_codes": [
+          "AREA_FAIL"
+        ],
+        "full_calls": 0
+      }
+    }
+  ],
+  "claim": "Local full-service single-beam controls. Reference stress ratio is not proof that another architecture is necessary."
+}

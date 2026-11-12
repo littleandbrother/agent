@@ -1,0 +1,76 @@
+{
+  "ranges": {
+    "capacitance": [
+      10.514763120815136,
+      689.7705322578312
+    ],
+    "mass": [
+      1.4162572357503533,
+      8.04721342493656
+    ]
+  },
+  "grid_max_gap": {
+    "capacitance": 5.0,
+    "mass": 0.05
+  },
+  "bands": {
+    "capacitance": [
+      {
+        "inner": [
+          76.06163812081513,
+          170.47570062081513
+        ],
+        "outer": [
+          76.02257562081513,
+          170.51476312081513
+        ]
+      }
+    ],
+    "mass": [
+      {
+        "inner": [
+          4.491647860750355,
+          4.738132235750357
+        ],
+        "outer": [
+          4.491257235750355,
+          4.738522860750358
+        ]
+      }
+    ]
+  },
+  "brackets": [
+    [
+      "capacitance",
+      76.02257562081513,
+      76.06163812081513,
+      false
+    ],
+    [
+      "capacitance",
+      170.47570062081513,
+      170.51476312081513,
+      true
+    ],
+    [
+      "mass",
+      4.491257235750355,
+      4.491647860750355,
+      false
+    ],
+    [
+      "mass",
+      4.738132235750357,
+      4.738522860750358,
+      true
+    ]
+  ],
+  "physical_exclusion": {
+    "capacitor_above_uF": 689.7705322578312,
+    "mass_below_g": 1.4162572357503533,
+    "horizon_s": 8.25,
+    "energy_upper_J": 0.0029004850881441803,
+    "proof": "dE/dt=-a*mf*v-c*v^2-loss <= a^2*mf^2/(4c); integrate both modes with triangle L2 bound; zero initial energy and nonnegative loads."
+  },
+  "interpretation": "Numerical interval calibration at stated resolution with an offset grid, transition bisection, and tighter independent reruns. Not a validated-interval-ODE mathematical proof."
+}

@@ -1,0 +1,122 @@
+{
+  "status": "calibration_only_no_agent_runs",
+  "consumer": "../sim.py full 30-second transient, real rectification/loading/FFT classification",
+  "evaluation_budget_per_future_episode": 6,
+  "python_timeout_s": 30,
+  "tasks_frozen_before_future_models": true,
+  "selection_must_not_use_agent_performance": true,
+  "future_model_or_budget_not_yet_set": true,
+  "experiments": {
+    "E1": {
+      "question": "Which measured facts help fix a feasible coupled design?",
+      "requested_tasks": 20,
+      "feedback": [
+        "F0_gateway",
+        "F1_add_stage_counts",
+        "F2_add_node_voltage_and_ready_time",
+        "F3_add_loaded_phase_and_event_windows"
+      ],
+      "runners": [
+        "L_reasoning",
+        "A_30s_python_nominal_model",
+        "Pi_coding_agent"
+      ],
+      "planned_episodes_per_model": 240,
+      "accept_task": "initial delivery=0/4, all5 witness checks PASS, witness in declared domain; same physical task under all levels",
+      "falsifier": "Richer feedback does not improve matched performance, or F0 adaptive probing matches it.",
+      "analysis_unit": "paired physical task, not model call or candidate evaluation"
+    },
+    "E2": {
+      "question": "Will an agent pay for a useful measurement before choosing a direction?",
+      "requested_pairs": 32,
+      "requested_halves": 64,
+      "conditions": [
+        "Blind",
+        "Active_diagnose_cost0.2",
+        "Oracle_given"
+      ],
+      "planned_episodes_per_model": 192,
+      "cost_units": "one complete transient evaluation=1, diagnose=0.2; monetary and token costs reported separately",
+      "qualification": "identical public specification and F0; full single-axis physical-domain scan, boundary refinement, and independently tighter repeats; pairwise numerical feasible bands do not overlap; both own witnesses PASS and crossed witnesses FAIL",
+      "current_scope": "controlled single-axis C or attached-mass repair; other fields publicly fixed; this is not a full fourteen-variable nonoverlap theorem",
+      "falsifier": "A common feasible point exists, another free variable bypasses the ambiguity, or paid diagnosis brings no net benefit.",
+      "analysis_unit": "pair; halves are dependent"
+    },
+    "E3": {
+      "question": "When does a structural change help, and when does a steady proxy mislead?",
+      "requested_structural_tasks": 16,
+      "requested_proxy_tasks": 16,
+      "conditions": [
+        "baseline_open_circuit_proxy",
+        "loaded_full_system_diagnostics"
+      ],
+      "planned_episodes_per_model": 64,
+      "structural_qualification": "Local controls: single-beam full PASS and any auxiliary-beam geometry excluded by public area constraint. Required-branch tasks: independent mixed-domain global counterexample searches across every declared no-A branch plus per-task targeted checks, no full-service hit; A-on full PASS witnesses. This is the numerical factory-check rule, separate from E4 analytic exclusion bounds.",
+      "proxy_qualification": "numerically optimized open-circuit point full FAIL, a distinct same-domain point full PASS",
+      "area_status": "300mm2 projected mechanical beam area is applied to new explicitly dimensioned stock; original 408mm2 reference is not silently relabeled",
+      "falsifier": "Proxy optimum itself passes, or current branch has a passing same-domain alternative.",
+      "difficulty_index": "The proposed chi had no defining equation. Actual stress utilization and energy burden are recorded as distinct physical measurements; acceptance uses full service, area, and counterexample search rather than inventing a shared chi label.",
+      "structural_area_limit_mm2": 300,
+      "proxy_area_scope": "The sixteen proxy-mismatch tasks retain their original baseline geometry and length-only domain; the300mm2 bound applies to the sixteen structural tasks."
+    },
+    "E4": {
+      "question": "Which facts permit a justified stop instead of a global claim from failed points?",
+      "requested_states": {
+        "S1": 16,
+        "S2": 16,
+        "S3": 16
+      },
+      "conditions": [
+        "L0_history",
+        "L1_current_branch_bound",
+        "L2_all_branch_bound"
+      ],
+      "planned_episodes_per_model": 144,
+      "S1": "16 current-branch witnesses with real PASS/FAIL-bracketed local windows; 0.0625mm boundary resolution",
+      "S2": "16 thin-film platform tasks: safe direct-branch voltage bound below original minimum start1.9V; original C80–1000uF range; alternate boost witnesses PASS",
+      "S3": "16 small-width platform tasks: all-branch first-deadline energy bound below original minimum startup energy; original C80–1000uF/start1.9–3.2V; real3/4 histories with other service checks PASS",
+      "bound": "S2 uses passive piezo charge/stress voltage upper bound; S3 uses integral acceleration and damping energy upper bound before first deadline; both cover each task explicit manufactured platform and legal domain",
+      "falsifier": "Bound not global over declared domain, bound too loose, or branch switch not covered.",
+      "decision_labels": {
+        "FEASIBLE": "submitted design actually passes all service and safety checks",
+        "INFEASIBLE_CURRENT": "valid exclusion of only the current declared branch; not a global stop",
+        "INFEASIBLE_ALL": "valid exclusion covering every declared branch",
+        "UNSURE": "no passing witness or covering exclusion established"
+      }
+    }
+  },
+  "future_total_episodes_one_model": 640,
+  "performance_percentages": "No preregistered positive outcome. All proposed pass-rate targets remain hypotheses.",
+  "report_inputs": "cases: [{name, design, task, provenance, evolution:[...]}] ; calibration engineering examples until formal Agent trajectories exist.",
+  "runner_configurations": {
+    "L": {
+      "agent": "same model in reasoning loop",
+      "python": false,
+      "evaluation_budget": 6
+    },
+    "A": {
+      "agent": "same model and same loop as L",
+      "python": true,
+      "python_per_call_timeout_s": 30,
+      "nominal_equations": true,
+      "evaluation_budget": 6
+    },
+    "Pi": {
+      "agent": "real Pi coding agent",
+      "python": true,
+      "python_per_call_timeout_s": 30,
+      "nominal_equations": true,
+      "evaluation_budget": 6
+    }
+  },
+  "comparison_rules": {
+    "same_physical_instance_across_conditions": true,
+    "same_model_within_runner_comparison": true,
+    "numerical_evaluation_budget_counts_every_submitted_candidate": true,
+    "page_reads_do_not_consume_physics_evaluations": true,
+    "python_timeout_is_per_call_not_total_episode_time": true,
+    "total_wall_and_model_budget": "set before any future Agent run; none starts during task calibration",
+    "public_assets": "public task and selected feedback condition only; private qualification witnesses and truth labels are not model inputs"
+  },
+  "task_acceptance_is_not_agent_performance": "Task construction must meet its physical entry conditions. Future Agent pass rates, diagnosis choices, and stopping accuracy are measured outcomes, never task-selection rules."
+}
