@@ -214,19 +214,15 @@ def calibrate(workers=4):
     # Reuse the already measured S1 boundaries; new manufactured platforms run fully.
     s1=[r for r in json.loads((OUT/'e4_summary.json').read_text())['tasks'] if r['state']=='S1']
     frozen=switch_tasks()+energy_tasks()
-    (OUT/'e4_frozen_new_platforms.json').write_text(json.dumps(frozen,indent=2)+'\n')
-    rows=s1[:]
+    rows=s1
     with ProcessPoolExecutor(workers,mp_context=get_context('fork')) as pool:
-        with (OUT/'e4_progress.jsonl').open('w') as f:
-            for r in pool.map(qualify,frozen):
-                rows.append(r);f.write(json.dumps(r)+'\n');f.flush()
-                print(r['id'],r['qualified'],r['witness_result']['metrics']['delivered_on_time'],flush=True)
+        for r in pool.map(qualify,frozen):
+            rows.append(r)
+            print(r['id'],r['qualified'],r['witness_result']['metrics']['delivered_on_time'],flush=True)
     result=dict(experiment='E4',tasks=rows,
         qualified_by_state={s:sum(r['qualified'] for r in rows if r['state']==s) for s in ['S1','S2','S3']},
         claim='Local narrow-window repair; safe direct-branch voltage exclusion over start1.9–3.2V/C80–1000uF with true boost PASS witnesses; all-declared-branch startup-energy exclusion over the same C/start ranges with true 3/4 histories. No Agent stopping accuracy measured.')
     write_public_views(result)
-    (OUT/'e4_progress.jsonl').unlink()
-    (OUT/'e4_frozen_new_platforms.json').unlink()
     return result
 
 

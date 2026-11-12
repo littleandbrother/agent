@@ -1,4 +1,4 @@
-"""Generate a standalone, inspectable explanation from the actual calibration files."""
+"""Explain the physics and experiments; link each canonical calibration file."""
 import json
 from pathlib import Path
 
@@ -6,17 +6,16 @@ HERE = Path(__file__).resolve().parent
 
 
 def build():
-    data = {"experiment_plan.json": json.loads((HERE / "experiment_plan.json").read_text())}
-    # Show the current task definitions and acceptance records, not every scout.
-    for name in ("summary.json", "e1_formal_tasks.json", "e1_formal_summary.json",
-                 "e2_tasks.json", "e2_summary.json", "e2_axis_bands.json",
-                 "e3_summary.json", "e3_local_controls.json", "e4_summary.json"):
-        p = HERE / "outputs" / name
-        if p.exists():
-            data[name] = json.loads(p.read_text())
+    acceptance = json.loads((HERE / "outputs" / "summary.json").read_text())["task_acceptance"]
+    files = [("../experiment_plan.json", "实验设置与变量范围"), ("summary.json", "四项实验总验收"),
+             ("e1_formal_tasks.json", "E1：20题完整输入与见证"), ("e1_formal_summary.json", "E1：逐题验收"),
+             ("e2_tasks.json", "E2：32对题目与反向可行带"), ("e2_summary.json", "E2：逐对验收"),
+             ("e2_axis_bands.json", "E2：电容与质量轴边界"), ("e3_summary.json", "E3：结构题、控制题与代理错配题"),
+             ("e4_summary.json", "E4：48题、分支界与见证")]
+    links = "".join(f'<li><a href="{name}">{label}</a> · <code>{name}</code></li>' for name, label in files)
     template = r'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>四项正式实验：物理校准与代码地图</title>
 <style>
-:root{font:16px/1.8 system-ui,sans-serif;color:#213047;background:#edf1f5}body{max-width:1280px;margin:auto;padding:30px}h1{font-size:36px;line-height:1.4}h2{font-size:27px;border-bottom:2px solid #d5dfea;padding-bottom:8px}h3{color:#175b79}section{background:white;border-radius:14px;padding:24px 32px;margin:22px 0;box-shadow:0 2px 7px #1b365210}p{max-width:1000px}nav{position:sticky;top:0;background:#15334e;padding:12px;border-radius:8px;z-index:2}nav a{color:white;margin:0 14px;text-decoration:none}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{border:1px solid #cbd8e6;border-radius:10px;padding:16px}table{border-collapse:collapse;width:100%;font-size:15px}td,th{border-bottom:1px solid #d8e1e9;padding:10px;text-align:left;vertical-align:top}th{background:#edf4fa}code,pre{background:#eef3f7;border-radius:5px;font:14px/1.7 ui-monospace,monospace}code{padding:2px 5px}pre{padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:650px;overflow:auto}.note{border-left:5px solid #dd962c;background:#fff8e8;padding:12px 18px}.good{color:#137250}.bad{color:#a53726}button,select{padding:8px 14px;border:1px solid #94a9bd;border-radius:6px;background:white;cursor:pointer}summary{cursor:pointer;color:#175b79;font-weight:600}svg{width:100%;height:auto}.small{font-size:14px;color:#566b7c}a{color:#176690}@media(max-width:850px){.grid{grid-template-columns:1fr}body{padding:10px}section{padding:16px}nav a{margin:0 5px}}
+:root{font:16px/1.8 system-ui,sans-serif;color:#213047;background:#edf1f5}body{max-width:1280px;margin:auto;padding:30px}h1{font-size:36px;line-height:1.4}h2{font-size:27px;border-bottom:2px solid #d5dfea;padding-bottom:8px}h3{color:#175b79}section{background:white;border-radius:14px;padding:24px 32px;margin:22px 0;box-shadow:0 2px 7px #1b365210}p{max-width:1000px}nav{position:sticky;top:0;background:#15334e;padding:12px;border-radius:8px;z-index:2}nav a{color:white;margin:0 14px;text-decoration:none}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{border:1px solid #cbd8e6;border-radius:10px;padding:16px}table{border-collapse:collapse;width:100%;font-size:15px}td,th{border-bottom:1px solid #d8e1e9;padding:10px;text-align:left;vertical-align:top}th{background:#edf4fa}code,pre{background:#eef3f7;border-radius:5px;font:14px/1.7 ui-monospace,monospace}code{padding:2px 5px}pre{padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:650px;overflow:auto}.note{border-left:5px solid #dd962c;background:#fff8e8;padding:12px 18px}select{padding:8px 14px;border:1px solid #94a9bd;border-radius:6px;background:white;cursor:pointer}svg{width:100%;height:auto}.small{font-size:14px;color:#566b7c}a{color:#176690}@media(max-width:850px){.grid{grid-template-columns:1fr}body{padding:10px}section{padding:16px}nav a{margin:0 5px}}
 </style><h1>一台真实瞬态模拟器，四个不同的科研问题</h1>
 <p>本页是本地物理校准的可检查说明。没有运行新 Agent 实验，也没有填写预期的模型胜率。每组是否校验通过，直接看下方验收表与逐题记录。</p>
 <nav><a href="#map">代码地图</a><a href="#physics">物理推导</a><a href="#experiments">四项实验</a><a href="#tasks">任务数据</a><a href="#limits">结论边界</a></nav>
@@ -54,16 +53,16 @@ def build():
 <h3>另一种真正覆盖整支路的界：安全应力限制了直接整流能有多高的电压</h3><p>从压电端最近一次电压过零开始，电荷关系给出 <code>Cp·|v| ≤ |θ|·|q(t)−q(t₀)| ≤ 2|θ|q_max</code>。因此，不能一边要求梁始终安全，一边任意假设它能输出更高电压。新薄膜任务采用3.5µm压电层，40MPa应力限制对应端口上界约1.728V，经过二极管后储能至多约1.628V，低于原允许的最低启动电压1.9V。改变电容、质量、长度、输入电阻都绕不过这条直接支路的界；已有65%效率升压支路能完成4/4，转换损失也真实计入。</p><p>这条结论来自同一个模型中的电荷与应力方程，不是“随机搜了很多次没有找到”。薄膜厚度是公开的制造平台规格；启动电压和电容保留原1.9–3.2V、80–1000µF范围。</p>
 <p>50%盲试上限只适用于对称先验、互不相交的可行域、且首提之前没有其他辨识信息的限定问题。不能从两条0/4记录推出整个Agent有50%的能力上限。F0接近0%、F3超过80%、诊断调用率90%都不是本轮已经得到的事实。</p>
 </section>
-<section id="tasks"><h2>4. 查看每道题的输入、见证与验收结果</h2><p>以下内容直接来自本轮JSON文件，不是手工填的成绩表。含隐藏偏差与见证的文件是<strong>开发者校准资料</strong>，将来不能整份发给被测Agent。</p><select id="files" onchange="showFile()"></select><pre id="payload"></pre></section>
+<section id="tasks"><h2>4. 查看每道题的输入、见证与验收结果</h2><p>以下链接直接打开原始JSON，不在本页重复保存整份数据。E3控制题已在其总表内。含隐藏偏差与见证的文件是<strong>开发者校准资料</strong>，将来不能整份发给被测Agent。</p><ul>__FILES__</ul></section>
 <section id="limits"><h2>5. 报告、清理与使用方法</h2><p>工程PDF是同一消费者的工程结果展示。正式Agent实验尚未运行，因此本轮生成的设计称为“本地校准工程示例”；没有的Agent修正实录不虚构。报告中的工作包络是固定设计、有限网格的运行图，不是整个设计空间的可行性证明。CAD是单模态尺寸对应的实体示意，不冒充完整封装、走线PCB或制造资格。</p>
 <pre>cd agent
 PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 python3 -B wakeup/formal/calibrate.py --experiment e1
 PYTHONDONTWRITEBYTECODE=1 python3 -B wakeup/formal/report.py --help
 PYTHONDONTWRITEBYTECODE=1 python3 -B wakeup/formal/explain.py</pre>
 <p>历史版本：<a href="https://github.com/littleandbrother/agent/tree/5c9569ba14fbba378210842f0453e1d69dd3b4f4">原统一分支固定提交</a>。新活动分支：<code>codex/formal-calibration-20261112</code>。本轮没有启动供应商请求，也没有恢复旧自动化。</p></section>
-<script>const DATA=__DATA__;const ff=document.getElementById('files');Object.keys(DATA).forEach(k=>{let o=document.createElement('option');o.text=k;ff.add(o)});function showFile(){document.getElementById('payload').textContent=JSON.stringify(DATA[ff.value],null,2)};function showLevel(){const l=+document.getElementById('level').value;let s={F0:['PASS/FAIL','按时交付数 / 期望数','误报数','应力合规布尔值','位移合规布尔值']};if(l>=1)s.F1=['WAKE','CONFIRM','REJECT','BROWNOUT'];if(l>=2)s.F2=['首事件前电容电压 V','主梁/辅梁/包络峰值电压 V','首次就绪时刻 s'];if(l>=3)s.F3=['实际受载电压正弦拟合的幅值 V 与相位 deg','每个事件的前后电压和真实状态转换时间戳'];document.getElementById('fields').textContent=JSON.stringify(s,null,2)};const acceptance=(DATA['summary.json']||{}).task_acceptance||[];let table='<table><tr><th>实验</th><th>题目数量</th><th>出厂状态</th><th>已核对的物理条件</th></tr>';acceptance.forEach(row=>{table+='<tr>'+[row.experiment,row.count,row.status,row.checks].map(v=>'<td>'+v+'</td>').join('')+'</tr>'});document.getElementById('status').innerHTML=table+'</table>';showFile();showLevel();</script></html>'''
+<script>function showLevel(){const l=+document.getElementById('level').value;let s={F0:['PASS/FAIL','按时交付数 / 期望数','误报数','应力合规布尔值','位移合规布尔值']};if(l>=1)s.F1=['WAKE','CONFIRM','REJECT','BROWNOUT'];if(l>=2)s.F2=['首事件前电容电压 V','主梁/辅梁/包络峰值电压 V','首次就绪时刻 s'];if(l>=3)s.F3=['实际受载电压正弦拟合的幅值 V 与相位 deg','每个事件的前后电压和真实状态转换时间戳'];document.getElementById('fields').textContent=JSON.stringify(s,null,2)};const acceptance=__ACCEPTANCE__;let table='<table><tr><th>实验</th><th>题目数量</th><th>出厂状态</th><th>已核对的物理条件</th></tr>';acceptance.forEach(row=>{table+='<tr>'+[row.experiment,row.count,row.status,row.checks].map(v=>'<td>'+v+'</td>').join('')+'</tr>'});document.getElementById('status').innerHTML=table+'</table>';showLevel();</script></html>'''
     target = HERE / "outputs" / "Architecture.html"
-    target.write_text(template.replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")))
+    target.write_text(template.replace("__FILES__", links).replace("__ACCEPTANCE__", json.dumps(acceptance, ensure_ascii=False).replace("</", "<\\/")))
     return target
 
 

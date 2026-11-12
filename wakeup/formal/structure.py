@@ -22,9 +22,8 @@ SEARCH_BOUNDS=[(0,3),(24,42),(2,7),(3,6),(1.90309,3),(1.9,3.2),
                (-1.30103,1.477121),(.100001,3.2),(.01,.999999),(0,1),(3,6),(.3,20),(0,1),(0,1)]
 
 
-def single_trial(argument):
+def single_trial(x,row,label):
     """One original-consumer counterexample trial, including all four branches."""
-    row,x,label=argument
     d=copy.deepcopy(row['witness'] if 'witness' in row else row['design'])
     t=row['task']
     arm=row.get('search_arms',[0,1,2,3])[int(round(x[0]))];envelope=arm%2==1;direct=arm>=2
@@ -58,7 +57,7 @@ def counterexample_search(row,seed=738,workers=4,generations=2,population=40):
     import multiprocessing
     rng=np.random.default_rng(seed);initial=[]
     log=OUT/'e3_single_search.jsonl'
-    offset=len(log.read_text().splitlines()) if log.exists() else 0
+    offset=log.stat().st_size if log.exists() else 0
     arms=row.get('search_arms',[0,1,2,3]);bounds=list(SEARCH_BOUNDS);bounds[0]=(0,len(arms)-1)
     seeds=[]
     for x in row.get('counterexample_seeds',[]):
@@ -85,24 +84,20 @@ def counterexample_search(row,seed=738,workers=4,generations=2,population=40):
             m=float(np.clip(5.8*(24/L)**3+rng.uniform(-.3,.3),2,7))
         initial.append([index,L,m,R,C,start,np.log10(rng.choice([1.45,4.5,5.75,6])),
             high,rng.uniform(.96,.9999),int(i%5==0),rng.uniform(4,5.5),rng.uniform(.5,10),int(i%4==0),int(i%4==1)])
-    f=partial(_objective,row=row,label=f"{row.get('id','prototype')}/seed{seed}")
+    f=partial(single_trial,row=row,label=f"{row.get('id','prototype')}/seed{seed}")
     with ProcessPoolExecutor(workers,mp_context=multiprocessing.get_context('fork')) as pool:
         r=differential_evolution(f,bounds,workers=pool.map,updating='deferred',init=np.array(initial),
             integrality=[True]+[False]*8+[True,False,False,True,True],maxiter=generations,
             polish=False,seed=seed,tol=0,atol=0)
-    trials=[json.loads(x) for x in (OUT/'e3_single_search.jsonl').read_text().splitlines()[offset:]]
+    with log.open('rb') as stream:
+        stream.seek(offset)
+        trials=[json.loads(line) for line in stream]
     best=min(trials,key=lambda x:x['score'])
     return dict(seed=seed,bounds=bounds,arms=arms,readout_charge_ohm=row.get('search_readout_charge_ohm',100e6),nfev=r.nfev,best_score=float(r.fun),best_x=r.x.tolist(),
         prefix_calls=len(trials),full_calls=sum(x['full_calls'] for x in trials),
         pass_hits=sum(x['result']['verdict']=='PASS' for x in trials),
         best_design=best['design'],best_result=best['result'],
         claim='Mixed-domain numerical counterexample search, not a symbolic impossibility proof.')
-
-
-
-def _objective(x,row,label):
-    return single_trial((row,x,label))
-
 
 def area_mm2(design):
     aux=design.get('connections',{}).get('aux_resonator',design.get('modules',{}).get('A',True))
@@ -202,7 +197,7 @@ def required_tasks(seed=5931):
     """Independent small manufacturing/operating deviations around the dual prototype."""
     prototype=json.loads((OUT/'e3_dual_final_prototype.json').read_text())
     seed_file=OUT/'e3_required_search_seeds.json'
-    seeds=json.loads(seed_file.read_text()) if seed_file.exists() else []
+    seeds=json.loads(seed_file.read_text())
     rng=np.random.default_rng(seed)
     used={r['id'] for r in control_tasks()}
     ids=[f'E3-T{i:02}' for i in range(1,17) if f'E3-T{i:02}' not in used]
@@ -232,19 +227,19 @@ def required_tasks(seed=5931):
 def required_evaluate(row):
     row=evaluate(row)
     row['mechanical_area_mm2']=area_mm2(row['witness'])
-    row['witness_qualified']=row.pop('qualified') and row['mechanical_area_mm2']<=300.
+    row['witness_qualified']=row.pop('qualified')
     return row
 
 
 def assemble(proxy,controls,required):
-    structure=dict(requested=16,qualified=controls['qualified']+required.get('qualified',0),
+    structure=dict(requested=16,qualified=controls['qualified']+required['qualified'],
         local_controls=controls,architecture_required=required,
         area_note='Original reference area408mm2 is retained. New public fixed-width stocks use actual L*b and the same 300mm2 limit in every branch.',
         chi_note='Reference stress/40MPa and energy duty burden are reported separately; they are not one interchangeable chi.')
     result=dict(experiment='E3',proxy_tasks=proxy,proxy_qualified=sum(r['qualified'] for r in proxy),structure=structure,
         claim='Original full transient factory calibration only; no Agent performance measured. Numerical branch exclusion is not a symbolic global impossibility proof.')
     public=[]
-    for r in proxy+controls['tasks']+required.get('tasks',[]):
+    for r in proxy+controls['tasks']+required['tasks']:
         public.append({k:r[k] for k in ('id','task','initial','domain','proxy','mechanical_area_limit_mm2','fixed_stock','branches','area_formula') if k in r})
     public.sort(key=lambda r:r['id'])
     (OUT/'e3_public_tasks.json').write_text(json.dumps(public,ensure_ascii=False,indent=2)+'\n')

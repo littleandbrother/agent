@@ -1,5 +1,4 @@
 """One full physical consumer; compact measurements, never next-step advice."""
-import copy
 import json
 import sys
 from collections import Counter
@@ -10,15 +9,11 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "outputs"
 sys.path.insert(0, str(HERE.parent))
-from sim import TASK, G, beam, simulate
+from sim import TASK, G, beam, simulate as full
 
 
 def baseline():
     return json.loads((HERE.parent / "design.json").read_text())
-
-
-def full(design, task=TASK, **resolution):
-    return simulate(copy.deepcopy(design), copy.deepcopy(task), **resolution)
 
 
 def response(part, frequency, acceleration_g, load=0.):

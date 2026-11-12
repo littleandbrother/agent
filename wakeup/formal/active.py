@@ -5,12 +5,8 @@ The declared precision and physical tail bounds are recorded with each pair.
 """
 import copy
 import json
-from pathlib import Path
 import numpy as np
-from common import baseline, TASK, full, compact, save
-from feedback import project
-
-HERE = Path(__file__).resolve().parent
+from common import baseline, TASK, OUT, full, compact, project, save
 
 
 def build(seed=20261113, pairs=16):
@@ -70,12 +66,12 @@ def job(item):
     halves = pair["private"]["halves"]
     half = halves[index]
     design = pair["public"]["initial"] if which == "initial" else halves[index if which == "witness" else 1-index]["witness"]
-    actual = realize(pair, half, design)
     if which == "witness":
-        known=json.loads((HERE/"outputs/e2_common_witness.json").read_text())
+        known=json.loads((OUT/"e2_common_witness.json").read_text())
         return dict(id=pair["id"],half=index,direction=half["direction"],which=which,
             design=design,realized_design=baseline(),result=known["result"],gateway=known["gateway"],
             reused=True,source=known["source"],identity=known["identity"])
+    actual = realize(pair, half, design)
     r = full(actual, pair["public"]["environment"])
     return dict(id=pair["id"], half=index, direction=half["direction"], which=which,
                 design=design, realized_design=actual, result=compact(r), gateway=project(r,0),reused=False)
@@ -84,7 +80,8 @@ def job(item):
 def energy_upper(design, horizon):
     """Passive total energy bound, independent of capacitor or rectifier trajectory."""
     from sim import beam, G
-    coefficient=sum(beam(design[k])["forcing_mass"]**2/(4*beam(design[k])["c"]) for k in ("harvester","trigger_beam"))
+    parts = [beam(design[k]) for k in ("harvester","trigger_beam")]
+    coefficient=sum(b["forcing_mass"]**2/(4*b["c"]) for b in parts)
     norms=[TASK["background_peak_g"]*G*np.sqrt(horizon/2+1/(8*np.pi*TASK["background_Hz"]))]
     for kind in ("fault","nuisance"):
         for start in TASK[kind+"_starts_s"]:
@@ -121,11 +118,7 @@ def calibrate(workers=4,pairs=16):
     import time
     from concurrent.futures import ProcessPoolExecutor
     from scipy.optimize import brentq
-    out=HERE/"outputs"; started=time.perf_counter()
-    # Preserve prior counterfactual-only evidence; final artifacts get the canonical names.
-    for name in ("tasks.json","public_tasks.json","calibration.jsonl","summary.json"):
-        p=out/("e2_"+name)
-        if p.exists() and not (out/("e2_development_"+name)).exists():p.rename(out/("e2_development_"+name))
+    out=OUT; started=time.perf_counter()
     tasks=build(pairs=pairs)
     for p in tasks:p["public"]["environment"]=copy.deepcopy(TASK)
     order=np.random.default_rng(20261115).random(len(tasks))<.5

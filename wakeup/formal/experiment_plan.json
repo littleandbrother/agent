@@ -1,5 +1,5 @@
 {
-  "status": "calibration_only_no_agent_runs",
+  "status": "tasks_calibrated_pi_connected_no_model_runs",
   "consumer": "../sim.py full 30-second transient, real rectification/loading/FFT classification",
   "evaluation_budget_per_future_episode": 6,
   "python_timeout_s": 30,
@@ -106,7 +106,15 @@
       "python": true,
       "python_per_call_timeout_s": 30,
       "nominal_equations": true,
-      "evaluation_budget": 6
+      "evaluation_budget": 6,
+      "entry": "node wakeup/formal/pi.mjs",
+      "sdk": "@earendil-works/pi-coding-agent@0.85.1",
+      "tools_host": "agent_tools.py",
+      "bash_per_call_timeout_s": 30,
+      "default_model_responses": 12,
+      "default_wall_s": 900,
+      "model_provider_and_cost_cap": "explicit CLI arguments; native SDK usage, between-response estimated-cost stop",
+      "integration_checked_without_model_calls": true
     }
   },
   "comparison_rules": {
@@ -118,5 +126,11 @@
     "total_wall_and_model_budget": "set before any future Agent run; none starts during task calibration",
     "public_assets": "public task and selected feedback condition only; private qualification witnesses and truth labels are not model inputs"
   },
-  "task_acceptance_is_not_agent_performance": "Task construction must meet its physical entry conditions. Future Agent pass rates, diagnosis choices, and stopping accuracy are measured outcomes, never task-selection rules."
+  "task_acceptance_is_not_agent_performance": "Task construction must meet its physical entry conditions. Future Agent pass rates, diagnosis choices, and stopping accuracy are measured outcomes, never task-selection rules.",
+  "public_module_defaults": {
+    "boost_input_R_ohm": 10000,
+    "shunt_ohm": 47000,
+    "shunt_threshold_V": 1,
+    "scope": "Same explicit module configuration for every condition; only supplies missing optional-module values when that branch is enabled; calibrated data and initial designs unchanged."
+  }
 }

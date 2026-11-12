@@ -1,7 +1,8 @@
 # Coupled physical design — minimal calibration
 
-当前活动实现：[wakeup/formal](wakeup/formal/README.md)。四项正式实验只做物理校准，尚未运行新Agent比较。
+当前活动实现：[wakeup/formal](wakeup/formal/README.md)。四项正式实验的题目校准已完成，真实Pi已接入；尚未运行新的正式Agent比较。
 
+- [源码架构单与精简说明](ARCHITECTURE.md)
 - [可视化架构与逐题数据](wakeup/formal/outputs/Architecture.html)
 - [本轮校准结果](wakeup/formal/outputs/CALIBRATION.md)
 - [15页工程设计报告](wakeup/formal/outputs/report/Engineering_Design_Report.pdf)

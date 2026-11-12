@@ -2,7 +2,6 @@
 import argparse
 import json
 import os
-import subprocess
 import sys
 from collections import Counter
 from copy import deepcopy
@@ -13,10 +12,9 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from sim import TASK, acceleration, beam, simulate
+from sim import TASK, acceleration, simulate
 
 FONT = os.environ.get("REPORT_FONT", "/System/Library/Fonts/Supplemental/Arial Unicode.ttf")
-CAD_PYTHON = os.environ.get("CAD_PYTHON", sys.executable)
 BLUE, GREEN, ORANGE, INK = "#164E7D", "#237B64", "#B85929", "#172B3A"
 
 
@@ -82,24 +80,9 @@ def figures(cases, results, traces, output):
         fig.suptitle(f"Case {n} | {result['verdict']} | full transient, actual program loads",color=INK)
         fig.savefig(output/f"case{n}_waveforms.svg"); fig.savefig(output/f"case{n}_waveforms.png",dpi=220);plt.close(fig)
     d = cases[0]["design"]
-    fig = plt.figure(figsize=(9,6)); ax=fig.add_subplot(111,projection="3d")
-    from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-    def box(x,y,z,L,w,h,color):
-        p=np.array([[x,y,z],[x+L,y,z],[x+L,y+w,z],[x,y+w,z],[x,y,z+h],[x+L,y,z+h],[x+L,y+w,z+h],[x,y+w,z+h]])
-        faces=[[p[j] for j in ids] for ids in [[0,1,2,3],[4,5,6,7],[0,1,5,4],[2,3,7,6],[1,2,6,5],[0,3,7,4]]]
-        ax.add_collection3d(Poly3DCollection(faces,facecolors=color,edgecolors="#335566",linewidths=.4,alpha=.95))
-    for i,name in enumerate(("harvester","trigger_beam")):
-        b=d[name];L,w,hs,hp=[b[k] for k in ("length_mm","width_mm","substrate_mm","piezo_layer_mm")];y=i*18
-        box(0,y-w/2,-hs/2,L,w,hs,"#AAB6C3")
-        box(0,y-w/2,hs/2,L,w,hp,"#73BDB6")
-        box(0,y-w/2,-hs/2-hp,L,w,hp,"#73BDB6")
-        tl=b["tip_mass_g"]/(.0193*w*2);box(L-tl,y-w/2,hs/2+hp,tl,w,2,"#E1B85A")
-        box(-5,y-w/2-2,-2,5,w+4,4,"#4C6378")
-    ax.set(xlim=(-7,35),ylim=(-9,26),zlim=(-3,5),xlabel="x (mm)",ylabel="y (mm)",zlabel="z (mm)")
-    ax.set_box_aspect((42,35,8));ax.view_init(22,-65)
-    fig.tight_layout();fig.savefig(output/"cad_isometric.png",dpi=240);plt.close(fig)
     fig,axes=plt.subplots(3,1,figsize=(9,7),layout="constrained")
-    for i,name in enumerate(("harvester","trigger_beam")):
+    aux=d.get("connections",{}).get("aux_resonator",d.get("modules",{}).get("A",True))
+    for i,name in enumerate(("harvester","trigger_beam") if aux else ("harvester",)):
         b=d[name];L,w,hs,hp=[b[k] for k in ("length_mm","width_mm","substrate_mm","piezo_layer_mm")]; yy=i*18
         axes[0].add_patch(plt.Rectangle((0,yy-w/2),L,w,fc=(BLUE if i==0 else GREEN),alpha=.4))
         axes[0].annotate("",(0,yy+w/2+3),(L,yy+w/2+3),arrowprops={"arrowstyle":"<->","color":INK})
@@ -194,7 +177,7 @@ def make_pdf(cases, results, env, output, cad_info):
     start(1,"第1章 / 任务书与合规矩阵","机械-模拟唤醒与数字确认节点")
     text("验收对象：可计算、可追溯的工程设计",21,BLUE)
     text("这份报告把几何结构、机电耦合、电源充电、事件触发、数字识别与无线交付放进同一条30秒瞬态轨迹。数值和图表直接来自实际模拟，不使用预设通过率，也不把漂亮的结构图当作物理验证。",12)
-    image("cad_isometric.png",255)
+    image("cad_isometric.svg",255)
     table([("报告状态","本地校准工程示例，非正式Agent实验"),("Case 1 完整服务",f"{r['verdict']} / {m['delivered_on_time']}/{m['faults']} 按时交付"),("Case 2 完整服务",results[1]["verdict"] if len(results)>1 else "待建立已验证设计，未作通过声明"),("能量闭合相对残差",f"{relative:.6g}%（实际计算）")])
     text("正式实验一/三完成后，以其最终 design.json 和原始演化轨迹替换本报告输入即可自动重新生成。当前没有把未来的Agent排障过程编写成事实。",10)
     end()
@@ -290,10 +273,6 @@ def make_pdf(cases, results, env, output, cad_info):
     text("数字分类使用实际瞬态加速度采样、量化和FFT频带占比，不是看到目标时刻便直接判正确。误报也按未匹配目标事件的真实接收记录计算。",11)
     end()
     start(13,"第5章 / 工作包络","固定设计在不同激励与事件间隔下会怎样")
-    rows=[("背景 g / 间隔 s","3 / 5 / 6")]
-    for g in (.10,.15,.20):
-        matches=[v for v in env['rows'] if v['background_g']==g]
-        rows.append((str(g)," / ".join(f"{v['metrics']['delivered_on_time']}/4 {v['verdict']}" for v in matches)))
     image("operating_envelope.png",235)
     text("这张3×3图保持设计不变，只改变背景幅值与目标事件间隔。保留原11/23秒的干扰事件。间隔变化也会改变目标与干扰的重叠，因此失败不能全部归因于充电。每点均跑完整瞬态，点之间不作全域保证。",11)
     text("较大背景可能加快充电，也可能增加非目标触发；间隔过短可能来不及恢复储能。因此不能把单轴的‘越大越好’当成普遍规律。",11)
@@ -321,25 +300,19 @@ def make_pdf(cases, results, env, output, cad_info):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument("input",nargs="?");parser.add_argument("--cad-only",nargs=2,metavar=("DESIGN","OUT"));args=parser.parse_args()
-    if args.cad_only:
-        d=json.loads(Path(args.cad_only[0]).read_text());o=Path(args.cad_only[1]);print(json.dumps(cad(d,o)));return
+    parser=argparse.ArgumentParser();parser.add_argument("input",nargs="?");args=parser.parse_args()
     output=HERE/"outputs"/"report";output.mkdir(parents=True,exist_ok=True)
     cases=json.loads(Path(args.input).read_text())["cases"] if args.input else [{"name":"Case 1","design":json.loads((HERE.parent/"design.json").read_text()),"task":deepcopy(TASK),"provenance":"原唤醒节点设计的本地完整瞬态复算；不是正式实验一/三的Agent运行。"}]
     results,traces=zip(*(data(case,output,f"case{i}") for i,case in enumerate(cases,1)))
     figures(cases,results,traces,output)
-    cad_design=output/"design.json"
-    same=cad_design.exists() and json.loads(cad_design.read_text())==cases[0]["design"] and (output/"node.step").exists()
-    if not same:
-        cad_design.write_text(json.dumps(cases[0]['design'],ensure_ascii=False,indent=2)+"\n")
-        subprocess.run([CAD_PYTHON,"-B",str(Path(__file__).resolve()),"--cad-only",str(cad_design),str(output)],capture_output=True,text=True,check=True)
+    for i,case in enumerate(cases,1):
+        directory=output if i==1 else output/f"case{i}_cad"
+        directory.mkdir(exist_ok=True)
+        design=directory/"design.json"
+        if not (design.exists() and json.loads(design.read_text())==case["design"] and (directory/"node.step").exists()):
+            design.write_text(json.dumps(case["design"],ensure_ascii=False,indent=2)+"\n")
+            cad(case["design"],directory)
     info=json.loads((output/"cad_manifest.json").read_text())
-    if len(cases)>1:
-        cad2=output/"case2_cad";cad2.mkdir(exist_ok=True)
-        dp=cad2/"design.json"
-        if not (dp.exists() and json.loads(dp.read_text())==cases[1]["design"] and (cad2/"node.step").exists()):
-            dp.write_text(json.dumps(cases[1]["design"],ensure_ascii=False,indent=2)+"\n")
-            subprocess.run([CAD_PYTHON,"-B",str(Path(__file__).resolve()),"--cad-only",str(dp),str(cad2)],capture_output=True,text=True,check=True)
     env=envelope(cases[0],output)
     import matplotlib.pyplot as plt
     fig,ax=plt.subplots(figsize=(8,4),layout="constrained")
